@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Payroll.Data.Entity.Salary
 {
-    [Table("AdditionalTaxInfo", Schema = "Payroll")]
+    [Table("AdditionalTaxInfo")]
     public class AdditionalTaxInfo : Base
     {
         public int employeeInfoId { get; set; }

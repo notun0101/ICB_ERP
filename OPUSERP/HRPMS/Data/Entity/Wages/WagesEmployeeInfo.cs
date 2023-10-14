@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Employee
 {
-    [Table("WagesEmployeeInfo", Schema = "HR")]
+    [Table("WagesEmployeeInfo")]
     public class WagesEmployeeInfo : Base
     {
         [Required]

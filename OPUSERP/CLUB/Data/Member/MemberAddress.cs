@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CLUB.Data.Member
 {
-    [Table("MemberAddress", Schema = "Club")]
+    [Table("MemberAddress")]
     public class MemberAddress : Base
     {
         //Foreign Reliation

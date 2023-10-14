@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.ProvidentFund.Data.Entity
 {
-    [Table("GratuityUpload", Schema = "PF")]
+    [Table("GratuityUpload")]
     public class GratuityUpload : Base
     {
         //public int? pfmemberId { get; set; }

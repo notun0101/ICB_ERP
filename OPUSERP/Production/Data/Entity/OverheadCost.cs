@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Production.Data.Entity
 {
-    [Table("OverheadCosts", Schema = "PROD")]
+    [Table("OverheadCosts")]
     public class OverheadCost:Base
     {
         [MaxLength(100)]

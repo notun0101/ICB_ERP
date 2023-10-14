@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.CRO.Data.Entity.DistributeJob
 {
-    [Table("ArchiveFloor", Schema = "CRO")]
+    [Table("ArchiveFloor")]
     public class ArchiveFloor : Base
     {
         [MaxLength(350)]

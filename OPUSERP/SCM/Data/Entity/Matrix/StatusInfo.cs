@@ -2,7 +2,7 @@
 
 namespace OPUSERP.Data.Entity.Matrix
 {
-    [Table("StatusInfo", Schema = "SCM")]
+    [Table("StatusInfo")]
     public class StatusInfo:Base
     {
         public string StatusName { get; set; }

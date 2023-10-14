@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.ACR
 {
-    [Table("WorkHistory", Schema = "HR")]
+    [Table("WorkHistory")]
     public class WorkHistory:Base
     {
         public int employeeId { get; set; }

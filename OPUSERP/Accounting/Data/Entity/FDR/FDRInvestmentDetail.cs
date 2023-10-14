@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Accounting.Data.Entity.FDR
 {
-    [Table("FDRInvestmentDetail", Schema = "ACCOUNT")]
+    [Table("FDRInvestmentDetail")]
     public class FDRInvestmentDetail:Base
     {
         public int? fDRInvesmentMasterId { get; set; }

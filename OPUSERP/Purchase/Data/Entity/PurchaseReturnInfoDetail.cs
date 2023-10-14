@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Purchase.Data.Entity
 {
-    [Table("PurchaseReturnInfoDetail", Schema = "Purchase")]
+    [Table("PurchaseReturnInfoDetail")]
     public class PurchaseReturnInfoDetail:Base
     {
         public int? purchaseReturnInfoMasterId { get; set; }

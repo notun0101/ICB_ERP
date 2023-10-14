@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.MasterData
 {
-    [Table("PreferableVendors", Schema = "SCM")]
+    [Table("PreferableVendors")]
     public class PreferableVendor:Base
     {
         public int requisitionDetailId { get; set; }

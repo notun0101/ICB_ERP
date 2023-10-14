@@ -5,7 +5,7 @@ using OPUSERP.VMS.Data.Entity.VehicleInfo;
 
 namespace OPUSERP.VMS.Data.Entity.Requisition
 {
-    [Table("VehicleUse", Schema = "VMS")]
+    [Table("VehicleUse")]
     public class VehicleUse : Base
     {
         public int? requisitionId { get; set; }

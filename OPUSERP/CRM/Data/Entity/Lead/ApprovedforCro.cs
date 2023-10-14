@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CRM.Data.Entity.Lead
 {
-    [Table("ApprovedforCro", Schema = "CRM")]
+    [Table("ApprovedforCro")]
     public class ApprovedforCro : Base
     {      
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.ACR
 {
-	[Table("ACRIndicator", Schema = "HR")]
+	[Table("ACRIndicator")]
 	public class ACRIndicator:Base
 	{
 		public int? headId { get; set; }

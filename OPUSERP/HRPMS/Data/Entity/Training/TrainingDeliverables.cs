@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Training
 {
-    [Table("TrainingDeliverables", Schema = "HR")]
+    [Table("TrainingDeliverables")]
     //Training Gift
     public class TrainingDeliverables : Base
     {

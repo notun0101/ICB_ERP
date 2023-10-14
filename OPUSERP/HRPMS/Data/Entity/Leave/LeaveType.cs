@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Leave
 {
-    [Table("LeaveType", Schema = "HR")]
+    [Table("LeaveType")]
     public class LeaveType : Base
     {
         [Required]

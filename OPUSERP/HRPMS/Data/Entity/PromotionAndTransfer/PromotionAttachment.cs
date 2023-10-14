@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.PromotionAndTransfer
 {
-    [Table("PromotionAttachment", Schema = "HR")]
+    [Table("PromotionAttachment")]
     public class PromotionAttachment:Base
     {
         public int promotionId { get; set; }

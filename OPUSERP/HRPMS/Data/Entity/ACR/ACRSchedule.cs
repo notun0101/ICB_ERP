@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.ACR
 {
-    [Table("ACRSchedule", Schema = "HR")]
+    [Table("ACRSchedule")]
     public class ACRSchedule:Base
     {
         public int employeeId { get; set; }

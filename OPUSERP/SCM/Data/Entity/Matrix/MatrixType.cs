@@ -2,7 +2,7 @@
 
 namespace OPUSERP.Data.Entity.Matrix
 {
-    [Table("MatrixType", Schema = "SCM")]
+    [Table("MatrixType")]
     public class MatrixType:Base
     {
         public string matrixTypeName { get; set; }

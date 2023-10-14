@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-    [Table("AttendenceApi", Schema = "HR")]
+    [Table("AttendenceApi")]
     public class AttendenceApi : Base
     {
         

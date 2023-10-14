@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.TAMS.Data.Entity
 {
-    [Table("TaskFollowUp", Schema = "TMS")]
+    [Table("TaskFollowUp")]
     public class TaskFollowUp:Base
     {
         public string name { get; set; }

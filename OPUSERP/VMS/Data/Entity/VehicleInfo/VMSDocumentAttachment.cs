@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.VMS.Data.Entity.VehicleInfo
 {
-    [Table("VMSDocumentAttachment", Schema = "VMS")]
+    [Table("VMSDocumentAttachment")]
     public class VMSDocumentAttachment:Base
     {
         [MaxLength(250)]

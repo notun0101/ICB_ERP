@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.CRM.Data.Entity.Notes
 {
-    [Table("CRMNoteMaster", Schema = "CRM")]
+    [Table("CRMNoteMaster")]
     public class CRMNoteMaster:Base
     {
         public int? leadsId { get; set; }

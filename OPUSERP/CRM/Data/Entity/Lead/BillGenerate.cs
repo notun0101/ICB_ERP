@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CRM.Data.Entity.Lead
 {
-    [Table("BillGenerate", Schema = "CRM")]
+    [Table("BillGenerate")]
     public class BillGenerate : Base
     {        
         public int? approvedforCroId { get; set; }

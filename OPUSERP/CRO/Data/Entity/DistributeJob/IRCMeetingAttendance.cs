@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.CRO.Data.Entity.DistributeJob
 {
-    [Table("IRCMeetingAttendance", Schema = "CRO")]
+    [Table("IRCMeetingAttendance")]
     public class IRCMeetingAttendance : Base
     {
         public int? operationMasterId { get; set; }

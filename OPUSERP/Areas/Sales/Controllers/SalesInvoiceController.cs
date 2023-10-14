@@ -21,7 +21,7 @@ using OPUSERP.Sales.Services.Sales.Interfaces;
 namespace OPUSERP.Areas.Sales.Controllers
 {
     [Authorize]
-    [Area("Sales")]
+    [Area("HR")]
     public class SalesInvoiceController : Controller
     {
         private readonly IHostingEnvironment _hostingEnvironment;

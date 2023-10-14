@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace OPUSERP.Programs.Data.Entity
 {
 
-    [Table("BenificiaryType", Schema = "PM")]
+    [Table("BenificiaryType")]
     public class BenificiaryType:Base
     {
         public string typeName { get; set; }

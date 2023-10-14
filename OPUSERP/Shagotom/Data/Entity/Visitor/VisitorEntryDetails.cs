@@ -7,7 +7,7 @@ using OPUSERP.Data.Entity;
 
 namespace OPUSERP.Shagotom.Data.Entity.Visitor
 {
-    [Table("VisitorEntryDetails", Schema = "Shagotom")]
+    [Table("VisitorEntryDetails")]
     public class VisitorEntryDetails : Base
     {
         public int? visitorEntryMasterId { get; set; }

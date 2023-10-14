@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Data.Entity.Matrix
 {
-    [Table("ApprovalMatrixlog", Schema = "SCM")]
+    [Table("ApprovalMatrixlog")]
     public class ApprovalMatrixlog: Base
     {
         public int? projectId { get; set; }

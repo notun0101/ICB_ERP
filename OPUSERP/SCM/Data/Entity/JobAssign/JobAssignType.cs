@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.JobAssign
 {
-    [Table("JobAssignType", Schema = "SCM")]
+    [Table("JobAssignType")]
     public class JobAssignType:Base
     {
         [StringLength(150)]

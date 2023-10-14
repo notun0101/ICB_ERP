@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Visitor
 {
-    [Table("PIMSVisitor", Schema = "HR")]
+    [Table("PIMSVisitor")]
     public class PIMSVisitor:Base
     {
         public string subject { get; set; }

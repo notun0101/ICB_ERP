@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.DMS.Data.Entity
 {
-    [Table("AssignDocumentMaster", Schema = "Doc")]
+    [Table("AssignDocumentMaster")]
     public class AssignDocumentMaster : Base
     {
         public int? employeeInfoId { get; set; }

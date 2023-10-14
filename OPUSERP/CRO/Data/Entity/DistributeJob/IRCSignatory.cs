@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.CRO.Data.Entity.DistributeJob
 {
-    [Table("IRCSignatory", Schema = "CRO")]
+    [Table("IRCSignatory")]
     public class IRCSignatory:Base
     {
         public int? employeeInfoId { get; set; }

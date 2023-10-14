@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.VMS.Data.Entity.Requisition
 {
-    [Table("VMSRequisitionDetails", Schema = "VMS")]
+    [Table("VMSRequisitionDetails")]
     public class VMSRequisitionDetails:Base
     {
         public int? requisitionId { get; set; }

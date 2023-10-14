@@ -7,7 +7,7 @@ using OPUSERP.Data.Entity;
 
 namespace OPUSERP.DMS.Data.Entity
 {
-    [Table("DocumentDetail", Schema = "Doc")]
+    [Table("DocumentDetail")]
     public class DocumentDetail : Base
     {
         public int? documentMasterId { get; set; }

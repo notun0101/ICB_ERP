@@ -17,7 +17,7 @@ using OPUSERP.Purchase.Service.Interfaces;
 namespace OPUSERP.Areas.Purchase.Controllers
 {
     [Authorize]
-    [Area("Purchase")]
+    [Area("HR")]
     public class StoreController : Controller
     {
         //Store

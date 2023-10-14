@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CLUB.Data.News
 {
-    [Table("NewsInfo", Schema = "Club")]
+    [Table("NewsInfo")]
     public class NewsInfo : Base
     {
         public string title { get; set; }

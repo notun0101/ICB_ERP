@@ -10,7 +10,7 @@ using OPUSERP.REMS.Services.Interfaces;
 
 namespace OPUSERP.Areas.REMS.Controllers
 {
-    [Area("REMS")]
+    [Area("HR")]
     public class ReassignToUsersController : Controller
     {
         private readonly IClaimRegisterService claimRegisterService;

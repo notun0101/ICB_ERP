@@ -20,7 +20,7 @@ using OPUSERP.SCM.Services.Supplier.Interface;
 namespace OPUSERP.Areas.Purchase.Controllers
 {
     [Authorize]
-    [Area("Purchase")]
+    [Area("HR")]
     public class BillPaymentController : Controller
     {
         private readonly IPurchaseService purchaseService;

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Distribution.Data.Entity.Requisition
 {
-    [Table("RequisitionMaster", Schema = "Distribution")]
+    [Table("RequisitionMaster")]
     public class RequisitionMaster : Base
     {
         public int? relSupplierCustomerResourseId { get; set; }

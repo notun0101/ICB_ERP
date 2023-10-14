@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.ProjectStatus
 {
-    [Table("WorkProgressActivityTypes", Schema = "SCM")]
+    [Table("WorkProgressActivityTypes")]
     public class WorkProgressActivityType:Base
     {
         public string activityName { get; set; }

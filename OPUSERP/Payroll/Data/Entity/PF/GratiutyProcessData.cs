@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity.PF
 {
-    [Table("GratiutyProcessData", Schema = "Payroll")]
+    [Table("GratiutyProcessData")]
     public class GratiutyProcessData:Base
     {
         public int? employeeInfoId { get; set; }

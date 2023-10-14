@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.VMS.Data.Entity.VehicleInfo
 {
-    [Table("FuelInduction", Schema = "VMS")]
+    [Table("FuelInduction")]
     public class FuelInduction:Base
     {
         [MaxLength(250)]

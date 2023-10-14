@@ -33,7 +33,7 @@ using OPUSERP.SCM.Services.Matrix.Interfaces;
 namespace OPUSERP.Areas.Distribution.Controllers
 {
     [Authorize]
-    [Area("Distribution")]
+    [Area("HR")]
     public class RequisitionController : Controller
     {
         private readonly IHostingEnvironment _hostingEnvironment;
@@ -465,7 +465,7 @@ namespace OPUSERP.Areas.Distribution.Controllers
                     await attachmentCommentService.SaveDocumentAttachment(data);
                 }
 
-                return RedirectToAction("RequisitionDetails", "Requisition", new { id = model.actionTypeId, Area = "Distribution" });
+                return RedirectToAction("RequisitionDetails", "Requisition", new { id = model.actionTypeId, Area = "HR" });
             }
             catch (Exception ex)
             {
@@ -515,7 +515,7 @@ namespace OPUSERP.Areas.Distribution.Controllers
                     await attachmentCommentService.SaveDocumentAttachment(data);
                 }
 
-                return RedirectToAction("RequisitionDetails", "Requisition", new { id = model.actionTypeId, Area = "Distribution" });
+                return RedirectToAction("RequisitionDetails", "Requisition", new { id = model.actionTypeId, Area = "HR" });
             }
             catch (Exception ex)
             {
@@ -540,7 +540,7 @@ namespace OPUSERP.Areas.Distribution.Controllers
                 };
                 int commentsId = await attachmentCommentService.SaveComment(entityComment);
 
-                return RedirectToAction("RequisitionDetails", "Requisition", new { id = model.actionTypeId, Area = "Distribution" });
+                return RedirectToAction("RequisitionDetails", "Requisition", new { id = model.actionTypeId, Area = "HR" });
             }
             catch (Exception ex)
             {
@@ -553,7 +553,7 @@ namespace OPUSERP.Areas.Distribution.Controllers
         public async Task<IActionResult> DeleteComments(int Id, int actionId)
         {
             await attachmentCommentService.DeleteCommentById(Id);
-            return RedirectToAction("RequisitionDetails", "Requisition", new { id = actionId, Area = "Distribution" });
+            return RedirectToAction("RequisitionDetails", "Requisition", new { id = actionId, Area = "HR" });
         }
         
 
@@ -567,7 +567,7 @@ namespace OPUSERP.Areas.Distribution.Controllers
             if (System.IO.File.Exists(fullFilePath))
                 System.IO.File.Delete(fullFilePath);
             await attachmentCommentService.DeleteDocumentAttachmentById(photoId);
-            return RedirectToAction("RequisitionDetails", "Requisition", new { id = actionId, Area = "Distribution" });
+            return RedirectToAction("RequisitionDetails", "Requisition", new { id = actionId, Area = "HR" });
         }
         
 

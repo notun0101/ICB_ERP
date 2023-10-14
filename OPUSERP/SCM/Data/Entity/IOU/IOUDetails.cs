@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.IOU
 {
-    [Table("IOUDetails", Schema = "SCM")]
+    [Table("IOUDetails")]
     public class IOUDetails:Base
     {
         public int? IOUId { get; set; }

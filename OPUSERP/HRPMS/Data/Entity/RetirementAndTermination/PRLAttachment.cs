@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.RetirementAndTermination
 {
-    [Table("PRLAttachment", Schema = "HR")]
+    [Table("PRLAttachment")]
     public class PRLAttachment:Base
     {
         public int prlApplicationid { get; set; }

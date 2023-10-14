@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.FixedAsset.Data.Entity.AssetRegister
 {
-    [Table("AssetRegistration", Schema = "FAMS")]
+    [Table("AssetRegistration")]
     public class AssetRegistration : Base
     {
         public int? purchaseInfoId { get; set; }

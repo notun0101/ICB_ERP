@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.MasterData
 {
-    [Table("FeatureItems", Schema = "SCM")]
+    [Table("FeatureItems")]
     public class FeatureItem:Base
     {
         public int? itemSpecificationId { get; set; }

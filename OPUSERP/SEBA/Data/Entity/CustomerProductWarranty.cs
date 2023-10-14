@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SEBA.Data.Entity
 {
-    [Table("CustomerProductWarranty", Schema = "SEBA")]
+    [Table("CustomerProductWarranty")]
     public class CustomerProductWarranty : Base
     {
         public int? leadsId { get; set; }

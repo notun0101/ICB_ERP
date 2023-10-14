@@ -10,7 +10,7 @@
         <h5 class="card-title" style="color: #4e73df!important;">User Role Information</h5>
         <hr>
         <div class="container">
-            <form asp-area="Auth" asp-controller="Account" asp-action="UserIdentityRoleCreate" method="post">
+            <form asp-area="Auth" asp-controller="HR" asp-action="UserIdentityRoleCreate" method="post">
 
                 
                 <div class="form-group row">
@@ -117,7 +117,7 @@
 
             $.ajax({
                 contentType: "application/json; charset=utf-8",
-                url: '@Url.Action("UserIdentityRoleCreate", "Account", "http")',
+                url: '@Url.Action("UserIdentityRoleCreate", "HR", "http")',
                 type: "POST",
                 dataType: 'json',
                 async: true,

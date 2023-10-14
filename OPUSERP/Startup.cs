@@ -314,6 +314,8 @@ using TraningHistoryService = OPUSERP.HRPMS.Services.Employee.TraningHistoryServ
 //using IPhotographService = OPUSERP.CLUB.Services.Member.Interfaces.IPhotographService;
 //using AddressEducationPhotoService = OPUSERP.HRPMS.Services.Employee.AddressEducationPhotoService;
 
+using Oracle.ManagedDataAccess;
+
 namespace OPUSERP
 {
     public class Startup
@@ -467,14 +469,30 @@ namespace OPUSERP
             #endregion
 
             #region ERP Database Settings
-            services.AddDbContext<ERPDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("ERPConnection")));
+
+
+            //services.AddDbContext<OracleDbContext>(item => item.UseOracle(Configuration.GetConnectionString("OracleConnectionString")));
+
+            //services.AddIdentity<ApplicationUser, ApplicationRole>()
+            //   .AddEntityFrameworkStores<OracleDbContext>().AddDefaultTokenProviders();
+
+            //For Oracle
+            services.AddDbContext<ERPDbContext>(item => item.UseOracle(Configuration.GetConnectionString("OracleConnectionString")));
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
+               .AddEntityFrameworkStores<ERPDbContext>().AddDefaultTokenProviders();
+
+            //Old: Sql
+            //services.AddDbContext<ERPDbContext>(options =>
+            //    options.UseSqlServer(
+            //        Configuration.GetConnectionString("ERPConnection")));
+            //services.AddIdentity<ApplicationUser, ApplicationRole>()
+            //   .AddEntityFrameworkStores<ERPDbContext>().AddDefaultTokenProviders();
+
 
             services.AddMemoryCache();
             //.AddDefaultTokenProviders();
-            services.AddIdentity<ApplicationUser, ApplicationRole>()
-               .AddEntityFrameworkStores<ERPDbContext>().AddDefaultTokenProviders();
+            
+            
             //services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ERPDbContext>();
             #endregion
 

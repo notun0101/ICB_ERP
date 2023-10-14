@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Sales.Data.Entity.Sales
 {
-    [Table("SalesInvoiceMaster", Schema = "Sales")]
+    [Table("SalesInvoiceMaster")]
     public class SalesInvoiceMaster:Base
     {
         public int? leadsId { get; set; }

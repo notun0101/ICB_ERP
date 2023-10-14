@@ -22,7 +22,7 @@ using OPUSERP.Data.Entity.AttachmentComment;
 namespace OPUSERP.Areas.VMS.Controllers
 {
     [Authorize]
-    [Area("VMS")]
+    [Area("HR")]
     public class FuelInfoController : Controller
     {
         //private readonly LangGenerate<FuelInfoLN> _lang;

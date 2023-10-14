@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.AccountingSettings
 {
-    [Table("AccountMode", Schema = "ACCOUNT")]
+    [Table("AccountMode")]
     public class AccountMode : Base
     {
         [Column(TypeName = "nvarchar(150)")]

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.ProvidentFund.Data.Entity
 {
-    [Table("UploadLoanData", Schema = "PF")]
+    [Table("UploadLoanData")]
     public class UploadLoanData : Base
     {
         public int? salaryPeriodID { get; set; }

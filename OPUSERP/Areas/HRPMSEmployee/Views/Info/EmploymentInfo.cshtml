@@ -3482,7 +3482,7 @@
         //        second = date.getSeconds(),
         //        hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
         //        minuteFormatted = minute < 10 ? "0" + minute : minute,
-        //        morning = hour < 12 ? "am" : "pm";
+        //        morning = hour < 12 ? "am" : "HR";
 
         //    return day + "-" + month + "-" + year;
         //}
@@ -3497,7 +3497,7 @@
                 second = date.getSeconds(),
                 hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
                 minuteFormatted = minute < 10 ? "0" + minute : minute,
-                morning = hour < 12 ? "am" : "pm";
+                morning = hour < 12 ? "am" : "HR";
 
             return day + "/" + + month + "/" + year;
         }
@@ -3511,7 +3511,7 @@
                 second = date.getSeconds(),
                 hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
                 minuteFormatted = minute < 10 ? "0" + minute : minute,
-                morning = hour < 12 ? "AM" : "PM";
+                morning = hour < 12 ? "AM" : "HR";
 
             return month + "/" + day + "/" + year + " 12:00:00 " + morning;
         }
@@ -3525,7 +3525,7 @@
                 second = date.getSeconds(),
                 hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
                 minuteFormatted = minute < 10 ? "0" + minute : minute,
-                morning = hour < 12 ? "am" : "pm";
+                morning = hour < 12 ? "am" : "HR";
 
             return day + month + year;
         }

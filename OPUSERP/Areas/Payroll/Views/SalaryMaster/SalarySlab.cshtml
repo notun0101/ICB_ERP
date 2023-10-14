@@ -69,7 +69,7 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<form asp-area="Payroll" id="FormId" asp-controller="SalaryMaster" asp-action="SalarySlab" method="post" data-parsley-validate="parsley">
+			<form asp-area="HR" id="FormId" asp-controller="SalaryMaster" asp-action="SalarySlab" method="post" data-parsley-validate="parsley">
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-sm-6">
@@ -161,7 +161,7 @@
 				second = date.getSeconds(),
 				hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
 				minuteFormatted = minute < 10 ? "0" + minute : minute,
-				morning = hour < 12 ? "am" : "pm";
+				morning = hour < 12 ? "am" : "HR";
 
 			return day + "/" + + month + "/" + year;
 		}

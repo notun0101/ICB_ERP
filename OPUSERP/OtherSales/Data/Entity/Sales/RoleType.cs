@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.OtherSales.Data.Entity.Sales
 {
-    [Table("RoleType", Schema = "OSales")]
+    [Table("RoleType")]
     public class RoleType:Base
     {
         public string name { get; set; }

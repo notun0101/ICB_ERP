@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CRM.Data.Entity.Lead
 {
-    [Table("Agreement", Schema = "CRM")]
+    [Table("Agreement")]
     public class Agreement : Base
     {
         [MaxLength(300)]

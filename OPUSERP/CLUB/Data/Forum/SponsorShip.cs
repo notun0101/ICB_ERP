@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.CLUB.Data.Forum
 {
-    [Table("SponsorShip", Schema = "Club")]
+    [Table("SponsorShip")]
     public class SponsorShip:Base
     {
         public string companyName { get; set; }

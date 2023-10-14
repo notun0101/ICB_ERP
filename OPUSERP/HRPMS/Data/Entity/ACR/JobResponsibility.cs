@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.ACR
 {
-    [Table("JobResponsibility", Schema = "ACR")]
+    [Table("JobResponsibility")]
     public class JobResponsibility:Base
     {
         public string ResponsibilityName { get; set; }

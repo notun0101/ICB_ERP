@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.ACR
 {
-    [Table("PhysicalProperty", Schema = "HR")]
+    [Table("PhysicalProperty")]
     public class PhysicalProperty:Base
     {
         public string physicalType { get; set; }

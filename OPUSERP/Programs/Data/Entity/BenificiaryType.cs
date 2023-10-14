@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace OPUSERP.Programs.Data.Entity
 {
 
-    [Table("DateRange", Schema = "PM")]
+    [Table("DateRange")]
     public class DateRange:Base
     {
         public string name { get; set; }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-	[Table("MembershipOrganization", Schema = "HR")]
+	[Table("MembershipOrganization")]
 	public class MembershipOrganization : Base
 	{
 		[Required]

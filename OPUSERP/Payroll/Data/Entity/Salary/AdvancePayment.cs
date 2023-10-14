@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Payroll.Data.Entity.Salary
 {
-    [Table("AdvancePayment", Schema = "Payroll")]
+    [Table("AdvancePayment")]
     public class AdvancePayment : Base
     {
         public int advanceAdjustmentId { get; set; }

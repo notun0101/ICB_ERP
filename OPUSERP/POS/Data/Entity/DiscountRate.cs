@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.POS.Data.Entity
 {
-    [Table("DiscountRate", Schema = "POS")]
+    [Table("DiscountRate")]
     public class DiscountRate : Base
     {
         public decimal? rate { get; set; }

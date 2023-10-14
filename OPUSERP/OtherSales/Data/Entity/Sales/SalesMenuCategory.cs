@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.OtherSales.Data.Entity.Sales
 {
-    [Table("SalesMenuCategory", Schema = "OSales")]
+    [Table("SalesMenuCategory")]
     public class SalesMenuCategory:Base
     {
         [MaxLength(300)]

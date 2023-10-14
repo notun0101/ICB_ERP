@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.JobAssign
 {
-    [Table("JobAssignDetail", Schema = "SCM")]
+    [Table("JobAssignDetail")]
     public class JobAssignDetail:Base
     {
         public int? jobAssignId { get; set; }

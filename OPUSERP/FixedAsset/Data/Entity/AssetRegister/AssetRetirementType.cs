@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.FixedAsset.Data.Entity.AssetRegister
 {
-    [Table("AssetRetirementTypes", Schema = "FAMS")]
+    [Table("AssetRetirementTypes")]
     public class AssetRetirementType : Base
     {
         [MaxLength(200)]

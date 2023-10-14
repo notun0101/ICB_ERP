@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.AccountingSettings
 {
-    [Table("AccountGroup", Schema = "ACCOUNT")]
+    [Table("AccountGroup")]
     public class AccountGroup : Base
     {
         public int? natureId { get; set; }

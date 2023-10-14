@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.TAMS.Data.Entity
 {
-    [Table("TaskComment", Schema = "TMS")]
+    [Table("TaskComment")]
     public class TaskComment:Base
     {
         public int? taskInformationId { get; set; }

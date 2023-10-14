@@ -19,7 +19,7 @@ using OPUSERP.Data.Entity.AttachmentComment;
 namespace OPUSERP.Areas.VMS.Controllers
 {
     [Authorize]
-    [Area("VMS")]
+    [Area("HR")]
     public class RequisitionController : Controller
     {
         private readonly IVMSVehicleInfoService vehicleInfoService;

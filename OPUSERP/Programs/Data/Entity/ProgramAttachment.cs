@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Programs.Data.Entity
 {
-    [Table("ProgramAttachment", Schema = "PM")]
+    [Table("ProgramAttachment")]
     public class ProgramAttachment:Base
     {
         public int? programMasterId { get; set; }

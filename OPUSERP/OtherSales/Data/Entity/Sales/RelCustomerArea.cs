@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.OtherSales.Data.Entity.Sales
 {
-    [Table("RelCustomerArea", Schema = "Distribution")]
+    [Table("RelCustomerArea")]
     public class RelCustomerArea : Base
     {
         public int? areaId { get; set; }

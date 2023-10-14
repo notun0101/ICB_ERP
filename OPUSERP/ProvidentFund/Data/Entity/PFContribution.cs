@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.ProvidentFund.Data.Entity
 {
-    [Table("PFContribution", Schema = "PF")]
+    [Table("PFContribution")]
 
     public class PFContribution : Base
     {

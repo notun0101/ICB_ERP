@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Gratuity
 {
-    [Table("GratuityPolicyMaster", Schema = "HR")]
+    [Table("GratuityPolicyMaster")]
     public class GratuityPolicyMaster : Base
     {
         public int sbuId { get; set; }

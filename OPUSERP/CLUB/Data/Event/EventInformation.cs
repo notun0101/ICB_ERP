@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CLUB.Data.Event
 {
-    [Table("EventInformation", Schema = "Club")]
+    [Table("EventInformation")]
     public class EventInformation : Base
     {
 

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Payroll.Data.Entity.Salary
 {
-    [Table("InvestmentRebateSettings", Schema = "Payroll")]
+    [Table("InvestmentRebateSettings")]
     public class InvestmentRebateSettings : Base
     {       
         public int taxYearId { get; set; }

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.ProvidentFund.Data.Entity
 {
-    [Table("PFInterestDistributionMaster", Schema = "PF")]
+    [Table("PFInterestDistributionMaster")]
     public class PFInterestDistributionMaster : Base
     {
         public string processBy { get; set; }

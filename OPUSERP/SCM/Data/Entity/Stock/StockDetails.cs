@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.Stock
 {
-    [Table("StockDetails", Schema = "SCM")]
+    [Table("StockDetails")]
     public class StockDetails:Base
     {
         public int? stockMasterId { get; set; }

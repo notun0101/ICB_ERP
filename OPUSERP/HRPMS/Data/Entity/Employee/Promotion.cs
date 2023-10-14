@@ -10,7 +10,7 @@ namespace OPUSERP.HRPMS.Data.Entity.Employee
         Verified By:  Jaggesher
         Date: 23/04/2019
     */
-    [Table("Promotion", Schema = "HR")]
+    [Table("Promotion")]
     public class Promotion:Base
     {
         public int employeeId { get; set; }

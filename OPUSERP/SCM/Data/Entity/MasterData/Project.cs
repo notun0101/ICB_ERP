@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.MasterData
 {
-    [Table("Project", Schema = "SCM")]
+    [Table("Project")]
     public class Project:Base
     {
         [MaxLength(250)]

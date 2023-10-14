@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.Requisition
 {
-    [Table("RFQPriceMaster", Schema = "SCM")]
+    [Table("RFQPriceMaster")]
     public class RFQPriceMaster:Base
     {
         public int? rFQMasterId { get; set; }

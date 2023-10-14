@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-    [Table("ShiftGroupMaster", Schema = "HR")]
+    [Table("ShiftGroupMaster")]
     public class ShiftGroupMaster : Base
     {
         [Required]

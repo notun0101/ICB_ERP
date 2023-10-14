@@ -112,7 +112,7 @@ namespace OPUSERP.Areas.HRPMSACR.Controllers
 					data.assignToRecomDate = DateTime.Now;
 					data.recommendator = drawerCode;
 					data.statusInfoId = 4;
-					await acrInfoService.SendNotification(userName, userName, drawerCode, "ACR for " + userDetails.nameEnglish, "", "ACR", "/HRPMSACR/AssessmentInfo/Authority");
+					await acrInfoService.SendNotification(userName, userName, drawerCode, "ACR for " + userDetails.nameEnglish, "", "HR", "/HRPMSACR/AssessmentInfo/Authority");
 				}
 				else
 				{
@@ -120,7 +120,7 @@ namespace OPUSERP.Areas.HRPMSACR.Controllers
 
 					data.statusInfoId = 1;
 					data.routeOrder = 1;
-					await acrInfoService.SendNotification(userName, userName, "2503", "ACR for " + userDetails.nameEnglish, "", "ACR", "/HRPMSACR/AssessmentInfo/ACRPendingListForHRAdmin");
+					await acrInfoService.SendNotification(userName, userName, "2503", "ACR for " + userDetails.nameEnglish, "", "HR", "/HRPMSACR/AssessmentInfo/ACRPendingListForHRAdmin");
 				}
 
 				await acrInfoService.SaveAssessment(data);
@@ -472,8 +472,8 @@ namespace OPUSERP.Areas.HRPMSACR.Controllers
                 //    if (userName == assBasic.recommendator)
                 //{
                 //    var userDetails = await personalInfoService.GetEmployeeInfoByCode(assBasic.empCode);
-                //    await acrInfoService.SendNotification(userName, userName, assBasic.signatory, "ACR From " + userDetails.nameEnglish, "Waiting for ACR to Signatory", "ACR", "/HRPMSACR/AssessmentInfo/Authority");
-                //    await acrInfoService.SendNotification(userName, userName, "2503", userDetails.nameEnglish + "'s ACR has been waiting for signatory.", "", "ACR", "/HRPMSACR/AssessmentInfo/ACRPendingListForHRAdmin");
+                //    await acrInfoService.SendNotification(userName, userName, assBasic.signatory, "ACR From " + userDetails.nameEnglish, "Waiting for ACR to Signatory", "HR", "/HRPMSACR/AssessmentInfo/Authority");
+                //    await acrInfoService.SendNotification(userName, userName, "2503", userDetails.nameEnglish + "'s ACR has been waiting for signatory.", "", "HR", "/HRPMSACR/AssessmentInfo/ACRPendingListForHRAdmin");
 
                 //}
 
@@ -481,8 +481,8 @@ namespace OPUSERP.Areas.HRPMSACR.Controllers
                 // if (userName == assBasic.empType)
                 //{
                 //    var userDetails = await personalInfoService.GetEmployeeInfoByCode(assBasic.empCode);
-                //    await acrInfoService.SendNotification(userName, userName, "2503", userDetails.nameEnglish + "'s ACR has been Completed.", "", "ACR", "/HRPMSACR/AssessmentInfo/AcrCompletedList");
-                //    await acrInfoService.SendNotification(userName, userName, "2064", userDetails.nameEnglish + "'s ACR has been Completed.", "", "ACR", "/HRPMSACR/AssessmentInfo/AcrCompletedList");
+                //    await acrInfoService.SendNotification(userName, userName, "2503", userDetails.nameEnglish + "'s ACR has been Completed.", "", "HR", "/HRPMSACR/AssessmentInfo/AcrCompletedList");
+                //    await acrInfoService.SendNotification(userName, userName, "2064", userDetails.nameEnglish + "'s ACR has been Completed.", "", "HR", "/HRPMSACR/AssessmentInfo/AcrCompletedList");
 
                 //}
 
@@ -609,9 +609,9 @@ namespace OPUSERP.Areas.HRPMSACR.Controllers
             if (userInfo.EmpCode == assessment.recommendator)
             {
                 var userDetails = await personalInfoService.GetEmployeeInfoByCode(userName);
-                await acrInfoService.SendNotification(userName, userName, assessment.signatory, "ACR From " + userDetails.nameEnglish, "Waiting for ACR to Signatory", "ACR", "/HRPMSACR/AssessmentInfo/Authority");
-                await acrInfoService.SendNotification(userName, userName, "2503", userDetails.nameEnglish + "'s ACR has been waiting for signatory.", "", "ACR", "/HRPMSACR/AssessmentInfo/ACRPendingListForHRAdmin");
-                await acrInfoService.SendNotification(userName, userName, "2064", userDetails.nameEnglish + "'s ACR has been waiting for signatory.", "", "ACR", "/HRPMSACR/AssessmentInfo/ACRPendingListForHRAdmin");
+                await acrInfoService.SendNotification(userName, userName, assessment.signatory, "ACR From " + userDetails.nameEnglish, "Waiting for ACR to Signatory", "HR", "/HRPMSACR/AssessmentInfo/Authority");
+                await acrInfoService.SendNotification(userName, userName, "2503", userDetails.nameEnglish + "'s ACR has been waiting for signatory.", "", "HR", "/HRPMSACR/AssessmentInfo/ACRPendingListForHRAdmin");
+                await acrInfoService.SendNotification(userName, userName, "2064", userDetails.nameEnglish + "'s ACR has been waiting for signatory.", "", "HR", "/HRPMSACR/AssessmentInfo/ACRPendingListForHRAdmin");
             }
 
 
@@ -901,8 +901,8 @@ namespace OPUSERP.Areas.HRPMSACR.Controllers
                 if (userName == data.signatory)
                 {
                      var userDetails =await personalInfoService.GetEmployeeInfoByCode(data.empCode);
-                    await acrInfoService.SendNotification(userName, userName, data.empType, "ACR From " + userDetails.nameEnglish, "Waiting for ACR to Approved", "ACR", "/HRPMSACR/AssessmentInfo/Authority");
-                    await acrInfoService.SendNotification(userName, userName, "2503", userDetails.nameEnglish + "'s ACR is on MD hand.", "", "ACR", "/HRPMSACR/AssessmentInfo/ACRPendingListForHRAdmin");
+                    await acrInfoService.SendNotification(userName, userName, data.empType, "ACR From " + userDetails.nameEnglish, "Waiting for ACR to Approved", "HR", "/HRPMSACR/AssessmentInfo/Authority");
+                    await acrInfoService.SendNotification(userName, userName, "2503", userDetails.nameEnglish + "'s ACR is on MD hand.", "", "HR", "/HRPMSACR/AssessmentInfo/ACRPendingListForHRAdmin");
 
                 }
                 return Json(assesId);
@@ -992,8 +992,8 @@ namespace OPUSERP.Areas.HRPMSACR.Controllers
             if (userName == assessment.signatory)
             {
                 var userDetails = await personalInfoService.GetEmployeeInfoByCode(assessment.empCode);
-                await acrInfoService.SendNotification(userName, userName, assessment.empType, "ACR From " + userDetails.nameEnglish, "Waiting for ACR to Approved", "ACR", "/HRPMSACR/AssessmentInfo/Authority");
-                await acrInfoService.SendNotification(userName, userName, "2503", userDetails.nameEnglish + "'s ACR is on MD hand.", "", "ACR", "/HRPMSACR/AssessmentInfo/ACRPendingListForHRAdmin");
+                await acrInfoService.SendNotification(userName, userName, assessment.empType, "ACR From " + userDetails.nameEnglish, "Waiting for ACR to Approved", "HR", "/HRPMSACR/AssessmentInfo/Authority");
+                await acrInfoService.SendNotification(userName, userName, "2503", userDetails.nameEnglish + "'s ACR is on MD hand.", "", "HR", "/HRPMSACR/AssessmentInfo/ACRPendingListForHRAdmin");
 
             }
 

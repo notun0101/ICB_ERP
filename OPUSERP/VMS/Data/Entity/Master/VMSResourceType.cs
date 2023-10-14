@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.VMS.Data.Entity.Master
 {
-    [Table("VMSResourceType", Schema = "VMS")]
+    [Table("VMSResourceType")]
     public class VMSResourceType:Base
     {
         public string empType { get; set; }

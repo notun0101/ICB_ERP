@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.MasterData
 {
-    [Table("Unit", Schema = "SCM")]
+    [Table("Unit")]
     public class Unit:Base
     {
         [MaxLength(250)]

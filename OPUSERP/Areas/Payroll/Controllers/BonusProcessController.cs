@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Areas.Payroll.Controllers
 {
-    [Area("Payroll")]
+    [Area("HR")]
     [Authorize]
     public class BonusProcessController : Controller
     {

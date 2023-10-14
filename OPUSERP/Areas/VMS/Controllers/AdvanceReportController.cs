@@ -10,7 +10,7 @@ using OPUSERP.VMS.Services.MasterData.Interfaces;
 namespace OPUSERP.Areas.VMS.Controllers
 {
     [Authorize]
-    [Area("VMS")]
+    [Area("HR")]
     public class AdvanceReportController : Controller
     {
         private readonly IVMSReportService reportService;

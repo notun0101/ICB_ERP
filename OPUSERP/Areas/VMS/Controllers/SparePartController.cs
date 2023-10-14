@@ -12,7 +12,7 @@ using OPUSERP.VMS.Services.CarManagement.Interfaces;
 namespace OPUSERP.Areas.VMS.Controllers
 {
     [Authorize]
-    [Area("VMS")]
+    [Area("HR")]
     public class SparePartController : Controller
     {
         private readonly ICarInfo carInfo;

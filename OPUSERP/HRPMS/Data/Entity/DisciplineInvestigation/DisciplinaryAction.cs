@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.DisciplineInvestigation
 {
-    [Table("DisciplinaryAction", Schema = "HR")]
+    [Table("DisciplinaryAction")]
     public class DisciplinaryAction : Base
     {
         public int employeeId { get; set; }

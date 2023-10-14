@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CRM.Data.Entity.Lead
 {
-    [Table("Document", Schema = "CRM")]
+    [Table("Document")]
     public class Document:Base 
     {
         public int? contactsId { get; set; }

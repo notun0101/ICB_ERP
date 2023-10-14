@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Patient.Data.Entity
 {
-    [Table("PatientRepresentative", Schema = "HOSPTL")]
+    [Table("PatientRepresentative")]
     public class PatientRepresentative : Base
     {
         public int? leadsId { get; set; }

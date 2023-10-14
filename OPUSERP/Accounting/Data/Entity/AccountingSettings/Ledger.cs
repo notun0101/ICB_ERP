@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.AccountingSettings
 {
-    [Table("Ledger", Schema = "ACCOUNT")]
+    [Table("Ledger")]
     public class Ledger : Base
     {
         public int? groupId { get; set; }

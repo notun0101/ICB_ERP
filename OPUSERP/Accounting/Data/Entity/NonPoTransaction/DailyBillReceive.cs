@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Accounting.Data.Entity.NonPoTransaction
 {
-    [Table("DailyBillReceive", Schema = "ACCOUNT")]
+    [Table("DailyBillReceive")]
     public class DailyBillReceive:Base
     {
         public string SLNo { get; set; }

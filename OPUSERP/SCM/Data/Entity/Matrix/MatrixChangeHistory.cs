@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Data.Entity.Matrix
 {
-    [Table("MatrixChangeHistory", Schema = "SCM")]
+    [Table("MatrixChangeHistory")]
     public class MatrixChangeHistory : Base
     {
         public int requisitionMasterId { get; set; }

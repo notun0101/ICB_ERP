@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Workflow.Data.Entity
 {
-    [Table("DraftDoc", Schema = "WMS")]
+    [Table("DraftDoc")]
     public class DraftDoc:Base
     {
         public string number { get; set; }

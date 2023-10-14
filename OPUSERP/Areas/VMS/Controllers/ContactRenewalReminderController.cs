@@ -11,7 +11,7 @@ using OPUSERP.VMS.Services.VehicleService.Interfaces;
 namespace OPUSERP.Areas.VMS.Controllers
 {
     [Authorize]
-    [Area("VMS")]
+    [Area("HR")]
     public class ContactRenewalReminderController : Controller
     {
        

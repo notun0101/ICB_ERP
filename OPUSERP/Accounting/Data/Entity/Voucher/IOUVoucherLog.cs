@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.Voucher
 {
-    [Table("IOUVoucherLog", Schema = "ACCOUNT")]
+    [Table("IOUVoucherLog")]
     public class IOUVoucherLog : Base
     {
         public int? IOUVoucherMasterId { get; set; }

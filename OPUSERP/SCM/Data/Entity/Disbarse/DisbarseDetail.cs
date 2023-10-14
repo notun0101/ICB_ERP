@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.Disbarse
 {
-    [Table("DeisbarseDetails", Schema = "SCM")]
+    [Table("DeisbarseDetails")]
     public class DisbarseDetail:Base
     {
         public int? disbarseId { get; set; }

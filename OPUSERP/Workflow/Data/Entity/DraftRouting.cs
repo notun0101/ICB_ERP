@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Workflow.Data.Entity
 {
-    [Table("DraftRouting", Schema = "WMS")]
+    [Table("DraftRouting")]
     public class DraftRouting:Base
     {
         public int? employeeId { get; set; }

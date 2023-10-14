@@ -9,7 +9,7 @@ using OPUSERP.VMS.Data.Entity.FuelStation;
 
 namespace OPUSERP.VMS.Data.Entity.Requisition
 {
-    [Table("RequisitionComment", Schema = "VMS")]
+    [Table("RequisitionComment")]
     public class RequisitionComment: Base
     {
         public int? requisitionMasterId { get; set; }

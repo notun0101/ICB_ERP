@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CLUB.Data.Member
 {
-    [Table("SpecialSkill", Schema = "Club")]
+    [Table("SpecialSkill")]
     public class SpecialSkill : Base
     {
         [Required]

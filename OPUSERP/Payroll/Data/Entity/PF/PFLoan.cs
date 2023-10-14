@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Payroll.Data.Entity.Salary
 {
-    [Table("PFLoan", Schema = "Payroll")]
+    [Table("PFLoan")]
     public class PFLoan : Base
     {
  

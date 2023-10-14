@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-    [Table("ApprovalDetail", Schema = "HR")]
+    [Table("ApprovalDetail")]
     public class ApprovalDetail : Base
     {
         public int? approvalMasterId { get; set; }

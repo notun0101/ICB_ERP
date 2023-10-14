@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.Voucher
 {
-    [Table("DeleteVoucherDetail", Schema = "ACCOUNT")]
+    [Table("DeleteVoucherDetail")]
     public class DeleteVoucherDetail : Base
     {        
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.MasterData
 {
-    [Table("OrganizationTypes", Schema = "SCM")]
+    [Table("OrganizationTypes")]
     public class OrganizationType:Base
     {
         [MaxLength(250)]

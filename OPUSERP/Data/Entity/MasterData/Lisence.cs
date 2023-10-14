@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Data.Entity.MasterData
 {
-    [Table("Lisence", Schema = "HR")]
+    [Table("Lisence")]
     public class Lisence:Base
     {
         public int? lisenceTypeId { get; set; }

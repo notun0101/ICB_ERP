@@ -9,7 +9,7 @@ using OPUSERP.SCM.Data.Entity.MasterData;
 
 namespace OPUSERP.Production.Data.Entity
 {
-    [Table("BOMMasters", Schema = "PROD")]
+    [Table("BOMMasters")]
     public class BOMMaster : Base
     {
         public string bomNo { get; set; }

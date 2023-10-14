@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Workflow.Data.Entity
 {
-    [Table("Urlgeneration", Schema = "WMS")]
+    [Table("Urlgeneration")]
     public class Urlgeneration:Base
     {
     }

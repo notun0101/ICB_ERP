@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity.Arrear
 {
-    [Table("EmployeeArrearInfo", Schema = "Payroll")]
+    [Table("EmployeeArrearInfo")]
     public class EmployeeArrearInfo : Base
     {
         public int? employeeId { get; set; }

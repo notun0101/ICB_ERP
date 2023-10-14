@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.FixedAsset.Data.Entity.MasterData
 {
-    [Table("DepriciationPeriod", Schema = "FAMS")]
+    [Table("DepriciationPeriod")]
     public class DepriciationPeriod: Base
     {
         public string PeriodName { get; set; }

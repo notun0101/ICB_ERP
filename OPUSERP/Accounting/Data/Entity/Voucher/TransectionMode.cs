@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.Voucher
 {
-    [Table("TransectionMode", Schema = "ACCOUNT")]
+    [Table("TransectionMode")]
     public class TransectionMode : Base
     {
         [Column(TypeName = "nvarchar(150)")]

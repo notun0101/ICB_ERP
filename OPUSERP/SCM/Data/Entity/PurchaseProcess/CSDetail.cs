@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.PurchaseProcess
 {
-    [Table("CSDetail", Schema = "SCM")]
+    [Table("CSDetail")]
     public class CSDetail:Base
     {
         public int? cSMasterId { get; set; }

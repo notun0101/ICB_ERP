@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Recruitment.ExitInterview
 {
-    [Table("ExitInterviewReasonOfLeaving", Schema = "HR")]
+    [Table("ExitInterviewReasonOfLeaving")]
     public class ExitInterviewReasonOfLeaving : Base
     {
         public int? exitInterviewMasterId { get; set; }

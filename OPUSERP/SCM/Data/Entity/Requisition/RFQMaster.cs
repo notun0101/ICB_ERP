@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.Requisition
 {
-    [Table("RFQMaster", Schema = "SCM")]
+    [Table("RFQMaster")]
     public class RFQMaster:Base
     {
         public string rfqNo { get; set; }

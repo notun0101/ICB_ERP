@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity.Salary
 {
-    [Table("FinalSettlement", Schema = "Payroll")]
+    [Table("FinalSettlement")]
     public class FinalSettlement : Base
     {
         public int? employeeInfoId { get; set; }

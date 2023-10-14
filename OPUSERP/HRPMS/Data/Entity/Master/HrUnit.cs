@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-    [Table("HrUnit", Schema = "HR")]
+    [Table("HrUnit")]
     public class HrUnit : Base
     {
         [MaxLength(250)]

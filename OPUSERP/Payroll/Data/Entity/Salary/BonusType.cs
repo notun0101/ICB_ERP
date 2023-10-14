@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Payroll.Data.Entity.Salary
 {
-    [Table("BonusType", Schema = "Payroll")]
+    [Table("BonusType")]
     public class BonusType : Base
     {
         [MaxLength(100)]

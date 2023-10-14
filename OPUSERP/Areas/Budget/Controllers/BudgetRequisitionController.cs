@@ -27,7 +27,7 @@ using System.Threading.Tasks;
 namespace OPUSERP.Areas.Budget.Controllers
 {
     [Authorize]
-    [Area("Budget")]
+    [Area("HR")]
     public class BudgetRequisitionController : Controller
     {
         private readonly LangGenerate<BudgetRequisitionLn> _lang;

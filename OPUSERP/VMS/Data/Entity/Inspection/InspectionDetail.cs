@@ -8,7 +8,7 @@ using OPUSERP.VMS.Data.Entity.Master;
 
 namespace OPUSERP.VMS.Data.Entity.Inspection
 {
-    [Table("InspectionDetail", Schema = "VMS")]
+    [Table("InspectionDetail")]
     public class InspectionDetail : Base
     {
         public int? inspectionMasterId { get; set; }

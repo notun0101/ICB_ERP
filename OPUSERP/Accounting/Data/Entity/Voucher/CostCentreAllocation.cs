@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.Voucher
 {
-    [Table("CostCentreAllocation", Schema = "ACCOUNT")]
+    [Table("CostCentreAllocation")]
     public class CostCentreAllocation : Base
     {
         public int? costCentreId { get; set; }

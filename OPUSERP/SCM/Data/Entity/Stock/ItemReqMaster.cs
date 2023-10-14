@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.Stock
 {
-    [Table("ItemReqMaster", Schema = "SCM")]
+    [Table("ItemReqMaster")]
     public class ItemReqMaster:Base
     {
         public string reqNo { get; set; }

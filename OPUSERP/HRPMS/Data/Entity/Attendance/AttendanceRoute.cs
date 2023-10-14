@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Attendance
 {
-    [Table("AttendanceRoute", Schema = "HR")]
+    [Table("AttendanceRoute")]
     public class AttendanceRoute : Base
     {
         public int? attendanceUpdateApplyId { get; set; }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Wages
 {
-    [Table("OTProcessData", Schema = "HR")]
+    [Table("OTProcessData")]
     public class OTProcessData:Base
     {
         public int? wageEmployeeInfoId { get; set; }

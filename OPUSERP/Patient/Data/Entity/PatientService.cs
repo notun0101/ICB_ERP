@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Patient.Data.Entity
 {
-    [Table("PatientService", Schema = "HOSPTL")]
+    [Table("PatientService")]
     public class PatientService : Base
     {
         public int? leadsId { get; set; }

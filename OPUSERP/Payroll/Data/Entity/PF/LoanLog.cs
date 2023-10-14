@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity.PF
 {
-	[Table("LoanLog", Schema = "Payroll")]
+	[Table("LoanLog")]
 	public class LoanLog:Base
 	{
 		public int? loanId { get; set; }

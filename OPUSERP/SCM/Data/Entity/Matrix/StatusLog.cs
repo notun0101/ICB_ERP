@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Data.Entity.Matrix
 {
-    [Table("StatusLog", Schema = "SCM")]
+    [Table("StatusLog")]
     public class StatusLog:Base
     {
         public int? matrixTypeId { get; set; }

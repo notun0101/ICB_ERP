@@ -8,7 +8,7 @@ using OPUSERP.HRPMS.Data.Entity.Employee;
 
 namespace OPUSERP.Shagotom.Data.Entity.Visitor
 {
-    [Table("VisitorEntryMaster", Schema = "Shagotom")]
+    [Table("VisitorEntryMaster")]
     public class VisitorEntryMaster : Base
     {
         public int? employeeInfoId { get; set; }

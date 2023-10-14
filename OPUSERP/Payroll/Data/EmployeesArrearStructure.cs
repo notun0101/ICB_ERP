@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data
 {
-    [Table("EmployeesArrearStructure", Schema = "Payroll")]
+    [Table("EmployeesArrearStructure")]
     public class EmployeesArrearStructure:Base
     {
         public int? arrearMasterId { get; set; }

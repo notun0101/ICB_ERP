@@ -14,7 +14,7 @@ using OPUSERP.VMS.Services.VehicleInfo.Interfaces;
 namespace OPUSERP.Areas.VMS.Controllers
 {
     [Authorize]
-    [Area("VMS")]
+    [Area("HR")]
     public class FuelTypeController : Controller
     {
         // GET: /<controller>/

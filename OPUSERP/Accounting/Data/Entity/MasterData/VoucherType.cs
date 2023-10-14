@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.MasterData
 {
-    [Table("VoucherType", Schema = "ACCOUNT")]
+    [Table("VoucherType")]
     public class VoucherType : Base
     {
         [MaxLength(100)]

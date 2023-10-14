@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.OtherSales.Data.Entity.Sales
 {
-    [Table("BarCodeInformation", Schema = "OSales")]
+    [Table("BarCodeInformation")]
     public class BarCodeInformation : Base
     {
         public int? itemPriceId { get; set; }

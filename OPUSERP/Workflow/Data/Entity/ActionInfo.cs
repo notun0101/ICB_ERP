@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Workflow.Data.Entity
 {
-    [Table("ActionInfo", Schema = "WMS")]
+    [Table("ActionInfo")]
     public class ActionInfo:Base
     {
         public string description { get; set; }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace OPUSERP.Areas.REMS.Controllers
 {
-    [Area("REMS")]
+    [Area("HR")]
     public class ClaimStatusLogController : Controller
     {
         public IActionResult Index()

@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Employee
 {
-    [Table("Belongings", Schema = "HR")]
+    [Table("Belongings")]
     public class Belongings:Base
     {
         [MaxLength(70)]

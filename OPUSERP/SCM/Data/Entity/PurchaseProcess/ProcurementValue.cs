@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.PurchaseProcess
 {
-    [Table("ProcurementValue", Schema = "SCM")]
+    [Table("ProcurementValue")]
     public class ProcurementValue:Base
     {
         [Column(TypeName = "nvarchar(100)")]

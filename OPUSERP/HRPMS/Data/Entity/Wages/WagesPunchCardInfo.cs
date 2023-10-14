@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Wages
 {
-    [Table("WagesPunchCardInfo", Schema = "HR")]
+    [Table("WagesPunchCardInfo")]
     public class WagesPunchCardInfo:Base
     {
         //Foreign Reliation

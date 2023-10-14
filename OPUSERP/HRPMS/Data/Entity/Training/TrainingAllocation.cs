@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Training
 {
-    [Table("TrainingAllocation", Schema = "HR")]
+    [Table("TrainingAllocation")]
     public class TrainingAllocation : Base
     {
         public int? trainingInfoId { get; set; }

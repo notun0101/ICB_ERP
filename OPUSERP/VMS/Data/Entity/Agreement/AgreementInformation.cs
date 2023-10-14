@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.VMS.Data.Entity.Agreement
 {
-    [Table("AgreementInformation", Schema = "VMS")]
+    [Table("AgreementInformation")]
     public class AgreementInformation:Base
     {
         public int? vehicleId { get; set; }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.CLUB.Data.Finance
 {
-    [Table("TrMaster", Schema = "Club")]
+    [Table("TrMaster")]
     public class TrMaster:Base
     {
         //Foreign Relation

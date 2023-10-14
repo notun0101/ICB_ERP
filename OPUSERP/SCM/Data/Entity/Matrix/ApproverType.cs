@@ -2,7 +2,7 @@
 
 namespace OPUSERP.Data.Entity.Matrix
 {
-    [Table("ApproverType", Schema = "SCM")]
+    [Table("ApproverType")]
     public class ApproverType:Base
     {
         public string approverTypeName { get; set; }

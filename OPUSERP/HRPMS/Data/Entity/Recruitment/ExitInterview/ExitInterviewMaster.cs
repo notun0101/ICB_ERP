@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Recruitment.ExitInterview
 {
-    [Table("ExitInterviewMaster", Schema = "HR")]
+    [Table("ExitInterviewMaster")]
     public class ExitInterviewMaster : Base
     {
         //Foreign Reliation

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Employee
 {
-    [Table("OtherQualification", Schema = "HR")]
+    [Table("OtherQualification")]
     public class OtherQualification:Base
     {
         public int employeeID { get; set; }

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.Requisition
 {
-    [Table("RequisitionDetails", Schema = "SCM")]
+    [Table("RequisitionDetails")]
     public class RequisitionDetail:Base
     {
         public int requisitionMasterId { get; set; }

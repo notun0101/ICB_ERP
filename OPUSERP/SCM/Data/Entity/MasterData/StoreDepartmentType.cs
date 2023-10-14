@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.MasterData
 {
-    [Table("StoreDepartmentTypes", Schema = "SCM")]
+    [Table("StoreDepartmentTypes")]
     public class StoreDepartmentType:Base
     {
         [Column(TypeName = "nvarchar(150)")]

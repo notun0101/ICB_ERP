@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Programs.Data.Entity
 {
-    [Table("ProgramPlanLocation", Schema = "PM")]
+    [Table("ProgramPlanLocation")]
     public class ProgramPlanLocation:Base
     {
         public int? programActivityId { get; set; }

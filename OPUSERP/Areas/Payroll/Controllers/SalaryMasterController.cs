@@ -14,7 +14,7 @@ using static OPUSERP.Areas.Payroll.Models.SalaryGradePercentViewModel;
 
 namespace OPUSERP.Areas.Payroll.Controllers
 {
-	[Area("Payroll")]
+	[Area("HR")]
 	[Authorize]
 	public class SalaryMasterController : Controller
 	{
@@ -111,10 +111,10 @@ namespace OPUSERP.Areas.Payroll.Controllers
 				salaryHeadsList = await salaryService.GetAllSalaryHead()
 			};
 			if (model.salaryHead == null) model.salaryHead = new SalaryHead();
-			var navdata = await navbarService.GetNavByAreaControllerAction("Payroll","SalaryMaster", "SalaryHead");
-			//var navdata = await navbarService.GetNavByAreaControllerAction("Payroll","SalaryMaster", "SalaryHead");
+			var navdata = await navbarService.GetNavByAreaControllerAction("HR","SalaryMaster", "SalaryHead");
+			//var navdata = await navbarService.GetNavByAreaControllerAction("HR","SalaryMaster", "SalaryHead");
 
-			//var actions = .GetMenuActions("Payroll", "SalaryMaster", "SalaryHead");
+			//var actions = .GetMenuActions("HR", "SalaryMaster", "SalaryHead");
 			return View(model);
 		}
 

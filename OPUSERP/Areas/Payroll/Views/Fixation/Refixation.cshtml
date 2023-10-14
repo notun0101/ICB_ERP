@@ -14,7 +14,7 @@
     <div class="card-body">
 
         <div class="container">
-            <form asp-area="Payroll" asp-controller="Fixation" asp-action="SaveReFixation" method="post">
+            <form asp-area="HR" asp-controller="HR" asp-action="SaveReFixation" method="post">
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="card" style="width: 100%;">
                     <div class="card-header  d-flex flex-row align-items-center justify-content-between">
@@ -399,7 +399,7 @@
             second = date.getSeconds(),
             hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
             minuteFormatted = minute < 10 ? "0" + minute : minute,
-            morning = hour < 12 ? "am" : "pm";
+            morning = hour < 12 ? "am" : "HR";
         if (month == 1) {
             monthName = 'Jan';
         }

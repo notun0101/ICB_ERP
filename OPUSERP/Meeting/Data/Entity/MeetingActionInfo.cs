@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Meeting.Data.Entity
 {
-    [Table("MeetingActionInfo", Schema = "MMS")]
+    [Table("MeetingActionInfo")]
     public class MeetingActionInfo:Base
     {
         public string description { get; set; }

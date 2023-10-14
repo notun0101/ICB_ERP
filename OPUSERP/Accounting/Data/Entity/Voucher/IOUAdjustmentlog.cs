@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Accounting.Data.Entity.Voucher
 {
-    [Table("IOUAdjustmentlog", Schema = "ACCOUNT")]
+    [Table("IOUAdjustmentlog")]
     public class IOUAdjustmentlog:Base
     {
         public int? iOUAdjustmentMasterId { get; set; }

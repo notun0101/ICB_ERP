@@ -23,7 +23,7 @@
         </div>
         <hr>
         <div class="container">
-            <form asp-area="Payroll" asp-controller="SalaryStructure" asp-action="SalStructure" id="FormId" method="post" data-parsley-validate="parsley">
+            <form asp-area="HR" asp-controller="SalaryStructure" asp-action="SalStructure" id="FormId" method="post" data-parsley-validate="parsley">
                 <div asp-validation-summary="All" class="text-danger"></div>
 
                 <div class="row" style="background-color:#f6f3d0a8;height: 90px;border-radius: 6px;">
@@ -532,7 +532,7 @@
                 second = date.getSeconds(),
                 hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
                 minuteFormatted = minute < 10 ? "0" + minute : minute,
-                morning = hour < 12 ? "am" : "pm";
+                morning = hour < 12 ? "am" : "HR";
 
             return day + "-" + month + "-" + year;
         }

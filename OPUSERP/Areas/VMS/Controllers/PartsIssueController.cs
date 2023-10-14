@@ -15,7 +15,7 @@ using OPUSERP.VMS.Services.VehicleInfo.Interfaces;
 namespace OPUSERP.Areas.VMS.Controllers
 {
     [Authorize]
-    [Area("VMS")]
+    [Area("HR")]
     public class PartsIssueController : Controller
     {
         private readonly IPartsIssueService partsIssueService;

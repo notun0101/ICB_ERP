@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-    [Table("AtttachmentGroup", Schema = "HR")]
+    [Table("AtttachmentGroup")]
     public class AtttachmentGroup : Base
     {
         [MaxLength(250)]

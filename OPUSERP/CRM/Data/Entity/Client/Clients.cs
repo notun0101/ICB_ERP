@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CRM.Data.Entity.Client
 {
-    [Table("Clients", Schema = "CRM")]
+    [Table("Clients")]
     public class Clients : Base
     {
         public DateTime? agreementReceiveDate { get; set; }

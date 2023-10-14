@@ -11,7 +11,7 @@ using OPUSERP.VMS.Data.Entity.ServiceVehicle;
 
 namespace OPUSERP.VMS.Data.Entity.VehicleInfo
 {
-    [Table("ContactRenewalReminder", Schema = "VMS")]
+    [Table("ContactRenewalReminder")]
     public class ContactRenewalReminder : Base
     {
         public int? supplierId { get; set; }

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.Voucher
 {
-    [Table("VoucherApproveLog", Schema = "ACCOUNT")]
+    [Table("VoucherApproveLog")]
     public class VoucherApproveLog : Base
     {
         public int? voucherMasterId { get; set; }

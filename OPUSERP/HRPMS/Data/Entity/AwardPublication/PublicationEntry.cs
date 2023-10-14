@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.AwardPublication
 {
-    [Table("PublicationEntry", Schema = "HR")]
+    [Table("PublicationEntry")]
     public class PublicationEntry : Base
     {
         //Foreign Reliation

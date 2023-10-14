@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.VMS.Data.Entity.VehicleInfo
 {
-    [Table("VehicleGroup", Schema = "VMS")]
+    [Table("VehicleGroup")]
     public class VehicleGroup:Base
     {
         [MaxLength(250)]

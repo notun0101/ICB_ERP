@@ -3,7 +3,7 @@ using OPUSERP.Data.Entity;
 
 namespace OPUSERP.Production.Data.Entity
 {
-    [Table("ProductionTypes", Schema = "PROD")]
+    [Table("ProductionTypes")]
     public class ProductionType:Base
     {
         [Column(TypeName = "nvarchar(100)")]

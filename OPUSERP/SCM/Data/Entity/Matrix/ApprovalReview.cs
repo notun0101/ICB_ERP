@@ -2,7 +2,7 @@
 
 namespace OPUSERP.Data.Entity.Matrix
 {
-    [Table("ApprovalReview", Schema = "SCM")]
+    [Table("ApprovalReview")]
     public class ApprovalReview:Base
     {
         public int? approvalLogID { get; set; }

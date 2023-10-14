@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace OPUSERP.HRPMS.Data.Entity.Employee
 {
 	
-	[Table("Signatory", Schema = "HR")]
+	[Table("Signatory")]
 	public class Signatory: Base
 	{
 		[Required]

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity.Fixation
 {
-	[Table("FixationIntegration", Schema = "Fixation")]
+	[Table("FixationIntegration")]
 	public class FixationIntegration:Base
 	{
 		public int? employeeId { get; set; }

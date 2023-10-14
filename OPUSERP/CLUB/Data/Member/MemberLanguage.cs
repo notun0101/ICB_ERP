@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.CLUB.Data.Member
 {
-    [Table("MemberLanguage", Schema = "Club")]
+    [Table("MemberLanguage")]
     public class MemberLanguage : Base
     {
         //Foreign Reliation

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Wages
 {
-    [Table("WagesEmpAttendance", Schema = "HR")]
+    [Table("WagesEmpAttendance")]
     public class WagesEmpAttendance : Base
     {
         public string punchCardNo { get; set; }

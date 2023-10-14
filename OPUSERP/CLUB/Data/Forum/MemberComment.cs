@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CLUB.Data.Forum
 {
-    [Table("MemberComment", Schema = "Club")]
+    [Table("MemberComment")]
     public class MemberComment : Base
     {
         public string details { get; set; }

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.Supplier
 {
-    [Table("Organization", Schema = "SCM")]
+    [Table("SupplierOrganization")]
     public class Organization:Base
     {
         [StringLength(250)]

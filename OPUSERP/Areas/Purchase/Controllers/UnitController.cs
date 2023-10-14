@@ -14,7 +14,7 @@ using OPUSERP.SCM.Services.MasterData.Interfaces;
 namespace OPUSERP.Areas.Purchase.Controllers
 {
     [Authorize]
-    [Area("Purchase")]
+    [Area("HR")]
     public class UnitController : Controller
     {
         private readonly IItemsService itemsService;

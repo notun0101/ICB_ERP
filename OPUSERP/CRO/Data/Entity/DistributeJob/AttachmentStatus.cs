@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.CRO.Data.Entity.DistributeJob
 {
-    [Table("AttachmentStatus", Schema = "CRO")]
+    [Table("AttachmentStatus")]
     public class AttachmentStatus : Base
     {        
         public int? operationMasterId { get; set; }

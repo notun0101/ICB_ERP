@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity
 {
-	[Table("InterestNotDeduct", Schema = "Payroll")]
+	[Table("InterestNotDeduct")]
 	public class InterestNotDeduct:Base
 	{
 		public string empCode { get; set; }

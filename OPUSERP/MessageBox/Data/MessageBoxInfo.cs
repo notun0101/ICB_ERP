@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.MessageBox.Data
 {
-    [Table("MessageBoxInfo", Schema = "MBox")]
+    [Table("MessageBoxInfo")]
     public class MessageBoxInfo:Base
     {
         public string message { get; set; }

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.IOU
 {
-    [Table("IOUMaster", Schema = "SCM")]
+    [Table("IOUMaster")]
     public class IOUMaster:Base
     {
         [Column(TypeName = "nvarchar(120)")]

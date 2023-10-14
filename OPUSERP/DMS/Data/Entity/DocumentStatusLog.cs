@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.DMS.Data.Entity
 {
-    [Table("DocumentStatusLog", Schema = "Doc")]
+    [Table("DocumentStatusLog")]
     public class DocumentStatusLog : Base
     {
         public int? documentMasterId { get; set; }

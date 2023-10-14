@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.TAMS.Data.Entity
 {
-    [Table("TaskAttachment", Schema = "TMS")]
+    [Table("TaskAttachment")]
     public class TaskAttachment:Base
     {
         public int? taskInformationId { get; set; }

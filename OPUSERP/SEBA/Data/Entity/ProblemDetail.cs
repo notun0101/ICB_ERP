@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SEBA.Data.Entity
 {
-    [Table("ProblemDetail", Schema = "SEBA")]
+    [Table("ProblemDetail")]
     public class ProblemDetail : Base
     {
         public int? problemMasterId { get; set; }

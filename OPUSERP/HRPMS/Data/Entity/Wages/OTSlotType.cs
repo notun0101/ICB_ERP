@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Wages
 {
-    [Table("OTSlotType", Schema = "HR")]
+    [Table("OTSlotType")]
     public class OTSlotType:Base
     {
         public string slotName { get; set; }

@@ -20,7 +20,7 @@ using OPUSERP.Utility.Models;
 
 namespace OPUSERP.Areas.Payroll.Controllers
 {
-    [Area("Payroll")]
+    [Area("HR")]
     [Authorize]
     public class SalaryProcessController : Controller
     {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.ProjectStatus
 {
-    [Table("DailyProgressReports", Schema = "SCM")]
+    [Table("DailyProgressReports")]
     public class DailyProgressReport:Base
     {
         public String ApplicationUserId { get; set; }

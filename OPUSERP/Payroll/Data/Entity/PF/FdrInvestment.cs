@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity.PF
 {
-    [Table("FdrInvestment", Schema = "Payroll")]
+    [Table("FdrInvestment")]
     public class FdrInvestment:Base
     {
         public string Ftno { get; set; }

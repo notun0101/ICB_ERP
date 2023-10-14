@@ -16,7 +16,7 @@ using OPUSERP.VMS.Services.VehicleService.Interfaces;
 namespace OPUSERP.Areas.VMS.Controllers
 {
     [Authorize]
-    [Area("VMS")]
+    [Area("HR")]
     public class VehicleServiceReminderController : Controller
     {
         private readonly IVMSVehicleInfoService vehicleInfoService;

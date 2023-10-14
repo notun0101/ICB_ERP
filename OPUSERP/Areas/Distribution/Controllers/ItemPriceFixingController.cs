@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 namespace OPUSERP.Areas.Distribution.Controllers
 {
     [Authorize]
-    [Area("Distribution")]
+    [Area("HR")]
     public class ItemPriceFixingController : Controller
     {
         private readonly IDisItemPriceFixingService itemPriceFixingService;

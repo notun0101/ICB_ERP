@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Purchase.Data.Entity
 {
-    [Table("BillPaymentDetail", Schema = "Purchase")]
+    [Table("BillPaymentDetail")]
     public class BillPaymentDetail:Base
     {
         public int? billPaymentMasterId { get; set; }

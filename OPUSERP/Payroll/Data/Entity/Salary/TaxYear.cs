@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Payroll.Data.Entity.Salary
 {
-    [Table("TaxYear", Schema = "Payroll")]
+    [Table("TaxYear")]
     public class TaxYear : Base
     {
         [MaxLength(100)]

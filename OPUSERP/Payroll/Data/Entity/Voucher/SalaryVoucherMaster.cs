@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity.Voucher
 {
-	[Table("SalaryVoucherMaster", Schema = "Payroll")]
+	[Table("SalaryVoucherMaster")]
 	public class SalaryVoucherMaster:Base
 	{
 		public string particular { get; set; }

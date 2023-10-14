@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Production.Data.Entity
 {
-    [Table("BOMOverheadDetail", Schema = "PROD")]
+    [Table("BOMOverheadDetail")]
     public class BOMOverheadDetail : Base
     {
         public int? bOMMasterId { get; set; }

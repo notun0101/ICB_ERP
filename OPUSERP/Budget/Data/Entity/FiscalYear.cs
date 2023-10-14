@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Budget.Data.Entity
 {
-    [Table("FiscalYear", Schema = "Budget")]
+    [Table("FiscalYear")]
     public class FiscalYear:Base
     {
         [MaxLength(100)]

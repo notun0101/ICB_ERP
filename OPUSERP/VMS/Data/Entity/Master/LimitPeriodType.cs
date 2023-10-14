@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.VMS.Data.Entity.Master
 {
-    [Table("LimitPeriodType", Schema = "VMS")]
+    [Table("LimitPeriodType")]
     public class LimitPeriodType:Base
     {
         public string limitPeriodTypeName { get; set; }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Distribution.Data.Entity.MasterData
 {
-    [Table("PackageMaster", Schema = "Distribution")]
+    [Table("PackageMaster")]
     public class PackageMaster : Base
     {
         public DateTime? packageDate { get; set; }

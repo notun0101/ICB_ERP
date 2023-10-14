@@ -45,6 +45,8 @@
           "Microsoft.VisualStudio.Web.BrowserLink": "2.2.0",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.2.4",
           "Newtonsoft.Json": "13.0.2",
+          "Oracle.EntityFrameworkCore": "2.19.180",
+          "Oracle.ManagedDataAccess": "19.18.0",
           "System.Data.OleDb": "4.7.0",
           "System.Drawing.Common": "4.6.0",
           "System.ServiceModel.Duplex": "4.4.4",
@@ -486,6 +488,33 @@
           "lib/netstandard1.6/NuGet.Frameworks.dll": {}
         }
       },
+      "Oracle.EntityFrameworkCore/2.19.180": {
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.Relational": "2.2.0",
+          "Oracle.ManagedDataAccess.Core": "2.19.180"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Oracle.EntityFrameworkCore.dll": {
+            "assemblyVersion": "2.0.19.1",
+            "fileVersion": "2.0.19.1"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/Oracle.EntityFrameworkCore.dll": {}
+        }
+      },
+      "Oracle.ManagedDataAccess/19.18.0": {
+        "runtime": {
+          "lib/net40/Oracle.ManagedDataAccess.dll": {
+            "assemblyVersion": "4.122.19.1",
+            "fileVersion": "4.122.19.1"
+          }
+        },
+        "compile": {
+          "lib/net40/Oracle.ManagedDataAccess.dll": {}
+        }
+      },
+      "Oracle.ManagedDataAccess.Core/2.19.180": {},
       "Portable.BouncyCastle/1.9.0": {
         "runtime": {
           "lib/netstandard2.0/BouncyCastle.Crypto.dll": {
@@ -4343,6 +4372,27 @@
       "sha512": "sha512-qbXaB76XYUVLocLBs8Z9TS/ERGK2wm797feO+0JEPFvT7o7MRadOR77mqaSD4J1k8G+DlZQyq+MlkCuxrkr3ag==",
       "path": "nuget.frameworks/4.7.0",
       "hashPath": "nuget.frameworks.4.7.0.nupkg.sha512"
+    },
+    "Oracle.EntityFrameworkCore/2.19.180": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-VNPwuODdwW7/6acbiu1joAyVmoM7Gq2g8ea5qX//uh1m/a0Qjwz7e6GiNtK5BJXZW725k0BG7Cp5W3nwwj8fmw==",
+      "path": "oracle.entityframeworkcore/2.19.180",
+      "hashPath": "oracle.entityframeworkcore.2.19.180.nupkg.sha512"
+    },
+    "Oracle.ManagedDataAccess/19.18.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ukPmMIEg+LgnIIMbkRIaC0MFLK990QLZrzWfdBaUg3XNdf1hFHCWNlTxU+/1trn+iqQSP+tWmb38efPm06W7iA==",
+      "path": "oracle.manageddataaccess/19.18.0",
+      "hashPath": "oracle.manageddataaccess.19.18.0.nupkg.sha512"
+    },
+    "Oracle.ManagedDataAccess.Core/2.19.180": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-WOgi2EQv3SR2nm55YTfF39s8i7WzLgxL5YjNZrTfTEklEj0ZcdNFwM3prsTk+8msOMX6d7nfsXHhnJDgvSuIhw==",
+      "path": "oracle.manageddataaccess.core/2.19.180",
+      "hashPath": "oracle.manageddataaccess.core.2.19.180.nupkg.sha512"
     },
     "Portable.BouncyCastle/1.9.0": {
       "type": "package",

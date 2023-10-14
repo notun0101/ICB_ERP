@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.AccountingSettings
 {
-    [Table("GroupNature", Schema = "ACCOUNT")]
+    [Table("GroupNature")]
     public class GroupNature : Base
     {
         [Column(TypeName = "nvarchar(250)")]

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.VEMS.Data.Entity.RegistrationForm
 {
-    [Table("InterestedArea", Schema = "VEMS")]
+    [Table("InterestedArea")]
     public class InterestedArea:Base
     {
         public int? registrationFormId { get; set; }

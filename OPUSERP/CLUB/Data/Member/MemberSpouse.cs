@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.CLUB.Data.Member
 {
-    [Table("MemberSpouse", Schema = "Club")]
+    [Table("MemberSpouse")]
     public class MemberSpouse: Base
     {
         //Foreign Reliation

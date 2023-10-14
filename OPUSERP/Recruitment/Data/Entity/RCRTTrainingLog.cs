@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Recruitment.Data.Entity
 {
-    [Table("RCRTTrainingLog", Schema = "RCRT")]
+    [Table("RCRTTrainingLog")]
     public class RCRTTrainingLog : Base
     {
         public int candidateId { get; set; }

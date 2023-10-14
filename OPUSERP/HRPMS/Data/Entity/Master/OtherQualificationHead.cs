@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-    [Table("OtherQualificationHead", Schema = "HR")]
+    [Table("OtherQualificationHead")]
     public class OtherQualificationHead:Base
     {
         public string name { get; set; }

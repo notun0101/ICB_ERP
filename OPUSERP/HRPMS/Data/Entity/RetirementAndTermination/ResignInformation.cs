@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.RetirementAndTermination
 {
-    [Table("ResignInformation", Schema = "HR")]
+    [Table("ResignInformation")]
     public class ResignInformation:Base
     {
         public int? employeeId { get; set; }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-	[Table("CvBlackList", Schema = "HR")]
+	[Table("CvBlackList")]
 	public class CvBlackList:Base
 	{
 		public string sscRoll { get; set; }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CRM.Data.Entity.MasterData
 {
-    [Table("Sector", Schema = "CRM")]
+    [Table("Sector")]
     public class Sector : Base
     {        
         public string sectorName { get; set; }

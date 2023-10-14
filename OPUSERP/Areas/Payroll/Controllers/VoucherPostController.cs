@@ -8,7 +8,7 @@ using OPUSERP.Payroll.Services.Salary.Interfaces;
 
 namespace OPUSERP.Areas.Payroll.Controllers
 {
-	[Area("Payroll")]
+	[Area("HR")]
 	public class VoucherPostController : Controller
     {
 		private readonly ISalaryService salaryService;

@@ -8,7 +8,7 @@ using OPUSERP.Data.Entity;
 
 namespace OPUSERP.HRPMS.Data.Entity.Recruitment
 {
-    [Table("ApplicationEdu", Schema = "HR")]
+    [Table("ApplicationEdu")]
     public class ApplicationEdu : Base
     {
         public int applicationFormId { get; set; }

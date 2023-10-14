@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.Requisition
 {
-    [Table("RequisitionMasters", Schema = "SCM")]
+    [Table("RequisitionMasters")]
     public class RequisitionMaster:Base
     {
         [MaxLength(150)]

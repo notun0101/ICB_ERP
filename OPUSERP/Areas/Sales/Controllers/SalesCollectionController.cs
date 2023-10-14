@@ -22,7 +22,7 @@ using OPUSERP.SCM.Services.PurchaseOrder.Interface;
 namespace OPUSERP.Areas.Sales.Controllers
 {
     [Authorize]
-    [Area("Sales")]
+    [Area("HR")]
     public class SalesCollectionController : Controller
     {
         private readonly ISalesInvoiceMasterService salesInvoiceMasterService;

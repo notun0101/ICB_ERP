@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Attendance
 {
-	[Table("EmpManualAttendance", Schema = "HR")]
+	[Table("EmpManualAttendance")]
 	public class EmpManualAttendance : Base
 	{
 		[MaxLength(50)]

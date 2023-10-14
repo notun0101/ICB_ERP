@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.ProjectStatus
 {
-    [Table("ActivityWiseDailyProgressDetails", Schema = "SCM")]
+    [Table("ActivityWiseDailyProgressDetails")]
     public class ActivityWiseDailyProgressDetail:Base
     {
         public int? workProgressActivityId { get; set; }

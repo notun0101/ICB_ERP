@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.CRO.Data.Entity.DistributeJob
 {
-    [Table("DocumentChart", Schema = "CRO")]
+    [Table("DocumentChart")]
     public class DocumentChart : Base
     {
         [MaxLength(250)]

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Recruitment.Data.Entity
 {
-    [Table("RcrtPublication", Schema = "RCRT")]
+    [Table("RcrtPublication")]
     public class RcrtPublication : Base
     {
         public int candidateId { get; set; }

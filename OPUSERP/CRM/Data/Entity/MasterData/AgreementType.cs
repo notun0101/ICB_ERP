@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CRM.Data.Entity.MasterData
 {
-    [Table("AgreementType", Schema = "CRM")]
+    [Table("AgreementType")]
     public class AgreementType : Base
     {
         [Required]

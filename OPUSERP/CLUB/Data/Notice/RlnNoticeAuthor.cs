@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.CLUB.Data.Notice
 {
-    [Table("RlnNoticeAuthor", Schema = "Club")]
+    [Table("RlnNoticeAuthor")]
     public class RlnNoticeAuthor : Base
     {
         public int? noticeInfoId { get; set; }

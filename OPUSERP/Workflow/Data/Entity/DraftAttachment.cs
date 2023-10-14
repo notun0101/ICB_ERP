@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Workflow.Data.Entity
 {
-    [Table("DraftAttachment", Schema = "WMS")]
+    [Table("DraftAttachment")]
     public class DraftAttachment:Base
     {
         public int? draftDocId { get; set; }

@@ -17,7 +17,7 @@ using ComTypeViewModel = OPUSERP.Areas.CRMMasterData.Models.ComTypeViewModel;
 
 namespace OPUSERP.Areas.CRMMasterData.Controllers
 {
-    [Area("Distribution")]
+    [Area("HR")]
     public class AreaController : Controller
     {
         private readonly ICommunicationService communicationService;

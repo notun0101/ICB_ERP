@@ -12,7 +12,7 @@ using OPUSERP.VMS.Services.Inventory.interfaces;
 namespace OPUSERP.Areas.VMS.Controllers
 {
     [Authorize]
-    [Area("VMS")]
+    [Area("HR")]
     public class PartsPurchaseController : Controller
     {
         private readonly IPurchasePartsService purchasePartsService;

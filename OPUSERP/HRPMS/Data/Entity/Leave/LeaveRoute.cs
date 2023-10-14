@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Leave
 {
-    [Table("LeaveRoute", Schema = "HR")]
+    [Table("LeaveRoute")]
     public class LeaveRoute : Base
     {
         public int? leaveRegisterId { get; set; }

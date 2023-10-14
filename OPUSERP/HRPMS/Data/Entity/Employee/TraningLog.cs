@@ -10,7 +10,7 @@ using OPUSERP.HRPMS.Data.Entity.Master;
 
 namespace OPUSERP.HRPMS.Data.Entity.Employee
 {
-    [Table("TraningLog", Schema = "HR")]
+    [Table("TraningLog")]
     public class TraningLog : Base
     {
         //Foreign Reliation

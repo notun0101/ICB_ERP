@@ -198,7 +198,7 @@
     </div>
 </div>
 <br />
-<form asp-area="Rental" asp-controller="RentInvoice" asp-action="InsertCondition" method="post" data-parsley-validate="parsley">
+<form asp-area="HR" asp-controller="RentInvoice" asp-action="InsertCondition" method="post" data-parsley-validate="parsley">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group row">
         <label for="conditext" class="col-sm-2 col-form-label">Terms &amp; Conditions</label>
@@ -237,7 +237,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="frmPhoto" asp-area="Sales" asp-controller="SalesInvoice" asp-action="SavePhoto" method="post" enctype="multipart/form-data" data-parsley-validate="parsley">
+            <form id="frmPhoto" asp-area="HR" asp-controller="SalesInvoice" asp-action="SavePhoto" method="post" enctype="multipart/form-data" data-parsley-validate="parsley">
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="modal-body">
                     <div class="form-group" enctype="multipart/form-data">
@@ -276,7 +276,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="frmDoc" asp-area="Sales" asp-controller="SalesInvoice" asp-action="SaveDoc" method="post" enctype="multipart/form-data" data-parsley-validate="parsley">
+            <form id="frmDoc" asp-area="HR" asp-controller="SalesInvoice" asp-action="SaveDoc" method="post" enctype="multipart/form-data" data-parsley-validate="parsley">
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="modal-body">
                     <div class="form-group" enctype="multipart/form-data">
@@ -316,7 +316,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="frmComments" asp-area="Sales" asp-controller="SalesInvoice" asp-action="SaveComment" method="post" enctype="multipart/form-data" data-parsley-validate="parsley">
+                <form id="frmComments" asp-area="HR" asp-controller="SalesInvoice" asp-action="SaveComment" method="post" enctype="multipart/form-data" data-parsley-validate="parsley">
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Title:</label>
                         <input type="text" class="form-control" id="title" name="title">

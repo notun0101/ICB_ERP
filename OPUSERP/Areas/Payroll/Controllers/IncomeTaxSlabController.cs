@@ -16,7 +16,7 @@ using OPUSERP.Payroll.Services.Salary.Interfaces;
 
 namespace OPUSERP.Areas.Payroll.Controllers
 {
-    [Area("Payroll")]
+    [Area("HR")]
     [Authorize]
     public class IncomeTaxSlabController : Controller
     {
@@ -87,7 +87,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
             await incomeTaxSlabService.SaveIncomeTaxSlabAssign(data);
 
 
-            return RedirectToAction("TaxSlabAssign", "IncomeTaxSlab", new { Area = "Payroll" });
+            return RedirectToAction("TaxSlabAssign", "IncomeTaxSlab", new { Area = "HR" });
 
 
         }
@@ -115,7 +115,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
             await incomeTaxSlabService.SaveIncomeTaxSlab(data);
 
 
-            return RedirectToAction("Index", "IncomeTaxSlab", new { Area = "Payroll" });
+            return RedirectToAction("Index", "IncomeTaxSlab", new { Area = "HR" });
 
 
         }
@@ -155,7 +155,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
             await salaryService.SaveTaxSlab(data);
 
 
-            return RedirectToAction("TaxSlab", "IncomeTaxSlab", new { Area = "Payroll" });
+            return RedirectToAction("TaxSlab", "IncomeTaxSlab", new { Area = "HR" });
 
 
         }
@@ -196,7 +196,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
             await salaryService.SaveRebateSlab(data);
 
 
-            return RedirectToAction("RebateSlab", "IncomeTaxSlab", new { Area = "Payroll" });
+            return RedirectToAction("RebateSlab", "IncomeTaxSlab", new { Area = "HR" });
 
 
         }
@@ -242,7 +242,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
             await incomeTaxSlabService.SaveRebateSlab(data);
 
 
-            return RedirectToAction("Rebate", "IncomeTaxSlab", new { Area = "Payroll" });
+            return RedirectToAction("Rebate", "IncomeTaxSlab", new { Area = "HR" });
 
 
         }
@@ -291,7 +291,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
             await incomeTaxSlabService.SaveTaxSetup(data);
 
 
-            return RedirectToAction("TaxSetup", "IncomeTaxSlab", new { Area = "Payroll" });
+            return RedirectToAction("TaxSetup", "IncomeTaxSlab", new { Area = "HR" });
 
 
         }
@@ -336,7 +336,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
             await incomeTaxSlabService.SaveTaxChallan(data);
 
 
-            return RedirectToAction("TaxChallan", "IncomeTaxSlab", new { Area = "Payroll" });
+            return RedirectToAction("TaxChallan", "IncomeTaxSlab", new { Area = "HR" });
 
 
         }
@@ -385,7 +385,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
             await incomeTaxSlabService.SaveAdditionalTax(data);
 
 
-            return RedirectToAction("AdditionalTax", "IncomeTaxSlab", new { Area = "Payroll" });
+            return RedirectToAction("AdditionalTax", "IncomeTaxSlab", new { Area = "HR" });
 
 
         }
@@ -571,7 +571,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
             await incomeTaxSlabService.taxProcessNew(model.salaryPeriodId,model.employeeInfoId);
 
           
-            return RedirectToAction("TaxProcess", "IncomeTaxSlab", new {id=1, Area = "Payroll" });
+            return RedirectToAction("TaxProcess", "IncomeTaxSlab", new {id=1, Area = "HR" });
 
 
         }
@@ -620,7 +620,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
             await salaryService.SaveRebateSetting(data);
 
 
-            return RedirectToAction("RebateSetting", "IncomeTaxSlab", new { Area = "Payroll" });
+            return RedirectToAction("RebateSetting", "IncomeTaxSlab", new { Area = "HR" });
 
 
         }
@@ -664,7 +664,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
             await salaryService.SaveReportFormat(data);
 
 
-            return RedirectToAction("ReportFormat", "IncomeTaxSlab", new { Area = "Payroll" });
+            return RedirectToAction("ReportFormat", "IncomeTaxSlab", new { Area = "HR" });
 
 
         }

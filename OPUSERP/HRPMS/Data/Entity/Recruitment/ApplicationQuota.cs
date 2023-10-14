@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Recruitment
 {
-    [Table("ApplicationQuota", Schema = "HR")]
+    [Table("ApplicationQuota")]
     public class ApplicationQuota : Base
     {
         public int? isFredomFighter { get; set; } //1=yes, 0=no

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity.Salary
 {
-	[Table("BranchWiseSalaryLock", Schema = "Payroll")]
+	[Table("BranchWiseSalaryLock")]
 	public class BranchWiseSalaryLock:Base
 	{
 		public int? periodId { get; set; }

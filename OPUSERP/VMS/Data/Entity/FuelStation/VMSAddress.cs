@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.VMS.Data.Entity.FuelStation
 {
-    [Table("VMSAddress", Schema = "VMS")]
+    [Table("VMSAddress")]
     public class VMSAddress:Base
     {
         public int fuelStationInfoId { get; set; }

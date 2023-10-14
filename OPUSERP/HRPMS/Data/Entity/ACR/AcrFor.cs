@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.ACR
 {
-	[Table("AcrFor", Schema = "HR")]
+	[Table("AcrFor")]
 	public class AcrFor:Base
 	{
 		[MaxLength(150)]

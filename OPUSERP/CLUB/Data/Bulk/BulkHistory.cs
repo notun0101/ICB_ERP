@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.CLUB.Data.Bulk
 {
-    [Table("BulkHistory", Schema = "Club")]
+    [Table("BulkHistory")]
     public class BulkHistory : Base
     {
         public string number { get; set; }

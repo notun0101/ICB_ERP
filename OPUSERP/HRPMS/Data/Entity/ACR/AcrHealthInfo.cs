@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.ACR
 {
-    [Table("AcrHealthInfo", Schema = "HR")]
+    [Table("AcrHealthInfo")]
     public class AcrHealthInfo : Base
     {
         public int? acrInitiateId { get; set; }

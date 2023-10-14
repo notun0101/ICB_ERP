@@ -130,7 +130,7 @@
 					}
 				</select>
 			</div>*@
-					<label for="budget" class="col-sm-2 col-form-label">
+					<label for="HR" class="col-sm-2 col-form-label">
 						@Model.fLang.budget <span style="float:right;" class="redStar">*</span>
 					</label>
 					<div class="col-sm-3">
@@ -553,7 +553,7 @@
 				second = date.getSeconds(),
 				hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
 				minuteFormatted = minute < 10 ? "0" + minute : minute,
-				morning = hour < 12 ? "am" : "pm";
+				morning = hour < 12 ? "am" : "HR";
 
 			return year + "-" + month + "-" + day;
 		}
@@ -568,7 +568,7 @@
                 second = date.getSeconds(),
                 hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
                 minuteFormatted = minute < 10 ? "0" + minute : minute,
-                morning = hour < 12 ? "am" : "pm";
+                morning = hour < 12 ? "am" : "HR";
 
             return day + "/" + + month + "/" + year;
         }

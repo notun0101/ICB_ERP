@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.PurchaseOrder
 {
-	[Table("DeliveryStructure", Schema = "SCM")]
+	[Table("DeliveryStructure")]
 	public class DeliveryStructure:Base
 	{
 		public int? cSDetailId { get; set; }

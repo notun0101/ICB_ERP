@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Purchase.Data.Entity
 {
-    [Table("TransferMaster", Schema = "Purchase")]
+    [Table("TransferMaster")]
     public class TransferMaster : Base
     {
         public int? companyId { get; set; }

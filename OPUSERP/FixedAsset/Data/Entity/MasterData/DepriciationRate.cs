@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.FixedAsset.Data.Entity.MasterData
 {
-    [Table("DepriciationRate", Schema = "FAMS")]
+    [Table("DepriciationRate")]
     public class DepriciationRate : Base
     {
         [MaxLength(400)]

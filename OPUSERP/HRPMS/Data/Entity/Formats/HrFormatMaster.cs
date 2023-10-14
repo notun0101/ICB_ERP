@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Formats
 {
-	[Table("HrFormatMaster", Schema = "HR")]
+	[Table("HrFormatMaster")]
 	public class HrFormatMaster:Base
 	{
 		public string name { get; set; }

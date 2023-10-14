@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Organogram
 {
-    [Table("OrganizationType", Schema = "HR")]
+    [Table("OrganizationType")]
     public class OrganizationType : Base
     {
         public string nameEN { get; set; }

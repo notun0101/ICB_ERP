@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CRM.Data.Entity.MasterData
 {
-    [Table("OwnerShipType", Schema = "CRM")]
+    [Table("OwnerShipType")]
     public class OwnerShipType : Base
     {
         [Required]

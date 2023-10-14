@@ -6,7 +6,7 @@ using OPUSERP.VMS.Data.Entity.CarManagement;
 
 namespace OPUSERP.VMS.Data.Entity.Inventory
 {
-    [Table("PurchasePartsMaster", Schema = "VMS")]
+    [Table("PurchasePartsMaster")]
     public class PurchasePartsMaster: Base
     {
         public int? sparePartsId { get; set; }

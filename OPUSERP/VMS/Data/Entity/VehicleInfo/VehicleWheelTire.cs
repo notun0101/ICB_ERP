@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.VMS.Data.Entity.VehicleInfo
 {
-    [Table("VehicleWheelTire", Schema = "VMS")]
+    [Table("VehicleWheelTire")]
     public class VehicleWheelTire:Base
     {
         public int? vehicleInformationId { get; set; }

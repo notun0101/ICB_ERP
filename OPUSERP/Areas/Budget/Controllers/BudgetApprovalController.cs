@@ -17,7 +17,7 @@ using OPUSERP.SCM.Services.Matrix.Interfaces;
 namespace OPUSERP.Areas.Budget.Controllers
 {
     [Authorize]
-    [Area("Budget")]
+    [Area("HR")]
     public class BudgetApprovalController : Controller
     {
         private readonly LangGenerate<BudgetRequisitionLn> _lang;

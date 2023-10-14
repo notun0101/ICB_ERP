@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.OtherSales.Data.Entity.Sales
 {
-    [Table("SalesMenu", Schema = "OSales")]
+    [Table("SalesMenu")]
     public class SalesMenu:Base
     {
         public int? salesMenuCategoryId { get; set; }

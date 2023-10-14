@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.PurchaseProcess
 {
-    [Table("CSItemCategory", Schema = "SCM")]
+    [Table("CSItemCategory")]
     public class CSItemCategory:Base
     {
         [StringLength(50)]

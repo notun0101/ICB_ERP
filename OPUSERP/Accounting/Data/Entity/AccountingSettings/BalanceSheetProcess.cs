@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.AccountingSettings
 {
-    [Table("BalanceSheetProcess", Schema = "ACCOUNT")]
+    [Table("BalanceSheetProcess")]
     public class BalanceSheetProcess : Base
     {
         public int? balanceSheetDetailsId { get; set; }

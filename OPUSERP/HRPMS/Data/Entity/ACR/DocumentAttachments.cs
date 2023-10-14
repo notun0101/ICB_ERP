@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.ACR
 {
-    [Table("DocumentAttachments", Schema = "ACR")]
+    [Table("DocumentAttachments")]
     public class DocumentAttachments:Base
     {
         public int? assesmentId { get; set; }

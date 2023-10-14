@@ -19,7 +19,7 @@ using OPUSERP.HRPMS.Services.Employee.Interfaces;
 
 namespace OPUSERP.Areas.CRO.Controllers
 {
-    [Area("CRO")]
+    [Area("HR")]
     public class AssignController : Controller
     {
         private readonly IAgreementService agreementService;

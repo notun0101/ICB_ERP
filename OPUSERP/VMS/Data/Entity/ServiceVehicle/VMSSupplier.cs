@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.VMS.Data.Entity.ServiceVehicle
 {
-    [Table("VMSSupplier", Schema = "VMS")]
+    [Table("VMSSupplier")]
     public class VMSSupplier:Base
     {
         [MaxLength(250)]

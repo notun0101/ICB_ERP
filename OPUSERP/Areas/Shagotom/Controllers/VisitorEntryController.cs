@@ -12,7 +12,7 @@ using OPUSERP.Shagotom.Services.Visitor.Interfaces;
 
 namespace OPUSERP.Areas.Shagotom.Controllers
 {
-    [Area("Shagotom")]
+    [Area("HR")]
     public class VisitorEntryController : Controller
     {
         private readonly IDesignationDepartmentService designationDepartmentService;

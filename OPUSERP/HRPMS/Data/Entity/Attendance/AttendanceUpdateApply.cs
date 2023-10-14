@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Attendance
 {
-    [Table("AttendanceUpdateApply", Schema = "HR")]
+    [Table("AttendanceUpdateApply")]
     public class AttendanceUpdateApply : Base
     {
         public int? employeeInfoId { get; set; }

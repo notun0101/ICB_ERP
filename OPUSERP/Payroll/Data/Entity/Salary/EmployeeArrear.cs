@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Payroll.Data.Entity.Salary
 {
-    [Table("EmployeeArrear", Schema = "Payroll")]
+    [Table("EmployeeArrear")]
     public class EmployeeArrear : Base
     {
         public int employeeInfoId { get; set; }

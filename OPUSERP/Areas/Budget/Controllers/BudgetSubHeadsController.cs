@@ -15,7 +15,7 @@ using OPUSERP.Helpers;
 namespace OPUSERP.Areas.Budget.Controllers
 {
     [Authorize]
-    [Area("Budget")]
+    [Area("HR")]
     public class BudgetSubHeadsController : Controller
     {
         private readonly LangGenerate<BudgetSubHeadLn> _lang;

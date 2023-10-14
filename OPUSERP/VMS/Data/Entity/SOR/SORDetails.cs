@@ -10,7 +10,7 @@ using OPUSERP.VMS.Data.Entity.ServiceVehicle;
 
 namespace OPUSERP.VMS.Data.Entity.SOR
 {
-    [Table("SORDetails", Schema = "VMS")]
+    [Table("SORDetails")]
     public class SORDetails : Base
     {
         public int sORMasterId { get; set; }

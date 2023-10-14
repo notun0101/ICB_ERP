@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Budget.Data.Entity
 {
-    [Table("BudgetBranchAddress", Schema = "Budget")]
+    [Table("BudgetBranchAddress")]
     public class BudgetBranchAddress:Base
     {
         public int? addressTypeId { get; set; }

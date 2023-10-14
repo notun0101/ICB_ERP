@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity.Salary
 {
-    [Table("ReportFormat", Schema = "Payroll")]
+    [Table("ReportFormat")]
     public class ReportFormat : Base
     {
         

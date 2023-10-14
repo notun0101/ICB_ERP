@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.AccountingSettings
 {
-    [Table("BalanceSheetMaster", Schema = "ACCOUNT")]
+    [Table("BalanceSheetMaster")]
     public class BalanceSheetMaster : Base
     {
         public int? accountGroupId { get; set; }

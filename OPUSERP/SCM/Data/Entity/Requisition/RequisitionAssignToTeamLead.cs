@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.Requisition
 {
-    [Table("RequisitionAssignToTeamLeads", Schema = "SCM")]
+    [Table("RequisitionAssignToTeamLeads")]
     public class RequisitionAssignToTeamLead:Base
     {
         public int? requisitionMasterId { get; set; }

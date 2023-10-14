@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.VMS.Data.Entity.Requisition
 {
-    [Table("VMSRequisitionMaster", Schema = "VMS")]
+    [Table("VMSRequisitionMaster")]
     public class VMSRequisitionMaster:Base
     {
         public string reqNo { get; set; }

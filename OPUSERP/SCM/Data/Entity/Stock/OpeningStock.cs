@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.Stock
 {
-    [Table("OpeningStock", Schema = "SCM")]
+    [Table("OpeningStock")]
     public class OpeningStock : Base
     {
         public int? itemSpecificationId { get; set; }

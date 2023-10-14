@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Payroll.Data.Entity.Salary
 {
-    [Table("BonousSubCategory", Schema = "Payroll")]
+    [Table("BonousSubCategory")]
     public class BonousSubCategory : Base
     {
         public int? bonousCategoryId { get; set; }

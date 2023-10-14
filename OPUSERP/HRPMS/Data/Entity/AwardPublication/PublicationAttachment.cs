@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.AwardPublication
 {
-    [Table("PublicationAttachment", Schema = "HR")]
+    [Table("PublicationAttachment")]
     public class PublicationAttachment:Base
     {
         public int publicationId { get; set; }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-    [Table("RelDegreeSubject", Schema = "HR")]
+    [Table("RelDegreeSubject")]
     public class RelDegreeSubject:Base
     {
         public int degreeId { get; set; }

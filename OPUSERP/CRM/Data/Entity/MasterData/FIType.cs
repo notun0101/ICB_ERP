@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CRM.Data.Entity.MasterData
 {
-    [Table("FIType", Schema = "CRM")]
+    [Table("FIType")]
     public class FIType : Base
     {      
         [MaxLength(250)]

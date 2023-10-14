@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Data.Entity.Matrix
 {
-    [Table("ChangeOfDoa", Schema = "SCM")]
+    [Table("ChangeOfDoa")]
     public class ChangeOfDoa: Base
     {
         public int? userId { get; set; }

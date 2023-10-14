@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.ProjectStatus
 {
-    [Table("ActivityWiseItemDetials", Schema = "SCM")]
+    [Table("ActivityWiseItemDetials")]
     public class ActivityWiseItemDetial:Base
     {
         public int? activityDetailsId { get; set; }

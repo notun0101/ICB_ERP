@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Leave
 {
-    [Table("LeavePolicy", Schema = "HR")]
+    [Table("LeavePolicy")]
     public class LeavePolicy:Base
     {
         public int? employeeId { get; set; }

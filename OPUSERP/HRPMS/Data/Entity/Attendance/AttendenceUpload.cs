@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Attendance
 {
-    [Table("AttendenceUpload", Schema = "HR")]
+    [Table("AttendenceUpload")]
     public class AttendenceUpload : Base
     {
         [MaxLength(50)]

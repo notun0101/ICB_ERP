@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Areas.Payroll.Controllers
 {
-	[Area("Payroll")]
+	[Area("HR")]
 	[Authorize]
 	public class SalaryStructureController : Controller
 	{
@@ -537,7 +537,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
 				}
 			}
 
-			return RedirectToAction("Index", "SalaryStructure", new { employeeInfoId = model.employeeInfoId, Area = "Payroll" });
+			return RedirectToAction("Index", "SalaryStructure", new { employeeInfoId = model.employeeInfoId, Area = "HR" });
 
 		}
 		[HttpGet]
@@ -786,7 +786,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
 			await salaryService.SavesalaryActivityPercent(data);
 
 
-			return RedirectToAction("SalaryActivityPercent", "SalaryStructure", new { Area = "Payroll" });
+			return RedirectToAction("SalaryActivityPercent", "SalaryStructure", new { Area = "HR" });
 
 
 		}

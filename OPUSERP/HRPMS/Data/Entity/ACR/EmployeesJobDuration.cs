@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.ACR
 {
-    [Table("EmployeesJobDuration", Schema = "ACR")]
+    [Table("EmployeesJobDuration")]
     public class EmployeesJobDuration:Base
     {
         [MaxLength(10)]

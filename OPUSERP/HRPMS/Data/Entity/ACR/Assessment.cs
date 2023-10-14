@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.ACR
 {
-    [Table("Assessment", Schema = "HR")]
+    [Table("Assessment")]
     public class Assessment : Base
     {
         [MaxLength(50)]

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Travel
 {
-    [Table("TravelRoute", Schema = "HR")]
+    [Table("TravelRoute")]
     public class TravelRoute:Base
     {
         public int? travelMasterId { get; set; }

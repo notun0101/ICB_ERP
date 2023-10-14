@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.IELTS
 {
-	[Table("IeltsInfo", Schema = "IELTS")]
+	[Table("IeltsInfo")]
 	public class IeltsInfo:Base
 	{
 		public int employeeId { get; set; }

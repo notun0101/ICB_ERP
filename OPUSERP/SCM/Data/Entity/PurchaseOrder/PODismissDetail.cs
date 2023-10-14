@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.PurchaseOrder
 {
-    [Table("PODismissDetails", Schema = "SCM")]
+    [Table("PODismissDetails")]
     public class PODismissDetail:Base
     {
         public int? pODismissId { get; set; }

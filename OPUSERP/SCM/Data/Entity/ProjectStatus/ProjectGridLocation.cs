@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.ProjectStatus
 {
-    [Table("ProjectGridLocations", Schema = "SCM")]
+    [Table("ProjectGridLocations")]
     public class ProjectGridLocation:Base
     {
         public int? projectConstructionLocationId { get; set; }

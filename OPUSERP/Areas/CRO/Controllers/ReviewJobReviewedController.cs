@@ -18,7 +18,7 @@ using OPUSERP.Helpers;
 
 namespace OPUSERP.Areas.CRO.Controllers
 {
-    [Area("CRO")]
+    [Area("HR")]
     public class ReviewJobReviewedController : Controller
     {
         private readonly IDistributeJobService distributeJobService;
@@ -242,14 +242,14 @@ namespace OPUSERP.Areas.CRO.Controllers
             int DocumentId = await distributeJobService.SaveStatusLog(statusdata);
             #endregion
 
-            return RedirectToAction("Index", "ReviewJobReviewed", new { opMstId = actionId, Area = "CRO" });
+            return RedirectToAction("Index", "ReviewJobReviewed", new { opMstId = actionId, Area = "HR" });
         }
 
         [HttpGet]
         public async Task<IActionResult> DeleteReceiveDocument(int operMstId, int Id)
         {
             await distributeJobService.DeleteReceiveDocumentById(Id);
-            return RedirectToAction("Index", "ReviewJobReviewed", new { opMstId = operMstId, Area = "CRO" });
+            return RedirectToAction("Index", "ReviewJobReviewed", new { opMstId = operMstId, Area = "HR" });
         }
     }
 }

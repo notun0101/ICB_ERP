@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Attendance
 {
-    [Table("EmployeePunchCardInfo", Schema = "HR")]
+    [Table("EmployeePunchCardInfo")]
     public class EmployeePunchCardInfo : Base
     {
         public string employeeCode { get; set; }

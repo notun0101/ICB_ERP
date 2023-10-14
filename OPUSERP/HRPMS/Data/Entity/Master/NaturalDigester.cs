@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-    [Table("NaturalDigester", Schema = "HR")]
+    [Table("NaturalDigester")]
     public class NaturalDigester:Base
     {
         public string name { get; set; }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.PurchaseProcess
 {
-    [Table("Justification", Schema = "SCM")]
+    [Table("Justification")]
     public class Justification:Base
     {
         public int? cSMasterId { get; set; }

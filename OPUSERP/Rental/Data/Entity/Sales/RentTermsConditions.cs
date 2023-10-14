@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace OPUSERP.Rental.Data.Entity.Sales
 {
    
-    [Table("RentTermsConditions", Schema = "Rental")]
+    [Table("RentTermsConditions")]
     public class RentTermsConditions : Base
     {
        

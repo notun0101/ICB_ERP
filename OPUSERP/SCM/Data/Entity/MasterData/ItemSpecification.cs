@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.MasterData
 {
-    [Table("ItemSpecification", Schema = "SCM")]
+    [Table("ItemSpecification")]
     public class ItemSpecification :Base
     {
         public int? itemId { get; set; }

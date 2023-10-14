@@ -490,7 +490,7 @@ namespace OPUSERP.Areas.HRPMSACR.Controllers
             var ass = await acrInfoService.AssaignAcrApprover(assId, recom, signatory, signatory2);
 
             var userDetails = await personalInfoService.GetEmployeeInfoByCode(userName);
-            await acrInfoService.SendNotification(userName, userName, recom, "ACR From " + userDetails.nameEnglish, "Waiting for ACR to recommendator", "ACR", "/HRPMSACR/AssessmentInfo/Authority");
+            await acrInfoService.SendNotification(userName, userName, recom, "ACR From " + userDetails.nameEnglish, "Waiting for ACR to recommendator", "HR", "/HRPMSACR/AssessmentInfo/Authority");
 
             return Json(1);
         }
@@ -507,7 +507,7 @@ namespace OPUSERP.Areas.HRPMSACR.Controllers
             ass.statusInfoId = 8;
             var id = await acrInfoService.SaveAssessment(ass);
             //  var userDetails = await personalInfoService.GetEmployeeInfoByCode(userName);
-            //  await acrInfoService.SendNotification(userName, userName, recom, "ACR From " + userDetails.nameEnglish, "Waiting for ACR to recommendator", "ACR", "/HRPMSACR/AssessmentInfo/Authority");
+            //  await acrInfoService.SendNotification(userName, userName, recom, "ACR From " + userDetails.nameEnglish, "Waiting for ACR to recommendator", "HR", "/HRPMSACR/AssessmentInfo/Authority");
 
             return Json(id);
         }

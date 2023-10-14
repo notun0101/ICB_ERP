@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.OtherSales.Data.Entity.Sales
 {
-    [Table("RelSupplierCustomerResourse", Schema = "OSales")]
+    [Table("RelSupplierCustomerResourse")]
     public class RelSupplierCustomerResourse:Base
     {
         public int? organizationId { get; set; }

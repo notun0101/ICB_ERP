@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.VMS.Data.Entity.Master
 {
-    [Table("ReportField", Schema = "VMS")]
+    [Table("ReportField")]
     public class ReportField:Base
     {
         public string fieldValue { get; set; }

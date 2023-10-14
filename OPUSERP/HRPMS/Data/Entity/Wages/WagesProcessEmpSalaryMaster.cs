@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity.Salary
 {
-    [Table("WagesProcessEmpSalaryMaster", Schema = "Payroll")]
+    [Table("WagesProcessEmpSalaryMaster")]
     public class WagesProcessEmpSalaryMaster : Base
     {
         public int? employeeInfoId { get; set; }

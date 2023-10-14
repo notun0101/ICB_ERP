@@ -9,7 +9,7 @@ using OPUSERP.VMS.Data.Entity.VehicleInfo;
 
 namespace OPUSERP.VMS.Data.Entity.ServiceVehicle
 {
-    [Table("VehicleServiceHistory", Schema = "VMS")]
+    [Table("VehicleServiceHistory")]
     public class VehicleServiceHistory:Base
     {
         public int vehicleInformationId { get; set; }

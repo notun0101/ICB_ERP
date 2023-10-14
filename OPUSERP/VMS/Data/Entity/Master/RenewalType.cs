@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.VMS.Data.Entity.Master
 {
-    [Table("RenewalType", Schema = "VMS")]
+    [Table("RenewalType")]
     public class RenewalType : Base
     {
         public string renewalTypeName { get; set; }

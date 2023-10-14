@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.Voucher
 {
-    [Table("AutoVoucherName", Schema = "ACCOUNT")]
+    [Table("AutoVoucherName")]
     public class AutoVoucherName : Base
     {
         [MaxLength(200)]

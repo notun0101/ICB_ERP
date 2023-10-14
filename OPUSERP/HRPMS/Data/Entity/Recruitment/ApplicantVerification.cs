@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Recruitment
 {
-    [Table("ApplicantVerification", Schema = "HR")]
+    [Table("ApplicantVerification")]
     public class ApplicantVerification : Base
     {
         public int MyProperty { get; set; }

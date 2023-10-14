@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity.Fixation
 {
-    [Table("IncrementHeld", Schema = "Fixation")]
+    [Table("IncrementHeld")]
     public class IncrementHeld:Base
     {
         public int? employeeId { get; set; }

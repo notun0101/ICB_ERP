@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Accounting.Data.Entity.BankReconciliation
 {
-    [Table("BankReconciliationMaster", Schema = "ACCOUNT")]
+    [Table("BankReconciliationMaster")]
     public class BankReconcileMaster : Base
     {
         public int? sbuId { get; set; }

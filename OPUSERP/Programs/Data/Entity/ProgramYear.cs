@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Programs.Data.Entity
 {
-    [Table("ProgramYear", Schema = "PM")]
+    [Table("ProgramYear")]
     public class ProgramYear:Base
     {
         public string name { get; set; }

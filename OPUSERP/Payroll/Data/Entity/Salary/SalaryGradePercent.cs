@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Payroll.Data.Entity.Salary
 {
-    [Table("SalaryGradePercent", Schema = "Payroll")]
+    [Table("SalaryGradePercent")]
     public class SalaryGradePercent : Base
     {
         public int salaryGradeId { get; set; }

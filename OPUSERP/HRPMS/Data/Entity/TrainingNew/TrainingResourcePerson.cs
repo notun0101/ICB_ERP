@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.TrainingNew
 {
-    [Table("TrainingResourcePerson", Schema = "HR")]
+    [Table("TrainingResourcePerson")]
     public class TrainingResourcePerson: Base
     {
         public int? trainingInfoNewId { get; set; }

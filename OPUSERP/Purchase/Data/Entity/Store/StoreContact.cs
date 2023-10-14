@@ -8,7 +8,7 @@ using OPUSERP.POS.Data.Entity;
 
 namespace OPUSERP.Data.Entity.MasterData
 {
-    [Table("StoreContact", Schema = "Purchase")]
+    [Table("StoreContact")]
     public class StoreContact : Base
     {
         public int? storeId { get; set; }

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace OPUSERP.ProvidentFund.Data.Entity
 {
 	
-	[Table("PFYear", Schema = "PF")]
+	[Table("PFYear")]
 	public class PFYear : Base
 	{
 		[MaxLength(100)]

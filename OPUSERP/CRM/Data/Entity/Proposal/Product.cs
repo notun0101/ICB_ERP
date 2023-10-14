@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CRM.Data.Entity.Proposal
 {
-    [Table("Product", Schema = "CRM")]
+    [Table("Product")]
     public class Product : Base
     {
         [MaxLength(250)]

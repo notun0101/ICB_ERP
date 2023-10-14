@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Meeting.Data.Entity
 {
-    [Table("MeetingUser", Schema = "MMS")]
+    [Table("MeetingUser")]
     public class MeetingUser:Base
     {
         public string role { get; set; }

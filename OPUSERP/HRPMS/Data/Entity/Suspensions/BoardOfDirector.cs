@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Suspensions
 {
-	[Table("BoardOfDirector", Schema = "HR")]
+	[Table("BoardOfDirector")]
 	public class BoardOfDirector:Base
 	{
 		public string name { get; set; }

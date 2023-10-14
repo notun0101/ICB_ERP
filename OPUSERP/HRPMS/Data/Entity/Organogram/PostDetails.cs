@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Organogram
 {
-    [Table("PostDetails", Schema = "HR")]
+    [Table("PostDetails")]
     public class PostDetails : Base
     {
         public int? postId { get; set; }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.MasterData
 {
-    [Table("TeamMember", Schema = "SCM")]
+    [Table("TeamMember")]
     public class TeamMember:Base
     {
         public int? teamMasterId { get; set; }

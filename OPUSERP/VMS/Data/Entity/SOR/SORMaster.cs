@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.VMS.Data.Entity.SOR
 {
-    [Table("SORMaster", Schema = "VMS")]
+    [Table("SORMaster")]
     public class SORMaster : Base
     {
         public SORMaster()

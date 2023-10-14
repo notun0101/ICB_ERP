@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CRO.Data.Entity.DistributeJob
 {
-    [Table("StatusLog", Schema = "CRO")]
+    [Table("DistributeJobStatusLog")]
     public class StatusLog : Base
     {
         public int? operationMasterId { get; set; }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Distribution.Data.Entity.MasterData
 {
-    [Table("DisItemPriceFixingDetails", Schema = "Distribution")]
+    [Table("DisItemPriceFixingDetails")]
     public class DisItemPriceFixingDetails : Base
     {
         

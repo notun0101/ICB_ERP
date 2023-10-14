@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.RewardInfo
 {
-    [Table("Reward", Schema = "HR")]
+    [Table("Reward")]
     public class Reward:Base
     {
         public int employeeId { get; set; }

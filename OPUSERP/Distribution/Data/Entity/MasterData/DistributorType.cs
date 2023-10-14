@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Distribution.Data.Entity.MasterData
 {
-    [Table("DistributorType", Schema = "Distribution")]
+    [Table("DistributorType")]
     public class DistributorType:Base
     {
         public string name { get; set; }

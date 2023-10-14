@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Employee
 {
-	[Table("HandoverTakeoverMaster", Schema = "HR")]
+	[Table("HandoverTakeoverMaster")]
 	public class HandoverTakeoverMaster:Base
 	{
 		public int? handoverId { get; set; }

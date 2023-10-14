@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.Matrix
 {
-    [Table("MailLog", Schema = "SCM")]
+    [Table("MailLog")]
     public class MailLog:Base
     {
         [Column(TypeName = "nvarchar(200)")]

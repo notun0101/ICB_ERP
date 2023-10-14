@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CRM.Data.Entity.Lead
 {
-    [Table("LeadsHistory", Schema = "CRM")]
+    [Table("LeadsHistory")]
     public class LeadsHistory : Base
     {
         public int? leadsId { get; set; }

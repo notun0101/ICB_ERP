@@ -9,7 +9,7 @@ using OPUSERP.Shagotom.Services.Visitor.Interfaces;
 
 namespace OPUSERP.Areas.Shagotom.Controllers
 {
-    [Area("Shagotom")]
+    [Area("HR")]
     public class CheckOutController : Controller
     {
         private readonly IIssueCardService issueCardService;

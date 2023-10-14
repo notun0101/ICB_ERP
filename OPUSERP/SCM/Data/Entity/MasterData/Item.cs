@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.MasterData
 {
-    [Table("Item", Schema = "SCM")]
+    [Table("Item")]
     public class Item:Base
     {
         public int? parentId { get; set; }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.VMS.Data.Entity.VehicleInfo
 {
-    [Table("VehicleSetting", Schema = "VMS")]
+    [Table("VehicleSetting")]
     public class VehicleSetting:Base
     {
         public int? vehicleInformationId { get; set; }

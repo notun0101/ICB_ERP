@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CRM.Data.Entity.Proposal
 {
-    [Table("RelProductProposal", Schema = "CRM")]
+    [Table("RelProductProposal")]
     public class RelProductProposal : Base
     {
         public int? productId { get; set; }

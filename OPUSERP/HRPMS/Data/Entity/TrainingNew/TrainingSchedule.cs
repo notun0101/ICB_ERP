@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.TrainingNew
 {
-    [Table("TrainingSchedule", Schema = "HR")]
+    [Table("TrainingSchedule")]
     public class TrainingSchedule:Base
     {
         public DateTime? effectiveDate { get; set; }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity.Loan
 {
-    [Table("StaffLoanLog", Schema = "Payroll")]
+    [Table("StaffLoanLog")]
     public class StaffLoanLog:Base
     {
         public int? staffLoanId { get; set; }

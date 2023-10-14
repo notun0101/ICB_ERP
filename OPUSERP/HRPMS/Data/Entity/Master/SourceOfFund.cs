@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-    [Table("SourceOfFund", Schema = "HR")]
+    [Table("SourceOfFund")]
     public class SourceOfFund:Base
     {
         public string nameEN { get; set; }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Attendance
 {
-	[Table("EmployeeAllocation", Schema = "HR")]
+	[Table("EmployeeAllocation")]
 	public class EmployeeAllocation:Base
 	{
 		public int? dutyId { get; set; }

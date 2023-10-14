@@ -9,7 +9,7 @@ using OPUSERP.VMS.Data.Entity.VehicleInfo;
 
 namespace OPUSERP.VMS.Data.Entity.FuelInfo
 {
-    [Table("FuelDetail", Schema = "VMS")]
+    [Table("FuelDetail")]
     public class FuelDetail : Base
     {
         public int? fuelInformationId { get; set; }

@@ -10,7 +10,7 @@ using OPUSERP.Payroll.Data.Entity.Salary;
 
 namespace OPUSERP.HRPMS.Data.Entity.Recruitment
 {
-    [Table("ApplicationForm", Schema = "HR")]
+    [Table("ApplicationForm")]
     public class ApplicationForm : Base
     {
         public string applicationNo { get; set; }

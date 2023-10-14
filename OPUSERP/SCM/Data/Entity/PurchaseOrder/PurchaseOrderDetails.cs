@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.PurchaseOrder
 {
-    [Table("PurchaseOrderDetails", Schema = "SCM")]
+    [Table("PurchaseOrderDetails")]
     public class PurchaseOrderDetails:Base
     {
         public int? purchaseId { get; set; }

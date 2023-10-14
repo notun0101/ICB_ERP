@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Sales.Data.Entity.Collection
 {
-    [Table("RepSalesCollectionDetail", Schema = "Sales")]
+    [Table("RepSalesCollectionDetail")]
     public class RepSalesCollectionDetail : Base
     {
         public int? repSalesCollectionId { get; set; }

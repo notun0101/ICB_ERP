@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CRM.Data.Entity.MasterData
 {
-    [Table("Area", Schema = "CRM")]
+    [Table("Area")]
     public class Area : Base
     {       
 

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Accounting.Data.Entity.BankReconciliation
 {
-    [Table("BankReconcileDetail", Schema = "ACCOUNT")]
+    [Table("BankReconcileDetail")]
     public class BankReconcileDetail : Base
     {
 

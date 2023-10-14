@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.REMS.Data.Entity
 {
-    [Table("AssignType", Schema = "REMS")]
+    [Table("AssignType")]
     public class AssignType:Base
     {
         public string assignTypeName { get; set; }

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.POS.Data.Entity
 {
-    [Table("PosInvoiceMaster", Schema = "POS")]
+    [Table("PosInvoiceMaster")]
     public class PosInvoiceMaster : Base
     {
         public int? posCustomerId { get; set; }

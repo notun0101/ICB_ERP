@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.FixedAsset.Data.Entity.AssetRegister
 {
-    [Table("AssetDepreciation", Schema = "FAMS")]
+    [Table("AssetDepreciation")]
     public class AssetDepreciation : Base
     {
         public int? assetRegistrationId { get; set; }

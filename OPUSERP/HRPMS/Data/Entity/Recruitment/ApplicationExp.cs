@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Recruitment
 {
-    [Table("ApplicationExp", Schema = "HR")]
+    [Table("ApplicationExp")]
     public class ApplicationExp : Base
     {
         public string officeName { get; set; }

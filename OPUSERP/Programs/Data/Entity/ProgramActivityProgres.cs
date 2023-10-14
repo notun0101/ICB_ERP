@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Programs.Data.Entity
 {
-    [Table("ProgramActivityProgres", Schema = "PM")]
+    [Table("ProgramActivityProgres")]
     public class ProgramActivityProgres: Base
     {
         public int? programActivityId { get; set; }

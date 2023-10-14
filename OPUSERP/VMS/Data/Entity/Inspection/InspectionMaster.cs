@@ -5,7 +5,7 @@ using OPUSERP.VMS.Data.Entity.VehicleInfo;
 
 namespace OPUSERP.VMS.Data.Entity.Inspection
 {
-    [Table("InspectionMaster", Schema = "VMS")]
+    [Table("InspectionMaster")]
     public class InspectionMaster:Base
     {
         public int? vehicleInformationId { get; set; }

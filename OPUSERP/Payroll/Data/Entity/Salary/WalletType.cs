@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Payroll.Data.Entity.Salary
 {
-    [Table("WalletType", Schema = "Payroll")]
+    [Table("WalletType")]
     public class WalletType : Base
     {
         [MaxLength(100)]

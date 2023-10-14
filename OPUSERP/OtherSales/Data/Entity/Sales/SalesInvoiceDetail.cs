@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.OtherSales.Data.Entity.Sales
 {
-    [Table("SalesInvoiceDetail", Schema = "OSales")]
+    [Table("SalesInvoiceDetail")]
     public class SalesInvoiceDetail:Base
     {
         public int? itemPriceFixingId { get; set; }

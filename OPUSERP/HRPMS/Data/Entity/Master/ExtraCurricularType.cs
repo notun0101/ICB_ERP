@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-    [Table("ExtraCurricularType", Schema = "HR")]
+    [Table("ExtraCurricularType")]
     public class ExtraCurricularType:Base
     {
         public string name { get; set; }

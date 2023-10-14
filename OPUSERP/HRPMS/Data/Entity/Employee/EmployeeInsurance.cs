@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Employee
 {
-    [Table("EmployeeInsurance", Schema = "HR")]
+    [Table("EmployeeInsurance")]
     public class EmployeeInsurance:Base
     {
         public int employeeInfoId { get; set; }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.VMS.Data.Entity.VehicleInfo
 {
-    [Table("DriveType", Schema = "VMS")]
+    [Table("DriveType")]
     public class DriveType:Base
     {
         [MaxLength(250)]

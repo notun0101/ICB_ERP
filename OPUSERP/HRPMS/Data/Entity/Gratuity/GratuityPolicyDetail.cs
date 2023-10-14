@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Gratuity
 {
-    [Table("GratuityPolicyDetail", Schema = "HR")]
+    [Table("GratuityPolicyDetail")]
     public class GratuityPolicyDetail : Base
     {
         public int? fromYear { get; set; }

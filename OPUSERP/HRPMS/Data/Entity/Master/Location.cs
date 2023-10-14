@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-    [Table("Location", Schema = "HR")]
+    [Table("Location")]
     public class Location: Base //zone table
     {
         public string branchUnitName { get; set; }

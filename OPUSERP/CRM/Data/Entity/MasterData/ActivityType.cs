@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CRM.Data.Entity.MasterData
 {
-    [Table("ActivityType", Schema = "CRM")]
+    [Table("ActivityType")]
     public class ActivityType : Base
     {
        

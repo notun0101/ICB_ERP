@@ -22,7 +22,7 @@ using OPUSERP.TAMS.Service.Interface;
 namespace OPUSERP.Areas.SEBA.Controllers
 {
     [Authorize]
-    [Area("SEBA")]
+    [Area("HR")]
     public class ProblemReportController : Controller
     {
         private readonly ISebaService sebaService;
@@ -150,7 +150,7 @@ namespace OPUSERP.Areas.SEBA.Controllers
 
             #region Attachment
 
-            var module = await iERPModuleService.GetERPModuleByModuleName("SEBA");
+            var module = await iERPModuleService.GetERPModuleByModuleName("HR");
             int moduleId = module.Id;
 
             if (model.imagePath_Challan != null)
@@ -213,7 +213,7 @@ namespace OPUSERP.Areas.SEBA.Controllers
         [HttpGet]
         public async Task<IActionResult> GetProblemphotoByProblemId(int Id)
         {
-            var module = await iERPModuleService.GetERPModuleByModuleName("SEBA");
+            var module = await iERPModuleService.GetERPModuleByModuleName("HR");
             int moduleId = module.Id;
 
             return Json(await attachmentCommentService.GetDocumentAttachmentByActionIdContact(Id, "Seba Problem", "photo", moduleId));

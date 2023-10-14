@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.Requisition
 {
-    [Table("RequisitionStatusLogs", Schema = "SCM")]
+    [Table("RequisitionStatusLogs")]
     public class RequisitionStatusLog:Base
     {
         public int? requisitionMasterId { get; set; }

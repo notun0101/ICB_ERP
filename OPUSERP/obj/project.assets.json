@@ -4030,6 +4030,37 @@
           }
         }
       },
+      "Oracle.EntityFrameworkCore/2.19.180": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.Relational": "[2.1.14, 3.0.0)",
+          "Oracle.ManagedDataAccess.Core": "[2.19.180, 2.20.0)"
+        },
+        "compile": {
+          "lib/netstandard2.0/Oracle.EntityFrameworkCore.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Oracle.EntityFrameworkCore.dll": {}
+        }
+      },
+      "Oracle.ManagedDataAccess/19.18.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Oracle.ManagedDataAccess.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Oracle.ManagedDataAccess.dll": {}
+        }
+      },
+      "Oracle.ManagedDataAccess.Core/2.19.180": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Oracle.ManagedDataAccess.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Oracle.ManagedDataAccess.dll": {}
+        }
+      },
       "Portable.BouncyCastle/1.9.0": {
         "type": "package",
         "compile": {
@@ -9967,6 +9998,62 @@
         "nuget.frameworks.nuspec"
       ]
     },
+    "Oracle.EntityFrameworkCore/2.19.180": {
+      "sha512": "VNPwuODdwW7/6acbiu1joAyVmoM7Gq2g8ea5qX//uh1m/a0Qjwz7e6GiNtK5BJXZW725k0BG7Cp5W3nwwj8fmw==",
+      "type": "package",
+      "path": "oracle.entityframeworkcore/2.19.180",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "lib/netstandard2.0/Oracle.EntityFrameworkCore.dll",
+        "oracle.entityframeworkcore.2.19.180.nupkg.sha512",
+        "oracle.entityframeworkcore.nuspec",
+        "readme.txt"
+      ]
+    },
+    "Oracle.ManagedDataAccess/19.18.0": {
+      "sha512": "ukPmMIEg+LgnIIMbkRIaC0MFLK990QLZrzWfdBaUg3XNdf1hFHCWNlTxU+/1trn+iqQSP+tWmb38efPm06W7iA==",
+      "type": "package",
+      "path": "oracle.manageddataaccess/19.18.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "PerfCounters/register_odpm_perfmon_counters.ps1",
+        "PerfCounters/unregister_odpm_perfmon_counters.ps1",
+        "bin/x64/Oracle.ManagedDataAccessIOP.dll",
+        "bin/x86/Oracle.ManagedDataAccessIOP.dll",
+        "content/net40/App.config.install.xdt",
+        "content/net40/App.config.transform",
+        "content/net40/App.config.uninstall.xdt",
+        "content/net40/Web.config.install.xdt",
+        "content/net40/Web.config.transform",
+        "content/net40/Web.config.uninstall.xdt",
+        "info.txt",
+        "lib/net40/Oracle.ManagedDataAccess.dll",
+        "oracle.manageddataaccess.19.18.0.nupkg.sha512",
+        "oracle.manageddataaccess.nuspec",
+        "readme.txt"
+      ]
+    },
+    "Oracle.ManagedDataAccess.Core/2.19.180": {
+      "sha512": "WOgi2EQv3SR2nm55YTfF39s8i7WzLgxL5YjNZrTfTEklEj0ZcdNFwM3prsTk+8msOMX6d7nfsXHhnJDgvSuIhw==",
+      "type": "package",
+      "path": "oracle.manageddataaccess.core/2.19.180",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "PerfCounters/register_odpc_perfmon_counters.ps1",
+        "PerfCounters/unregister_odpc_perfmon_counters.ps1",
+        "info.txt",
+        "lib/netstandard2.0/Oracle.ManagedDataAccess.dll",
+        "oracle.manageddataaccess.core.2.19.180.nupkg.sha512",
+        "oracle.manageddataaccess.core.nuspec",
+        "readme.txt"
+      ]
+    },
     "Portable.BouncyCastle/1.9.0": {
       "sha512": "eZZBCABzVOek+id9Xy04HhmgykF0wZg9wpByzrWN7q8qEI0Qen9b7tfd7w8VA3dOeesumMG7C5ZPy0jk7PSRHw==",
       "type": "package",
@@ -15669,6 +15756,8 @@
       "Microsoft.VisualStudio.Web.BrowserLink >= 2.2.0",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 2.2.4",
       "Newtonsoft.Json >= 13.0.2",
+      "Oracle.EntityFrameworkCore >= 2.19.180",
+      "Oracle.ManagedDataAccess >= 19.18.0",
       "System.Data.OleDb >= 4.7.0",
       "System.Drawing.Common >= 4.6.0",
       "System.ServiceModel.Duplex >= 4.4.*",
@@ -15687,11 +15776,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Git Projects\\BDBL_ERP\\OPUSERP\\OPUSERP.csproj",
+      "projectUniqueName": "D:\\Git Projects\\ICB_ERP\\OPUSERP\\OPUSERP.csproj",
       "projectName": "OPUSERP",
-      "projectPath": "D:\\Git Projects\\BDBL_ERP\\OPUSERP\\OPUSERP.csproj",
+      "projectPath": "D:\\Git Projects\\ICB_ERP\\OPUSERP\\OPUSERP.csproj",
       "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "D:\\Git Projects\\BDBL_ERP\\OPUSERP\\obj\\",
+      "outputPath": "D:\\Git Projects\\ICB_ERP\\OPUSERP\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -15793,6 +15882,14 @@
             "target": "Package",
             "version": "[13.0.2, )"
           },
+          "Oracle.EntityFrameworkCore": {
+            "target": "Package",
+            "version": "[2.19.180, )"
+          },
+          "Oracle.ManagedDataAccess": {
+            "target": "Package",
+            "version": "[19.18.0, )"
+          },
           "System.Data.OleDb": {
             "target": "Package",
             "version": "[4.7.0, )"
@@ -15840,5 +15937,17 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Oracle.ManagedDataAccess 19.18.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework '.NETCoreApp,Version=v2.2'. This package may not be fully compatible with your project.",
+      "libraryId": "Oracle.ManagedDataAccess",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v2.2"
+      ]
+    }
+  ]
 }

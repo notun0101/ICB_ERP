@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Rental.Data.Entity.Sales
 {
-    [Table("TermsAndConditions", Schema = "Rental")]
+    [Table("TermsAndConditions")]
     public class TermsAndConditions : Base
     {        
         public string termName { get; set; }

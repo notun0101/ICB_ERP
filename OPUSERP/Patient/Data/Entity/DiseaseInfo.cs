@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Patient.Data.Entity
 {
-    [Table("DiseaseInfo", Schema = "HOSPTL")]
+    [Table("DiseaseInfo")]
     public class DiseaseInfo : Base
     {
         [MaxLength(250)]

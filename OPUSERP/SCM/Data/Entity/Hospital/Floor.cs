@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.Hospital
 {
-	[Table("Floor", Schema = "SCM")]
+	[Table("Floor")]
 	public class Floor:Base
 	{
 		public int? buildingId { get; set; }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.ProjectStatus
 {
-    [Table("ManpowerTypes", Schema = "SCM")]
+    [Table("ManpowerTypes")]
     public class ManpowerType:Base
     {
         public string manpowerTypeName { get; set; }

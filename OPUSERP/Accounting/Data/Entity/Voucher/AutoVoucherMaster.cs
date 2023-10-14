@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.Voucher
 {
-    [Table("AutoVoucherMaster", Schema = "ACCOUNT")]
+    [Table("AutoVoucherMaster")]
     public class AutoVoucherMaster : Base
     {
         public int? autoVoucherNameId { get; set; }

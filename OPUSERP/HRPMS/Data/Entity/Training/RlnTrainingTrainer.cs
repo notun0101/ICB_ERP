@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Training
 {
-    [Table("RlnTrainingTrainer", Schema = "HR")]
+    [Table("RlnTrainingTrainer")]
     public class RlnTrainingTrainer : Base
     {
         public int? trainerId { get; set; }

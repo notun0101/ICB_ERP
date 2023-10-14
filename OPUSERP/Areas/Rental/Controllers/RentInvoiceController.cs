@@ -30,7 +30,7 @@ using System.Threading.Tasks;
 namespace OPUSERP.Areas.Rental.Controllers
 {
     [Authorize]
-    [Area("Rental")]
+    [Area("HR")]
     public class RentInvoiceController : Controller
     {
         private readonly IHostingEnvironment _hostingEnvironment;
@@ -220,7 +220,7 @@ namespace OPUSERP.Areas.Rental.Controllers
                 }
             }
 
-            return RedirectToAction("InvoiceDetails", "RentInvoice", new { id = masterId, Area = "Rental" });
+            return RedirectToAction("InvoiceDetails", "RentInvoice", new { id = masterId, Area = "HR" });
             // return RedirectToAction(nameof(InvoiceDetails), new { id = masterId });
         }
 
@@ -346,7 +346,7 @@ namespace OPUSERP.Areas.Rental.Controllers
 
         public async Task<IActionResult> InvoiceDetails(int id)
         {
-            ERPModule module = await eRPModuleService.GetERPModuleByModuleName("Rental");
+            ERPModule module = await eRPModuleService.GetERPModuleByModuleName("HR");
             ViewBag.masterId = id;
             var CommentInfo = await attachmentCommentService.GetCommentByActionTypeId(id, "RentInvoice", module.Id);
             if (CommentInfo == null)
@@ -385,7 +385,7 @@ namespace OPUSERP.Areas.Rental.Controllers
         [HttpGet]
         public async Task<IActionResult> InvoicePDF(int id, string userName)
         {
-            ERPModule module = await eRPModuleService.GetERPModuleByModuleName("Rental");
+            ERPModule module = await eRPModuleService.GetERPModuleByModuleName("HR");
             ViewBag.masterId = id;
 
             var CommentInfo = await attachmentCommentService.GetCommentByActionTypeId(id, "RentInvoice", module.Id);
@@ -562,7 +562,7 @@ namespace OPUSERP.Areas.Rental.Controllers
 
 
 
-            return RedirectToAction("InvoiceDetails", "RentInvoice", new { id = model.masterId, Area = "Rental" });
+            return RedirectToAction("InvoiceDetails", "RentInvoice", new { id = model.masterId, Area = "HR" });
 
         }
 
@@ -607,7 +607,7 @@ namespace OPUSERP.Areas.Rental.Controllers
                     await attachmentCommentService.SaveDocumentAttachment(data);
                 }
 
-                return RedirectToAction("InvoiceDetails", "RentInvoice", new { id = model.actionTypeId, Area = "Rental" });
+                return RedirectToAction("InvoiceDetails", "RentInvoice", new { id = model.actionTypeId, Area = "HR" });
             }
             catch (Exception ex)
             {
@@ -655,7 +655,7 @@ namespace OPUSERP.Areas.Rental.Controllers
                     await attachmentCommentService.SaveDocumentAttachment(data);
                 }
 
-                return RedirectToAction("ReturnInvoiceDetails", "RentInvoice", new { id = model.actionTypeId, Area = "Rental" });
+                return RedirectToAction("ReturnInvoiceDetails", "RentInvoice", new { id = model.actionTypeId, Area = "HR" });
             }
             catch (Exception ex)
             {
@@ -704,7 +704,7 @@ namespace OPUSERP.Areas.Rental.Controllers
                     await attachmentCommentService.SaveDocumentAttachment(data);
                 }
 
-                return RedirectToAction("InvoiceDetails", "RentInvoice", new { id = model.actionTypeId, Area = "Rental" });
+                return RedirectToAction("InvoiceDetails", "RentInvoice", new { id = model.actionTypeId, Area = "HR" });
             }
             catch (Exception ex)
             {
@@ -838,7 +838,7 @@ namespace OPUSERP.Areas.Rental.Controllers
         public async Task<IActionResult> DeleteComments(int Id, int actionId)
         {
             await attachmentCommentService.DeleteCommentById(Id);
-            return RedirectToAction("InvoiceDetails", "RentInvoice", new { id = actionId, Area = "Rental" });
+            return RedirectToAction("InvoiceDetails", "RentInvoice", new { id = actionId, Area = "HR" });
         }
 
         [HttpGet]
@@ -851,7 +851,7 @@ namespace OPUSERP.Areas.Rental.Controllers
             if (System.IO.File.Exists(fullFilePath))
                 System.IO.File.Delete(fullFilePath);
             await attachmentCommentService.DeleteDocumentAttachmentById(photoId);
-            return RedirectToAction("InvoiceDetails", "RentInvoice", new { id = actionId, Area = "Rental" });
+            return RedirectToAction("InvoiceDetails", "RentInvoice", new { id = actionId, Area = "HR" });
         }
         [AllowAnonymous]
         public IActionResult ReceivedAction()
@@ -1073,7 +1073,7 @@ namespace OPUSERP.Areas.Rental.Controllers
 
                 }
                 return Json(id);
-                //return RedirectToAction("HallRentalReportPdf", "RentInvoice",new { Area="Rental", id= model.hallRentalApplicationInfoId });
+                //return RedirectToAction("HallRentalReportPdf", "RentInvoice",new { Area="HR", id= model.hallRentalApplicationInfoId });
 
             }
             catch (Exception ex)

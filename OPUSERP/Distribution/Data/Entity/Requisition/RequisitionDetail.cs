@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Distribution.Data.Entity.Requisition
 {
-    [Table("RequisitionDetail", Schema = "Distribution")]
+    [Table("RequisitionDetail")]
     public class RequisitionDetail : Base
     {
         public int? itemSpecificationId { get; set; }

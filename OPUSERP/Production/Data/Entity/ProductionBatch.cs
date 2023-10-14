@@ -8,7 +8,7 @@ using OPUSERP.Production.Data.Entity;
 
 namespace OPUSERP.Production.Data.Entity
 {
-    [Table("ProductionBatchs", Schema = "PROD")]
+    [Table("ProductionBatchs")]
     public class ProductionBatch:Base
     {
         public int? productionPlanId { get; set; }

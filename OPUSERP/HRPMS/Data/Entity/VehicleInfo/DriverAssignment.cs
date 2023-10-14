@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.VehicleInfo
 {
-    [Table("DriverAssignment", Schema = "HR")]
+    [Table("DriverAssignment")]
     public class DriverAssignment : Base
     {
         public int? vehicleEntryId { get; set; }

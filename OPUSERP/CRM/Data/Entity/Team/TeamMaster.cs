@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.CRM.Data.Entity.Team
 {
-	[Table("CRMTeamMaster ", Schema = "CRM")]
+	[Table("CRMTeamMaster ")]
 	public class CRMTeamMaster : Base
 	{
 		[StringLength(50)]

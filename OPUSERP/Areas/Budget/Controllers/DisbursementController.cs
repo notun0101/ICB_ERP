@@ -14,7 +14,7 @@ using OPUSERP.HRPMS.Services.MasterData.Interfaces;
 namespace OPUSERP.Areas.Budget.Controllers
 {
     [Authorize]
-    [Area("Budget")]
+    [Area("HR")]
     public class DisbursementController : Controller
     {
         private readonly IBudgetRequsitionMasterService budgetRequsitionMasterService;

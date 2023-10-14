@@ -24,7 +24,7 @@ using OPUSERP.Payroll.Services.Salary.Interfaces;
 
 namespace OPUSERP.Areas.Payroll.Controllers
 {
-	[Area("Payroll")]
+	[Area("HR")]
 	[Authorize]
 	public class EmailingController : Controller
 	{
@@ -195,7 +195,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
 		//					employeeId = employeeId,
 		//					date = DateTime.Now,
 		//					type = "Send",
-		//					module = "Payroll",
+		//					module = "HR",
 		//					itemName = "PaySlip"
 		//				};
 		//				await salaryService.SaveSendEmailLogStatus(data);
@@ -240,7 +240,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
 		//						employeeId = data.Id,
 		//						date = DateTime.Now,
 		//						type = "Send",
-		//						module = "Payroll",
+		//						module = "HR",
 		//						itemName = "PaySlip"
 		//					};
 		//					await salaryService.SaveSendEmailLogStatus(data1);
@@ -319,7 +319,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
 		//						employeeId = data.Id,
 		//						date = DateTime.Now,
 		//						type = "Send",
-		//						module = "Payroll",
+		//						module = "HR",
 		//						itemName = "PaySlip"
 		//					};
 		//					await salaryService.SaveSendEmailLogStatus(data1);
@@ -716,7 +716,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
 							employeeId = emp.Id,
 							date = DateTime.Now,
 							type = "Send",
-							module = "Payroll",
+							module = "HR",
 							itemName = "PaySlip"
 						};
 						await salaryService.SaveSendEmailLogStatus(data);
@@ -756,7 +756,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
 								employeeId = data.Id,
 								date = DateTime.Now,
 								type = "Send",
-								module = "Payroll",
+								module = "HR",
 								itemName = "PaySlip"
 							};
 							await salaryService.SaveSendEmailLogStatus(data1);
@@ -824,7 +824,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
 								employeeId = data.Id,
 								date = DateTime.Now,
 								type = "Send",
-								module = "Payroll",
+								module = "HR",
 								itemName = "PaySlip"
 							};
 							await salaryService.SaveSendEmailLogStatus(data1);
@@ -887,7 +887,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
 				employeeId = employeeInfoId,
 				date = DateTime.Now,
 				type = "Download",
-				module = "Payroll",
+				module = "HR",
 				itemName = "PaySlip"
 			};
 			await salaryService.SaveSendEmailLogStatus(data1);

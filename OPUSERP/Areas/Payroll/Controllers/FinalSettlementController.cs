@@ -19,7 +19,7 @@ using OPUSERP.Payroll.Services.Salary.Interfaces;
 
 namespace OPUSERP.Areas.Payroll.Controllers
 {
-    [Area("Payroll")]
+    [Area("HR")]
     public class FinalSettlementController : Controller
     {
         private readonly IHostingEnvironment _hostingEnvironment;

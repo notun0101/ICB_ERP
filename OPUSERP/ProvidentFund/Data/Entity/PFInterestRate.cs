@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.ProvidentFund.Data.Entity
 {
-    [Table("PFInterestRate", Schema = "PF")]
+    [Table("PFInterestRate")]
     public class PFInterestRate : Base
     {
         public DateTime? StartDate { get; set; }

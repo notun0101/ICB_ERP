@@ -3,7 +3,7 @@ using OPUSERP.Data.Entity;
 
 namespace OPUSERP.CLUB.Data.Event
 {
-    [Table("EventPerticipantHead", Schema = "Club")]
+    [Table("EventPerticipantHead")]
     public class EventPerticipantHead:Base
     {
         //Foreign Reliation

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.MasterData
 {
-    [Table("TeamMaster", Schema = "SCM")]
+    [Table("TeamMaster")]
     public class TeamMaster:Base
     {
         [StringLength(50)]

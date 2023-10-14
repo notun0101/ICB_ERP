@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.VMS.Data.Entity.FuelStation
 {
-    [Table("FuelStationComment", Schema = "VMS")]
+    [Table("FuelStationComment")]
     public class FuelStationComment: Base
     {
         public int? fuelStationInfoId { get; set; }

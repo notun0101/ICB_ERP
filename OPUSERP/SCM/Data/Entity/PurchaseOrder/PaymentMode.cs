@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.PurchaseOrder
 {
-    [Table("PaymentMode", Schema = "SCM")]
+    [Table("PaymentMode")]
     public class PaymentMode:Base
     {
         [Column(TypeName = "nvarchar(200)")]

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Leave
 {
-    [Table("LeaveCommittee", Schema = "HR")]
+    [Table("LeaveCommittee")]
     public class LeaveCommittee:Base
     {
         public int? employeeId { get; set; }

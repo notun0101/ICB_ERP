@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-    [Table("AtttachmentCategory", Schema = "HR")]
+    [Table("AtttachmentCategory")]
     public class AtttachmentCategory :  Base
     {
         public int? atttachmentGroupId { get; set; }

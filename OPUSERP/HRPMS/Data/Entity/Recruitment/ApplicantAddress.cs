@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Recruitment
 {
-    [Table("ApplicantAddress", Schema = "HR")]
+    [Table("ApplicantAddress")]
     public class ApplicantAddress:Base
     {
         public int? countryId { get; set; }

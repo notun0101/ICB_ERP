@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Data.Entity.MasterData
 {
-    [Table("StoreAddress", Schema = "Purchase")]
+    [Table("StoreAddress")]
     public class StoreAddress : Base
     {
         public int? addressCategoryId { get; set; }

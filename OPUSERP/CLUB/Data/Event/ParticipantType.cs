@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.CLUB.Data.Event
 {
-    [Table("ParticipantType", Schema = "Club")]
+    [Table("ParticipantType")]
     public class ParticipantType:Base
     {
         public string name { get; set; }

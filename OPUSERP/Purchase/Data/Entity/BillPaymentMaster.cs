@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Purchase.Data.Entity
 {
-    [Table("BillPaymentMaster", Schema = "Purchase")]
+    [Table("BillPaymentMaster")]
     public class BillPaymentMaster:Base
     {
         //public int? supplierId { get; set; }

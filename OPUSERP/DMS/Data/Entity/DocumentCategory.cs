@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.DMS.Data.Entity
 {
-    [Table("DocumentCategory", Schema = "Doc")]
+    [Table("DocumentCategory")]
     public class DocumentCategory : Base
     {
         [MaxLength(300)]

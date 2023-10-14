@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.ACR
 {
-    [Table("AcrRoute", Schema = "HR")]
+    [Table("AcrRoute")]
     public class AcrRoute : Base
     {
         public int? supervisorId { get; set; }

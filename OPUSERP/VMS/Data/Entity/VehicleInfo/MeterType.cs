@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.VMS.Data.Entity.VehicleInfo
 {
-    [Table("MeterType", Schema = "VMS")]
+    [Table("MeterType")]
     public class MeterType:Base
     {
         [MaxLength(250)]

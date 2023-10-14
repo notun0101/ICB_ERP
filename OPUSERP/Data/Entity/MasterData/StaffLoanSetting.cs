@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace OPUSERP.Data.Entity.Master
 
 {
-    [Table("StaffLoanSetting", Schema = "Payroll")]
+    [Table("StaffLoanSetting")]
 
     public class StaffLoanSetting : Base
     {

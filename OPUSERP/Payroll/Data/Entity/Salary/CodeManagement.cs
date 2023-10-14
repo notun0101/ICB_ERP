@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Payroll.Data.Entity.Salary
 {
-    [Table("CodeManagement", Schema = "Payroll")]
+    [Table("CodeManagement")]
     public class CodeManagement : Base
     {        
        

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Library
 {
-    [Table("BorrowerInfo", Schema = "HR")]
+    [Table("BorrowerInfo")]
     public class BorrowerInfo: Base
     {
         //Foreign Reliation

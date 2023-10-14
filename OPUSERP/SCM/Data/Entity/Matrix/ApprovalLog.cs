@@ -2,7 +2,7 @@
 
 namespace OPUSERP.Data.Entity.Matrix
 {
-    [Table("ApprovalLog", Schema = "SCM")]
+    [Table("ApprovalLog")]
     public class ApprovalLog:Base
     {
         public int masterId { get; set; }

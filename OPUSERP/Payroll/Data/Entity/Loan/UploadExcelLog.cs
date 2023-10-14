@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity.Loan
 {
-    [Table("UploadExcelLog", Schema = "Payroll")]
+    [Table("UploadExcelLog")]
     public class UploadExcelLog:Base
     {
         public string fileName { get; set; }

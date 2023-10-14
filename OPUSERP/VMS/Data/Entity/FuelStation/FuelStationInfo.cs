@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.VMS.Data.Entity.FuelStation
 {
-    [Table("FuelStationInfo", Schema = "VMS")]
+    [Table("FuelStationInfo")]
     public class FuelStationInfo:Base
     {
         [MaxLength(150)]

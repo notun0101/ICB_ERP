@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Purchase.Data.Entity
 {
-    [Table("PurchaseReturnInfoMaster", Schema = "Purchase")]
+    [Table("PurchaseReturnInfoMaster")]
     public class PurchaseReturnInfoMaster:Base
     {
         public int? relSupplierCustomerResourseId { get; set; }

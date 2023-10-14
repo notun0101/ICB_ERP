@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.Voucher
 {
-    [Table("VoucherMaster", Schema = "ACCOUNT")]
+    [Table("VoucherMaster")]
     public class VoucherMaster : Base
     {
         [Column(TypeName = "nvarchar(150)")]

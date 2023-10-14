@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Employee
 {
-    [Table("AcrInfo", Schema = "HR")]
+    [Table("AcrInfo")]
     public class AcrInfo :  Base
     {
         //Foreign Reliation

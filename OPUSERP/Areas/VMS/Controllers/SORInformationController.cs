@@ -10,7 +10,7 @@ using OPUSERP.VMS.Services.SOR.Interfaces;
 
 namespace OPUSERP.Areas.VMS.Controllers
 {
-    [Area("VMS")]
+    [Area("HR")]
     public class SORInformationController : Controller
     {
        

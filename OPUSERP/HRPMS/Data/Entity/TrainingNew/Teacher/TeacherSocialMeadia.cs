@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.TrainingNew.Teacher
 {
-	[Table("TeacherSocialMeadia", Schema = "HR")]
+	[Table("TeacherSocialMeadia")]
 	public class TeacherSocialMeadia:Base
 	{
 		public string name { get; set; }

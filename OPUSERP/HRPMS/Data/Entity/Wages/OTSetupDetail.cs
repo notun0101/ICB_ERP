@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Wages
 {
-    [Table("OTSetupDetail", Schema = "HR")]
+    [Table("OTSetupDetail")]
     public class OTSetupDetail:Base
     {
         public int? oTSetupMasterId { get; set; }

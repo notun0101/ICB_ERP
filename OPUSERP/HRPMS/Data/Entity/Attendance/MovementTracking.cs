@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Attendance
 {
-    [Table("MovementTracking", Schema = "HR")]
+    [Table("MovementTracking")]
     public class MovementTracking : Base
     {
         [MaxLength(50)]

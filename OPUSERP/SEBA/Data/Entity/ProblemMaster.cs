@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SEBA.Data.Entity
 {
-    [Table("ProblemMaster", Schema = "SEBA")]
+    [Table("ProblemMaster")]
     public class ProblemMaster : Base
     {       
         [MaxLength(20)]

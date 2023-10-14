@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.ProvidentFund.Data.Entity
 {
-	[Table("PfFinalSettlement", Schema = "PF")]
+	[Table("PfFinalSettlement")]
 	public class PfFinalSettlement : Base
 	{
 		public int? pfMemberId { get; set; }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Git Projects\\BDBL_ERP\\OPUSERP\\OPUSERP.csproj": {}
+    "D:\\Git Projects\\ICB_ERP\\OPUSERP\\OPUSERP.csproj": {}
   },
   "projects": {
-    "D:\\Git Projects\\BDBL_ERP\\OPUSERP\\OPUSERP.csproj": {
+    "D:\\Git Projects\\ICB_ERP\\OPUSERP\\OPUSERP.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Git Projects\\BDBL_ERP\\OPUSERP\\OPUSERP.csproj",
+        "projectUniqueName": "D:\\Git Projects\\ICB_ERP\\OPUSERP\\OPUSERP.csproj",
         "projectName": "OPUSERP",
-        "projectPath": "D:\\Git Projects\\BDBL_ERP\\OPUSERP\\OPUSERP.csproj",
+        "projectPath": "D:\\Git Projects\\ICB_ERP\\OPUSERP\\OPUSERP.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "D:\\Git Projects\\BDBL_ERP\\OPUSERP\\obj\\",
+        "outputPath": "D:\\Git Projects\\ICB_ERP\\OPUSERP\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -112,6 +112,14 @@
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.2, )"
+            },
+            "Oracle.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[2.19.180, )"
+            },
+            "Oracle.ManagedDataAccess": {
+              "target": "Package",
+              "version": "[19.18.0, )"
             },
             "System.Data.OleDb": {
               "target": "Package",

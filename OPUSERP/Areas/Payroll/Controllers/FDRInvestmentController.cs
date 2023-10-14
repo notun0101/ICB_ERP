@@ -28,7 +28,7 @@ using OPUSERP.Payroll.Services.Salary.Interfaces;
 
 namespace OPUSERP.Areas.Payroll.Controllers
 {
-    [Area("Payroll")]
+    [Area("HR")]
     [Authorize]
     public class FDRInvestmentController : Controller
     {
@@ -171,7 +171,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
             var user = await _userManager.FindByNameAsync(userName);
             var model = new PFLoanViewModel
             {
-                loans = await pFService.GetOngoingLoanByTypeAndUserId("PF", user.userId)
+                loans = await pFService.GetOngoingLoanByTypeAndUserId("HR", user.userId)
             };
 
             return View(model);
@@ -185,7 +185,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
             {
                 rptDate = reportDate,
                 companies = await eRPCompanyService.GetAllCompany(),
-                pFLoans = await pFService.GetLoansByTypeAndStatus1("PF", 1, year)
+                pFLoans = await pFService.GetLoansByTypeAndStatus1("HR", 1, year)
             };
 
             return View(model);
@@ -640,7 +640,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
             var user = await _userManager.FindByNameAsync(userName);
             var model = new PFLoanViewModel
             {
-                loans = await pFService.GetForwardedLoanByTypeAndUserId("PF", user.userId)
+                loans = await pFService.GetForwardedLoanByTypeAndUserId("HR", user.userId)
             };
 
             return View(model);
@@ -671,7 +671,7 @@ namespace OPUSERP.Areas.Payroll.Controllers
         {
             var model = new PFLoanViewModel
             {
-                pFLoans = await pFService.GetLoansByTypeAndStatus("PF", 1)
+                pFLoans = await pFService.GetLoansByTypeAndStatus("HR", 1)
             };
 
             return View(model);

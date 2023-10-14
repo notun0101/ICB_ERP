@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.ACR
 {
-	[Table("QuantitativeEvaluationHead", Schema = "HR")]
+	[Table("QuantitativeEvaluationHead")]
 	public class QuantitativeEvaluationHead:Base
 	{
 		[MaxLength(400)]

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Employee
 {
-    [Table("EmployeeRole", Schema = "HR")]
+    [Table("EmployeeRole")]
     public class EmployeeRole : Base
     {
         public int? employeeId { get; set; }

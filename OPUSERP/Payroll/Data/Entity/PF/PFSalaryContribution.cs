@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity.PF
 {
-	[Table("PFSalaryContribution", Schema = "Payroll")]
+	[Table("PFSalaryContribution")]
 	public class PFSalaryContribution:Base
 	{
 		public int? employeeId { get; set; }

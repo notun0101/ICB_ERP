@@ -23,7 +23,7 @@ using OPUSERP.SCM.Services.Stock.Interface;
 namespace OPUSERP.Areas.Purchase
 {
     [Authorize]
-    [Area("Purchase")]
+    [Area("HR")]
     public class TransferController : Controller
     {
         private readonly IAttachmentCommentService attachmentCommentService;

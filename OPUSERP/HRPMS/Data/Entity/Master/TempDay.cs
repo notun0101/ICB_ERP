@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-    [Table("TempDay", Schema = "HR")]
+    [Table("TempDay")]
     public class TempDay :Base
     {        
         public string daysInBetween { get; set; }

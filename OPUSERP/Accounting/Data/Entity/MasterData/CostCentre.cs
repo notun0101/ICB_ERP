@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.MasterData
 {
-    [Table("CostCentre", Schema = "ACCOUNT")]
+    [Table("CostCentre")]
     public class CostCentre : Base
     {
         [Column(TypeName = "nvarchar(250)")]

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity.PF
 {
-    [Table("HomeLoanSchedule", Schema = "Payroll")]
+    [Table("HomeLoanSchedule")]
     public class HomeLoanSchedule:Base
     {
         public int? homeLoanID { get; set; }

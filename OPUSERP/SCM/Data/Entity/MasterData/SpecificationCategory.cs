@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.MasterData
 {
-    [Table("SpecificationCategory", Schema = "SCM")]
+    [Table("SpecificationCategory")]
     public class SpecificationCategory:Base
     {
         [MaxLength(250)]

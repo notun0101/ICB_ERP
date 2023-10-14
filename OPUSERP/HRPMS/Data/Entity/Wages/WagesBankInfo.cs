@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Employee
 {
-    [Table("WagesBankInfo", Schema = "HR")]
+    [Table("WagesBankInfo")]
     public class WagesBankInfo : Base
     {
         //Foreign Reliation

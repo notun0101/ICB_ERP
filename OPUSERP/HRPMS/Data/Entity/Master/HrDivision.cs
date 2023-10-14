@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-	[Table("HrDivision", Schema = "HR")]
+	[Table("HrDivision")]
 	public class HrDivision : Base
 	{
 		public string divCode { get; set; }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.MasterData
 {
-    [Table("Signature", Schema = "ACCOUNT")]
+    [Table("Signature")]
     public class Signature : Base
     {
         public int? signatureTypeId { get; set; }

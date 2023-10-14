@@ -742,7 +742,7 @@ namespace OPUSERP.Areas.SCMIOU.Controllers
                 //await sCMMailService.MailMessage("suzauddaula103@gmail.com", reqNo, 2, empNameCode, baseUrl);
                 //}
 
-                //await requisitionStatusHistory.SaveRequisitionStatusLog(reqId, 1, Convert.ToInt32(currUserInfo.UserTypeId), currUserInfo.UserId, empNameCode, nextEmpNameCode, remark, statusId, "Budget", reqId, actionNo);
+                //await requisitionStatusHistory.SaveRequisitionStatusLog(reqId, 1, Convert.ToInt32(currUserInfo.UserTypeId), currUserInfo.UserId, empNameCode, nextEmpNameCode, remark, statusId, "HR", reqId, actionNo);
                 return Json(true);
             }
             catch (Exception ex)

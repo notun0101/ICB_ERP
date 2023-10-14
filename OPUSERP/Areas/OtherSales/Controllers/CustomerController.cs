@@ -494,13 +494,13 @@ namespace OPUSERP.Areas.OtherSales.Controllers
             var distributortype = await distributorTypeService.GetAllDistributorType();
             List<int?> rellids = new List<int?>();
             var reldata = new List<RelSupplierCustomerResourse>();
-            if (modulename.moduleName == "Rental")
+            if (modulename.moduleName == "HR")
             {
                 var x = await rentInvoiceMasterService.GetAllSalesInvoiceMaster();
                 rellids = x.Select(y => y.relSupplierCustomerResourseId).ToList();
                 reldata = x.Select(y => y.relSupplierCustomerResourse).ToList();
             }
-            else if (modulename.moduleName == "Sales")
+            else if (modulename.moduleName == "HR")
             {
                 var x = await salesInvoiceMasterService.GetAllSalesInvoiceMaster();
                 rellids = x.Where(y=>y.invoiceNumber.Contains("SALE")).Select(y => y.relSupplierCustomerResourseId).ToList();

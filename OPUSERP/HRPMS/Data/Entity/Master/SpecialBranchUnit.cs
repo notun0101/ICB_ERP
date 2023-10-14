@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-    [Table("SpecialBranchUnit", Schema = "HR")]
+    [Table("SpecialBranchUnit")]
     public class SpecialBranchUnit: Base
     {
         public string branchUnitName { get; set; }

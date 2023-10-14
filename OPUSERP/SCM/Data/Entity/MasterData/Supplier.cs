@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.MasterData
 {
-    [Table("Suppliers", Schema = "SCM")]
+    [Table("Suppliers")]
     public class Supplier:Base
     {
         public int? supplierTypeId { get; set; }

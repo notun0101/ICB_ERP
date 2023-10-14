@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.ProjectStatus
 {
-    [Table("SiteConstraints", Schema = "SCM")]
+    [Table("SiteConstraints")]
     public class SiteConstraint:Base
     {
         public int? progressReportId { get; set; }

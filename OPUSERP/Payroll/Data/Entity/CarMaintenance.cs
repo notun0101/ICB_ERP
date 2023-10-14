@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity
 {
-	[Table("CarMaintenance", Schema = "Payroll")]
+	[Table("CarMaintenance")]
 	public class CarMaintenance:Base
 	{
 		public int? employeeInfoId { get; set; }

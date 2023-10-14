@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.VMS.Data.Entity.ServiceVehicle
 {
-    [Table("ItemStoreInServiceCenter", Schema = "VMS")]
+    [Table("ItemStoreInServiceCenter")]
     public class ItemStoreInServiceCenter : Base
     {
         public int? vehicleServiceHistoryId { get; set; }

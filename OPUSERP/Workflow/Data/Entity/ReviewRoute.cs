@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Workflow.Data.Entity
 {
-    [Table("ReviewRoute", Schema = "WMS")]
+    [Table("ReviewRoute")]
     public class ReviewRoute:Base
     {
         public int? docRouteId { get; set; }

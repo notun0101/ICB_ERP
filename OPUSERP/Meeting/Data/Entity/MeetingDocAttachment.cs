@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Meeting.Data.Entity
 {
-    [Table("MeetingDocAttachment", Schema = "MMS")]
+    [Table("MeetingDocAttachment")]
     public class MeetingDocAttachment:Base
     {
         public int? docId { get; set; }

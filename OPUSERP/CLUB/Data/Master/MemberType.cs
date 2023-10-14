@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CLUB.Data.Master
 {
-    [Table("MemberType", Schema = "Club")]
+    [Table("MemberType")]
     public class MemberType : Base
     {
         [Required]

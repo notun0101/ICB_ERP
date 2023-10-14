@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.VMS.Data.Entity.Master
 {
-    [Table("VMSResource", Schema = "VMS")]
+    [Table("VMSResource")]
     public class VMSResource:Base
     {
 

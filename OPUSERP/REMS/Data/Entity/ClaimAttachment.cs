@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.REMS.Data.Entity
 {
-    [Table("ClaimAttachment", Schema = "REMS")]
+    [Table("ClaimAttachment")]
     public class ClaimAttachment:Base
     {
         public int? claimId { get; set; }

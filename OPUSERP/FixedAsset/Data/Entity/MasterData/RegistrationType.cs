@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.FixedAsset.Data.Entity.MasterData
 {
-    [Table("RegistrationType", Schema = "FAMS")]
+    [Table("RegistrationType")]
     public class RegistrationType:Base
     {
         public string RegistrationTypeName { get; set; }

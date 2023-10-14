@@ -3336,7 +3336,7 @@ namespace OPUSERP.Areas.HRPMSEmployee.Controllers
 
 		//public async Task<IActionResult> DeleteById(int id, string table)
 		//{
-		//    if (table == "ielts")
+		//    if (table == "HR")
 		//    {
 		//        await personalInfoService.DeleteIeltsById(id);
 		//    }

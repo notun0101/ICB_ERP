@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Recruitment.Data.Entity
 {
-    [Table("CandidatePhoto", Schema = "RCRT")]
+    [Table("CandidatePhoto")]
     public class CandidatePhoto : Base
     {
         //Foreign Reliation

@@ -9,7 +9,7 @@ using OPUSERP.VMS.Data.Entity.VehicleInfo;
 
 namespace OPUSERP.VMS.Data.Entity.ServiceVehicle
 {
-    [Table("ReminderSchedule", Schema = "VMS")]
+    [Table("ReminderSchedule")]
     public class ReminderSchedule:Base
     {
         public int? vehicleServiceReminderId { get; set; }

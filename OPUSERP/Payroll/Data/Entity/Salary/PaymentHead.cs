@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity.Salary
 {
-    [Table("PaymentHead", Schema = "Club")]
+    [Table("PaymentHead")]
     public class PaymentHead:Base
     {
         public string name { get; set; }

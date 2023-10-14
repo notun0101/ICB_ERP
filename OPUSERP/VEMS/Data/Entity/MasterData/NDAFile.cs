@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.VEMS.Data.Entity.MasterData
 {
-    [Table("NDAFile", Schema = "VEMS")]
+    [Table("NDAFile")]
     public class NDAFile:Base
     {
         [Column(TypeName = "nvarchar(200)")]

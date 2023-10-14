@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.CLUB.Data.Bulk
 {
-    [Table("RlnMemberGroup", Schema = "Club")]
+    [Table("RlnMemberGroup")]
     public class RlnMemberGroup:Base
     {
         public int? memberGroupId { get; set; }

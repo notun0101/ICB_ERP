@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity.Salary
 {
-    [Table("SalaryProcessLog", Schema = "Payroll")]
+    [Table("SalaryProcessLog")]
     public class SalaryProcessLog : Base
     {        
         public int? salaryPeriodId { get; set; }

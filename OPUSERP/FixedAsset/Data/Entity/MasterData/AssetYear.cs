@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.FixedAsset.Data.Entity.MasterData
 {
-    [Table("AssetYear", Schema = "FAMS")]
+    [Table("AssetYear")]
     public class AssetYear:Base
     {
         public string AssetYearName { get; set; }

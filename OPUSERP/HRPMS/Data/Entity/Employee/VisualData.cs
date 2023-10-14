@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Employee
 {
-    [Table("VisualData", Schema = "HR")]
+    [Table("VisualData")]
     public class VisualData : Base
     {
         [MaxLength(200)]

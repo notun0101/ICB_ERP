@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CLUB.Data.Notice
 {
-    [Table("NoticeAuthor", Schema = "Club")]
+    [Table("NoticeAuthor")]
     public class NoticeAuthor : Base
     {
         public string name { get; set; }

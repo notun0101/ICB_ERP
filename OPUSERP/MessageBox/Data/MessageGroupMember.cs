@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.MessageBox.Data
 {
-    [Table("MessageGroupMember", Schema = "MBox")]
+    [Table("MessageGroupMember")]
     public class MessageGroupMember:Base
     {
         public int? employeeId { get; set; }

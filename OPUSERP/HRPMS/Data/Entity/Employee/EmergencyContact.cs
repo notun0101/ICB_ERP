@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Employee
 {
-    [Table("EmergencyContact", Schema = "HR")]
+    [Table("EmergencyContact")]
     public class EmergencyContact:Base
     {
         public int employeeID { get; set; }

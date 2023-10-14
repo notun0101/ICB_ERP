@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.VehicleInfo
 {
-    [Table("MajorOverholding", Schema = "HR")]
+    [Table("MajorOverholding")]
     public class MajorOverholding : Base
     {
         public int? vehicleEntryId { get; set; }

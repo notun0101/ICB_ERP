@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.VMS.Data.Entity.Master
 {
-    [Table("ResourceSkill", Schema = "VMS")]
+    [Table("ResourceSkill")]
     public class ResourceSkill:Base
     {
         public string skillCode { get; set; }

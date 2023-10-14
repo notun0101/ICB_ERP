@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CRM.Data.Entity.Cold
 {
-    [Table("ColdActivityTeams", Schema = "CRM")]
+    [Table("ColdActivityTeams")]
     public class ColdActivityTeams:Base
     {
         public int coldActivityMastersId { get; set; }

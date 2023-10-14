@@ -6,7 +6,7 @@ using OPUSERP.SCM.Data.Entity.PurchaseOrder;
 
 namespace OPUSERP.FixedAsset.Data.Entity.AssetRegister
 {
-    [Table("PurchaseInfo", Schema = "FAMS")]
+    [Table("PurchaseInfo")]
     public class PurchaseInfo:Base
     {
         public int? supplierId { get; set; }

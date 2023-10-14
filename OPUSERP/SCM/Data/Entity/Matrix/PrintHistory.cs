@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.Matrix
 {
-    [Table("PrintHistory", Schema = "SCM")]
+    [Table("PrintHistory")]
     public class PrintHistory:Base
     {
         public int? matrixTypeId { get; set; }

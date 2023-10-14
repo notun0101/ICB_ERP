@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.ProvidentFund.Data.Entity
 {
-    [Table("PFLoanManagement", Schema = "PF")]
+    [Table("PFLoanManagement")]
 
     public class PFLoanManagement : Base
     {
@@ -55,7 +55,7 @@ namespace OPUSERP.ProvidentFund.Data.Entity
 
 //namespace OPUSERP.ProvidentFund.Data.Entity
 //{
-//    [Table("PFLoanManagement", Schema = "PF")]
+//    [Table("PFLoanManagement")]
 
 //    public class PFLoanManagement: Base
 //    {

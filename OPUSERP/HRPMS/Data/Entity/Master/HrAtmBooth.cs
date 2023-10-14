@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-    [Table("HrAtmBooth", Schema = "HR")]
+    [Table("HrAtmBooth")]
     public class HrAtmBooth:Base
     {
         public int? branchId { get; set; }

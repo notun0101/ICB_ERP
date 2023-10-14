@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.CRM.Data.Entity.MasterData
 {
-    [Table("LeadProgressStatus", Schema = "CRM")]
+    [Table("LeadProgressStatus")]
     public class LeadProgressStatus:Base
     {
         public string name { get; set; }

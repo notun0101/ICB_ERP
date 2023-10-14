@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.CRM.Data.Entity.Lead
 {
-    [Table("ActivityStatusProgress", Schema = "CRM")]
+    [Table("ActivityStatusProgress")]
     public class ActivityStatusProgress:Base
     {
         public int? activityMasterId { get; set; }

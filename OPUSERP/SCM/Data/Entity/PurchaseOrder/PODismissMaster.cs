@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.PurchaseOrder
 {
-    [Table("PODismissMaster", Schema = "SCM")]
+    [Table("PODismissMaster")]
     public class PODismissMaster:Base
     {
         public string reviseNo { get; set; }

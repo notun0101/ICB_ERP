@@ -7,7 +7,7 @@ using OPUSERP.Payroll.Data.Entity.Salary;
 
 namespace OPUSERP.CLUB.Data.Finance
 {
-    [Table("Collection", Schema = "Club")]
+    [Table("Collection")]
     public class Collection:Base
     {
         //Foreign Relation

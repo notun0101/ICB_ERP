@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.ACR
 {
-    [Table("AcrEvaluationValue", Schema = "HR")]
+    [Table("AcrEvaluationValue")]
     public class AcrEvaluationValue : Base
     {       
         public int acrInitiateId { get; set; }

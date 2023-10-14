@@ -14,7 +14,7 @@ using OPUSERP.Distribution.Services.MasterData.Interfaces;
 namespace OPUSERP.Areas.Distribution.Controllers
 {
     [Authorize]
-    [Area("Distribution")]
+    [Area("HR")]
     public class SalesLevelController : Controller
     {
         // GET: /<controller>/

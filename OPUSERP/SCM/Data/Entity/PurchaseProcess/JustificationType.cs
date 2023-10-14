@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.PurchaseProcess
 {
-    [Table("JustificationType", Schema = "SCM")]
+    [Table("JustificationType")]
     public class JustificationType:Base
     {
         [Column(TypeName = "nvarchar(200)")]

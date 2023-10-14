@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.Requisition
 {
-    [Table("RFQDocumentAttachmentDetail", Schema = "SCM")]
+    [Table("RFQDocumentAttachmentDetail")]
     public class RFQDocumentAttachmentDetail: Base
     {
         public int? rFQPriceMasterId { get; set; }

@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.TrainingNew
 {
-    [Table("TrainingInfoNew", Schema = "HR")]
+    [Table("TrainingInfoNew")]
     public class TrainingInfoNew : Base
     {
         public string year { get; set; }
@@ -101,7 +101,7 @@ namespace OPUSERP.HRPMS.Data.Entity.TrainingNew
 
 	}
 
-	[Table("CourseCoordinator", Schema = "HR")]
+	[Table("CourseCoordinator")]
 	public class CourseCoordinator:Base
 	{
 		public int? trainingInfoNewId { get; set; }

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Rental.Data.Entity.Sales
 {
-    [Table("RentInvoiceMaster", Schema = "Rental")]
+    [Table("RentInvoiceMaster")]
     public class RentInvoiceMaster : Base
     {
         public int? relSupplierCustomerResourseId { get; set; }

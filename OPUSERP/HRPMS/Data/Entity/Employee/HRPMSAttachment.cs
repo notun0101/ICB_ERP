@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Employee
 {
-    [Table("HRPMSAttachment", Schema = "HR")]
+    [Table("HRPMSAttachment")]
     public class HRPMSAttachment:Base
     {
         //Foreign Reliation

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.ProvidentFund.Data.Entity
 {
-    [Table("LoanAmortization", Schema = "PF")]
+    [Table("LoanAmortization")]
     public class LoanAmortization:Base
     {
         public int? pfmemberId { get; set; }

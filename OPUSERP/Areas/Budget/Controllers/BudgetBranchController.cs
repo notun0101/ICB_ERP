@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace OPUSERP.Areas.Budget.Controllers
 {
     [Authorize]
-    [Area("Budget")]
+    [Area("HR")]
     public class BudgetBranchController : Controller
     {
         private readonly IConverter converter;

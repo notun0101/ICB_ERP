@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-    [Table("Occupation", Schema = "HR")]
+    [Table("Occupation")]
     public class Occupation:Base
     {
         [Required]

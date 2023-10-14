@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.MasterData
 {
-    [Table("BuyerItemMapping", Schema = "SCM")]
+    [Table("BuyerItemMapping")]
     public class BuyerItemMapping : Base
     {
         public int? itemCategoryId { get; set; }

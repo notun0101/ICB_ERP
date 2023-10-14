@@ -10,7 +10,7 @@ using OPUSERP.Data;
 
 namespace OPUSERP.Areas.Shagotom.Controllers
 {
-    [Area("Shagotom")]
+    [Area("HR")]
     public class CameraController : Controller
     {
         private readonly ERPDbContext _context;

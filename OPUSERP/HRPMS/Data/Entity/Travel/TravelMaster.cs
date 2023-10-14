@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Travel
 {
-    [Table("TravelMaster", Schema = "HR")]
+    [Table("TravelMaster")]
     public class TravelMaster:Base
     {
         public string travelNumber { get; set; }

@@ -26,7 +26,7 @@ using OPUSERP.HRPMS.Services.Employee.Interfaces;
 
 namespace OPUSERP.Areas.CRO.Controllers
 {
-    [Area("CRO")]
+    [Area("HR")]
     public class JobProgressController : Controller
     {
         private readonly IDistributeJobService distributeJobService;
@@ -519,7 +519,7 @@ namespace OPUSERP.Areas.CRO.Controllers
             log.createdAt = DateTime.Now;
             log.createdBy = HttpContext.User.Identity.Name;
             await distributeJobService.SaveStatusLog(log);
-            // return RedirectToAction("HoldList", "JobProgress", new {Area = "CRO" });
+            // return RedirectToAction("HoldList", "JobProgress", new {Area = "HR" });
             return Json(Id);
         }
 
@@ -537,7 +537,7 @@ namespace OPUSERP.Areas.CRO.Controllers
             log.createdAt = DateTime.Now;
             log.createdBy = HttpContext.User.Identity.Name;
             await distributeJobService.SaveStatusLog(log);
-            // return RedirectToAction("HoldList", "JobProgress", new {Area = "CRO" });
+            // return RedirectToAction("HoldList", "JobProgress", new {Area = "HR" });
             return Json(Id);
         }
 
@@ -564,7 +564,7 @@ namespace OPUSERP.Areas.CRO.Controllers
             int DocumentId = await distributeJobService.SaveStatusLog(statusdata);
             #endregion
 
-            return RedirectToAction("Index", "JobProgress", new { opMstId = actionId, Area = "CRO" });
+            return RedirectToAction("Index", "JobProgress", new { opMstId = actionId, Area = "HR" });
         }
 
         [HttpGet]
@@ -775,7 +775,7 @@ namespace OPUSERP.Areas.CRO.Controllers
             log.createdAt = DateTime.Now;
             log.createdBy = HttpContext.User.Identity.Name;
             await distributeJobService.SaveStatusLog(log);
-            return RedirectToAction("BlockList", "JobProgress", new { Area = "CRO" });
+            return RedirectToAction("BlockList", "JobProgress", new { Area = "HR" });
         }
         [HttpGet]
         public async Task<IActionResult> UpdateOperationMasterunblockbyId(int Id)
@@ -791,7 +791,7 @@ namespace OPUSERP.Areas.CRO.Controllers
             log.createdAt = DateTime.Now;
             log.createdBy = HttpContext.User.Identity.Name;
             await distributeJobService.SaveStatusLog(log);
-            return RedirectToAction("UnBlockList", "JobProgress", new { Area = "CRO" });
+            return RedirectToAction("UnBlockList", "JobProgress", new { Area = "HR" });
         }
 
         [HttpGet]

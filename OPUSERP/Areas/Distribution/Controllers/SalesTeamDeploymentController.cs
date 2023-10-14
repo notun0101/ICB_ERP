@@ -18,7 +18,7 @@ using OPUSERP.HRPMS.Services.Employee.Interfaces;
 namespace OPUSERP.Areas.Distribution.Controllers
 {
     [Authorize]
-    [Area("Distribution")]
+    [Area("HR")]
     public class SalesTeamDeploymentController : Controller
     {
         // GET: /<controller>/

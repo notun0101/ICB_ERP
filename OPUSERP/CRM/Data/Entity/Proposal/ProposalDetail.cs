@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CRM.Data.Entity.Proposal
 {
-    [Table("ProposalDetail", Schema = "CRM")]
+    [Table("ProposalDetail")]
     public class ProposalDetail : Base
     {
         public int? proposalMasterId { get; set; }

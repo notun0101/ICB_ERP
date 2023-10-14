@@ -16,7 +16,7 @@ using OPUSERP.Helpers;
 
 namespace OPUSERP.Areas.CRO.Controllers
 {
-    [Area("CRO")]
+    [Area("HR")]
     public class TLAssignmentController : Controller
     {
         private readonly IDistributeJobService distributeJobService;

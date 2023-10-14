@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.ProvidentFund.Data.Entity
 {
-	[Table("PFVoucherType", Schema = "PF")]
+	[Table("PFVoucherType")]
 	public class PFVoucherType:Base
 	{
 		public string nameEn { get; set; }

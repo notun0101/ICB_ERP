@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.TAMS.Data.Entity
 {
-    [Table("TaskFollower", Schema = "TMS")]
+    [Table("TaskFollower")]
     public class TaskFollower:Base
     {
         public int? taskInformationId { get; set; }

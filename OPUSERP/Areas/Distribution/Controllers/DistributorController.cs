@@ -30,7 +30,7 @@ using OPUSERP.SCM.Services.MasterData.Interfaces;
 
 namespace OPUSERP.Areas.Distribution.Controllers
 {
-    [Area("Distribution")]
+    [Area("HR")]
     public class DistributorController : Controller
     {
         //Customer

@@ -7,7 +7,7 @@ using OPUSERP.HRPMS.Data.Entity.Master;
 
 namespace OPUSERP.HRPMS.Data.Entity.Assignment
 {
-    [Table("Assignment", Schema = "HR")]
+    [Table("Assignment")]
     public class Assignment:Base
     {
         public int employeeId { get; set; }

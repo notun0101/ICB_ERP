@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Areas.REMS.Controllers
 {
-    [Area("REMS")]
+    [Area("HR")]
     public class RepairHeadController : Controller
     {
         private readonly IClaimRegisterService claimRegisterService;

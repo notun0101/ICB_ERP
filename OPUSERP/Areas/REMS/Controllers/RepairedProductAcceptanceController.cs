@@ -11,7 +11,7 @@ using OPUSERP.REMS.Services.Interfaces;
 
 namespace OPUSERP.Areas.REMS.Controllers
 {
-    [Area("REMS")]
+    [Area("HR")]
     public class RepairedProductAcceptanceController : Controller
     {
         private readonly IClaimRegisterService claimRegisterService;

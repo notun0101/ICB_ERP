@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.AwardPublication
 {
-    [Table("AwardAttachment", Schema = "HR")]
+    [Table("AwardAttachment")]
     public class AwardAttachment:Base
     {
         public int awardId { get; set; }

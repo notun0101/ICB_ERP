@@ -42,7 +42,7 @@
         </div>
         <hr>
         <div class="container">
-            <form asp-area="Rental" asp-controller="RentInvoice" asp-action="HallRental" method="post" data-parsley-validate="parsley" id="formRental">
+            <form asp-area="HR" asp-controller="RentInvoice" asp-action="HallRental" method="post" data-parsley-validate="parsley" id="formRental">
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group row">
                     <input type="hidden" class="form-control" name="Id"  value="@Model.hallRentalApplicationInfo?.Id">

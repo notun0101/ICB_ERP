@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.VMS.Data.Entity.VehicleInfo
 {
-    [Table("BlockType", Schema = "VMS")]
+    [Table("BlockType")]
     public class BlockType:Base
     {
         [MaxLength(250)]

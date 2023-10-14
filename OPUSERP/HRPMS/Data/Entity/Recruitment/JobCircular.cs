@@ -8,7 +8,7 @@ using OPUSERP.Data.Entity;
 
 namespace OPUSERP.HRPMS.Data.Entity.Recruitment
 {
-    [Table("JobCircular", Schema = "HR")]
+    [Table("JobCircular")]
     public class JobCircular : Base
     {
         public string reference { get; set; }

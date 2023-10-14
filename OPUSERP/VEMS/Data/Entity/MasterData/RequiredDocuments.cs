@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.VEMS.Data.Entity.MasterData
 {
-    [Table("RequiredDocuments", Schema = "VEMS")]
+    [Table("RequiredDocuments")]
     public class RequiredDocuments:Base
     {
         public string description { get; set; }

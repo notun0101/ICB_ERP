@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.ProvidentFund.Data.Entity
 {
-    [Table("InterestProvision", Schema = "PF")]
+    [Table("InterestProvision")]
     public class InterestProvision : Base
     {
 

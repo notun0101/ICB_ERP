@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Meeting.Data.Entity
 {
-    [Table("MeetingDetail", Schema = "MMS")]
+    [Table("MeetingDetail")]
     public class MeetingDetail:Base
     {
         public int? meetingInfoId { get; set; }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.VMS.Data.Entity.Master
 {
-    [Table("LimitAmountType", Schema = "VMS")]
+    [Table("LimitAmountType")]
     public class LimitAmountType:Base
     {
         public string limitAmountTypeName { get; set; }

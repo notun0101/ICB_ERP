@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.CRO.Data.Entity.DistributeJob
 {
-    [Table("RatingType", Schema = "CRO")]
+    [Table("RatingType")]
     public class RatingType : Base
     {
         [MaxLength(350)]

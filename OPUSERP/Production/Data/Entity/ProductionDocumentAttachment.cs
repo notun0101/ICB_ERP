@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Production.Data.Entity
 {
-    [Table("ProductionDocumentAttachments", Schema = "PROD")]
+    [Table("ProductionDocumentAttachments")]
     public class ProductionDocumentAttachment:Base
     {
         [MaxLength(250)]

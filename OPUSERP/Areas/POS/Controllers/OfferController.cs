@@ -17,7 +17,7 @@ using OPUSERP.SCM.Services.MasterData.Interfaces;
 namespace OPUSERP.Areas.POS.Controllers
 {
     [Authorize]
-    [Area("POS")]
+    [Area("HR")]
     public class OfferController : Controller
     {
         private readonly IItemPriceFixingService itemPriceFixingService;

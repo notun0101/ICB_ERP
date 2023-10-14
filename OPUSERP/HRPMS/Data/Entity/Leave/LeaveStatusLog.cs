@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Leave
 {
-    [Table("LeaveStatusLog", Schema = "HR")]
+    [Table("LeaveStatusLog")]
     public class LeaveStatusLog : Base
     {
         //Foreign Relation -> Resource

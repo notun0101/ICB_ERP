@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Payroll.Data.Entity.Fixation
 {
-    [Table("FixationPeriod", Schema = "Fixation")]
+    [Table("FixationPeriod")]
     public class FixationPeriod : Base
     {
         public string PeriodName { get; set; }

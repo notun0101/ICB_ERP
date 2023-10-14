@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.Hospital
 {
-	[Table("Ambulance", Schema = "SCM")]
+	[Table("Ambulance")]
 	public class Ambulance:Base
 	{
 		public int? vehicleTypeId { get; set; }

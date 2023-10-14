@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.AccountingSettings
 {
-    [Table("NoteMaster", Schema = "ACCOUNT")]
+    [Table("NoteMaster")]
     public class NoteMaster : Base
     {
         

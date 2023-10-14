@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.VMS.Data.Entity.Master
 {
-    [Table("InspectionCheckLIstCategory", Schema = "VMS")]
+    [Table("InspectionCheckLIstCategory")]
     public class InspectionCheckLIstCategory:Base
     {
         public string checkListCategoryName { get; set; }

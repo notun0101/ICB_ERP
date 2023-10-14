@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity.Fixation
 {
-    [Table("FixaType", Schema = "Fixation")]
+    [Table("FixaType")]
     public class FixaType:Base
     {
         public string FixationTypeName { get; set; }

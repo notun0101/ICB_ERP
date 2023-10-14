@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Accounting.Data.Entity.FDR
 {
-    [Table("BankChargeMaster", Schema = "ACCOUNT")]
+    [Table("BankChargeMaster")]
     public class BankChargeMaster:Base
     {
         public int? bankBranchDetailsId { get; set; }

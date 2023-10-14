@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Meeting.Data.Entity
 {
-    [Table("MeetingDocument", Schema = "MMS")]
+    [Table("MeetingDocument")]
     public class MeetingDocument:Base
     {
         public string number { get; set; }

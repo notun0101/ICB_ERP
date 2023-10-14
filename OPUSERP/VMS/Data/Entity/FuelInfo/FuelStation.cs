@@ -8,7 +8,7 @@ using OPUSERP.Data.Entity;
 
 namespace OPUSERP.VMS.Data.Entity.FuelInfo
 {
-    [Table("FuelStation", Schema = "VMS")]
+    [Table("FuelStation")]
     public class FuelStation: Base
     {
         [MaxLength(350)]

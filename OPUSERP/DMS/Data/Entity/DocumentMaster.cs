@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.DMS.Data.Entity
 {
-    [Table("DocumentMaster", Schema = "Doc")]
+    [Table("DocumentMaster")]
     public class DocumentMaster : Base
     {
         public int? documentCategoryId { get; set; }

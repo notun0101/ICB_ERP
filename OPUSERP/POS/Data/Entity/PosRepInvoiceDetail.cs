@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.POS.Data.Entity
 {
-    [Table("PosRepInvoiceDetail", Schema = "POS")]
+    [Table("PosRepInvoiceDetail")]
     public class PosRepInvoiceDetail: Base
     {
         public int? itemPriceFixingId { get; set; }

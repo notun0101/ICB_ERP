@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.POS.Data.Entity
 {
-    [Table("MobileBankingType", Schema = "POS")]
+    [Table("MobileBankingType")]
     public class MobileBankingType : Base
     {
         [MaxLength(100)]

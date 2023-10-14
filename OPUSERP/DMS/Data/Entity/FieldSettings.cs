@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.DMS.Data.Entity
 {
-    [Table("FieldSettings", Schema = "Doc")]
+    [Table("FieldSettings")]
     public class FieldSettings : Base
     {
         public int? fieldTypeId { get; set; }

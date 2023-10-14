@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.MasterData
 {
-    [Table("FundSource", Schema = "ACCOUNT")]
+    [Table("FundSource")]
     public class FundSource : Base
     {
         public int? companyId { get; set; }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.POS.Data.Entity
 {
-    [Table("CardType", Schema = "POS")]
+    [Table("CardType")]
     public class CardType : Base
     {
         [MaxLength(100)]

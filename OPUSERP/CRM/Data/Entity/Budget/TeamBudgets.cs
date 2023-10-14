@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.CRM.Data.Entity.Budget
 {
-     [Table("TeamBudgets", Schema = "CRM")]
+     [Table("TeamBudgets")]
     public class TeamBudgets:Base
     {
         public int? teamId { get; set; }

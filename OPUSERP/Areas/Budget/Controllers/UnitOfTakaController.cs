@@ -14,7 +14,7 @@ using OPUSERP.Helpers;
 namespace OPUSERP.Areas.Budget.Controllers
 {
     [Authorize]
-    [Area("Budget")]
+    [Area("HR")]
     public class UnitOfTakaController : Controller
     {
         private readonly LangGenerate<UnitLn> _lang;

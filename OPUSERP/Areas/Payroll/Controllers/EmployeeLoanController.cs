@@ -13,7 +13,7 @@ using static OPUSERP.Areas.Payroll.Models.SalaryGradePercentViewModel;
 
 namespace OPUSERP.Areas.Payroll.Controllers
 {
-    [Area("Payroll")]
+    [Area("HR")]
     [Authorize]
     public class EmployeeLoanController : Controller
     {

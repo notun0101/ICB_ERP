@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Formats
 {
-	[Table("HrFormatDetails", Schema = "HR")]
+	[Table("HrFormatDetails")]
 	public class HrFormatDetails:Base
 	{
 		public int formatMasterId { get; set; }

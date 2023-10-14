@@ -9,7 +9,7 @@ using OPUSERP.VMS.Data.Entity.VehicleInfo;
 
 namespace OPUSERP.VMS.Data.Entity.ServiceVehicle
 {
-    [Table("ServiceTask", Schema = "VMS")]
+    [Table("ServiceTask")]
     public class ServiceTask: Base
     {
         [MaxLength(350)]

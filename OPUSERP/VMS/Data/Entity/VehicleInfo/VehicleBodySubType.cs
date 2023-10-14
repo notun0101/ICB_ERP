@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.VMS.Data.Entity.VehicleInfo
 {
-    [Table("VehicleBodySubType", Schema = "VMS")]
+    [Table("VehicleBodySubType")]
     public class VehicleBodySubType : Base
     {
         [MaxLength(250)]

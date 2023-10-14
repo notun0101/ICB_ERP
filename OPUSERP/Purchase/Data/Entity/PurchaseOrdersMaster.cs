@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace OPUSERP.Purchase.Data.Entity
 {
 
-    [Table("PurchaseOrdersMasters", Schema = "Purchase")]
+    [Table("PurchaseOrdersMasters")]
     public class PurchaseOrdersMaster:Base
     {
         [Column(TypeName = "nvarchar(150)")]

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Distribution.Data.Entity.MasterData
 {
-    [Table("RelCustomerSalesTeamDeployment", Schema = "Distribution")]
+    [Table("RelCustomerSalesTeamDeployment")]
     public class RelCustomerSalesTeamDeployment:Base
     {
         public int? nsmsalesTeamDeploymentId { get; set; }

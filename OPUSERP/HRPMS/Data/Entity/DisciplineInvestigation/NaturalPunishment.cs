@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.DisciplineInvestigation
 {
-    [Table("NaturalPunishment", Schema = "HR")]
+    [Table("NaturalPunishment")]
     public class NaturalPunishment :  Base
     {
         public string name { get; set; }

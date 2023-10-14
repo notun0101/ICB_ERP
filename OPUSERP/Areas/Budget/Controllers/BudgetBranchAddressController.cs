@@ -10,7 +10,7 @@ using OPUSERP.ERPServices.MasterData.Interfaces;
 namespace OPUSERP.Areas.Budget.Controllers
 {
     [Authorize]
-    [Area("Budget")]
+    [Area("HR")]
     public class BudgetBranchAddressController : Controller
     {
         private readonly IAddressTypeService addressTypeService;

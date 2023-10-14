@@ -34,7 +34,7 @@ using OPUSERP.SCM.Services.Supplier.Interface;
 namespace OPUSERP.Areas.Purchase.Controllers
 {
     [Authorize]
-    [Area("Purchase")]
+    [Area("HR")]
     public class PurchaseOrderController : Controller
     {
         private readonly IPurchaseService purchaseService;
@@ -77,9 +77,9 @@ namespace OPUSERP.Areas.Purchase.Controllers
             ViewBag.masterId = id;
             var purchase = await purchaseOrderService.GetPurchaseOrderMasterAll();
             int Cpurchase = 0;
-            Cpurchase = purchase.Where(x => Convert.ToDateTime(x.poDate).ToString("yyyyMMdd") == Convert.ToDateTime(DateTime.Now).ToString("yyyyMMdd") && x.poType == "Purchase").Count();
+            Cpurchase = purchase.Where(x => Convert.ToDateTime(x.poDate).ToString("yyyyMMdd") == Convert.ToDateTime(DateTime.Now).ToString("yyyyMMdd") && x.poType == "HR").Count();
             string idate = Convert.ToDateTime(DateTime.Now).ToString("yyyy-MM-dd");
-            string issueNo = "Purchase" + '-' + idate + '-' + (Cpurchase + 1);
+            string issueNo = "HR" + '-' + idate + '-' + (Cpurchase + 1);
 
 
             if (Convert.ToInt32(id) != 0)
@@ -91,7 +91,7 @@ namespace OPUSERP.Areas.Purchase.Controllers
             PurchaseViewModel model = new PurchaseViewModel
             {
                 //purchaseOrderMasters = await purchaseOrderService.GetPurchaseOrderMasterAll(),
-                purchaseOrderMasters = purchase.Where(x => x.poType == "Purchase"),
+                purchaseOrderMasters = purchase.Where(x => x.poType == "HR"),
                 specificationCategories = await ItemsService.GetAllSpecificationCategory(),
             };
 
@@ -104,9 +104,9 @@ namespace OPUSERP.Areas.Purchase.Controllers
         {
             var purchase = await purchaseOrderService.GetPurchaseOrderMasterAll();
             int Cpurchase = 0;
-            Cpurchase = purchase.Where(x => Convert.ToDateTime(x.poDate).ToString("yyyyMMdd") == Convert.ToDateTime(poDate).ToString("yyyyMMdd") && x.poType == "Purchase").Count();
+            Cpurchase = purchase.Where(x => Convert.ToDateTime(x.poDate).ToString("yyyyMMdd") == Convert.ToDateTime(poDate).ToString("yyyyMMdd") && x.poType == "HR").Count();
             string idate = Convert.ToDateTime(poDate).ToString("yyyy-MM-dd");
-            string issueNo = "Purchase" + '-' + idate + '-' + (Cpurchase + 1);
+            string issueNo = "HR" + '-' + idate + '-' + (Cpurchase + 1);
             return Json(issueNo);
         }
 
@@ -117,9 +117,9 @@ namespace OPUSERP.Areas.Purchase.Controllers
             string userName = User.Identity.Name;
             var purchase = await purchaseOrderService.GetPurchaseOrderMasterAll();
             int Cpurchase = 0;
-            Cpurchase = purchase.Where(x => Convert.ToDateTime(x.poDate).ToString("yyyyMMdd") == Convert.ToDateTime(model.poDate).ToString("yyyyMMdd") && x.poType == "Purchase").Count();
+            Cpurchase = purchase.Where(x => Convert.ToDateTime(x.poDate).ToString("yyyyMMdd") == Convert.ToDateTime(model.poDate).ToString("yyyyMMdd") && x.poType == "HR").Count();
             string idate = Convert.ToDateTime(model.poDate).ToString("yyyy-MM-dd");
-            string issueNo = "Purchase" + '-' + idate + '-' + (Cpurchase + 1);
+            string issueNo = "HR" + '-' + idate + '-' + (Cpurchase + 1);
             if (model.purchaseOrderMasterId > 0)
             {
                 issueNo = model.poNo;
@@ -144,7 +144,7 @@ namespace OPUSERP.Areas.Purchase.Controllers
                 netTotal = model.netTotal,
                 isClose = 0,
                 isStockClose = 0,
-                poType = "Purchase"
+                poType = "HR"
             };
             int PID = await purchaseOrderService.SavePurchaseOrderMaster(purchaseOrderMaster);
 
@@ -283,7 +283,7 @@ namespace OPUSERP.Areas.Purchase.Controllers
             var purchase = await purchaseOrderService.GetPurchaseOrderMasterAll();
             var model = new PurchaseViewModel
             {
-                purchaseOrderMasters = purchase.Where(x => x.poType == "Purchase")
+                purchaseOrderMasters = purchase.Where(x => x.poType == "HR")
             };
             return View(model);
         }
@@ -331,19 +331,19 @@ namespace OPUSERP.Areas.Purchase.Controllers
             try
             {
                 ViewBag.masterId = Id;
-                //var CommentInfo = await attachmentCommentService.GetCommentByActionTypeId(Id, "Purchase");
+                //var CommentInfo = await attachmentCommentService.GetCommentByActionTypeId(Id, "HR");
                 //if (CommentInfo == null)
                 //{
                 //    CommentInfo = new List<Comment>();
                 //}
                 var CommentInfo = new List<Comment>();
-                //var photoInfo = await attachmentCommentService.GetDocumentAttachmentByActionId(Id, "Purchase", "photo");
+                //var photoInfo = await attachmentCommentService.GetDocumentAttachmentByActionId(Id, "HR", "photo");
                 //if (photoInfo == null)
                 //{
                 //    photoInfo = new List<DocumentAttachment>();
                 //}
                 var photoInfo = new List<DocumentAttachment>();
-                //var docInfo = await attachmentCommentService.GetDocumentAttachmentByActionId(Id, "Purchase", "Document");
+                //var docInfo = await attachmentCommentService.GetDocumentAttachmentByActionId(Id, "HR", "Document");
                 //if (docInfo == null)
                 //{
                 //    docInfo = new List<DocumentAttachment>();
@@ -375,19 +375,19 @@ namespace OPUSERP.Areas.Purchase.Controllers
             try
             {
                 ViewBag.masterId = Id;
-                //var CommentInfo = await attachmentCommentService.GetCommentByActionTypeId(Id, "Purchase");
+                //var CommentInfo = await attachmentCommentService.GetCommentByActionTypeId(Id, "HR");
                 //if (CommentInfo == null)
                 //{
                 //    CommentInfo = new List<Comment>();
                 //}
                 var CommentInfo = new List<Comment>();
-                //var photoInfo = await attachmentCommentService.GetDocumentAttachmentByActionId(Id, "Purchase", "photo");
+                //var photoInfo = await attachmentCommentService.GetDocumentAttachmentByActionId(Id, "HR", "photo");
                 //if (photoInfo == null)
                 //{
                 //    photoInfo = new List<DocumentAttachment>();
                 //}
                 var photoInfo = new List<DocumentAttachment>();
-                //var docInfo = await attachmentCommentService.GetDocumentAttachmentByActionId(Id, "Purchase", "Document");
+                //var docInfo = await attachmentCommentService.GetDocumentAttachmentByActionId(Id, "HR", "Document");
                 //if (docInfo == null)
                 //{
                 //    docInfo = new List<DocumentAttachment>();
@@ -456,7 +456,7 @@ namespace OPUSERP.Areas.Purchase.Controllers
         public async Task<IActionResult> DeleteComments(int Id, int actionId)
         {
             await attachmentCommentService.DeleteCommentById(Id);
-            return RedirectToAction("PurchaseDetail", "PurchaseOrder", new { id = actionId, Area = "Purchase" });
+            return RedirectToAction("PurchaseDetail", "PurchaseOrder", new { id = actionId, Area = "HR" });
         }
 
         [HttpGet]
@@ -469,7 +469,7 @@ namespace OPUSERP.Areas.Purchase.Controllers
             if (System.IO.File.Exists(fullFilePath))
                 System.IO.File.Delete(fullFilePath);
             await attachmentCommentService.DeleteDocumentAttachmentById(photoId);
-            return RedirectToAction("PurchaseDetail", "PurchaseOrder", new { id = actionId, Area = "Purchase" });
+            return RedirectToAction("PurchaseDetail", "PurchaseOrder", new { id = actionId, Area = "HR" });
         }
 
 

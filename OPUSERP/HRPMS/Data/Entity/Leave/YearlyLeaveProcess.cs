@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Leave
 {
-	[Table("YearlyLeaveProcess", Schema = "HR")]
+	[Table("YearlyLeaveProcess")]
 	public class YearlyLeaveProcess:Base
 	{
 		public int? employeeId { get; set; }

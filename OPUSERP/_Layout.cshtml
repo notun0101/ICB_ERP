@@ -688,7 +688,7 @@
                 </div>
                 <div class="modal-body" style="height: 55px !important;">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
-                    <form asp- method="post" asp-area="Auth" asp-controller="Account" asp-action="Logout" id="logoutForm" class="navbar-right">
+                    <form asp- method="post" asp-area="Auth" asp-controller="HR" asp-action="Logout" id="logoutForm" class="navbar-right">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                         <button type="submit" onclick="ClearLocalStorage()" class="btn btn-success">Logout</button>
                     </form>
@@ -974,7 +974,7 @@
 				second = date.getSeconds(),
 				hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
 				minuteFormatted = minute < 10 ? "0" + minute : minute,
-				morning = hour < 12 ? "am" : "pm";
+				morning = hour < 12 ? "am" : "HR";
 
 			return day + "/" + + month + "/" + year;
 		}

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CRM.Data.Entity.MasterData
 {
-    [Table("RatingCategory", Schema = "CRM")]
+    [Table("RatingCategory")]
     public class RatingCategory : Base
     {
         [Required]

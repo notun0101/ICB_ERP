@@ -8,7 +8,7 @@ using OPUSERP.Payroll.Services.Dashboard.Interfaces;
 
 namespace OPUSERP.Areas.Payroll.Controllers
 {
-    [Area("Payroll")]
+    [Area("HR")]
     public class DashboardController : Controller
     {
         private readonly IPayrollDashboardService payrollDashboardService;

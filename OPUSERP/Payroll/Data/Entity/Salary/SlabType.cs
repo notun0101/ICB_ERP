@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Payroll.Data.Entity.Salary
 {
-    [Table("SlabType", Schema = "Payroll")]
+    [Table("SlabType")]
     public class SlabType : Base
     {
         [MaxLength(30)]

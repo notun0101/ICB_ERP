@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity.Salary
 {
-    [Table("SalaryYear", Schema = "Payroll")]
+    [Table("SalaryYear")]
     public class SalaryYear : Base
     {
         [MaxLength(100)]

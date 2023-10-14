@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Training
 {
-    [Table("Trainer", Schema = "HR")]
+    [Table("Trainer")]
     public class Trainer : Base
     {
         //Foreign Relation -> Resource

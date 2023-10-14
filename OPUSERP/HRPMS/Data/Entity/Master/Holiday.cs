@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-    [Table("Holiday", Schema = "HR")]
+    [Table("Holiday")]
     public class Holiday : Base
     {
         public DateTime? weeklyHoliday { get; set; }

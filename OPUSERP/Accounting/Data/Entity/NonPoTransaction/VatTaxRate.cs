@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Accounting.Data.Entity.NonPoTransaction
 {
-    [Table("VatTaxRate", Schema = "ACCOUNT")]
+    [Table("VatTaxRate")]
     public class VatTaxRate:Base
     {
         public int? rateTypeId { get; set; }

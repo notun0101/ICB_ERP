@@ -22,7 +22,7 @@ using OPUSERP.VMS.Services.VehicleInfo.Interfaces;
 namespace OPUSERP.Areas.VMS.Controllers
 {
     [Authorize]
-    [Area("VMS")]
+    [Area("HR")]
     public class FuelStationsController : Controller
     {
         private readonly IFuelStationInfoService fuelStationInfoService;

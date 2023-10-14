@@ -18,7 +18,7 @@ using OPUSERP.Payroll.Services.Salary.Interfaces;
 
 namespace OPUSERP.Areas.Payroll.Controllers
 {
-    [Area("Payroll")]
+    [Area("HR")]
     public class ArrearController : Controller
     {
         private readonly ISalaryService salaryService;

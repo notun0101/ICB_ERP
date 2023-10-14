@@ -10,7 +10,7 @@ using OPUSERP.HRPMS.Data.Entity.Master;
 
 namespace OPUSERP.HRPMS.Data.Entity.Employee
 {
-    [Table("TrainingTitlelog", Schema = "HR")]
+    [Table("TrainingTitlelog")]
     public class TrainingTitlelog : Base
     {
 		public string trainingTitle { get; set; }

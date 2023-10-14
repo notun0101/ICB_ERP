@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.CLUB.Data.Gallery
 {
-    [Table("GalleryContent", Schema = "Club")]
+    [Table("GalleryContent")]
     public class GalleryContent:Base
     {
         public int galleryTitleId { get; set; }

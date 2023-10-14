@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.ACR
 {
-    [Table("AcrEvaluationMaster", Schema = "HR")]
+    [Table("AcrEvaluationMaster")]
     public class AcrEvaluationMaster : Base
     {
         [Required]

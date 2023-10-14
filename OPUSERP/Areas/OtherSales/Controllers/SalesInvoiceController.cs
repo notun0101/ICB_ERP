@@ -351,7 +351,7 @@ namespace OPUSERP.Areas.OtherSales.Controllers
             int Cpurchase = 0;
             Cpurchase = sale.Where(x => Convert.ToDateTime(x.invoiceDate).ToString("yyyyMMdd") == Convert.ToDateTime(DateTime.Now).ToString("yyyyMMdd")).Count();
             string idate = Convert.ToDateTime(DateTime.Now).ToString("yyyy-MM-dd");
-            string issueNo = "Pos" + '-' + idate + '-' + (Cpurchase + 1);
+            string issueNo = "HR" + '-' + idate + '-' + (Cpurchase + 1);
             ViewBag.SaleNo = issueNo;
 
             var MasterInfo = await salesInvoiceMasterService.GetSalesInvoiceMasterById(id);
@@ -396,7 +396,7 @@ namespace OPUSERP.Areas.OtherSales.Controllers
                 int Cpurchase3 = 0;
                 Cpurchase3 = sale3.Where(x => Convert.ToDateTime(x.invoiceDate).ToString("yyyyMMdd") == Convert.ToDateTime(DateTime.Now).ToString("yyyyMMdd")).Count();
                 string idate3 = Convert.ToDateTime(DateTime.Now).ToString("yyyy-MM-dd");
-                string issueNo3 = "Pos" + '-' + idate3 + '-' + (Cpurchase3 + 1);
+                string issueNo3 = "HR" + '-' + idate3 + '-' + (Cpurchase3 + 1);
                 ViewBag.SaleNo = issueNo3;
                 model.salesInvoiceMaster = new SalesInvoiceMaster();
                 model.itemPriceFixings = await itemPriceFixingService.GetActiveItemPriceFixing();
@@ -429,7 +429,7 @@ namespace OPUSERP.Areas.OtherSales.Controllers
             //        int Cpurchase3 = 0;
             //        Cpurchase3 = sale3.Where(x => Convert.ToDateTime(x.invoiceDate).ToString("yyyyMMdd") == Convert.ToDateTime(DateTime.Now).ToString("yyyyMMdd")).Count();
             //        string idate3 = Convert.ToDateTime(DateTime.Now).ToString("yyyy-MM-dd");
-            //        string issueNo3 = "Pos" + '-' + idate3 + '-' + (Cpurchase3 + 1);
+            //        string issueNo3 = "HR" + '-' + idate3 + '-' + (Cpurchase3 + 1);
             //        ViewBag.SaleNo = issueNo3;
             //        model.salesInvoiceMaster = new SalesInvoiceMaster();
             //        model.itemPriceFixings = await itemPriceFixingService.GetActiveItemPriceFixing();
@@ -448,7 +448,7 @@ namespace OPUSERP.Areas.OtherSales.Controllers
             //        int Cpurchase3 = 0;
             //        Cpurchase3 = sale3.Where(x => Convert.ToDateTime(x.invoiceDate).ToString("yyyyMMdd") == Convert.ToDateTime(DateTime.Now).ToString("yyyyMMdd")).Count();
             //        string idate3 = Convert.ToDateTime(DateTime.Now).ToString("yyyy-MM-dd");
-            //        string issueNo3 = "Pos" + '-' + idate3 + '-' + (Cpurchase3 + 1);
+            //        string issueNo3 = "HR" + '-' + idate3 + '-' + (Cpurchase3 + 1);
             //        ViewBag.SaleNo = issueNo3;
             //        model.salesInvoiceMaster = new SalesInvoiceMaster();
             //        model.itemPriceFixings = await itemPriceFixingService.GetActiveItemPriceFixing();
@@ -467,7 +467,7 @@ namespace OPUSERP.Areas.OtherSales.Controllers
             //        int Cpurchase3 = 0;
             //        Cpurchase3 = sale3.Where(x => Convert.ToDateTime(x.invoiceDate).ToString("yyyyMMdd") == Convert.ToDateTime(DateTime.Now).ToString("yyyyMMdd")).Count();
             //        string idate3 = Convert.ToDateTime(DateTime.Now).ToString("yyyy-MM-dd");
-            //        string issueNo3 = "Pos" + '-' + idate3 + '-' + (Cpurchase3 + 1);
+            //        string issueNo3 = "HR" + '-' + idate3 + '-' + (Cpurchase3 + 1);
             //        ViewBag.SaleNo = issueNo3;
             //        model.salesInvoiceMaster = new SalesInvoiceMaster();
             //        model.itemPriceFixings = await itemPriceFixingService.GetActiveItemPriceFixing();
@@ -486,7 +486,7 @@ namespace OPUSERP.Areas.OtherSales.Controllers
             //        int Cpurchase3 = 0;
             //        Cpurchase3 = sale3.Where(x => Convert.ToDateTime(x.invoiceDate).ToString("yyyyMMdd") == Convert.ToDateTime(DateTime.Now).ToString("yyyyMMdd")).Count();
             //        string idate3 = Convert.ToDateTime(DateTime.Now).ToString("yyyy-MM-dd");
-            //        string issueNo3 = "Pos" + '-' + idate3 + '-' + (Cpurchase3 + 1);
+            //        string issueNo3 = "HR" + '-' + idate3 + '-' + (Cpurchase3 + 1);
             //        ViewBag.SaleNo = issueNo3;
             //        model.salesInvoiceMaster = new SalesInvoiceMaster();
             //        model.itemPriceFixings = await itemPriceFixingService.GetActiveItemPriceFixing();
@@ -505,7 +505,7 @@ namespace OPUSERP.Areas.OtherSales.Controllers
             //        int Cpurchase3 = 0;
             //        Cpurchase3 = sale3.Where(x => Convert.ToDateTime(x.invoiceDate).ToString("yyyyMMdd") == Convert.ToDateTime(DateTime.Now).ToString("yyyyMMdd")).Count();
             //        string idate3 = Convert.ToDateTime(DateTime.Now).ToString("yyyy-MM-dd");
-            //        string issueNo3 = "Pos" + '-' + idate3 + '-' + (Cpurchase3 + 1);
+            //        string issueNo3 = "HR" + '-' + idate3 + '-' + (Cpurchase3 + 1);
             //        ViewBag.SaleNo = issueNo3;
             //        model.salesInvoiceMaster = new SalesInvoiceMaster();
             //        model.itemPriceFixings = await itemPriceFixingService.GetActiveItemPriceFixing();
@@ -553,7 +553,7 @@ namespace OPUSERP.Areas.OtherSales.Controllers
                 int Cpurchase3 = 0;
                 Cpurchase3 = sale3.Where(x => Convert.ToDateTime(x.invoiceDate).ToString("yyyyMMdd") == Convert.ToDateTime(DateTime.Now).ToString("yyyyMMdd")).Count();
                 string idate3 = Convert.ToDateTime(DateTime.Now).ToString("yyyy-MM-dd");
-                string issueNo3 = "Pos" + '-' + idate3 + '-' + (Cpurchase3 + 1);
+                string issueNo3 = "HR" + '-' + idate3 + '-' + (Cpurchase3 + 1);
                 ViewBag.SaleNo = issueNo3;
                 model.salesInvoiceMaster = new SalesInvoiceMaster();
                 model.itemPriceFixings = await itemPriceFixingService.GetActiveItemPriceFixing();
@@ -569,7 +569,7 @@ namespace OPUSERP.Areas.OtherSales.Controllers
             int Cpurchase = 0;
             Cpurchase = sale.Where(x => Convert.ToDateTime(x.invoiceDate).ToString("yyyyMMdd") == Convert.ToDateTime(DateTime.Now).ToString("yyyyMMdd")).Count();
             string idate = Convert.ToDateTime(DateTime.Now).ToString("yyyy-MM-dd");
-            string issueNo = "Pos" + '-' + idate + '-' + (Cpurchase + 1);
+            string issueNo = "HR" + '-' + idate + '-' + (Cpurchase + 1);
 
             if (model.masterId > 0)
             {
@@ -910,7 +910,7 @@ namespace OPUSERP.Areas.OtherSales.Controllers
             int Cpurchase = 0;
             Cpurchase = sale.Where(x => Convert.ToDateTime(x.invoiceDate).ToString("yyyyMMdd") == Convert.ToDateTime(DateTime.Now).ToString("yyyyMMdd")).Count();
             string idate = Convert.ToDateTime(DateTime.Now).ToString("yyyy-MM-dd");
-            string issueNo = "Pos" + '-' + idate + '-' + (Cpurchase + 1);
+            string issueNo = "HR" + '-' + idate + '-' + (Cpurchase + 1);
             ViewBag.SaleNo = issueNo;
 
             var MasterInfo = await salesInvoiceMasterService.GetSalesInvoiceMasterById(id);
@@ -1184,7 +1184,7 @@ namespace OPUSERP.Areas.OtherSales.Controllers
             }
 
             return RedirectToAction(nameof(RentInvoiceDetails), new { id = model.masterId });
-            // return RedirectToAction("InvoiceDetails", "RentInvoice", new { id = model.masterId, Area = "Rental" });
+            // return RedirectToAction("InvoiceDetails", "RentInvoice", new { id = model.masterId, Area = "HR" });
 
         }
         [HttpPost]
@@ -1207,7 +1207,7 @@ namespace OPUSERP.Areas.OtherSales.Controllers
                 }
             }
             return RedirectToAction(nameof(InvoiceDetails), new { id = model.masterId });
-            // return RedirectToAction("InvoiceDetails", "RentInvoice", new { id = model.masterId, Area = "Rental" });
+            // return RedirectToAction("InvoiceDetails", "RentInvoice", new { id = model.masterId, Area = "HR" });
 
         }
         [HttpPost]
@@ -1232,7 +1232,7 @@ namespace OPUSERP.Areas.OtherSales.Controllers
 
 
             return RedirectToAction(nameof(PatInvoiceDetails), new { id = model.masterId });
-            // return RedirectToAction("InvoiceDetails", "RentInvoice", new { id = model.masterId, Area = "Rental" });
+            // return RedirectToAction("InvoiceDetails", "RentInvoice", new { id = model.masterId, Area = "HR" });
 
         }
         [HttpGet]
@@ -2821,7 +2821,7 @@ namespace OPUSERP.Areas.OtherSales.Controllers
         public async Task<IActionResult> GetAllSalesInvoiceMasterS()
         {
             var data = await salesInvoiceMasterService.GetDueSalesInvoice(0);
-            return Json(data.Where(x => x.salesInvoiceMaster.invoiceNumber.Contains("Sales")));
+            return Json(data.Where(x => x.salesInvoiceMaster.invoiceNumber.Contains("HR")));
         }
         [Route("global/api/getAllSalesInvoiceMasterH/")]
         [HttpGet]
@@ -3010,7 +3010,7 @@ namespace OPUSERP.Areas.OtherSales.Controllers
         public async Task<IActionResult> getAllPInvoiceLIstCS(DateTime? fromdate, DateTime? toDate)
         {
             var data = await salesInvoiceMasterService.GetAllSalesInvoiceMaster();
-            data = data.Where(x => x.invoiceDate >= fromdate && x.invoiceDate <= toDate && x.invoiceNumber.Contains("Sales")).ToList();
+            data = data.Where(x => x.invoiceDate >= fromdate && x.invoiceDate <= toDate && x.invoiceNumber.Contains("HR")).ToList();
             List<int?> relids = data.Select(x => x.relSupplierCustomerResourseId).ToList();
             var cusdata = await customerService.GetRelSupplierCustomerResourseByRoleId(0);
             cusdata = cusdata.Where(x => relids.Contains(x.relId));

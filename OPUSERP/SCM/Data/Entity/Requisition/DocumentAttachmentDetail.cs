@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.Requisition
 {
-    [Table("DocumentAttachmentDetail", Schema = "SCM")]
+    [Table("DocumentAttachmentDetail")]
     public class DocumentAttachmentDetail: Base
     {
        public int? requisitionDetailId { get; set; }

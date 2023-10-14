@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.AccountingSettings
 {
-    [Table("OpeningBalance", Schema = "ACCOUNT")]
+    [Table("OpeningBalance")]
     public class OpeningBalance : Base
     {
         public int? ledgerRelationId { get; set; }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Accounting.Data.Entity.Voucher
 {
-    [Table("CreateBillVoucherDetail", Schema = "ACCOUNT")]
+    [Table("CreateBillVoucherDetail")]
     public class CreateBillVoucherDetail:Base
     {
         public int? createBillVoucherMasterId { get; set; }

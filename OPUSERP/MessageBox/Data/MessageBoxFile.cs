@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.MessageBox.Data
 {
-    [Table("MessageBoxFile", Schema = "MBox")]
+    [Table("MessageBoxFile")]
     public class MessageBoxFile:Base
     {
         public int? messageBoxId { get; set; }

@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.Voucher
 {
-    [Table("UploadedVoucherData", Schema = "ACCOUNT")]
+    [Table("UploadedVoucherData")]
     public class UploadedVoucherData : Base
     {
 

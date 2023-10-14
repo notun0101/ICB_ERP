@@ -9,7 +9,7 @@ using OPUSERP.VMS.Data.Entity.VehicleInfo;
 
 namespace OPUSERP.VMS.Data.Entity.ServiceVehicle
 {
-    [Table("LabelType", Schema = "VMS")]
+    [Table("LabelType")]
     public class LabelType: Base
     {
 

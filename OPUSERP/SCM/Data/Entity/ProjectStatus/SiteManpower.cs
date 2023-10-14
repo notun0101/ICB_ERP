@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.ProjectStatus
 {
-    [Table("SiteManpowers", Schema = "SCM")]
+    [Table("SiteManpowers")]
     public class SiteManpower:Base
     {
         public int? progressReportId { get; set; }

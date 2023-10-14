@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.SCM.Data.Entity.ProjectStatus
 {
-    [Table("ProjectConstructionLocations", Schema = "SCM")]
+    [Table("ProjectConstructionLocations")]
     public class ProjectConstructionLocation:Base
     {
         public int? projectId { get; set; }

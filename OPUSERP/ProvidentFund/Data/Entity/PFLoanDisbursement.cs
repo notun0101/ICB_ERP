@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.ProvidentFund.Data.Entity
 {
-    [Table("PFLoanDisbursement", Schema = "PF")]
+    [Table("PFLoanDisbursement")]
     public class PFLoanDisbursement : Base
     {
         public int? EmployeeInfoId { get; set; }

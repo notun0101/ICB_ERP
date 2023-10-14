@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Organogram
 {
-	[Table("OrganogramChild", Schema = "HR")]
+	[Table("OrganogramChild")]
 	public class OrganogramChild:Base
 	{
 		public int? designationId { get; set; }

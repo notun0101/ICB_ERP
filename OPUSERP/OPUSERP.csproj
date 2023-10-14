@@ -121,6 +121,7 @@
 
   <ItemGroup>
     <Compile Remove="Areas\CRMMasterData\Controllers\TeamController.cs" />
+    <Compile Remove="Data\OracleDbContext.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -159,6 +160,8 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="Oracle.EntityFrameworkCore" Version="2.19.180" />
+    <PackageReference Include="Oracle.ManagedDataAccess" Version="19.18.0" />
     <PackageReference Include="sautinsoft.pdffocus" Version="7.5.3.27" />
     <PackageReference Include="System.Data.OleDb" Version="4.7.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.6.0" />

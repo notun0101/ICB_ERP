@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Training
 {
-    [Table("EvaluationFectors", Schema = "HR")]
+    [Table("EvaluationFectors")]
     public class EvaluationFectors : Base
     {
         public string name { get; set; }

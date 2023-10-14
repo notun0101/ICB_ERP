@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-    [Table("Department", Schema = "HR")]
+    [Table("Department")]
     public class Department:Base
     {
         public string deptCode { get; set; }

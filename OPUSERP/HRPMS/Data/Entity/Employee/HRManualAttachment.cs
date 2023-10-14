@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Employee
 {
-    [Table("HRManualAttachment", Schema = "HR")]
+    [Table("HRManualAttachment")]
     public class HRManualAttachment : Base
     {
         public string fileUrl { get; set; }

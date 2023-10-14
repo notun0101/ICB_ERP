@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.ACR
 {
-    [Table("ACRProcess", Schema = "HR")]
+    [Table("ACRProcess")]
     public class ACRProcess:Base
     {
         public int acrSeduleId { get; set; }

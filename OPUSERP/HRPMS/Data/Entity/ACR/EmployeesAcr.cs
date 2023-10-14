@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.ACR
 {
-	[Table("EmployeesAcr", Schema = "HR")]
+	[Table("EmployeesAcr")]
 	public class EmployeesAcr:Base
 	{
 		public int? assessmentId { get; set; }

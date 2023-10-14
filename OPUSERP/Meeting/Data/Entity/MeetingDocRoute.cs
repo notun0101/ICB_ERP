@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Meeting.Data.Entity
 {
-    [Table("MeetingDocRoute", Schema = "MMS")]
+    [Table("MeetingDocRoute")]
     public class MeetingDocRoute:Base
     {
         public int? employeeId { get; set; }

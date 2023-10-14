@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Recruitment.Data.Entity
 {
-    [Table("RCRTAddress", Schema = "RCRT")]
+    [Table("RCRTAddress")]
     public class RCRTAddress : Base
     {
         //Foreign Reliation

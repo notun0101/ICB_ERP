@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.DMS.Data.Entity
 {
-    [Table("FieldType", Schema = "Doc")]
+    [Table("FieldType")]
     public class FieldType : Base
     {
         [MaxLength(20)]

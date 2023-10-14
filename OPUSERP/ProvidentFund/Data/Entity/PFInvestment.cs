@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.ProvidentFund.Data.Entity
 {
-    [Table("PFInvestment", Schema = "PF")]
+    [Table("PFInvestment")]
 
     public class PFInvestment : Base
     {

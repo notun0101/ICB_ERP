@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Payroll.Data.Entity.homeLoan
 {
-    [Table("HomeLoan", Schema = "Payroll")]
+    [Table("HomeLoan")]
     public class HomeLoan:Base
     {
         public int employeeInfoId { get; set; }

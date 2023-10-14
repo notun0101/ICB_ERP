@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Distribution.Data.Entity.MasterData
 {
-    [Table("PackageDetail", Schema = "Distribution")]
+    [Table("PackageDetail")]
     public class PackageDetail : Base
     {
         public int? itemSpecificationId { get; set; }

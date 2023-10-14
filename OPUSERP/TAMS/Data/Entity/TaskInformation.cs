@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.TAMS.Data.Entity
 {
-    [Table("TaskInformation", Schema = "TMS")]
+    [Table("TaskInformation")]
     public class TaskInformation:Base
     {
         public int? problemMasterId { get; set; }

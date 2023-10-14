@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.CRO.Data.Entity.DistributeJob
 {
-    [Table("AttachmentType", Schema = "CRO")]
+    [Table("AttachmentType")]
     public class AttachmentType : Base
     {
         [MaxLength(250)]

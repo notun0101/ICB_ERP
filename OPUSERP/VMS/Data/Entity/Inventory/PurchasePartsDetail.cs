@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.VMS.Data.Entity.Inventory
 {
-    [Table("PurchasePartsDetail", Schema = "VMS")]
+    [Table("PurchasePartsDetail")]
     public class PurchasePartsDetail: Base
     {
         public int? purchasePartsMasterId { get; set; }

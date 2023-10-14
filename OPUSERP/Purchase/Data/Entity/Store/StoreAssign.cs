@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Data.Entity.MasterData
 {
-    [Table("StoreAssign", Schema = "Purchase")]
+    [Table("StoreAssign")]
     public class StoreAssign : Base
     {
         public int? storeId { get; set; }

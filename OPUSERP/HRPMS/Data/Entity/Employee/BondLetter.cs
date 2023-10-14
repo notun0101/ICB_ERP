@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Employee
 {
-    [Table("BondLetter", Schema = "HR")]
+    [Table("BondLetter")]
     public class BondLetter:Base
     {
 

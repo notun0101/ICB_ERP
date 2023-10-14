@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.VMS.Data.Entity.CarManagement
 {
-    [Table("SourceType", Schema = "VMS")]
+    [Table("SourceType")]
     public class SourceType:Base
     {
         public string sourceNameBN { get; set; }

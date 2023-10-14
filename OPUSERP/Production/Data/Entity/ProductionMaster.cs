@@ -8,7 +8,7 @@ using OPUSERP.HRPMS.Data.Entity.Master;
 
 namespace OPUSERP.Production.Data.Entity
 {
-    [Table("ProductionMasters", Schema = "PROD")]
+    [Table("ProductionMasters")]
     public class ProductionMaster:Base
     {
         [MaxLength(150)]

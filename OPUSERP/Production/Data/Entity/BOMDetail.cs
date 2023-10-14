@@ -9,7 +9,7 @@ using OPUSERP.SCM.Data.Entity.MasterData;
 
 namespace OPUSERP.Production.Data.Entity
 {
-    [Table("BOMDetails", Schema = "PROD")]
+    [Table("BOMDetails")]
     public class BOMDetail : Base
     {
         public int? bOMMasterId { get; set; }

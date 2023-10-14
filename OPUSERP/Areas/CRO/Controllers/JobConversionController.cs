@@ -19,7 +19,7 @@ using OPUSERP.Helpers;
 
 namespace OPUSERP.Areas.CRO.Controllers
 {
-    [Area("CRO")]
+    [Area("HR")]
     public class JobConversionController : Controller
     {
         private readonly IDistributeJobService distributeJobService;
@@ -236,7 +236,7 @@ namespace OPUSERP.Areas.CRO.Controllers
             if (System.IO.File.Exists(fullFilePath))
                 System.IO.File.Delete(fullFilePath);
             await attachmentCommentService.DeleteDocumentAttachmentById(photoId);
-            return RedirectToAction("Index", "JobConversion", new { opMstId = actionId, Area = "CRO" });
+            return RedirectToAction("Index", "JobConversion", new { opMstId = actionId, Area = "HR" });
         }
 
         [HttpGet]

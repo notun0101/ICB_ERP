@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Accounting.Data.Entity.MasterData
 {
-    [Table("SignatureType", Schema = "ACCOUNT")]
+    [Table("SignatureType")]
     public class SignatureType : Base
     {
         [MaxLength(100)]

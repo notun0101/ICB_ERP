@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.VMS.Data.Entity.CarManagement
 {
-    [Table("SpareParts", Schema = "VMS")]
+    [Table("SpareParts")]
     public class SpareParts:Base
     {
         public string brandName { get; set; }

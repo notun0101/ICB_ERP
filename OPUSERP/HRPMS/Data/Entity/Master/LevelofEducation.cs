@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-    [Table("LevelofEducation", Schema = "HR")]
+    [Table("LevelofEducation")]
     public class LevelofEducation:Base
     {
         public int? sortOrder { get; set; }

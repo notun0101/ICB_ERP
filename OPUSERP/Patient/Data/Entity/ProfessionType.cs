@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.Patient.Data.Entity
 {
-    [Table("ProfessionType", Schema = "HOSPTL")]
+    [Table("ProfessionType")]
     public class ProfessionType : Base
     {
         [MaxLength(150)]

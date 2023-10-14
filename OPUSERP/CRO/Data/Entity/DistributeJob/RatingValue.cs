@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CRO.Data.Entity.DistributeJob
 {
-    [Table("RatingValue", Schema = "CRO")]
+    [Table("RatingValue")]
     public class RatingValue : Base
     {
         public int? ratingTypeId { get; set; }

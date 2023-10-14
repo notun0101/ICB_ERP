@@ -8,7 +8,7 @@ using OPUSERP.VMS.Data.Entity.Master;
 
 namespace OPUSERP.VMS.Data.Entity.FuelStation
 {
-    [Table("VMSContact", Schema = "VMS")]
+    [Table("VMSContact")]
     public class VMSContact:Base
     {
         public int? fuelStationInfoId { get; set; }

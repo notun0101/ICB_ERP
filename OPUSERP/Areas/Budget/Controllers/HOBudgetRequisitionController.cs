@@ -27,7 +27,7 @@ using OPUSERP.HRPMS.Data.Entity.Master;
 namespace OPUSERP.Areas.Budget.Controllers
 {
     [Authorize]
-    [Area("Budget")]
+    [Area("HR")]
     public class HOBudgetRequisitionController : Controller
     {
         private readonly LangGenerate<BudgetRequisitionLn> _lang;

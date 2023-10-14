@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.Master
 {
-    [Table("RlnSBUPNS", Schema = "HR")]
+    [Table("RlnSBUPNS")]
     public class RlnSBUPNS:Base
     {
         public int? pNSId { get; set; }

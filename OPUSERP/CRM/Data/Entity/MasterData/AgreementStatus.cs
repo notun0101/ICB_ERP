@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.CRM.Data.Entity.MasterData
 {
-    [Table("AgreementStatus", Schema = "CRM")]
+    [Table("AgreementStatus")]
     public class AgreementStatus : Base
     {       
         [MaxLength(50)]

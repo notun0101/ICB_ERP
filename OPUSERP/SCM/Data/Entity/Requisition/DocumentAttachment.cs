@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.SCM.Data.Entity.Requisition
 {
-    [Table("DocumentAttachments", Schema = "SCM")]
+    [Table("RequisitionDocumentAttachments")]
     public class DocumentAttachment:Base
     {
         public int masterId { get; set; }

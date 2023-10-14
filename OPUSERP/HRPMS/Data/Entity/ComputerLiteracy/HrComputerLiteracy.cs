@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.HRPMS.Data.Entity.HrComputerLiteracy
 {
-	[Table("HrComputerLiteracy", Schema = "HR")]
+	[Table("HrComputerLiteracy")]
 	public class HrComputerLiteracy:Base
 	{
 		public string subject { get; set; }

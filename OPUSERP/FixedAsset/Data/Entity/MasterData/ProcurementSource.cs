@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.FixedAsset.Data.Entity.MasterData
 {
-    [Table("ProcurementSource", Schema = "FAMS")]
+    [Table("ProcurementSource")]
     public class ProcurementSource : Base
     {
         [MaxLength(150)]

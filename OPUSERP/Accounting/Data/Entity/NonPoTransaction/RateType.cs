@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OPUSERP.Accounting.Data.Entity.NonPoTransaction
 {
-    [Table("RateType", Schema = "ACCOUNT")]
+    [Table("RateType")]
     public class RateType : Base
     {
         public string RateTypeName { get; set; }

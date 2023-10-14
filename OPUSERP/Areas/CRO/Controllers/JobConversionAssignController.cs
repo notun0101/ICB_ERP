@@ -17,7 +17,7 @@ using OPUSERP.HRPMS.Services.Employee.Interfaces;
 
 namespace OPUSERP.Areas.CRO.Controllers
 {
-    [Area("CRO")]
+    [Area("HR")]
     public class JobConversionAssignController : Controller
     {
         private readonly IDistributeJobService distributeJobService;

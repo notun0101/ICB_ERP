@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace OPUSERP.HRPMS.Data.Entity.Employee
 {
 	//1=Inactive, 0=Active
-    [Table("EmployeeInfo", Schema = "HR")]
+    [Table("EmployeeInfo")]
     public class EmployeeInfo : Base
     {
         [Required]

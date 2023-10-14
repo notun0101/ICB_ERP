@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OPUSERP.HRPMS.Data.Entity.Leave
 {
-    [Table("LeaveDay", Schema = "HR")]
+    [Table("LeaveDay")]
     public class LeaveDay : Base
     {
         [MaxLength(200)]
