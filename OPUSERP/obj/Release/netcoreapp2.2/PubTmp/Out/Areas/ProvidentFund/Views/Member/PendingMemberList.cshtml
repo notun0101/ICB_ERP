@@ -1,0 +1,108 @@
+﻿@model PFMemberInfoViewModel
+@{
+    ViewData["Title"] = "PendingMemberList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<div class="" style="width: 100%;">
+        <div class="">
+            <ul class="breadcrumb toptab">
+                <li><a href="/ProvidentFund/Member/MemberOverView"><h3>Overview</h3></a></li>&nbsp;&nbsp;&nbsp;
+                <li><a href="/ProvidentFund/Member/MemberApplication"><h3>Membership Application</h3></a></li>&nbsp;&nbsp;&nbsp;
+                <li><a href="/ProvidentFund/Member/PendingMemberList"><h3>Pending Member Approval</h3></a></li>&nbsp;&nbsp;&nbsp;
+                <li><a href="/ProvidentFund/Member/MemberList"><h3>Member List</h3></a></li>
+            </ul>
+            <hr />
+        </div>
+    </div>*@
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+                <h5 class="m-0 font-weight-bold text-primary">Pending Member List</h5>
+                <a class='btn btn-info mr-4' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1014&perentId=6014'>@*<i class="fas fa-backward fa-2x "></i>*@<i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+
+            <div class="card" style="width: 100%;">
+                <div class="card-body">
+                    
+                    <div class="">
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-bordered table-striped" id="tblMemberList" data-parsley-required="true">
+                                    <thead style="width:100%;background-color:lightgray">
+                                        <tr>
+                                            <th>
+                                                Member ID
+                                            </th>
+                                            <th>
+                                                Member Name
+                                            </th>
+
+                                            <th>
+                                                Employee ID
+                                            </th>
+                                            <th>
+                                                Designation
+                                            </th>
+                                            <th>
+                                                Date of Joining
+                                            </th>
+                                            <th>
+                                                Email
+                                            </th>
+                                            <th>
+                                                Mobile
+                                            </th>
+                                            <th>
+                                                Application Date
+                                            </th>
+                                            <th>
+                                                Action
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var data in Model.pFMemberInfos)
+                                        {
+                                            <tr>
+                                                <td>@data.memberCode</td>
+                                                <td>@data.memberName</td>
+
+                                                <td>@data.employeeInfo.employeeCode</td>
+                                                <td>@data.employeeInfo.lastDesignation?.designationName</td>
+                                                <td>@data.employeeInfo.joiningDateGovtService?.ToString("dd-MMM-yyyy")</td>
+                                                <td>@data.employeeInfo.emailAddress</td>
+                                                <td>@data.employeeInfo.mobileNumberOffice</td>
+                                                <td>@data.applicationDate?.ToString("dd-MMM-yyyy")</td>
+
+                                                <td><a href="/ProvidentFund/Member/ViewMember?id=@data.Id"><i class="fas fa-eye" style="color:green"></i></a></td>
+
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+
+            $('#tblMemberList').DataTable({
+                //columnDefs: [{ type: 'Date', 'targets': [1] }],
+                "order": [[1, "asc"]],
+            });
+
+        });
+    </script>
+}
+

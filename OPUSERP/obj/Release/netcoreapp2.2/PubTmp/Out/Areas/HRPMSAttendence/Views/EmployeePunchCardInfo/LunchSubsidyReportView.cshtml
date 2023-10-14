@@ -1,0 +1,257 @@
+﻿@model IEnumerable<SubsidyViewModel>;
+@using OPUSERP.Helpers;
+
+@{
+	ViewData["Title"] = "LunchSubsidyReportView";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+
+}
+@section Style{
+	<style>
+
+		.print-card-body {
+			width: 100%;
+			padding-bottom: 10px;
+		}
+
+		.vartical-table th {
+			width: 25%;
+		}
+
+		.vartical-table td {
+			width: 25%;
+		}
+
+		.table td, .table th {
+			padding: .3rem;
+			font-size: 14px;
+			border: 1px solid black !important;
+		}
+
+		table {
+			page-break-inside: auto;
+			border-collapse: collapse;
+			border: 1px solid black !important;
+		}
+
+		tr {
+			page-break-inside: avoid;
+			page-break-after: auto;
+			border: 1px solid black !important;
+		}
+
+		thead {
+			display: table-header-group;
+			border: 1px solid black !important;
+		}
+
+		tfoot {
+			display: table-footer-group;
+			border: 1px solid black !important;
+		}
+
+		h6 {
+			font-size: 14px;
+			background-color: gray;
+			color: white !important;
+			padding: 3px;
+		}
+	</style>
+}
+<div class="print-card" style="width: 100%;">
+	<div class="print-card-body">
+
+		<div class="container-fluid">
+
+			<div class="row" style="padding-top:0px;">
+
+				<div class="col-2">
+					@*<img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="OPUS ERP" style="height:70px;" />*@
+				</div>
+				<div class="col-8">
+					<div style="color:black;text-align:center;">
+
+						<h3 style="font-size:20px;">বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড</h3>
+						@if (ViewBag.type != "branch" && ViewBag.type != "zone")
+						{
+							<h3 style="font-size:20px;"><u>হেড অফিস, ঢাকা </u></h3>
+						}
+						<h3 style="font-size:20px;">
+							<u>
+								@ViewBag.branchName
+							</u>
+						</h3>
+					</div>
+				</div>
+				<div class="col-2">
+					@*<img src="~/images/mujib.png" style="height:70px; text-align:right" />*@
+				</div>
+			</div>
+		</div>
+		<br />
+		@if (ViewBag.type != "branch")
+		{
+			<div class="container-fluid" style="float:left">
+
+				<h3 style="font-size:18px;color:black;margin-right:2%">
+					নং -<br /><br />
+					ডিপার্টমেন্ট হেড <br />
+					সেন্ট্রাল অ্যাকাউন্টস ডিপার্টমেন্ট<br />
+					বাংলাদেশ ডেভেলপমেন্ট ব্যাংক<br />
+					হেড অফিস<br />
+					<u>ঢাকা । </u>
+				</h3>
+
+			</div>
+		}
+		else if (ViewBag.type != "zone")
+		{ 
+			<div class="container-fluid" style="float:left">
+
+				<h3 style="font-size:18px;color:black;margin-right:2%">
+					নং -১১.৩/১১/<br /><br />
+					ডিপার্টমেন্ট হেড <br />
+					সেন্ট্রাল অ্যাকাউন্টস ডিপার্টমেন্ট<br />
+					বাংলাদেশ ডেভেলপমেন্ট ব্যাংক<br />
+					হেড অফিস<br />
+					<u>ঢাকা । </u>
+				</h3>
+
+			</div>
+		}
+		<div class="container-fluid ">
+			<div class="col-12">
+				<h3 style="font-size:18px;color:black;text-align:center">
+					বিষয়: <u>@ViewBag.month @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(ViewBag.year.ToString()) মাসের লাঞ্চ সাবসিডি প্রদান</u>।
+				</h3>
+			</div>
+		</div>
+		<div class="container-fluid" style="color:black;">
+
+			<div class="row" style="padding: 0px 15px 0px 15px;">
+				@if (ViewBag.type != "branch") {
+					<span>
+						প্রিয় মহোদয়,
+					</span>
+
+					<br/>
+				}
+				&nbsp;   &nbsp;   &nbsp;   &nbsp; শিরোনামীয় বিষয়ে আপনাদের ২৪-০৩-২০২০ তারিখের ০১/২০১০ নং প্রজ্ঞাপনের সূত্রে @ViewBag.month, @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(ViewBag.year.ToString()) মাসের প্রাপ্য লাঞ্চ সাবসিডি বিবরন নিম্নে দেওয়া হলোঃ
+			</div>
+			<br />
+			<table class="table table-border text-center">
+				<thead>
+					<tr>
+						<th>
+							ক্রমিক নং
+						</th>
+						<th>
+							কর্মকর্তা/কর্মচারীর নাম
+						</th>
+						<th>পদবী </th>
+						<th>
+							কর্মদিবসে প্রকৃত উপস্থিতি/দিন
+						</th>
+						<th>
+							প্রাপ্য লাঞ্চ সাবসিডি
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					@{
+						int i = 1;
+						int attend = 0;
+						decimal total = 0;
+					}
+
+					@foreach (var item in Model)
+					{
+
+						<tr>
+							<td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(i.ToString())</td>
+							<td>
+								@if (item.employee?.nameBangla != null)
+								{
+									<span>@item.employee?.nameBangla</span>
+								}
+								else
+								{
+									<span>@item.employee?.nameEnglish</span>
+								}
+							</td>
+							<td>
+								@if (item.employee?.lastDesignation?.designationNameBN != null)
+								{
+									<span>@item.employee?.lastDesignation?.designationNameBN</span>
+								}
+								else
+								{
+									<span>@item.employee?.lastDesignation?.designationName</span>
+								}
+							</td>
+							<td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(item.attendDays.ToString())</td>
+							<td style="text-align: right;">৳ @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(item.amount?.ToString("N2"))</td>
+						</tr>
+						i++;
+						attend += (int)item.attendDays;
+						total += (decimal)item.amount;
+
+					}
+					<tr>
+						<td colspan="2" style="border-bottom:none;border-left:none;"> </td>
+						<td style="text-align:right; font-weight: bold;"> সর্বমোট  :</td>
+						<td style=" font-weight: bold;">@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(attend.ToString())</td>
+						<td style="text-align: right; font-weight: bold;">৳ @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(total.ToString("N2"))</td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<br />
+			<div class="container-fluid">
+			
+					<h3 style="font-size:18px;color:black;float:left;">মোটঃ @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(total.ToString("0.00")) &nbsp;( @AmountInWordBn.ConvertToWordsBn(total.ToString("0.00")) )। </h3>
+					<h3 style="font-size:18px;color:black;float:left;"></h3>
+                    @if(ViewBag.type=="branch"){
+						<h3 style="font-size:18px;color:black;float:left">
+							০২। উপরোল্লিখিত কর্মকর্তা/কর্মচারীদের লাঞ্চ সাবসিডির পরিমাণ দৈনিক হাজিরা যাচাই করে প্রণয়ন করা হয়েছে।
+						</h3>
+					}
+					else if (ViewBag.type == "zone")
+					{
+						<h3 style="font-size:18px;color:black;float:left">
+						০২। উপরোল্লিখিত কর্মকর্তা/কর্মচারীদের লাঞ্চ সাবসিডির পরিমাণ দৈনিক হাজিরা যাচাই করে প্রণয়ন করা হয়েছে। নিয়মানুসারে উক্ত টাকা উত্তোলনের জন্য নিম্নস্বাক্ষরকারীকে টিআরভি প্রদান করার জন্য অনুরোধ করা হলো।
+						</h3>
+					}
+					else{
+						<h3 style="font-size:18px;color:black;float:left">
+							০২। উপরোল্লিখিত কর্মকর্তা/কর্মচারীদের লাঞ্চ সাবসিডির পরিমাণ দৈনিক হাজিরা যাচাই করে প্রণয়ন করা হয়েছে। নিয়মানুসারে উক্ত টাকা উত্তোলনের জন্য অত্র ডিপার্টমেন্টের নিম্নস্বাক্ষরকারীকে টিআরভি প্রদান করার জন্য অনুরোধ করা হলো।
+						</h3>
+					}
+			</div>
+			<br />
+			<br />
+			<br />
+			<br />
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-8">
+						<h3 style="font-size:18px;color:black;">ধন্যবাদান্তে ,</h3>
+					</div>
+                    <div class="col-4" style="text-align:center">
+                        <h3 style="font-size:18px;color:black">
+                            আপনার বিশ্বস্ত ,
+                        </h3><br />
+                        @*<h3 style="font-size:18px;color:black">( ইঞ্জি:  মোঃ রিয়াজুল ইসলাম )</h3>
+                        <h3 style="font-size:18px;color:black">ডেপুটি জেনারেল ম্যানেজার</h3>
+                        <h3 style="font-size:18px;color:black">ফোন : ৫৭১৬০৪৫১  </h3>*@
+
+                        <h3 style="font-size:18px;color:black">@(ViewBag.finalEmp?.HeadNameBn == null ? ViewBag.finalEmp?.HeadName : ViewBag.finalEmp?.HeadNameBn)</h3>
+                        <h3 style="font-size:18px;color:black">@(ViewBag.finalEmp?.designationNameBN == null ? ViewBag.finalEmp?.designationName : ViewBag.finalEmp?.designationNameBN)</h3>
+                        @*<h3 style="font-size:18px;color:black">ফোন :@(ViewBag.finalEmp?.phoneOffice == null ? ViewBag.finalEmp?.phoneOffice : @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(ViewBag.finalEmp?.phoneOffice))  </h3>*@
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+

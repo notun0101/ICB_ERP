@@ -1,0 +1,620 @@
+﻿@model BelongingsViewModel
+@{
+    ViewData["Title"] = "Office Item";
+    Layout = "~/Areas/HRPMSEmployee/Views/Shared/_EmployeeForm.cshtml";
+}
+@section StyleEmp{
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        .redStar {
+            color: red;
+            float:right;
+        }
+
+        #myDIV {
+            background-color: white;
+            padding: 20px;
+            box-shadow: 3px 3px 3px 3px lightgray;
+            max-height: 415px;
+            overflow-y: scroll;
+            padding-top: 5px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+            background-color: white;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #F3F3F3;
+        }
+
+        .g {
+            text-decoration: none;
+            color: #1492a5;
+        }
+
+            .g:hover {
+                text-decoration: none;
+                color: #070a67;
+            }
+
+            .g span {
+                font-family: serif;
+            }
+
+        .small-box {
+            text-align: center;
+            border-radius: 10px;
+            padding: 10px;
+            transition: transform .5s;
+        }
+
+            .small-box:hover {
+                background-color: #e8f0fe;
+                transform: scale(.95);
+            }
+
+            .small-box i {
+                font-size: 35px;
+                margin: 10px;
+            }
+    </style>
+}
+
+<div class="card" style="width: 100%;">
+
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; border-right: 1px solid #D9D8DB">
+            <h5 class="card-title" style="color: black; margin: 0;">Office Item</h5>
+        </div>
+        <div class="col-md-8">
+            @if (User.IsInRole("HRAdmin") || User.IsInRole("admin"))
+            {
+                <div style="float: left;">
+
+                    @if (Model.photograph?.url == null || Model.photograph?.url == "")
+                    {
+                        <img src="~/images/user-icon-png.png" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                    }
+                    else
+                    {
+                        <img src="~/@Model.photograph?.url" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                    }
+                    @*<img src="~/@Model.photograph?.url" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />*@
+                    <input type="hidden" id="hiddenFile" />
+                </div>
+            }
+            else
+            {
+                <div style="float: left;">
+
+                    @if (Model.photograph?.url == null || Model.photograph?.url == "")
+                    {
+                        <img src="~/images/user-icon-png.png" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                    }
+                    else
+                    {
+                        <img src="~/@Model.photograph?.url" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                    }
+                    @*<img src="~/@Model.photograph?.url" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />*@
+                    <input type="hidden" id="hiddenFile" />
+                </div>
+            }
+            <div style="float: left;">
+                <div style="padding: 5px;text-align: center;">
+                    <p style="margin: 0; text-transform: uppercase;">@Model.employeeInfo?.nameEnglish</p>
+                    <p style="margin: 0">@Model.employeeInfo?.lastDesignation?.designationName</p>
+                </div>
+            </div>
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info mr-2' style="" data-toggle='tooltip' title='Go Back' href='/HRPMSEmployee/Photograph/EditGrid/@Model.employeeInfo?.Id'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+                @*<a class='btn btn-info' style="" data-toggle='tooltip' title='Print' target='_blank' href='/HRPMSEmployee/InfoView/pdspdf/@Model.employeeInfo?.Id'><i class='fa fa-print'></i></a>*@
+                <a id="btngle" href="javascript:void(0)" class="btn btn-outline-success mr-5"
+                   style="position: absolute; right: 82px; top: 17px; box-shadow: none; font-size: 17px;"><i class="fas fa-th"></i></a>
+
+            </div>
+        </div>
+    </div>
+
+    @*<div class="card-header row">
+        <div class="col-8">
+            <h5 class="card-title" style="color: black">Belongings Information</h5>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="card-body row">
+            <div class="col-2">
+                <img id="user_img_current" style="width: 180px;height: 165px;border-radius: 120px;cursor:pointer;" src="~/@Model.photograph?.url" alt="" class="img-thumbnail float-left">
+                <i class="fa fa-camera" data-toggle="modal" data-target="#updateEmpPhotoModal" style="position:relative;margin-top:120px;margin-left:-22px;cursor:pointer;"></i>
+                <input type="hidden" id="hiddenFile" />
+            </div>
+            <div class="col-8" style="color: black; font-size: 15px; padding-top: 24px;">
+                <span style="font-weight:bold;">Employee Name :</span> <span style="margin-left:10px">@Model.employeeInfo?.nameEnglish</span><br />
+                <span style="font-weight:bold;">Designation :</span> <span style="margin-left:10px">@Model.employeeInfo?.designation</span><br />
+                <span style="font-weight:bold;">Department :</span> <span style="margin-left:10px">@Model.employeeInfo?.department.deptName</span><br />
+                <span style="font-weight:bold;">Joining Date :</span><span style="margin-left:10px">@Model.employeeInfo?.joiningDateGovtService</span><br />
+                <span style="font-weight:bold;">Job Nature :</span><span style="margin-left:10px">@Model.employeeInfo?.employeeType?.empType</span><br />
+                <span style="font-weight:bold;">Job Status :</span><span style="margin-left:10px">@(Model.employeeInfo?.activityStatus == 1 ? "Active" : "Inactive")</span>
+            </div>
+            <div class="col-1">
+                <a class='btn btn-info' style="float:right;" data-toggle='tooltip' title='Go Back' href='/HRPMSEmployee/Photograph/EditGrid/@Model.employeeInfo.Id'><i class="fas fa-backward"></i></a>
+            </div>
+            <div class="col-1">
+                <a class='btn btn-info' style="float:right;margin-right:70%;" data-toggle='tooltip' title='Print' target='_blank' href='/HRPMSEmployee/InfoView/pdspdf/@Model.employeeInfo.Id'><i class='fa fa-print'></i></a>
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-12 row" style="color: black; font-size: 15px; padding-top: 24px;">
+                <span style="font-weight:bold;">Employee Code :</span> <span style="padding: 0 86% 1% 1%;">@Model.employeeInfo.employeeCode</span>
+
+                <br />
+
+                <span style="font-weight:bold;"> Name :</span> <span style="margin-left:10px">@Model.employeeInfo?.nameEnglish </span>
+            </div>
+        </div>
+        <div class="row">
+            <div>
+                <h5 class="card-title" style="color: black">@Model.employeeNameCode</h5>
+            </div>
+        </div>
+    </div>
+    <hr />*@
+    <div class="container">
+        <form asp-area="HRPMSEmployee" asp-controller="Belongings" asp-action="Index" id="FormId" method="post" data-parsley-validate="parsley">
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="row">
+                <div class="col-6">
+                    @*<div class="form-group row">
+                    <label for="itemCategory" class="col-sm-4 col-form-label">Item Name <span style="color:red;">*</span></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="itemName" name="itemName" data-parsley-required="true">
+                        <input type="hidden" id="itemID" name="itemID" value="0">
+
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="specification" class="col-sm-4 col-form-label">Specification <span style="color:red;">*</span></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="specification" name="specification" data-parsley-required="true">
+                        <input type="hidden" id="specificationID" name="specificationID" value="0">
+                    </div>
+                </div>*@
+
+                    <div class="form-group row">
+                        <label for="belongingId" class="col-sm-4 col-form-label">Item Name<span class="redStar">*</span> </label>
+                        <div class="col-sm-8">
+                            <select type="text" class="form-control" id="belongingId" name="belongingId" data-parsley-required="true">
+                                <option value="">Select One</option>
+                                @foreach (var data in Model.belongingItems)
+                                {
+                                    <option value="@data.Id">@data.ItemName</option>
+                                }
+                            </select>
+                            <input type="hidden" id="employeeID" name="employeeID" value="@Model.employeeID">
+                            <input type="hidden" id="belongingsItemID" name="belongingsItemID" value="0">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="assetNo" class="col-sm-4 col-form-label">Asset No </label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="assetNo" name="assetNo">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="issueDate" class="col-sm-4 col-form-label">Issue Date </label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="issueDate" name="issueDate" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="returnDate" class="col-sm-4 col-form-label">Return Date </label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="returnDate" name="returnDate" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group row">
+                        <label for="remarks" class="col-sm-4 col-form-label">Remarks </label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" rows="6" id="remarks" name="remarks"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <hr>
+            @*<button type="submit" id="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+            <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+            <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+
+
+        </form>
+    </div>
+</div>
+
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold">Office Item Information List</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="belongingsTable">
+                    <thead>
+                        <tr>
+                            <th>Item name</th>
+                            <th>Asset No</th>
+                            <th>Issue Date</th>
+                            <th>Return Date</th>
+                            <th>Action</th>
+                     </thead>
+
+                    <tbody>
+                        @foreach (var data in Model.belongings)
+                        {
+                            <tr>
+                                <td>@data?.belongingItem?.ItemName</td>
+                                <td>@data.assetNo</td>
+                                <td>@data.issueDate?.ToString("dd-MMM-yyyy")</td>
+                                <td>@data.returnDate?.ToString("dd-MMM-yyyy")</td>
+                                <td>
+                                    <a class="btn btn-success" onclick="Edit(@data.Id, '@data.belongingItemId','@data.assetNo','@data.description', '@data.issueDate?.ToString("dd-MMM-yyyy")', '@data.returnDate?.ToString("dd-MMM-yyyy")')" href="#"><i class="fa fa-edit"></i></a>
+                                    <a class="btn btn-danger" onclick="Remove(@data.Id, @data.employeeId)" href="#"><i class="fa fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myDIV" style="display: none; width: 311px; position: absolute; right: 50px; top: 167px;">
+    <div class="row">
+        <a href="/HRPMSEmployee/Info/Index/@Model.employeeID" class="col-md-4 small-box g">
+                <i class="fa fa-user-tie"></i><span>Basic</span>
+            </a>
+
+        <a href="/HRPMSEmployee/Address/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-map-marker-alt"></i><span>Address</span>
+        </a>
+        <a href="/HRPMSEmployee/Spouse/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-female"></i><span>Spouse</span>
+        </a>
+        <a href="/HRPMSEmployee/Children/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-child"></i><span>Children</span>
+        </a>
+        <a href="/HRPMSEmployee/EmergencyContact/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-blender-phone"></i><span>Emergency Contact</span>
+        </a>
+        <a href="/HRPMSEmployee/Nominee/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-sitemap"></i><span>Nominee</span>
+        </a>
+        <a href="/HRPMSEmployee/Nominee/EmployeeInsurance/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-university"></i><span>Insurance</span>
+        </a>
+        <a href="/HRPMSEmployee/EducationalQualification/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-graduation-cap"></i><span>Education</span>
+        </a>
+        <a href="/HRPMSEmployee/ProfessionalQualifications/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-chalkboard-teacher"></i><span>Qualification</span>
+        </a>
+        <a href="/HRPMSEmployee/OtherQualifications/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-book-reader"></i><span>Other Qualification</span>
+        </a>
+        <a href="/HRPMSEmployee/Training/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-clipboard-list"></i><span>Training History</span>
+        </a>
+        <a href="/HRPMSEmployee/TransferLog/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-stream"></i><span>Service</span>
+        </a>
+        <a href="/HRPMSEmployee/PromotionLog/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-chart-line"></i><span>Promotion</span>
+        </a>
+        <a href="/HRPMSEmployee/ACRLog/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-clipboard-check"></i><span>History</span>
+        </a>
+        <a href="/HRPMSEmployee/Disciplinary/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-times"></i><span>Disciplinary Action</span>
+        </a>
+        <a href="/HRPMSEmployee/Supervisor/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-shield"></i><span>Supervisor</span>
+        </a>
+        <a href="/HRPMSEmployee/License/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-id-badge"></i><span>Driving License</span>
+        </a>
+        <a href="/HRPMSEmployee/Passport/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-passport "></i><span>Passport</span>
+        </a>
+        <a href="/HRPMSEmployee/Travel/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-suitcase-rolling"></i><span>Travel</span>
+        </a>
+        <a href="/HRPMSEmployee/Membership/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-tag"></i><span>Membership</span>
+        </a>
+        <a href="/HRPMSEmployee/Award/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-medal"></i><span>Award</span>
+        </a>
+        <a href="/HRPMSEmployee/Publication/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-atlas"></i><span>Publication</span>
+        </a>
+        <a href="/HRPMSEmployee/Language/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-language"></i><span>Language</span>
+        </a>
+
+        <a href="/HRPMSEmployee/OtherActivities/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-skating"></i><span>Other Activities</span>
+        </a>
+        <a href="/HRPMSEmployee/BankInfo/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-university"></i><span>Bank Acounts</span>
+        </a>
+        @*<a href="/HRPMSEmployee/Belongings/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-bold"></i><span>Belongings</span>
+        </a>*@
+        <a href="/HRPMSEmployee/PreviousEmployment/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-th-list"></i><span>Prev.Employment</span>
+        </a>
+        <a href="/HRPMSEmployee/FreedomFighter/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-check"></i><span>Freedom Fighter</span>
+        </a>
+
+
+        <a href="/HRPMSEmployee/Reference/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-clock"></i><span>Reference</span>
+        </a>
+        <a href="/HRPMSEmployee/OfficeAssign/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-map-marker-alt"></i><span>Office Assign</span>
+        </a>
+        <a href="/HRPMSEmployee/Photograph/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-circle"></i><span>Picture</span>
+        </a>
+        <a href="/HRPMSEmployee/Photograph/Signature/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-circle"></i><span>Signature</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeContractInfo/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-file-signature"></i><span>Contract</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-sitemap"></i><span>Project Activity</span>
+        </a>
+        <a href="/HRPMSEmployee/FinanceCode/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fas fa-code-branch"></i><span>Financial Code</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeAttachment/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fas fa-file"></i><span>Attachment</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/ProjectAssign/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fas fa-air-freshener"></i><span>Project Assign</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/EmployeeOtherInfo/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fas fa-info-circle"></i><span>Other Info</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/EmployeeCostCentre/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fas fa-dollar-sign"></i><span>Cost Centre</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/EmployeeGrade/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fab fa-glide-g"></i><span>Employee Grade</span>
+        </a>
+
+    </div>
+</div>
+<div class="modal fade" id="updateEmpPhotoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                @*<img src="~/images/Aloha New Logo.png" style="height:50px;" />*@
+                <h5 class="modal-title" id="exampleModalLabel">Update Photo</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-area="HRPMSEmployee" asp-controller="Photograph" asp-action="Index" method="post" enctype="multipart/form-data" data-parsley-validate="parsley">
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="form-group row">
+                        @*<div class="col-5">
+            <img id="user_img_current" style="width:200px;height:200px" src="~/@Model.photograph.url" alt="" class="img-thumbnail float-left">
+            <input type="hidden" id="hiddenFile" />
+        </div>*@
+                        <div class="col-7">
+                            <input type="hidden" name="queryString" id="queryString" value="" />
+                            @if (Model.photograph?.url != null || Model.photograph?.url != "")
+                            {
+                                <img id="user_img" style="width:200px;height:200px;cursor:pointer;" src="~/@Model.photograph?.url" alt="" class="img-thumbnail float-left">
+                            }
+                            else
+                            {
+                                <img id="user_img" style="width:200px;height:200px;cursor:pointer;" src="/images/user-icon-png.png" alt="" class="img-thumbnail float-left">
+                            }
+                            <input type="hidden" name="employeeID" value="@Model.employeeInfo.Id" />
+                            <input type="hidden" name="photographID" value="@Model.photograph?.Id" />
+                            <input type="file" title="Photo Upload" id="imagePath" data-parsley-required="true" name="empPhoto" class="btn btn-default btn-sm pull-right" />
+                            <span style="float:left;color:red;" class="redStar">*</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ScriptsEmp{
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        @*$('#submit').click(function () {
+
+
+		console.log($('#FormId').serializeArray());
+		var data = $('#FormId').serializeArray();
+
+		console.log(data[0].value)
+		swal({
+			title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+		}).then(function () {
+			$.ajax({
+				url: '@Url.Action("Index", "Belongings")',
+				type: 'POST',
+				data: data
+			}).done(function () {
+                if (data[0].value == 0) {
+                    swal('success', 'Saved Successfully!', 'success').then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    swal('success', 'Updated Successfully!', 'success').then(function () {
+                        location.reload();
+                    });;
+                }
+			}).fail(function () {
+				swal('warning', 'Failed!', 'warning');
+			})
+		});
+        })*@
+        $(document).ready(function () {
+            var pathname = window.location.pathname;
+            $('#queryString').val(pathname);
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+            });
+            $("#photo").addClass("active");
+            $("#imagePath").change(function () {
+                readURL(this);
+            });
+
+
+
+            $("#btngle").click(function () {
+                $("#myDIV").slideToggle("slow");
+            });
+            $("#belongings").addClass("active");
+            //$('#issueDate').flatpickr({ dateFormat: "d-M-Y" });
+            //$('#returnDate').flatpickr({ dateFormat: "d-M-Y" });
+            $('#issueDate').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2030" });
+            $('#returnDate').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2030" });
+
+            $('#belongingsTable').DataTable();
+
+            Common.Ajax('GET', '/global/api/GetAllFixedAssetItem', [], 'json', ajaxGetAllFixedAssetItem);
+
+        });
+
+        function ajaxGetAllFixedAssetItem(response) {
+            var GetList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.itemName;
+                GetList[GetList.length] = obj;
+            });
+            $('#itemName').autocomplete({
+                source: GetList,
+                select: function (event, ui) {
+                    $("#itemName").val(ui.item.value);
+                    $("#itemID").val(ui.item.key);
+                    var ItemId = ui.item.key;
+                    Common.Ajax('GET', '/SCMRequisition/RequisitionMaster/GetAllItemSpecificationByitemId/?ItemId=' + ItemId, [], 'json', ajaxGetItemSpecification);
+                    //Common.Ajax('GET', '/global/api/Item/' + ItemId, [], 'json', GetItemName);
+                }
+            });
+        }
+
+        function ajaxGetItemSpecification(response) {
+            console.log(response);
+            var GetList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.specificationName;
+                GetList[GetList.length] = obj;
+            });
+            $('#specification').autocomplete({
+                source: GetList,
+                select: function (event, ui) {
+                    $("#specification").val(ui.item.value);
+                    $("#specificationID").val(ui.item.key);
+                    //var ItemId = ui.item.key;
+                    //Common.Ajax('GET', '/SCMRequisition/RequisitionMaster/GetAllItemSpecificationByitemId/?ItemId=' + ItemId, [], 'json', ajaxGetItemSpecification);
+                    //Common.Ajax('GET', '/global/api/Item/' + ItemId, [], 'json', GetItemName);
+                }
+            });
+        }
+
+        function Edit(Id, itemId, assetNo, description, issueDate, returnDate) {
+            $("#belongingsItemID").val(Id);
+            $("#belongingId").val(itemId);
+            $("#assetNo").val(assetNo);
+            $("#issueDate").val(issueDate);
+            $("#remarks").val(description);
+            $("#returnDate").val(returnDate);
+        }
+
+        //function Remove(Id, employeeId) {
+        //    chk = confirm('Do you want to delete this?');
+        //    if (chk) {
+        //        location.replace("/HRPMSEmployee/Belongings/Delete/" + Id + "?empId=" + employeeId);
+        //    } else {
+        //        return false;
+        //    }
+        //}
+
+        function Remove(Id, employeeId) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+                location.replace("/HRPMSEmployee/Belongings/Delete/" + Id + "?empId=" + employeeId);
+                swal('', 'Deleted Successfully!', 'success')
+            });
+            return false;
+        }
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var filerdr = new FileReader();
+                filerdr.onload = function (e) {
+                    $('#user_img').attr('src', e.target.result);
+                    $('#user_img_current').attr('src', e.target.result);
+                }
+                filerdr.readAsDataURL(input.files[0]);
+            }
+        }
+        //$(document).ready(function () {
+        //    $("#photo").addClass("active");
+        //    $("#imagePath").change(function () {
+        //        readURL(this);
+        //    });
+
+        //});
+
+    </script>
+}
+
+
+
+
+

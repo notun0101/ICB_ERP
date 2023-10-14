@@ -1,0 +1,144 @@
+﻿@model AllHrReportViewModel
+@{
+    ViewData["Title"] = "Branch Manager view";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Style{
+    <style>
+        ul.ui-autocomplete {
+            z-index: 99999999;
+        }
+    </style>
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+                <h5 class="m-0 font-weight-bold text-primary">Branch Manager Report</h5>
+                <a class='btn btn-info mr-4' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1014&perentId=6015'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+            <div class="card-body">
+                <div class="">
+
+
+                    <div class="form-group row" style="padding-left:20px" id="">
+                        <label for="hrBranchId" class="col-sm-2 col-form-label"> Branch : </label>
+                        <div class="col-sm-7">
+                            <select name="hrBranchId" id="hrBranchId" class="form-control" data-parsley-required="true">
+                                <option value="1000">All</option>
+                                @foreach (var item in Model.hrBranches)
+                                {
+                                    <option value="@item.Id">@item.branchName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                   
+
+                    <div class="form-group row date1" style="padding-left:20px;">
+                        <label for="date1" class="col-sm-2 col-form-label">From Date: </label>
+                        <div class="col-sm-3">
+                            <input type="text" id="fDate" class="form-control datepicker" readonly value="" placeholder="Select Date..." />
+                        </div>
+                        <label for="date2" class="col-sm-1 col-form-label">To Date : </label>
+                        <div class="col-sm-3">
+                            <input type="text" id="tDate" class="form-control datepicker2" readonly value=""   placeholder="Select Date..."/>
+                        </div>
+                    </div>
+
+
+
+
+
+                    <br />
+                    <a href="javascript:void(0)" id="pdfBtn" onclick="GeneratepdfBtn()" class="btn btn-success btn-sm" style="height: 32px;margin-left: 65%;" target="_blank">Generate PDF</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $(".datepicker").datepicker({
+                dateFormat: 'dd-MM-yy', showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100", date: new Date()
+            })
+            $(".datepicker2").datepicker({
+                dateFormat: 'dd-MM-yy', showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100", date: new Date()
+            })
+            $('.datepicker').val(formatDateMonthName(new Date(2021, 1, 1)));
+            $('.datepicker2').val(formatDateMonthName(new Date()));
+
+			//$('#SubmitExcel').click(function () {
+			//	var date1 = $(".date1 #date1").val();
+           // var date2 = $(".date1 #date2").val();
+            //window.open('/Payroll/PayrollReport/SBSReportExcel?startDate=' + date1 + '&endDate=' + date2, '_blank');
+		   //})
+
+       
+        });
+
+        function GeneratepdfBtn() {
+            var hrBranchId = $('#hrBranchId').val();
+            var fromDate = $('#fDate').val();
+            var toDate = $('#tDate').val();
+            //window.location.href = "/HRPMSEmployee/IDCard/GenerateIdCardPdf?id=" + id + "&valid=" + valid;
+            window.open("/HRPMSReport/HrAdminReport/GetBranchManagerByDatePDF?hrBranchId=" + hrBranchId + "&fromDate=" + fromDate + "&toDate=" + toDate ,'_blank');
+        }
+
+        function formatDateMonthName(date) {
+            var monthName = "";
+            date = new Date(date);
+            var year = date.getFullYear(),
+                month = date.getMonth() + 1, // months are zero indexed
+                day = date.getDate(),
+                hour = date.getHours(),
+                minute = date.getMinutes(),
+                second = date.getSeconds(),
+                hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+                minuteFormatted = minute < 10 ? "0" + minute : minute,
+                morning = hour < 12 ? "am" : "pm";
+            if (month == 1) {
+                monthName = "January";
+            }
+            else if (month == 2) {
+                monthName = "February";
+            }
+            else if (month == 3) {
+                monthName = "March";
+            }
+            else if (month == 4) {
+                monthName = "April";
+            }
+            else if (month == 5) {
+                monthName = "May";
+            }
+            else if (month == 6) {
+                monthName = "June";
+            }
+            else if (month == 7) {
+                monthName = "July";
+            }
+            else if (month == 8) {
+                monthName = "August";
+            }
+            else if (month == 9) {
+                monthName = "September";
+            }
+            else if (month == 10) {
+                monthName = "October";
+            }
+            else if (month == 11) {
+                monthName = "November";
+            }
+            else {
+                monthName = "December";
+            }
+            return day + "-" + monthName + "-" + year;
+        }
+    </script>
+
+} 

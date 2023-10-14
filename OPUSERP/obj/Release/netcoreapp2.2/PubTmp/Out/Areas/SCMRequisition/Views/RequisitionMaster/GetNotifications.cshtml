@@ -1,0 +1,47 @@
+﻿@model IEnumerable<OPUSERP.SCM.Data.Entity.Requisition.Notification>
+@{
+    ViewData["Title"] = "GetNotifications";
+}
+
+<div class="list-group">
+	<a href="javascript:void(0)" class="active list-group-item list-group-item-action flex-column align-items-start active">
+		<div class="d-flex w-100 justify-content-between">
+			<h5 class="mb-1">All Notifications</h5>
+		</div>
+	</a>
+	<div style="max-height: 500px; overflow: scroll;">
+		@foreach (var item in Model)
+		{
+			if (item.isRead == 1)
+			{
+				<a href="@item.url" class="list-group-item list-group-item-action flex-column align-items-start">
+					<div class="d-flex w-100 justify-content-between">
+						<h5 class="mb-1">@item.title</h5>
+						<small class="badge badge-primary">@item.date</small>
+					</div>
+					<p class="mb-1">@item.description</p>
+				</a>
+			}
+			else
+			{
+				<a href="@item.url" onclick="MarkAsRead(@item.Id)" class="list-group-item list-group-item-action flex-column align-items-start bg-danger">
+					<div class="d-flex w-100 justify-content-between">
+						<h5 class="mb-1">@item.title</h5>
+						<small class="badge badge-primary">@item.date</small>
+					</div>
+					<p class="mb-1">@item.description</p>
+				</a>
+			}
+		}
+	</div>
+</div>
+
+@section  Scripts{
+	<script>
+		function MarkAsRead(id) {
+			Common.Ajax('GET', '/SCMRequisition/RequisitionMaster/ReadNotification?id=' + id, [], 'json', ajaxFunctionRead, false);
+		}
+		function ajaxFunctionRead(response) {
+		}
+	</script>
+}

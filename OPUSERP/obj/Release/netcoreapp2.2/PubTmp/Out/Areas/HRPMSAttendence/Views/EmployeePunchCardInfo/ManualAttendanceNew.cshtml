@@ -1,0 +1,615 @@
+﻿@model EmpWithManualAttendence
+@{
+    ViewData["Title"] = "Manual Attendance";
+
+}
+<link href="~/Assets/MD_Time_Picker/mdtimepicker.css" rel="stylesheet" />
+@section Style{
+    <style>
+        .redStar {
+            color: red;
+        }
+
+        ul.ui-autocomplete {
+            z-index: 99999999;
+        }
+    </style>
+}
+
+<div class="card" style="width: 100%;" id="div1">
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+            <h5 class="card-title" style="color: black; margin: 8px;">Manual Attendance</h5>
+        </div>
+        <div class="col-md-8">
+
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info mr-4' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1020&perentId=6295'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="card">
+            <div class="card-header">
+                <a href="javascript:void(0)" id="InTimeBtn" class="btn btn-secondary btn-sm" style="font-size: 18px;"><i class="fas fa-sign-in-alt"></i> Log In Time</a>
+                <a href="javascript:void(0)" id="OutTimeBtn" class="btn btn-success btn-sm" style="font-size: 18px;"><i class="fas fa-sign-out-alt"></i> Log Out Time</a>
+                <a href="javascript:void(0)" id="BothTimeBtn" class="btn btn-info btn-sm" style="font-size: 18px;"><i class="fas fa-door-open"></i> Both Time</a>
+                <input type="hidden" value="" id="btnTrack" />
+            </div>
+            <div class="card-body">
+                <div class="container" id="intimebox">
+                    <form id="empInfoForm" asp-area="HRPMSAttendence" asp-controller="EmployeePunchCardInfo" asp-action="ManualAttendance" method="post" data-parsley-validate="parsley">
+
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="row">
+                            <input type="hidden" id="employeeInfoId" name="employeeInfoId">
+                            <input type="hidden" id="Id" name="Id" value="0">
+                            <div class="col-sm-6">
+                                <div class="form-group row">
+                                    <label for="employeeInfoId" class="col-sm-4 col-form-label">Emp Name <span style="color:red;">*</span></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="employeeName" autocomplete="off" name="employeeName" placeholder="Employee Name" data-parsley-required="true" @*data-parsley-trigger="keyup" *@>
+                                        <input type="hidden" name="EmpCode" value="" id="EmpCode" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="Designation" class="col-sm-4 col-form-label">Designation </label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="designation" name="designation" placeholder="designation" readonly="readonly">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="department" class="col-sm-4 col-form-label">Department</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="department" name="department" placeholder="Department" readonly>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="col-sm-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-4 col-form-label" style="padding-left: 1px;">Login Date<span style="color:red;">*</span> </label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" id="effectiveDate" name="workDate" placeholder="Effective Date" readonly="readonly" required data-parsley-required="true">
+
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" id="WeekdayT" value="" placeholder="Week day" readonly="readonly">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="inContainer">
+                                    <label class="col-sm-4 col-form-label" style="padding-left: 1px;">Login Time<span style="color:red;">*</span> </label>
+                                    <div class="col-sm-8">
+                                        <input class="form-control" type="text" placeholder="Set In time" id="timepickerIn" />
+                                        <input class="form-control" type="hidden" name="startTime" value="" placeholder="In time" id="intime" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="outContainer">
+                                    <label class="col-sm-4 col-form-label" style="padding-left: 1px;">Out Time</label>
+                                    <div class="col-sm-8">
+                                        <input class="form-control" type="text" placeholder="Set Out time" id="timepickerOut" />
+                                        <input class="form-control" type="hidden" name="endTime" placeholder="Out time" id="outtime" />
+                                    </div>
+                                </div>
+                                <div class="form-group row" id="">
+                                    <label class="col-sm-4 col-form-label" style="padding-left: 1px;">Reason</label>
+                                    <div class="col-sm-8">
+                                        <textarea class="form-control" type="text" placeholder="" id="notes" name="notes"></textarea>
+                                    </div>
+                                </div>
+
+                                @*<div class="form-group row">
+                                    <label for="department" class="col-sm-4 col-form-label p-0">Preferable In Time</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="InTime3" name="InTime3" readonly>
+                                        <input type="hidden" class="form-control" id="lateMin" name="lateMin" value="0" readonly>
+                                    </div>
+                                </div>*@
+
+                            </div>
+                        </div>
+                        <hr>
+                        @*<button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>*@
+                        <button type="button" id="submit" onclick="saveManualAttendce();"  value="Submit" class="btn btn-success " style="float:right; margin-top:5px;" data-toggle='tooltip' title='Save'><i class="fas fa-save"></i> Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Commented by Asad On 23.08.2023, instructed By Sabrina*@
+@*<hr />
+<div class="card" id="list">
+    <div class="card-header">
+        <h4>All Manual Attendance</h4>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered  table-striped" id="attendenceTable">
+            <thead>
+                <tr>
+                    <th>Sl.</th>
+                    <th style="width: 49px;">Emp-Id</th>
+                    <th>Employee Name</th>
+                    <th>Designation</th>
+                    <th>Department</th>
+
+                    <th>Login Date</th>
+                    <th>Login Time</th>
+                    <th>Out Time</th>
+                    <th>Reason</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int i = 1;
+                    @foreach (var data in Model.empManualAttBySp.OrderBy(x => x.designationCode))
+                    {
+
+
+                        var _startTime = "";
+                        var _endTime = "";
+                        
+                        @if (data?.endTime != null)
+						{
+						};
+                        <tr>
+                            <td style="text-align:center">@data?.endTime</td>
+                            <td style="text-align:center">@data.employeeCode</td>
+                            <td>@data.nameEnglish</td>
+                            <td>@data.designationName</td>
+                            <td>@data.deptName</td>
+                            <td style="text-align:center">@data.workDate</td>
+                            <td style="text-align:center">@_startTime</td>
+                            <td style="text-align:center">@_endTime</td>
+                            <td style="text-align:center">@data.notes</td>
+                        </tr>
+                        i++;
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+*@
+
+
+
+
+@section Scripts{
+    <script src="~/Assets/MD_Time_Picker/mdtimepicker.js"></script>
+    <script>
+        var dateEf = $('#effectiveDate').val();
+
+        $(document).ready(function () {
+            //$("#submit").click(function () {
+            //    swal({
+            //        title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+            //    }).then(function () {
+            //        $("#submitbtn").click();
+            //    });
+            //});
+            var employeeInfoId = $("#employeeInfoId").val();
+            //$("#exampleModal").modal('show');
+            //$('#div1').hide();
+            //$('#list').hide();
+            $('#btnTrack').val('In');
+
+            $('#inContainer').show();
+            $('#outContainer').hide();
+           
+            $('#attendenceTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'CV Black List',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'CV Black List'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "ERP-HRPMS",
+                        messageTop: 'CV Black List',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+
+            $("#effectiveDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2050" }).datepicker();
+
+          //  Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo', [], 'json', ajaxGetEmployees);
+            Common.Ajax('GET', '/global/api/GetActiveEmployeeInfo', [], 'json', ajaxGetEmployees);
+
+            if (employeeInfoId == null || employeeInfoId == 0 || employeeInfoId == '') {
+
+            }
+            else {
+
+                Common.Ajax('GET', '/Payroll/SalaryStructure/GetEmpStructureByEmpId/?employeeInfoId=' + employeeInfoId, [], 'json', ajaxGetEmpStructureByEmpIdWithName);
+            }
+
+
+
+            $('#timepickerIn').mdtimepicker({
+
+                // format of the time value (data-time attribute)
+                timeFormat: 'hh:mm:ss',
+                // format of the input value
+                format: 'hh:mm:ss',
+
+                // theme of the timepicker
+                // 'red', 'purple', 'indigo', 'teal', 'green', 'dark'
+                theme: 'green',
+
+                // determines if input is readonly
+                readOnly: true,
+
+                // determines if display value has zero padding for hour value less than 10 (i.e. 05:30 PM); 24-hour format has padding by default
+                hourPadding: true,
+
+                // determines if clear button is visible
+                clearBtn: true
+
+            });
+
+            // setting the value
+            // $('#intime').val(formatDate(new Date()) + ' 9:00:00.000');
+            $('#intime').val('');
+            //$('#timepickerIn').mdtimepicker('setValue', dateEf + ' 9:00 AM');
+            //$('#intime').click(function () {
+            //    $('#timepickerIn').mdtimepicker('setValue', '3:30 PM');
+            //})
+            $('#timepickerIn').mdtimepicker().on('timechanged', function (e) {
+
+                console.log(formatDate(new Date()) + ' ' + e.time);
+                $('#intime').val(formatDate(new Date()) + ' ' + e.time)
+            });
+
+
+            $('#timepickerOut').mdtimepicker({
+
+                // format of the time value (data-time attribute)
+                timeFormat: 'hh:mm:ss',
+
+                // format of the input value
+                format: 'hh:mm:ss',
+
+                // theme of the timepicker
+                // 'red', 'purple', 'indigo', 'teal', 'green', 'dark'
+                theme: 'blue',
+
+                // determines if input is readonly
+                readOnly: true,
+
+                // determines if display value has zero padding for hour value less than 10 (i.e. 05:30 PM); 24-hour format has padding by default
+                hourPadding: false,
+
+                // determines if clear button is visible
+                clearBtn: false
+
+            });
+
+            // setting the value
+            // $('#outtime').val(formatDate(new Date()) + ' 18:00:00.000');
+            $('#outtime').val('');
+            // $('#timepickerOut').mdtimepicker('setValue', dateEf + '18:00');
+            $('#timepickerOut').mdtimepicker().on('timechanged', function (e) {
+
+                console.log(formatDate(new Date()) + ' ' + e.time);
+                $('#outtime').val(formatDate(new Date()) + ' ' + e.time)
+            });
+
+
+
+            $('#InTimeBtn').click(function () {
+                $('#inContainer').show();
+                $('#outContainer').hide();
+                $('#btnTrack').val('In');
+            })
+            $('#OutTimeBtn').click(function () {
+                $('#inContainer').hide();
+                $('#outContainer').show();
+                $('#btnTrack').val('Out');
+
+            })
+            $('#BothTimeBtn').click(function () {
+                $('#inContainer').show();
+                $('#outContainer').show();
+                $('#btnTrack').val('Both');
+
+            })
+
+		});
+
+		function saveManualAttendce() {
+			var login = $('#timepickerIn').val();
+            var logout = $('#timepickerOut').val();
+			var track = $('#btnTrack').val();
+            if (track == 'In') {
+                if (login == null || login == '') {
+                    alert("Please Set the Login Time first");
+                    return false;
+                }
+            }
+            else if (track == 'Out') {
+					 if (logout == null || logout == '') {
+                     alert("Please Set the Logout Time first");
+                     return false;
+					}
+            }
+			else
+			{
+               if (logout == null || logout == '' || login == null || login == '') {
+                    alert("Please Set both Login and Logout Time first");
+                    return false;
+               }
+            }
+
+			 var formData = $('#empInfoForm').serialize();
+	                swal({
+		                title: 'Are you sure?', text: 'Do you want to update this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#007ACC', cancelButtonColor: '#d33', confirmButtonText: 'Yes, Update it!'
+	                }).then(function () {
+		                $.ajax({
+			                url: '@Url.Action("ManualAttendance", "EmployeePunchCardInfo")',
+			                type: 'Post',
+			                data: formData
+		                })
+						.done(function () {
+							swal('Success', 'Successfully Applied For Manual Attendance!', 'success').then(function () {
+								location.reload();
+							});
+							
+			            })
+						.fail(function () {
+						  swal('Cancelled', 'Unable to Save. Please Try Again!', 'error');
+			            });
+	                });
+        }
+
+
+
+        function ajaxGetEmployees(response) {
+            console.log(response)
+            var GeEmployeesList = [];
+
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+                obj.designation = option.designation;
+                obj.department = option.department?.deptName;
+                obj.employeeCode = option.employeeCode;
+                GeEmployeesList[GeEmployeesList.length] = obj;
+            });
+            //console.log(GeEmployeesList);
+            $('#employeeName').autocomplete({
+                source: GeEmployeesList,
+                select: function (event, ui) {
+                    $("#employeeName").val(ui.item.value);
+                    $("#designation").val(ui.item.designationName);
+                    $("#department").val(ui.item.department);
+                    $("#EmpCode").val(ui.item.employeeCode);
+                    $("#employeeInfoId").val(ui.item.key);
+                    // GetSalaryStructure();
+                    //alert(ui.item.key)
+                    Common.Ajax('GET', '/global/api/GetEmployeePunchCardInfoByEmpCode/' + ui.item.employeeCode, [], 'json', ajaxCheckEmpPunchCardInfo, false);
+                    Common.Ajax('GET', '/HRPMSAttendence/EmployeePunchCardInfo/GetShiftGroupByEmpCode?code=' + ui.item.employeeCode, [], 'json', ajaxCheckEmpShiftInfo, false);
+                    Common.Ajax('GET', '/HRPMSMasterData/FormatMaster/GetAllEmployeeInfoById?id=' + ui.item.key, [], 'json', ajaxFunction, false);
+
+                }
+
+
+            });
+        }
+        function ajaxFunction(response) {
+            console.log(response);
+            $('#code').val(response.employeeCode);
+            $('#department').val(response.department.deptName);
+            $('#designation').val(response.lastDesignation.designationName);
+        }
+
+
+        //$('#submit').click(function () {
+            
+        //    var login = $('#timepickerIn').val();
+        //    var logout = $('#timepickerOut').val();
+
+        //    var track = $('#btnTrack').val();
+        //    if (track == 'In') {
+        //        if (login == null || login == '') {
+        //            alert("Please Set the Login Time first");
+        //            return false;
+        //        }
+        //    }
+        //    else if (track == 'Out') {
+        //        if (logout == null || logout == '') {
+        //            alert("Please Set the Logout Time first");
+        //            return false;
+        //        }
+        //    }
+        //    else {
+        //        if (logout == null || logout == '' || login == null || login == '') {
+        //            alert("Please Set both Login and Logout Time first");
+        //            return false;
+        //        }
+        //    }
+        //})
+
+
+        function formatDate(date) {
+            date = new Date(date);
+            var year = date.getFullYear(),
+                month = date.getMonth() + 1, // months are zero indexed
+                day = date.getDate(),
+                hour = date.getHours(),
+                minute = date.getMinutes(),
+                second = date.getSeconds(),
+                hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+                minuteFormatted = minute < 10 ? "0" + minute : minute,
+                morning = hour < 12 ? "am" : "pm";
+
+            return day + "/" + + month + "/" + year;
+        }
+
+        $("#effectiveDate").change(function () {
+            var date = $('#effectiveDate').val();
+            var dateWeek = new Date(date);
+            var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+
+            var weekday = weekdays[dateWeek.getDay()];
+
+
+            $('#WeekdayT').val(weekday);
+            function formateDate(vdate) {
+                var formattedDate = new Date(vdate);
+                var d = formattedDate.getDate();
+                var m = formattedDate.getMonth();
+                var y = formattedDate.getFullYear();
+
+                var monthNames = [
+                    "Jan", "Feb", "Mar",
+                    "Apr", "May", "Jun", "Jul",
+                    "Aug", "Sep", "Oct",
+                    "Nov", "Dec"
+                ];
+
+                var fullDate = d + "-" + monthNames[m] + "-" + y;
+                return fullDate;
+            }
+
+
+        });
+
+      
+
+
+        
+
+        $('#timepicker').mdtimepicker().on('timechanged', function (e) {
+            console.log(e.value);
+            console.log(e.time);
+        });
+
+        $('#timepickerIN').mdtimepicker().on('timechanged', function (e) {
+            console.log(e.value);
+            console.log(e.time);
+        });
+
+        $('#timepickerIn').change(function () {
+            var LoginTime = $('#timepickerIn').val();
+            var expectedTime = $('#InTime3').val();
+            if (expectedTime != null) {
+                var late = (new Date("1970-1-1 " + LoginTime).getTime() - new Date("1970-1-1 " + expectedTime).getTime()) / 1000 / 60;
+                if (late > 15) {
+                    $('#lateMin').val(late);
+                }
+            }
+
+        })
+
+
+        function ajaxCheckEmpShiftInfo(response) {
+            console.log(response);
+            $('#GroupName').val(response.GroupName)
+            $('#InTime3').val(response.InTime)
+            $('#OutTime3').val(response.OutTime)
+
+            var LoginTime = $('#timepickerIn').val();
+            var late = (new Date("1970-1-1 " + LoginTime) - new Date("1970-1-1 " + response.InTime)) / 1000 / 60;
+            if (late > 15) {
+                $('#lateMin').val(late);
+            }
+        }
+
+        function ajaxCheckEmpPunchCardInfo(response) {
+            console.log(response);
+            if (response == null) {
+
+                Common.Ajax('GET', '/global/api/GetEmployeePunchCardList', [], 'json', ajaxEmpPunchCardList, false);
+                $("#PunchCardModal").modal("show");
+            }
+        }
+
+        function ajaxEmpPunchCardList(response) {
+            console.log(response);
+        }
+
+
+
+
+
+        function ajaxGetEmpStructureByEmpIdWithName(response) {
+            console.log(response)
+            $("#employeeInfoId").val(response.employeeInfo.nameEnglish + "(" + response.employeeInfo.employeeCode + ")");
+            $("#Designation").val(response.employeeInfo.designation);
+            $("#employeeInfoId").val(response.employeeInfoId);
+            $("#department").val(response.employeeInfo.department.deptName);
+
+
+            if (response.effectiveDate == null) {
+                $('#effectiveDate').val('');
+                //$('#effectiveDateT').val('');
+            }
+            else {
+                $('#effectiveDate').val(getPurchaseDate(response.effectiveDate));
+                //$('#effectiveDateT').val(getPurchaseDate(response.effectiveDate));
+            }
+
+        }
+
+     
+        function getPurchaseDate(pdate) {
+            var formattedDate = new Date(pdate);
+            var d = formattedDate.getDate();
+            var m = formattedDate.getMonth();
+            var y = formattedDate.getFullYear();
+            var monthNames = [
+                "Jan", "Feb", "Mar",
+                "Apr", "May", "Jun", "Jul",
+                "Aug", "Sep", "Oct",
+                "Nov", "Dec"
+            ];
+            var fullDate = d + "-" + monthNames[m] + "-" + y;
+            return fullDate;
+        }
+
+
+    </script>
+}
+

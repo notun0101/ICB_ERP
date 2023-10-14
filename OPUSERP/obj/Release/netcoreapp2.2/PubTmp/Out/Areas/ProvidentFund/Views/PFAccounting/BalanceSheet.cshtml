@@ -1,0 +1,142 @@
+﻿
+@{
+    ViewData["Title"] = "BalanceSheet";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row clearfix">
+    <div class="col-12">
+
+        <div class="card-body  bg-white">
+            <h5 class="m-0 font-weight-bold text-primary">Balance Sheet</h5>
+            <hr />
+            <br />
+            <div class="form-row">
+                <div class="col-sm-4 input-group">
+                    <input name="fromDate" id="fromDate" class="form-control input-group-sm" placeholder="From Date" />
+                    <div class="input-group-prepend">
+                        <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                    </div>
+                </div>
+                <div class="col-sm-4 input-group">
+                    <input name="toDate" id="toDate" class="form-control input-group-sm" placeholder="To Date" />
+                    <div class="input-group-prepend">
+                        <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <button type="button" onclick="search()" class="btn btn-sm btn-primary" style="background-color:darkcyan; color:white" id="addcoa" value="View PF Statement">Run Report</button>
+        </div>
+        <br />
+
+
+
+        <div class="card mb-4">
+            <div class="card-body bg-white">
+                <div class="col-sm-12">
+                    <h4 class="text-success" align="center">Employees' Provident Fund Trust of BDBL Finance</h4>
+                    <p align="center">
+                        <strong>Address: </strong> House: 40, Lake Drive Road, SEC-7, Uttara, Dhaka-1230 <br />
+                        Balance Sheet
+                        <br />
+                        As at 2021-05-01
+                    </p>
+                </div>
+                <br />
+                <br />
+                <div class="col-sm-12">
+                    <div class="col-sm-6">
+                        <table class="table table-striped table-bordered table-hover" id="">
+                            <thead>
+                                <tr>
+                                    <th><strong>Particulars Amount</strong></th>
+                                    <th><strong>Amount</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Cash & Bank</td>
+                                    <td>30,000.00</td>
+                                </tr>
+                                <tr>
+                                    <td> Investment</td>
+                                    <td>70,000.00</td>
+                                </tr>
+                                <tr>
+                                    <td>  Others Asset</td>
+                                    <td>300,000.00</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Total Assets</strong></td>
+                                    <td><strong>400,000.00</strong></td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+                        <br />
+                        <table class="table table-striped table-bordered table-hover" id="">
+                            <tbody>
+                                <tr>
+                                    <td>Fund Accounts</td>
+                                    <td>50,000.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Loan</td>
+                                    <td>150,000.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Others Liabilities</td>
+                                    <td>200,000.00</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Total Fund & Liabilities</strong></td>
+                                    <td><strong>400,000.00</strong></td>
+                                </tr>
+
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                    <div class="col-sm-6">
+
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#fromDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker(new Date());
+        $("#toDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker(new Date());
+
+    });
+
+    function search() {
+        var FromDate = $("#fromDate").val();
+        var ToDate = $("#toDate").val();
+
+
+        if (FromDate == "") {
+            swal('Warning', 'please try again', 'warning');
+            return false;
+        }
+        if (ToDate == "") {
+            swal('Warning', 'please try again', 'warning');
+            return false;
+        }
+    }
+</script>

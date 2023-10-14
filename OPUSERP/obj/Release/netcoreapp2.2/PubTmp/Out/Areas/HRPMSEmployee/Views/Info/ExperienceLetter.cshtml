@@ -1,0 +1,294 @@
+﻿@model ExperienceLetterViewModel
+@{
+    ViewData["Title"] = "Experience Letter";
+    Layout = "~/Areas/HRPMSEmployee/Views/Shared/_EmployeeForm.cshtml";
+}
+<style>
+    .redStar {
+        color: red;
+    }
+    #user_img1:hover {
+        border-radius: 5px;
+        cursor: zoom-in;
+        transition: 0.3s !important;
+        opacity: 0.5;
+        box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    }
+</style>
+<div class="card" style="width: 100%;">
+
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+            <h5 class="card-title" style="color: black; margin: 8px;">Experience Letter</h5>
+
+        </div>
+        <div class="col-md-8">
+
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info mr-4 float-right' style="margin-right:6px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=202'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+                @*<a class="btn btn-success mr-1" style="float:right" href="/HRPMSEmployee/Info/ExperienceLetterPdf" target="_blank"><i class="fa fa-download" aria-hidden="true"></i> Download</a>*@
+            </div>
+        </div>
+    </div>
+    @*<div class="card-header row outBox d-inline-block" style="background-color: #EAF6FA;padding: 20px; color: black; height: 70px;">
+            <div style="border-right: 1px solid #D9D8DB">
+                <h5 class="card-title d-inline-block ml-2" style="color: black; margin: 0; text-transform: uppercase;">Exprience Letter</h5>
+                <a class="btn btn-sm btn-danger mr-5" style="float:right" href="/HRPMSEmployee/Info/ExperienceLetterPdf"><i class="fa fa-download" aria-hidden="true"></i> Download Exprience Letter</a>
+            </div>
+        </div>*@
+    <div class="card-body">
+        <div class="container">
+            <form asp-area="HRPMSEmployee" asp-controller="Info" asp-action="ExperienceLetter" id="FormId" method="post" data-parsley-validate="parsley" enctype="multipart/form-data">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <input type="hidden" name="ExpLetterId" id="ExpLetterId" value="0" />
+                <input type="hidden" name="EmployeeId" id="EmployeeId" />
+                <div class="form-group row">
+                    <label for="EmployeeName" class="col-sm-2 col-form-label">Employee Name<span style="float:right;" class="redStar">*</span></label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="EmployeeName" name="EmployeeName" data-parsley-required="true">
+                        <input type="hidden" name="empId" value="" />
+                    </div>
+                    <label for="Designation" class="col-sm-2 col-form-label">Designation</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="Designation" name="Designation" readonly>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="Depeartment" class="col-sm-2 col-form-label">Department</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="Depeartment" name="Depeartment" readonly>
+                    </div>
+                    <label for="Date" class="col-sm-2 col-form-label">Date</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="Date" name="Date" value="@DateTime.Now.ToString("dd-MMM-yyyy")" readonly>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Attachment <span style="float:right;" class="redStar">*</span></label>
+                    <div class="col-4">
+                        <img id="user_img1" style="width:180px;height:180px;" src="~/images/file_imge.jpg" alt="" class="img-thumbnail float-left">
+                        <input type="hidden" id="userFile" />
+                        <input type="file" title="Photo Upload" id="imagePath1" data-parsley-required="true" name="ExprienceLetterPhoto" class="btn btn-default btn-sm pull-right" />
+                    </div>
+                </div>
+                <hr />
+                <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+                <button type="button" id="submit" value="Submit" class="btn btn-success " style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold">Experience Letter Information</h6>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="ExprienceLetterInformationTable">
+                    <thead>
+                        <tr>
+                            <th>Employee Name</th>
+                            <th>Designation</th>
+                            <th>Department</th>
+                            <th>File</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.ExprienceLetterEmployeeInfos)
+                        {
+                        <tr>
+                            <td>@data.employee?.nameEnglish</td>
+                            <td>@data.employee?.lastDesignation?.designationName</td>
+                            <td>@data.employee?.department?.deptName</td>
+                            @*<td><a href="~/EmpAttachment/@data.fileUrl">File</a></td>*@
+                            @if (data.fileUrl == null)
+                            {
+                                <td></td>
+
+                            }
+                            else
+                            {
+
+                                <td> <a href="~/EmpAttachment/@data.fileUrl" target="_blank"><i class="fas fa-link"><u>Click Here</u></i></a></td>
+
+                            }
+                            <td>
+                                <a class="btn btn-danger" onclick="Remove(@data.Id,@data.employeeId)" href="#"><i class="fa fa-trash-alt"></i></a>
+                            </td>
+
+
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="imgViewModal" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLabel">Photo Preview</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" style="color: black; box-shadow: none !important; outline: none!important;">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <img class="" src="" id="imgView" style="height:545px;width:465px;">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="pdfViewModal" style="height:100% !important;" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" style="height: 100%;" role="document">
+        <div class="modal-content" style="height:100% !important;">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLabel">PDF Preview</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <iframe id="pdfFrame" src="" style="width:100%;height:100% !important;"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+@section ScriptsEmp{
+    <script>
+        $(document).ready(function () {
+          $('#Date').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100" });
+
+            var pathname = window.location.pathname;
+            var orgFullTitle = "Experience Information List";
+            $('#queryString').val(pathname);
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+            });
+         $("#user_img1").click(function () {
+                var img = $(this).attr('src');
+                if (img.indexOf("pdfIcon.png") >= 0) {
+                    //alert($("#userFile").val())
+                    $("#pdfFrame").attr('src', $("#userFile").val());
+                    $("#pdfViewModal").modal('show');
+                }
+                else {
+                    $("#imgView").attr('src', img);
+                    $("#imgViewModal").modal('show');
+                }
+
+
+            });
+            $("#imagePath1").change(function () {
+                readURL1(this);
+            });
+            //$('#ExprienceLetterInformationTable').DataTable();
+            Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo', [], 'json', ajaxGetEmployees);
+            $('#ExprienceLetterInformationTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        title: orgFullTitle,
+                        messageTop: 'List Of Experience Letter',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        title: orgFullTitle,
+                        messageTop: 'List Of Experience Letter'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: orgFullTitle,
+                        messageTop: 'List Of Experience Letter',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+        });
+        function readURL1(input) {
+            if (input.files && input.files[0]) {
+                var filerdr = new FileReader();
+                filerdr.onload = function (e) {
+                    var srcUrl = e.target.result;
+                    if (srcUrl.indexOf("application/pdf") > 0) {
+                        $('#user_img1').attr('src', "/EmpAttachment/pdfIcon.png");
+                        $('#userFile').val(e.target.result);
+                    }
+                    else {
+                        $('#user_img1').attr('src', e.target.result);
+                    }
+                }
+                filerdr.readAsDataURL(input.files[0]);
+            }
+        }
+        var employeeInfo = [];
+        function ajaxGetEmployees(response) {
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.nameEnglish + " - " + option.employeeCode;
+                obj.designation = option.lastDesignation ?.designationName;
+                obj.department = option.department ?.deptName;
+                employeeInfo[employeeInfo.length] = obj;
+            });
+        }
+        $('#EmployeeName').autocomplete({
+            source: employeeInfo,
+            select: function (event, ui) {
+                $("#EmployeeId").val(ui.item.key);
+                $("#Designation").val(ui.item.designation);
+                $("#Depeartment").val(ui.item.department);
+            }
+        });
+        function Remove(Id) {
+            chk = confirm('Do you want to delete this?');
+            if (chk) {
+                location.replace("/HRPMSEmployee/Info/DeleteExperienceLetter/" + Id);
+            } else {
+                return false;
+            }
+        }
+
+    </script>
+}
+
+
+
+

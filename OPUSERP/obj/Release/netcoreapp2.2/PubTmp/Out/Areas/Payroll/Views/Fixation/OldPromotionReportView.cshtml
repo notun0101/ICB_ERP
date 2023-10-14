@@ -1,0 +1,274 @@
+﻿@model FixationViewModel
+@{
+    ViewData["Title"] = "Promotion Report";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+<style>
+    /*table {
+        border: 1px solid black;
+        width: 100%;
+        font-size: 12px;
+    }
+
+    tr {
+    }
+
+    td {
+        border: 1px solid black;
+    }*/
+</style>
+@using OPUSERP.ERPServices.MasterData.Interfaces
+@using OPUSERP.ERPService.AuthService.Interfaces
+@using System
+@inject IERPCompanyService eRPCompanyService
+@inject IUserInfoes userInfo
+@{
+    var companies = await eRPCompanyService.GetAllCompany();
+    var company = companies.FirstOrDefault()?.filePath;
+    var companyName = companies.FirstOrDefault()?.companyName;
+}
+
+
+<div class="container-fluid">
+
+    @*<div class="row" style="padding-top:0px;">
+            <div class="col-3"></div>
+            <div class="col-8">
+                <div style="color:black;">
+
+                    <div class="form-group row">
+                        <div class="class row" > <img src="/Assets/bdbl.png" style="height:80px;width:100px; margin-left:10%;" alt=""></div>
+                        <div style="margin-top:2%">
+                            <p style="color:#022E98!important;padding-bottom:0; margin-bottom:0; font-weight:900;font-size:18px;">
+                                Bangladesh Development Bank Limited
+                            </p>
+                            <p style="font-size:14px;color:black;font-family:'Brush Script MT'!important">A State-Owned Commercial Bank</p>
+                            <p style="">
+                                8, Rajuk Avenue, Dhaka - 1000, Bangladesh
+                            </p><br />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-1"></div>
+        </div>*@
+    <div class="fa-pull-right">
+        <p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+    </div>
+    <div class="row" style="padding-top:0px;">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <div style="color:black;text-align:center;">
+                <img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="OPUS ERP" style="height:80px;" />
+                <h3>@Model.companies.FirstOrDefault().companyName</h3>
+                <label>@Model.companies.FirstOrDefault().addressLine</label>
+                <label> <u>Human Resource Management Department</u></label>
+
+                <br />
+            </div>
+
+        </div>
+
+        <div class="col-2">
+
+        </div>
+    </div><br />
+    @*<div class="row" style="color:black;">
+            <div class="col-7">
+                <p style="font-size:13px;">Human Resource Planning Deployment & Operations Division(HR)</p>
+            </div>
+            <div class="col-3">
+                <p style="font-size:13px;">HRPDOD/PRO/Fixation./694</p>
+            </div>
+            <div class="col-2">
+                <h6>@DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</h6>
+            </div>
+
+        </div>*@
+    <div class="row" style="color:black">
+        <div class="col-3">
+            <p><span style="color:black">Ref No. @Model.fixationIntegration?.refNo , @Model.fixationIntegration?.empCode</span></p>
+        </div>
+        <div class="col-3"></div>
+        <div class="col-3"></div>
+        <div class="col-3">
+            <p><span style="color:black;float:right;">Date: @Model.fixationIntegration?.effectiveDate?.ToString("MM/dd/yyyy") </span></p>
+        </div>
+
+    </div>
+
+</div>
+<hr style="border-top: 1px solid black;" />
+
+<div class="row p-2 m-2">
+
+
+    <div style=" padding-right:0px; padding-left:0px; color:black;">
+
+
+        <section style="text-align:center">
+            <p style="font-size:17px;"><u><b>Fixation of Salary on Promotion to the Rank of ASSTT.GENERAL MANAGER</b></u></p>
+
+        </section>
+        <article>
+            Dear Sir,<br /><br />
+            Asper letter No. HRPDOD/OCS-1/760/18 Dated @Model.fixationIntegration?.letterDate we are pleased to advise you that on promotion to the rank of
+            ASSTT.GENERAL MANAGER (@Model.fixationIntegration?.fixationGrade?.gradeName) your basic pay has been fixed as Tk. (@Model.fixationIntegration?.amount) according to Jatiya Betan Scale,2015 TK 50000-
+            71200 with effect from @Model.fixationIntegration?.effectiveDate?.ToString("MM/dd/yyyy") next annual grade increment will be due on '@Model.fixationIntegration?.lastIncrementDate?.ToString("MM/dd/yyyy")' subject to fulfilment of existing rules in
+            force.
+        </article>
+
+    </div>
+
+</div>
+
+<div class="print-card">
+    <div class="print-card-body">
+        <div class="container-fluid">
+            <table style="width:100% ;">
+                <tr>
+                    <td style="border:1px solid black; width:430px;">Personnel No: @Model.fixationIntegration?.employee?.employeeCode</td>
+                    <td style="border:none; width:432px;"></td>
+                    <td style="border:1px solid black;width:320px;">File No : @Model.fixationIntegration?.fileNo</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid black; width:430px;">National ID NO : @Model.fixationIntegration?.employee?.nationalID</td>
+                    <td style="border:none ; width:432px;"></td>
+                    <td style="border:1px solid black; width:320px;">Mobile No : @Model.fixationIntegration?.employee?.mobileNumberPersonal</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid black; width:430px;">Account No : @Model.fixationIntegration?.employee?.sbAccount</td>
+
+
+                </tr>
+            </table>
+            <br />
+            <br />
+            <table style="width:100% ; border:1px solid black; ">
+                <tr>
+                    <th style="border:1px solid black;width: 50%;">Name :</th>
+                    <td style="border:1px solid black;text-align:center;">@Model.fixationIntegration?.employee?.nameEnglish</td>
+                </tr>
+                @*<tr>
+                    <th style="border:1px solid black;">Father's Name :</th>
+                    <td style="border:1px solid black;text-align:center;">@Model.fixationIntegration?.employee?.fatherNameEnglish</td>
+                </tr>*@
+                <tr>
+                    <th style="border:1px solid black;">Place Of Posting :</th>
+                    <td style="border:1px solid black;text-align:center;">@Model.fixationIntegration?.employee?.presentPosting</td>
+                </tr>
+                @*<tr>
+                    <th style="border:1px solid black;">Date of Birth :</th>
+                    <td style="border:1px solid black;text-align:center;">@Model.fixationIntegration?.employee?.dateOfBirth?.ToString("dd-MMM-yyy")</td>
+                </tr>*@
+                <tr>
+                    <th style="border:1px solid black;">Date Of Joining :</th>
+                    <td style="border:1px solid black;text-align:center;">@Model.fixationIntegration?.employee?.joiningDateGovtService?.ToString("MM/dd/yyyy")</td>
+                </tr>
+                <tr>
+                    <th style="border:1px solid black;">Promotion Date :</th>
+                    <td style="border:1px solid black;text-align:center;">@Model.fixationIntegration?.lastPromotionDate?.ToString("MM/dd/yyyy")</td>
+                </tr>
+                <tr>
+                    <th style="border:1px solid black;">Designation :</th>
+                    <td style="border:1px solid black;text-align:center;">@Model.fixationIntegration?.designation</td>
+                </tr>
+
+
+
+
+            </table>
+
+            <br /><br />
+            <table style="width:100% ; border:1px solid black; ">
+                <tr>
+                    <th style="border:1px solid black;width: 3%;">SL</th>
+                    <th style="border:1px solid black;width: 50%; text-align:center"><strong>Particular</strong> </th>
+                    <th style="border:1px solid black;text-align:right;"><strong>Amount</strong> </th>
+                </tr>
+                <tr>
+                    <td style="border:1px solid black;">01</td>
+                    <th style="border:1px solid black;">Present Scale as per NPS-2015</th>
+                    <td style="border:1px solid black;text-align:right;">@Model.fixationIntegration?.startingBasic</td>
+                    @*<td style="border:1px solid black;text-align:right;">
+
+                        @{
+                            var slabN = "";
+                            var strings = new List<string>();
+                            foreach (var item in Model.AllSlab)
+                            {
+                                if (!strings.Contains(item?.slabName))
+                                {
+                                    strings.Add(item?.slabName);
+                                }
+
+                            }
+                            slabN = string.Join("-", strings);
+                        }
+
+                        <span>@slabN</span>
+                    </td>*@
+                </tr>
+                <tr>
+                    <td style="border:1px solid black;">02</td>
+                    <th style="border:1px solid black;">Promotional Scale as per NPS-2015 </th>
+                    <td style="border:1px solid black;text-align:right;">@Model.fixationIntegration?.promotionScale</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid black;">03</td>
+                    <th style="border:1px solid black;">Basic Pay Before Promotion </th>
+                    <td style="border:1px solid black;text-align:right;">@Model.fixationIntegration?.employee?.currentBasic</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid black;">04</td>
+                    <th style="border:1px solid black;">Basic Pay fixed (as on @Model.fixationIntegration?.effectiveDate?.ToString("dd-MMM-yyy")) </th>
+                    @*<td style="border:1px solid black;text-align:right;">@Model.fixationIntegration?.newBasicPoint</td>*@
+                    <td style="border:1px solid black;text-align:right;">@Model.newbasicAmount</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid black;">05</td>
+                    <th style="border:1px solid black;">Next Increment Due on </th>
+                    <td style="border:1px solid black;text-align:center;">@Model.fixationIntegration?.nextIncrementDate?.ToString("dd-MMM-yyy")</td>
+                </tr>
+
+
+            </table>
+           
+            <hr style="border-top: 1px solid black;" />
+
+            <p style="color:black; font-size:11px;">N.B. In case of any discrepancy in the fixation, the bank reserves the right to modify the fixation and recover the amount excess disbursed.</p>
+            <br />
+            <br />
+           
+           
+            <div class="row" style="color:black;">
+                <div class="col-1"></div>
+                <div class="col-4">Prepared By</div>
+                <div class="col-4">Officer-in-Charge</div>
+                <div class="col-3">AGM/DGM/GM</div>
+
+            </div>
+            <br />
+            <br />
+           
+            <hr style="border-top: 1px solid black;" />
+           
+            @*<p>
+            CC To: 1.Secretariat of Managing Director and CEO, BDBL,8, Rajuk Avenue, Dhaka - 1000, Bangladesh
+        </p>
+        <p>2.DGM/AGM/Manager/Secretariat of GM, BDBL</p>*@
+
+            <pre style="color:black !important; font-size:15px">
+    CC To:  1.DGM/AGM/Manager,Agrani Bank Ltd.,MYMENSINGH CIRCLE,
+            2.Officer in Charge,Salary Section,HRPDOD,H/O,Dhaka
+            3..Personal File/Office Copy         
+                
+      </pre>
+            <p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+        </div>
+
+    </div>
+</div>
+
+

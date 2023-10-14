@@ -1,0 +1,87 @@
+﻿@model LoanApplicationViewModel
+@{
+    ViewData["Title"] = "LoanReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4 bg-light">
+
+            <div class="card">
+                <!-- Card Body -->
+                <div class="card-body">
+                    <h5 class="m-0 font-weight-bold text-primary">Pending Loan Disbursment List</h5>
+                    <hr />
+                    <table class="table table-bordered table-striped" id="tblMemberList1" data-parsley-required="true">
+                        <thead style="width:100%;background-color:lightgray">
+                            <tr>
+                                <th>
+                                    Member ID
+                                </th>
+                                <th>
+                                    Member Name
+                                </th>
+                                <th>
+                                    Application Date
+                                </th>
+                                <th>
+                                    Approve Date
+                                </th>
+                                <th>
+                                    Loan Amount (Approved)
+                                </th>
+                                <th>
+                                    Loan Paid Amount
+                                </th>
+                                <th>
+                                    Repayment Amount
+                                </th>
+                                <th>
+                                    Loan Status
+                                </th>
+
+                                <th>
+                                    Manage
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var data in Model.pFLoanManagements)
+                            {
+                                <tr>
+                                    <td>@data.pfmember?.employeeCode</td>
+                                    <td>@data.pfmember?.memberName</td>
+                                    <td>@data.pfmember?.mobile</td>
+                                    <td></td>
+                                    <td>@data.expectedDate</td>
+                                    <td>@data.loanAmount</td>
+                                    <td>@data.loanAmount</td>
+                                    <td></td>
+                                    <td><a href="/ProvidentFund/LoanManagement/ViewLoanReport"><i class="fas fa-eye" style="color:green"></i></a></td>
+                                </tr>
+                            }
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+
+            $('#tblMemberList1').DataTable();
+
+        });
+    </script>
+}
+

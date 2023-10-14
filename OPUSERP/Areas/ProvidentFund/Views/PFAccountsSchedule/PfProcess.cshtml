@@ -1,0 +1,218 @@
+﻿@model OPUSERP.Areas.Payroll.Models.SalaryPeriodViewModel
+@{
+    ViewData["Title"] = "PfProcess";
+}
+
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+                <h5 class="m-0 font-weight-bold text-primary">All Processed Salary</h5>
+                <a class='btn btn-info mr-4' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1014&perentId=6015'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="SalaryPeriodList">
+                    <thead>
+                        <tr>
+                            <th>SL#</th>
+                            <th>Period Name</th>
+                            <th>Year</th>
+                            <th>Month Name</th>
+                            <th>Tax Year</th>
+                            <th>Salary Type</th>
+                            <th>Status</th>
+                            @*<th>Lock Type</th>*@
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 1;
+
+                            @foreach (var data in Model.salaryPeriodsList.Where(a => a.salaryTypeId == 1 && a.lockLabel == 5))
+                            {
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@data.periodName</td>
+                                    <td>@data.salaryYear.yearName</td>
+                                    <td>@data.monthName</td>
+                                    <td>@data.taxYear.taxYearName</td>
+                                    <td>@data.salaryType.salaryTypeName</td>
+                                    @if (data.isPfProcessed == 1)
+                                    {
+                                        <td><span class="badge badge-success">Processed</span></td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                    @*@if (@data.lockLabel == 5)
+                                        {
+                                            <td>Locked</td>
+                                        }
+                                        else if (@data.lockLabel == 4)
+                                        {
+                                            <td>In Disburse</td>
+                                        }
+                                        else if (@data.lockLabel == 3)
+                                        {
+                                            <td>In Approve</td>
+                                        }
+                                        else if (@data.lockLabel == 2)
+                                        {
+                                            <td>Ongoing</td>
+                                        }
+                                        else
+                                        {
+                                            <td>In Process</td>
+                                        }*@
+                                    <td>
+                                        @*<a href="javascript:void(0)" onclick="Process(@data.Id, '@data.salaryYear?.Id')" class="btn btn-success" title="" style="width:30px"><i class="fas fa-circle"></i></a>*@
+                                        <a href="javascript:void(0)" onclick="OpenModal(@data.Id, '@data.salaryYear?.Id')" class="btn btn-success" title="">PF Process</a>
+
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-info" id="exampleModalLabel">PF Process</h5>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="modalPeriodId" value="" />
+                <input type="hidden" id="modalYearId" value="" />
+
+                <table class="table table-striped" id="pfProcessTable">
+                    <thead>
+                        <tr>
+                            <th>Employee Id</th>
+                            <th>Employee Name</th>
+                            <th>Member Id</th>
+                            <th>PF Own</th>
+                            <th>PF Company</th>
+                            <th>PF Loan</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="Process()">Process</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$('#TblAccSch').DataTable();
+        $('#SalaryPeriodList').DataTable({
+            stateSave: false,
+            dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                "<'row'<'col-sm-12't>>" +
+                "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fa fa-file-excel"></i> Excel',
+                    titleAttr: 'Excel',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    },
+                    title: "Salary Period List",
+                    messageTop: 'List Of Salary Period List',
+                    class: 'btn btn-info'
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: '<i class="fa fa-file-excel"></i> CSV',
+                    titleAttr: 'CSV',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    },
+                    title: "Salary Period List",
+                    messageTop: 'List Of Salary Period List',
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i> Print',
+                    titleAttr: 'Print',
+                    title: "Salary Period List",
+                    messageTop: 'List Of Salary Period List',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6]
+                    },
+                    customize: function (doc) {
+                        $(doc.document.body).find('h1').css('font-size', '20pt');
+                        $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                        $(doc.document.body).find('h1').css('text-align', 'center');
+                    }
+                }
+            ]
+        });
+
+
+    });
+
+    function OpenModal(id, year) {
+        $('#modalPeriodId').val(id);
+        $('#modalYearId').val(year);
+
+        Common.Ajax('GET', '/ProvidentFund/PFAccountsSchedule/GetPFTransactionDetailsByPeriodId?salaryPeriodId=' + id + '&yearId=' + year, [], 'json', ajaxFunctionTransactionDetails, false);
+    }
+
+    function Process(id, year) {
+        var id = $('#modalPeriodId').val();
+        var year = $('#modalYearId').val();
+        Common.Ajax('GET', '/ProvidentFund/PFAccountsSchedule/ProcessPfTransactionNew?salaryPeriodId=' + id + '&yearId=' + year, [], 'json', ajaxFunctionProcess, false);
+    }
+
+    function ajaxFunctionProcess(response) {
+        if (response == 'ok') {
+            swal('success', 'Process Completed Successfully', 'success').then(function () {
+                location.reload();
+            });
+        }
+        else {
+            swal('warning', 'Process Failed', 'warning').then(function () {
+                location.reload();
+            });
+        }
+    }
+
+    function ajaxFunctionTransactionDetails(response) {
+        var option = "";
+        $.each(response, function (i, item) {
+            console.log(item);
+            option += `<tr>
+                            <td>${item.employee?.employeeCode}</td>
+                            <td>${item.employee?.nameEnglish}</td>
+                            <td>${item.pfMember?.memberCode}</td>
+                            <td>${item.pfOwn}</td>
+                            <td>${item.pfCompany}</td>
+                            <td>${item.pfLoanAmount}</td>
+                        </tr>`;
+        })
+
+        $('#exampleModal table tbody').empty();
+        $('#exampleModal table tbody').append(option);
+        $('#exampleModal').modal('show');
+        $('#pfProcessTable').DataTable();
+    }
+</script>

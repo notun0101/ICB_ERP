@@ -1,0 +1,626 @@
+﻿@model PayrollReportViewModel
+@{
+	ViewData["Title"] = "Staff Loan Report";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<style>
+
+	.print-card-body {
+		width: 100%;
+		padding-bottom: 10px;
+	}
+
+	.vartical-table th {
+		width: 25%;
+	}
+
+	.vartical-table td {
+		width: 25%;
+	}
+
+	.table td, .table th {
+		padding: .3rem;
+		font-size: 14px;
+		border: 1px solid black !important;
+	}
+
+	table {
+		page-break-inside: auto;
+		border-collapse: collapse;
+		border: 1px solid black !important;
+	}
+
+	tr {
+		page-break-inside: avoid;
+		page-break-after: auto;
+		border: 1px solid black !important;
+	}
+
+	thead {
+		display: table-header-group;
+		border: 1px solid black !important;
+	}
+
+	tfoot {
+		display: table-footer-group;
+		border: 1px solid black !important;
+	}
+
+	h6 {
+		font-size: 14px;
+		background-color: gray;
+		color: white !important;
+		padding: 3px;
+	}
+	
+	table#rightTopTbl, table#rightTopTbl tbody tr td, table#rightTopTbl tbody tr {
+		border: none !important;
+		font-size: 10px !important;
+	}
+
+	table#leftTopTbl, table#leftTopTbl tbody tr td, table#leftTopTbl tbody tr {
+		border: none !important;
+		font-size: 14px !important;
+		line-height: 1.30;
+	}
+
+	table#leftBottomTbl, table#leftBottomTbl tbody tr td, table#leftBottomTbl tbody tr {
+		border: none !important;
+		font-size: 14px !important;
+	}
+
+	table#rightBottomTbl, table#rightBottomTbl tbody tr td, table#rightBottomTbl tbody tr {
+		border: none !important;
+		font-size: 14px !important;
+	}
+	/*tbody{
+    font-weight:normal !important;
+	}​*/
+	.footer {
+		position: relative;
+		height: 50px;
+		margin-top:100px;
+	} 
+</style>
+
+@if (ViewBag.loanId != 0)
+{
+	var loanName = "";
+	if (Model.staffLoanTrans?.FirstOrDefault()?.loanType == "MCA")
+	{
+		loanName = "Motor Cycle Loan";
+	}
+	else if (Model.staffLoanTrans?.FirstOrDefault()?.loanType == "MCAR")
+	{
+		loanName = "Motor Car Loan";
+	}
+	else if (Model.staffLoanTrans?.FirstOrDefault()?.loanType == "CL")
+	{
+		loanName = "Computer Loan";
+	}
+	else if (Model.staffLoanTrans?.FirstOrDefault()?.loanType == "HBA-B13")
+	{
+		loanName = "House Building Loan (Before 2013)";
+	}
+	else if (Model.staffLoanTrans?.FirstOrDefault()?.loanType == "HBA-A13")
+	{
+		loanName = "House Building Loan (After 2013)";
+	}
+	else if (Model.staffLoanTrans?.FirstOrDefault()?.loanType == "BCA")
+	{
+		loanName = "Bicycle Advance";
+	}
+	else
+	{
+		loanName = "";
+	}
+	
+	<div class="print-card" style="width: 100%;">
+		<div class="print-card-body">
+			<div class="container-fluid ">
+				<div class="col-12 row text-dark" style="color: black !important;float:left;">
+					<div class="col-7">
+						<img src="~/EmpImages/bdbl_logo.jpeg" style="width: 170%;margin-left:-25%;" alt="Alternate Text" />
+					</div>
+					<div class="col-5">
+						<table class="table" id="rightTopTbl">
+							<tbody>
+								<tr>
+									<td>BRANCH / DEPARTMENT</td>
+									<td>: &nbsp; Central Accounts Department</td>
+								</tr>
+								<tr>
+									<td>STATEMENT PERIOD</td>
+									<td>: &nbsp; @ViewBag.startDate &nbsp; to &nbsp; @ViewBag.endDate</td>
+								</tr>
+								<tr style="width:100%">
+									<td width="40%">ACCOUNT</td>
+									<td width="60%">: &nbsp; @loanName</td>
+								</tr>
+								<tr>
+									<td>ACCOUNT NO</td>
+									<td>: &nbsp; @Model.staffLoanTrans?.FirstOrDefault()?.newLoanNo</td>
+								</tr>
+								<tr>
+									<td>CURRENCY</td>
+									<td>: &nbsp; BDT</td>
+								</tr>
+								<tr>
+									<td>PRINT DATE</td>
+									<td>: &nbsp; @DateTime.Now.ToString("dd-MMM-yyyy")</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-6" style="width: 100%; color: black; font-size: 14px;">
+						<table class="table" id="leftTopTbl">
+							<tbody>
+								<tr>
+									<td>Name</td>
+									<td>: @Model.employeeInfoForLoan?.nameEnglish.ToUpper()</td>
+								</tr>
+								<tr>
+									<td>Designation</td>
+									<td>: @Model.employeeInfoForLoan?.designation.ToUpper()</td>
+								</tr>
+								<tr>
+									<td>Address</td>
+									<td>
+										: 8 RAJUK AVENUE, BDBL Bhaban,<br />
+										&nbsp; Dhaka-1000
+									</td>
+								</tr>
+								<tr>
+									<td>Phone</td>
+									<td>
+										: @Model.employeeInfoForLoan?.mobilePersonal
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+				</div>
+			</div>
+			<br />
+			<div class="container-fluid ">
+				<div class="row">
+					<div class="col-12 text-dark" style="color: black !important;float:left;">
+						<p class="text-center" style="color: black !important;float:left;">Statement of @loanName for the period of @ViewBag.startDate to @ViewBag.endDate</p>
+					</div>
+				</div>
+
+			</div>
+			
+			<div class="container-fluid" style="color:black;">
+				<table class="table table border" style="font-weight:normal !important; border:1px solid black !important">
+					<thead>
+						<tr>
+							<th style="font-weight:normal !important;">Date</th>
+							<th style ="font-weight:normal !important;">Particular</th>
+							<th style="font-weight:normal !important;">Debit</th>
+							<th style="font-weight:normal !important;">Credit</th>
+							<th style="font-weight:normal !important;">Principal</th>
+							<th style="font-weight:normal !important;">Interest</th>
+							<th style="font-weight:normal !important;">Charge</th>
+							<th style="font-weight:normal !important;">Balance</th>
+						</tr>
+					</thead>
+					<tbody>
+						@{
+							int rowCount = 0;
+							decimal totalDebit = 0;
+							decimal totalCredit = 0;
+							decimal openingbalance = 0;
+							decimal closingbalance = 0;
+							int debitCount = 0;
+							int creditCount = 0;
+						}
+						@foreach (var item in Model.staffLoanTrans)
+						{
+							rowCount = rowCount + 1;
+							if (rowCount == 1)
+							{
+								openingbalance = (decimal)item.total;
+							}
+							closingbalance = (decimal)item.total;
+
+							var debit = "-";
+							var credit = "-";
+							var principal = "-";
+							var interest = "-";
+							var charge = "-";
+							var total = "-";
+							if (item.debit?.ToString("N2") != "0.00")
+							{
+								debit = item.debit?.ToString("N2");
+							}
+							if (item.credit?.ToString("N2") != "0.00")
+							{
+								credit = item.credit?.ToString("N2");
+							}
+							if (item.principal?.ToString("N2") != "0.00")
+							{
+								principal = item.principal?.ToString("N2");
+							}
+							if (item.interest?.ToString("N2") != "0.00")
+							{
+								interest = item.interest?.ToString("N2");
+							}
+							if (item.charge?.ToString("N2") != "0.00")
+							{
+								charge = item.charge?.ToString("N2");
+							}
+							if (item.total?.ToString("N2") != "0.00")
+							{
+								total = item.total?.ToString("N2");
+							}
+							<tr>
+								<td>@item.effectiveDate?.ToString("dd/MM/yyyy")</td>
+								<td>@item.particular</td>
+								<td style="text-align: right;">@debit</td>
+								<td style="text-align: right;">@credit</td>
+								<td style="text-align: right;">@principal</td>
+								<td style="text-align: right;">@interest</td>
+								<td style="text-align: right;">@charge</td>
+								<td style="text-align: right;">@total</td>
+							</tr>
+
+							totalDebit += Convert.ToDecimal(item.debit);
+							totalCredit += Convert.ToDecimal(item.credit);
+
+							if (Convert.ToDecimal(item.debit) > 0)
+							{
+								debitCount++;
+							}
+							if (Convert.ToDecimal(item.credit) > 0)
+							{
+								creditCount++;
+							}
+						}
+						
+					</tbody>
+				</table>
+
+				<div>Summary:</div>
+				<div class="row">
+					<div class="col-1 text-dark"></div>
+					<div class="col-6 text-dark">
+						<table class="table" id="leftBottomTbl">
+							<tbody>
+								<tr>
+									<td>Opening Balance</td>
+									<td>: &nbsp; @openingbalance.ToString("N2")</td>
+								</tr>
+								<tr>
+									<td>Total Debit Amount</td>
+									<td>: &nbsp; @totalDebit.ToString("N2")</td>
+								</tr>
+								<tr>
+									<td>Total Credit Amount</td>
+									<td>: &nbsp; @totalCredit.ToString("N2")</td>
+								</tr>
+								<tr>
+									<td>Closing Balance</td>
+									<td>: &nbsp; @closingbalance.ToString("N2")</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="col-3 text-dark">
+						<table class="table" id="rightBottomTbl">
+							<tbody>
+								<tr>
+									<td>&nbsp;</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td>DR Count</td>
+									<td>: &nbsp; @debitCount</td>
+								</tr>
+								<tr>
+									<td>CR Count</td>
+									<td>: &nbsp; @creditCount</td>
+								</tr>
+								<tr>
+									<td></td>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		
+	</div>
+}
+else
+{
+	var loadType = Model.staffLoanTrans.Select(x => x.loanType).Distinct();
+	@foreach (var name in loadType)
+	{
+		var loanName = @name;
+		var loanName0 = @name;
+		if (name == "MCA")
+		{
+			loanName0 = "Motor Cycle Loan";
+		}
+		if (name == "MCAR")
+		{
+			loanName0 = "Motor Car Loan";
+		}
+		else if (name == "CL")
+		{
+			loanName0 = "Computer Loan";
+		}
+		else if (name == "MCA")
+		{
+			loanName0 = "Motor Cycle Loan";
+		}
+		else if (name == "HBA-B13")
+		{
+			loanName0 = "House Building Loan (Before 2013)";
+		}
+		else if (name == "HBA-A13")
+		{
+			loanName0 = "House Building Loan (After 2013)";
+		}
+		else if (name == "BCA")
+		{
+			loanName0 = "Bicycle Advance";
+		}
+		else
+		{
+
+		}
+
+		<div class="print-card" style="width: 100%;">
+			<div class="print-card-body">
+				<div class="container-fluid ">
+					<div class="col-12 row text-dark" style="color: black !important;float:left;">
+						<div class="col-7">
+							<img src="~/EmpImages/bdbl_logo.jpeg" style="width: 170%;margin-left:-25%;" alt="Alternate Text" />
+						</div>
+						<div class="col-5">
+							<table class="table" id="rightTopTbl">
+								<tbody>
+									<tr>
+										<td>BRANCH / DEPARTMENT</td>
+										<td>: &nbsp; Central Accounts Department</td>
+									</tr>
+									<tr>
+										<td>STATEMENT PERIOD</td>
+										<td>: &nbsp; @ViewBag.startDate &nbsp; to &nbsp; @ViewBag.endDate</td>
+									</tr>
+									<tr style="width:100%">
+										<td width="40%">ACCOUNT</td>
+										<td width="60%">: &nbsp; @loanName0</td>
+									</tr>
+									<tr>
+										<td>ACCOUNT NO</td>
+										<td>: &nbsp; @Model.staffLoanTrans?.Where(x => x.loanType == loanName)?.FirstOrDefault()?.newLoanNo</td>
+									</tr>
+									<tr>
+										<td>CURRENCY</td>
+										<td>: &nbsp; BDT</td>
+									</tr>
+									<tr>
+										<td>PRINT DATE</td>
+										<td>: &nbsp; @DateTime.Now.ToString("dd-MMM-yyyy")</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col-6" style="width: 100%; color: black; font-size: 14px;">
+							<table class="table" id="leftTopTbl">
+								<tbody>
+									<tr>
+										<td>Name</td>
+										<td>: @Model.employeeInfoForLoan?.nameEnglish.ToUpper()</td>
+									</tr>
+									<tr>
+										<td>Designation</td>
+										<td>: @Model.employeeInfoForLoan?.designation.ToUpper()</td>
+									</tr>
+									<tr>
+										<td>Address</td>
+										<td>
+											: 8 RAJUK AVENUE, BDBL Bhaban,<br />
+											&nbsp; Dhaka-1000
+										</td>
+									</tr>
+									<tr>
+										<td>Phone</td>
+										<td>
+											: @Model.employeeInfoForLoan?.mobilePersonal
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+					</div>
+				</div>
+				<br />
+				<div class="container-fluid ">
+					<div class="row">
+						<div class="col-12 text-dark" style="color: black !important;float:left;">
+							<p class="text-center" style="color: black !important;float:left;">Statement of @loanName0 for the period of @ViewBag.startDate to @ViewBag.endDate</p>
+						</div>
+					</div>
+
+				</div>
+	
+				<div class="container-fluid" style="color:black;">
+					<table class="table table border" style="font-weight:normal !important; border:1px solid black !important">
+						<thead>
+							<tr>
+								<th style="font-weight:normal !important;">Date</th>
+								<th style="font-weight:normal !important;">Particular</th>
+								<th style="font-weight:normal !important;">Debit</th>
+								<th style="font-weight:normal !important;">Credit</th>
+								<th style="font-weight:normal !important;">Principal</th>
+								<th style="font-weight:normal !important;">Interest</th>
+								<th style="font-weight:normal !important;">Charge</th>
+								<th style="font-weight:normal !important;">Balance</th>
+							</tr>
+						</thead>
+						<tbody>
+							@{
+
+								int rowCount = 0;
+								decimal totalDebit = 0;
+								decimal totalCredit = 0;
+								decimal openingbalance = 0;
+								decimal closingbalance = 0;
+								int debitCount = 0;
+								int creditCount = 0;
+							}
+							@foreach (var item in Model.staffLoanTrans.Where(x => x.loanType == loanName))
+							{
+								rowCount = rowCount + 1;
+								if (rowCount == 1)
+								{
+									openingbalance = (decimal)item.total;
+								}
+								closingbalance = (decimal)item.total;
+
+								var debit = "-";
+								var credit = "-";
+								var principal = "-";
+								var interest = "-";
+								var charge = "-";
+								var total = "-";
+								if (item.debit?.ToString("N2") != "0.00")
+								{
+									debit = item.debit?.ToString("N2");
+								}
+								if (item.credit?.ToString("N2") != "0.00")
+								{
+									credit = item.credit?.ToString("N2");
+								}
+								if (item.principal?.ToString("N2") != "0.00")
+								{
+									principal = item.principal?.ToString("N2");
+								}
+								if (item.interest?.ToString("N2") != "0.00")
+								{
+									interest = item.interest?.ToString("N2");
+								}
+								if (item.charge?.ToString("N2") != "0.00")
+								{
+									charge = item.charge?.ToString("N2");
+								}
+								if (item.total?.ToString("N2") != "0.00")
+								{
+									total = item.total?.ToString("N2");
+								}
+								<tr>
+									<td>@item.effectiveDate?.ToString("dd/MM/yyyy")</td>
+									<td>@item.particular</td>
+									<td style="text-align: right;">@debit</td>
+									<td style="text-align: right;">@credit</td>
+									<td style="text-align: right;">@principal</td>
+									<td style="text-align: right;">@interest</td>
+									<td style="text-align: right;">@charge</td>
+									<td style="text-align: right;">@total</td>
+								</tr>
+
+								totalDebit += Convert.ToDecimal(item.debit);
+								totalCredit += Convert.ToDecimal(item.credit);
+
+								if (Convert.ToDecimal(item.debit) > 0)
+								{
+									debitCount++;
+								}
+								if (Convert.ToDecimal(item.credit) > 0)
+								{
+									creditCount++;
+								}
+							}
+
+						</tbody>
+					</table>
+
+
+					<div>Summary:</div>
+					<div class="row">
+						<div class="col-1 text-dark"></div>
+						<div class="col-6 text-dark">
+							<table class="table" id="leftBottomTbl">
+								<tbody>
+									<tr>
+										<td>Opening Balance</td>
+										<td>: &nbsp; @openingbalance.ToString("N2")</td>
+										
+									</tr>
+									<tr>
+										<td>Total Debit Amount</td>
+										<td>: &nbsp; @totalDebit.ToString("N2")</td>
+									</tr>
+									<tr>
+										<td>Total Credit Amount</td>
+										<td>: &nbsp; @totalCredit.ToString("N2")</td>
+									</tr>
+									<tr>
+										<td>Closing Balance</td>
+										<td>: &nbsp; @closingbalance.ToString("N2")</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col-3 text-dark">
+							<table class="table" id="rightBottomTbl">
+								<tbody>
+									<tr>
+										<td>&nbsp;</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>DR Count</td>
+										<td>: &nbsp; @debitCount</td>
+									</tr>
+									<tr>
+										<td>CR Count</td>
+										<td>: &nbsp; @creditCount</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+					</div>
+					@*<hr style="border:1px solid black !important" />*@
+
+				</div>
+			</div>
+			@*<footer class="footer">
+				<ol>
+					<li style="font-size:9px;color:black">This is a computer generated statement which is issued without any alteration and does not require a signature.</li>
+					<li style="font-size:9px;color:black">You are requested to please check and confirm the above balance within 15 (Fifteen) days from the date of publication of this statement. Unless you notify Central Accounts Department of any discrepancies within the stipulated period, the account statement will be considered as complete and correct.</li>
+				</ol>
+			</footer>*@
+		</div>
+		<div style="page-break-after: always"></div>
+	}
+}

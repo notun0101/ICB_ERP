@@ -1,0 +1,349 @@
+﻿
+@{
+    ViewData["Title"] = "GoodsReceiveInfoView";
+}
+
+@model ReportMasterViewModel
+@{
+    ViewData["Title"] = "Goods Receive View";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+    //decimal? vat = Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.vat;
+    //decimal? subTotal = Model?.purchaseOrderRPTViewModels?.Sum(x => x.poValueItem);
+    //decimal? total = vat + subTotal;
+}
+
+<style>
+    body {
+        color: black;
+    }
+
+    table {
+        page-break-inside: auto
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto
+    }
+
+    thead {
+        display: table-header-group
+    }
+
+    tfoot {
+        display: table-footer-group
+    }
+
+    .pb_before {
+        page-break-before: always !important;
+    }
+
+    /***Always insert a page break after the element***/
+    .pb_after {
+        page-break-after: always !important;
+    }
+
+    /***Avoid page break before the element (if possible)***/
+    .pb_before_avoid {
+        page-break-before: avoid !important;
+    }
+
+    /***Avoid page break after the element (if possible)***/
+    .pb_after_avoid {
+        page-break-after: avoid !important;
+    }
+</style>
+
+<div class="container">
+
+    <div style="padding:20px; border:5px solid #111">
+        <div class="row">
+            <div class="col-12">
+                <h2 style="font-size: 30px; font-weight: 800;color:#2051CC; font-family: sans-serif; margin-top:10px; margin-bottom:0px;text-align:center">@Model.companies.FirstOrDefault().companyName.ToUpper()</h2>
+                <div class="row">
+                    <div class="col-3" style="height:110px;">
+                        <p style="padding-bottom:0!important; margin-bottom:0!important;font-weight:800;color:#2051CC; font-size:18px">
+                            Head office
+                        </p>
+                        <p style="font-size: 12px; font-weight: 800; font-family: sans-serif; color:#808080">@Model.companies.FirstOrDefault().addressLine</p>
+                    </div>
+                    <div class="col-6" style="padding-left:10px;">
+                        @*<h1 style="font-size: 30px; font-weight: 800; font-family: sans-serif; margin-top:10px; margin-bottom:0px;text-align:center">@Model.companies.FirstOrDefault().companyName.ToUpper()</h1>
+                        <p style="margin-bottom:0px;text-align:center;">
+                            @Model.companies.FirstOrDefault().addressLine
+                        </p>*@
+                    </div>
+                    <div class="col-3" style="padding-left:10px;">
+                        <p style="padding-bottom:0!important; margin-bottom:0!important;font-weight:800;color:#2051CC; font-size:18px">
+                            Bangladesh Liaison Office
+                        </p>
+                        <p style="font-size: 12px; font-weight: 800; font-family: sans-serif; color:#808080">@Model.companies.FirstOrDefault().addressLine</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h5 style="text-align:center; margin:20px 0 20px 0"><u>Goods Received Note (GRN)</u></h5>
+
+        @*<div class="row" style="font-size: 18px;padding-top:10px;">
+            <div class="col-3" style="font-weight:bolder;">GRN Number:<span style="float:right;">:</span></div>
+            <div class="col-9">
+                @if (@Model?.stockDetails?.FirstOrDefault()?.stockMaster?.receiveType == "PO")
+                {
+                    <span>@Model?.stockDetails?.FirstOrDefault()?.stockMaster?.purchase?.cSMaster?.requisition?.project?.projectName</span>
+                }
+                else
+                {
+                    <span>@Model?.stockDetails?.FirstOrDefault()?.stockMaster?.IOU?.project?.projectName</span>
+                }
+            </div>
+        </div>*@
+
+
+        <br />
+
+
+
+        <div class="row">
+            <div class="col-12">
+                <table style="width:100%;">
+                    @if (@Model?.stockDetails?.FirstOrDefault()?.stockMaster?.receiveType == "PO")
+                    {
+                        <tr>
+                            <th style="width:20%;padding-bottom:5px!important;font-size:13px;font-size:12px!important">GRN Number:</th>
+                            <td style="width:30%;padding-bottom:5px!important;font-size:13px">: @Model?.stockDetails?.FirstOrDefault()?.stockMaster?.receiveNo</td>
+                            <th style="width:20%;padding-bottom:5px!important;font-size:12px!important">Date</th>
+                            <td style="width:30%;padding-bottom:5px!important;font-size:13px">: @Model?.stockDetails?.FirstOrDefault()?.stockMaster?.receiveDate?.ToString("dd-MMM-yyyy")</td>
+                        </tr>
+
+                        <tr>
+                            <th style="width:20%;padding-bottom:5px!important;font-size:12px!important">Supplier Name : </th>
+                            <td style="width:30%;padding-bottom:5px!important;font-size:13px">: @Model?.stockDetails?.FirstOrDefault()?.stockMaster?.purchase?.supplier?.organizationName</td>
+                        </tr>
+
+                        <tr>
+                            <th style="width:40%;padding-bottom:5px!important;font-size:12px!important">Supplier Address:</th>
+                            <td style="width:60%;padding-bottom:5px!important;font-size:13px">: @Model?.stockDetails?.FirstOrDefault()?.stockMaster?.purchase?.cSMaster?.requisition?.deliveryaddress</td>
+                        </tr>
+
+
+                        <tr>
+                            <th style="width:20%;padding-bottom:5px!important;font-size:12px!important">Invoice/Challan No:</th>
+                            <td style="width:30%;padding-bottom:5px!important;font-size:13px">:@Model?.stockDetails?.FirstOrDefault()?.stockMaster?.receiveNo</td>
+                            <th style="width:10%;font-size:12px!important">Work Order No:</th>
+                            <td style="width:40%;font-size:13px">:@Model?.stockDetails?.FirstOrDefault()?.stockMaster?.purchase?.poNo </td>
+                        </tr>
+
+                        <tr>
+                            <th style="width:20%;padding-bottom:5px!important">Department</th>
+                            <td style="width:30%;">:@Model?.stockDetails?.FirstOrDefault()?.stockMaster?.purchase?.cSMaster?.requisition?.reqDept</td>
+                            <th style="width:20%; font-size:14px!important">Req No</th>
+                            <td style="width:30%;padding-bottom:5px!important; font-size:13px">: @Model?.stockDetails?.FirstOrDefault()?.stockMaster?.purchase?.cSMaster?.requisition?.reqNo</td>
+                        </tr>
+
+
+                        @*<tr>
+                            <th style="width:20%;">GR Receive No</th>
+                            <td style="width:30%;">: @Model?.stockDetails?.FirstOrDefault()?.stockMaster?.receiveNo</td>
+                            <th style="width:20%;">PR Date</th>
+                            <td style="width:30%;">: @Model?.stockDetails?.FirstOrDefault()?.stockMaster?.purchase?.cSMaster?.requisition?.reqDate?.ToString("dd-MMM-yyyy")</td>
+                        </tr>
+                        <tr>
+                            <th style="width:20%;">PR No</th>
+                            <td colspan="3" style="width:80%;">: @Model?.stockDetails?.FirstOrDefault()?.stockMaster?.purchase?.cSMaster?.requisition?.reqNo</td>
+                        </tr>*@
+                    }
+                    else
+                    {
+                        <tr>
+                            <th style="width:20%;">GR No.</th>
+                            <td style="width:30%;">: @Model?.stockDetails?.FirstOrDefault()?.stockMaster?.IOU?.iouNo</td>
+                            <th style="width:20%;">Order by</th>
+                            <td style="width:30%;">: @Model?.stockDetails?.FirstOrDefault()?.stockMaster?.IOU?.attentionTo</td>
+                        </tr>
+                        <tr>
+                            <th style="width:20%;">GR Receive Date</th>
+                            <td style="width:30%;">: @Model?.stockDetails?.FirstOrDefault()?.stockMaster?.receiveDate?.ToString("dd-MMM-yyyy")</td>
+                            <th style="width:20%;">GR Receive No</th>
+                            <td style="width:30%;">: @Model?.stockDetails?.FirstOrDefault()?.stockMaster?.receiveNo</td>
+                        </tr>
+                        <tr>
+                            <th style="width:20%;">GR Receive No</th>
+                            <td style="width:30%;">: @Model?.stockDetails?.FirstOrDefault()?.stockMaster?.receiveNo</td>
+                            <th style="width:20%;">PR Date</th>
+                            <td style="width:30%;">: @Model?.stockDetails?.FirstOrDefault()?.stockMaster?.receiveDate?.ToString("dd-MMM-yyyy")</td>
+                        </tr>
+                        <tr>
+                            <th style="width:20%;">PR No</th>
+                            <td colspan="3" style="width:80%;">: @Model?.stockDetails?.FirstOrDefault()?.stockMaster?.IOU?.requisition?.reqNo</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+
+
+
+
+
+        <br />
+        <div class="row" style="padding: 10px 12px 0px 12px;">
+            @if (@Model?.stockDetails?.FirstOrDefault()?.stockMaster?.receiveType == "PO")
+            {
+                <table class="table-bordered-grey" style="width:100%;font-size:12px!important">
+                    <thead>
+                        <tr style="background-color:lightgray;">
+                            <th style="text-align:center;width:10%;">SN.</th>
+                            <th style="text-align:center;width:40%;">Items description</th>
+                            <th style="text-align:center;width:10%;">Invoice/Challan Qty</th>
+                            <th style="text-align:center;width:10%;">ReceivedGoods</th>
+                            <th style="text-align:center;width:10%;">Rejected Goods</th>
+                            <th style="text-align:center;width:25%;">Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody style="min-height:400px;">
+                        @{
+                            var i = 1;
+                            @foreach (var data in @Model.stockDetails)
+                            {
+                                decimal? Total = (@data.grQty * @data.orderDetails?.poRate);
+                                <tr>
+                                    <td style="text-align:left;width:10%;">@i</td>
+                                    <td style="text-align:center;width:40%;">@data.orderDetails?.cSDetail?.requisitionDetail?.itemSpecification?.Item?.itemName</td>
+                                    <td style="text-align:center;width:10%;">@data.orderDetails?.cSDetail?.requisitionDetail?.reqQty?.ToString("0.00")</td>
+                                    <td style="text-align:right;width:10%;">@data.orderDetails?.cSDetail?.requisitionDetail?.itemSpecification?.Item?.itemCode</td>
+                                    <td style="text-align:right;width:10%;"></td>
+                                    <td style="text-align:right;width:25%;"></td>
+
+                                </tr>
+                                i++;
+                            }
+                        }
+                    </tbody>
+                </table>
+
+
+
+                @*<table class="table-bordered-grey" style="width:100%;">
+                    <thead>
+                        <tr style="background-color:lightgray;">
+                            <th style="text-align:center;width:25%;">Item Name</th>
+                            <th style="text-align:center;width:10%;">Item Code</th>
+                            <th style="text-align:center;width:10%;">Unit of measurement(Unm)</th>
+                            <th style="text-align:center;width:10%;">Req Qty</th>
+                            <th style="text-align:center;width:10%;">PO Qty</th>
+                            <th style="text-align:center;width:10%;">GR Qty</th>
+                            <th style="text-align:center;width:10%;">Rate</th>
+                            <th style="text-align:center;width:15%;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody style="min-height:400px;">
+                        @foreach (var data in @Model.stockDetails)
+                        {
+                            decimal? Total = (@data.grQty * @data.orderDetails?.poRate);
+                            <tr>
+                                <td style="text-align:left;width:25%;">@data.orderDetails?.cSDetail?.requisitionDetail?.itemSpecification?.Item?.itemName</td>
+                                <td style="text-align:center;width:10%;">@data.orderDetails?.cSDetail?.requisitionDetail?.itemSpecification?.Item?.itemCode</td>
+                                <td style="text-align:center;width:10%;">@data.orderDetails?.cSDetail?.requisitionDetail?.itemSpecification?.Item?.unit?.unitName</td>
+                                <td style="text-align:right;width:10%;">@data.orderDetails?.cSDetail?.requisitionDetail?.reqQty?.ToString("0.00")</td>
+                                <td style="text-align:right;width:10%;">@data.orderDetails?.poQty?.ToString("0.00")</td>
+                                <td style="text-align:right;width:10%;">@data.grQty?.ToString("0.00")</td>
+                                <td style="text-align:right;width:10%;">@data.orderDetails?.poRate?.ToString("0.00")</td>
+                                <td style="text-align:right;width:15%;">@Total?.ToString("0.00")</td>
+                            </tr>
+                            SubTotal = SubTotal + Total;
+                            SubReqQtyTotal = SubReqQtyTotal + @data.orderDetails?.cSDetail?.requisitionDetail?.reqQty;
+                            SubPOQtyTotal = SubPOQtyTotal + @data.orderDetails?.poQty;
+                            SubGRQtyTotal = SubGRQtyTotal + @data.grQty;
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="3" style="text-align:right;">Total</th>
+                            <th style="text-align:right;">@SubReqQtyTotal?.ToString("0.00")</th>
+                            <th style="text-align:right;">@SubPOQtyTotal?.ToString("0.00")</th>
+                            <th style="text-align:right;">@SubGRQtyTotal?.ToString("0.00")</th>
+                            <th style="text-align:right;"></th>
+                            <th style="text-align:right;">@SubTotal?.ToString("0.00")</th>
+                        </tr>
+                    </tfoot>
+                </table>*@
+
+
+            }
+            else
+            {
+                decimal? SubTotal = 0; decimal? SubReqQtyTotal = 0; decimal? SubIOUQtyTotal = 0; decimal? SubGRQtyTotal = 0;
+                <table class="table-bordered-grey" style="width:100%;">
+                    <thead>
+                        <tr style="background-color:lightgray;">
+                            <th style="text-align:center;width:25%;">Item Name</th>
+                            <th style="text-align:center;width:10%;">Item Code</th>
+                            <th style="text-align:center;width:10%;">Unit Name</th>
+                            <th style="text-align:center;width:10%;">Req Qty</th>
+                            <th style="text-align:center;width:10%;">IOU Qty</th>
+                            <th style="text-align:center;width:10%;">GR Qty</th>
+                            <th style="text-align:center;width:10%;">Rate</th>
+                            <th style="text-align:center;width:15%;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody style="min-height:400px;">
+                        @foreach (var data in @Model.stockDetails)
+                        {
+                            decimal? Total = (@data.grQty * @data.iOUDetails?.rate);
+                            <tr>
+                                <td style="text-align:left;width:25%;">@data.iOUDetails?.requisitionDetail?.itemSpecification?.Item?.itemName</td>
+                                <td style="text-align:center;width:10%;">@data.iOUDetails?.requisitionDetail?.itemSpecification?.Item?.itemCode</td>
+                                <td style="text-align:center;width:10%;">@data.iOUDetails?.requisitionDetail?.itemSpecification?.Item?.unit?.unitName</td>
+                                <td style="text-align:right;width:10%;">@data.iOUDetails?.requisitionDetail?.reqQty?.ToString("0.00")</td>
+                                <td style="text-align:right;width:10%;">@data.iOUDetails?.qty?.ToString("0.00")</td>
+                                <td style="text-align:right;width:10%;">@data.grQty?.ToString("0.00")</td>
+                                <td style="text-align:right;width:10%;">@data.iOUDetails?.rate?.ToString("0.00")</td>
+                                <td style="text-align:right;width:15%;">@Total?.ToString("0.00")</td>
+                            </tr>
+                            SubTotal = SubTotal + Total;
+                            SubReqQtyTotal = SubReqQtyTotal + @data.iOUDetails?.requisitionDetail?.reqQty;
+                            SubIOUQtyTotal = SubIOUQtyTotal + @data.iOUDetails?.qty;
+                            SubGRQtyTotal = SubGRQtyTotal + @data.grQty;
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="3" style="text-align:right;">Total</th>
+                            <th style="text-align:right;">@SubReqQtyTotal?.ToString("0.00")</th>
+                            <th style="text-align:right;">@SubIOUQtyTotal?.ToString("0.00")</th>
+                            <th style="text-align:right;">@SubGRQtyTotal?.ToString("0.00")</th>
+                            <th style="text-align:right;"></th>
+                            <th style="text-align:right;">@SubTotal?.ToString("0.00")</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            }
+
+        </div>
+        <p style="padding-top:20px; font-size:11px">
+            "I hereby certify that the goods have been received, inspected and found satisfactory for the purpose for which they were purchased."
+        </p>
+        <p style="font-size:11px">
+            Note: 1st copy will be attached to the bill, 2nd copy will be preserved by purchase department for their record and 3rd copy will preserve with the book.
+        </p>
+        <div class="row" style="padding-top: 180px;">
+            <div class="col-3" style="font-size: 12px;font-weight:bold;">
+                <span style="border-bottom:2px solid black;">
+                    Prepared By
+                </span>
+            </div>
+            <div class="col-6"></div>
+            <div class="col-3" style="font-size: 12px;font-weight:bold;">
+                <span style="border-bottom:2px solid black;">Head of Purchase</span>
+            </div>
+        </div>
+        <p style="text-align:right; margin-top:50px">
+            <img src="@Model.companies.FirstOrDefault().filePath" alt="Logo" style="height:70px;width:200px;" />
+        </p>
+    </div>
+</div>
+
+<div class="pb_after"></div>
+
+

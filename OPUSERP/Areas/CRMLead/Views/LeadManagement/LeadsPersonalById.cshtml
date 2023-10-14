@@ -1,0 +1,247 @@
+﻿@model LeadViewModel
+@{
+    ViewData["Title"] = "Lead";
+    //Layout = "~/Areas/CRMLead/Views/Shared/_LeadFormPersonal.cshtml";
+}
+
+@section Style{
+    <style>
+        .redStar {
+            color: red;
+        }
+    </style>
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-header row">
+        <div class="col-9">
+            <h5 class="card-title" style="color: black">Lead Personal</h5>
+        </div>
+        <div class="col-3">
+            <a href='/CRMLead/LeadManagement/AllLeadList' style="text-decoration:none;"><h6 class="identity-box">Back To The List</h6></a>
+
+        </div>
+    </div>
+    <div class="card-body">
+        @*<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h4 class="m-0 font-weight-bold text-primary">Contacts</h4>
+            <a href="/CRMLead/LeadManagement/AllLeadList" style="background-color:#024972;" class="btn btn-info btn-sm pull-right">Back to List</a>
+        </div>*@
+        @*<h5 class="card-title" style="color: black;float:left;">Contacts</h5>*@
+        <div class="card-body row">
+            @*<div class="col-1">
+                <img id="user_img_current" style="width: 180px;height: 165px;border-radius: 120px;" src="" alt="" class="img-thumbnail float-left">
+            <i class="fa fa-camera" data-toggle="modal" data-target="#updateEmpPhotoModal" style="position:relative;margin-top:120px;margin-left:-22px"></i>
+            <input type="hidden" id="hiddenFile" />
+            </div>*@
+            <div class="col-12" style="color: black; font-size: 15px;">
+                <span style="font-weight:bold;">Lead Name : </span><span>@Model.GetLeadDetailsById?.leadName</span><br />
+                <span style="font-weight:bold;">Short Name : </span><span>@Model.GetLeadDetailsById?.leadShortName</span><br />
+                <span style="font-weight:bold;">Lead Number : </span><span>@Model.GetLeadDetailsById?.leadNumber</span><br />
+                <span style="font-weight:bold;">Email : </span><span>@Model?.contacts?.FirstOrDefault()?.resource?.email</span><br />
+                <span style="font-weight:bold;">Mobile : </span><span>@Model?.contacts?.FirstOrDefault()?.resource?.mobile</span><br />
+            </div>
+            @*<div class="col-1">
+                <a class='btn btn-info' style="float:right;" data-toggle='tooltip' title='Print' target='_blank' href='/HRPMSEmployee/InfoView/pdspdf/@Model'><i class='fa fa-print'></i></a>
+            </div>*@
+        </div>
+    </div>
+
+    <div class="card-body row" style="padding-top: 0;">
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="@Url.Action("LeadInfoPersonal", "LeadManagement", new { id = @Model.GetLeadDetailsById?.Id ,leadName=@Model.GetLeadDetailsById?.leadName,area="CRMLead"})" style="text-decoration:none;">
+                    <i class="fa fa-user-tie fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Lead Info</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="@Url.Action("IndexPersonal", "Address", new { id = @Model.GetLeadDetailsById?.Id ,leadName=@Model.GetLeadDetailsById?.leadName,area="CRMLead"})" style="text-decoration:none;">
+                    <i class="fa fa-address-book fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Address</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="@Url.Action("ContactsPersonal", "LeadManagement", new { id = @Model.GetLeadDetailsById?.Id ,leadName=@Model.GetLeadDetailsById?.leadName,area="CRMLead"})" style="text-decoration:none;">
+                    <i class="fa fa-file-contract fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Other Contact</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="@Url.Action("ActivityMasterPer", "Activity", new { id = @Model.GetLeadDetailsById?.Id ,leadName=@Model.GetLeadDetailsById?.leadName,area="CRMLead"})" style="text-decoration:none;">
+                    <i class="fa fa-tasks fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Activities</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="@Url.Action("LeadFilePersonal", "LeadManagement", new { id = @Model.GetLeadDetailsById?.Id ,leadName=@Model.GetLeadDetailsById?.leadName,area="CRMLead"})" style="text-decoration:none;">
+                    <i class="fa fa-file fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Files</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="@Url.Action("IndexPersonal", "Proposal", new { id = @Model.GetLeadDetailsById?.Id ,leadName=@Model.GetLeadDetailsById?.leadName,area="CRMLead"})" style="text-decoration:none;">
+                    <i class="fa fa-handshake fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Proposal</span>
+                </a>
+            </div>
+        </div>
+        @*<div class="col-2">
+                <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                    <a class="text-center btn btn-default" href="@Url.Action("LeadBankListPersonal", "LeadManagement", new { id = @Model.GetLeadDetailsById?.Id ,leadName=@Model.GetLeadDetailsById?.leadName,area="CRMLead"})" style="text-decoration:none;">
+                        <i class="fas fa-university fa-3x "></i>
+                        <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Bank</span>
+                    </a>
+                </div>
+            </div>*@
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="@Url.Action("AgreementListForLeadPersonal", "Agreement", new { id = @Model.GetLeadDetailsById?.Id ,leadName=@Model.GetLeadDetailsById?.leadName,area="CRMLead"})" style="text-decoration:none;">
+                    <i class="fa fa-file-contract fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Agreement</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="@Url.Action("LeadHistoryPersonal", "LeadManagement", new { id = @Model.GetLeadDetailsById?.Id ,leadName=@Model.GetLeadDetailsById?.leadName,area="CRMLead"})" style="text-decoration:none;">
+                    <i class="fa fa-history fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">History</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            $("#personal").addClass("active");
+            $("#imagePath").change(function () {
+
+               // alert(this);
+                readURL(this);
+            });
+            $("#imagePath_Vcard_Font").change(function () {
+                readURLVcard_Font(this);
+            });
+            $("#imagePath_Vcard_Back").change(function () {
+                readURLVcard_Back(this);
+            });
+
+            if ('@ViewBag.leadId'!= null || '@ViewBag.leadId'!=0) {
+            $('#leadId').val(@ViewBag.leadId);
+            $('#companyName').val('@ViewBag.companyName');
+            $('#contactName').val('@Model?.contacts?.FirstOrDefault()?.resource?.resourceName');
+            $('#contactId').val(@Model?.contacts?.FirstOrDefault()?.resourceId);
+            $('#designation').val(@Model?.contacts?.FirstOrDefault()?.resource?.designationsId);
+            $('#age').val(@Model?.contacts?.FirstOrDefault()?.resource?.age);
+            $('#gender').val('@Model?.contacts?.FirstOrDefault()?.resource?.gender');
+            $('#imagePath').val();
+            $('#phone').val('@Model?.contacts?.FirstOrDefault()?.resource?.phone');
+            $('#mobile').val('@Model?.contacts?.FirstOrDefault()?.resource?.mobile');
+            $('#email').val('@Model?.contacts?.FirstOrDefault()?.resource?.email');
+            $('#sourceDescription').val('@ViewBag.sourceDescription');
+            $('#fax').val('@Model?.contacts?.FirstOrDefault()?.resource?.fax');
+            $('#department').val('@Model?.contacts?.FirstOrDefault()?.resource?.departmentsId');
+            $('#skypeId').val('@Model?.contacts?.FirstOrDefault()?.resource?.skypeId');
+            $('#linkedInId').val('@Model?.contacts?.FirstOrDefault()?.resource?.linkedInId');
+
+            Common.Ajax('GET', '/CRMLead/LeadManagement/GetContactphotoByContactId/?Id=' + '@Model?.contacts?.FirstOrDefault()?.Id', [], 'json', ajaxGetContactphotoByContactId);
+            Common.Ajax('GET', '/CRMLead/LeadManagement/GetContactVcard_FontByContactId/?Id=' + '@Model?.contacts?.FirstOrDefault()?.Id', [], 'json', ajaxGetContactVcard_FontByContactId);
+            Common.Ajax('GET', '/CRMLead/LeadManagement/GetContactVcard_BackByContactId/?Id=' + '@Model?.contacts?.FirstOrDefault()?.Id', [], 'json', ajaxGetContactVcard_BackByContactId);
+            }
+
+        });
+
+        function readURL(input) {
+            //alert(input)
+            //alert(input.files);
+            if (input.files && input.files[0]) {
+                var filerdr = new FileReader();
+                filerdr.onload = function (e) {
+                    $('#user_img').attr('src', e.target.result);
+                }
+                filerdr.readAsDataURL(input.files[0]);
+            }
+    }
+
+    function readURLVcard_Font(input) {
+        if (input.files && input.files[0]) {
+            var filerdr = new FileReader();
+            filerdr.onload = function (e) {
+                $('#user_img_Vcard_Font').attr('src', e.target.result);
+            }
+            filerdr.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function readURLVcard_Back(input) {
+        if (input.files && input.files[0]) {
+            var filerdr = new FileReader();
+            filerdr.onload = function (e) {
+                $('#user_img_Vcard_Back').attr('src', e.target.result);
+            }
+            filerdr.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function Edit(id, contactowner, resourceid, leadid, phone, mobile, email, departmentid, desigid, fax, skypeId, linkedInId) {
+            $('#id').val(id);
+            $('#leadId').val(leadid);
+            $('#contactName').val(contactowner);
+            $('#contactId').val(resourceid);
+            $('#designation').val(desigid);
+            $('#imagePath').val();
+            $('#phone').val(phone);
+            $('#mobile').val(mobile);
+            $('#email').val(email);
+            $('#fax').val(fax);
+            $('#department').val(departmentid);
+        $('#skypeId').val(skypeId);
+        $('#linkedInId').val(linkedInId);
+
+            Common.Ajax('GET', '/CRMLead/LeadManagement/GetContactphotoByContactId/?Id=' + id, [], 'json', ajaxGetContactphotoByContactId);
+            Common.Ajax('GET', '/CRMLead/LeadManagement/GetContactVcard_FontByContactId/?Id=' + id, [], 'json', ajaxGetContactVcard_FontByContactId);
+            Common.Ajax('GET', '/CRMLead/LeadManagement/GetContactVcard_BackByContactId/?Id=' + id, [], 'json', ajaxGetContactVcard_BackByContactId);
+
+    }
+
+        function ajaxGetContactphotoByContactId(response) {
+            if (response != null) {
+                var baseUrl = 'http://' + location.host + '/Upload/Photo/' + response.fileName.toString();
+                var image = document.getElementById('user_img');
+                image.setAttribute('src', baseUrl);
+            }
+    }
+
+        function ajaxGetContactVcard_FontByContactId(response) {
+            if (response != null) {
+                var baseUrl = 'http://' + location.host + '/Upload/Photo/' + response.fileName.toString();
+                var image = document.getElementById('user_img_Vcard_Font');
+                image.setAttribute('src', baseUrl);
+            }
+    }
+        function ajaxGetContactVcard_BackByContactId(response) {
+            if (response != null) {
+                var baseUrl = 'http://' + location.host + '/Upload/Photo/' + response.fileName.toString();
+                var image = document.getElementById('user_img_Vcard_Back');
+                image.setAttribute('src', baseUrl);
+            }
+    }
+
+    </script>
+}
+

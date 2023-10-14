@@ -1,0 +1,194 @@
+﻿@{
+    ViewData["Title"] = "PendingLoanPay";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4 bg-light">
+            <div class="card">
+
+                <div class="card-body">
+                    <h5 class="m-0 font-weight-bold text-primary"> Loan Disbursement</h5>
+                    <hr />
+                    <div class="">
+                        <form id="FormId">
+
+                            <div class="row col-sm-12">
+                                <div class="col-sm-6">
+
+                                    <div class="form-group row">
+                                        <input type="hidden" name="loanId" value="@Model.loanId" />
+                                        <input type="hidden" class="form-control" id="membersCode" name="">
+                                        <input type="hidden" id="" name="approveStatus" value="@Model.approveStatus" />
+                                        <input type="hidden" id="memberId" name="pfmemberId" value="@Model.pfmemberId" />
+                                        <input type="hidden" id="employeeInfoId" name="employeeInfoId" value="@Model.employeeInfoId" />
+                                        <label for="settlemtntDate" class="col-sm-5 col-form-label">Application Date</label>
+                                        <div class="col-sm-6 input-group">
+                                            <input name="applicationDate" id="applicationDate" class="form-control input-group-sm" value="@Model.applicationDate?.ToString("dd-MMM-yyyy")" readonly />
+                                            <div class="input-group-prepend">
+                                                <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="loanAmount" class="col-sm-5 col-form-label">Loan Amount</label>
+                                        <div class="col-sm-6 ">
+                                            <input type="text" class="form-control" name="loanAmount" id="loanAmount" value="@Model.loanAmount" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row d-none">
+                                        <label for="settlemtntDate" class="col-sm-5 col-form-label">Expected Date</label>
+                                        <div class="col-sm-6 input-group">
+                                            <input name="expectedDate" id="expectedDate" class="form-control input-group-sm" value="@Model.expectedDate?.ToString("dd-MMM-yyyy")" readonly />
+                                            <div class="input-group-prepend">
+                                                <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row d-none">
+                                        <label for="installmentAmount" class="col-sm-5 col-form-label">Installment Amount</label>
+                                        <div class="col-sm-6 ">
+                                            <input type="text" class="form-control" name="installmentAmount" id="installmentAmount" value="@Model.installmentAmount">
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group row">
+                                        <label for="installmentPeriod" class="col-sm-5 col-form-label">Installment Period</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" name="installmentPeriod" readonly id="installmentPeriod">
+                                                @Model.installmentPeriod
+                                                <option>Select Period</option>
+                                                <option selected value="1">Monthly</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="settlementDate" class="col-sm-5 col-form-label">Expected Settlemtnt Date</label>
+                                        <div class="col-sm-6 input-group">
+                                            <input name="expectedSettlementDate" id="expectedSettlementDate" class="form-control input-group-sm" value="@Model.expectedSettlementDate?.ToString("dd-MMM-yyyy")" readonly />
+                                            <div class="input-group-prepend">
+                                                <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label for="interestRate" class="col-sm-5 col-form-label">Interest Rate</label>
+                                        <div class="col-sm-6 ">
+                                            <input type="text" readonly class="form-control" name="interestRate" id="interestRate" value="@Model.interestRate">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="txtPaymentAccount" class="col-sm-5 col-form-label text-left">Payment Account<span style="color:red;">*</span></label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control input-group-sm" name="txtPaymentAccount" id="txtPaymentAccount" />
+                                            <input type="hidden" id="LedgerRelationId" name="LedgerRelationId" />
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="note" class="col-sm-5 col-form-label">Note</label>
+                                        <div class="col-sm-6 ">
+                                            <textarea name="note" id="note" class="form-control input-group-sm"> @Model.note </textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group text-right">
+                                        <input type="button" style="margin-right:43px" class="btn btn-sm btn-success" id="submit" value="Disbursement">
+                                    </div>
+                                </div>
+
+                             
+
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#paymentDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+        Common.Ajax('GET', '/api/global/getLedersForPayment/' + 2, [], 'json', GetLedgerList);
+    });
+
+
+    function GetLedgerList(response) {
+        $('#txtPaymentAccount').empty();
+        $("#LedgerRelationId").val('');
+
+        var lstLedger = [];
+        $.each(response, function (i, option) {
+            var obj = new Object();
+            obj.key = option.Id;
+            obj.ledgerId = option.ledgerId;
+            obj.accountCode = option.accountCode;
+            obj.natureId = option.natureId;
+            obj.value = option.accountName + ' (' + option.accountCode + ')';
+            lstLedger[lstLedger.length] = obj;
+        });
+        $('#txtPaymentAccount').autocomplete({
+            source: lstLedger,
+            select: function (event, ui) {
+                $('#txtPaymentAccount').val(ui.item.value);
+
+                $("#LedgerRelationId").val(ui.item.key);
+                //GetVoucherNo();
+                // Common.Ajax('GET', '/api/global/getOpenBalanceById/' + ui.item.key, [], 'json', GetPaymentLedgerBalance);
+            }
+        });
+    }
+
+    $('#submit').click(function () {
+        console.log($('#FormId').serializeArray());
+        var data = $('#FormId').serializeArray();
+
+
+
+        console.log(data[0].value)
+        swal({
+            title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+        }).then(function () {
+            $.ajax({
+                url: '/ProvidentFund/LoanManagement/PendingLoanPay',
+                type: 'POST',
+                data: data
+            }).done(function () {
+                console.log(data);
+                if (data[0].value == 0) {
+                    swal('success', 'Saved Successfully!', 'success').then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    swal('success', 'Disbursment Successfully!', 'success').then(function () {
+                  
+                        window.location.href = '/ProvidentFund/LoanManagement/LoanDisbursmentPending';
+
+                    });;
+                }
+            }).fail(function () {
+                swal('warning', 'Failed!', 'warning');
+            })
+        });
+    })
+
+</script>
+
+

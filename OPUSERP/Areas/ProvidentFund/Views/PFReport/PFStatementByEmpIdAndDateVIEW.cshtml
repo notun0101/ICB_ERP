@@ -1,0 +1,118 @@
+﻿@model OPUSERP.ProvidentFund.VMS.PFReportViewModel
+@{
+    ViewData["Title"] = "ReportCenter";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+
+
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+        <div class="container-fluid">
+            <div class="row" style="padding-top:0px;">
+                <div class="col-2">
+                    <img src="~/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="OPUS ERP" style="height:50px;" />
+                </div>
+                <div class="col-8" style="color:black;text-align:center">
+                    <h3>@Model.companies.FirstOrDefault().companyName</h3>
+                    <h5>@Model.companies.FirstOrDefault().addressLine</h5>
+                    <br />
+                    <h5 style="text-align:center;"> Statement for Employees' Provident Fund Account from  @ViewBag.fromDate To  @ViewBag.toDate</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid" style="color:black;">
+            <hr style="border:1px solid grey;">
+            <div class="row" style="padding: 5px 0px 5px 0px;">
+                <div class="col-10">
+                    <p>Name: @Model.pFStatementVMs?.FirstOrDefault()?.nameEnglish</p>
+                    <p>PF Id: @Model.pFStatementVMs?.FirstOrDefault()?.memberCode</p>
+                    <p>Designation: @Model.pFStatementVMs?.FirstOrDefault()?.designationName</p>
+                    <p>Department: @Model.pFStatementVMs?.FirstOrDefault()?.deptName</p>
+                </div>
+            </div>
+            <div class="row" style="padding: 0px 15px 0px 15px;">
+                <table class="table table-bordered">
+                    <thead>
+
+                        <tr class="align-text-top">
+                            @*<th class="align-text-top">SL No</th>*@
+                            <th class="align-text-top">Trans. Date</th>
+                            <th class="align-text-top">Particulars</th>
+                            <th class="align-text-top"> Member Amount</th>
+                            <th class="align-text-top"> Bank Amount </th>
+                            <th class="align-text-top">With drawn</th>
+                            <th class="align-text-top">Interest</th>
+                            <th class="align-text-top">Balance</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+
+                            decimal? TotalNetBalance = 0;
+                            decimal? TotalOwnBalance = 0;
+                            decimal? TotalBankBalance = 0;
+                            decimal? TotalwithdrawnBalance = 0;
+                            decimal? TotalInterestBalance = 0;
+                            int sl = 1;
+                        }
+                        @foreach (var item in Model.pFStatementVMs)
+                        {
+                            TotalNetBalance += @item.own + @item.company - @item.withDrawn + @item.distributedInterest;
+                            TotalOwnBalance += @item.own;
+                            TotalBankBalance += @item.company;
+                            TotalwithdrawnBalance += @item.withDrawn;
+                            TotalInterestBalance += @item.distributedInterest;
+
+                            <tr>
+                                @*<td>@sl</td>*@
+                                <td width="120px" class="">@item.transectionDate?.ToString("dd-MMM-yy")</td>
+
+                                @if (@item.particulars != "")
+                                {
+                                    <td class="">@item.particulars</td>
+                                }
+                                else
+                                {
+                                    <td class="">@item.transectionDate?.ToString("MMM yyyy")</td>
+                                }
+
+
+                                <td class="text-right">@item.own?.ToString("N2")</td>
+                                <td class="text-right">@item.company?.ToString("N2")</td>
+                                <td class="text-right">@item.withDrawn?.ToString("N2")</td>
+                                <td class="text-right">@item.distributedInterest?.ToString("N2")</td>
+                                <td class="text-right">@TotalNetBalance</td>
+
+
+
+                            </tr>
+
+
+                            sl++;
+
+                        }
+                        <tr>
+                           
+                            <td></td>
+                            <td>Total</td>
+                            <td class="text-right">@TotalOwnBalance</td>
+                            <td class="text-right">@TotalBankBalance</td>
+                            <td class="text-right">@TotalwithdrawnBalance</td>
+                            <td class="text-right">@TotalInterestBalance</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

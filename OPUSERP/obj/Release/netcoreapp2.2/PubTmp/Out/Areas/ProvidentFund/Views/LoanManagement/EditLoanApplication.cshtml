@@ -1,0 +1,193 @@
+﻿@model LoanApplicationViewModel
+@{
+    ViewData["Title"] = "EditLoanApplication";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4 bg-light">
+            <div class="card">
+
+                <div class="card-body">
+                    <h5 class="m-0 font-weight-bold text-primary">Update Loan Application</h5>
+                    <hr />
+                    <div class="">
+                        <form id="FormId">
+
+                            <div class="row col-sm-12">
+                                <div class="col-sm-6">
+
+                                    <div class="form-group row">
+                                        <input type="hidden" name="loanId" value="@Model.loanId" />
+                                        <input type="hidden" class="form-control" id="membersCode" name="">
+                                        <input type="hidden" id="" name="approveStatus" value="@Model.approveStatus" />
+                                        <input type="hidden" id="memberId" name="pfmember" value="@Model.pfmember" />
+                                        <label for="settlemtntDate" class="col-sm-5 col-form-label">Application Date</label>
+                                        <div class="col-sm-6 input-group">
+                                            <input name="applicationDate" id="applicationDate" class="form-control input-group-sm" value="@Model.applicationDate?.ToString("dd-MMM-yyyy")" readonly />
+                                            <div class="input-group-prepend">
+                                                <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="loanAmount" class="col-sm-5 col-form-label">Loan Amount</label>
+                                        <div class="col-sm-6 ">
+                                            <input type="text" class="form-control" name="loanAmount" id="loanAmount" value="@Model.loanAmount">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="settlemtntDate" class="col-sm-5 col-form-label">Expected Date</label>
+                                        <div class="col-sm-6 input-group">
+                                            <input name="expectedDate" id="expectedDate" class="form-control input-group-sm" value="@Model.expectedDate?.ToString("dd-MMM-yyyy")" readonly />
+                                            <div class="input-group-prepend">
+                                                <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="installmentAmount" class="col-sm-5 col-form-label">Installment Amount</label>
+                                        <div class="col-sm-6 ">
+                                            <input type="text" class="form-control" name="installmentAmount" id="installmentAmount" value="@Model.installmentAmount">
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group row">
+                                        <label for="installmentPeriod" class="col-sm-5 col-form-label">Installment Period</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" name="installmentPeriod" id="installmentPeriod">
+                                                @Model.installmentPeriod
+                                                <option>Select Period</option>
+                                                <option value="1">Monthly</option>
+                                                <option value="2">Querterly </option>
+                                                <option value="3">Half-Yearly </option>
+                                                <option value="4">Yearly</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="settlementDate" class="col-sm-5 col-form-label">Expected Settlemtnt Date</label>
+                                        <div class="col-sm-6 input-group">
+                                            <input name="expectedSettlementDate" id="expectedSettlementDate" class="form-control input-group-sm" value="@Model.expectedSettlementDate?.ToString("dd-MMM-yyyy")" readonly />
+                                            <div class="input-group-prepend">
+                                                <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="interestRate" class="col-sm-5 col-form-label">Interest Rate(if any)</label>
+                                        <div class="col-sm-6 ">
+                                            <input type="text" class="form-control" name="interestRate" id="interestRate" value="@Model.interestRate">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="note" class="col-sm-5 col-form-label">Note</label>
+                                        <div class="col-sm-6 ">
+                                            <textarea name="note" id="note" class="form-control input-group-sm"> @Model.note </textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+
+                                    <table class="table invoice-table">
+                                        <tbody>
+                                            <tr>
+                                                <th>Members' ID</th>
+                                                <td>: MEM101</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Members' Name</th>
+                                                <td>: Kamal Hossain</td>
+                                            </tr>
+                                            <tr>
+                                                <th>E-mail</th>
+                                                <td>: kamal@gmail.com</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Mobile No</th>
+                                                <td>: 01756123230</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Loan Amount (Approved)</th>
+                                                <td>: 50000</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Application Date</th>
+                                                <td>: 12/4/2019</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Date of approval</th>
+                                                <td>: 12/5/2019</td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+                                <br />
+                                <br />
+
+                                <div class="form-group">
+                                    <input type="button" class="btn btn-sm btn-primary bg-success text-white" id="btnSave" value="Update"/>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#expectedDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker(new Date());
+        $("#expectedSettlementDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker(new Date());
+        $("#applicationDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker(new Date());
+    });
+
+
+    $('#btnSave').click(function () {
+        console.log($('#FormId').serializeArray());
+        var data = $('#FormId').serializeArray();
+
+        console.log(data[0].value)
+        swal({
+            title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+        }).then(function () {
+            $.ajax({
+                url: '/ProvidentFund/LoanManagement/EditLoanApplication',
+                type: 'POST',
+                data: data
+            }).done(function () {
+                if (data[0].value == 0) {
+                    swal('success', 'Saved Successfully!', 'success').then(function () {
+                        //location.reload();
+                        //window.location.href = '/ProvidentFund/Member/MemberList';
+                    });
+                }
+                else {
+                    swal('success', 'Updated Successfully!', 'success').then(function () {
+                        //location.reload();
+                        window.location.href = '/ProvidentFund/LoanManagement/AllApplicationList';
+                    });;
+                }
+            }).fail(function () {
+                swal('warning', 'Failed!', 'warning');
+            })
+        });
+    })
+
+</script>

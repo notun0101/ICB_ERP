@@ -1,0 +1,761 @@
+﻿@model EmployeeHobbyViewModel
+
+@{
+    ViewData["Title"] = "Employee Hobby";
+    Layout = "~/Areas/HRPMSEmployee/Views/Shared/_EmployeeForm.cshtml";
+}
+
+@section StyleEmp{
+    <style>
+        .redStar {
+            color: red;
+        }
+
+        .aa {
+            cursor: pointer;
+            background-color: #F8FEFF;
+        }
+        /*.aa:hover {
+            background-color: #9ae2f3ed !important;
+            color: white;
+        }*/
+        .input1 {
+            font-size: 31px;
+            font-weight: bold;
+            border: none;
+            background-color: transparent;
+            width: 214px;
+            text-align: center;
+            outline-offset: 0px;
+            outline: none;
+        }
+
+        .aaa {
+            border-radius: 0 !important
+        }
+
+        .active {
+            background-color: #9ae2f3ed !important;
+            color: white;
+        }
+
+        #myDIV {
+            background-color: white;
+            padding: 20px;
+            box-shadow: 3px 3px 3px 3px lightgray;
+            max-height: 415px;
+            overflow-y: scroll;
+            padding-top: 5px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+            background-color: white;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #F3F3F3;
+        }
+
+        .g {
+            text-decoration: none;
+            color: #1492a5;
+        }
+
+            .g:hover {
+                text-decoration: none;
+                color: #070a67;
+            }
+
+            .g span {
+                font-family: serif;
+            }
+
+        .small-box {
+            text-align: center;
+            border-radius: 10px;
+            padding: 10px;
+            transition: transform .5s;
+        }
+
+            .small-box:hover {
+                background-color: #e8f0fe;
+                transform: scale(.95);
+            }
+
+            .small-box i {
+                font-size: 35px;
+                margin: 10px;
+            }
+
+        .choosen {
+            background-color: darkseagreen !important;
+        }
+    </style>
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-header">
+        <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+            <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; border-right: 1px solid #D9D8DB">
+
+                <h5 class="card-title" style="color: black; margin: 0;">Employee Hobby</h5>
+            </div>
+            <div class="col-md-8">
+                @if (User.IsInRole("HRAdmin") || User.IsInRole("admin"))
+                {
+                    <div style="float: left;">
+
+                        @if (Model.photograph?.url == null || Model.photograph?.url == "")
+                        {
+                            <img src="~/images/user-icon-png.png" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                        }
+                        else
+                        {
+                            <img src="~/@Model.photograph?.url" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                        }
+                        @*<img src="~/@Model.photograph?.url" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />*@
+                        <input type="hidden" id="hiddenFile" />
+                    </div>
+                }
+                else
+                {
+                    <div style="float: left;">
+
+                        @if (Model.photograph?.url == null || Model.photograph?.url == "")
+                        {
+                            <img src="~/images/user-icon-png.png" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                        }
+                        else
+                        {
+                            <img src="~/@Model.photograph?.url" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                        }
+                        @*<img src="~/@Model.photograph?.url" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />*@
+                        <input type="hidden" id="hiddenFile" />
+                    </div>
+                }
+                <div style="float: left;">
+                    <div style="padding: 5px;text-align: center;">
+                        <p style="margin: 0; text-transform: uppercase;">@Model.employeeInfo?.nameEnglish</p>
+                        <p style="margin: 0">@Model.employeeInfo?.lastDesignation?.designationName</p>
+                    </div>
+                </div>
+                <div style="float: right; margin: 16px;">
+                    <input type="button" value="Add More" onclick="OpenAddModal()" class="btn btn-success" />
+                    <a id="btngle" href="javascript:void(0)" class="btn btn-outline-secondary btn-sm"
+                       style=" right: 82px; top: 17px; box-shadow: none; font-size: 20px;"><i class="fas fa-th"></i></a>
+
+                    <a class='btn btn-info mr-0' style="" data-toggle='tooltip' title='Go Back' href='/HRPMSEmployee/Photograph/EditGrid/@ViewBag.empId'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+                </div>
+            </div>
+        </div>
+        @*<h5 class="card-title float-left" style="color: black; margin: 0; text-transform: uppercase;">Employee Hobby</h5>
+            <input type="button" value="Add More" onclick="OpenAddModal()" class="btn btn-success float-right" />*@
+    </div>
+
+    <div class="card-body">
+
+        <div class="container">
+            <form asp-area="HRPMSEmployee" asp-controller="EmployeeHobby" asp-action="Index" id="FormId" method="post" data-parsley-validate="parsley">
+
+                <input type="hidden" name="employeeInfoId" value="@ViewBag.empId" />
+                <input type="hidden" id="EmployeeHobbyID" name="EmployeeHobbyID" value="0">
+                <div class="col-12" style="align-content:center">
+                    <div class="row no-gutters">
+                        @if (Model.employeeHobbies.Count() > 0)
+                        {
+                            var hby = new List<string>(); //listed hby
+                            var hby1 = new List<string>(); //listed hby
+                            hby.Add("Reading"); hby.Add("Gardening"); hby.Add("Traveling"); hby.Add("Writing");
+                            var exHobby = Model.employeeHobbies.Select(x => x.hobbyName).ToList();
+                            var exHobby1 = exHobby; //new hby
+                            if (exHobby1.Count > 0)
+                            {
+                                if (exHobby1.IndexOf("Reading")>=0)
+                                {
+                                    exHobby1.RemoveAt(exHobby1.IndexOf("Reading"));
+                                    hby1.Add("Reading");
+                                }
+                                if (exHobby1.IndexOf("Gardening") >=0)
+                                {
+                                    exHobby1.RemoveAt(exHobby1.IndexOf("Gardening"));
+                                    hby1.Add("Gardening");
+                                }
+                                if (exHobby1.IndexOf("Traveling") >=0)
+                                {
+
+                                    exHobby1.RemoveAt(exHobby1.IndexOf("Traveling"));
+                                    hby1.Add("Traveling");
+                                }
+                                if (exHobby1.IndexOf("Writing") >=0)
+                                {
+                                    exHobby1.RemoveAt(exHobby1.IndexOf("Writing"));
+                                    hby1.Add("Writing");
+                                }
+
+
+
+                            }
+
+
+                            @if (hby1.Contains("Reading"))
+                            {
+                                <div class="col-sm-3 my-2">
+                                    <div class="card hobbyVal aa choosen" style="border-radius: 50%; border: 2px solid #3af3e4e8; cursor:pointer">
+                                        <div class="pt-2" style="height:250px;text-align:center;">
+                                            <div class="" style="margin-top: 41px;">
+                                                <i class="fas fa-book-reader fa-3x"></i>
+                                            </div>
+                                            <input value="Reading" class="pt-2 input1 inp" id="hobbyName1" readonly />
+                                            @*<input type="hidden" id="employeeInfoId" name="employeeInfoId" value="@Model.employeeInfoId">*@
+                                            @*<input type="hidden" id="EmployeeHobbyID" name="EmployeeHobbyID" value="0">*@
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-sm-3 my-2">
+                                        <div class="card hobbyVal aa" style="border-radius: 50%; border: 1px solid #3af3e4e8; cursor:pointer">
+                                            <div class="pt-2" style="height:250px;text-align:center;">
+                                                <div class="" style="margin-top: 41px;">
+                                                    <i class="fas fa-book-reader fa-3x"></i>
+                                                </div>
+                                                <input value="Reading" class="pt-2 input1 inp" id="hobbyName1" readonly />
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                            }
+
+                            @if (hby1.Contains("Gardening"))
+                            {
+                                <div class="col-sm-3 my-2 ">
+                                    <div class="card hobbyVal aa choosen" style="border-radius: 50%; border: 2px solid #3af3e4e8; cursor:pointer">
+                                        <div class="pt-2" style="height:250px;text-align:center;">
+                                            <div class="" style="margin-top: 41px;">
+
+                                                <i class="fab fa-pagelines fa-3x"></i>
+                                            </div>
+                                            <input value="Gardening" class="pt-2 input1 inp" id="hobbyName2" readonly />
+                                            @*<div class="pt-2" id="hobbyName" name="hobbyName" style="font-size: 31px;  font-weight: bold;">Gardening</div>*@
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-sm-3 my-2">
+                                    <div class="card hobbyVal aa" style="border-radius: 50%; border: 1px solid #3af3e4e8; cursor:pointer">
+                                        <div class="pt-2" style="height:250px;text-align:center;">
+                                            <div class="" style="margin-top: 41px;">
+
+                                                <i class="fab fa-pagelines fa-3x"></i>
+                                            </div>
+                                            <input value="Gardening" class="pt-2 input1 inp" id="hobbyName2" readonly />
+                                            @*<div class="pt-2" id="hobbyName" name="hobbyName" style="font-size: 31px;  font-weight: bold;">Gardening</div>*@
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                            @if (hby1.Contains("Traveling"))
+                            {
+                                <div class="col-sm-3 my-2 ">
+                                    <div class="card hobbyVal aa choosen" style="border-radius: 50%; border: 2px solid #3af3e4e8; cursor:pointer">
+                                        <div class="pt-2" style="height:250px;text-align:center;">
+                                            <div class="" style="margin-top: 41px;">
+
+                                                <i class="fas fa-bus fa-3x"></i>
+                                            </div>
+                                            <input value="Traveling" class="pt-2 input1 inp" id="hobbyName3" readonly />
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-sm-3 my-2">
+                                    <div class="card hobbyVal aa" style="border-radius: 50%; border: 1px solid #3af3e4e8; cursor:pointer">
+                                        <div class="pt-2" style="height:250px;text-align:center;">
+                                            <div class="" style="margin-top: 41px;">
+
+                                                <i class="fas fa-bus fa-3x"></i>
+                                            </div>
+                                            <input value="Traveling" class="pt-2 input1 inp" id="hobbyName3" readonly />
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (hby1.Contains("Writing"))
+                            {
+                                <div class="col-md-3 my-2 ">
+                                    <div class="card hobbyVal aa choosen" style="border-radius: 50%; border: 2px solid #3af3e4e8; cursor:pointer">
+                                        <div class="pt-2" style="height:250px;text-align:center;">
+                                            <div class="" style="margin-top: 41px;">
+
+                                                <i class="fas fa-pencil-alt fa-3x"></i>
+                                            </div>
+                                            <input value="Writing" class="pt-2 input1 inp" id="hobbyName4" readonly />
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-3 my-2">
+                                    <div class="card hobbyVal aa" style="border-radius: 50%; border: 1px solid #3af3e4e8; cursor:pointer">
+                                        <div class="pt-2" style="height:250px;text-align:center;">
+                                            <div class="" style="margin-top: 41px;">
+
+                                                <i class="fas fa-pencil-alt fa-3x"></i>
+                                            </div>
+                                            <input value="Writing" class="pt-2 input1 inp" id="hobbyName4" readonly />
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (exHobby.Count > 0)
+                            {
+                                var k = 4;
+                                var idname = "hobbyName" + k;
+                                @foreach (var item in exHobby)
+                                {
+                                    k++;
+                                    <div class="col-md-3 my-2 ">
+                                        <div class="card hobbyVal aa choosen" style="border-radius: 50%; border: 2px solid #3af3e4e8; cursor:pointer">
+                                            <div class="pt-2" style="height:250px;text-align:center;">
+                                                <div class="" style="margin-top: 41px;">
+
+                                                    <i class="fas fa-pencil-alt fa-3x"></i>
+                                                </div>
+                                                <input value="@item" class="pt-2 input1 inp" id="@idname" readonly />
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <div class="col-sm-3 my-2">
+                                <div class="card hobbyVal aa" style="border-radius: 50%; border: 1px solid #3af3e4e8; cursor:pointer">
+                                    <div class="pt-2" style="height:250px;text-align:center;">
+                                        <div class="" style="margin-top: 41px;">
+                                            <i class="fas fa-book-reader fa-3x"></i>
+
+                                        </div>
+                                        <input value="Reading" class="pt-2 input1 inp" id="hobbyName1" readonly />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-3 my-2">
+                                <div class="card hobbyVal aa" style="border-radius: 50%; border: 1px solid #3af3e4e8; cursor:pointer">
+                                    <div class="pt-2" style="height:250px;text-align:center;">
+                                        <div class="" style="margin-top: 41px;">
+
+                                            <i class="fab fa-pagelines fa-3x"></i>
+                                        </div>
+                                        <input value="Gardening" class="pt-2 input1 inp" id="hobbyName2" readonly />
+                                        @*<div class="pt-2" id="hobbyName" name="hobbyName" style="font-size: 31px;  font-weight: bold;">Gardening</div>*@
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 my-2">
+                                <div class="card hobbyVal aa" style="border-radius: 50%; border: 1px solid #3af3e4e8; cursor:pointer">
+                                    <div class="pt-2" style="height:250px;text-align:center;">
+                                        <div class="" style="margin-top: 41px;">
+
+                                            <i class="fas fa-bus fa-3x"></i>
+                                        </div>
+                                        <input value="Traveling" class="pt-2 input1 inp" id="hobbyName3" readonly />
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 my-2">
+                                <div class="card hobbyVal aa" style="border-radius: 50%; border: 1px solid #3af3e4e8; cursor:pointer">
+                                    <div class="pt-2" style="height:250px;text-align:center;">
+                                        <div class="" style="margin-top: 41px;">
+
+                                            <i class="fas fa-pencil-alt fa-3x"></i>
+                                        </div>
+                                        <input value="Writing" class="pt-2 input1 inp" id="hobbyName4" readonly />
+
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        @*<div class="col-md-3 my-2" id="approverDiv">
+
+                                <div class="card cc aa" style="width:250px!important; border-radius: 50%; border: 1px solid #3af3e4e8; cursor:pointer">
+
+                                    <div class="pt-3 outer-approve" style="height:250px;text-align:center;" id="a1" onclick="openModal('1')">
+                                        <div style="margin-top: 41px;">
+                                            <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
+                                        </div>
+                                        <button type="button" class="close addF1" id="AddNewLevelModal" data-dismiss="modal" aria-label="Close">
+                                            <span class="add1 btn btn-info btn-sm aaa" aria-hidden="true"><i class="fas fa-save"></i></span>
+                                        </button><br />
+                                        <div class="pt-2" id="AddNew2" style="font-size: 31px;  font-weight: bold;">Add New</div>
+                                        <br />
+                                        <input class="pt-2 input1" value="" id="hobbyName6" />
+
+                                        <input type="hidden" class="result23" id="EmployeeHobbyID" name="EmployeeHobbyID" value="" />
+
+                                    </div>
+
+                                </div><br />
+                            </div>*@
+
+                    </div>
+
+
+                </div>
+                <br />
+
+
+
+
+
+                <hr>
+                <button type="button" id="submitbtn" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+                @*<button type="button" id="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add More Hobby</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="display: flex; justify-content: center; align-items: center;">
+                <div id="approverDiv">
+                    <div class="card cc aa" style="width:250px!important; border-radius: 50%; border: 1px solid #3af3e4e8; cursor:pointer">
+                        <div class="pt-3 outer-approve" style="height:250px;text-align:center;" id="a1" onclick="openModal('1')">
+                            <div style="margin-top: 41px;">
+                                <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
+                            </div>
+                            <button type="button" class="close addF1" id="AddNewLevelModal" data-dismiss="modal" aria-label="Close">
+                                <span class="add1 btn btn-info btn-sm aaa" aria-hidden="true"><i class="fas fa-save"></i></span>
+                            </button><br />
+                            <div class="pt-2" id="AddNew2" style="font-size: 31px;  font-weight: bold;">Add New</div>
+                            <br />
+                            <input class="pt-2 input1" value="" id="hobbyName6" />
+                            <input type="hidden" class="result23" id="EmployeeHobbyID" name="EmployeeHobbyID" value="" />
+                        </div>
+                    </div><br />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateEmpPhotoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                @*<img src="~/images/Aloha New Logo.png" style="height:50px;" />*@
+                <h5 class="modal-title" id="exampleModalLabel">Update Photo</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-area="HRPMSEmployee" asp-controller="Photograph" asp-action="Index" method="post" enctype="multipart/form-data" data-parsley-validate="parsley">
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="form-group row">
+                        @*<div class="col-5">
+                                <img id="user_img_current" style="width:200px;height:200px" src="~/@Model.photograph.url" alt="" class="img-thumbnail float-left">
+                                <input type="hidden" id="hiddenFile" />
+                            </div>*@
+                        <div class="col-7">
+                            <input type="hidden" name="queryString" id="queryString" value="" />
+                            @if (Model.photograph?.url != null || Model.photograph?.url != "")
+                            {
+                                <img id="user_img" style="width:200px;height:200px;cursor:pointer;" src="~/@Model.photograph?.url" alt="" class="img-thumbnail float-left">
+                            }
+                            else
+                            {
+                                <img id="user_img" style="width:200px;height:200px;cursor:pointer;" src="/images/user-icon-png.png" alt="" class="img-thumbnail float-left">
+                            }
+                            <input type="hidden" name="employeeID" value="@Model.employeeInfo.Id" />
+                            <input type="hidden" name="photographID" value="@Model.photograph?.Id" />
+                            <input type="file" title="Photo Upload" id="imagePath" data-parsley-required="true" name="empPhoto" class="btn btn-default btn-sm pull-right" />
+                            <span style="float:left;color:red;" class="redStar">*</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <button type="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myDIV" style="display: none; width: 311px; position: absolute; right: 50px; top: 167px;">
+    <div class="row">
+        <a href="/HRPMSEmployee/Info/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-user-tie"></i><span>Basic</span>
+        </a>
+
+        <a href="/HRPMSEmployee/Address/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-map-marker-alt"></i><span>Address</span>
+        </a>
+        <a href="/HRPMSEmployee/Spouse/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-female"></i><span>Spouse</span>
+        </a>
+        <a href="/HRPMSEmployee/Children/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-child"></i><span>Children</span>
+        </a>
+        <a href="/HRPMSEmployee/EmergencyContact/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-blender-phone"></i><span>Emergency Contact</span>
+        </a>
+        @*<a href="/HRPMSEmployee/Nominee/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+                <i class="fa fa-sitemap"></i><span>Nominee</span>
+            </a>*@
+        <a href="/HRPMSEmployee/Nominee/EmployeeInsurance/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-university"></i><span>Insurance</span>
+        </a>
+        <a href="/HRPMSEmployee/EducationalQualification/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-graduation-cap"></i><span>Education</span>
+        </a>
+        <a href="/HRPMSEmployee/ProfessionalQualifications/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-chalkboard-teacher"></i><span>Qualification</span>
+        </a>
+        <a href="/HRPMSEmployee/OtherQualifications/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-book-reader"></i><span>Other Qualification</span>
+        </a>
+        <a href="/HRPMSEmployee/Training/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-clipboard-list"></i><span>Training History</span>
+        </a>
+        <a href="/HRPMSEmployee/TransferLog/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-stream"></i><span>Service</span>
+        </a>
+        <a href="/HRPMSEmployee/PromotionLog/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-chart-line"></i><span>Promotion</span>
+        </a>
+        <a href="/HRPMSEmployee/ACRLog/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-clipboard-check"></i><span>History</span>
+        </a>
+        <a href="/HRPMSEmployee/Disciplinary/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-user-times"></i><span>Disciplinary Action</span>
+        </a>
+        <a href="/HRPMSEmployee/Supervisor/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-user-shield"></i><span>Supervisor</span>
+        </a>
+        <a href="/HRPMSEmployee/License/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-id-badge"></i><span>Driving License</span>
+        </a>
+        <a href="/HRPMSEmployee/Passport/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-passport "></i><span>Passport</span>
+        </a>
+        <a href="/HRPMSEmployee/Travel/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-suitcase-rolling"></i><span>Travel</span>
+        </a>
+        <a href="/HRPMSEmployee/Membership/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-user-tag"></i><span>Membership</span>
+        </a>
+        <a href="/HRPMSEmployee/Award/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-medal"></i><span>Award</span>
+        </a>
+        <a href="/HRPMSEmployee/Publication/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-atlas"></i><span>Publication</span>
+        </a>
+        <a href="/HRPMSEmployee/Language/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-language"></i><span>Language</span>
+        </a>
+
+        <a href="/HRPMSEmployee/OtherActivities/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-skating"></i><span>Other Activities</span>
+        </a>
+        <a href="/HRPMSEmployee/BankInfo/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-university"></i><span>Bank Acounts</span>
+        </a>
+        <a href="/HRPMSEmployee/Belongings/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-bold"></i><span>Belongings</span>
+        </a>
+        <a href="/HRPMSEmployee/PreviousEmployment/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-th-list"></i><span>Prev.Employment</span>
+        </a>
+        <a href="/HRPMSEmployee/FreedomFighter/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-user-check"></i><span>Freedom Fighter</span>
+        </a>
+
+
+        <a href="/HRPMSEmployee/Reference/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-user-clock"></i><span>Reference</span>
+        </a>
+        <a href="/HRPMSEmployee/OfficeAssign/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-map-marker-alt"></i><span>Office Assign</span>
+        </a>
+        <a href="/HRPMSEmployee/Photograph/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-user-circle"></i><span>Picture</span>
+        </a>
+        <a href="/HRPMSEmployee/Photograph/Signature/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-user-circle"></i><span>Signature</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeContractInfo/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-file-signature"></i><span>Contract</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fa fa-sitemap"></i><span>Project Activity</span>
+        </a>
+        <a href="/HRPMSEmployee/FinanceCode/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fas fa-code-branch"></i><span>Financial Code</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeAttachment/Index/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fas fa-file"></i><span>Attachment</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/ProjectAssign/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fas fa-air-freshener"></i><span>Project Assign</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/EmployeeOtherInfo/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fas fa-info-circle"></i><span>Other Info</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/EmployeeCostCentre/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fas fa-dollar-sign"></i><span>Cost Centre</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/EmployeeGrade/@Model.employeeInfoId" class="col-md-4 small-box g">
+            <i class="fab fa-glide-g"></i><span>Employee Grade</span>
+        </a>
+
+    </div>
+</div>
+
+
+
+@section ScriptsEmp{
+    <script>
+
+        $(document).ready(function () {
+            var pathname = window.location.pathname;
+            $('#queryString').val(pathname);
+			$("#hobbyName6").hide();
+			$("#AddNewLevelModal").hide();
+
+			$(document).on('click', '#del2', function () {
+				$(this).closest('.bb').toggleClass('strike').fadeOut('slow', function () { $(this).remove(); });
+			});
+
+
+			$(document).on('click', '#del3', function () {
+				$(this).closest('.cc').toggleClass('strike').fadeOut('slow', function () { $(this).parent('.col-md-3').remove(); });
+			});
+
+            $("#btngle").click(function () {
+                $("#myDIV").slideToggle("slow");
+            });
+			$('.hobbyVal').click(function () {
+				//alert('ok')
+				if ($(this).hasClass('active')) {
+					$(this).removeClass('active');
+					$(this).find('.inp').removeAttr('name');
+				}
+				else {
+					$(this).addClass('active')
+					$(this).find('.inp').attr('name', 'hobbyName');
+				}
+			})
+
+			$('#submitbtn').click(function () {
+				var formData = $('#FormId').serialize();
+
+				swal({
+					title: 'Are you sure?', text: 'Do you want to save this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#007ACC', cancelButtonColor: '#d33', confirmButtonText: 'Yes, Save it!'
+				}).then(function () {
+					$.ajax({
+						url: '@Url.Action("SaveHobby", "EmployeeHobby")',
+						type: 'Post',
+						data: formData
+					})
+					.done(function (res) {
+						swal('Success', 'Saved Successfully!', 'success').then(function () {
+							window.location.reload();
+						});
+					})
+					.fail(function (res) {
+						alert("Unable to Save. Please Try Again");
+					});
+				});
+			})
+		});
+
+		$('#hobbyName6').click(function () {
+			$(this).val('').focus();
+		})
+
+		$("#approverDiv").click(function () {
+			$("#AddNew2").hide();
+			$("#hobbyName6").show();
+			$('#hobbyName6').focus();
+			$("#AddNewLevelModal").show();
+		});
+
+
+		$(".add1").click(function () {
+			$("#AddNew2").show();
+			$("#hobbyName6").hide();
+			$("#AddNewLevelModal").hide();
+			var v = $('#hobbyName6').val();
+			var i = Math.floor(Math.random() * 90000) + 10000;
+			$('.no-gutters').append(`<div class="col-md-3">
+										<div class="card hobbyVal active cc aa" style="width:250px!important; border-radius: 50%; border: 1px solid #3af3e4e8; cursor:pointer">
+											<div class="pt-3 outer-approve" style="height:250px;text-align:center;" id="a1" onclick="openModal('1')">
+															<div style="margin-top: 41px;">
+																<i class="fa fa-magic fa-3x" aria-hidden="true"></i>
+															</div>
+															<input class="pt-2 input1 inp" value="${v}" name="hobbyName" id="hobbyName7" />
+														<button id="del2" type="button" class="close" data-dismiss="modal" aria-label="Close">
+													<span id="del3" class="btn btn-danger btn-sm aaa" aria-hidden="true">&times;</span>
+												</button>
+												<input type="hidden" class="result23" id="EmployeeHobbyID" name="EmployeeHobbyID" value="" />
+												</div>
+										</div><br/>
+									</div> `);
+
+			$('#a' + i).children().find('.addF1').hide();
+			$('#a' + i).find('.addF1').show();
+			$('#hobbyName6').val('Add New');
+		});
+		function OpenAddModal() {
+			$('#exampleModal').modal('show');
+		}
+
+    </script>
+}
+

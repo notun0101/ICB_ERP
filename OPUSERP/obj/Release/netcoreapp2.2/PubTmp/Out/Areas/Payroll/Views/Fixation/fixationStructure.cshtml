@@ -1,0 +1,172 @@
+﻿@model FixationIntegrationViewModel
+
+@{
+    ViewData["Title"] = "FixationStructure";
+    Layout = "~/Areas/Payroll/Views/Shared/_SalaryMasterForm.cshtml";
+
+}
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Fixation Structure</h6>
+                <input type="text" id="search" class="form-control" value="" />
+                <a class='btn btn-info mr-2' href='javascript:void(0)' onclick="searchfunction()">Search</a>
+                @*<a class='btn btn-success mr-2' href="/Payroll/Fixation/CreateSelf">General</a>*@
+                <a class='btn btn-info fa-pull-right' data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1013&perentId=5926'><i class="fas fa-backward"></i></a>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="FixationIntegrationtbl">
+                    <thead>
+                        <tr>
+                            @*<th>Employee Code</th>*@
+                            <th>Employee Name</th>
+                            <th>Employee Code</th>
+                            <th>Current Scale</th>
+                            <th>Branch</th>
+                            <th>Designation</th>
+                            <th>New Basic</th>
+                            <th>Type</th>
+                            <th>Eff. Date</th>
+                            <th>Action</th>
+
+                    </thead>
+                    <tbody>
+                        @*@foreach (var data in Model.fixationIntegrationList)
+                            {
+                                <tr>
+                                    <td>@data.empCode</td>
+                                    <td>@data.currentGrade</td>
+                                    <td>@data.brachCode</td>
+                                    <td>@data.designation</td>
+                                    <td>@data.amount</td>
+                                    <td>
+                                        @if (data.fixationType == "Increment")
+                                        {
+                                            <span class="badge badge-primary">Increment</span>
+                                        }
+                                        else if (data.fixationType == "Promotion")
+                                        {
+                                            <span class="badge badge-info">Promotion</span>
+                                        }
+                                        else
+                                        {
+
+
+                                        }
+                                    </td>
+                                    <td>@data.effectiveDate?.ToString("MM/dd/yy")</td>
+                                    <td>
+                                        <a class="btn btn-success" onclick="Edit(@data.Id,'@data.empCode',' @data.employeeId', '@data.joiningDate?.ToString("MM/dd/yy")', '@data.dateOfBirth?.ToString("MM/dd/yy")','@data.currentGrade','@data.lastIncrementDate?.ToString("MM/dd/yy")', '@data.postingPlace','@data.initialBasic','@data.startingBasic','@data.newBasicPoint','@data.basicPay','@data.lastPromotionDate?.ToString("MM/dd/yy")','@data.brachCode','@data.designation','@data.fixationType','@data.fixationGradeId','@data.amount','@data.refNo','@data.fileNo','@data.letterDate?.ToString("MM/dd/yy")','@data.effectiveDate?.ToString("MM/dd/yy")','@data.nextIncrementDate?.ToString("MM/dd/yy")')" href="#"><i class="fa fa-edit"></i></a>
+                                        @if (data.fixationType == "Increment")
+                                        {
+                                            <a class="btn btn-info" onclick="location.href='/Payroll/Fixation/IncrementReportPdf?id=@data.Id'" href="javascript:void(0)"><i class="fa fa-print"></i></a>
+                                        }
+                                        else if (data.fixationType == "Promotion")
+                                        {
+                                            <a class="btn btn-info" onclick="location.href='/Payroll/Fixation/PromotionReportPdf?id=@data.Id'" href="javascript:void(0)"><i class="fa fa-print"></i></a>
+                                        }
+                                        else
+                                        {
+
+                                        }
+                                    </td>
+                                </tr>
+                            }*@
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+	<script>
+		function searchfunction() {
+			var str = $('#search').val();
+			Common.Ajax('GET', '/Payroll/Fixation/GetFixationByEmpCode?code=' + str, [], 'json', ajaxFixationByCode);
+		};
+
+		function ajaxFixationByCode(response) {
+			console.log(response.fixationIntegrationList);
+			var option = "";
+			$.each(response.fixationIntegrationList, function (i, item) {
+				var btn = "";
+				if (item.fixationType == "Increment") {
+					var url = `location.href="/Payroll/Fixation/IncrementReportPdf?id=${item.Id}"`;
+
+					btn = "<a class='btn btn-info' onclick='" + url + "' href='javascript:void(0)'><i class='fa fa-print'></i></a>";
+
+				}
+				else if (item.fixationType == "Promotion") {
+					var url = `location.href="/Payroll/Fixation/PromotionReportPdf?id=${item.Id}"`;
+					btn = "<a class='btn btn-info' onclick='" + url + "' href='javascript:void(0)'><i class='fa fa-print'></i></a>";
+				}
+				else {
+					btn = "";
+				}
+				var fixationType = "";
+				if (item.fixationType == "Increment") {
+					fixationType = "<span class='badge badge-primary'>Increment</span>";
+				}
+				else if (item.fixationType == "Promotion") {
+					fixationType = "<span class='badge badge-info'>Promotion</span>";
+				}
+				else {
+					fixationType = "<span class='badge badge-success'>Initial</span>";
+				}
+				var effectiveDate = "";
+				if (item.effectiveDate != null) {
+					effectiveDate = formatDate(item.effectiveDate);
+				}
+				var brachCode = "";
+				if (item.brachCode != null) {
+					brachCode = item.brachCode;
+				}
+				var amount = "";
+				if (item.amount != null) {
+					amount = item.amount;
+				}
+				var designation = "";
+				if (item.designation != null) {
+					designation = item.designation;
+				}
+
+				option += `<tr>
+                                <td>${item.employee?.nameEnglish}</td>
+                                <td>${item.empCode}</td>
+                                <td>${item.fixationGrade?.payScale}</td>
+                                <td>${brachCode}</td>
+                                <td>${designation}</td>
+                                <td>${amount}</td>
+                                <td>
+                                   ${fixationType}
+                                </td>
+                                <td>${effectiveDate}</td>
+                                <td>
+                                    <a class="btn btn-secondary" target="_blank" href="/Payroll/SalaryStructure/SalStructure?employeeInfoId=${item.employee ?.Id}"><i class="fas fa-exclamation-circle"></i></a>
+                                    ${btn}
+                                </td>
+                            </tr>`
+			});
+			$('#FixationIntegrationtbl tbody').empty();
+			$('#FixationIntegrationtbl tbody').append(option);
+
+		}
+
+		function formatDate(date) {
+			date = new Date(date);
+			var year = date.getFullYear(),
+				month = date.getMonth() + 1, // months are zero indexed
+				day = date.getDate(),
+				hour = date.getHours(),
+				minute = date.getMinutes(),
+				second = date.getSeconds(),
+				hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+				minuteFormatted = minute < 10 ? "0" + minute : minute,
+				morning = hour < 12 ? "am" : "pm";
+
+			return day + "/" + + month + "/" + year;
+
+		}
+	</script>

@@ -1,0 +1,179 @@
+﻿@model YearlyBudgetReportDetails
+@{
+    ViewData["Title"] = "FinancialBudgetReport";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+<style>
+    .header-cls {
+        text-align: left;
+        color: black;
+    }
+
+    .header-clst {
+        text-align: center;
+        color: black;
+    }
+
+    .text-align-center-cls {
+        text-align: center;
+    }
+
+    .table-cls {
+        margin-top: 100px;
+    }
+
+    .signature-div-cls p {
+        text-align: right;
+        color: black;
+        margin-right: 50px;
+    }
+</style>
+<br />
+<section>
+    <div class="container-fluid">
+
+        <div class="header-cls" style="text-align:center;">
+            <img src="@Model.company.filePath" alt="Urban ERP" style="height:80px;" />
+            <h3>@Model.company.companyName</h3>
+            <label>@Model.company.addressLine</label>
+            <h5 style="text-align: center;">Financial Budget Report</h5><br />
+            @if (ViewBag.SBUName != null)
+            {
+                <p style="font-size:18px;width:100%;margin-top:-15px;">SBU : @ViewBag.SBUName</p>
+            }
+            @if (ViewBag.projectName != null)
+            {
+                <p style="font-size:18px;width:100%;margin-top:-15px;">Project Name : @ViewBag.projectName</p>
+            }
+            <p style="font-size:18px;width:100%;margin-top:-15px;">Period : @ViewBag.FromDate?.ToString("dd-MMM-yyyy") &nbsp; to &nbsp; @ViewBag.ToDate?.ToString("dd-MMM-yyyy")</p>
+        </div>
+
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Budget Head</th>
+                        <th>Init. Budget</th>
+                        @foreach (var data in Model.yearlyBudgetReports.GroupBy(x => x.yearName))
+                        {
+                            <th>Budget Year @data.Key</th>
+                            <th>Achievement Year  @data.Key</th>
+                        }
+                        <th>Total Budget</th>
+                        <th>Total Achievement</th>
+                        <th>Balance</th>
+                        <th>Current Year Budget (Approved)</th>
+                        <th>Current Year Achievement - Q1</th>
+                        <th>Current Year Achievement - Q2</th>
+                        <th>Current Year Achievement - Q3</th>
+                        <th>Current Year Achievement - Q4</th>
+                        <th>Current Year Achievement</th>
+                        <th>Balance (Current Year)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        decimal? AllTotal = 0;
+                        decimal? initBudgetTotal = 0;
+                        decimal? AllAchvTotal = 0;
+                        decimal? totalBalance = 0;
+                        decimal? totalcurrentYearApprovedbudgetAmount = 0;
+                        decimal? totalcurrentYearAchievementAmountQ1 = 0;
+                        decimal? totalcurrentYearAchievementAmountQ2 = 0;
+                        decimal? totalcurrentYearAchievementAmountQ3 = 0;
+                        decimal? totalcurrentYearAchievementAmountQ4 = 0;
+                        decimal? totalcurrentYearAchievement = 0;
+                        decimal? totalcurrentYearBalance = 0;
+                       
+
+                        @foreach (var item in Model.yearlyBudgetReports.GroupBy(x => x.headName))
+                        {
+                            decimal? Total = 0;
+                            decimal? initialBudget = item.Select(x => x.initialAmount).FirstOrDefault();
+                            decimal? AchTotal = 0;
+                            decimal? balance = 0;
+                            decimal? currentYearApprovedbudgetAmount = item.Select(x=>x.currentYearApprovedbudgetAmount).FirstOrDefault();
+                            decimal? currentYearAchievementAmountQ1 = item.Select(x=>x.currentYearAchievementAmountQ1).FirstOrDefault();
+                            decimal? currentYearAchievementAmountQ2 = item.Select(x=>x.currentYearAchievementAmountQ2).FirstOrDefault();
+                            decimal? currentYearAchievementAmountQ3 = item.Select(x=>x.currentYearAchievementAmountQ3).FirstOrDefault();
+                            decimal? currentYearAchievementAmountQ4 = item.Select(x=>x.currentYearAchievementAmountQ4).FirstOrDefault();
+                            decimal? currentYearAchievement = item.Select(x=>x.currentYearAchievement).FirstOrDefault();
+                            decimal? currentYearBalance = item.Select(x=>x.currentYearBalance).FirstOrDefault();
+
+                            totalcurrentYearApprovedbudgetAmount += currentYearApprovedbudgetAmount;
+                            totalcurrentYearAchievementAmountQ1 += currentYearAchievementAmountQ1;
+                            totalcurrentYearAchievementAmountQ2 += currentYearAchievementAmountQ2;
+                            totalcurrentYearAchievementAmountQ3 += currentYearAchievementAmountQ3;
+                            totalcurrentYearAchievementAmountQ4 += currentYearAchievementAmountQ4;
+                            totalcurrentYearAchievement += currentYearAchievement;
+                            totalcurrentYearBalance += currentYearBalance;
+
+                            initBudgetTotal += initialBudget;
+
+
+                    <tr>
+                        <td>@item.Key</td>
+                        <td style="text-align:right"> @initialBudget?.ToString("0,0.00")</td>
+                        @foreach (var data in item)
+                        {
+
+                            Total = Total + data.amount;
+                            <td style="text-align:right"> @data.amount?.ToString("0,0.00")</td>
+                            AchTotal = AchTotal + data.achievementAmount;
+                            <td style="text-align:right">@data.achievementAmount?.ToString("0,0.00")</td>
+                        }
+                        <td style="text-align:right">@Total?.ToString("0,0.00")</td>
+                        <td style="text-align:right">@AchTotal?.ToString("0,0.00")</td>
+                        @{
+                            balance = Total - AchTotal;
+                        }
+                        <td style="text-align:right">@balance?.ToString("0,0.00")</td>
+                        <td style="text-align:right">@currentYearApprovedbudgetAmount?.ToString("0,0.00")</td>
+                        <td style="text-align:right">@currentYearAchievementAmountQ1?.ToString("0,0.00")</td>
+                        <td style="text-align:right">@currentYearAchievementAmountQ2?.ToString("0,0.00")</td>
+                        <td style="text-align:right">@currentYearAchievementAmountQ3?.ToString("0,0.00")</td>
+                        <td style="text-align:right">@currentYearAchievementAmountQ4?.ToString("0,0.00")</td>
+                        <td style="text-align:right">@currentYearAchievement?.ToString("0,0.00")</td>
+                        <td style="text-align:right">@currentYearBalance?.ToString("0,0.00")</td>
+
+                    </tr>
+                        }
+
+                            <tr>
+                                <th>Total</th>
+                                <th>@initBudgetTotal</th>
+                                @foreach (var data in Model.yearlyBudgetReports.Select(x => x.yearName).Distinct())
+                                {
+                                    AllTotal = AllTotal + Model.yearlyBudgetReports.Where(x => x.yearName == data).Sum(x => x.amount);
+
+                                    <th style="text-align:right">@Model.yearlyBudgetReports.Where(x => x.yearName == data).Sum(x => x.amount)?.ToString("0,0.00")</th>
+
+                                    AllAchvTotal = AllAchvTotal + Model.yearlyBudgetReports.Where(x => x.yearName == data).Sum(x => x.achievementAmount);
+
+                                    <th style="text-align:right">@Model.yearlyBudgetReports.Where(x => x.yearName == data).Sum(x => x.achievementAmount)?.ToString("0,0.00")</th>
+
+                                }
+                                
+                                @{
+                                    totalBalance = AllTotal - AllAchvTotal;
+                                }
+
+                                <th style="text-align:right">@AllTotal?.ToString("0,0.00")</th>
+                                <th>@AllAchvTotal?.ToString("0,0.00")</th>
+                                <th>@totalBalance?.ToString("0,0.00")</th>
+                                <th>@totalcurrentYearApprovedbudgetAmount?.ToString("0,0.00")</th>
+                                <th>@totalcurrentYearAchievementAmountQ1?.ToString("0,0.00")</th>
+                                <th>@totalcurrentYearAchievementAmountQ2?.ToString("0,0.00")</th>
+                                <th>@totalcurrentYearAchievementAmountQ3?.ToString("0,0.00")</th>
+                                <th>@totalcurrentYearAchievementAmountQ4?.ToString("0,0.00")</th>
+                                <th>@totalcurrentYearAchievement?.ToString("0,0.00")</th>
+                                <th>@totalcurrentYearBalance?.ToString("0,0.00")</th>
+                            </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+

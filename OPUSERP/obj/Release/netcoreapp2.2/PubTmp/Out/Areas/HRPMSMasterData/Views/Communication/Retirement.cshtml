@@ -1,0 +1,295 @@
+﻿@model HrCommunicationViewModel
+@{
+	ViewData["TitleMD"] = "Retirement";
+	Layout = "~/Areas/HRPMSMasterData/Views/Shared/_MasterDataForm.cshtml";
+}
+
+@section StyleMD{
+    <style>
+        .redStar {
+            color: red;
+        }
+    </style>
+}
+<div class="card" style="width: 100%;">
+    <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+        <h5 class="m-0 font-weight-bold text-primary">Retirement Letter</h5>
+        <a class='btn btn-info mr-4' style="float:right" data-toggle='tooltip' title='Go Back' href='/HRPMSMasterData/Communication/HRCommunications'>@*<i class="fas fa-backward fa-2x "></i>*@<i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <form asp-area="HRPMSMasterData" id="FormId" asp-controller="Communication" asp-action="Retirement" method="post" data-parsley-validate="parsley">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group row">
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label for="startDate" class="col-sm-4 col-form-label">Employee Name <span class="redStar">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="hidden" value="0" class="form-control" name="CommunicationId" id="CommunicationId">
+                                <input type="hidden" value="" name="employeeId" id="employeeId">
+                                <input type="text" class="form-control" id="employeeName" data-parsley-required="true" data-parsley-trigger="keyup">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="startDate" class="col-sm-4 col-form-label">Designation</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="designationId" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="startDate" class="col-sm-4 col-form-label">Department</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="departmentId" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label for="startDate" class="col-sm-4 col-form-label">Email<span class="redStar">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="email" name="email"data-parsley-required="true" data-parsley-trigger="keyup" >
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="startDate" class="col-sm-4 col-form-label">Date</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="date" name="date" readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="refNo" class="col-sm-4 col-form-label">Reference No</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="refNo" name="refNo">
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <hr>
+                <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+                <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+
+
+            </form>
+        </div>
+    </div>
+</div>
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">All Retirement Letters</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="designationTable">
+                    <thead>
+                        <tr>
+                            <th>Employee Name</th>
+                            <th>Designation</th>
+                            <th>Department</th>
+                            <th>Email</th>
+                            <th>Date</th>
+                            <th>Reference No</th>
+                            <th>Status</th>
+                            <th>Action</th>
+
+                        </thead>
+                    <tbody>
+                        @foreach (var data in Model.hrCommunications.Where(x => x.remarks == "retirement"))
+                        {
+                        <tr>
+                            <td>@data.employee?.nameEnglish</td>
+                            <td>@data.employee?.lastDesignation?.designationName</td>
+                            <td>@data.employee?.department?.deptName</td>
+                            <td>@data.email</td>
+                            <td>@data.date?.ToString("dd-MMM-yyyy")</td>
+                            <td>@data.refNo</td>
+                            <td>
+                                @if (data.status == 2)
+                                {
+                                    <span class="badge badge-success">Sent</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-danger">Unsent</span>
+                                }
+                            </td>
+                            <td>
+                                <a class="btn btn-success" onclick="Edit('@data.Id','@data.employeeId','@data.email','@data.date?.ToString("dd-MMM-yyyy")','@data.refNo')" href="#"><i class="fa fa-edit"></i></a>
+                                <a class="btn btn-danger" href="javascript:void(0)" onclick="DeleteMaster(@data.Id)"><i class="fa fa-trash-alt"></i></a>
+                                @if (data.status != 2)
+                                {
+                                    <a class="btn btn-info" href="javascript:void(0)" onclick="SendEmail(@data.Id)" style="" title=""><i class="fas fa-envelope-square"> Email</i></a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-warning" href="javascript:void(0)" onclick="SendEmail(@data.Id)" style="" title=""><i class="fas fa-envelope-square"> Resend</i></a>
+                                }
+                            </td>
+                        </tr>
+						}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ScriptsMD{
+    <script>
+
+        $(document).ready(function () {
+            Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo1', [], 'json', ajaxGetEmployees);
+            $('#date').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2030" });
+
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+            });
+            $("#designation").addClass("active");
+            $('#designationTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        title: "All Retirement Letters",
+                        messageTop: 'List Of All Retirement Letters',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        title: "All Retirement Letters",
+                        messageTop: 'List Of All Retirement Letters'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "All Retirement Letters List",
+                        exportOptions: {
+                            columns: [0, 1, 2, 3,4,5,6]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+
+        });
+
+        function ajaxGetEmployees(response) {
+            var GeEmployeesList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+                obj.designation = option.lastDesignation?.designationName;
+                obj.department = option.department?.deptName;
+                obj.employeeCode = option.employeeCode;
+                obj.email = option.emailAddress;
+                GeEmployeesList[GeEmployeesList.length] = obj;
+            });
+            //console.log(GeEmployeesList);
+            $('#employeeName').autocomplete({
+                source: GeEmployeesList,
+                select: function (event, ui) {
+                    $("#employeeName").val(ui.item.value);
+                    $("#employeeId").val(ui.item.key);
+                    $("#designationId").val(ui.item.designation);
+                    $("#departmentId").val(ui.item.department);
+                    $("#email").val(ui.item.email);
+
+                }
+            });
+        }
+        function SendEmail(id) {
+            Common.Ajax('GET', '/HRPMSMasterData/Communication/SendRetirementMailByComId?id=' + id, [], 'json', ajaxSendMail);
+        }
+
+        function ajaxSendMail(response) {
+            console.log(response)
+            if (response == "ok") {
+                swal("success", "Mail sent successfully!", "success").then(function () {
+                    window.location.reload();
+                });
+            }
+            else {
+                swal("warning", "Mail sending failed!", "warning");
+            }
+        }
+
+        function Edit(Id, employeeId, email, date, refNo) {
+
+            $("#CommunicationId").val(Id);
+            $("#employeeId").val(employeeId);
+            $("#email").val(email);
+            $("#date").val(date);
+            $("#refNo").val(refNo);
+
+            Common.Ajax('GET', '/HRPMSMasterData/Communication/GetEmployeeInfoById/?id=' + employeeId, [], 'json', ajaxGetEmployeesById);
+
+
+        }
+
+        function ajaxGetEmployeesById(response) {
+            $("#employeeName").val(response.nameEnglish + "(" + response.employeeCode + ")" );
+            $("#designationId").val(response.lastDesignation ?.designationName);
+            $("#departmentId").val(response.department ?.deptName);
+
+
+
+
+        }
+
+        function DeleteMaster(Id) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+
+                $.ajax({
+                    url: '@Url.Action("DeleteRetirement", "Communication")',
+                    data: { Id: Id },
+                    type: 'POST',
+                })
+                    .done(function () {
+                        swal('', 'Deleted Successfully!', 'success');
+                        window.location.href = "/HRPMSMasterData/Communication/Retirement";
+                    })
+                    .fail(function () {
+                        swal('Cancelled', 'It will not be deleted. Please try again later !!!', 'error');
+                    });
+            });
+        }
+
+
+    </script>
+}

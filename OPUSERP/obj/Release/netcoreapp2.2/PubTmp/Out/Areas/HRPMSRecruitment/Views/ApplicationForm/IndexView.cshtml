@@ -1,0 +1,864 @@
+﻿@model ApplicationFormViewModel
+@{
+    ViewData["Title"] = "Application Form";
+}
+
+<style>
+    span.error {
+        display: block;
+        visibility: hidden;
+        color: red;
+        font-size: 90%;
+        width: 80px;
+    }
+
+    tr.error {
+        background-color: rgba(255,0,0,0.35);
+    }
+
+    .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    #user_img1:hover {
+        border-radius: 5px;
+        cursor: zoom-in;
+        transition: 0.3s !important;
+        opacity: 0.5;
+        box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    }
+
+    #user_sign:hover {
+        border-radius: 5px;
+        cursor: zoom-in;
+        transition: 0.3s !important;
+        opacity: 0.5;
+        box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    }
+
+    #user_img2:hover {
+        border-radius: 5px;
+        cursor: zoom-in;
+        transition: 0.3s !important;
+        opacity: 0.5;
+        box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    
+      }
+    #user_img3:hover {
+        border-radius: 5px;
+        cursor: zoom-in;
+        transition: 0.3s !important;
+        opacity: 0.5;
+        box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    }
+</style>
+<div class="card" style="width: 100%;">
+    <div class="card-body">
+        <h5 class="card-title" style="color: black">Application Form</h5>
+        <hr>
+        <div>
+
+            <form asp-area="HRPMSRecruitment" asp-controller="ApplicationForm" asp-action="Index" method="post" enctype="multipart/form-data">
+
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 style="color: black;">General Information : </h5>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="form-group row">
+                            <label for="applicantsNo" class="col-sm-2 col-form-label">Applicants No</label>
+                            <div class="col-sm-4">
+                                <input type="hidden" id="ApplicationId" name="ApplicationId" value="@Model.ApplicationId" />
+                                <input type="text" class="form-control" readonly id="applicantsNo" value="@Model.applicationForm?.applicationNo" name="applicantsNo">
+                            </div>
+                            <label for="paymentRefno" class="col-sm-2 col-form-label">Payment Reference No</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="paymentRefno" value="@Model.applicationForm?.payRef" readonly name="payRef">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="nameBn" class="col-sm-2 col-form-label">Name (in Bangla)</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="nameBn" value="@Model.applicationForm?.nameBN" readonly name="nameBn">
+                            </div>
+
+                            <label for="nameEn" class="col-sm-2 col-form-label">Name (in English)<span style="color:red">*</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="nameEn" value="@Model.applicationForm?.nameEN" readonly name="nameEn" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="nid" class="col-sm-2 col-form-label">NID No</label>
+                            <div class="col-sm-4">
+                                <input type="number" class="form-control" id="nidNO" value="@Model.applicationForm?.nidNO" readonly name="nameEn">
+                            </div>
+
+                            <label for="bin" class="col-sm-2 col-form-label">BIN No</label>
+                            <div class="col-sm-4">
+                                <input type="number" class="form-control" id="binNO" value="@Model.applicationForm?.binNO" readonly name="binNO">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="dateOfBirth" class="col-sm-2 col-form-label">Date of Birth</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control datepicker " readonly id="birthDate" value="@Model.applicationForm?.birthDate.ToString("dd-MMM-yyyy")" name="birthDate">
+                            </div>
+
+                            <label for="locationOfBirth" class="col-sm-2 col-form-label">Location of Birth</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="locationOfBirth" value="@Model.applicationForm?.birtPlace" readonly name="birtPlace">
+                            </div>
+                        </div>
+                       
+                        <div class="form-group row">
+                            <label for="fnameBn" class="col-sm-2 col-form-label">Father's Name (in Bangla)</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="fnameBn" value="@Model.applicationForm?.fNmaeBN" readonly name="fNmaeBN">
+                            </div>
+
+                            <label for="fnameEn" class="col-sm-2 col-form-label">Father's Name (in English)</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="fnameEn" value="@Model.applicationForm?.fNmaeEN" readonly name="fNmaeEN">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="mnameBn" class="col-sm-2 col-form-label">Mother's Name (in Bangla)</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="mnameBn" value="@Model.applicationForm?.mNmaeBN" readonly name="mNmaeBN">
+                            </div>
+
+                            <label for="mnameEn" class="col-sm-2 col-form-label">Mother's Name (in English)</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="mnameEn" value="@Model.applicationForm?.mNmaeEN" readonly name="mNmaeEN">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="spouseNameBn" class="col-sm-2 col-form-label">Spouse Name (in Bangla)</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="spouseNameBn" value="@Model.applicationForm?.sNameBN" readonly name="sNameBN">
+                            </div>
+
+                            <label for="spouseNameEn" class="col-sm-2 col-form-label">Spouse Name (in English)</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="spouseNameEn" value="@Model.applicationForm?.sNameEN" readonly name="sNameEN">
+                            </div>
+                        </div>
+                       
+
+                        <div class="form-group row">
+                            <label for="photo" class="col-sm-2 col-form-label">Applicant's Photo</label>
+                            <div class="col-sm-4">
+                                @if (Model.applicationForm?.applicantPhoto == null || Model.applicationForm?.applicantPhoto == "")
+                                {
+                                    <img id="user_img1" style="width:150px;height:150px;border-radius: 47%;" src="~/images/defaultperson.png" alt="" class="img-thumbnail float-left">
+
+                                }
+                                else
+                                {
+                                    <img id="user_img1" style="width:150px;height:150px;border-radius: 47%;" src="~/EmpImages/@Model.applicationForm?.applicantPhoto" alt="" class="img-thumbnail float-left">
+
+                                }
+                                @*<img id="user_img1" style="width:150px;height:150px;border-radius: 47%;" src="~/images/defaultperson.png" alt="" class="img-thumbnail float-left">*@
+
+                                <input type="hidden" id="userFile" />
+                                <input type="hidden" name="ApplicationId" value="@Model.ApplicationId" />
+                                <input type="hidden" title="Photo Upload" class="btn btn-default btn-sm pull-right" id="imagePath1" name="applicantPhoto">
+                            </div>
+
+                            <label for="sign" class="col-sm-2 col-form-label">Applicant's Signature</label>
+                            <div class="col-sm-4">
+                                @if (Model.applicationForm?.applicantSignature == null || Model.applicationForm?.applicantSignature == "")
+                                {
+                                    <img id="user_sign" style="width:150px;height:150px;border-radius: 47%;" src="~/images/sig.jpg" alt="" class="img-thumbnail float-left">
+
+                                }
+                                else
+                                {
+                                    <img id="user_sign" style="width:150px;height:150px;border-radius: 47%;" src="~/EmpImages/@Model.applicationForm?.applicantSignature" alt="" class="img-thumbnail float-left">
+
+                                }
+                                @*<img id="user_sign" style="width:150px;height:150px;border-radius: 47%;" src="~/images/sig.jpg" alt="" class="img-thumbnail float-left">*@
+
+                                <input type="hidden" id="userFile1" />
+                                <input type="hidden" name="ApplicationId" value="@Model.ApplicationId" />
+                                <input type="hidden" title="Signature Upload" class="btn btn-default btn-sm pull-right" id="sign" name="applicantSignature">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="paymentDoc" class="col-sm-2 col-form-label">Payment Docs</label>
+                            <div class="col-sm-4">
+                                @if (Model.applicationForm?.payDoc == null || Model.applicationForm?.payDoc == "")
+                                {
+                                    <img id="user_img2" style="width:150px;height:150px;" src="~/images/file_imge.jpg" alt="" class="img-thumbnail float-left">
+
+                                }
+                                else
+                                {
+                                    <img id="user_img2" style="width:150px;height:150px;" src="/EmpAttachment/pdfIcon.png" alt="" class="img-thumbnail float-left">
+                                    <input type="hidden" id="userFile2" value="" />
+                                    <input type="hidden" id="userFile3" value="@Model.applicationForm?.payDoc" />
+
+                                }
+
+                                <input type="hidden" name="ApplicationId" value="@Model.ApplicationId" />
+                                <input type="hidden" title="Payment Doc Upload" class="btn btn-default btn-sm pull-right" id="paymentDoc" name="payDoc" value="">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h5 style="color: black;">Present Address : </h5>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <h5 style="color: black;">Permanent Address : </h5>
+                            </div>
+                            <div class="col-sm-3">
+                                @*<label for="copyAs" onclick="CopyAddress()" class=" col-form-label"><input type="checkbox" class="form-check-inline" style="margin-right:5px;" id="copyAs" name="copyAs" />Same as Present Address</label>*@
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <input type="hidden" id="PresentAdressId" name="PresentAdressId" value="0" />
+                            <label for="presentDivision" class="col-sm-2 col-form-label">Division</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="presentDivision" value="@Model.present?.division?.divisionName" readonly name="divisionId">
+
+                            </div>
+                            <input type="hidden" id="PermanentAdressId" name="PermanentAdressId" value="0" />
+                            <label for="PermanentDivision" class="col-sm-2 col-form-label">Division</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="PermanentDivision" value="@Model.permanent?.division?.divisionName" name="divisionIdp" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="presentDistrict" class="col-sm-2 col-form-label">District</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="presentDistrict" value="@Model.present?.district?.districtName" name="districtId" readonly>
+                            </div>
+
+                            <label for="PermanentDistrict" class="col-sm-2 col-form-label">District</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="PermanentDistrict" value="@Model.permanent?.district?.districtName" name="districtIdp" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="presentUpazilla" class="col-sm-2 col-form-label">Upazilla</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="presentUpazilla" value="@Model.present?.thana?.thanaName" name="thanaId" readonly>
+                            </div>
+
+                            <label for="PermanentUpazilla" class="col-sm-2 col-form-label">Upazilla</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="PermanentUpazilla" value="@Model.permanent?.thana?.thanaName" name="thanaIdp" readonly>
+
+
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="presentPostOffice" class="col-sm-2 col-form-label">Post Office</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="presentPostOffice1" value="@Model.present?.postOffice" readonly name="postOffice">
+                            </div>
+
+                            <label for="PermanentPostOffice" class="col-sm-2 col-form-label">Post Office</label>
+                            <div class="col-sm-4">
+                                <input type="number" class="form-control" id="PermanentPostOffice1" value="@Model.permanent?.postOffice" readonly name="postOfficep">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="presentHouseNo" class="col-sm-2 col-form-label">Road Block/House No</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="presentHouseNo" value="@Model.present?.blockSector" readonly name="blockSector">
+                            </div>
+
+                            <label for="PermanentHouseNo" class="col-sm-2 col-form-label">Road Block/House No</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="PermanentHouseNo" value="@Model.permanent?.blockSector" readonly name="blockSectorp">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="card">
+                    <div class="card-header">
+                        <h5 style="color: black;">Communication : </h5>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="form-group row">
+                            <label for="mobile" class="col-sm-2 col-form-label">Mobile No</label>
+                            <div class="col-sm-4">
+                                <input type="number" class="form-control" id="mobile" value="@Model.applicationForm?.mobile" readonly name="mobile">
+                            </div>
+
+                            <label for="PermanentHouseNo" class="col-sm-2 col-form-label">E-Mail</label>
+                            <div class="col-sm-4">
+                                <input type="email" class="form-control" id="email" value="@Model.applicationForm?.email" readonly name="email">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="nationality" class="col-sm-2 col-form-label">Nationality<span style="color:red">*</span></label>
+                            <div class="col-sm-4">
+                                <input type="email" class="form-control" id="nationality" value="" readonly name="nationality">
+
+                                @*<select class="form-control" id="nationality" name="nationality" data-parsley-required="true">
+                                        <option value="Bangladeshi">Bangladeshi</option>
+                                        <option value="Foreigner">Foreigner</option>
+                                    </select>*@
+                            </div>
+
+                            <label for="Gender" class="col-sm-2 col-form-label">Gender</label>
+                            <div class="col-sm-4">
+
+                                @if (Model.applicationForm?.gender == "1")
+                                {
+                                    <span><input type="radio" checked disabled> Male</span>
+                                    <span><input type="radio" disabled> Female</span>
+                                    <span><input type="radio" disabled> Other</span>
+
+                                }
+                                else if (Model.applicationForm?.gender == "2")
+                                {
+                                    <span><input type="radio" disabled> Male</span>
+                                    <span><input type="radio" checked> Female</span>
+                                    <span><input type="radio" disabled> Other</span>
+                                }
+                                else if (Model.applicationForm?.gender == "0")
+                                {
+                                    <span><input type="radio" disabled> Male</span>
+                                    <span><input type="radio" disabled> Female</span>
+                                    <span><input type="radio" checked> Other</span>
+                                }
+                                else
+                                {
+                                    <span><input type="radio" disabled> Male</span>
+                                    <span><input type="radio" disabled> Female</span>
+                                    <span><input type="radio" disabled> Other</span>
+                                }
+
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="religion" class="col-sm-2 col-form-label">Religion</label>
+                            <div class="col-sm-4">
+                                <input type="email" class="form-control" id="email" value="@Model.applicationForm?.religion?.name" readonly name="email">
+
+                            </div>
+
+                            <label for="occupation" class="col-sm-2 col-form-label">Occupation</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="occupation" value="@Model.applicationForm?.religion?.name" readonly name="occupation">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 style="color: black;">Educational Qualification : </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+
+                            <table class="table table-bordered table-responsive" id="eduTable">
+                                <thead>
+                                    <tr>
+                                        <th id="spanRow">Description of Educational Qualification</th>
+                                        <th>Degree</th>
+                                        <th>Institution</th>
+                                        <th>Board/Versity</th>
+                                        <th>Roll No</th>
+                                        <th>Country</th>
+                                        <th>Year of Certification</th>
+                                        <th>Main Subject</th>
+                                        <th>GPA/Division</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var data in Model.ApplicationEdu)
+                                    {
+                                        <tr>
+                                            <td>@data.type</td>
+                                            <td>@data.degree</td>
+                                            <td>@data.institution</td>
+                                            <td>@data.boardUniversity</td>
+                                            <td>@data.rollNo</td>
+                                            <td>@data.country</td>
+                                            <td>@data.yearOfCertification</td>
+                                            <td>@data.mainSubject</td>
+                                            <td>@data.gpaDivision</td>
+
+
+                                        </tr>
+
+
+                                        <tr style="display: none">
+                                            <td>Others (if any) </td>
+                                            <td colspan="8" width="100%"><input type="text" class="form-control" id="others" value="" name="others"> </td>
+                                        </tr>
+                                    }
+                                </tbody>
+
+
+
+                            </table>
+                            @*<div id="orderItems">
+                                    <table class="table table-responsive" id="educationDetails"></table>
+                                    <span id="orderItemError" style="color:red"></span>
+                                </div>*@
+                            @*<div class="col-md-12">
+                                    <table>
+
+                                    </table>
+                                </div>*@
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+                <div class="card">
+                    <div class="card-header">
+                        <h5 style="color: black;">Experience : </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <table class="table table-bordered" id="ExpTbl">
+                                <thead>
+                                    <tr>
+                                        <th>Name of Office </th>
+                                        <th>Position</th>
+                                        <th>Joining Date</th>
+                                        <th>Resigning Date </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var data in Model.ApplicationExp)
+                                    {
+                                        <tr>
+                                            <td>@data.officeName</td>
+                                            <td>@data.position</td>
+                                            <td>@data.from?.ToString("dd-MMM-yyyy")</td>
+                                            <td>@data.to?.ToString("dd-MMM-yyyy")</td>
+
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+                <div class="card">
+                    <div class="card-header">
+                        <h5 style="color: black;">Quota : </h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+
+                            <tr>
+                                <td>Under Freedom Fighter Quata?</td>
+                                <td> 
+                                    <input id="Fighter" type="hidden" value="@Model.applicationQuota?.isFredomFighter" />
+                                    @if (Model.applicationQuota?.isFredomFighter == 1)
+                                    {
+                                        <span><input type="radio" id="isFredomFighter1" checked> Yes</span>
+                                        <span><input type="radio" disabled> No</span>
+
+                                    }
+                                    else if (Model.applicationQuota?.isFredomFighter == 0)
+                                    {
+                                        <span><input type="radio" disabled> Yes</span>
+                                        <span><input type="radio" checked> No</span>
+                                    }
+                                    else
+                                    {
+                                        <span><input type="radio" disabled> Yes</span>
+                                        <span><input type="radio" disabled> No</span>
+                                    }
+
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr id="OnOff">
+                                <td>Relation With Freedom Fighter</td>
+                                <td><input type="text" class="form-control" readonly id="relation" value="@Model.applicationQuota?.relation" name="relation"></td>
+                                <td>Document of Freedom Fighter</td>
+                                <td>
+                                    @if (Model.applicationQuota?.document == null || Model.applicationQuota?.document == "")
+                                    {
+                                        <img id="user_img3" style="width:70px;height:70px;margin-left:74px;" src="~/images/file_imge.jpg" alt="" class="img-thumbnail float-left">
+
+                                    }
+                                    else
+                                    {
+                                        <img id="user_img3" style="width:70px;height:70px;margin-left:74px;" src="/EmpAttachment/pdfIcon.png" alt="" class="img-thumbnail float-left">
+                                        <input type="hidden" id="userFile4" value="" />
+                                        <input type="hidden" id="userFile5" value="@Model.applicationQuota?.document" />
+
+                                    }
+                                    <input type="hidden"  name="QuotaIdr" value="@Model.QuotaIdr" />
+                                    @*<input type="hidden" name="ApplicationId" value="@Model.ApplicationId" />*@
+                                    @*<input type="hidden" title="Payment Doc Upload" class="btn btn-default btn-sm pull-right" id="paymentDoc" name="payDoc" value="">*@
+
+                                    <input type="hidden" class="form-control" readonly id="docsOfFF" name="document">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Disable/Orphan</td>
+                                <td>
+                                    @if (Model.applicationQuota?.isDisable == 1)
+                                    {
+                                        <span><input type="radio" id="isFredomFighter1" checked> Yes</span>
+                                        <span><input type="radio" disabled> No</span>
+
+                                    }
+                                    else if (Model.applicationQuota?.isDisable == 0)
+                                    {
+                                        <span><input type="radio" disabled> Yes</span>
+                                        <span><input type="radio" checked> No</span>
+                                    }
+                                    else
+                                    {
+                                        <span><input type="radio" disabled> Yes</span>
+                                        <span><input type="radio" disabled> No</span>
+                                    }
+
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Is Trible People ?</td>
+                                <td>
+                                    @if (Model.applicationQuota?.isTrible == 1)
+                                    {
+                                        <span><input type="radio" id="isFredomFighter1" checked> Yes</span>
+                                        <span><input type="radio" disabled> No</span>
+
+                                    }
+                                    else if (Model.applicationQuota?.isTrible == 0)
+                                    {
+                                        <span><input type="radio" disabled> Yes</span>
+                                        <span><input type="radio" checked> No</span>
+                                    }
+                                    else
+                                    {
+                                        <span><input type="radio" disabled> Yes</span>
+                                        <span><input type="radio" disabled> No</span>
+                                    }
+
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Is Anser ? </td>
+                                <td>
+                                    @if (Model.applicationQuota?.isAnser == 1)
+                                    {
+                                        <span><input type="radio" id="isFredomFighter1" checked> Yes</span>
+                                        <span><input type="radio" disabled> No</span>
+
+                                    }
+                                    else if (Model.applicationQuota?.isAnser == 0)
+                                    {
+                                        <span><input type="radio" disabled> Yes</span>
+                                        <span><input type="radio" checked> No</span>
+                                    }
+                                    else
+                                    {
+                                        <span><input type="radio" disabled> Yes</span>
+                                        <span><input type="radio" disabled> No</span>
+                                    }
+
+
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Under Other Quota</td>
+                                <td> 
+                                    <input type="hidden" id="isOther" value="@Model.applicationQuota?.isOther" />
+                                    @if (Model.applicationQuota?.isOther == 1)
+                                    {
+                                        <span><input type="radio" id="isFredomFighter1" checked> Yes</span>
+                                        <span><input type="radio" disabled> No</span>
+
+                                    }
+                                    else if (Model.applicationQuota?.isOther == 0)
+                                    {
+                                        <span><input type="radio" disabled> Yes</span>
+                                        <span><input type="radio" checked> No</span>
+                                    }
+                                    else
+                                    {
+                                        <span><input type="radio" disabled> Yes</span>
+                                        <span><input type="radio" disabled> No</span>
+                                    }
+
+                                </td>
+                                <td> <span id="Q1">Which Quata?</span></td>
+                                <td id="Q2"><input type="text" class="form-control" readonly id="otherQuotaName" value="" name="otherQuotaName"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+
+                <hr />
+                @*<button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-plus-square"></i></button>*@
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="imgViewModal" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLabel">Photo Preview</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" style="color: black; box-shadow: none !important; outline: none!important;">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <img class="" src="" id="imgView" style="height:545px;width:465px;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="imgViewModal1" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLabel">Sign Preview</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" style="color: black; box-shadow: none !important; outline: none!important;">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <img class="" src="" id="imgView1" style="height:545px;width:465px;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="pdfViewModal2" style="height:100% !important;" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" style="height: 100%;" role="document">
+        <div class="modal-content" style="height:100% !important;">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLabel">PDF Preview</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <iframe id="pdfFrame2" src="yourpdffile.pdf" style="width:100%;height:100% !important;"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="pdfViewModal3" style="height:100% !important;" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" style="height: 100%;" role="document">
+        <div class="modal-content" style="height:100% !important;">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLabel">PDF Preview</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <iframe id="pdfFrame3" src="yourpdffile.pdf" style="width:100%;height:100% !important;"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+<script>
+    $(document).ready(function () {
+        var file = $('#userFile3').val();
+        //  alert(file);
+        $('#userFile2').val("/EmpImages/" + file);
+
+        var file1 = $('#userFile5').val();
+        //  alert(file);
+        $('#userFile4').val("/EmpImages/" + file1);
+
+
+        $("#imagePath1").change(function () {
+            readURL1(this);
+        });
+        $("#sign").change(function () {
+            readURL12(this);
+        });
+
+        $("#user_img1").click(function () {
+            var img = $(this).attr('src');
+            if (img.indexOf("pdfIcon.png") >= 0) {
+                //alert($("#userFile").val())
+                $("#pdfFrame").attr('src', $("#userFile").val());
+                $("#pdfViewModal").modal('show');
+            }
+            else {
+                $("#imgView").attr('src', img);
+                $("#imgViewModal").modal('show');
+            }
+        });
+        $("#user_sign").click(function () {
+            var img = $(this).attr('src');
+            $("#imgView1").attr('src', img);
+            $("#imgViewModal1").modal('show');
+
+        });
+        $("#user_img2").click(function () {
+            var img = $(this).attr('src');
+            if (img.indexOf("pdfIcon.png") >= 0) {
+                //alert($("#userFile").val())
+                $("#pdfFrame2").attr('src', $("#userFile2").val());
+                $("#pdfViewModal2").modal('show');
+            }
+
+
+        });
+        $("#user_img3").click(function () {
+            var img = $(this).attr('src');
+            if (img.indexOf("pdfIcon.png") >= 0) {
+                //alert($("#userFile").val())
+                $("#pdfFrame3").attr('src', $("#userFile2").val());
+                $("#pdfViewModal3").modal('show');
+            }
+
+
+        });
+
+        $("#paymentDoc").change(function () {
+            readURL2(this);
+        });
+        $("#docsOfFF").change(function () {
+            readURL3(this);
+        });
+
+        $('#spanRow').rowSpan = 2;
+        var Fighter = $('#Fighter').val();
+
+        if (Fighter == 1) {
+            $("#OnOff").show();
+        } else {
+            $("#OnOff").hide();
+        }
+
+        var isOther = $('#isOther').val();
+  
+         if (isOther == 1) {
+
+            $("#Q1").show();
+            $("#otherQuotaName").show();
+         } else {
+
+           $("#Q1").hide();
+           $("#otherQuotaName").hide();
+        }
+});
+
+
+
+
+function readURL12(input) {
+    if (input.files && input.files[0]) {
+        var filerdr = new FileReader();
+        filerdr.onload = function (e) {
+            $('#user_sign').attr('src', e.target.result);
+        }
+        filerdr.readAsDataURL(input.files[0]);
+    }
+}
+function readURL2(input) {
+    if (input.files && input.files[0]) {
+        var filerdr = new FileReader();
+        filerdr.onload = function (e) {
+            console.log(e);
+            var srcUrl = e.target.result;
+            if (srcUrl.indexOf("application/pdf") > 0) {
+                $('#user_img2').attr('src', "/EmpAttachment/pdfIcon.png");
+                $('#userFile2').val(e.target.result);
+            }
+            else {
+                $('#user_img2').attr('src', e.target.result);
+            }
+
+        }
+        filerdr.readAsDataURL(input.files[0]);
+    }
+}
+function readURL3(input) {
+    if (input.files && input.files[0]) {
+        var filerdr = new FileReader();
+        filerdr.onload = function (e) {
+            console.log(e);
+            var srcUrl = e.target.result;
+            if (srcUrl.indexOf("application/pdf") > 0) {
+                $('#user_img3').attr('src', "/EmpAttachment/pdfIcon.png");
+                $('#userFile3').val(e.target.result);
+            }
+            else {
+                $('#user_img3').attr('src', e.target.result);
+            }
+
+        }
+        filerdr.readAsDataURL(input.files[0]);
+    }
+}
+
+
+
+
+</script>
+}
+

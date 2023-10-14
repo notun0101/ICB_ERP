@@ -1,0 +1,111 @@
+﻿@model ManpowerSummaryViewModel
+@{
+	ViewData["Title"] = "DATA CHART FOR SDG";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+<style>
+	body {
+		color: black !important;
+		font-family: 'Times New Roman';
+	}
+
+	#footertbl tr td p {
+		margin: 0;
+	}
+
+	.report-table-1 tbody tr td {
+		text-align: center;
+		color: black;
+		font-size: 14px !important;
+	}
+</style>
+<div class="text-center p-2">
+
+	<h6>DATA CHART FOR SDG</h6>
+	<h5>GOVERNMENT OF THE PEOPLES REPUBLIC OF BANGLADESH</h5>
+	<br />
+	<br />
+	<h6>Ministry/Division:__________________________________________________________________________________________________</h6>
+	<br />
+	<h6>Name of the office:__________________________________________________________________________________________________</h6>
+	<br />
+	<br />
+</div>
+<br />
+<table class="report-table-1" border="1" cellpadding="3" cellspacing="0" id="participantTable">
+	<thead>
+		<tr>
+			<th rowspan="2">Grade</th>
+			<th rowspan="2">Total Employees</th>
+			<th colspan="2">Sex</th>
+			<th colspan="2">Age Group</th>
+			<th colspan="5">Religious Affiliation</th>
+			<th rowspan="2">Disabled</th>
+			<th rowspan="2">Minor Ethnic Sect</th>
+		</tr>
+		<tr>
+			<th>Male</th>
+			<th>Female</th>
+			<th>Up to 34 Yrs.</th>
+			<th>Above 34 Yrs.</th>
+			<th>Islam</th>
+			<th>Hinduism</th>
+			<th>buddhism</th>
+			<th>Christianity</th>
+			<th>Others</th>
+
+		</tr>
+		<tr>
+			<th>1</th>
+			<th>2</th>
+			<th>3</th>
+			<th>4</th>
+			<th>5</th>
+			<th>6</th>
+			<th>7</th>
+			<th>8</th>
+			<th>9</th>
+			<th>10</th>
+			<th>11</th>
+			<th>12</th>
+			<th>13</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.manpowerSummaryList)
+		{
+			<tr>
+				<td>@item.grade</td>
+				<td>@item.totalEmployee</td>
+				<td>@item.male</td>
+				<td>@item.feMale</td>
+				<td>@item.upTo34Years</td>
+				<td>@item.above34Years</td>
+				<td>@item.islam</td>
+				<td>@item.Hinduism</td>
+				<td>@item.buddhism</td>
+				<td>@item.christian</td>
+				<td>@item.Others</td>
+				<td>@item.disabled</td>
+				<td>@item.minorEthnicSect</td>
+			</tr>
+		}
+
+
+	<tbody>
+</table>
+<table style="width:100%;"border="0"cellpadding="3"cellspacing="0">
+	<tr>
+		<td colspan="13" >
+			<div style="text-align:left;float:right;">
+				<br />
+				<br />
+				<br />
+				<br />
+				<p style="padding-right:20px;">	Officers signature, Seal and Telephone</p>
+			</div>
+		</td>
+	</tr>
+</table>
+
+

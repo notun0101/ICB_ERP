@@ -1,0 +1,493 @@
+﻿@model EmployeeInfoViewModel
+
+@{
+	ViewData["Title"] = "IDCard";
+	Layout = "~/Areas/HRPMSEmployee/Views/Shared/_EmployeeForm.cshtml";
+}
+@using OPUSERP.ERPServices.MasterData.Interfaces
+@using OPUSERP.ERPService.AuthService.Interfaces
+@using System
+@inject IERPCompanyService eRPCompanyService
+@inject IUserInfoes userInfo
+@{
+	var companies = await eRPCompanyService.GetAllCompany();
+	var company = companies.FirstOrDefault()?.filePath;
+	var companyName = companies.FirstOrDefault()?.companyName;
+}
+
+<style>
+    <style >
+    .redStar {
+        color: red;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    .back_id {
+        margin-left: 6px;
+        width: 225px;
+        border: 1px solid;
+        background-color: aqua;
+    }
+
+    #outer-box {
+        background-color: white;
+        width: 514px;
+        height: 380px;
+        font-family: 'AdorshoLipi', Arial, sans-serif !important;
+    }
+
+    #front-part {
+        background-color: #F8FDFF;
+        width: 217px;
+        height: 340px;
+        float: left;
+        margin: 20px;
+        position: relative;
+        border-radius: 10px;
+    }
+
+    #front-head {
+        border-bottom: 3px solid #52A940;
+        height: 70px;
+    }
+
+        #front-head #head {
+            padding: 10px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        #front-head #sub-head {
+            display: flex;
+            align-items: end;
+        }
+
+            #front-head #sub-head #sub1 {
+            }
+
+                #front-head #sub-head #sub1 img {
+                    width: 43px;
+                }
+
+            #front-head #sub-head #sub2 {
+                font-size: 12px;
+            }
+
+    #fron-body img {
+        width: 100%;
+    }
+
+    #front-foot {
+        background-color: #000760;
+        padding: 5px 10px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+    }
+
+        #front-foot p {
+            margin: 0;
+            color: white;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        #front-foot img {
+            width: 60px;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            height: 26px;
+        }
+
+    #back-part {
+        background-color: #F8FDFF;
+        width: 217px;
+        height: 340px;
+        float: left;
+        margin: 20px;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+        #back-part #back-head {
+            font-size: 15px;
+            text-align: center;
+        }
+
+    #back-body {
+        font-size: 10px;
+    }
+
+    #back-footer {
+        font-size: 10px
+    }
+
+        #back-footer #address {
+            font-size: 10px;
+        }
+
+    #back-part #capsul {
+        border: solid;
+        border-radius: 15px;
+        font-size: 10px;
+        border-width: 1px;
+    }
+
+    #back-part #website {
+        text-align: center;
+    }
+</style>
+
+<link href="https://fonts.maateen.me/adorsho-lipi/font.css" rel="stylesheet">
+
+
+
+<div class="card">
+    <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+        <h5 class="m-0 font-weight-bold text-primary">Generate Id Card</h5>
+        <a class='btn btn-info float-right' style="margin-top: 0px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=202'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+    </div>
+   
+    <div class="card-body">
+        <div class="container" id="intimebox">
+            <div class="row">
+                <input type="hidden" id="employeeInfoId" name="employeeInfoId">
+                <input type="hidden" id="Id" name="Id" value="0">
+                <div class="col-sm-5">
+                    <div class="form-group row">
+                        <label for="employeeInfoId" class="col-sm-4 col-form-label">Employee Name<span style="color:red;">*</span></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="employeeName" name="employeeName" placeholder="Employee Name or Code" autocomplete="off">
+                            <input type="hidden" name="EmpCode" value="" id="EmpCode" />
+                            <input type="hidden" value="@company" id="companyImg" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <div class="form-group row">
+                        <label for="employeeInfoId" class="col-sm-4 col-form-label">Expiry Date<span style="color:red;">*</span></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="expiryDate" name="expiryDate" readonly>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" id="generateBtn" onclick="GenerateId()" class="btn btn-success btn-sm">Generate Id Card</button>
+            </div><br /><br /><br />
+            <div id="IdCardFront" style="width:534px; background-color:lightpink">
+            </div>
+            <div>
+                <a href="javascript:void(0)" id="pdfBtn" onclick="GeneratepdfBtn()" class="btn btn-success btn-sm" style="margin-top: 10px;" target="_blank">Generate PDF</a>
+            </div>
+            <div id="outer-box">
+                @*<div id="front-part">
+                        <div id="front-head">
+                            <div id="head">
+                                বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ
+                            </div>
+                            <div id="sub-head">
+                                <div id="sub1">
+                                    <img src="~/Assets/bdbl.png" alt="">
+                                </div>
+                                <div id="sub2">
+                                    (রাষ্ট্র মালিকানাধীন ব্যাংক)
+                                </div>
+                            </div>
+                        </div>
+                        <div id="fron-body">
+                            <img src="~/Assets/man.JPG" alt="">
+                        </div>
+                        <div id="front-foot">
+                            <p>মোঃ হুমায়ন কবির</p>
+                            <p>MD HUMAYUN KABIR</p>
+                            <p>আইডি নং-২৫৮৯</p>
+                            <p style="text-align: left;">ইস্যুকারী কর্মকর্তার স্বাক্ষরঃ</p>
+                            <img src="~/Assets/sign.png" alt="">
+                        </div>
+                    </div>
+                    <div id="back-part">
+                        <div id="back-head">
+                            <b>ব্যাক্তিগত তথ্য</b>
+                        </div>
+                        <div id="back-body">
+                            <div>পিতার নামঃ মোঃ ছামছুল আলম</div>
+                            <div>মাতার নামঃ মোছাঃ রহিমা বেগম</div>
+                            <div>স্বামী/স্ত্রীর নামঃ মোছাঃ আয়েশা সিদ্দিকা কাকলী</div>
+                            <div>স্থায়ী ঠিকানাঃ গ্রামঃ খুরশা(শাতাবারি), ডাকঘর: ঝড়গাসাহাট, থানা: বগুড়া সদর, জেলা: বগুড়া।</div>
+                            <div>ফোন নম্বরঃ ০১৭৭৪৬৩৫৩৫০</div>
+                            <div>জরুরী যোগাযোগঃ ০১৭৭৪৬৩৫৩৫০ (বাসা)৯৫৬০০৭৬(অফিস)</div>
+                            <div>এনআডি নম্বরঃ ১৯৯১১০২২০১৯০০০০১৮৪</div>
+                            <div>রক্তের গ্রপঃ ও পজেটিভ</div>
+                            <div>জন্ম তারিখঃ ৩১-১২-১৯৯১</div>
+                        </div>
+                        <br />
+                        <div id="back-footer">
+                            <div>ইস্যু তারিখঃ ০২/০২/২০২০</div>
+                            <div>মেয়াদ/পিআরএল তারিখঃ ৩০-১২-২০৫০</div>
+                            <div id="address">Head Office:BDBL Bhaban, 8 Rajuk Avenue, Dhaka-1000</div>
+                            <div id="website">Website: www.bdbl.com.bd</div>
+                        </div>
+                        <div id="capsul">এই কার্ডটি কেউ পেলে বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লি: এর নিকটস্ত শাখায় জমা দেয়ার জন্য অনুরোধ করা হলো।</div>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section ScriptsEmp{
+
+
+	<script>
+		$(document).ready(function () {
+			$('#pdfBtn').hide();
+			Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo', [], 'json', ajaxGetEmployees);
+            $('#expiryDate').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:3000" });
+		});
+		function ajaxGetEmployees(response) {
+			var lstPOP = [];
+			$.each(response, function (i, option) {
+				var obj = new Object();
+				obj.key = option.Id;
+				obj.value = option.nameEnglish + " - " + option.employeeCode;
+				lstPOP[lstPOP.length] = obj;
+			});
+			$('#employeeName').autocomplete({
+				source: lstPOP,
+				select: function (event, ui) {
+					$("#EmpCode").val(ui.item.value);
+					$("#EmpCode").val(ui.item.key);
+				}
+			});
+
+		}
+
+		function GenerateId() {
+			$('#pdfBtn').show();
+			var id = $('#EmpCode').val();
+			Common.Ajax('GET', '/HRPMSEmployee/IDCard/IndexApi?id=' + id, [], 'json', ajaxFunction, false);
+			//if ($('#EmpCode').val() == null) {
+			//    alert('Please Select Employee !!');
+			//}
+		}
+
+		function GeneratepdfBtn() {
+			var id = $('#EmpCode').val();
+			var valid = $('#Valid').val();
+			//window.location.href = "/HRPMSEmployee/IDCard/GenerateIdCardPdf?id=" + id + "&valid=" + valid;
+			window.open("/HRPMSEmployee/IDCard/GenerateIdCardPdf?id=" + id + "&valid=" + valid, '_blank');
+        }
+        function formatDate(date) {
+            date = new Date(date);
+            var year = date.getFullYear(),
+                month = date.getMonth() + 1, // months are zero indexed
+                day = date.getDate();
+                //hour = date.getHours(),
+                //minute = date.getMinutes(),
+                //second = date.getSeconds(),
+                //hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+                //minuteFormatted = minute < 10 ? "0" + minute : minute,
+                //morning = hour < 12 ? "am" : "pm";
+
+            return day + "/" + + month + "/" + year;
+        }
+
+        var e2BN = { '0': '০', '1': '১', '2': '২', '3': '৩', '4': '৪', '5': '৫', '6': '৬', '7': '৭', '8': '৮', '9': '৯' };
+
+        String.prototype.getE2BN = function () {
+            var retStr = this;
+            for (var x in e2BN) {
+                retStr = retStr.replace(new RegExp(x, 'g'), e2BN[x]);
+            }
+            return retStr;
+        };
+
+        function ajaxFunction(response) {
+            //var Valid = $('#Valid').val();
+
+            //var company = $("#companyImg").val();
+
+            console.log(response);
+            var photo = '';
+            var nameBangla = '';
+            var nameEnglish = '';
+            var employeeCode = '';
+            var fatherNameBangla = '';
+            var motherNameBangla = '';
+            var postOfficeName = '';
+            var spouseNameBN = '';
+            var thana = '';
+            var district = '';
+            var mobileNumberPersonal = '';
+            var telephoneResidence = '';
+            var mobileNumberOffice = '';
+            var nationalID = '';
+            var bloodGroup = '';
+            var dateOfBirth = '';
+            if (response.photograph?.url == null) {
+                photo = '/images/user.png';
+            }
+            else {
+                photo = response.photograph?.url;
+            }
+            if (response.employeeInfo ?.nameBangla == null) {
+                nameBangla = '';
+            }
+            else {
+                nameBangla = response.employeeInfo ?.nameBangla;
+            }
+            if (response.employeeInfo ?.nameEnglish == null) {
+                nameEnglish = '';
+            }
+            else {
+                nameEnglish = response.employeeInfo ?.nameEnglish;
+            }
+            if (response.employeeInfo ?.employeeCode == null) {
+                employeeCode = '';
+            }
+            else {
+                employeeCode = response.employeeInfo ?.employeeCode;
+            }
+            if (response.employeeInfo ?.fatherNameBangla == null) {
+                fatherNameBangla = '';
+            }
+            else {
+                fatherNameBangla = response.employeeInfo ?.fatherNameBangla;
+            }
+            if (response.employeeInfo ?.motherNameBangla == null) {
+                motherNameBangla = '';
+            }
+            else {
+                motherNameBangla = response.employeeInfo ?.motherNameBangla;
+            }
+            if (response.Spouses ?.spouseNameBN == null) {
+                spouseNameBN = '';
+            }
+            else {
+                spouseNameBN = response.Spouses ?.spouseNameBN;
+            }
+            if (response.Addresss ?.postOffice == null) {
+                postOffice = '';
+            }
+            else {
+                postOffice = response.Addresss ?.postOffice;
+            }
+            if (response.Addresss ?.thana == null) {
+                thana = '';
+            }
+            else {
+                thana = response.Addresss ?.thana ?.thanaName;
+            }
+            if (response.Addresss ?.district == null) {
+                district = '';
+            }
+            else {
+                district = response.Addresss ?.district ?.districtName;
+            }
+            if (response.employeeInfo ?.mobileNumberPersonal == null) {
+                mobileNumberPersonal = '';
+            }
+            else {
+                mobileNumberPersonal = response.employeeInfo ?.mobileNumberPersonal.getE2BN();
+            }
+            if (response.employeeInfo ?.telephoneResidence == null) {
+                telephoneResidence = '';
+            }
+            else {
+                telephoneResidence = response.employeeInfo ?.telephoneResidence.getE2BN();
+            }
+            if (response.employeeInfo ?.mobileNumberOffice == null) {
+                mobileNumberOffice = '';
+            }
+            else {
+                mobileNumberOffice = response.employeeInfo ?.mobileNumberOffice.getE2BN();
+            }
+            if (response.employeeInfo ?.nationalID == null) {
+                nationalID = '';
+            }
+            else {
+                nationalID = response.employeeInfo ?.nationalID.getE2BN();
+            }
+            if (response.employeeInfo ?.bloodGroup == null) {
+                bloodGroup = '';
+            }
+            else {
+                bloodGroup = response.employeeInfo ?.bloodGroup;
+            }
+            if (response.employeeInfo ?.dateOfBirth == null) {
+                dateOfBirth = '';
+            }
+            else {
+                //dateOfBirth = response.employeeInfo ?.dateOfBirth;
+                dateOfBirth = formatDate(response.employeeInfo ?.dateOfBirth).getE2BN();
+            }
+            
+
+            var today = formatDate(new Date()).getE2BN();
+            var expiryDate = formatDate($('#expiryDate').val()).getE2BN();
+            //alert(expiryDate)
+            var option = `<div id="front-part">
+							<div id="front-head">
+								<div id="head">
+									বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ
+								</div>
+								<div id="sub-head">
+									<div id="sub1">
+										<img src="/Assets/bdbl.png" alt="">
+									</div>
+									<div id="sub2">
+										(রাষ্ট্র মালিকানাধীন ব্যাংক)
+									</div>
+								</div>
+							</div>
+							<div id="fron-body">
+								<img src="/${photo}" alt="" style="height:200px;">
+							</div>
+							<div id="front-foot">
+								<p>${nameBangla}</p>
+								<p>${nameEnglish}</p>
+								<p>আইডি নং-${employeeCode}</p>
+								<p style="text-align: left;">ইস্যুকারী কর্মকর্তার স্বাক্ষরঃ</p>
+								<img src="/Assets/sign.png" alt="">
+							</div>
+						</div>
+						<div id="back-part">
+                        <div id="back-head">
+                            <b>ব্যাক্তিগত তথ্য</b>
+                        </div>
+                        <div id="back-body">
+                            <div>পিতার নামঃ ${fatherNameBangla}</div>
+                            <div>মাতার নামঃ ${motherNameBangla}</div>
+                            <div>স্বামী/স্ত্রীর নামঃ ${spouseNameBN}</div>
+                            <div>স্থায়ী ঠিকানাঃ Post: ${postOffice}, Thana: ${thana}, District: ${district} </div>
+                            <div>ফোন নম্বরঃ ${mobileNumberPersonal} </div>
+                            <div>জরুরী যোগাযোগঃ ${telephoneResidence} (Home) 
+    </br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${mobileNumberOffice} (Office) </div>
+                            <div>এনআডি নম্বরঃ ${nationalID}</div>
+                            <div>রক্তের গ্রপঃ ${bloodGroup}</div>
+                            <div>জন্ম তারিখঃ ${dateOfBirth}</div>
+                        </div>
+                        <div id="back-footer">
+                            <div>ইস্যু তারিখঃ ${today}</div>
+                                <div>মেয়াদ/পিআরএল তারিখঃ ${expiryDate}</div>
+                            <div id="address">Head Office:BDBL Bhaban, 8 Rajuk Avenue, Dhaka-1000</div>
+                            <div id="website">Website: www.bdbl.com.bd</div>
+                        </div>
+                        <div id="capsul">এই কার্ডটি কেউ পেলে বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লি: এর নিকটস্ত শাখায় জমা দেয়ার জন্য অনুরোধ করা হলো।</div>
+                    </div>`
+			
+			$('#outer-box').empty();
+			$('#outer-box').append(option);
+		}
+
+	</script>
+
+}

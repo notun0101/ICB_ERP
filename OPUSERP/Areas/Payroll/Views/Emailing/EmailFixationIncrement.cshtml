@@ -1,0 +1,227 @@
+﻿@model EmailingViewModel
+@{
+	ViewData["Title"] = "EmailFixation";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section Style{
+	<style>
+		ul.ui-autocomplete {
+			z-index: 99999999;
+		}
+	</style>
+}
+
+	
+
+<div class="card" style="width: 100%;">
+	<div class="card-header">
+		<h5 class="card-title" style="color: black">Process Pay Slip To Send Employees Email</h5>
+		<a href="javascript:void(0)" class="btn btn-info btn-sm" onclick="CheckMailSent()">Check Mail Sending</a>
+	</div>
+	<div class="card-body">
+		<div class="container">
+			<form asp-area="Payroll" asp-controller="Emailing" asp-action="EmailFixationIncrement" method="post" data-parsley-validate="parsley">
+				<div asp-validation-summary="All" class="text-danger"></div>
+				<div class="row">
+
+					<div class="col-sm-12">
+						<div class="form-group row">
+							<div class="col-sm-6">
+							</div>
+							<div class="col-sm-6">
+								@*<input type="radio" name="All" id="BranchWise" value="2" required><scan style="color:black;font-size: 16px; margin-right: 23px;margin-left: 8px;">Branch Wise</scan>
+								<input type="radio" name="All" id="All" value="1" required><scan style="color:black;font-size: 16px; margin-right: 23px;margin-left: 8px;">All</scan>*@
+								<input type="radio" name="All" id="Individual" value="0"><scan style="color:black;font-size: 16px;margin-left: 8px;">Individual</scan>
+								<input type="radio" name="All" id="DesignationWise" value="3"><scan style="color:black;font-size: 16px;margin-left: 8px;">Designation</scan>
+							</div>
+						</div>
+					</div>
+
+					<input type="hidden" id="employeeInfoId" name="employeeInfoId">
+					<div class="col-sm-4">
+						<div class="form-group row">
+							<label for="employeeInfoId" class="col-sm-5 col-form-label">Employee's Name </label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="employeeName" name="employeeName">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="FixationType" class="col-sm-5 col-form-label">Fixation Type <span style="color:red;">*</span></label>
+							<div class="col-sm-7">
+								<select name="FixationType" id="FixationType" class="form-control" data-parsley-required="true">
+									<option value="">Select Fixation Type</option>
+									<option value="Promotion">Promotion</option>
+									<option value="Increment" selected>Increment</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="FixationYear" class="col-sm-5 col-form-label">Fixation Year <span style="color:red;">*</span></label>
+							<div class="col-sm-7">
+								<select name="FixationYear" id="FixationYear" class="form-control" data-parsley-required="true">
+									<option value="">Select Fixation Year</option>
+									@for (int i = DateTime.Now.Year; i > 2019; i--)
+									{
+										<option value="@i">@i</option>
+									}
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="payDate" class="col-sm-5 col-form-label">Pay Date </label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" id="payDate" name="payDate">
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-sm-7">
+								<a href="javascript:void(0)" class="btn btn-info" onclick="GenerateFixation()">Generate Fixation</a>
+							</div>
+							<div class="col-sm-5 text-center" id="fileCountBox" style="display: none; font-weight: bold;">
+								<span>Generated: </span><span id="incFiles">0</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-8">
+						<div class="form-group row All" id="branch-box">
+							<label for="mailSub" class="col-sm-2 col-form-label">Branch Name</label>
+							<div class="col-sm-10">
+								<select class="form-control" id="hrBranchid" name="hrBranchid">
+									<option value="0">Choose Branch</option>
+									@foreach (var item in Model.hrBranches)
+									{
+										<option value="@item.Id">@item.branchName</option>
+									}
+								</select>
+							</div>
+						</div>
+						<div class="form-group row All" id="desig-box">
+							<label for="mailSub" class="col-sm-2 col-form-label">Designation</label>
+							<div class="col-sm-10">
+								<select class="form-control" id="designationId" name="designationId">
+									<option value="0">Choose Designation</option>
+									@foreach (var item in Model.designations.OrderBy(x => Convert.ToInt32(x.designationCode)))
+									{
+										<option value="@item.Id">@item.designationName</option>
+									}
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="mailSub" class="col-sm-2 col-form-label">Mail Subject <span style="color:red;">*</span></label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="mailSub" name="mailSub" data-parsley-required="true">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="mailText" class="col-sm-2 col-form-label">Mail Body <span style="color:red;">*</span></label>
+							<div class="col-sm-10">
+								<textarea class="form-control" id="mailText" name="mailText" cols="18" rows="12" data-parsley-required="true"></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+				<hr>
+				<button type="submit" value="Submit" title="Save" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+
+@section Scripts{
+	<script>
+        $(document).ready(function () {
+            $("#payDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1960:2040" }).datepicker("setDate", new Date());
+			$('.All').hide();
+            //$('#leaveTable').DataTable();
+
+            Common.Ajax('GET', '/global/api/GetAllEmployess', [], 'json', ajaxGetEmployees);
+
+            $('#salaryPeriodId').change(function () {
+                Common.Ajax('GET', '/Payroll/Emailing/GetSalaryPeriodById/?periodId=' + parseInt($('#salaryPeriodId').val()), [], 'json', ajaxGetSalaryPeriodById);
+			});
+
+			$('#DesignationWise').on('click', function () {
+				$('.All').hide();
+				$('#desig-box').show();
+			})
+			$('#Individual').on('click', function () {
+				$('.All').hide();
+				$('#desig-box').hide();
+			})
+			$('#BranchWise').on('click', function () {
+				alert()
+				$('.All').hide();
+				$('#branch-box').show();
+			})
+        });
+
+		function GenerateFixation() {
+			var type = $('#FixationType :selected').val();
+			var year = $('#FixationYear :selected').val();
+
+            $('#fileCountBox').show();
+
+			if (type != '' && year != '') {
+				location.href = '/Payroll/Emailing/GenerateAllFixationPdf?type=' + type + '&year=' + year;
+            }
+            else {
+                swal('warning', 'Please Choose Type and Year!', 'warning');
+            }
+
+            const interval = setInterval(function () {
+                Common.Ajax('GET', '/Payroll/Emailing/CountFixationGenerate?type=' + type + "&year=" + year, [], 'json', ajaxGetIncompleteFileCount, false);
+            }, 5000);
+        }
+
+        function ajaxGetIncompleteFileCount(res) {
+            console.log(res);
+            $('#incFiles').text(res);
+			$('#count').text(res);
+        }
+
+        function CheckMailSent() {
+            var periodId = $('#salaryPeriodId').val();
+
+            if (periodId != '') {
+                location.href = '/Payroll/Emailing/CheckEmailSendingStatusByperiodId?periodId=' + periodId;
+            }
+            else {
+                swal('warning', 'Please Choose a period!', 'warning');
+            }
+        }
+
+        function ajaxGetSalaryPeriodById(response) {
+            console.log(response);
+            $("#mailSub").val(response.mailSub);
+            $("#mailText").val(response.mailText);
+        }
+
+        function ajaxGetEmployees(response) {
+            var GeEmployeesList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+                obj.designation = option.designation;
+                obj.employeeCode = option.employeeCode;
+                GeEmployeesList[GeEmployeesList.length] = obj;
+            });
+            $('#employeeName').autocomplete({
+                source: GeEmployeesList,
+                select: function (event, ui) {
+                    $("#employeeName").val(ui.item.value);
+                    $("#Designation").val(ui.item.designation);
+                    $("#employeeInfoId").val(ui.item.key);
+                }
+            });
+        }
+
+
+	</script>
+}

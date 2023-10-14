@@ -1,0 +1,95 @@
+﻿@model PFInvestmentViewModel
+@{
+    ViewData["Title"] = "InvestmentList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            @*<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h2 class="m-0 font-weight-bold text-primary">Investment List</h2>
+                </div>*@
+
+            <div class="card-body ">
+                <div class="">
+                    <h5 class="m-0 font-weight-bold text-primary">Investment List</h5>
+                </div>
+                <hr />
+                <table class="table table-striped table-bordered table-hover" id="TblOverView">
+                    <thead>
+                        <tr>
+                            <th>Investment Name</th>
+                            <th>Investment Date</th>
+                            <th>Amount</th>
+                            <th>Interest Rate</th>
+                            <th>Maturity Date</th>
+                            <th>Manage</th>
+
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.pFInvestments)
+                        {
+                            <tr>
+                                <td>@data.investmentName</td>
+                                <td>@data.investmentDate?.ToString("dd-MMM-yyyy")</td>
+                                <td>@data.investmentAmount</td>
+                                <td>@data.interestRate</td>
+                                <td>@data.maturityDate?.ToString("dd-MMM-yyyy")</td>
+                                <td>
+                                    <a href="/ProvidentFund/Investment/PreviewInvestment">
+                                        <i class="fa fa-eye" style="color:green"></i>
+                                    </a>
+                                    &nbsp;
+                                    &nbsp;
+                                    <a class="btn-sm btn-danger" onclick="Remove(@data.Id)"><i class="fa fa-trash" style="border:none"></i></a>
+
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#TblOverView').DataTable();
+    });
+
+    function Remove(Id) {
+
+        if (Id == "") {
+            swal('Warning', 'please try again', 'warning');
+            return false;
+        }
+        swal({
+            title: 'Are you sure?', text: 'Do you want to Delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, Delete it!'
+        }).then(function () {
+            $.get("/ProvidentFund/Investment/DeleteInvestment?id=" + Id, function (data) {
+                if (data.Success) {
+                    swal('', data.Message, 'success').then(function () {
+                        location.reload();
+                    })
+                } else {
+                    swal('Warning', data.Message, 'warning');
+                }
+
+
+            });
+
+        })
+
+    }
+
+</script>
+
+
+
+

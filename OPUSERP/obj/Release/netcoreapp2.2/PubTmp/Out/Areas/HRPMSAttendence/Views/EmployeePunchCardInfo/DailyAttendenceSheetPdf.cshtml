@@ -1,0 +1,131 @@
+﻿@model DailyAttendenceViewModel
+@{
+    ViewData["Title"] = "DailyTimeSheet";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+
+<div class="card" style="width: 100%;">
+    <div class="card-header row" style="background-color:#EAF6FA;">
+        <div class="col-12">
+            <h5 class="card-title" style="color: black">Daily Time Sheet @*@DateTime.Now.ToString("dd-MMM-yyyy")*@</h5>
+        </div>
+
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-12 row">
+                <div class="col-5" style="color: black; font-size: 17px; padding-top: 24px;">
+                   
+                    <span style="font-weight:bold;">Date : </span><span>@DateTime.Now.ToString("dd-MMM-yyyy")</span><br />
+                    @*<span style="font-weight:bold;">Department : </span><span></span><br />
+                    <span style="font-weight:bold;">Shift : </span><span></span><br />*@
+                </div>
+                <div class="col-6">
+
+                    <div class="card-body">
+                        <table class="table table-striped table-bordered" style="margin-left:30%;">
+                            <thead>
+                                <tr style="background-color:#A8D1F7">
+                                    <th>Particular</th>
+                                    <th>Days</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr>
+                                    <td>Total Present</td>
+                                    <td>@Model.totalPresent</td>
+                                </tr>
+                                <tr>
+                                    <td>Total Absent</td>
+                                    <td>@Model.totalAbsent</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Total Late</td>
+                                    <td>@Model.totalLate</td>
+                                </tr>
+                                <tr>
+                                    <td>Total Leave</td>
+                                    <td id="tLeave">@Model.totalLeave</td>
+                                </tr>
+                                <tr>
+                                    <td>Total Leave (Without Pay)</td>
+                                    <td>@Model.totalLeaveWP</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card">
+            
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="attendenceTable">
+                    <thead>
+                        <tr>
+                            <th>Employee Name</th>
+                            <th>Employee ID</th>
+                            <th>In Time</th>
+                            <th>Out Time</th>
+                            <th>Status</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.DailyAttendence.OrderBy(x => x.employeeInfo?.nameEnglish))
+                        {
+                            <tr>
+                                <td>@item.employeeInfo.nameEnglish</td>
+                                <td>@item.employeeInfo.Id</td>
+                                <td>
+                                    @item.empAttendance?.startTime
+                                </td>
+                                <td>@item.empAttendance?.endTime</td>
+                                <td>
+                                    @if (item.empAttendance?.startTime != null && item.empAttendance?.endTime != null)
+                                    {
+                                        <span class="badge badge-success">P</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-warning">A</span>
+                                    }
+
+                                </td>
+                                <td>@item.empAttendance?.remarks</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Assets/paginathing.js"></script>
+    <script>
+        $(document).ready(function () {
+        
+
+		});
+
+     
+
+
+    </script>
+}

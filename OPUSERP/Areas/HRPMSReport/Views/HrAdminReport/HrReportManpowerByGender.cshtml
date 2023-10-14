@@ -1,0 +1,257 @@
+﻿@model AllHrReportViewModel
+
+@{
+    ViewData["Title"] = "HrReportManpowerByGender";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+
+}
+@section Style{
+    <style>
+
+        .print-card-body {
+            width: 100%;
+            padding-bottom: 10px;
+        }
+
+        .vartical-table th {
+            width: 25%;
+        }
+
+        .vartical-table td {
+            width: 25%;
+        }
+
+        .table td, .table th {
+            padding: .3rem;
+            font-size: 14px;
+        }
+
+        table {
+            page-break-inside: auto;
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        tfoot {
+            display: table-footer-group;
+        }
+
+        h6 {
+            font-size: 14px;
+            background-color: gray;
+            color: white !important;
+            padding: 3px;
+        }
+    </style>
+}
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+        <div class="container-fluid">
+            <div class="fa-pull-right">
+                <p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+            </div>
+            <div class="row" style="padding-top:0px;">
+                <div class="col-2">
+                    <img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="OPUS ERP" style="height:80px;" />
+                </div>
+                <div class="col-10">
+                    <div style="color:black;text-align:center;">
+                        <h4 style="text-transform: uppercase;font-size:18px;">Bangladesh Development Bank Limited</h4>
+                        <h4 style="text-transform: uppercase;font-size:18px;">Head office : dhaka</h4>
+                        <h4 style="text-transform: uppercase;font-size:18px;"><u>human resource management department</u></h4>
+                        <h5 style="font-size:18px;"><u>Manpower by Age Group [Regular and Contractual]</u></h5>
+
+                        <br />
+                        <br />
+
+                    </div>
+                </div>
+                @*<div class="col-2"></div>*@
+            </div>
+        </div>
+
+        <div class="container-fluid" style="color:black;">
+
+            <div class="row" style="padding: 0px 15px 0px 15px; width:100%;">
+                <table class="table table-bordered " style="width:45%;">
+                    <thead>
+                        <tr style="background-color:lightgray;">
+
+                            <th style="text-align:center;width:50%;border-bottom:1px solid black !important;" rowspan="3">Particulars</th>
+                        </tr>
+                        <tr style="background-color:lightgray;">
+                            <th style="text-align:center;width:50%;border-bottom:1px solid black !important;" colspan="2">@ViewBag.monthTw?.ToString("dd-MM-yyyy")</th>
+
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        @{ 
+                            int i = 0;
+                            int c0Male = 0;
+
+                        }
+                        @foreach (var data in @Model.genderManpowerViewModels12)
+                        {
+                            i++;
+                            c0Male += data.count;
+
+                            <tr>
+                                <td>@data.title</td>
+                                <td style="text-align:center;" class="t_12_@i">@data.count</td>
+                            </tr>
+                            if (data.title == "Contructual Male")
+                            {
+
+                                <tr>
+                                    <td><b>Sub-total of Male</b></td>
+                                    <td style="text-align:center" id="sm_12">@c0Male</td>
+                                </tr>
+                                c0Male = 0;
+                            }
+                            if (data.title == "Contructual Female")
+                            {
+                                <tr>
+                                    <td><b>Sub-total of Female</b></td>
+                                    <td style="text-align:center" id="sf_12">@c0Male</td>
+                                </tr>
+
+                            }
+                          
+                        }
+
+                    </tbody>
+                </table>
+
+                <table class="table table-bordered " style="width:30%; ">
+                    <thead>
+                        <tr style="background-color:lightgray;">
+                            <th style="text-align:center;width:50%;border-bottom:1px solid black !important;" rowspan="3">@ViewBag.months?.ToString("dd-MM-yyyy")</th>
+                        </tr>
+                        <tr style="background-color:lightgray;">
+                            <th style="text-align:center;width:40%;border-bottom:1px solid black !important;" colspan="2">Difference</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int j = 0;
+                            int cMale = 0;
+                            int fMale = 0;
+                      
+                        }
+                        @foreach (var data in @Model.genderManpowerViewModels6)
+                        {
+                            j++;
+                            cMale += data.count;
+                            fMale += data.count;
+                            <tr>
+                                <td style="text-align:center;" class="t_6_@j">@data.count</td>
+                                <td style="text-align:center;" class="dif612 dif_612_@j">-</td>
+                            </tr>
+                            if (data.title == "Contructual Male")
+                            {
+                                <tr>
+                                    <td style="text-align:center" id="sm_6" >@cMale</td>
+                                    <td></td>
+                                </tr>
+                                cMale = 0;
+                            }
+                            if (data.title == "Contructual Female")
+                            {
+                                <tr>
+                                    <td style="text-align:center" id="sf_6">@cMale</td>
+                                    <td></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                <table class="table table-bordered " style="width:30%; ">
+                    <thead>
+                        <tr style="background-color:lightgray;">
+                            <th style="text-align:center;width:50%;border-bottom:1px solid black !important;" rowspan="3">@ViewBag.month?.ToString("dd-MM-yyyy")</th>
+                        </tr>
+                        <tr style="background-color:lightgray;">
+                            <th style="text-align:center;width:40%;border-bottom:1px solid black !important;" colspan="2">Difference</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int k = 0;
+                            int c2Male = 0;
+                            int f2Male = 0;
+                        }
+                        @foreach (var data in @Model.genderManpowerViewModels)
+                        {
+                            k++;
+                            c2Male += data.count;
+                            f2Male += data.count;
+
+                            <tr>
+                                <td style="text-align:center;" class="t_@k">@data.count</td>
+                                <td style="text-align:center;" class="dif6 dif_6_@k">-</td>
+                            </tr>
+                            if (data.title == "Contructual Male")
+                            {
+                            <tr>
+                                <td style="text-align:center" id="sm_0">@c2Male</td>
+                                <td></td>
+                            </tr>
+                                c2Male = 0;
+                            }
+                            if (data.title == "Contructual Female")
+                            {
+                                <tr>
+                                    <td style="text-align:center" id="fm_0">@c2Male</td>
+                                    <td></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            //$(".calculate").click(function () {
+            //    var Present = $('input[name="25-08-2021"]').val();
+            //    var Previous = $('input[name="25-02-2021"]').val();
+            //    var total = Present - Previous;
+            //    $('.result').html(total);
+            //});
+
+            for (var i = 1; i <= $('.dif612').length; i++) {
+                //console.log(parseInt($('.t_6_' + i).text()) - parseInt($('.t_12_' + i).text()))
+                $('.dif_612_' + i).text(parseInt($('.t_6_' + i).text()) - parseInt($('.t_12_' + i).text()));
+            }
+            for (var i = 1; i <= $('.dif6').length; i++) {
+                //console.log(parseInt($('.t_6_' + i).text()) - parseInt($('.t_12_' + i).text()))
+                $('.dif_6_' + i).text(parseInt($('.t_' + i).text()) - parseInt($('.t_6_' + i).text()));
+            
+            }
+
+            $('.t_12_7').text(parseInt($('#sm_12').text()) + parseInt($('#sf_12').text()));
+            $('.t_6_7').text(parseInt($('#sm_6').text()) + parseInt($('#sf_6').text()));
+            $('.t_7').text(parseInt($('#sm_0').text()) + parseInt($('#fm_0').text()));
+            $('.dif612.dif_612_7').text(parseInt($('.t_6_7').text()) - parseInt($('.t_12_7').text()));
+            $('.dif6.dif_6_7').text(parseInt($('.t_7').text()) - parseInt($('.t_6_7').text()));
+        });
+    </script>
+
+}
+
+

@@ -1,0 +1,285 @@
+﻿@model EmployeeInfoViewModel
+
+@{
+    ViewData["Title"] = "IDCard";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+@using OPUSERP.ERPServices.MasterData.Interfaces
+@using OPUSERP.ERPService.AuthService.Interfaces
+@using System
+@inject IERPCompanyService eRPCompanyService
+@inject IUserInfoes userInfo
+@{
+    var companies = await eRPCompanyService.GetAllCompany();
+    var company = companies.FirstOrDefault()?.filePath;
+    var companyName = companies.FirstOrDefault()?.companyName;
+}
+
+<style>
+    .redStar {
+        color: red;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    .back_id {
+        margin-left: 6px;
+        width: 225px;
+        border: 1px solid;
+        background-color: aqua;
+    }
+
+    #outer-box {
+        background-color: white;
+        width: 514px;
+        height: 380px;
+        font-family: 'AdorshoLipi', Arial, sans-serif !important;
+    }
+
+    #front-part {
+        background-color: #F8FDFF;
+        width: 217px;
+        height: 340px;
+        float: left;
+        margin: 20px;
+        position: relative;
+        border-radius: 10px;
+    }
+
+    #front-head {
+        border-bottom: 3px solid #52A940;
+        height: 70px;
+    }
+
+        #front-head #head {
+            padding: 10px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        #front-head #sub-head {
+            display: flex;
+            align-items: end;
+        }
+
+            #front-head #sub-head #sub1 {
+            }
+
+                #front-head #sub-head #sub1 img {
+                    width: 43px;
+                }
+
+            #front-head #sub-head #sub2 {
+                font-size: 12px;
+            }
+
+    #fron-body img {
+        width: 100%;
+    }
+
+    #front-foot {
+        background-color: #000760;
+        padding: 5px 10px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+    }
+
+        #front-foot p {
+            margin: 0;
+            color: white;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        #front-foot img {
+            width: 60px;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            height: 26px;
+        }
+
+    #back-part {
+        background-color: #F8FDFF;
+        width: 217px;
+        height: 340px;
+        float: left;
+        margin: 20px;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+        #back-part #back-head {
+            font-size: 15px;
+            text-align: center;
+        }
+
+    #back-body {
+        font-size: 10px;
+    }
+
+    #back-footer {
+        font-size: 10px
+    }
+
+        #back-footer #address {
+            font-size: 10px;
+        }
+
+    #back-part #capsul {
+        border: solid;
+        border-radius: 15px;
+        font-size: 10px;
+        border-width: 1px;
+    }
+
+    #back-part #website {
+        text-align: center;
+    }
+
+    #sub-head #sub1 {
+        float: left;
+    }
+
+    #sub-head #sub2 {
+        float: left;
+    }
+</style>
+<div id="front-part">
+    <div id="front-head">
+        <div id="head">
+            বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ
+        </div>
+        <div id="sub-head">
+            <div id="sub1">
+                <img src="/Assets/bdbl.png" alt="">
+            </div>
+            <div id="sub2">
+                (রাষ্ট্র মালিকানাধীন ব্যাংক)
+            </div>
+        </div>
+    </div>
+    <div id="fron-body">
+        @if (Model.photograph?.url == null || Model.photograph?.url == "")
+        {
+            <img src="~/images/user.png" style="height:200px"/>
+        }
+        else
+        {
+            <img src="~/@Model.photograph?.url" style="height:200px"/>
+        }
+    </div>
+    <div id="front-foot">
+        <p>@Model.nameBangla</p>
+        <p>@Model.nameEnglish</p>
+        <p>আইডি নং @Model.religion</p>
+        <p style="text-align: left;">ইস্যুকারী কর্মকর্তার স্বাক্ষরঃ</p>
+        <img src="/Assets/sign.png" alt="">
+    </div>
+</div>
+
+<div id="back-part">
+    <div id="back-head">
+        <b>ব্যাক্তিগত তথ্য</b>
+    </div>
+    <div id="back-body">
+        <div>পিতার নামঃ @Model.employeeInfo?.fatherNameBangla</div>
+        <div>মাতার নামঃ @Model.employeeInfo?.motherNameBangla</div>
+        <div>স্বামী/স্ত্রীর নামঃ @Model.Spouses?.spouseNameBN</div>
+        <div>স্থায়ী ঠিকানাঃ  Vill: @Model.Addresss?.houseVillage, Post: @Model.Addresss?.postOffice, Thana: @Model.Addresss?.thana?.thanaName, District: @Model.Addresss?.district?.districtName</div>
+        <div>ফোন নম্বরঃ @Model.employeeInfo?.mobileNumberPersonal </div>
+        <div>
+            জরুরী যোগাযোগঃ @Model.employeeInfo?.telephoneResidence (Home)
+            <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @Model.employeeInfo?.telephoneOffice (Office)
+        </div>
+        <div>এনআইডি নম্বরঃ @Model.employeeInfo?.nationalID</div>
+        <div>রক্তের গ্রপঃ @Model.employeeInfo?.bloodGroup</div>
+        <div>জন্ম তারিখঃ @Model.employeeInfo?.dateOfBirth?.ToString("dd/MM/yyyy")</div>
+    </div>
+   
+    <div id="back-footer">
+        <div>ইস্যু তারিখঃ @ViewBag.valid</div>
+        <div>মেয়াদ/পিআরএল তারিখঃ </div>
+        <div id="address">Head Office:BDBL Bhaban, 8 Rajuk Avenue, Dhaka-1000</div>
+        <div id="website">Website: www.bdbl.com.bd</div>
+    </div>
+    <div id="capsul">এই কার্ডটি কেউ পেলে বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লি: এর নিকটস্ত শাখায় জমা দেয়ার জন্য অনুরোধ করা হলো।</div>
+</div>
+
+@*<div id="IdCardDemo" style="width:580px; ">
+
+        <div style="height:390px; width:47%; border:2px solid #000000;border-radius: 4%;float: left;color:black;background-color:azure;">
+            <br>
+            <div style="text-align: center;">
+                <img src="/EmpImages/@company" style=" height: 35px; width: 80px;margin-top: 10px;" /><br />
+                @if (Model.photograph?.url == null || Model.photograph?.url == "")
+                {
+                    <img src="~/images/user.png" style="border-radius: 10%; height: 100px; width: 100px;border:1px solid #808080;margin-top: 11px; " />
+                }
+                else
+                {
+                    <img src="~/@Model.photograph?.url" style="border-radius: 10%; height: 100px; width: 100px;border:1px solid #808080;margin-top: 11px; " />
+                }
+
+                <div style="padding: 5px;text-align: center; font-weight:bold">
+                    <u style="color:#121268;"><p style="margin: 0; text-transform: uppercase; font-weight:bold; font-size:14px; padding: 4px">@Model.employeeInfo?.nameEnglish</p></u>
+                    <p style="margin: 0; font-size:14px;">@Model.employeeInfo?.employeeCode</p>
+                    <p style="margin: 0;font-size:14px;">@Model.employeeInfo?.designation</p>
+                    <p style="margin: 0 ; font-size:14px;">@Model.employeeInfo?.department.deptName</p>
+
+                    <p style="margin: 0; font-size:14px;">Valid- @ViewBag.valid</p>
+                </div>
+            </div>
+            <div style="float:right">
+                <img src="~/images/MDSign.jpg" style="border-radius: 10%; height: 30px; width: 60px;margin-left: 18px; " />
+                <p style="margin: 0; font-size:10px;padding-right: 10px;">Authorized Signature</p>
+            </div>
+        </div>
+
+        <div style="height:390px; width:47%; border:2px solid #000000;border-radius: 4%;float: right; padding-right: 20px; color:black;background-color:cornflowerblue;">
+            <div style="text-align: center">
+                <br>
+                <img src="/EmpImages/@company" style=" height: 40px; width: 80px;margin-top: 10px;" /><br />
+
+                <div style="padding: 20px;text-align: right; font-weight:bold">
+                    <p style="margin: 0;  font-weight:bold;font-size:13px;  padding: 4px">If Found Please Return to:</p><br />
+                    <p style="margin: 0; font-size:13px;"> @Model.employeeInfo?.branch?.company?.addressLine<i class="fas fa-map-marker-alt" style="color:blue"></i></p><br />
+                    <p style="margin: 0; font-size:13px;"> @Model.employeeInfo?.branch?.company?.officeTelephone  <i class="fas fa-phone-volume" style="color:blue"></i></p><br />
+                    <p style="margin: 0; font-size:13px;">@Model.employeeInfo?.branch?.company?.companyEmail  <i class="fas fa-envelope-open" style="color:blue"></i></p>
+
+                </div>
+            </div><br />
+            <div style="float:left">
+                <img src="~/images/qr_code.png" style=" height: 60px; width: 60px;margin-left: 18px;border: 1px solid blue; " />
+            </div>
+        </div>
+    </div>*@
+@*@section ScriptsEmp{
+    <script>
+        function formatDate(date) {
+            date = new Date(date);
+            var year = date.getFullYear(),
+                month = date.getMonth() + 1,
+                day = date.getDate();
+            return day + "/" + + month + "/" + year;
+        }
+
+        var e2BN = { '0': '০', '1': '১', '2': '২', '3': '৩', '4': '৪', '5': '৫', '6': '৬', '7': '৭', '8': '৮', '9': '৯' };
+        String.prototype.getE2BN = function () {
+            var retStr = this;
+            for (var x in e2BN) {
+                retStr = retStr.replace(new RegExp(x, 'g'), e2BN[x]);
+            }
+            return retStr;
+        };
+        //var telephoneResidence = telephoneResidence.getE2BN();
+
+    </script>
+
+}*@
+

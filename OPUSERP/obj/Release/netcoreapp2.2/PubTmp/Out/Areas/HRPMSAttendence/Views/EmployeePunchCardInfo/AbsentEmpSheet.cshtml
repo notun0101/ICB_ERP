@@ -1,0 +1,497 @@
+﻿@model DailyAttendenceViewModel
+@{
+    ViewData["Title"] = "AbsentSheet";
+}
+
+
+<div class="card" style="width: 100%;">
+    <div class="card-header row" style="background-color:#EAF6FA;">
+        <div class="col-8">
+            <h5 class="card-title" style="color: black">Absent Report(All Employees)</h5>
+        </div>
+
+        <div class="col-4">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <a class='btn btn-info' style="margin-left: 125px;" data-toggle='tooltip' href='javascript:void(0)' onclick="PrintPdf()"><i style=" " class="fas fa-print"></i> Print</a>
+
+                    <a class='btn btn-info mr-4' style="margin-left: 9px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1020&perentId=6295'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <img src="~/Assets/processing.gif" id="loader" style="display: none; width: 400px; margin: 0 auto;" />
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-12 row">
+                <div class="col-7" style="color: black; font-size: 17px; padding-top: 24px;">
+                    @*<h5 style="background-color:#A8D1F7; font-size:28px;">Daily Timesheet</h5>*@
+                    @*<span style="font-weight:bold;">Date : </span><input type="text" id="date1" placeholder="Select Date">*@
+                    <table style="border:none;">
+                        <tr>
+                            <td> <span style="font-weight:bold;">Select Date  </span></td>
+                            <td>
+                                <input type="text" id="date1" autocomplete="off" placeholder="Select Date" class="form-control" readonly>
+                            </td>
+                            <td>
+                                @*<a href="javascript:void(0)" class="btn btn-success" onclick="ShowAll()">Show All</a>*@
+                                <a href="javascript:void(0)" id="btnFind" style="font-size: 13px;" class="btn btn-success"><i class="fas fa-search"></i> Find</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-weight:bold;">Designation</span><span style="margin-left:5px;"></span></td>
+                            <td>
+                                <select class="form-control dropChange" id="designation" value="" name="">
+                                    <option value="A">Select</option>
+                                    @foreach (var data in Model.designations)
+                                    {
+                                        <option value="@data.designationName">@data.designationName</option>
+                                    }
+                                </select>
+                                <input type="hidden" id="rptType" value="" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-weight:bold;">Department</span><span style="margin-left:3px;"></span> </td>
+                            <td style="width: 50%;">
+                                <select class="form-control dropChange" id="department" value="" name="">
+                                    <option value="">-Department-</option>
+                                    @foreach (var data in Model.departments)
+                                    {
+                                        <option value="@data.Id">@data.deptName</option>
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-weight:bold;">Branch</span><span style="margin-left:3px;"></span> </td>
+                            <td style="width: 50%;">
+                                <select class="form-control dropChange" id="hrBranches" value="" name="">
+                                    <option value="">-Branch-</option>
+                                    @foreach (var data in Model.hrBranches)
+                                    {
+                                        <option value="@data.Id">@data.branchName</option>
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-weight:bold;">Division</span><span style="margin-left:3px;"></span> </td>
+                            <td style="width: 50%;">
+                                <select class="form-control dropChange" id="hrDivisions" value="" name="">
+                                    <option value="">-Division-</option>
+                                    @foreach (var data in Model.hrDivisions)
+                                    {
+                                        <option value="@data.Id">@data.divName</option>
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-weight:bold;">Zone</span><span style="margin-left:5px;"></span></td>
+                            <td>
+                                <select class="form-control dropChange" id="zone" value="" name="">
+                                    <option value="">-Zone-</option>
+                                    @foreach (var data in Model.zone)
+                                    {
+                                        <option value="@data.Id">@data.branchUnitName</option>
+                                    }
+                                </select>
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><span style="font-weight:bold;">Office</span><span style="margin-left:5px;"></span></td>
+                            <td>
+                                <select class="form-control dropChange" id="office" value="" name="">
+                                    <option value="">-Office-</option>
+                                    @foreach (var data in Model.Office)
+                                    {
+                                        <option value="@data.Id">@data.branchUnitName</option>
+                                    }
+                                </select>
+
+                            </td>
+                        </tr>
+
+                        <tr style="display: none;">
+                            <td><span style="font-weight:bold;">Shift </span><span style="margin-left:13px;"></span></td>
+                            <td>
+                                <input type="hidden" id="shift" name="shift" value="1" />
+                            </td>
+                        </tr>
+
+
+                    </table>
+                    @*<span>@DateTime.Now.ToString("dd-MMM-yyyy")</span>*@
+                    <br />
+
+                    @*<span style="font-weight:bold;">Department : </span><span></span><br />
+                        <span style="font-weight:bold;">Shift : </span><span></span><br />*@
+                </div>
+                <div class="col-5">
+
+                    <div class="card-body">
+                        <table class="table table-striped  table-bordered" id="particularTable">
+                            <thead>
+                                <tr style="background-color:#A8D1F7">
+                                    <th>Particular</th>
+                                    <th style="text-align:center;">Days</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr>
+                                    <td>Total Present</td>
+                                    <td id="tPresent" style="text-align:center;"></td>
+                                </tr>
+                                <tr>
+                                    <td>Total Absent</td>
+                                    <td id="tAbsent" style="text-align:center;"></td>
+                                </tr>
+
+                                @*<tr>
+                                        <td>Total Late</td>
+                                        <td id="tLate" style="text-align:center;"></td>
+                                    </tr>*@
+                                @*<tr>
+                                        <td>Total Leave</td>
+                                        <td id="tLeave" style="text-align:center;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Leave (Without Pay)</td>
+                                        <td id="tLeaveWP" style="text-align:center;"></td>
+                                    </tr>*@
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<br />
+<hr />
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style="background-color: #EAF6FA;">
+                <h6 class="m-0 font-weight-bold">Absent Info List</h6>
+            </div>
+            <img src="~/Assets/processing.gif" id="loader" style="width: 200px; margin: 0 auto; display: none;" />
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="attendenceTable">
+                    <thead>
+                        <tr>
+                            <th>SL</th>
+                            <th>Employee ID</th>
+                            <th>Employee Name</th>
+                            <th>Designation</th>
+                            <th>Posting Place</th>
+                            @*<th>In Time</th>
+                            <th>Out Time</th>*@
+                            <th>Status</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @*@foreach (var item in Model.DailyAttendence)
+                            {
+                                <trid id    >
+                                    <td>@item.employeeInfo.nameEnglish</td>
+                                    <td>@item.employeeInfo.Id</td>
+                                    <td>
+                                        @item.empAttendance?.startTime
+                                    </td>
+                                    <td>@item.empAttendance?.endTime</td>
+                                    <td>
+                                        @if (item.empAttendance?.startTime != null && item.empAttendance?.endTime != null)
+                                        {
+                                            <span class="badge badge-success">P</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-warning">A</span>
+                                        }
+
+                                    </td>
+                                    <td>@item.empAttendance?.remarks</td>
+                                </tr>
+                            }*@
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Assets/paginathing.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#date1").datepicker({
+                dateFormat: 'dd-MM-yy',
+
+            })
+
+            $('#department').change(function () {
+                if ($(this).val() != '') {
+                    $('#hrBranches').val('').attr('readonly', 'true');
+                    $('#hrDivisions').val('').attr('readonly', 'true');
+                    $('#department').removeAttr('readonly');
+                    $('#zone').val('').attr('readonly', 'true');
+                    $('#office').val('').attr('readonly', 'true');
+                    $('#rptType').val('department');
+                }
+            })
+            $('#hrBranches').change(function () {
+                if ($(this).val() != '') {
+                    $('#department').val('').attr('readonly', 'true');
+                    $('#hrDivisions').val('').attr('readonly', 'true');
+                    $('#hrBranches').removeAttr('readonly');
+                    $('#zone').val('').attr('readonly', 'true');
+                    $('#office').val('').attr('readonly', 'true');
+                    $('#rptType').val('hrBranches');
+                }
+            })
+            $('#hrDivisions').change(function () {
+                if ($(this).val() != '') {
+                    $('#department').val('').attr('readonly', 'true');
+                    $('#hrBranches').val('').attr('readonly', 'true');
+                    $('#hrDivisions').removeAttr('readonly');
+                    $('#zone').val('').attr('readonly', 'true');
+                    $('#office').val('').attr('readonly', 'true');
+                    $('#rptType').val('hrDivisions');
+                }
+            })
+            $('#zone').change(function () {
+                if ($(this).val() != '') {
+                    $('#department').val('').attr('readonly', 'true');
+                    $('#hrBranches').val('').attr('readonly', 'true');
+                    $('#hrDivisions').val('').attr('readonly', 'true');
+                    $('#zone').removeAttr('readonly');
+                    $('#office').val('').attr('readonly', 'true');
+                    $('#rptType').val('zone');
+                }
+            })
+
+            $('#office').change(function () {
+                if ($(this).val() != '') {
+                    $('#department').val('').attr('readonly', 'true');
+                    $('#hrBranches').val('').attr('readonly', 'true');
+                    $('#hrDivisions').val('').attr('readonly', 'true');
+                    $('#zone').val('').attr('readonly', 'true');
+                    $('#office').removeAttr('readonly');
+                    $('#rptType').val('office');
+                }
+            })
+
+            $('#btnFind').on('click', function () {
+                $('.card-body').hide();
+                $('#loader').show();
+
+
+                var Date = $('#date1').val();
+
+                var depart = $('#department').val();
+                var branch = $('#hrBranches').val();
+                var division = $('#hrDivisions').val();
+                var desig = $('#designation').val();
+                var shift = $('#shift').val();
+                var zonee = $('#zone').val();
+                var officee = $('#office').val();
+
+                if (depart == '') {
+                    depart = 0;
+                }
+                else {
+                    depart = $('#department').val();
+                }
+                if (branch == '') {
+                    branch = 0;
+                }
+                else {
+                    branch = $('#hrBranches').val();
+                }
+                if (division == '') {
+                    division = 0;
+                }
+                else {
+                    division = $('#hrDivisions').val();
+                }
+                if (desig == 'A') {
+                    desig = 'A';
+                }
+                else {
+                    desig = $('#designation').val();
+                }
+                if (shift == '') {
+                    shift = 0;
+                }
+                else {
+                    shift = $('#shift').val();
+                }
+
+                if (zonee == '') {
+                    zonee = 0;
+                }
+                else {
+                    zonee = $('#zone').val();
+                }
+
+
+                if (officee == '') {
+                    officee = 0;
+                }
+                else {
+                    officee = $('#office').val();
+                }
+
+
+                //alert(depart)
+                //alert(desig)
+                Common.Ajax('GET', '/HRPMSAttendence/EmployeePunchCardInfo/GetAdminDailyAttendenceByMonthDDSapi?Date=' + Date + '&department=' + depart + '&designation=' + desig + '&shift=' + shift + '&branch=' + branch + '&division=' + division + '&zone=' + zonee + '&office=' + officee, [], 'json', ajaxFunction, true);
+            })
+        })
+
+        function ajaxFunction(response) {
+            console.log("check")
+            console.log(response)
+            //$('#attendenceTable').DataTable().destroy();
+            $('#attendenceTable tbody').empty();
+            //return false;
+            console.log('ok2');
+            console.log(response);
+            var option = "";
+
+            $('#tPresent').text(response.totalPresent);
+            $('#tAbsent').text(response.totalAbsent);
+            $('#tLate').text(response.totalLate);
+            $('#tLeave').text(response.totalLeave);
+            $('#tLeaveWP').text(response.totalLeaveWP);
+            $.each(response.DailyAttendence, function (i, item) {
+                empName = item.employeeInfo ?.nameEnglish;
+                empId = item.employeeInfo ?.employeeCode;
+                empDesig = item.designation;
+              
+                var empDept = '';
+                var status = 'A';
+                var remarks = '';
+                var className = 'warning';
+                
+                 if (item.employeeInfo ?.placeOfPosting == null) {
+                    empDept = " ";
+
+                }
+                else {
+                     empDept = item.employeeInfo ?.placeOfPosting;;
+                }
+
+
+                if (item.empAttendance != null) {
+                    start = convertto12hourtime(item.empAttendance.startTime);
+                    if (item.empAttendance.endTime != null) {
+                        end = convertto12hourtime(item.empAttendance.endTime);
+                    }
+                    status = 'P';
+                    remarks = item.empAttendance.remarks;
+                    className = 'success';
+
+                }
+                if (item.isLeaved == 1) {
+                    status = 'Leave';
+                    className = 'danger';
+                }
+                if (remarks == null) {
+                    remarks = '';
+                }
+
+                if (item.empAttendance == null) {
+                    option += `<tr>
+                                <td>${i + 1}</td>
+                                <td>${empId}</td>
+                                <th>${empName}</th>
+                                <th>${empDesig}</th>
+                                <th>${empDept}</th>
+                                
+                                <td style="text-align:center;">
+                                    <span class="badge badge-${className}".>${status}</span>
+                                </td>
+                            </tr>`
+                }
+            });
+            $('#attendenceTable tbody').append(option);
+            $('#attendenceTable').DataTable();
+          
+            $('#loader').hide();
+            $('.card-body').show();
+            $('#attendenceTable').show();
+        }
+
+        function PrintPdf() {
+            var Date = $('#date1').val();
+            var depart = $('#department').val();
+            var branch = $('#hrBranches').val();
+            var division = $('#hrDivisions').val();
+            var desig = $('#designation').val();
+            var shift = $('#shift').val();
+            var zonepdf = $('#zone').val();
+            var officepdf = $('#office').val();
+
+            if (Date != '') {
+                if ($('#rptType').val() != 'department' && $('#rptType').val() != 'hrBranches' && $('#rptType').val() != 'hrDivisions' && $('#rptType').val() != 'zone' && $('#rptType').val() != 'office') {
+                    window.open('/HRPMSAttendence/EmployeePunchCardInfo/getAbsentAttendenceByDatePdf?type=department&Date=' + Date + '&dbdId=' + depart + '&designation=' + desig + '&shift=' + shift, '_blank');
+                }
+                if ($('#rptType').val() == 'department') {
+                    window.open('/HRPMSAttendence/EmployeePunchCardInfo/getAbsentAttendenceByDatePdf?type=department&Date=' + Date + '&dbdId=' + depart + '&designation=' + desig + '&shift=' + shift, '_blank');
+                }
+                if ($('#rptType').val() == 'hrBranches') {
+                    window.open('/HRPMSAttendence/EmployeePunchCardInfo/getAbsentAttendenceByDatePdf?type=branch&Date=' + Date + '&dbdId=' + branch + '&designation=' + desig + '&shift=' + shift, '_blank');
+                }
+                if ($('#rptType').val() == 'hrDivisions') {
+                    window.open('/HRPMSAttendence/EmployeePunchCardInfo/getAbsentAttendenceByDatePdf?type=division&Date=' + Date + '&dbdId=' + division + '&designation=' + desig + '&shift=' + shift, '_blank');
+                }
+                if ($('#rptType').val() == 'zone') {
+                    window.open('/HRPMSAttendence/EmployeePunchCardInfo/getAbsentAttendenceByDatePdf?type=zone&Date=' + Date + '&dbdId=' + zonepdf + '&designation=' + desig + '&shift=' + shift, '_blank');
+                }
+                if ($('#rptType').val() == 'office') {
+                    window.open('/HRPMSAttendence/EmployeePunchCardInfo/getAbsentAttendenceByDatePdf?type=office&Date=' + Date + '&dbdId=' + officepdf + '&designation=' + desig + '&shift=' + shift, '_blank');
+                }
+            }
+            
+        }
+        function convertto12hourtime(time) {
+            var ftime = time.split(":");
+            var hour = ftime[0];
+            var realhour = "";
+            var time = "";
+
+            if (parseInt(hour) == 0) {
+                realhour = "12";
+                time = realhour + ":" + ftime[1] + ":" + ftime[2] + " AM";
+            }
+            else if (parseInt(hour) == 12) {
+                realhour = "12";
+                time = realhour + ":" + ftime[1] + ":" + ftime[2] + " PM";
+            }
+            else if (parseInt(hour) < 12 && parseInt(hour) != 0) {
+                realhour = hour;
+                time = realhour + ":" + ftime[1] + ":" + ftime[2] + " AM";
+            }
+            else {
+                realhour = hour - 12;
+                time = realhour + ":" + ftime[1] + ":" + ftime[2] + " PM";
+            };
+            return time;
+        }
+
+    </script>
+}

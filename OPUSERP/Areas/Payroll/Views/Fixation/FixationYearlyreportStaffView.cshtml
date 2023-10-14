@@ -1,0 +1,191 @@
+﻿@model FixationViewModel
+@{
+    ViewData["Title"] = "Fixation Report";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+
+<style>
+    .divstyle {
+        color: black;
+    }
+
+    .divstyleee {
+        text-align: center;
+        vertical-align: middle;
+        padding-top: 70px;
+    }
+
+    .spanStyle {
+        color: black;
+        font-size: small;
+        text-align: center;
+    }
+
+    .boldspanStyle {
+        color: black;
+        font-weight: bolder;
+        text-align: center;
+    }
+
+    .print-card-body {
+        width: 100%;
+        padding-bottom: 10px;
+    }
+
+    .vartical-table th {
+        width: 25%;
+        text-align: center;
+        vertical-align: top;
+    }
+
+    .table td, .table th {
+        padding: .3rem;
+        font-size: 16px;
+    }
+
+    table {
+        page-break-inside: auto
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+        <div class="container-fluid">
+            <div class="fa-pull-right">
+            </div>
+            <div class="row" style="padding-top:0px;font-size:22px;">
+                <div class="col-2"></div>
+                <div class="col-8">
+                    <div style="color:black;text-align:center;">
+
+                        <h5> BANGLADESH DEVELOPMENT BANK LIMITED</h5>
+                        <h5><u>HEAD OFFICE, DHAKA</u></h5>
+                        <h6><u>Human resource Management department</u></h6>
+                        <h6><u>Yearly Increment @Model.yearlyFixations?.FirstOrDefault()?.effectiveDate?.ToString("dd MMMM, yyyy")</u></h6>
+                    </div>
+                </div>
+                <div class="col-2"></div>
+            </div>
+        </div>
+
+        <div class="container-fluid" style="color:black;">
+            <div class="row" style="padding: 0px 15px 0px 15px;">
+                <table class="table table-bordered vartical-table" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th style="width: 3%;">Sl</th>
+                            <th style="width: 5%;">Emp Id</th>
+                            <th style="width: 15%;">Name</th>
+                            <th style="width: 5%;">Desig-nation</th>
+                            <th style="width: 10%;">Place of Posting</th>
+                            <th style="width: 15%; font-size: 10px;">National Pay Scale, 2015</th>
+                            <th style="width: 5%;">Subst-antive Pay</th>
+                            <th style="width: 7%; font-size: 10px;">Date of Present<br />Increment<br />dd/MM/yyyy</th>
+                            <th style="width: 5%;">Next Slab</th>
+                            <th style="width: 17%; font-size: 10px;">Record of suspension<br />/Punishment</th>
+                            <th style="width: 5%;">Recommen-dation</th>
+                            <th style="width: 10%; font-size: 10px;">Signature of the<br />sanctioning authority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 0;
+                        }
+                        
+                        @foreach (var item in Model.yearlyFixations.Where(x => x.designationCode >= 13))
+                        {
+                            i++;
+                            <tr>
+                                <td style="text-align: center;">@i</td>
+                                <td style="text-align: center;">@item.empCode</td>
+                                <td>@item.nameEnglish <br /> @item.nameBangla</td>
+                                <td style="text-align: center;">@item.designation</td>
+                                <td style="font-size: 12px;">
+                                    @if (item.posting != null)
+                                    {
+                                        if (item.posting.Split("*").Length > 1)
+                                        {
+                                            <ol style="padding-left: 14px;">
+                                                @foreach (var data in item.posting.Split("*"))
+                                                {
+                                                    <li>@data</li>
+                                                }
+                                            </ol>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.posting.Split("*")[0]</span>
+                                        }
+                                    }
+                                </td>
+                                <td style="font-size: 12px;">@item.payScale</td>
+                                <td style="text-align: center;">@item.substantiveAmount</td>
+                                <td>@item.effectiveDate?.ToString("dd/MM/yyyy")</td>
+                                <td style="text-align: center;">@item.nextSlab?.ToString("#")</td>
+                                <td style="text-align: center;">@item.punishment</td>
+                                <td style="text-align: center;">@item.recommendation</td>
+                                <td style="text-align: center;">@item.signature</td>
+                            </tr>
+                        }
+                                            
+</tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<div style="page-break-after: always;">
+</div>
+
+<div style="width: 100%;">
+    <div style="margin: auto 33%;">
+        <h4><u>Summary</u></h4>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Sl</th>
+                    <th>Designation</th>
+                    <th>Total Employee</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int j = 0;
+                }
+                @foreach (var item in Model.fixationSummaryViewModels)
+                {
+                    j++;
+                    <tr>
+                        <td style="text-align: center;">@j</td>
+                        <td style="text-align: left;">@item.designation</td>
+                        <td style="text-align: center;">@item.totalEmp</td>
+                    </tr>
+                }
+                <tr>
+                    <td style="text-align: right;" colspan="2">Total</td>
+                    <td style="text-align: center;">@Model.fixationSummaryViewModels?.Select(x => x.totalEmp).Sum()</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+
+}

@@ -1,0 +1,231 @@
+﻿@*@model LabTestRegistrationViewModel*@
+@{
+    ViewData["Title"] = "Lab Test Registration Info";
+   // Layout = "~/ Views / Shared / _Layout.cshtml";
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-body">
+        <h5 class="card-title" style="color: black">Lab Test Registration Info</h5>
+        
+        <hr>
+        <div class="container">
+            <form asp-area="HospitalManagement" id="FormId" asp-controller="HospitalCommon" asp-action="LabTestRegistration" method="post" data-parsley-validate="parsley">
+
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        
+                        <div class="form-group row">
+                            <label for="BloodId " class="col-sm-3 col-form-label">Patient Name</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="BloodId" value="" name="BloodId" >
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="nameBn" class="col-sm-3 col-form-label">Patient Id<span style="color:red;">*</span></label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="nameBn" value="" name="nameBn">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="nameBn" class="col-sm-3 col-form-label">Test Name<span style="color:red;">*</span></label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="nameBn" value="" name="nameBn">
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="sortOrder" class="col-sm-3 col-form-label">Doctor</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="type" name="type" @*data-parsley-required="true"*@>
+                                    <option value="">Select</option>
+                                    <option value="No">Mehedi Hasan</option>
+                                    <option value="Yes">Arafat Hossain</option>
+                                    <option value="Yes">Noman Rhoman</option>
+                                    <option value="Yes">Emran hossain</option>
+                                    <option value="Yes">Saif Islam</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                            <div class="form-group row">
+                                <label for="Donationdate " class="col-sm-3 col-form-label">From date</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control datePicker" id="Donationdate" value="@DateTime.Now.ToString(" dd-MMM-yyyy")" name="joiningDateGovtService" autocomplete="off" placeholder="Date of Donation">
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="Donationdate " class="col-sm-3 col-form-label">To date</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control datePicker" id="Donationdate" value="@DateTime.Now.ToString(" dd-MMM-yyyy")" name="joiningDateGovtService" autocomplete="off" placeholder="Date of Donation">
+
+                                </div>
+                            </div>
+
+                        </div>
+                </div>
+                <hr>
+                <button type="button" id="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<br />
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Lab Test Registration status</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="educationalTable">
+                    <thead>
+                        <tr>
+                            <th>Patient Name</th>
+                            <th>Patient Id</th>
+                            <th>Test Name</th>
+                            <th>Suggested Doctor</th>
+                            <th>Date DUration</th>
+                            <th>Doctor Name</th>
+                            <th>Lab Id</th>
+                            <th>Status</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Mehedi Hasan</td>
+                            <td>1010</td>
+                            <td>T4,TSH</td>
+                            <td>Benojir Khanom</td>
+                            <td>20th March to 27th March</td>
+                            <td>Benojir Khanom</td>
+                            <td>105</td>
+                            <td>Active</td>
+                            
+
+
+
+                            @*<td>
+                                <a class="btn btn-success" href=""><i class="fa fa-edit"></i></a>&nbsp;
+                                <a class="btn btn-danger" href=""><i class="fa fa-trash-alt"></i></a>
+                            </td>*@
+                        </tr>
+                        @*@foreach (var data in Model.LabTestRegistrationList)
+        {
+            <tr>
+                <td>@data.buildingId</td>
+                <td>@data.nameEn</td>
+                <td>@data.nameBn</td>
+                <td>@data.type</td>
+                <td>@data.status</td>
+                <td>@data.remarks</td>
+                <td>
+                    <a class="btn btn-success" onclick="Edit(@data.Id,'@data.buildingId','@data.nameEn','@data.nameBn','@data.type','@data.status','@data.remarks')" href="javascript:void(0)"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;
+                    <a class="btn btn-danger" href="javascript:void(0)" onclick="Delete(@data.Id)"><i class="fa fa-trash-alt"></i></a>
+                </td>
+            </tr>
+        }*@
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script>
+        $('#submit').click(function () {
+		console.log($('#FormId').serializeArray());
+		var data = $('#FormId').serializeArray();
+
+		console.log(data[0].value)
+		swal({
+			title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+		}).then(function () {
+			$.ajax({
+				url: '@Url.Action("LabTestRegistration", "HospitalCommon")',
+				type: 'POST',
+				data: data
+			}).done(function () {
+                if (data[0].value == 0) {
+                    swal('success', 'Saved Successfully!', 'success').then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    swal('success', 'Updated Successfully!', 'success').then(function () {
+                        location.reload();
+                    });;
+                }
+			}).fail(function () {
+				swal('warning', 'Failed!', 'warning');
+			})
+		});
+	})
+
+        $(document).ready(function () {
+           
+            $("#LabTestRegistration").addClass("active");
+            $('#educationalTable').DataTable();
+
+            $('#Donationdate').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100" });
+        });
+
+
+        function Edit(Id, buildingId, nameEn, nameBn, type, status, remarks) {
+            $('#Id').val(Id);
+            $('#buildingId').val(buildingId);
+            $('#nameEn').val(nameEn);
+            $('#nameBn').val(nameBn);
+            $('#type').val(type);
+            $('#status').val(status);
+            $('#remarks').val(remarks);
+            
+        }
+
+        function Delete(Id) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+
+                $.ajax({
+                    url: '@Url.Action("DeleteLabTestRegistrationById", "HospitalCommon")',
+                    data: { Id: Id },
+                    type: 'POST',
+                })
+                    .done(function () {
+                        swal('', 'Deleted Successfully!', 'success');
+                        window.location.href = "/HospitalManagement/HospitalCommon/LabTestRegistration";
+                    })
+                    .fail(function () {
+                        swal('Cancelled', 'It will not be deleted. Please try again later !!!', 'error');
+                    });
+            });
+        }
+
+    </script>
+}
+
+
+
+
+
+
+

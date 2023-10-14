@@ -1,0 +1,177 @@
+﻿@model PayrollReportViewModel
+@{
+	ViewData["Title"] = "Bonus Summary Report";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+@{ 
+    var bonusName = "";
+    var yearname = DateTime.Now.Year;
+
+    if (Model.salaryPeriod?.bonusTypeId == 4)
+    {
+        bonusName = "Incentive Bonus";
+        yearname = Convert.ToInt32(Model.salaryPeriod?.salaryYear?.yearName);
+    }
+    else
+    {
+        bonusName = Model.salaryPeriod?.mailText;
+        yearname = Convert.ToInt32(Model.salaryPeriod?.salaryYear?.yearName);
+    }
+}
+<style>
+
+	.print-card-body {
+		width: 100%;
+		padding-bottom: 10px;
+	}
+
+	.vartical-table th {
+		width: 25%;
+	}
+
+	.vartical-table td {
+		width: 25%;
+	}
+
+	.table td, .table th {
+		padding: .3rem;
+		font-size: 14px;
+		border: 1px solid black !important;
+	}
+
+	table {
+		page-break-inside: auto;
+		border-collapse: collapse;
+		border: 1px solid black !important;
+	}
+
+	tr {
+		page-break-inside: avoid;
+		page-break-after: auto;
+		border: 1px solid black !important;
+	}
+
+	thead {
+		display: table-header-group;
+		border: 1px solid black !important;
+	}
+
+	tfoot {
+		display: table-footer-group;
+		border: 1px solid black !important;
+	}
+
+	h6 {
+		font-size: 14px;
+		background-color: gray;
+		color: white !important;
+		padding: 3px;
+	}
+</style>
+
+<div class="print-card" style="width: 100%;">
+	<div class="print-card-body">
+		<div class="container-fluid">
+			@*<div class="fa-pull-right">
+					<p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+				</div>*@
+			<div class="row" style="padding-top:0px;">
+				<div class="col-2">
+					<img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="BDBL Logo" style="height:80px;" />
+				</div>
+				<div class="col-8">
+					<div style="color:black;text-align:center;">
+						<h3 style="font-size:20px;">@Model.companies.FirstOrDefault()?.companyName</h3>
+						<h3 style="font-size:18px;">@Model.headOfficeBonusSummaries?.FirstOrDefault()?.branchName</h3>
+						<h3 style="font-size:18px;">Central Accounts Department</h3>
+                        <h3 style="font-size:18px;">@bonusName for the year @yearname.ToString()</h3>
+						@*<h4 style="font-size:18px;"><u>Summary of Bangla Nobo Borsho Allowance for the year 2022</u></h4>*@
+						<br />
+					</div>
+				</div>
+				<div class="col-2">
+
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid ">
+			<div class="col-12">
+				<h3 style="font-size:18px;color:black"> </h3>
+			</div>
+		</div>
+		<br />
+		<div class="container-fluid" style="color:black;">
+			<div class="row">
+				<div class="col-12">
+					<table class="table table-bordered">
+						<thead>
+							<tr style="text-align: center;">
+								<th>SL</th>
+
+								<th>Designation Name</th>
+								<th>No. Of Employees</th>
+								<th>Basic Amount</th>
+								<th>Bonus Amount</th>
+								<th>Revenue Stamp</th>
+								<th>Net Bonus</th>
+							</tr>
+						</thead>
+						<tbody>
+							@{
+								int i = 0;
+							}
+							@foreach (var item in Model.headOfficeBonusSummaries.OrderBy(x => Convert.ToInt32(x.designationCode)))
+							{
+								i++;
+								<tr>
+									<td>@i</td>
+
+									<td>@item.designationName</td>
+									<td class="text-center">@item.EmployeeCount</td>
+									<td style="text-align: right; width: 15%;">@item.BasicAmount?.ToString("N2")</td>
+									<td style="text-align: right; width: 15%;">@item.BonusAmount?.ToString("N2")</td>
+									<td style="text-align: right; width: 15%;">@item.Revenue?.ToString("N2")</td>
+									<td style="text-align: right; width: 15%;">@item.NetBonus?.ToString("N2")</td>
+								</tr>
+							}
+							<tr>
+								<td colspan="2">Total (@Model.headOfficeBonusSummaries.Count())</td>
+								<td style="text-align: center; width: 15%;">@Model.headOfficeBonusSummaries.Sum(x => x.EmployeeCount)</td>
+								<td style="text-align: right; width: 15%;">@Model.headOfficeBonusSummaries.Sum(x => x.BasicAmount)?.ToString("N2")</td>
+								<td style="text-align: right; width: 15%;">@Model.headOfficeBonusSummaries.Sum(x => x.BonusAmount)?.ToString("N2")</td>
+								<td style="text-align: right; width: 15%;">@Model.headOfficeBonusSummaries.Sum(x => x.Revenue)?.ToString("N2")</td>
+								<td style="text-align: right; width: 15%;">@Model.headOfficeBonusSummaries.Sum(x => x.NetBonus)?.ToString("N2")</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<br />
+			<div class="row">
+				<div class="col-12">
+                    <p style="text-align: justify;">A sum of Tk. @Model.headOfficeBonusSummaries.Sum(x => x.BonusAmount)?.ToString("N2") (@OPUSERP.Helpers.AmountInWord.ConvertToWords(Model.headOfficeBonusSummaries.Sum(x => x.BonusAmount)?.ToString("N2"))) for @bonusName @Model.salaryPeriod?.salaryYear?.yearName may be sanctioned and paid to the Executives and staffs of BDBL Head Office subject to audit clearence.</p>
+				</div>
+			</div>
+			<br />
+			<br />
+			<br />
+
+			<table class="table" style="border: none !important;">
+				<tr style="border: none !important;">
+					<td style="text-align: left;border: none !important;">Assistant General Manager</td>
+					<td style="text-align: right;border: none !important;">Deputy General Manager (CAD)</td>
+				</tr>
+			</table>
+			<br /><br />
+			<table class="table" style="border: none !important;">
+				<tr style="border: none !important;">
+					<td style="text-align: left;border: none !important;">Deputy General Manager (AID)</td>
+					<td style="text-align: right;border: none !important;"></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+

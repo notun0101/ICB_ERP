@@ -1,0 +1,470 @@
+﻿@model PayrollReportViewModel
+@{
+	ViewData["Title"] = "Monthly Summary Report";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+<div class="print-card" style="width: 100%;">
+	<div class="print-card-body">
+		<div class="container-fluid">
+			<div style="width:100%;overflow:hidden;">
+
+				<div style="width:10%;float:left;">
+					<img src="/Assets/bdbl.png" alt="" style="height:100px;">
+				</div>
+				<div style="width:80%;float:left;">
+					<h3 style="text-align:center;color:black;"><b>@Model.companies.FirstOrDefault().companyName</b></h3>
+
+					<h6 style="text-align:center;color:black;font-size:larger;">Salary Summary For the month of @Model.branchSalarySummaryViewModels?.FirstOrDefault()?.PeriodName?.Substring(7)</h6>
+					<h6 style="text-align:center;color:black;font-size:larger;">@*For the month of @Model.branchSalarySummaryViewModels?.FirstOrDefault()?.PeriodName*@</h6>
+				</div>
+				@*<div style="width:10%;float:right;">
+					<div class="fa-pull-right">
+
+						<p style="text-align:right;font-size:small;color:black;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+					</div>
+				</div>*@
+			</div>
+		</div>
+
+		<div class="container-fluid" style="color:black;">
+			<div class="row" style="padding: 0px 15px 0px 15px;">
+				<table class="table table-bordered vartical-table" style="width: 100%;">
+					<thead style="background-color:white;">
+						<tr>
+							<td colspan="14" style="text-align: center;">Salary And Allowances</td>
+							<td colspan="10" style="text-align: center;">Deduction</td>
+						</tr>
+						<tr>
+							<th style="width:30%;vertical-align:middle;border-right-color:#D3D3D3"></th>
+							<th style="width:20%;vertical-align:middle;border-right-color:#D3D3D3">Branch</th>
+							<th style="width:20%;vertical-align:middle;"></th>
+							<th style="width:10%;vertical-align:middle;">Basic Paid</th>
+							<th style="width:10%;vertical-align:middle;">
+								House
+								Rent
+							</th>
+							<th style="width:10%;vertical-align:middle;">Medical</th>
+							<th style="width:10%;vertical-align:middle;">Dearness</th>
+							<th style="width:10%;vertical-align:middle;">
+								House
+								Hold
+							</th>
+							<th style="width:10%;vertical-align:middle;">Cook,Mali</th>
+							<th style="width:10%;vertical-align:middle;">
+								Entertaint
+								/Wash
+							</th>
+							<th style="width:10%;vertical-align:middle;">Charge</th>
+							<th style="width:10%;vertical-align:middle;">Bank Contribution to Gratuity Fund</th>
+							<th style="width:10%;vertical-align:middle;">PF Employer Cont.</th>
+							<th style="width:10%;vertical-align:middle;">Total Paid By Bank</th>
+
+							<th style="width:10%;vertical-align:middle;">Gratuity Fund Deduction</th>
+							<th style="width:10%;vertical-align:middle;">PF Employer Cont.</th>
+							<th style="width:10%;vertical-align:middle;">Group Insurance</th>
+
+							<th style="width:10%;vertical-align:middle;">
+								PF Employee
+								Cont.
+							</th>
+							<th style="width:10%;vertical-align:middle;">House Building Loan</th>
+							<th style="width:10%;vertical-align:middle;">
+								Income Tax
+							</th>
+							<th style="width:10%;vertical-align:middle;">
+								Tele/Off Ass/
+								Union Sub.
+							</th>
+							<th style="width:10%;vertical-align:middle;">
+								Pic Drp/
+								Bus
+							</th>
+							<th style="width:10%;vertical-align:middle;">
+								News
+								Paper
+							</th>
+							<th style="width:10%;vertical-align:middle;">Total Deduction</th>
+						</tr>
+						<tr>
+							<th colspan="3" style="width:30%;vertical-align:middle;">
+								Total Employee
+							</th>
+							<th style="width:10%;vertical-align:middle;">
+								Basic +
+								PP
+							</th>
+							<th style="width:10%;vertical-align:middle;">
+								Sumptuary
+							</th>
+							<th style="width:10%;vertical-align:middle;">
+								Conv/
+								Transport
+							</th>
+							<th style="width:10%;vertical-align:middle;">
+								Other
+								Allow
+							</th>
+							<th style="width:10%;vertical-align:middle;">
+								Telephone
+							</th>
+							<th style="width:10%;vertical-align:middle;">Education</th>
+							<th style="width:10%;vertical-align:middle;">
+								Arrear
+							</th>
+							<th style="width:10%;vertical-align:middle;">
+								Misc
+								Allow
+							</th>
+							<th style="width:10%;vertical-align:middle;">
+								Bank Cont. to
+								Pension Fund
+							</th>
+							<th style="width:10%;vertical-align:middle;">
+							</th>
+							<th style="width:10%;vertical-align:middle;">
+							</th>
+
+
+							<th style="width:10%;vertical-align:middle;">
+								Bank Cont. to
+								Pension Fund
+							</th>
+							<th style="width:10%;vertical-align:middle;">
+							</th>
+							<th style="width:10%;vertical-align:middle;">
+								Computer Loan
+							</th>
+							<th style="width:10%;vertical-align:middle;">
+								PF Loan
+							</th>
+							<th style="width:10%;vertical-align:middle;">
+								Mcl /
+								Bcl/Car
+							</th>
+							<th style="width:10%;vertical-align:middle;">
+								Arrear
+								Deduction
+							</th>
+							<th style="width:10%;vertical-align:middle;">
+								Benavolent Fund
+							</th>
+							<th style="width:10%;vertical-align:middle;">
+								Other
+								Ded
+							</th>
+							<th style="width:10%;vertical-align:middle;">
+								Revenue
+								Stamp
+							</th>
+							<th style="width:10%;vertical-align:middle;">
+								Net pay
+							</th>
+						</tr>
+					</thead>
+
+					<!--Include Start-->
+					<tbody>
+						@{
+							decimal? totalDeduct = Convert.ToDecimal(0);
+						}
+
+						<tr>
+							<td colspan="15" style="font-size: small;">Head Office Salary</td>
+						</tr>
+						<tr style="font-size: 5px !important;">
+							<td colspan="3" style="background-color:white;font-family:Cambria;font-size:small;">Grand Total</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.Basic)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.HouseRent)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.Medical)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.Dearness)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.HouseHold)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.Cook)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.Entertainment)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.Charge)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.GratuityFundDed)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.PfBankCont)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.TOTALPAIDBYBANK)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.GratuityFundDed)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.PfBankCont)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.GroupInsurance)?.ToString("0,0.00")</td>
+
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.PFSubscription)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.HouseBuilding)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.IncomeTax)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.UnionSubscription)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.BusFare)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.NewsPaper)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.TOTALDEDUCT)?.ToString("0,0.00")</td>
+						</tr>
+						<tr style="font-size: 5px !important;">
+							<td colspan="3" style="background-color:white;font-family:Cambria;font-size:small;">Total Employee: @Model.salarySummarySheetSpViewModels?.Sum(a => a.DesignationCount)</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.Basic)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.Sumptuary)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.Conveyance)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.OtherAllowance)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.MobileAllowance)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.Education)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.ArrearAddition)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.Misc)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.PensionFundBank)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;"></td>
+
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;"></td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.PensionFundBank)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;"></td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.ComputerLoan)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels.Sum(a => a.PFAdvance)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.MotorCycle)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.ArrearDeduction)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.Benevolent)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.OtherDed)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.RevenueStamp)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.salarySummarySheetSpViewModels?.Sum(a => a.NETPAY)?.ToString("0,0.00")</td>
+						</tr>
+
+
+						<tr style="font-size: 5px !important;">
+							<td colspan="15">Branch Salary</td>
+						</tr>
+						<tr style="font-size: 5px !important;">
+							<td colspan="3" style="background-color:white;font-family:Cambria;font-size:small;">Grand Total</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.Basic)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.HouseRent)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.Medical)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.Dearness)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.HouseHold)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.Cook)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.Entertainment)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.Charge)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.GratuityFundDed)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.PfBankCont)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.TOTALPAIDBYBANK)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.GratuityFundDed)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.PfBankCont)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.GroupInsurance)?.ToString("0,0.00")</td>
+
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.PFSubscription)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.HouseBuilding)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.IncomeTax)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.UnionSubscription)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.BusFare)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.NewsPaper)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.TOTALDEDUCT)?.ToString("0,0.00")</td>
+						</tr>
+						<tr style="font-size: 5px !important;">
+							<td colspan="3" style="background-color:white;font-family:Cambria;font-size:small;">Total Employee: @Model.branchSalarySummaryViewModels?.Sum(a => a.TotalEmployee)</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.Basic)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.Sumptuary)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.Conveyance)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.OtherAllowance)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.MobileAllowance)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.Education)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.ArrearAddition)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.Misc)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.PensionFundBank)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;"></td>
+
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;"></td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.PensionFundBank)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;"></td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.ComputerLoan)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.PFAdvance)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.MotorCycle)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.ArrearDeduction)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.Benevolent)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.OtherDed)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.RevenueStamp)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModels?.Sum(a => a.NETPAY)?.ToString("0,0.00")</td>
+						</tr>
+
+						<tr style="font-size: 5px !important;">
+							<td colspan="15">Zone Salary</td>
+						</tr>
+						<tr style="font-size: 5px !important;">
+							<td colspan="3" style="background-color:white;font-family:Cambria;font-size:small;">Grand Total</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.Basic)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.HouseRent)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.Medical)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.Dearness)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.HouseHold)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.Cook)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.Entertainment)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.Charge)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.GratuityFundDed)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.PfBankCont)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.TOTALPAIDBYBANK)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.GratuityFundDed)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.PfBankCont)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.GroupInsurance)?.ToString("0,0.00")</td>
+
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.PFSubscription)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.HouseBuilding)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.IncomeTax)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.UnionSubscription)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.BusFare)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.NewsPaper)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.TOTALDEDUCT)?.ToString("0,0.00")</td>
+						</tr>
+						<tr style="font-size: 5px !important;">
+							<td colspan="3" style="background-color:white;font-family:Cambria;font-size:small;">Total Employee: @Model.branchSalarySummaryViewModelZone?.Sum(a => a.TotalEmployee)</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.Basic)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.Sumptuary)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.Conveyance)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.OtherAllowance)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.MobileAllowance)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.Education)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.ArrearAddition)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.Misc)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.PensionFundBank)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;"></td>
+
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;"></td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.PensionFundBank)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;"></td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.ComputerLoan)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone.Sum(a => a.PFAdvance)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.MotorCycle)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.ArrearDeduction)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.Benevolent)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.OtherDed)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.RevenueStamp)?.ToString("0,0.00")</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@Model.branchSalarySummaryViewModelZone?.Sum(a => a.NETPAY)?.ToString("0,0.00")</td>
+						</tr>
+
+
+
+						<tr style="font-size: 5px !important;">
+							<td colspan="3" style="background-color:white;font-family:Cambria;font-size:small;">Total</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.Basic) + Model.salarySummarySheetSpViewModels?.Sum(a => a.Basic) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.Basic))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.HouseRent) + Model.salarySummarySheetSpViewModels?.Sum(a => a.HouseRent) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.HouseRent))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.Medical) + Model.salarySummarySheetSpViewModels?.Sum(a => a.Medical) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.Medical))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.Dearness) + Model.salarySummarySheetSpViewModels?.Sum(a => a.Dearness) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.Dearness))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.HouseHold) + Model.salarySummarySheetSpViewModels?.Sum(a => a.HouseHold) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.HouseHold))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.Cook) + Model.salarySummarySheetSpViewModels?.Sum(a => a.Cook) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.Cook))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.Entertainment) + Model.salarySummarySheetSpViewModels?.Sum(a => a.Entertainment) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.Entertainment))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.Charge) + Model.salarySummarySheetSpViewModels?.Sum(a => a.Charge) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.Charge))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.GratuityFundDed) + Model.salarySummarySheetSpViewModels?.Sum(a => a.GratuityFundDed) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.GratuityFundDed))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.PfBankCont) + Model.salarySummarySheetSpViewModels?.Sum(a => a.PfBankCont) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.PfBankCont))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.TOTALPAIDBYBANK) + Model.salarySummarySheetSpViewModels?.Sum(a => a.TOTALPAIDBYBANK) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.TOTALPAIDBYBANK))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.GratuityFundDed) + Model.salarySummarySheetSpViewModels?.Sum(a => a.GratuityFundDed) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.GratuityFundDed))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.PfBankCont) + Model.salarySummarySheetSpViewModels?.Sum(a => a.PfBankCont) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.PfBankCont))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.GroupInsurance) + Model.salarySummarySheetSpViewModels?.Sum(a => a.GroupInsurance) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.GroupInsurance))?.ToString("0,0.00"))</td>
+
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.PFSubscription) + Model.salarySummarySheetSpViewModels?.Sum(a => a.PFSubscription) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.PFSubscription))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.HouseBuilding) + Model.salarySummarySheetSpViewModels?.Sum(a => a.HouseBuilding) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.HouseBuilding))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.IncomeTax) + Model.salarySummarySheetSpViewModels?.Sum(a => a.IncomeTax) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.IncomeTax))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.UnionSubscription) + Model.salarySummarySheetSpViewModels?.Sum(a => a.UnionSubscription) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.UnionSubscription))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.BusFare) + Model.salarySummarySheetSpViewModels?.Sum(a => a.BusFare) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.BusFare))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.NewsPaper) + Model.salarySummarySheetSpViewModels?.Sum(a => a.NewsPaper) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.NewsPaper))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.TOTALDEDUCT) + Model.salarySummarySheetSpViewModels?.Sum(a => a.TOTALDEDUCT) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.TOTALDEDUCT))?.ToString("0,0.00"))</td>
+						</tr>
+						<tr style="font-size: 5px !important;">
+							<td colspan="3" style="background-color:white;font-family:Cambria;font-size:small;">Total Employee: @(Model.branchSalarySummaryViewModels?.Sum(a => a.TotalEmployee) + Model.salarySummarySheetSpViewModels?.Sum(a => a.DesignationCount) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.TotalEmployee))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.Basic) + Model.salarySummarySheetSpViewModels?.Sum(a => a.Basic) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.Basic))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.Sumptuary) + Model.salarySummarySheetSpViewModels?.Sum(a => a.Sumptuary) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.Sumptuary))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.Conveyance) + Model.salarySummarySheetSpViewModels?.Sum(a => a.Conveyance) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.Conveyance))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.OtherAllowance) + Model.salarySummarySheetSpViewModels?.Sum(a => a.OtherAllowance) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.OtherAllowance))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.MobileAllowance) + Model.salarySummarySheetSpViewModels?.Sum(a => a.MobileAllowance) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.MobileAllowance))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.Education) + Model.salarySummarySheetSpViewModels?.Sum(a => a.Education) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.Education))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.ArrearAddition) + Model.salarySummarySheetSpViewModels?.Sum(a => a.ArrearAddition) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.ArrearAddition))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.Misc) + Model.salarySummarySheetSpViewModels?.Sum(a => a.Misc) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.Misc))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.PensionFundBank) + Model.salarySummarySheetSpViewModels?.Sum(a => a.PensionFundBank) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.PensionFundBank))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;"></td>
+
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;"></td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.PensionFundBank) + Model.salarySummarySheetSpViewModels?.Sum(a => a.PensionFundBank) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.PensionFundBank))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;"></td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.ComputerLoan) + Model.salarySummarySheetSpViewModels?.Sum(a => a.ComputerLoan) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.ComputerLoan))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels.Sum(a => a.PFAdvance) + Model.salarySummarySheetSpViewModels?.Sum(a => a.PFAdvance) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.PFAdvance))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.MotorCycle) + Model.salarySummarySheetSpViewModels?.Sum(a => a.MotorCycle) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.MotorCycle))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.ArrearDeduction) + Model.salarySummarySheetSpViewModels?.Sum(a => a.ArrearDeduction) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.ArrearDeduction))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.Benevolent) + Model.salarySummarySheetSpViewModels?.Sum(a => a.Benevolent) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.Benevolent))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.OtherDed) + Model.salarySummarySheetSpViewModels?.Sum(a => a.OtherDed) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.OtherDed))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.RevenueStamp) + Model.salarySummarySheetSpViewModels?.Sum(a => a.RevenueStamp) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.RevenueStamp))?.ToString("0,0.00"))</td>
+							<td style="background-color:white;font-family:Cambria;font-size:small;text-align:right;">@((Model.branchSalarySummaryViewModels?.Sum(a => a.NETPAY) + Model.salarySummarySheetSpViewModels?.Sum(a => a.NETPAY) + Model.branchSalarySummaryViewModelZone?.Sum(a => a.NETPAY))?.ToString("0,0.00"))</td>
+						</tr>
+					</tbody>
+
+				</table>
+			</div>
+		</div>
+	</div>
+	<br /><br /><br /><br />
+	<div class="row">
+		<div class="col-4 divstyleee">
+			<span class="boldspanStyle">_________________________</span><br />
+			<span class="spanStyle">Prepared by:</span>
+		</div>
+		<div class="col-4 divstyleee">
+			<span class="boldspanStyle">__________________________</span><br />
+			<span class="spanStyle">Checked by:</span>
+		</div>
+		<div class="col-4 divstyleee">
+			<span class="boldspanStyle">__________________________</span><br />
+			<span class="spanStyle">Approved by:</span>
+		</div>
+	</div>
+</div>
+
+@section Scripts{
+
+}
+<style>
+	.divstyle {
+		color: black;
+	}
+
+	.divstyleee {
+		text-align: center;
+		vertical-align: middle;
+		padding-top: 70px;
+	}
+
+	.spanStyle {
+		color: black;
+		font-size: small;
+		text-align: center;
+	}
+
+	.boldspanStyle {
+		color: black;
+		font-weight: bolder;
+		text-align: center;
+	}
+
+	.print-card-body {
+		width: 100%;
+		padding-bottom: 10px;
+	}
+
+	.vartical-table th {
+		width: 25%;
+		text-align: center;
+		vertical-align: top;
+	}
+
+	.table td, .table th {
+		padding: .3rem;
+		font-size: 10px;
+	}
+
+	table {
+		page-break-inside: auto
+	}
+
+	tr {
+		page-break-inside: avoid;
+		page-break-after: auto;
+	}
+
+	thead {
+		display: table-header-group;
+	}
+
+	tfoot {
+		display: table-footer-group;
+	}
+</style>

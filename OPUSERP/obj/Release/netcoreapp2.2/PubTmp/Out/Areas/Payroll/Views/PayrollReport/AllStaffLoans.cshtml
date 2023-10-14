@@ -1,0 +1,655 @@
+﻿@model PayrollReportViewModel
+@{
+    ViewData["Title"] = "Staff Loan Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Style{
+    <style>
+        ul.ui-autocomplete {
+            z-index: 99999999;
+        }
+    </style>
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+                <h5 class="m-0 font-weight-bold text-primary">Staff Loan Report</h5>
+                <a class='btn btn-info mr-4' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1014&perentId=6015'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+            <div class="card-body">
+				<div class="">
+					<div class="form-group row" style="padding-left:20px">
+						<label for="rptType" class="col-sm-2 col-form-label"> Report Type : </label>
+						<div class="col-sm-8">
+							<select name="rptType" id="rptType" class="form-control" data-parsley-required="true">
+								<option>Please Select Report Type</option>
+								<option value="1">Staff Loan Balance As On Report</option>
+								<option value="13">Staff Loan Balance As On (Type Wise)</option>
+								@*<option value="2">Type Wise Staff Loan Balance Report</option>*@
+								<option value="3">Transaction Details</option>
+								<option value="4">Recovery Report</option>
+								<option value="5">SBS Report</option>
+								<option value="6">Interest Process Report</option>
+								<option value="10">Interest Process Report (All By Branch)</option>
+								<option value="11">Interest Process Report (All By Type)</option>
+								<option value="12">Interest Process Excel (All By Type)</option>
+								<option value="7">Disbursement Without Installment</option>
+								<option value="8">Salary Loan Deduction</option>
+								<option value="9">Loan Recovery (Other Than Salary)</option>
+								<option value="14">Loan Interest Charge Report</option>
+								<option value="15">Reconcilliation Report</option>
+                                <option value="16">Quarterly Branchwise Staff Loan Report</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row" style="padding-left:20px" id="br">
+						<label for="hrBranchId" class="col-sm-2 col-form-label"> Branch : </label>
+						<div class="col-sm-8">
+							<select name="hrBranchId" id="hrBranchId" class="form-control" data-parsley-required="true">
+								<option value="1000" data-type="zone">All</option>
+								@foreach (var item in Model.branchandZoneVms.OrderBy(x => x.BranchandZoneName))
+		{
+			<option value="@item.BranchandZoneId" data-type="@item.Type">@item.BranchandZoneName</option>
+		}
+								@*@foreach (var item in Model.hrBranches.OrderBy(x => x.branchName))
+								{
+									<option value="@item.Id">@item.branchName</option>
+								}*@
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row date" style="padding-left:20px; display: none;">
+						<label for="date" class="col-sm-2 col-form-label">Choose Date : </label>
+						<div class="col-sm-8">
+							<input type="text" id="date" class="form-control datepicker2" readonly value="" />
+						</div>
+					</div>
+					<div class="form-group row loanType1" style="padding-left:20px; display: none;">
+						<label for="loanType1" class="col-sm-2 col-form-label">Loan Types : </label>
+						<div class="col-sm-8">
+							<select class="form-control" id="loanType1" name="loanType">
+								<option value="0">All Type</option>
+								<option value="MCA">MCA</option>
+								<option value="MCAR">MCAR</option>
+								<option value="CL">CL</option>
+								<option value="HBA-B13">HBA-B13</option>
+								<option value="HBA-A13">HBA-A13</option>
+								<option value="BCA">BCA</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group row particularbox" style="padding-left:20px; display: none;">
+						<label for="date1" class="col-sm-2 col-form-label">Particular: </label>
+						<div class="col-sm-8">
+                            <select class="form-control" id="particular">
+                                @foreach (var item in Model.particulars.Where(x => x.particular != ""))
+                                {
+                                    <option value="@item.particular">@item.particular</option>
+                                }
+                            </select>
+						</div>
+					</div>
+					<div class="form-group row date1" style="padding-left:20px; display: none;">
+						<label for="date1" class="col-sm-2 col-form-label">From : </label>
+						<div class="col-sm-4">
+							<input type="text" id="date1" class="form-control datepicker" readonly value="" />
+						</div>
+						<label for="date2" class="col-sm-1 col-form-label">To : </label>
+						<div class="col-sm-3">
+							<input type="text" id="date2" class="form-control datepicker2" readonly value="" />
+						</div>
+					</div>
+
+					<div class="form-group row trxBox" style="padding-left:20px; display: none;">
+						<label for="date3" class="col-sm-2 col-form-label">From : </label>
+						<div class="col-sm-3">
+							<input type="text" id="date3" class="form-control datepicker" readonly value="" />
+						</div>
+						<label for="date4" class="col-sm-2 col-form-label">To : </label>
+						<div class="col-sm-3">
+							<input type="text" id="date4" class="form-control datepicker2" readonly value="" />
+						</div>
+						<div class="col-sm-2"></div>
+
+						<label for="hrbranchTrx" class="col-sm-2 col-form-label">Branch : </label>
+						<div class="col-sm-3">
+							<select id="hrbranchTrx" class="form-control">
+								<option value="0">All Branch</option>
+								@foreach (var item in Model.hrBranches)
+								{
+									<option value="@item.Id">@item.branchName</option>
+								}
+							</select>
+						</div>
+						<label for="zoneTrx" class="col-sm-2 col-form-label">Zone : </label>
+						<div class="col-sm-3">
+							<select id="zoneTrx" class="form-control">
+								<option value="0">All Zone</option>
+								@foreach (var item in Model.locations)
+								{
+									<option value="@item.Id">@item.branchUnitName</option>
+								}
+							</select>
+						</div>
+						<div class="col-sm-2"></div>
+
+						<label for="empIdTrx" class="col-sm-2 col-form-label">Employee : </label>
+						<div class="col-sm-3">
+							<input type="hidden" id="empCodeTrx" name="empCodeTrx" value="0" />
+							<input type="text" class="form-control" name="empIdTrx" id="empIdTrx" value="" />
+						</div>
+					</div>
+
+					<div class="form-group row recovery" style="padding-left:20px; display: none;">
+						<label for="recoverydate1" class="col-sm-2 col-form-label">From : </label>
+						<div class="col-sm-4">
+							<input type="text" id="recoverydate1" class="form-control datepicker" readonly value="" />
+						</div>
+						<label for="recoverydate2" class="col-sm-1 col-form-label">To : </label>
+						<div class="col-sm-3">
+							<input type="text" id="recoverydate2" class="form-control datepicker2" readonly value="" />
+						</div>
+						<div class="col-md-2"></div>
+
+						<label for="recoveryBranch" class="col-sm-2 col-form-label">Branch : </label>
+						<div class="col-sm-4">
+							<select class="form-control" id="recoveryBranch">
+								<option value="0">Select Branch</option>
+								@foreach (var item in Model.hrBranches)
+								{
+									<option value="@item.Id">@item.branchName</option>
+								}
+							</select>
+						</div>
+						<label for="recoveryZone" class="col-sm-1 col-form-label">Zone : </label>
+						<div class="col-sm-3">
+							<select class="form-control" id="recoveryZone">
+								<option value="0">Select Zone</option>
+								@foreach (var item in Model.locations)
+								{
+									<option value="@item.Id">@item.branchUnitName</option>
+								}
+							</select>
+						</div>
+
+
+						<div class="col-md-2"></div>
+						<label for="empCode" class="col-sm-2 col-form-label">Employee : </label>
+						<div class="col-sm-4">
+							<input type="hidden" id="empCode" value="0" />
+							<input type="text" id="empName" class="form-control" value="" />
+						</div>
+
+						<label for="loanType" class="col-sm-1 col-form-label">Loan Types : </label>
+						<div class="col-sm-3">
+							<select class="form-control" id="loanType" name="loanType">
+								<option value="0">All Type</option>
+								<option value="MCA">MCA</option>
+								<option value="MCAR">MCAR</option>
+								<option value="CL">CL</option>
+								<option value="HBA-B13">HBA-B13</option>
+								<option value="HBA-A13">HBA-A13</option>
+								<option value="BCA">BCA</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group row recsalareport" style="padding-left:20px; display: none;">
+						<label for="date" class="col-sm-2 col-form-label">salary period : </label>
+						<div class="col-sm-8">
+							@*<input type="text" id="date" class="form-control datepicker2" readonly value="" />*@
+							<select name="periodid" id="periodid" class="form-control" data-parsley-required="true">
+								<option value="1000">All</option>
+								@foreach (var item in Model.salaryPeriods.OrderBy(x => x.Id))
+								{
+									<option value="@item.Id">@item.periodName</option>
+								}
+							</select>
+						</div>
+					</div>
+					<br />
+					<button id="SubmitExcel" style="float:right; margin-top:5px;margin-right:180px" class="btn btn-success btn-xs" title="Preview"><i class="fas fa-file-excel"> Excel</i></button>
+					<button id="Submit" style="float:right; margin-top:5px;margin-right:5px" class="btn btn-success btn-xs" title="Preview"><i class="fas fa-print"> Print</i></button>
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $(".datepicker").datepicker({
+                dateFormat: 'dd-MM-yy', showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2050", date: new Date()
+            })
+            $(".datepicker2").datepicker({
+                dateFormat: 'dd-MM-yy', showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2050", date: new Date()
+            })
+            $('.datepicker').val(formatDateMonthName(new Date(2022, 1, 1)));
+            $('.datepicker2').val(formatDateMonthName(new Date()));
+
+            Common.Ajax('GET', '/global/api/GetAllEmployeeInfos', [], 'json', ajaxGetEmployees, false);
+            HideAll();
+
+
+
+            $('#recoveryBranch').on('change', function () {
+                if ($(this).val() != 0) {
+                    $('#recoveryZone').val(0)
+                    $('#empCode').val(0)
+                    $('#empName').val('')
+                }
+            })
+
+            $('#recoveryZone').on('change', function () {
+                if ($(this).val() != 0) {
+                    $('#recoveryBranch').val(0)
+                    $('#empCode').val(0)
+                    $('#empName').val('')
+                }
+            })
+
+            $('#hrbranchTrx').on('change', function () {
+                if ($(this).val() != 0) {
+                    $('#zoneTrx').val(0);
+                    $('#empIdTrx').val('');
+                    $('#empCodeTrx').val(0);
+                }
+            })
+
+            $('#zoneTrx').on('change', function () {
+                if ($(this).val() != 0) {
+                    $('#hrbranchTrx').val(0);
+                    $('#empIdTrx').val('');
+                    $('#empCodeTrx').val(0);
+                }
+            })
+
+
+
+
+            $("#rptType").change(function () {
+                let report = $("#rptType").val();
+                if (report == 1) {
+                    HideAll();
+                    $(".date").show();
+                    $("#br").show();
+                    $("#Submit").show();
+                }
+                if (report == 2) {
+                    HideAll();
+                    $(".date").show();
+                    $("#Submit").show();
+                }
+                if (report == 3) {
+                    HideAll();
+                    $(".trxBox").show();
+                    $("#Submit").show();
+                }
+                if (report == 4) {
+                    HideAll();
+                    $(".recovery").show();
+                    $("#Submit").show();
+                }
+                if (report == 5) {
+                    HideAll();
+                    $(".date1").show();
+                    $("#SubmitExcel").show();
+                    $("#Submit").hide();
+                }
+                if (report == 6) {
+                    HideAll();
+                    $(".recovery").show();
+                    $("#empName").hide();
+                    $("#Submit").show();
+                }
+                if (report == 7) {
+                    HideAll();
+                    $(".date1").show();
+                    $("#Submit").show();
+                }
+                if (report == 8) {
+                    HideAll();
+                    $(".recsalareport").show();
+                    $("#Submit").show();
+                }
+                if (report == 9) {
+                    HideAll();
+                    $(".date1").show();
+                    $("#Submit").show();
+                }
+                if (report == 10) {
+                    HideAll();
+                    $(".date1").show();
+                    $("#SubmitExcel").hide();
+                    $("#Submit").show();
+                }
+                if (report == 11) {
+                    HideAll();
+                    $(".date1").show();
+                    $("#SubmitExcel").hide();
+                    $("#Submit").show();
+                }
+                if (report == 12) {
+                    HideAll();
+                    $(".date1").show();
+                    $("#SubmitExcel").show();
+                    $("#Submit").hide();
+                }
+                if (report == 13) {
+                    HideAll();
+                    $(".date").show();
+					$("#br").show();
+                    $(".loanType1").show();
+                    $("#Submit").show();
+				}
+				if (report == 14) {
+					HideAll();
+					$(".date").show();
+					$("#br").show();
+                    $(".loanType1").show();
+                    $("#Submit").show();
+				}
+				if (report == 15) {
+					HideAll();
+                    $(".date1").show();
+                    $(".particularbox").show();
+                    $("#Submit").hide();
+                    $("#SubmitExcel").show();
+				}
+				if (report == 16) {
+					HideAll();
+                    $(".date1").show();
+                    $(".loanType1").show();
+                    $("#Submit").hide();
+                    $("#SubmitExcel").show();
+				}
+            })
+
+            $('#SubmitExcel').click(function () {
+                var date1 = $(".date1 #date1").val();
+                var date2 = $(".date1 #date2").val();
+                let report = $("#rptType").val();
+                let type = $("#loanType1").val();
+
+                if (report == 5) {
+                    window.open('/Payroll/PayrollReport/SBSReportExcel?startDate=' + date1 + '&endDate=' + date2, '_blank');
+                }
+                if (report == 12) {
+                    window.open('/Payroll/PayrollReport/InterestReportAllByTypeExcel?startDate=' + date1 + '&endDate=' + date2 + '&hrBranchId=0&zoneId=0&loanType=0', '_blank');
+                }
+                if (report == 15) {
+                    window.open('/Payroll/PayrollReport/ReconcilliationReportExcel?particular=' + particular + '&fDate=' + date1 + '&tDate=' + date2, '_blank');
+                }
+                if (report == 16) {
+                    window.open('/Payroll/PayrollReport/QuarterlyReportExcel?type=' + type + '&fDate=' + date1 + '&tDate=' + date2, '_blank');
+                }
+            })
+
+            $("#Submit").click(function (e) {
+                let report = $("#rptType").val();
+                var date = $("#date").val();
+                var date1 = $("#date1").val();
+                var date2 = $("#date2").val();
+                var hrBranchId = $("#hrBranchId").val();
+
+                //var ZoneId = 0;
+                var zoneorBranch = $('#hrBranchId').find(':selected').attr("data-type");
+
+                //if (zoneorBranch == 'All') {
+                //    ZoneId = 1000;
+                //    hrBranchId = 1000;
+                //}
+                //else if (zoneorBranch == 'zone') {
+                //    ZoneId = hrBranchId;
+                //    hrBranchId = 0;
+                //}
+                //else {
+                //    ZoneId = 0;
+                //    hrBranchId = hrBranchId;
+                //}
+                
+                var date3 = $("#date3").val();
+                var date4 = $("#date4").val();
+                var hrbranchTrx = $("#hrbranchTrx").val();
+                var zoneTrx = $("#zoneTrx").val();
+                var empCodeTrx = $("#empCodeTrx").val();
+				var type = $("#loanType1").val();
+                var periodidforloandeduction = $("#periodid").val();
+
+                if (report == 1) {
+					window.open('/Payroll/PayrollReport/StaffLoanBalanceAsOnDatePdf?asOndate=' + date + '&hrBranchId=' + hrBranchId + '&zoneorBranch=' + zoneorBranch, '_blank');
+                }
+                if (report == 2) {
+                    window.open('/Payroll/PayrollReport/StaffLoanTypeWiseReportPdf?asOndate=' + date + '&hrBranchId=' + hrBranchId, '_blank');
+                }
+                if (report == 3) {
+                    window.open('/Payroll/PayrollReport/StaffLoanIndSchedulePdf?startDate=' + date3 + '&endDate=' + date4 + '&hrBranchId=' + hrbranchTrx + '&zoneId=' + zoneTrx + '&empCode=' + empCodeTrx, '_blank');
+                }
+                if (report == 4) {
+                    var date1 = $("#recoverydate1").val();
+                    var date2 = $("#recoverydate2").val();
+                    var hrBranchId = $("#recoveryBranch").val();
+                    var zoneId = $("#recoveryZone").val();
+                    var empCode = $("#empCode").val();
+                    var loanType = $("#loanType").val();
+
+                    if (date1 != '' && date2 != '') {
+                        window.open('/Payroll/PayrollReport/StaffLoanIndRecoveryPdf?startDate=' + date1 + '&endDate=' + date2 + '&hrBranchId=' + hrBranchId + '&zoneId=' + zoneId + '&empCode=' + empCode + '&loanType=' + loanType, '_blank');
+                    }
+                    else {
+                        swal('Warning', 'Date Is Required', 'warning');
+                    }
+                }
+                if (report == 5) {
+                    window.open('/Payroll/PayrollReport/SBSReportView?startDate=' + date, '_blank');
+                }
+                if (report == 6) {
+                    var date1 = $("#recoverydate1").val();
+                    var date2 = $("#recoverydate2").val();
+                    var hrBranchId = $("#recoveryBranch").val();
+                    var zoneId = $("#recoveryZone").val();
+                    var empCode = $("#empCode").val();
+                    var loanType = $("#loanType").val();
+
+                    if (date1 != '' && date2 != '') {
+                        window.open('/Payroll/PayrollReport/InterestReportPdf?startDate=' + date1 + '&endDate=' + date2 + '&hrBranchId=' + hrBranchId + '&zoneId=' + zoneId + '&loanType=' + loanType, '_blank');
+                    }
+                    else if (date1 != '' && date2 != '' && hrBranchId == 0 && zoneId == 0 && loanType == 0) {
+                        alert()
+                    }
+                    else {
+                        swal('Warning', 'Date Is Required', 'warning');
+                    }
+				}
+	
+                if (report == 7) {
+                    if (date1 != '' && date2 != '') {
+                        window.open('/Payroll/PayrollReport/AllStaffLoanPdf?startDate=' + date1 + '&endDate=' + date2, '_blank');
+                    }
+                    else {
+                        swal('Warning', 'Date Is Required', 'warning');
+                    }
+                }
+                if (report == 8) {
+                    if (periodidforloandeduction != '') {
+                        window.open('/Payroll/PayrollReport/RecoveryforsalarizedPdf?periodId=' + periodidforloandeduction, '_blank');
+                    }
+                    else {
+                        swal('Warning', 'Date Is Required', 'warning');
+                    }
+                }
+                if (report == 9) {
+                    if (date1 != '' && date2 != '') {
+                        window.open('/Payroll/PayrollReport/LoanRecoveryothersalaryPdf?startDate=' + date1 + '&endDate=' + date2, '_blank');
+                    }
+                    else {
+                        swal('Warning', 'Date Is Required', 'warning');
+                    }
+                }
+                if (report == 10) {
+                    if (date1 != '' && date2 != '') {
+                        window.open('/Payroll/PayrollReport/InterestReportAllPdf?startDate=' + date1 + '&endDate=' + date2 + '&hrBranchId=0&zoneId=0&loanType=0', '_blank');
+                    }
+                    else {
+                        swal('Warning', 'Date Is Required', 'warning');
+                    }
+                }
+                if (report == 11) {
+                    if (date1 != '' && date2 != '') {
+                        window.open('/Payroll/PayrollReport/InterestReportAllByTypePdf?startDate=' + date1 + '&endDate=' + date2 + '&hrBranchId=0&zoneId=0&loanType=0', '_blank');
+                    }
+                    else {
+                        swal('Warning', 'Date Is Required', 'warning');
+                    }
+                }
+                if (report == 13) {
+
+
+					if (type == 0) {
+						window.open('/Payroll/PayrollReport/StaffLoanBalanceAsOnDateTypePdf?asOndate=' + date + '&hrBranchId=' + hrBranchId + '&zoneorBranch=' + zoneorBranch , '_blank');
+					}
+					else {
+						window.open('/Payroll/PayrollReport/StaffLoanBalanceAsOnDateByTypePdf?asOndate=' + date + '&hrBranchId=' + hrBranchId + '&type=' + type + '&zoneorBranch=' + zoneorBranch, '_blank');
+					}                    
+				}
+				if (report == 14) {
+					if (type == 0) {
+						window.open('/Payroll/PayrollReport/InterestChargeReportPdf?asOndate=' + date + '&hrBranchId=' + hrBranchId + '&zoneorBranch=' + zoneorBranch, '_blank');
+					}
+					else {
+						window.open('/Payroll/PayrollReport/InterestChargeReportPdf?asOndate=' + date + '&hrBranchId=' + hrBranchId + '&type=' + type + '&zoneorBranch=' + zoneorBranch, '_blank');
+					}     
+				
+				}
+            });
+
+            //Common.Ajax('GET', '/ProvidentFund/Member/GetAllMembers', [], 'json', ajaxFunctionAllMembers, false);
+
+        });
+
+        function HideAll() {
+            $(".date").hide();
+            $(".date1").hide();
+            $(".trxBox").hide();
+            $("#br").hide();
+            $("#SubmitExcel").hide();
+            $(".recovery").hide();
+            $(".recsalareport").hide();
+			$(".loanType1").hide();
+            $(".particularbox").hide();
+        }
+
+        function formatDateMonthName(date) {
+            var monthName = "";
+            date = new Date(date);
+            var year = date.getFullYear(),
+                month = date.getMonth() + 1, // months are zero indexed
+                day = date.getDate(),
+                hour = date.getHours(),
+                minute = date.getMinutes(),
+                second = date.getSeconds(),
+                hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+                minuteFormatted = minute < 10 ? "0" + minute : minute,
+                morning = hour < 12 ? "am" : "pm";
+            if (month == 1) {
+                monthName = "January";
+            }
+            else if (month == 2) {
+                monthName = "February";
+            }
+            else if (month == 3) {
+                monthName = "March";
+            }
+            else if (month == 4) {
+                monthName = "April";
+            }
+            else if (month == 5) {
+                monthName = "May";
+            }
+            else if (month == 6) {
+                monthName = "June";
+            }
+            else if (month == 7) {
+                monthName = "July";
+            }
+            else if (month == 8) {
+                monthName = "August";
+            }
+            else if (month == 9) {
+                monthName = "September";
+            }
+            else if (month == 10) {
+                monthName = "October";
+            }
+            else if (month == 11) {
+                monthName = "November";
+            }
+            else {
+                monthName = "December";
+            }
+            return day + "-" + monthName + "-" + year;
+        }
+
+        function ajaxFunctionAllMembers(response) {
+            console.log(response);
+            var GetMemberList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.employeeCode = option.employeeCode;
+                obj.value = option.memberName + "(" + option.employeeCode + ")";
+                GetMemberList[GetMemberList.length] = obj;
+            });
+
+            $('#membersName').autocomplete({
+                source: GetMemberList,
+                select: function (event, ui) {
+                    $("#membersName").val(ui.item.value);
+                    $("#memberId").val(ui.item.key);
+                }
+            });
+        }
+
+
+
+
+        function ajaxGetEmployees(response) {
+            var GeEmployeesList = [];
+
+            $.each(response, function (id, option) {
+                console.log(option)
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.empName + "(" + option.employeeCode + ")";
+                obj.lastDesignation = option.lastDesignation?.designationName;
+                obj.employeeCode = option.employeeCode;
+                obj.gradeName = option.currentGradeId;
+                obj.currentBasic = option.currentBasic;
+                GeEmployeesList[GeEmployeesList.length] = obj;
+            });
+            $('#empName').autocomplete({
+                source: GeEmployeesList,
+                select: function (event, ui) {
+                    $("#empName").val(ui.item.value);
+                    $("#empCode").val(ui.item.employeeCode);
+                    $('#recoveryBranch').val(0)
+                    $('#recoveryZone').val(0)
+                }
+            });
+            $('#empIdTrx').autocomplete({
+                source: GeEmployeesList,
+                select: function (event, ui) {
+                    $("#empIdTrx").val(ui.item.value);
+                    $("#empCodeTrx").val(ui.item.employeeCode);
+                    $('#hrbranchTrx').val(0);
+                    $('#zoneTrx').val(0);
+                }
+            });
+        }
+    </script>
+
+} 

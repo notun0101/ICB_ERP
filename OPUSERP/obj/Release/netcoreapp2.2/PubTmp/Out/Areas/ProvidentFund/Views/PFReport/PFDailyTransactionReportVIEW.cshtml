@@ -1,0 +1,101 @@
+﻿@model OPUSERP.ProvidentFund.VMS.PFReportViewModel
+@{
+    ViewData["Title"] = "ReportCenter";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+        <div class="container-fluid">
+            <div class="row" style="padding-top:0px;">
+                <div class="col-2">
+                    <img src="~/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="OPUS ERP" style="height:50px;" />
+                </div>
+                <div class="col-8" style="color:black;text-align:center">
+                    <h3>@Model.companies.FirstOrDefault().companyName</h3>
+                    <h5>@Model.companies.FirstOrDefault().addressLine</h5>
+                    <br />
+                    <h3 style="text-align:center;">Daily Transaction Report for Provident Fund From  @ViewBag.fromDate To  @ViewBag.toDate</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid" style="color:black;">
+            <hr style="border:1px solid grey;">
+            
+            <div class="row" style="padding: 0px 15px 0px 15px;">
+                <table class="table table-bordered">
+                    <thead>
+
+                        <tr class="align-text-top">
+                           
+                            <th class="align-text-top" style="width:100px">Date</th>
+                            <th class="align-text-top">Emp. ID</th>
+                            <th class="align-text-top">Name of the Employees</th>
+                            <th class="align-text-top"> Designation</th>
+                            <th class="align-text-top">Place of Posting</th>
+                            <th class="align-text-top"> Employees Contribution</th>
+                            <th class="align-text-top"> Bank Contribution</th>
+                            <th class="align-text-top">Credit (Total Contribution)</th>
+                            <th class="align-text-top">Debit</th>
+
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+
+
+                            int sl = 1;
+                            decimal? totalOwn = 0;
+                            decimal? totalBank = 0;
+                            decimal? totalCredit = 0;
+                            decimal? totaldebit = 0;
+                        }
+                        @foreach (var item in Model.pFStatementVMs)
+                        {
+                            totalOwn += item.own;
+                            totalBank += item.company;
+                            totalCredit += item.credit;
+                            totaldebit += item.debit;
+
+                            <tr>
+                                
+                                <td class="" style="width:100px">@item.transectionDate?.ToString("dd-MMM-yyyy")</td>
+                                <td class="">@item.employeeCode</td>
+                                <td class="">@item.nameEnglish</td>
+                                <td class="">@item.designationName</td>
+                                <td class="">@item.deptName</td>
+                                <td class="text-right">@item.own?.ToString("N2")</td>
+                                <td class="text-right">@item.company?.ToString("N2")</td>
+                                <td class="text-right">@item.credit?.ToString("N2")</td>
+                                <td class="text-right">@item.debit?.ToString("N2")</td>
+
+                            </tr>
+
+
+                            sl++;
+
+                        }
+                        <tr>
+
+                            <td class="text-right" colspan="5">Total</td>
+                            <td>@totalOwn</td>
+                            <td>@totalBank</td>
+                            <td>@totalCredit</td>
+                            <td>@totaldebit</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

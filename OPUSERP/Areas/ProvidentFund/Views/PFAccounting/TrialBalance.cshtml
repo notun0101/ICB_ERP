@@ -1,0 +1,110 @@
+﻿
+@{
+    ViewData["Title"] = "TrialBalance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row clearfix">
+    <div class="col-12">
+
+
+        <div class="card-body  bg-white">
+            <h5 class="m-0 font-weight-bold text-primary">Trial Balance</h5>
+            <hr />
+            <br />
+            <div class="form-row">
+                <div class="col-sm-4 input-group">
+                    <input name="fromDate" id="fromDate" class="form-control input-group-sm" placeholder="From Date"  />
+                    <div class="input-group-prepend">
+                        <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                    </div>
+                </div>
+                <div class="col-sm-4 input-group">
+                    <input name="toDate" id="toDate" class="form-control input-group-sm" placeholder="To Date"  />
+                    <div class="input-group-prepend">
+                        <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <button type="button" onclick="search()" class="btn btn-sm btn-primary" style="background-color:darkcyan; color:white" id="addcoa" value="View PF Statement">Run Report</button>
+        </div>
+        <br />
+
+
+        <div class="card mb-4">
+            <div class="card-body bg-white">
+                <div class="col-sm-12">
+                    <h4 class="text-success" align="center">Employees' Provident Fund Trust of BDBL Finance</h4>
+                    <p align="center">
+                        <strong>Address: </strong> House: 40, Lake Drive Road, SEC-7, Uttara, Dhaka-1230
+                        <br />
+                        <br />
+                        Members' Ledger<br />
+                        <strong>Duration:</strong> 2021-05-01 To 2021-05-01
+                    </p>
+                </div>
+                <br />
+                <br />
+                <table class="table table-striped table-bordered table-hover" id="">
+                    <thead>
+                        <tr>
+                            <th>Head of Accounts</th>
+                            <th>Opening Balance</th>
+                            <th>Movement</th>
+                            <th>Debit Balance</th>
+                            <th>Credit Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>10000000000 | Assets</td>
+                            <td>68</td>
+                            <td>0</td>
+                            <td>68</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>10101001001 | Doors	</td>
+                            <td>92730</td>
+                            <td>0</td>
+                            <td>92730</td>
+                            <td>0</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#fromDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker(new Date());
+        $("#toDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker(new Date());
+
+    });
+
+    function search() {
+        var FromDate = $("#fromDate").val();
+        var ToDate = $("#toDate").val();
+
+
+        if (FromDate == "") {
+            swal('Warning', 'please try again', 'warning');
+            return false;
+        }
+        if (ToDate == "") {
+            swal('Warning', 'please try again', 'warning');
+            return false;
+        }
+    }
+</script>

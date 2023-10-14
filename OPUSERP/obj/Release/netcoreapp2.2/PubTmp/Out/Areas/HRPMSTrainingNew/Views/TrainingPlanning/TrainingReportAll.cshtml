@@ -1,0 +1,403 @@
+﻿@model TrainingWithAttendanceDetails
+@{
+    ViewData["Title"] = "All Training Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .redStar {
+        color: red;
+    }
+    ul.ui-autocomplete {
+        z-index: 99999999;
+    }
+</style>
+<div class="card">
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+            <h5 class="card-title" style="color: black; margin: 8px;">Training Report</h5>
+        </div>
+        <div class="col-md-8">
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1019&perentId=6302'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <label for="report" class="col-sm-3 col-form-label">Report By <span class="redStar">*</span></label>
+            <div class="col-sm-9">
+                <select class="form-control" id="report" name="report" required>
+                    <option value="">Please Select Report Type</option>
+                    <option value="1">Institute wise Training Report (Year)</option>
+                    <option value="2">Month wise Training Report</option>
+                    <option value="3">Course wise Training Report</option>
+                    <option value="4">Year wise Training Report</option>
+                    <option value="5">Speaker Evaluation Report</option>
+                    <option value="6">Course Wise Participants Report</option>
+                    <option value="7">Training Schedule Wise Report</option>
+                    <option value="8">Bangladesh Bank Manpower Report</option>
+                    <option value="9">All Institute Wise Training Report</option>
+                    <option value="10">Employee Wise Training Report</option>
+                    <option value="11">DATA CHART FOR SDG</option>
+                    <option value="12">Foreign Training</option>
+                    <option value="13">Local Training</option>
+                    <option value="14">BDBL Banner</option>
+                    <option value="15">Tranning Institute</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row HideShow" id="YearSelect">
+            <label for="ledgerId" class="col-sm-3 col-form-label">Year <span class="redStar">*</span></label>
+            <div class="col-sm-3">
+                <select type="text" class="form-control year" id="yearYearhwise" name="">
+                    <option value="">Select</option>
+                    <option value="2021">2021</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row HideShow" id="MonthSelect">
+            <label for="retirementFrom" class="col-sm-3 col-form-label"> Year <span class="redStar">*</span></label>
+            <div class="col-sm-4">
+                <select type="text" class="form-control year" id="yearMonthwise" name="">
+                    <option value="">Select</option>
+                    <option value="2021">2021</option>
+                </select>
+            </div>
+            <div class="col-sm-1">
+                Month  <span class="redStar">*</span>
+            </div>
+            <div class="col-sm-4">
+                <select type="text" class="form-control" id="monthMonthwise" name="">
+                    <option value="">Select</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row HideShow" id="courseSelect">
+            <label for="ledgerId" class="col-sm-3 col-form-label">Course</label>
+            <div class="col-sm-9">
+
+                <select class="form-control" id="courseID" name="">
+                    <option value="0">All Course</option>
+                    @foreach (var data in Model.courseTitles)
+                    {
+                        <option value="@data.Id">@data.nameEN</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group row">
+                    <label for="" class="col-sm-3 col-form-label">Start Date</label>
+                    <div class="col-sm-3">
+                        <input type="text" value="" id="CourseStart" readonly class="form-control datepicker" />
+                    </div>
+                    <div class="col-sm-3">
+                        End Date
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="text" value="" id="CourseEnd" readonly class="form-control datepicker" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row HideShow" id="YearSelectforTraining">
+            <label for="ledgerId" class="col-sm-3 col-form-label">Year <span class="redStar">*</span></label>
+            <div class="col-sm-3">
+                <select type="text" class="form-control year" id="trainWiseY" name="">
+                    <option value="">Select</option>
+                    <option value="2021">2021</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row HideShow" id="YearSelectforTrainingNew">
+            <label for="ledgerId" class="col-sm-3 col-form-label">Year <span class="redStar">*</span></label>
+            <div class="col-sm-3">
+                <select type="text" class="form-control year" id="trainWiseYN" name="">
+                    <option value="">Select</option>
+                    <option value="2021">2021</option>
+                </select>
+            </div>
+
+            <div class="col-sm-1">
+                Month  <span class="redStar">*</span>
+            </div>
+            <div class="col-sm-4">
+                <select type="text" class="form-control" id="MonthwiseN" name="">
+                    <option value="">Select</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+        </div>
+
+
+
+
+        <div class="form-group row HideShow" id="courseSelectSpeaker">
+            <label for="ledgerId" class="col-sm-3 col-form-label">Course</label>
+            <div class="col-sm-9">
+                <select class="form-control" id="trainingID" name="">
+                    <option value="0" selected>All Course</option>
+                    @foreach (var item in Model.AlltrainingInfoNews@*.Where(x => x.status == 255)*@ /**/
+                                                                                                                           /**/
+                                                                                                                           .ToList())
+                                {
+                                    <option value="@item.Id">@item.course (@item.startDate?.ToString("dd-MM-yyyy") to @item.endDate?.ToString("dd-MM-yyyy"))</option>
+                                }
+                </select>
+            </div>
+        </div>
+        <div class="form-group row HideShow" id="ScheduleTraining">
+            <label for="ledgerId" class="col-sm-3 col-form-label">Course</label>
+            <div class="col-sm-9">
+                <select class="form-control" id="ScheduleID" name="">
+                    <option value="0" selected>All Course</option>
+                    @foreach (var data in Model.AlltrainingInfoNews.Where(x => x.status == 255))
+                    {
+                        <option value="@data.Id">@data.course</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row HideShow" id="ScheduleTraining1">
+            <label for="ScheduleID1" class="col-sm-3 col-form-label">Course</label>
+            <div class="col-sm-9">
+                <select class="form-control" id="ScheduleID1" name="">
+                    <option value="0" selected>All Course</option>
+                    @foreach (var data in Model.AlltrainingInfoNews.Where(x => x.status != 255))
+                    {
+                        <option value="@data.Id">@data.course</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+
+        <div class="form-group row HideShow" id="traineeSelect">
+            <label for="ledgerId" class="col-sm-3 col-form-label">Course</label>
+            <div class="col-sm-9">
+
+                <select class="form-control" id="enrollID" name="">
+                    <option value="0">All Paticipants </option>
+                    @foreach (var data in Model.employeeInfoList)
+                    {
+                        <option value="@data.Id">@data.nameEnglish (@data.employeeCode)</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group row">
+                    <label for="" class="col-sm-3 col-form-label">Date</label>
+                    <div class="col-sm-3">
+                        <input type="text" value="" id="trainingDate" readonly class="form-control datepicker" />
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="form-group row HideShow" id="Foreigntraining">
+            <label for="ledgerId" class="col-sm-3 col-form-label">Year <span class="redStar">*</span></label>
+            <div class="col-sm-3">
+                <select type="text" class="form-control year" id="yearYearhwiseF" name="">
+                    <option value="">Select</option>
+                    <option value="2021">2021</option>
+                </select>
+            </div>
+        </div>
+
+
+        <div class="form-group row HideShow" id="localtraining">
+            <label for="retirementFrom" class="col-sm-3 col-form-label"> Year <span class="redStar">*</span></label>
+            <div class="col-sm-4">
+                <select type="text" class="form-control year" id="yearMonthwiseL" name="">
+                    <option value="">Select</option>
+                    <option value="2021">2021</option>
+                </select>
+            </div>
+            <div class="col-sm-1">
+                Month  <span class="redStar">*</span>
+            </div>
+            <div class="col-sm-4">
+                <select type="text" class="form-control" id="MonthwiseL" name="">
+                    <option value="">Select</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <input type="button" value="Report" id="button" class="btn btn-info btn-sm " style="margin-left: 85%;" />
+        <input type="button" value="Reset" id="Reset" class="btn btn-secondary btn-sm right" />
+    </div>
+    <input type="hidden" id="hidden" value="@DateTime.Now.ToString("dd-MMM-yyyy")" />
+</div>
+@section Scripts{
+    <script>
+		$(document).ready(function () {
+			$("#enrollID").select2();
+            $(".datepicker").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2080" }).datepicker("setDate", new Date());
+            $("#CourseStart").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2080" }).datepicker("setDate", new Date());
+            $("#CourseEnd").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2080" }).datepicker("setDate", new Date());
+            $("#trainingDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2080" }).datepicker("setDate", new Date());
+            $('.HideShow').hide();
+            var year = new Date().getFullYear();  // returns the current year: 2021
+            var startyear = (year - 20);
+            var endyear = (year + 10);
+            var option = '<option value="">Select</option>';
+            for (var i = startyear; i < endyear + 1; i++) {
+                option += '<option value="' + i + '">' + i + '</option>';
+            }
+            $(".year").html(option);
+            $(".year").val(year);
+
+            $("#button").click(function (e) {
+                let report = $('#report :selected').val();
+                var from = $('#from').val();
+                if (report == 1) {
+                    window.open('/HRPMSTrainingNew/TrainingImplementation/InstituteWiseYearlyTrainingReportPdf?year=' + $("#yearYearhwise").val());
+                }
+                else if (report == 2) {
+                    window.open('/HRPMSTrainingNew/TrainingImplementation/InstituteWiseMonthlyTrainingReportPdf?year=' + $("#yearMonthwise").val() + "&month=" + $("#monthMonthwise").val(), '_blank');
+                }
+                 else if (report == 3) {
+                    window.open('/HRPMSTrainingNew/TrainingImplementation/CourseWiseTrainingDateRangePdf?courseId=' + $("#courseID").val() + "&startDate=" + $("#CourseStart").val() + "&endDate=" + $("#CourseEnd").val(), '_blank');
+                }
+                else if (report == 4) {
+                    window.open('/HRPMSTrainingNew/TrainingImplementation/yearlyTrainingPdf/' + $("#trainWiseY").val());
+                }
+                else if (report == 5) {
+                    window.open('/HRPMSTrainingNew/TrainingImplementation/SpeakerEvaluationReportPdf?trainingId=' + $("#trainingID").val(), '_blank');
+                }
+                else if (report == 6) {
+                    window.open('/HRPMSTrainingNew/TrainingImplementation/CourseWisePerticipientsInfoPdf?courseId=' + $("#courseID").val() + "&startDate=" + $("#CourseStart").val() + "&endDate=" + $("#CourseEnd").val(), '_blank');
+                }
+                 else if (report == 7) {
+                    window.open('/HRPMSTrainingNew/TrainingImplementation/GetTrainingScheduleByTrainingIdPdf?trainingId=' + $("#ScheduleID1").val(), '_blank');
+                }
+                 else if (report == 8) {
+                    window.open('/HRPMSTrainingNew/TrainingImplementation/TrainingInfoForBangladeshBankManPowerPdf?year=' + $("#trainWiseYN").val() + "&month=" + $("#MonthwiseN").val(), '_blank');
+				}
+				else if (report == 9) {
+					window.open('/HRPMSTrainingNew/TrainingImplementation/TrainingReportByInstituteIdViewpdf', '_blank');
+                }
+                else if (report == 10) {
+                    window.open('/HRPMSTrainingNew/TrainingImplementation/GetTrainingByParticipantsIdpdf?id=' + $("#enrollID").val() + "&endDate=" + $("#trainingDate").val(), '_blank');
+				}
+				else if (report == 11) {
+					window.open('/HRPMSTrainingNew/TrainingImplementation/EmployeeSummaryReportViewPdf', '_blank');
+                }
+                else if (report == 12) {
+                    window.open('/HRPMSTrainingNew/TrainingImplementation/TrainingWorkshopBDReportViewPdf?year=' + $("#yearYearhwiseF").val());
+                }
+                else if (report == 13) {
+                    window.open('/HRPMSTrainingNew/TrainingImplementation/TrainingWorkshopBankReportViewPdf?year=' + $("#yearMonthwise").val() + "&month=" + $("#MonthwiseL").val(), '_blank');
+                }
+                else if (report == 14) {
+                    window.open('/HRPMSTrainingNew/TrainingImplementation/BannerReportViewPdf', '_blank');
+                }
+                else if (report == 15) {
+                    window.open('/HRPMSTrainingNew/TrainingImplementation/ApplicationTrainningReportViewPdf', '_blank');
+                }
+            });
+
+        });
+
+        $('#report').change(function () {
+            let report = $('#report').val();
+            if (report == 1) {
+                $('.HideShow').hide();
+                $('#YearSelect').show();
+            }
+            else if (report == 2) {
+                $('.HideShow').hide();
+                $('#MonthSelect').show();
+            }
+            else if (report == 3) {
+                $('.HideShow').hide();
+                $('#courseSelect').show();
+            }
+            else if (report == 4) {
+                            $('.HideShow').hide();
+                $('#YearSelectforTraining').show();
+                        }
+
+                else if (report == 5) {
+                            $('.HideShow').hide();
+                $('#courseSelectSpeaker').show();
+                        }
+
+            else if (report == 6) {
+                $('.HideShow').hide();
+                $('#courseSelect').show();
+            }
+          else if (report == 7) {
+                $('.HideShow').hide();
+                $('#ScheduleTraining1').show();
+            }
+           else if (report == 8) {
+                $('.HideShow').hide();
+                $('#YearSelectforTrainingNew').show();
+			}
+			else if (report == 9) {
+				$('.HideShow').hide();
+            }
+           else if (report == 10) {
+                $('.HideShow').hide();
+                $('#traineeSelect').show();
+            }
+            else if (report == 12) {
+                $('.HideShow').hide();
+                $('#Foreigntraining').show();
+            }
+            else if (report == 13) {
+                $('.HideShow').hide();
+                $('#localtraining').show();
+            }
+
+            else {
+                $('.HideShow').hide();
+                console.log("Hi! No Report Selected.");
+            }
+        });
+
+        $('#Reset').click(function () {
+            $('#report').val("");
+            $('.HideShow').hide();
+            $(".year").val(new Date().getFullYear());
+        });
+    </script>
+}

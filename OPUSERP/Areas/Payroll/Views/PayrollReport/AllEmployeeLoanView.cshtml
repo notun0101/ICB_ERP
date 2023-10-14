@@ -1,0 +1,151 @@
+﻿@model PayrollReportViewModel
+@{
+    ViewData["Title"] = "All Loan";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<style>
+
+    .print-card-body {
+        width: 100%;
+        padding-bottom: 10px;
+    }
+
+    .vartical-table th {
+        width: 25%;
+    }
+
+    .vartical-table td {
+        width: 25%;
+    }
+
+    .table td, .table th {
+        padding: .3rem;
+        font-size: 14px;
+        border: 1px solid black !important;
+    }
+
+    table {
+        page-break-inside: auto;
+        border-collapse: collapse;
+        border: 1px solid black !important;
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+        border: 1px solid black !important;
+    }
+
+    thead {
+        display: table-header-group;
+        border: 1px solid black !important;
+    }
+
+    tfoot {
+        display: table-footer-group;
+        border: 1px solid black !important;
+    }
+
+    h6 {
+        font-size: 14px;
+        background-color: gray;
+        color: white !important;
+        padding: 3px;
+    }
+</style>
+
+
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+
+        <div class="container-fluid">
+            <div class="fa-pull-right">
+                <p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+            </div>
+            <div class="row" style="padding-top:0px;">
+                <div class="col-2">
+                    <img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="BDBL Logo" style="height:80px;" />
+                </div>
+                <div class="col-8">
+                    <div style="color:black;text-align:center;">
+                        <h3 style="font-size:20px;">@Model.companies.FirstOrDefault()?.companyName</h3>
+                        <h3 style="font-size:18px;"> @ViewBag.type </h3>
+                        <h3 style="font-size:18px;"> All Staff Loans </h3>
+                        <br />
+                    </div>
+                </div>
+                <div class="col-2">
+
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid ">
+            <div class="col-12">
+                <h3 style="font-size:18px;color:black"> </h3>
+            </div>
+        </div>
+        <br />
+        <div class="container-fluid" style="color:black;">
+            <table class="table table border" style="border:1px solid black !important">
+                <thead>
+                    <tr>
+                        <th>SL</th>
+                        <th>Employee Id </th>
+                        <th>Employee Name</th>
+                        <th>Designation</th>
+                        <th>Loan Type</th>
+                        <th>Total Disbursement</th>
+                        <th>Loan Account</th>
+                        <th>Loan Date</th>
+                        <th>Principal</th>
+                        <th>Interest</th>
+                        <th>Charge</th>
+                        <th>Total Balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 1;
+						decimal totalPrincipal = 0;
+						decimal totalInterest = 0;
+						decimal totalCharge = 0;
+                    }
+                    @foreach (var item in Model.allLoans)
+                    {
+						decimal total = Convert.ToDecimal(item.principalAmount) + Convert.ToDecimal(item.interestAmount) + Convert.ToDecimal(item.chargeAmount);
+                        
+						<tr>
+                            <td>@i</td>
+                            <td style="text-align: center;">@item.employeeCode</td>
+                            <td style="text-align: center;">@item.employeeName</td>
+                            <td style="text-align: center;">@item.designationName</td>
+                            <td style="text-align: center;">@item.loanType</td>
+                            <td style="text-align: right;">@item.totalDisbursement</td>
+                            <td style="text-align: center;">@item.LoanNo</td>
+                            <td style="text-align: center;">@item.loanDate?.ToString("dd/MM/yyyy")</td>
+                            <td style="text-align: right;">@item.principalAmount?.ToString("N2")</td>
+                            <td style="text-align: right;">@item.interestAmount?.ToString("N2")</td>
+                            <td style="text-align: right;">@item.chargeAmount?.ToString("N2")</td>
+                            <td style="text-align: right;">@total.ToString("N2")</td>
+                        </tr>
+						totalPrincipal += Convert.ToDecimal(item.principalAmount);
+						totalInterest += Convert.ToDecimal(item.interestAmount);
+						totalCharge += Convert.ToDecimal(item.chargeAmount);
+						i++;
+					}
+					<tr>
+						<th colspan="8">Total</th>
+						<th style="text-align: right;">@totalPrincipal.ToString("N2")</th>
+						<th style="text-align: right;">@totalInterest.ToString("N2")</th>
+						<th style="text-align: right;">@totalCharge.ToString("N2")</th>
+						<th style="text-align: right;">@(totalPrincipal + totalInterest + totalCharge)</th>
+					</tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+    </div>
+</div>

@@ -1,0 +1,731 @@
+﻿@model StaffLoanFilterVm
+@{
+    ViewData["Title"] = "Staff loan Filter";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Style{
+    <style>
+        ul.ui-autocomplete {
+            z-index: 99999999;
+        }
+    </style>
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+
+            <h5 class="card-title" style="color: black; margin: 8px;">Staff Loan Filter</h5>
+
+        </div>
+        <div class="col-md-8">
+
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info mr-4' style="margin-right:6px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1017&perentId=6229'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <select class="form-control onchange" id="filterbranchId" name="filterbranchId">
+                                <option value="0">Choose Branch</option>
+                                @foreach (var item in Model.hrBranches)
+                                {
+                                    <option value="@item.Id">@item.branchName</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <select class="form-control onchange" id="filterzoneId" name="filterzoneId">
+                                <option value="0">Choose Zone</option>
+                                @foreach (var item in Model.zones)
+                                {
+                                    <option value="@item.Id">@item.branchUnitName</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="hidden" name="filteremployeeId" id="filteremployeeId" value="0" />
+                            <input type="text" class="form-control" placeholder="Type Employee Id" id="filteremployeeName" name="filteremployeeName" autocomplete="off">
+                        </div>
+                        <div class="col-sm-3">
+                            <select class="form-control" id="filterloanType" name="filterloanType">
+                                <option value="0">Choose Loan Type</option>
+                                <option value="MCA">Motor Cycle Loan</option>
+                                <option value="MCAR">Motor Car Loan</option>
+                                <option value="CL">Computer Loan</option>
+                                <option value="HBA-B13">Home Loan (Before 2013)</option>
+                                <option value="HBA-A13">Home Loan (After 2013)</option>
+                                <option value="BCA">Bicyle Loan</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <a href="javascript:void(0)" onclick="FindStaffLoan()" class="btn btn-success fa-pull-right">Find</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">List of Staff Loan</h6>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-bordered table-responsive" id="staffLoanTbl">
+                    <thead>
+                        <tr>
+                            <th width="5%">SL</th>
+                            <th>Emp Id</th>
+                            <th>Employee Name</th>
+                            <th>Loan Type</th>
+                            @*<th>CBS Loan No</th>*@
+                            <th>Loan No</th>
+                            <th>Disbursed</th>
+                            <th>Principal</th>
+                            <th>Interest</th>
+                            <th>Charge</th>
+                            <th>Total</th>
+                            <th>Loan Date</th>
+                            <th>Action</th>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Update Staff Loan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="StaffLoanForm">
+                    <div class="row">
+                        <input type="hidden" id="staffLoanId" name="staffLoanId" value="0">
+                        <input type="hidden" id="employeeInfoId" name="employeeInfoId">
+                        <input type="hidden" id="empCode" name="empCode">
+                        <div class="col-sm-12">
+                            <div class="form-group row">
+                                <label for="employeeInfoId" class="col-sm-2 col-form-label">Employee's Name <span style="color:red;">*</span></label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="employeeName" name="employeeName" data-parsley-required="true" data-parsley-trigger="keyup" autocomplete="off">
+                                </div>
+                                <label for="loanType" class="col-sm-2 col-form-label">Loan Type <span style="color:red;">*</span></label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="loanType" name="loanType">
+                                        <option value="">Select Loan Type</option>
+                                        <option value="MCA">Motor Cycle Loan</option>
+                                        <option value="MCAR">Motor Car Loan</option>
+                                        <option value="CL">Computer Loan</option>
+                                        <option value="HBA-B13">Home Loan (Before 2013)</option>
+                                        <option value="HBA-A13">Home Loan (After 2013)</option>
+                                        <option value="BCA">Bicyle Loan</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group row">
+                                <label for="loanNo" class="col-sm-2 col-form-label">CBS Loan Account</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="loanNo" name="loanNo" autocomplete="off">
+                                </div>
+                                <label for="loanNo" class="col-sm-2 col-form-label">Loan Account</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="loanAc" name="loanAc" readonly autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group row">
+                                <label for="totalDisbursement" class="col-sm-2 col-form-label">Total Disbursement</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="totalDisbursement" name="totalDisbursement" autocomplete="off">
+                                </div>
+                                <label for="principal" class="col-sm-2 col-form-label">Principal Amount</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control changable" id="principal" value="0" name="principal" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group row">
+                                <label for="interest" class="col-sm-2 col-form-label">Interest</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control changable" id="interest" value="0" name="interest" autocomplete="off">
+                                </div>
+                                <label for="charge" class="col-sm-2 col-form-label">Charge Amount</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control changable" id="charge" name="charge" value="0" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-12">
+                            <div class="form-group row">
+                                <label for="totalAmount" class="col-sm-2 col-form-label">Total Amount</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="totalAmount" value="0" readonly name="totalAmount" autocomplete="off">
+                                </div>
+                                <label for="loanDate" class="col-sm-2 col-form-label">Loan Date</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="loanDate" name="loanDate" readonly autocomplete="off">
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="UpdateStaffLoan()">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Update Staff Loan Deduction Type</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="StaffLoanForm2">
+                    <div class="row">
+                        <input type="hidden" id="staffLoanId2" name="staffLoanId" value="0">
+                        <input type="hidden" id="employeeInfoId2" name="employeeInfoId">
+                        <input type="hidden" id="empCode2" name="empCode">
+                        <div class="col-sm-12">
+                            <div class="form-group row">
+                                <label for="employeeInfoId" class="col-sm-2 col-form-label">Employee's Name <span style="color:red;">*</span></label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="employeeName2" readonly  name="employeeName" data-parsley-required="true" data-parsley-trigger="keyup" autocomplete="off">
+                                </div>
+                                <label for="loanType" class="col-sm-2 col-form-label">Loan Type <span style="color:red;">*</span></label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="loanType2" name="loanType">
+                                        <option value="">Select Loan Type</option>
+                                        <option value="MCA">Motor Cycle Loan</option>
+                                        <option value="MCAR">Motor Car Loan</option>
+                                        <option value="CL">Computer Loan</option>
+                                        <option value="HBA-B13">Home Loan (Before 2013)</option>
+                                        <option value="HBA-A13">Home Loan (After 2013)</option>
+                                        <option value="BCA">Bicyle Loan</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group row">
+                                <label for="loanNo" class="col-sm-2 col-form-label">CBS Loan Account</label>
+                                <div class="col-sm-4">
+                                    <input type="text" readonly class="form-control" id="loanNo2" name="loanNo" autocomplete="off">
+                                </div>
+                                <label for="loanNo" class="col-sm-2 col-form-label">Loan Account</label>
+                                <div class="col-sm-4">
+                                    <input type="text"  class="form-control" id="loanAc2" name="loanAc" readonly autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group row">
+                                <label for="totalDisbursement" class="col-sm-2 col-form-label">Total Disbursement</label>
+                                <div class="col-sm-4">
+                                    <input type="text" readonly class="form-control" id="totalDisbursement2" name="totalDisbursement" autocomplete="off">
+                                </div>
+                                <label for="principal" class="col-sm-2 col-form-label">Principal Amount</label>
+                                <div class="col-sm-4">
+                                    <input type="text" readonly class="form-control changable" id="principal2" value="0" name="principal" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group row">
+                                <label for="interest" class="col-sm-2 col-form-label">Interest</label>
+                                <div class="col-sm-4">
+                                    <input type="text" readonly class="form-control changable" id="interest2" value="0" name="interest" autocomplete="off">
+                                </div>
+                                <label for="charge" class="col-sm-2 col-form-label">Charge Amount</label>
+                                <div class="col-sm-4">
+                                    <input type="text" readonly class="form-control changable" id="charge2" name="charge" value="0" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-12">
+                            <div class="form-group row">
+                                <label for="totalAmount" class="col-sm-2 col-form-label">Total Amount</label>
+                                <div class="col-sm-4">
+                                    <input type="text"  class="form-control" id="totalAmount2" value="0" readonly name="totalAmount" autocomplete="off">
+                                </div>
+                                <label for="loanDate" class="col-sm-2 col-form-label">Loan Date</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="loanDate2" name="loanDate" readonly autocomplete="off">
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-12 " id="HLoanType">
+                            <div class="form-group row">
+                                <label for="InstallmentType" class="col-sm-2 col-form-label">Deduction Type</label>
+                                <div class="col-sm-4">
+                                    <select name="InstallmentType" style="" class="form-control  HType" id="HInstallmentTypeId" asp-items="Html.GetEnumSelectList<OPUSERP.Models.HRPMS.HLoanInstallmentType>()"></select>
+                                </div>
+                                <label for="DeductionAmount" class="col-sm-2 col-form-label">Desuction Amount</label>
+                                <div class="col-sm-4">
+                                    <input type="text" style="" name="DeductionAmount" class="form-control  HType" id="HDeductionAmount" />
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="UpdateStaffLoanDeduction()">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function Delete(Id) {
+            Common.Ajax('GET', '/Payroll/StaffLoan/DeleteStaffLoan?id=' + Id, [], 'json', ajaxDeleteStaffLoan, false);
+        }
+
+        function ajaxDeleteStaffLoan(response) {
+            if (response == '1') {
+                swal('success', 'Deleted Successfully', 'success').then(function () {
+                    location.reload();
+                });
+            }
+            else {
+                swal('warning', 'Cannot Be Deleted!', 'warning');
+            }
+        }
+
+        $(document).ready(function () {
+            $("#loanDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+            Common.Ajax('GET', '/global/api/GetAllEmployeeInfos', [], 'json', ajaxGetEmployees);
+
+            $('.changable').on('change', function () {
+                var principal = parseFloat($('#principal').val());
+                var interest = parseFloat($('#interest').val());
+                var charge = parseFloat($('#charge').val());
+                if (principal == '' || principal == null) {
+                    principal = parseFloat(0);
+                }
+                if (interest == '' || interest == null) {
+                    interest = parseFloat(0);
+                }
+                if (charge == '' || charge == null) {
+                    charge = parseFloat(0);
+                }
+                var total = principal + interest + charge;
+
+                $('#totalAmount').val(total);
+            })
+
+            $('#filterbranchId').on('change', function () {
+                if ($(this).val() > 0) {
+                    $('#filterzoneId').val(0);
+                }
+            })
+
+            $('#filterzoneId').on('change', function () {
+                if ($(this).val() > 0) {
+                    $('#filterbranchId').val(0);
+                }
+            })
+
+            $('#loanType').on('change', function () {
+                var empCode = $('#empCode').val();
+                var loantype = $('#loanType').val();
+
+                if (empCode != '' && loantype != '') {
+                    GetStaffLoanNo(empCode, loantype);
+                }
+            })
+
+            $('#staffLoanTbl').DataTable({
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" + "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                        },
+                        title: 'ERP',
+                        messageTop: 'Status List',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                        },
+                        title: 'ERP',
+                        messageTop: 'Status List'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: 'ERP',
+                        messageTop: 'Status List',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            }
+            );
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+            });
+
+
+
+
+            $("#installmentAmount").keyup(function () {
+                GetInstallment();
+            });
+
+            $("#noOfInstallment").keyup(function () {
+                GetMonthly();
+            });
+
+        });
+
+        function FindStaffLoan() {
+            var branchId = $('#filterbranchId').val();
+            var zoneId = $('#filterzoneId').val();
+            var empId = $('#filteremployeeId').val();
+            var loanType = $('#filterloanType').val();
+
+            Common.Ajax('GET', '/Payroll/StaffLoan/GetStaffLoansApi?zoneId=' + zoneId + '&branchId=' + branchId + '&empId=' + empId + '&loanType=' + loanType, [], 'json', ajaxGetStaffLoansApi, false);
+        }
+
+        function ajaxGetStaffLoansApi(response) {
+            console.log(response);
+            var option = '';
+            $.each(response, function (i, item) {
+                var CBSLoanNo = item.CBSLoanNo;
+                if (CBSLoanNo == null) {
+                    CBSLoanNo = '';
+                }
+
+                var NewLoanNo = item.NewLoanNo;
+                if (NewLoanNo == null) {
+                    NewLoanNo = '';
+                }
+                var hidden = 'hidden';
+                if (item.loanType == 'HBA-A13' || item.loanType == 'HBA-B13'){
+                    hidden = '';
+                }
+                option += `<tr>
+                                        <td>${i + 1}</td>
+                                        <td>${item.employeeCode}</td>
+                                        <td>${item.nameEnglish}</td>
+                                        <td>${item.loanType}</td>
+                                        <td>${NewLoanNo}</td>
+                                        <td style="text-align: right;">${item.totalDisbursement?.toFixed(2)}</td>
+                                        <td style="text-align: right;">${item.principalAmount?.toFixed(2)}</td>
+                                        <td style="text-align: right;">${item.interestAmount?.toFixed(2)}</td>
+                                        <td style="text-align: right;">${item.chargeAmount?.toFixed(2)}</td>
+                                        <td style="text-align: right;">${item.totalAmount?.toFixed(2)}</td>
+                                        <td>${formatDate(item.loandate)}</td>
+                                        <td>
+                                            <a href="javascript:void(0)" class="btn btn-success" onclick="Edit(${item.Id}, ${item.employeeInfoId}, '${item.employeeCode}', '${item.nameEnglish}', '${item.loanType}', '${item.totalDisbursement}', '${item.principalAmount}', '${item.interestAmount}', '${item.chargeAmount}', '${item.totalAmount}', '${CBSLoanNo}','${NewLoanNo}', '${item.loandate}','${item.InstallmentType}','${item.DeductionAmount}')"><i class="fas fa-pen"></i></a>
+                                            <a href="javascript:void(0)" ${hidden} class="btn btn-warning" onclick="Deduct(${item.Id}, ${item.employeeInfoId}, '${item.employeeCode}', '${item.nameEnglish}', '${item.loanType}', '${item.totalDisbursement}', '${item.principalAmount}', '${item.interestAmount}', '${item.chargeAmount}', '${item.totalAmount}', '${CBSLoanNo}','${NewLoanNo}', '${item.loandate}','${item.InstallmentType}','${item.DeductionAmount}')"><i class="fas fa-dollar-sign"></i></a>
+                                            <a href="javascript:void(0)" class="btn btn-danger" onclick="Delete(${item.Id})"><i class="fas fa-trash"></i></a>
+                                        </td>
+                                    </tr>`
+            })
+
+            $('#staffLoanTbl tbody').empty();
+            $('#staffLoanTbl tbody').append(option);
+        }
+
+        function GetStaffLoanNo(empCode, loanType) {
+            Common.Ajax('GET', '/Payroll/StaffLoan/GetStaffLoanNo?empCode=' + empCode + '&loanType=' + loanType, [], 'json', ajaxGetLoanNo, false);
+        }
+        function ajaxGetLoanNo(response) {
+            console.log(response);
+            $('#loanAc').val(response);
+        }
+        function ajaxGetsalaryGrade(response) {
+            $('#salaryGradeId').empty();
+            $('#salaryGradeId').append('<option value="">Select Grade</option');
+
+            $.each(response, function (id, option) {
+                $('#salaryGradeId').append('<option Gradetype="' + option.type + '" value="' + option.Id + '">' + option.gradeName + '</option');
+
+            });
+        }
+
+        function UpdateStaffLoan() {
+            var formData = $('#StaffLoanForm').serialize();
+
+            swal({
+                title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#007ACC', cancelButtonColor: '#d33', confirmButtonText: 'Yes, Update it!'
+            }).then(function () {
+                $.ajax({
+                    url: '/Payroll/StaffLoan/SaveStaffLoan',
+                    type: 'Post',
+                    data: formData
+                })
+                    .done(function (data) {
+                        if (data == 'ok') {
+                            swal('success', 'Updated Successfully', 'success').then(function () {
+                                FindStaffLoan();
+                                $('#exampleModal').modal('hide');
+                            })
+                        }
+                    })
+                    .fail(function (err) {
+                        alert("Unable to Update. Please Try Again");
+                    });
+            });
+        }
+
+        function UpdateStaffLoanDeduction() {
+            var formData = $('#StaffLoanForm2').serialize();
+
+            swal({
+                title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#007ACC', cancelButtonColor: '#d33', confirmButtonText: 'Yes, Update it!'
+            }).then(function () {
+                $.ajax({
+                    url: '/Payroll/StaffLoan/SaveLoanDeductionType',
+                    type: 'Post',
+                    data: formData
+                })
+                    .done(function (data) {
+                        if (data == 'ok') {
+                            swal('success', 'Updated Successfully', 'success').then(function () {
+                                FindStaffLoan();
+                                $('#exampleModal2').modal('hide');
+                            })
+                        }
+                    })
+                    .fail(function (err) {
+                        alert("Unable to Update. Please Try Again");
+                    });
+            });
+        }
+
+        function ajaxGetEmployees(response) {
+            var GeEmployeesList = [];
+
+            $.each(response, function (id, option) {
+                console.log(option)
+                var obj = new Object();
+                obj.key = option.employeeId;
+                obj.value = option.empName + "(" + option.employeeCode + ")";
+                obj.lastDesignation = option.designation;
+                obj.employeeCode = option.employeeCode;
+                obj.gradeName = option.currentGradeId;
+                obj.currentBasic = option.currentBasic;
+                GeEmployeesList[GeEmployeesList.length] = obj;
+            });
+            $('#filteremployeeName').autocomplete({
+                source: GeEmployeesList,
+                select: function (event, ui) {
+                    $("#filteremployeeName").val(ui.item.value);
+                    //$("#designationId").val(ui.item.lastDesignation);
+                    $("#filteremployeeId").val(ui.item.key);
+                    //$("#empCode").val(ui.item.employeeCode);
+                    //$("#salaryGradeId").val(ui.item.gradeName);
+                    //$("#amount").val(ui.item.currentBasic);
+
+                    //var empCode = $('#empCode').val();
+                    //var loantype = $('#loanType').val();
+
+                    //if (empCode != '' && loantype != '') {
+                    //    GetStaffLoanNo(empCode, loantype);
+                    //}
+                }
+            });
+            $('#approverName').autocomplete({
+                source: GeEmployeesList,
+                select: function (event, ui) {
+                    $("#approverName").val(ui.item.value);
+                    Common.Ajax('GET', '/Payroll/FDRInvestment/GetUserByEmpCode?code=' + ui.item.employeeCode, [], 'json', ajaxFunctionCode, false);
+                }
+            });
+        }
+
+        function ajaxFunctionCode(res) {
+            console.log(res);
+            $("#approver").val(res.UserId);
+        }
+
+
+        function formatDate(date) {
+            date = new Date(date);
+            var year = date.getFullYear(),
+                month = date.getMonth() + 1, // months are zero indexed
+                day = date.getDate(),
+                hour = date.getHours(),
+                minute = date.getMinutes(),
+                second = date.getSeconds(),
+                hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+                minuteFormatted = minute < 10 ? "0" + minute : minute,
+                morning = hour < 12 ? "am" : "pm";
+
+            return day + "/" + + month + "/" + year;
+        }
+
+        $('#HInstallmentTypeId').change(function () {
+            var selectedOption = $(this).val();
+            var empid = $('#employeeInfoId2').val();
+            if (selectedOption == 1) {
+                swal({
+                    title: 'Are you sure?', text: 'Replace Amount with  House Rent amount From Salary Structure?', type: 'warning', showCancelButton: true, confirmButtonColor: '#007ACC', cancelButtonColor: '#d33', confirmButtonText: 'Yes, Update it!'
+                }).then(function () {
+                    $.ajax({
+                        url: '/Payroll/SalaryStructure/GetHouseRentAmount',
+                        type: 'GET',
+                        data: { employeeId: empid }
+                    })
+                        .done(function (data) {
+                            $('#HDeductionAmount').val(data);
+                        })
+                        .fail(function (err) {
+
+                        });
+                });
+            }
+            else if (selectedOption == 2) {
+                var total = $('#totalDisbursement2').val();
+                var amt = (total / 100000) * 400;
+                $('#HDeductionAmount').val(amt);
+            }
+
+            // Perform your desired actions here based on the selected option
+        });
+        
+        function Deduct(Id, empId, empCode, empName, loanType, disburse, principal, interest, charge, total, loanNo, newLoanNo, loanDate, deductType, deductamount) {
+            $('#staffLoanId2').val(Id);
+            $('#employeeInfoId2').val(empId);
+            $('#empCode2').val(empCode);
+            $('#employeeName2').val(empName);
+            $('#loanType2').val(loanType);
+            $('#loanNo2').val(loanNo);
+            $('#loanAc2').val(newLoanNo);
+            $('#principal2').val(principal);
+            $('#interest2').val(interest);
+            $('#totalDisbursement2').val(disburse);
+            $('#charge2').val(charge);
+            $('#totalAmount2').val(total);
+            $('#loanDate2').val(loanDate);
+            //== 'HBA-A13' || $(this).val() == 'HBA-B13'
+            if (loanType == 'HBA-A13' || loanType == 'HBA-B13') {
+                var elem = document.getElementById('HLoanType');
+                elem.style.display = "block";
+                $('#HInstallmentTypeId').val(deductType);
+                $('#HDeductionAmount').val(deductamount);
+
+            }
+            else {
+                var elem = document.getElementById('HLoanType');
+                elem.style.display = "none";
+            }
+
+            $('#exampleModal2').modal('show');
+        }
+
+
+
+        function Edit(Id, empId, empCode, empName, loanType, disburse, principal, interest, charge, total, loanNo, newLoanNo, loanDate, deductType, deductamount) {
+            $('#staffLoanId').val(Id);
+            $('#employeeInfoId').val(empId);
+            $('#empCode').val(empCode);
+            $('#employeeName').val(empName);
+            $('#loanType').val(loanType);
+            $('#loanNo').val(loanNo);
+            $('#loanAc').val(newLoanNo);
+            $('#principal').val(principal);
+            $('#interest').val(interest);
+            $('#totalDisbursement').val(disburse);
+            $('#charge').val(charge);
+            $('#totalAmount').val(total);
+            $('#loanDate').val(loanDate);
+            //== 'HBA-A13' || $(this).val() == 'HBA-B13'
+            
+
+            $('#exampleModal').modal('show');
+        }
+
+        function GetInstallment() {
+            var totalAmount = $("#advanceAmount").val();
+            var monthlyAmount = $("#installmentAmount").val();
+            if ($("#advanceAmount").val() == '' || $("#installmentAmount").val() == '') {
+                totalAmount = 0;
+                monthlyAmount = 0;
+            }
+            $("#noOfInstallment").val(parseFloat(totalAmount / monthlyAmount).toFixed(0));
+        }
+
+        function GetMonthly() {
+            var totalAmount = $("#advanceAmount").val();
+            var noOfInstal = $("#noOfInstallment").val();
+            if ($("#advanceAmount").val() == '' || $("#noOfInstallment").val() == '') {
+                totalAmount = 0;
+                noOfInstal = 0;
+            }
+            $("#installmentAmount").val(parseFloat(totalAmount / noOfInstal).toFixed(2));
+        }
+
+    </script>
+}

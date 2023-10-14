@@ -1,0 +1,137 @@
+﻿@model AllEmployeeLateViewModel
+
+@{
+    ViewData["Title"] = "LateAttendenceByMonthPrintPage";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-header row" style="">
+        <div class="col-12">
+            <h5 class="card-title" style="color: black">Late Attendance TimeSheet</h5>
+        </div>
+    </div>
+    <img src="~/Assets/processing.gif" id="loader" style="display: none; width: 400px; margin: 0 auto;" />
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-12 row">
+                <div class="col-7" style="color: black; font-size: 17px; padding-top: 24px;">
+					<table style="border:none">
+						@if (Model.departmentName != null)
+						{
+							<tr>
+								<td><span style="font-weight:bold;">Department  </span></td>
+								<td>: @Model.departmentName</td>
+							</tr>
+						}
+						@if (ViewBag.designationName != null)
+                        {
+							<tr>
+								<td><span style="font-weight:bold;">Designation  </span></td>
+								<td>: @ViewBag.designationName</td>
+							</tr>
+						}
+                      
+						
+						<tr>
+							<td><span style="font-weight:bold;">Date </span></td>
+							<td>: @ViewBag.month, @ViewBag.year</td>
+						</tr>
+						@*@if (Model.shiftName != null)
+						{
+							<tr>
+								<td><span style="font-weight:bold;">Shift  </span></td>
+								<td>: @Model.shiftName</td>
+							</tr>
+						}*@
+
+
+
+					</table>
+                </div>
+                <div class="col-5">
+
+                    <div class="card-body">
+                        <table class="table table-striped  table-bordered" id="particularTable">
+                            <thead>
+                                <tr style="background-color:gray;">
+                                    <th>Particular</th>
+                                    <th>Days</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr>
+                                    <td>Total Active Employees</td>
+                                    <td id="tPresent">@Model.totalActive</td>
+                                </tr>
+                                <tr>
+                                    <td>Total Late Employees</td>
+                                    <td id="tAbsent">@Model.totalLate</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<hr />
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card">
+            @*<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style="background-color: #EAF6FA;">
+                    <h6 class="m-0 font-weight-bold">Attendance List</h6>
+                </div>*@
+            <div class="card-body">
+                <table class="table  table-striped table-bordered nowrap" id="attendenceTable">
+                    <thead>
+
+                        <tr style="background-color: gray;">
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Designation</th>
+                            <th>Employee Id</th>
+                            <th>Total Works</th>
+                            <th>Total Late</th>
+
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.empAttendances)
+                        {
+                            if (item.totalLate > 0)
+                            {
+                        <tr>
+                            <td>@item.employeeInfo?.nameEnglish</td>
+                            <td>@item.employeeInfo?.department?.deptName</td>
+                            <td>@item.employeeInfo?.lastDesignation?.designationName</td>
+                            <td>@item.employeeInfo?.employeeCode</td>
+                            <td>@item.totalWorks</td>
+                            <td>@item.totalLate</td>
+
+                        </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Assets/paginathing.js"></script>
+    <script>
+        $(document).ready(function () {
+        });
+    </script>
+}

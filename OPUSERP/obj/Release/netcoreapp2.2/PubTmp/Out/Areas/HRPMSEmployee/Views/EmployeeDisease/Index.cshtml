@@ -1,0 +1,425 @@
+﻿@model EmployeeDiseaseViewModel
+
+@{
+    ViewData["Title"] = "Medical Care";
+    Layout = "~/Areas/HRPMSEmployee/Views/Shared/_EmployeeForm.cshtml";
+}
+
+@section StyleEmp{
+    <style>
+        .redStar {
+            color: red;
+            float:right
+        }
+
+        #myDIV {
+            background-color: white;
+            padding: 20px;
+            box-shadow: 3px 3px 3px 3px lightgray;
+            max-height: 415px;
+            overflow-y: scroll;
+            padding-top: 5px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+            background-color: white;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #F3F3F3;
+        }
+
+        .g {
+            text-decoration: none;
+            color: #1492a5;
+        }
+
+            .g:hover {
+                text-decoration: none;
+                color: #070a67;
+            }
+
+            .g span {
+                font-family: serif;
+            }
+
+        .small-box {
+            text-align: center;
+            border-radius: 10px;
+            padding: 10px;
+            transition: transform .5s;
+        }
+
+            .small-box:hover {
+                background-color: #e8f0fe;
+                transform: scale(.95);
+            }
+
+            .small-box i {
+                font-size: 35px;
+                margin: 10px;
+            }
+    </style>
+}
+
+<div class="card" style="width: 100%;">
+
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; border-right: 1px solid #D9D8DB">
+            <h5 class="card-title" style="color: black; margin: 0;">Medical Care</h5>
+        </div>
+        <div class="col-md-8">
+            @if (User.IsInRole("HRAdmin") || User.IsInRole("admin"))
+            {
+                <div style="float: left;">
+
+                    @if (Model.photograph?.url == null || Model.photograph?.url == "")
+                    {
+                        <img src="~/images/user-icon-png.png" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                    }
+                    else
+                    {
+                        <img src="~/@Model.photograph?.url" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                    }
+                    @*<img src="~/@Model.photograph?.url" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />*@
+                    <input type="hidden" id="hiddenFile" />
+                </div>
+            }
+            else
+            {
+                <div style="float: left;">
+
+                    @if (Model.photograph?.url == null || Model.photograph?.url == "")
+                    {
+                        <img src="~/images/user-icon-png.png" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                    }
+                    else
+                    {
+                        <img src="~/@Model.photograph?.url" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                    }
+                    @*<img src="~/@Model.photograph?.url" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />*@
+                    <input type="hidden" id="hiddenFile" />
+                </div>
+            }
+            <div style="float: left;">
+                <div style="padding: 5px;text-align: center;">
+                    <p style="margin: 0; text-transform: uppercase;">@Model.employeeInfo?.nameEnglish</p>
+                    <p style="margin: 0">@Model.employeeInfo?.lastDesignation?.designationName</p>
+                </div>
+            </div>
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info mr-2' style="" data-toggle='tooltip' title='Go Back' href='/HRPMSEmployee/Photograph/EditGrid/@Model.employeeInfo?.Id'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+                <a id="btngle" href="javascript:void(0)" class="btn btn-outline-success mr-5"
+                   style="position: absolute; right: 82px; top: 17px; box-shadow: none; font-size: 17px;"><i class="fas fa-th"></i></a>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <form asp-area="HRPMSEmployee" asp-controller="EmployeeDisease" asp-action="Index" id="FormId" method="post" data-parsley-validate="parsley">
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group row">
+                        <label for="medicalDiseaseId" class="col-sm-4 col-form-label">Employee Disease<span style="float:right;" class="redStar">*</span></label>
+                        <div class="col-sm-8">
+                            <select id="medicalDiseaseId" name="medicalDiseaseId" class="form-control" required>
+                                <option value="">Please Select</option>
+                                @foreach (var data in Model.medicalDiseases)
+                                {
+                                    <option value="@data.Id">@data?.name</option>
+                                }
+                            </select>
+                            <input type="hidden" name="employeeID" id="employeeID" value="@Model.employeeID" />
+                            <input type="hidden" name="EmployeeDiseaseId" id="EmployeeDiseaseId" value="0" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group row">
+                        <label for="status" class="col-sm-4 col-form-label">status<span style="float:right;" class="redStar">*</span></label>
+                        <div class="col-sm-8">
+                            <select id="status" name="status" class="form-control" required>
+                                <option value="">Please Select</option>
+                                <option value="0">YES</option>
+                                <option value="1">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group row">
+                        <label for="medicalDiseaseId" class="col-sm-4 col-form-label">Hospitalized<span style="float:right;" class="redStar">*</span></label>
+                        <div class="col-sm-8">
+                            <select id="hospitalised" name="hospitalised" class="form-control" required>
+                                <option value="">Please Select</option>
+                                <option value="1">YES</option>
+                                <option value="0">No</option>
+                            </select>
+                       
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group row">
+                        <label for="status" class="col-sm-4 col-form-label">UnderTreatment<span style="float:right;" class="redStar">*</span></label>
+                        <div class="col-sm-8">
+                            <select id="underTreatment" name="underTreatment" class="form-control" required>
+                                <option value="">Please Select</option>
+                                <option value="1">YES</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group row">
+                        <label for="medicalDiseaseId" class="col-sm-4 col-form-label">Vaccinated<span style="float:right;" class="redStar">*</span></label>
+                        <div class="col-sm-8">
+                            <select id="vaccinated" name="vaccinated" class="form-control" required>
+                                <option value="">Please Select</option>
+                                <option value="1">YES</option>
+                                <option value="0">No</option>
+                            </select>
+                          
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group row">
+                        <label for="observation" class="col-sm-4 col-form-label">Observation</label>
+                        <div class="col-sm-8">
+                                <input type="text" class="form-control" name="observation" id="observation" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+            <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+        </form>
+    </div>
+</div>
+<br />
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold">Employee Medical Status Info</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="Dieseasetbl">
+                    <thead>
+                        <tr>
+                            <th>SL#</th>
+                            <th>Name</th>
+                            <th>Hospitalized</th>
+                            <th>Under Treatment</th>
+                            <th>Vaccinated</th>
+                            <th>Observation</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 1;
+                            @foreach (var data in Model.employeeDiseases)
+                            {
+                        <tr>
+                            <td>@i</td>
+                            <td>@data?.medicalDisease?.name</td>
+                            @if (data.hospitalised == 1)
+                            {
+                                <td>YES</td>
+                            }
+                            else
+                            {
+                                <td>NO</td>
+                            }
+                            @if (data.underTreatment == 1)
+                            {
+                                <td>YES</td>
+                            }
+                            else
+                            {
+                                <td>NO</td>
+                            }
+                            @if (data.vaccinated == 1)
+                            {
+                                <td>YES</td>
+                            }
+                            else
+                            {
+                                <td>NO</td>
+                            }
+                            <td>@data.observation</td>
+                            @if (data.status == 0)
+                            {
+                                <td>YES</td>
+                            }
+                            else
+                            {
+                                <td>NO</td>
+                            }
+                            <td>
+                                <a class="btn btn-success" onclick="Edit(@data.Id,'@data.employeeInfoId', '@data.medicalDiseaseId', '@data.status','@data.hospitalised','@data.underTreatment','@data.vaccinated','@data.observation')" href="#"><i class="fa fa-edit"></i></a>
+                                <a class="btn btn-danger" onclick="Remove(@data.Id,'@data.employeeInfoId')" href="#"><i class="fa fa-trash-alt"></i></a>
+                            </td>
+                        </tr>
+                                i++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateEmpPhotoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                @*<img src="~/images/Aloha New Logo.png" style="height:50px;" />*@
+                <h5 class="modal-title" id="exampleModalLabel">Update Photo</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-area="HRPMSEmployee" asp-controller="Photograph" asp-action="Index" method="post" enctype="multipart/form-data" data-parsley-validate="parsley">
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="form-group row">
+                        @*<div class="col-5">
+            <img id="user_img_current" style="width:200px;height:200px" src="~/@Model.photograph.url" alt="" class="img-thumbnail float-left">
+            <input type="hidden" id="hiddenFile" />
+        </div>*@
+                        <div class="col-7">
+                            <input type="hidden" name="queryString" id="queryString" value="" />
+                            @if (Model.photograph?.url != null || Model.photograph?.url != "")
+                            {
+                                <img id="user_img" style="width:200px;height:200px;cursor:pointer;" src="~/@Model.photograph?.url" alt="" class="img-thumbnail float-left">
+                            }
+                            else
+                            {
+                                <img id="user_img" style="width:200px;height:200px;cursor:pointer;" src="/images/user-icon-png.png" alt="" class="img-thumbnail float-left">
+                            }
+                            <input type="hidden" name="employeeID" value="@Model.employeeInfo?.Id" />
+                            <input type="hidden" name="photographID" value="@Model.photograph?.Id" />
+                            <input type="file" title="Photo Upload" id="imagePath" data-parsley-required="true" name="empPhoto" class="btn btn-default btn-sm pull-right" />
+                            <span style="float:left;color:red;" class="redStar">*</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ScriptsEmp{
+    <script>
+       
+        $(document).ready(function () {
+            var pathname = window.location.pathname;
+            $('#queryString').val(pathname);
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+            });
+            $("#btngle").click(function () {
+                $("#myDIV").slideToggle("slow");
+            });
+            $('#Dieseasetbl').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2,3,4,5,6]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'Disease Details',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2,3,4,5,6]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'Disease Details',
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "ERP-HRPMS",
+                        messageTop: 'Disease Details',
+                        exportOptions: {
+                            columns: [0, 1, 2,3,4,5,6]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+        });
+
+        function Edit(Id, employeeInfoId, medicalDiseaseId, status, hospitalised, underTreatment, vaccinated, observation) {
+            $("#EmployeeDiseaseId").val(Id);
+            $("#employeeID").val(employeeInfoId);
+            $("#medicalDiseaseId").val(medicalDiseaseId);
+            $("#status").val(status);
+            $("#hospitalised").val(hospitalised);
+            $("#underTreatment").val(underTreatment);
+            $("#vaccinated").val(vaccinated);
+            $("#observation").val(observation);
+           
+        }
+
+        function Remove(Id, employeeId) {
+            chk = confirm('Do you want to delete this?');
+            if (chk) {
+                //return true;
+                location.replace("/HRPMSEmployee/EmployeeDisease/Delete/" + Id + "?empId=" + employeeId);
+            } else {
+                return false;
+            }
+        }
+       
+       
+    </script>
+}

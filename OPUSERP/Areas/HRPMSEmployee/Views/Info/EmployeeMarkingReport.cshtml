@@ -1,0 +1,583 @@
+﻿@model EmployeeMarkingViewModel
+@{
+	ViewData["Title"] = "EmployeeMarkingReport";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+@section Style{
+	<style>
+
+		.print-card-body {
+			width: 100%;
+			/*padding-bottom: 10px;*/
+		}
+
+		.vartical-table th {
+			width: 25%;
+		}
+
+		.vartical-table td {
+			width: 25%;
+		}
+
+		.table td, .table th {
+			padding: 2px 5px;
+			/*font-size: 16px;*/
+		}
+
+		table {
+			page-break-inside: auto;
+		}
+
+		tr {
+			page-break-inside: avoid;
+			page-break-after: auto;
+		}
+
+		thead {
+			display: table-header-group;
+		}
+
+		tfoot {
+			display: table-footer-group;
+		}
+
+		h6 {
+			font-size: 14px;
+			background-color: gray;
+			color: white !important;
+			padding: 3px;
+		}
+		body{
+			font-size: 28px;
+		}
+	</style>
+}
+
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+        <div class="container-fluid">
+			<div class="fa-pull-right">
+				@*<p style="font-size:15px;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>*@
+				<h3 style="font-size:24px;color:black;margin-left:12%"><u><b>(গোপনীয়)</b></u></h3>
+				<h3 style="font-size:24px;color:black;margin-left:12%"><u><b>(সংযোজনী-১)</b></u></h3>
+			</div>
+            <div class="row" style="padding-top:0px;">
+                <div class="col-1">
+                    @*<img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="OPUS ERP" style="height:80px;" />*@
+                </div>
+                <div class="col-7" style="margin-left: 7%;">
+                    <div style="color:black;text-align:center; line-height: 0.8">
+                        <h3 style="font-size:24px; margin: 0;">বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড</h3>
+                        <h3 style="font-size:24px; margin: 0;"><u>হেড অফিস, ঢাকা।</u></h3>
+                        <h3 style="font-size:24px; margin: 0;"><u><b>(বিভাগীয় বাছাই কমিটি-১ এর জন্য)</b></u></h3>
+                    </div>
+                </div>
+
+                <div class="col-4" style="margin-left:2%;line-height:.8">
+
+                    <table class=" table-bordered">
+                        <tr>
+                            <td style="font-size:24px;width: 61%;">জ্যেষ্ঠতার নম্বর</td>
+                            <td style="width:7%;">
+                                <img style="width: 7px;margin-bottom:6px" src="~/EmpImages/bisorgo.png" />
+                            </td>
+							<td style="width:60px; font-size: 18px;">@Model.markingInfoVm?.seniorityLevel</td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:24px;width: 65%;">আইডি নম্বর</td>
+                            <td style="width: 7%;text-align:center">
+                                <img style="width: 7px;margin-bottom:1px" src="~/EmpImages/bisorgo.png" />
+                            </td>
+							<td style="width:60px; font-size: 18px;">@Model.markingInfoVm?.employeeCode</td>
+                        </tr>
+
+
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid" style="color:black;line-height:.8;">
+
+            <div class="row" style="font-size:16px;">
+				<table class="table table-bordered">
+					<tr>
+						<td style="padding: 5px; font-size: 20px; width: 35%;">নাম</td>
+						<td style="padding: 5px; width: 3%;text-align:center">
+							<img style="width: 7px;margin-bottom:3px" src="~/EmpImages/bisorgo.png" />
+						</td>
+						<td style="padding: 5px; font-size: 16px;">@Model.markingInfoVm?.nameEnglish</td>
+					</tr>
+
+					<tr>
+						<td style="padding: 5px; width: 35%;font-size:24px;">পদবী ও বর্তমান কর্মস্থল</td>
+						<td style="padding: 5px; width: 5px;text-align:center">
+							<img style="width: 7px;margin-bottom:3px" src="~/EmpImages/bisorgo.png" />
+						</td>
+						<td style="padding: 5px; font-size: 16px; line-height: 1;">@Model.markingInfoVm?.designationName (@Model.markingInfoVm?.presentPosting)</td>
+					</tr>
+					<tr>
+						<td style="padding: 5px; width: 35%;font-size:24px;">জন্ম তারিখ</td>
+						<td style="padding: 5px; width: 5px;text-align:center">
+							<img style="width: 7px;margin-bottom:3px" src="~/EmpImages/bisorgo.png" />
+						</td>
+						<td style="padding: 5px; font-size: 16px;">@Model.markingInfoVm?.dateOfBirth?.ToString("dd/MM/yyy")</td>
+					</tr>
+					<tr>
+						<td style="padding: 5px; width: 35%;font-size:24px;">বেতনস্কেল</td>
+						<td style="padding: 5px; width: 5px;text-align:center">
+							<img style="width: 7px;margin-bottom:3px" src="~/EmpImages/bisorgo.png" />
+						</td>
+						<td style="padding: 5px; font-size: 16px; line-height: 1.2;">@Model.markingInfoVm?.salaryScale</td>
+					</tr>
+					<tr>
+						<td style="padding: 5px; width: 35%;font-size:24px;">ব্যাংকে যোগদানের তারিখ</td>
+						<td style="padding: 5px; width: 5px;text-align:center">
+							<img style="width: 7px;margin-bottom:3px" src="~/EmpImages/bisorgo.png" />
+						</td>
+						<td style="padding: 5px; font-size: 16px;">@Model.markingInfoVm?.joiningDate?.ToString("dd/MM/yyy")</td>
+					</tr>
+					<tr>
+						<td style="padding: 5px; width: 35%;font-size:24px;">বর্তমান পদে পদোন্নতির তারিখ</td>
+						<td style="padding: 5px; width: 5px;text-align:center">
+							<img style="width: 7px;margin-bottom:3px" src="~/EmpImages/bisorgo.png" />
+						</td>
+						<td style="padding: 5px; font-size: 16px;">@Model.markingInfoVm?.promotionDateCurrentDesignation?.ToString("dd/MM/yyy")</td>
+					</tr>
+					<tr>
+						<td style="padding: 5px; width: 35%;font-size:24px;">বর্তমান পদে স্থায়ী হওয়ার তারিখ</td>
+						<td style="padding: 5px; width: 5px;text-align:center">
+							<img style="width: 7px;margin-bottom:3px" src="~/EmpImages/bisorgo.png" />
+						</td>
+						<td style="padding: 5px; font-size: 16px;">@Model.markingInfoVm?.permanantDateCurrentDesignation?.ToString("dd/MM/yyy")</td>
+					</tr>
+					<tr>
+						<td style="padding: 5px; width: 35%;font-size:24px;">পি.আর.এল-এ গমনের তারিখ</td>
+						<td style="padding: 5px; width: 5px;text-align:center">
+							<img style="width: 7px;margin-bottom:3px" src="~/EmpImages/bisorgo.png" />
+						</td>
+						<td style="padding: 5px; font-size: 16px;">@Model.markingInfoVm?.prlDate?.ToString("dd/MM/yyy")</td>
+					</tr>
+					<tr>
+						<td style="padding: 5px; width: 35%;font-size:24px;">নিজ জেলা</td>
+						<td style="padding: 5px; width: 5px;text-align:center">
+							<img style="width: 7px;margin-bottom:3px" src="~/EmpImages/bisorgo.png" />
+						</td>
+						<td style="padding: 5px; font-size: 16px;">@Model.markingInfoVm?.homeDistrict</td>
+					</tr>
+				</table>
+            </div>
+
+        </div>
+        <div class="">
+            <h3 style="font-size:24px;color:black;margin-right:10px"><u><b>প্রাপ্ত নম্বরের বিবরণ <img style="width:7px;margin-bottom:1%;" src="~/EmpImages/bisorgo.png" /></b></u></h3>
+        </div>
+        <div class="container-fluid" style="color:black;line-height:.8;">
+            <div class="">
+
+                <table class="borderless" style="border:none;">
+                    <tr>
+                        <td style="width:7%;font-size:24px;"><b>(ক)</b></td>
+                        <td style="width:100%;font-size:24px;"><u><b>সর্বশেষ ৩ বছরের বার্ষিক গোপনীয় অনুবেদন (৩ বছরের গড় নম্বর এর ৫০%) <img style="width:7px;margin-bottom:1%;" src="~/EmpImages/bisorgo.png" /></b></u></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="" style="font-size:24px;">
+
+                <div class="col-sm-10">
+
+                    <table class="table table-bordered tdFontSize" id="tblEducationalQualifications" style="margin-left:4%;width:99%">
+                        <thead style="text-align:center">
+                            <tr>
+                                <td style="border-bottom:solid black 1px;">বছর</td>
+                                <td style="border-bottom:solid black 1px;">২০১৭</td>
+                                <td style="border-bottom:solid black 1px;">২০১৮</td>
+                                <td style="border-bottom:solid black 1px;">২০১৯</td>
+                                <td style="border-bottom:solid black 1px;">মোট নম্বর</td>
+                                <td style="border-bottom:solid black 1px;">৩ বছরের গড় নম্বর</td>
+                                <td style="border-bottom:solid black 1px;">বিবেচ্য নম্বর (গড় নম্বরের ৫০%)</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td>প্রাপ্ত নম্বর</td>
+                                <td style="font-size:24px"></td>
+                                <td class="text-center" style="font-size:24px"></td>
+                                <td class="text-center" style="font-size:24px"></td>
+                                <td style="font-size:24px"></td>
+                                <td style="font-size:24px"></td>
+                                <td style="font-size:24px"></td>
+                            </tr>
+
+
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+           
+            <div class="">
+
+                <table class="borderless" style="border:none;">
+                    <tr>
+                        <td style="width:11%;font-size:24px;"><b>(খ)</b></td>
+                        <td style="width:100%;font-size:24px;"><b>শিক্ষাগত যোগ্যতা (মোট নম্বর সর্বোচ্চ ১৪) <img style="width:7px;margin-bottom:1%;" src="~/EmpImages/bisorgo.png" /></b></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="" style="font-size:24px;">
+
+                <div class="col-sm-10">
+
+                    <table class="table table-bordered tdFontSize" id="tblEducationalQualifications" style="margin-left:4%;width:99%;">
+                        <thead style="text-align:center">
+                            <tr>
+                                <td style="border-bottom:solid black 1px;">শিক্ষাগত যোগ্যতা</td>
+
+                                <td style="border-bottom:solid black 1px;">বোর্ড/বিশ্ববিদ্যালয়/বছর</td>
+
+                                <td style="border-bottom:solid black 1px;">প্রাপ্ত নম্বর</td>
+                            </tr>
+                        </thead>
+						<tbody>
+							@foreach (var item in Model.markingEducation)
+							{
+								<tr>
+									<td style="font-size:16px; padding: 5px;">@item.degreeName</td>
+									<td style="font-size:16px; padding: 5px;">@item.institution - @item.passingYear</td>
+									<td style="font-size:16px; padding: 5px;"></td>
+								</tr>
+							}
+						</tbody>
+                    </table>
+
+                </div>
+            </div>
+
+          
+            <div class="">
+
+                <table class="borderless" style="border:none;">
+                    <tr>
+                        <td style="width:11%;font-size:24px;"><b>(গ)</b></td>
+                        <td style="width:100%;font-size:24px;"><b>পেশাগত যোগ্যতা/অতিরিক্ত ডিগ্রী ( সর্বোচ্চ<img style="width:7px;margin-bottom:1%;" src="~/EmpImages/bisorgo.png" /> নম্বর ০৬) <img style="width:7px;margin-bottom:1%;" src="~/EmpImages/bisorgo.png" /></b></td>
+                    </tr>
+                </table>
+            </div>
+
+
+
+
+            <div class="" style="font-size:24px;">
+
+                <div class="col-sm-10">
+
+                    <table class="table table-bordered tdFontSize" id="tblEducationalQualifications" style="margin-left:4%;width:99%">
+                        <thead style="text-align:center">
+                            <tr>
+                                <td style="border-bottom:solid black 1px;">
+                                    ব্যাংকিং ডিপ্লোমা <img style="width:7px;margin-bottom:3%;" src="~/EmpImages/bisorgo.png" /> পার্ট-১, <br />
+                                    (নম্বর-০৩)
+                                </td>
+
+                                <td style="border-bottom:solid black 1px;">
+                                    ব্যাংকিং ডিপ্লোমা <img style="width:7px;margin-bottom:3%;" src="~/EmpImages/bisorgo.png" /> পার্ট-২, <br />
+                                    (নম্বর-০৩)
+
+                                </td>
+
+                                <td style="border-bottom:solid black 1px;">সিএ/সিএমএ,<br />(নম্বর-০৬)</td>
+                                <td style="border-bottom:solid black 1px;text-align:initial">প্রাপ্ত নম্বর<br /><span style="color:white">ggg</span></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+							@{ 
+								int total = 0;
+							}
+                            <tr>
+                                <td style="font-size:16px; padding: 5px; text-align: center;">
+									@if (Model.markingInfoVm?.bankingDiploma1 != null)
+									{
+										total += 3;
+										<span>3</span>
+									}
+								</td>
+								<td style="font-size:16px; padding: 5px; text-align: center;"> 
+									@if (Model.markingInfoVm?.bankingDiploma2 != null)
+									{
+										total += 3;
+										<span>3</span>
+									}
+								</td>
+                                <td style="font-size:16px; padding: 5px; text-align: center;"> </td>
+                                <td style="font-size:16px; padding: 5px; text-align: center;"> @total</td>
+                            </tr>
+
+
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+           
+            <div class="">
+
+                <table class="" style="border:none;">
+                    <tr>
+                        <td style="width:5%;font-size:24px;"><b>(ঘ)</b></td>
+                        <td style="width:120%;font-size:24px;"><b>চাকুরীর মেয়াদ (বর্তমান পদে)(সর্বোচ্চ নম্বর<img style="width:7px;margin-bottom:1%;" src="~/EmpImages/bisorgo.png" />১০)<img style="width:7px;margin-bottom:1%;" src="~/EmpImages/bisorgo.png" /><span style="font-size: 16px;">@Model.markingInfoVm?.promotionDateCurrentDesignation?.ToString("dd/MM/yyyy")</span> হতে <span style="font-size: 16px;">@DateTime.Now.ToString("dd/MM/yyyy")</span> তারিখ পর্যন্ত @Model.markingInfoVm?.totalDaysOfPromotion<img style="width:7px;margin-bottom:1%;" src="~/EmpImages/bisorgo.png" /></b></td>
+                    </tr>
+                </table>
+            </div>
+
+
+
+
+            <div class="" style="font-size:24px;">
+
+                <div class="col-sm-10">
+
+                    <table class="table table-bordered tdFontSize" id="tblEducationalQualifications" style="margin-left:4%;width:99%;">
+                        <thead style="text-align:center">
+                            <tr>
+                                <td style="border-bottom:solid black 1px;">
+                                    প্রথম ০৩ বছরে <br />
+                                    প্রতি বছর ২.৫০ নম্বর হিসাবে
+                                </td>
+
+                                <td style="border-bottom:solid black 1px;">
+                                    পরবর্তী ১ম বছরের <br />
+                                    জন্য ১.৫০ নম্বর হিসাবে
+                                </td>
+
+                                <td style="border-bottom:solid black 1px;">পরবর্তী ২য় বছরের জন্য <br />১.৫০ নম্বর হিসাবে</td>
+                                <td style="border-bottom:solid black 1px;text-align:initial">প্রাপ্ত নম্বর<br /><span style="color:white">ggg</span></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+
+                                <td style="font-size:24px">.</td>
+                                <td style="font-size:24px"></td>
+                                <td style="font-size:24px"></td>
+                                <td style="font-size:24px"></td>
+                            </tr>
+
+
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <div class="">
+
+                <table class="" style="border:none;">
+                    <tr>
+                        <td style="width:5%;font-size:24px;"><b>(ঙ)</b></td>
+                        <td style="width:130%;font-size:20px;">
+                            <b>
+                                ব্রাঞ্চ ও জোনাল অফিসে এবং আর্থিক প্রতিষ্ঠান বিভাগে কাজের অভিজ্ঞতা(সর্বোচ্চ নম্বর<img style="width:7px;margin-bottom:1%;" src="~/EmpImages/bisorgo.png" />০৩)<img style="width:7px;margin-bottom:1%;" src="~/EmpImages/bisorgo.png" />৩১-০৩-২০২০তারিখ পর্যন্ত।
+                            </b>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+
+
+
+            <div class="" style="font-size:24px;">
+
+                <div class="col-sm-10">
+
+                    <table class="table table-bordered tdFontSize" id="tblEducationalQualifications" style="margin-left:4%;width:99%;">
+                        <thead style="text-align:center">
+                            <tr>
+                                <td style="border-bottom:solid black 1px;width:55%">
+                                    ব্রাঞ্চ ও জোনাল অফিসে এবং আর্থিক প্রতিষ্ঠান <br />
+                                    বিভাগে কাজের অভিজ্ঞতা
+                                </td>
+
+                                <td style="border-bottom:solid black 1px;">
+                                    বছর <br />
+
+                                    <span style="color:white">r</span>
+                                </td>
+
+                                <td style="border-bottom:solid black 1px;">মাস <br /><span style="color:white">5</span></td>
+                                <td style="border-bottom:solid black 1px;text-align:initial">প্রাপ্ত নম্বর<br /><span style="color:white">6</span></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+
+                                <td style="font-size:24px">প্রতি বছরের জন্য ০১ নম্বর হিসেবে  সর্বোচ্চ ০৩ নম্বর</td>
+                                <td style="font-size:24px"></td>
+                                <td style="font-size:24px"></td>
+                                <td style="font-size:24px"></td>
+                            </tr>
+
+
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+           <div class="">
+
+                <table class="borderless" style="border:none;">
+                    <tr>
+                        <td style="width:11%;font-size:24px;"><b>(চ)</b></td>
+                        <td style="width:100%;font-size:24px;"><b>বিশেষ যোগ্যতা (Appreciation Letter) (নম্বর <img style="width:7px;margin-bottom:1%;" src="~/EmpImages/bisorgo.png" /> ০২) <img style="width:7px;margin-bottom:1%;" src="~/EmpImages/bisorgo.png" /></b></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="" style="font-size:24px;">
+
+                <div class="col-sm-10">
+
+                    <table class="table table-bordered tdFontSize" id="tblEducationalQualifications" style="margin-left:4%;width:99%">
+                        <thead style="text-align:center">
+                            <tr>
+                                <td style="border-bottom:solid black 1px;"><span style="font-size:20px"> Appreciation Letter</span> প্রাপ্তির  বিষয়</td>
+
+                                <td style="border-bottom:solid black 1px;">প্রাপ্তির বছর</td>
+
+                                <td style="border-bottom:solid black 1px;">প্রাপ্ত নম্বর</td>
+                            </tr>
+                        </thead>
+						<tbody>
+							@foreach (var item in Model.awards)
+							{
+								<tr>
+									<td style="font-size:16px; padding: 5px;">@item.award?.awardName</td>
+									<td style="font-size:16px; padding: 5px;">@item.awardDate?.Year</td>
+									<td style="font-size:16px; padding: 5px;"></td>
+								</tr>
+							}
+						</tbody>
+                    </table>
+
+                </div>
+                <div class="col-ms-1"></div>
+            </div>
+
+
+            <table class="table table-bordered" style="line-height:.8;width:102%">
+                <tr>
+                    <td style="width:70%;font-size:24px;"><b>(ছ)  <span style="margin-left:4%">মোট নম্বর (ক+খ+গ+ঘ+ঙ+চ) <img style="width:7px;margin-bottom:1%;" src="~/EmpImages/bisorgo.png" /></span></b></td>
+                    <td style="width:40%;font-size:24px;text-align:center"><b>প্রাপ্ত সর্বমোট নম্বর</b></td>
+                </tr>
+                <tr>
+                    <td style="width:80%;font-size:16px; padding: 5px;">.</td>
+                    <td style="width:20%;font-size:16px; padding: 5px;"></td>
+                </tr>
+            </table>
+            <table class="table table-bordered" style="line-height:.8;width:102%">
+                <tr>
+                    <td style="width:70%;font-size:24px;"><b><img style="width:20px;margin-bottom:1%;" src="~/EmpImages/arrow-icon.jpg" /> অনুবেদনে যদি কোন বিরূপ মন্তব্য থাকে <img style="width:7px;margin-bottom:1%;" src="~/EmpImages/bisorgo.png" /></b></td>
+                    <td style="width:40%;font-size:24px;text-align:center"></td>
+                </tr>
+
+            </table>
+            <table class="borderless" style="line-height:.8;width:102%">
+                <tr>
+                    <td style="width:70%;font-size:24px;"><img style="width:20px;margin-bottom:1%;" src="~/EmpImages/arrow-icon.jpg" />বিভাগীয় মামলা/মোকদ্দমা/শাস্তি সংক্রান্ত তথ্য<img style="width:7px;margin-bottom:1%;" src="~/EmpImages/bisorgo.png" /></td>
+                </tr>
+
+            </table>
+            <table class="table-bordered" style="line-height:.8;width:102%">
+                <tr>
+                    <td style="font-size:24px;">ক্রঃ নং </td>
+                    <td style="font-size:24px;text-align:center">মামলা নং ও বিষয়বস্তু সংক্ষেপে</td>
+                    <td style="font-size:24px;text-align:center">শাস্তি/রায়ের বিবরণ</td>
+                    <td style="font-size:24px;text-align:center">শাস্তি/রায়ের প্রদানের পত্র নং ও তাং</td>
+                    <td style="font-size:24px;text-align:center">শাস্তির মেয়াদ শেষ হওয়ার তারিখ/মন্তব্য </td>
+                </tr>
+                <tr>
+                    <td style="font-size:24px;">.</td>
+                    <td style="font-size:24px;"></td>
+                    <td style="font-size:24px;"></td>
+                    <td style="font-size:24px;"></td>
+                    <td style="font-size:24px;"></td>
+                </tr>
+            </table>
+            <br />
+
+            <table class="table-bordered" style="line-height:.8;width:102%">
+                <tr>
+                    <td style="font-size:24px;width:60%"><img style="width:20px;margin-bottom:1%;" src="~/EmpImages/arrow-icon.jpg" />লগুদন্ডের ক্ষেত্রে  শাস্তি অতিক্রান্তের পর ১ বছর হয়েছে কিনা এবং তারিখ</td>
+                    <td style="text-align:center;width:3%;"> <img style="width:7px;margin-bottom:1%;" src="~/EmpImages/bisorgo.png" /></td>
+                    <td style="font-size:24px;text-align:left">  হ্যাঁ / না</td>
+
+                </tr>
+                <tr>
+					<td style="font-size:24px;"><img style="width:20px;margin-bottom:1%;" src="~/EmpImages/arrow-icon.jpg" />গুরুদণ্ডের  ক্ষেত্রে  শাস্তি অতিক্রান্তের পর ২ বছর হয়েছে কিনা এবং তারিখ</td>
+                    <td style="text-align:center;width:9px"><img style="width:7px;margin-bottom:1%;" src="~/EmpImages/bisorgo.png" /></td>
+                    <td style="font-size:24px;text-align:left">  হ্যাঁ / না</td>
+
+                </tr>
+                <tr>
+                    <td style="font-size:24px;"><img style="width:20px;margin-bottom:1%;" src="~/EmpImages/arrow-icon.jpg" />পদোন্নতির  ক্ষেত্রে বেস  মার্ক </td>
+                    <td style="text-align:center;width:9px"><img style="width:7px;margin-bottom:1%;" src="~/EmpImages/bisorgo.png" /></td>
+                    <td style="font-size:24px;"></td>
+
+                </tr>
+                <tr>
+                    <td style="font-size:24px;"><img style="width:20px;margin-bottom:1%;" src="~/EmpImages/arrow-icon.jpg" />অন্যান্য  মন্তব্য  (যদি থাকে) </td>
+                    <td style="text-align:center;width:9px"><img style="width:7px;margin-bottom:1%;" src="~/EmpImages/bisorgo.png" /></td>
+                    <td style="font-size:24px;"></td>
+
+                </tr>
+                <tr>
+                    <td style="font-size:24px;"><img style="width:20px;margin-bottom:1%;" src="~/EmpImages/arrow-icon.jpg" />বাছাই  কমিটির  মন্তব্য</td>
+                    <td style="text-align:center;width:9px"><img style="width:7px;margin-bottom:1%;" src="~/EmpImages/bisorgo.png" /></td>
+                    <td style="font-size:24px;"></td>
+
+                </tr>
+            </table>
+
+
+        </div>
+        <br />
+        <div class="row col-12" style="color:black;font-size:22px;line-height:.8">
+			<div class="col-3" style="text-align: center;">
+				<p style="margin: 0;">ডেপুটি  জেনারাল ম্যানেজার</p>
+				<p style="margin: 0;">(এইচআরএমডি)</p>
+				<p style="margin: 0;"> ও </p>
+				<p style="margin: 0;">সদস্য-সচিব</p>
+			</div>
+			<div class="col-6" style="text-align:center;">
+				<p style="margin: 0;">জেনারেল ম্যানেজার</p>
+				<p style="margin: 0;">(ইন্টার কন্ট্রোল এন্ড কমপ্লায়েন্স ও ব্রাঞ্চ ব্যাঙ্কিং ডিভিশন)</p>
+				<p style="margin: 0;"> ও </p>
+				<p style="margin: 0;">সদস্য</p>
+
+			</div>
+			<div class="col-3" style="text-align:center;">
+				<p style="margin: 0;">জেনারেল ম্যানেজার</p>
+				<p style="margin: 0;">(অ্যাডমিনিস্ট্রেশন ডিভিশন)</p>
+				<p style="margin: 0;"> ও </p>
+				<p style="margin: 0;">সভাপতি</p>
+			</div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+}
+

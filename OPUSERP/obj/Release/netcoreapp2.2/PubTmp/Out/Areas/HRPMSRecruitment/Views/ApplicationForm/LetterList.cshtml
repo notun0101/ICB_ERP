@@ -1,0 +1,212 @@
+﻿
+@{
+    ViewData["TitleMD"] = "Letter/Bond";
+    Layout = "~/Areas/HRPMSMasterData/Views/Shared/_MasterDataForm.cshtml";
+}
+<style>
+
+    
+
+    .active {
+        color: darkcyan;
+    }
+
+    /*.c {
+     
+        background-color: lightgreen;
+        
+    }*/
+
+        .c .card-footer {
+            height: 50px;
+            /*background-color: #E9F7EF;*/
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+  
+    /*//////////////////////*/
+    .c {
+        text-decoration: none;
+        border: 1px solid black;
+        transition: .3s all;
+        background-color: lightgray;
+    }
+
+        .c:hover {
+            background-color: #ADD8E6;
+            /*background: #73ddff;*/
+            border: 2px solid #0b9ac8;
+            overflow: hidden;
+            color: #ffffff;
+            transform: scale(1.05)
+        }
+
+    .d {
+        color: black;
+        font-size: 10pt;
+        font-weight: 400;
+    }
+
+        .name:hover {
+            color: #ffffff;
+        }
+
+    .fas:hover, i:hover, .fa:hover {
+        color: #0b9ac8;
+    }
+    /*////////////////////*/
+
+        /*.c:hover {
+           
+            background-color: lightblue;
+           
+            border: 1px solid black !important;
+        }
+    .name:hover {
+        cursor: pointer;
+        color: black;
+    }*/
+
+    
+
+   
+
+    a i {
+        font-size: 20px !important;
+      
+    }
+
+    
+</style>
+
+
+<div class="card" style="width: 100%;">
+
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+
+            <h5 class="card-title" style="color: black; margin: 8px;">Letter/Bond</h5>
+
+        </div>
+        <div class="col-md-8">
+
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info ' href='/Home/GridMenuPage?moduleId=3&perentId=5796'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row" id="cards">
+            @*<div class="col-md-3 mb-1">
+            <div class="card c " style="padding-bottom:10px;">
+                <a class="text-center btn btn-default " href="/HRPMSEmployee/Info/APPreciationPDF" color: black;>
+                    <br /> <strong class="name"> Appreciation Letter</strong><br />
+                    <i class="fa fa-download" aria-hidden="true" style="color:blue"></i> <br />
+                </a>
+            </div>
+
+        </div>*@
+
+            <div class="col-md-3 mb-1">
+                <div class="card c ">
+                    <a class="text-center btn btn-default " href="/HRPMSEmployee/Info/APPreciationPDF" color: black;>
+                        <br /> <strong class="name"> Appreciation Letter</strong><br />
+                        <i class="fa fa-download" aria-hidden="true" style="color:blue"></i> <br />
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="col-md-3 mb-1">
+                <div class="card c ">
+                    <a class="text-center btn btn-default " href="/HRPMSEmployee/Info/ExperienceLetterPdf" color: black;>
+                        <br /> <strong class="name"> Experience Letter</strong><br />
+                        <i class="fa fa-download" aria-hidden="true" style="color:blue"></i> <br />
+                    </a>
+                </div>
+
+            </div>
+            <div class="col-md-3 mb-1">
+                <div class="card c ">
+                    <a class="text-center btn btn-default " href="/HRPMSEmployee/Info/bondLetterPDF" color: black;>
+                        <br /> <strong class="name"> Surety Bond Letter</strong><br />
+                        <i class="fa fa-download" aria-hidden="true" style="color:blue"></i> <br />
+                    </a>
+                </div>
+
+            </div>
+            <div class="col-md-3 mb-1">
+                <div class="card c ">
+                    <a class="text-center btn btn-default " href="/HRPMSEmployee/Info/DeclarationFidelityBondPDF" color: black;>
+                        <br /> <strong class="name">  Declaration Fidelity Bond</strong><br />
+                        <i class="fa fa-download" aria-hidden="true" style="color:blue"></i> <br />
+                    </a>
+                </div>
+
+            </div> <br />
+            <div class="col-md-3 mb-1">
+                <div class="card c ">
+                    <a class="text-center btn btn-default " href="/HRPMSEmployee/Info/DeclarationSecrecyBondPDF" color: black;>
+                        <br /> <strong class="name"> Declaration Secrecy Bond</strong><br />
+                        <i class="fa fa-download" aria-hidden="true" style="color:blue"></i> <br />
+                    </a>
+                </div>
+
+            </div>
+
+
+
+        </div>
+    </div>
+    @*<div class="card-body">
+
+            <div>
+
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-action active" style="font-size:30px;">
+                       Letter Format Name
+                        <span class="badge badge-primary badge-pill"><i class="fas fa-link"></i>  PDF Link</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Appreciation Letter
+                        <span class="badge badge-pill">  <a class="btn btn-secondary" style="float:right" href="/HRPMSEmployee/Info/APPreciationPDF" target="_blank"><i class="fa fa-download" aria-hidden="true"></i> Download</a></span>
+
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Experience Letter
+                        <span class="badge badge-pill">  <a class="btn btn-secondary" style="float:right" href="/HRPMSEmployee/Info/ExperienceLetterPdf" target="_blank"><i class="fa fa-download" aria-hidden="true"></i> Download</a></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Surety Bond Letter
+                        <span class="badge  badge-pill">
+                            <a href="/HRPMSEmployee/Info/bondLetterPDF" class="btn btn-secondary"  style="float:right" target="_blank"><i class="fa fa-download" aria-hidden="true"></i> Download</a>
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Declaration Fidelity Bond
+                        <span class="badge  badge-pill">
+                            <a href="/HRPMSEmployee/Info/DeclarationFidelityBondPDF" class="btn btn-secondary" style="float:right" target="_blank"><i class="fa fa-download" aria-hidden="true"></i> Download</a>
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Declaration Secrecy Bond
+                        <span class="badge  badge-pill">
+                            <a href="/HRPMSEmployee/Info/DeclarationSecrecyBondPDF" class="btn btn-secondary" style="float:right" target="_blank"><i class="fa fa-download" aria-hidden="true"></i> Download</a>
+                        </span>
+                    </li>
+
+
+
+                </ul>
+            </div>
+        </div>*@
+</div>
+@section ScriptsMD{
+   
+    <script>
+    </script>
+}
+

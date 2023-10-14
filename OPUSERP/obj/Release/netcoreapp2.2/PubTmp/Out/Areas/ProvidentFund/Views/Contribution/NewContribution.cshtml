@@ -1,0 +1,152 @@
+﻿@model ContributionViewModel
+@{
+    ViewData["Title"] = "NewContribution";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+
+            @*<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h2 class="m-0 font-weight-bold text-primary">New Contribution</h2>
+        </div>*@
+
+            <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+                <h5 class="m-0 font-weight-bold text-primary">Add New Contribution</h5>
+                <a class='btn btn-info mr-4' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1014&perentId=6015'>@*<i class="fas fa-backward fa-2x "></i>*@<i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+
+
+            <div class="card-body">             
+                <form id="FormId">
+                    <div class="row col-sm-12">
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <label for="" class="col-sm-4 col-form-label">Members' ID</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="membersName" placeholder="Search Member" name="">
+                                    <input type="hidden" id="memberId" name="pfmemberId" />
+                                    <input type="hidden" id="employeeInfoId" name="employeeInfoId" />
+                                    <input type="hidden" id="contributionId" name="" />
+                                </div>
+                            </div>
+
+                          
+                            <div class="form-group row">
+                                <label for="note" class="col-sm-4 col-form-label">Narration</label>
+                                <div class="col-sm-6">
+                                    <textarea name="narration" id="narration" class="form-control" rows="3"></textarea>
+                                </div>
+                                
+                            </div>
+                           
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <label for="" class="col-sm-4 col-form-label">Transaction Date</label>
+                                <div class="col-sm-6 input-group">
+                                    <input name="transectionDate" id="tranDate" class="form-control input-group-sm Date" value="" readonly />
+                                </div>
+
+                            </div>
+                            <div class="form-group row">
+                                <label for="" class="col-sm-4 col-form-label">Company Contributioin</label>
+                                <div class="col-sm-6">
+                                    <input type="number" class="form-control" name="companyContribution" id="compCont">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="" class="col-sm-4 col-form-label">Employee Contributioin</label>
+                                <div class="col-sm-6">
+                                    <input type="number" class="form-control" name="employeeContribution" id="empCont">
+                                </div>
+                            </div> 
+                            <div class="form-group row text-right" style="float:right">
+
+                                <button type="button" id="submit" value="Submit" class="btn btn-success " style="float:right; margin-top:5px;margin-right: 55px"><i class="fas fa-save"></i>&nbsp; Save</button>
+                                 @*   <button type="button" id="reset" class="btn btn-danger " style="float:right; margin-top:5px;margin-right:5px;"><i class="fas fa-sync"></i>&nbsp; Refresh</button>*@
+
+                               
+                            </div>
+                        </div>
+
+                    </div>
+                   
+                    
+                   
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".Date").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+
+        Common.Ajax('GET', '/ProvidentFund/Member/GetAllMembers', [], 'json', ajaxFunctionAllMembers, false);
+
+        $("#reset").on("click", function (event) {
+            $('#employeeName').val('');
+            $('#tranDate').val('');
+            $('#contMonth').val('');
+            $('#compCont').val('');
+            $('#empCont').val('');
+        });
+
+    });
+
+    function ajaxFunctionAllMembers(response) {
+        console.log(response);
+        var GetMemberList = [];
+        $.each(response, function (id, option) {
+            var obj = new Object();
+            obj.key = option.Id;
+            obj.employeeInfoId = option.employeeInfo.Id;
+            obj.value = option.memberName + "(" + option.memberCode + ")";
+            GetMemberList[GetMemberList.length] = obj;
+        });
+
+        $('#membersName').autocomplete({
+            source: GetMemberList,
+            select: function (event, ui) {
+                $("#membersName").val(ui.item.value);
+                $("#memberId").val(ui.item.key);
+                $("#employeeInfoId").val(ui.item.employeeInfoId);
+            }
+        });
+    }
+
+
+    $('#submit').click(function () {
+        console.log($('#FormId').serializeArray());
+        var data = $('#FormId').serializeArray();
+
+
+        var data = $('#FormId').serializeArray();
+        $.ajax({
+            url: '/ProvidentFund/Contribution/NewContribution',
+            type: 'POST',
+            data: data
+        }).done(function () {
+           
+                swal('success', 'Saved Successfully!', 'success').then(function () {
+                    location.reload();
+                });
+          
+        }).fail(function () {
+            swal('warning', 'Failed!', 'warning');
+        })
+
+
+
+       
+    })
+
+
+
+
+</script>

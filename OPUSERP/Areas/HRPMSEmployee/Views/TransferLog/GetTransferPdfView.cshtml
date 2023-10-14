@@ -1,0 +1,275 @@
+﻿@model TransferLogViewModel
+@using OPUSERP.Helpers;
+@{
+    ViewData["Title"] = "GetTransferPdfView";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+@using OPUSERP.ERPServices.MasterData.Interfaces
+@using OPUSERP.ERPService.AuthService.Interfaces
+@using System
+@inject IERPCompanyService eRPCompanyService
+@inject IUserInfoes userInfo
+@{
+    var companies = await eRPCompanyService.GetAllCompany();
+    var company = companies.FirstOrDefault()?.filePath;
+    var companyName = companies.FirstOrDefault()?.companyName;
+}
+
+
+<style>
+    .box {
+        margin-top: 100px;
+        margin-left: 100px;
+        margin-right: 100px;
+        margin-bottom: 100px;
+        text-align: justify;
+        font-size: 18px;
+        color: black;
+    }
+
+    header {
+        text-align: center;
+        font-size: 30px;
+    }
+
+    .dbox {
+        width: 100%;
+        margin-bottom: 25px;
+        text-align: justify;
+    }
+
+    .sbox {
+        margin-right: 15px;
+        float: left;
+        height: 150px;
+        text-align: justify;
+    }
+
+    aside {
+        word-wrap: normal;
+    }
+
+    article {
+        margin-bottom: 15px;
+        text-indent: 75px;
+        word-wrap: normal;
+    }
+
+    footer {
+        text-align: right;
+    }
+</style>
+
+<section class="box">
+    <header>
+        <div id="sub1">
+            <img src="/Assets/bdbl.png" style="height:60px;width:80px;" alt="">
+        </div>
+        বাংলাদেশ ডেভলপমেন্ট ব্যাংক লিমিটেড <br />
+        <u>হেড অফিস, ঢাকা।</u> <br />
+        <u> ব্রাঞ্চ ম্যানেজমেন্ট ডিপার্টমেন্ট</u>
+
+    </header>
+    <section style="float:left">
+        নং ১৪.১/ @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.employeeInfo?.employeeCode)
+    </section>
+    <section style="float:right">
+        তারিখঃ  @Model.transferLog?.reportDateBn
+
+        @*তারিখঃ ......./......./............*@
+        @*@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@DateTime.Now.ToString("dd-MM-yyyy"))*@ <br />
+        @*আষাঢ় ০৩, ১৪২৮*@
+    </section>
+    <br />
+    <br />
+    <br />
+    <section style="text-align:center">
+        <h3><b><u>স্মারকলিপি</u></b></h3><br />
+        <h4><b>বিষয়ঃ <u>বিমুক্তকরণ প্রসংগে।</u></b></h4>
+    </section>
+    <article>
+        হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্ট কর্তৃক জারীকৃত @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.transferLog?.orderDate?.ToString("dd/MM/yyyy")) তারিখে  @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.transferLog?.orderNo)
+        নং কর্মী প্রজ্ঞাপনের পরিপ্রেক্ষিতে জনাব @Model.employeeInfo?.nameBangla, @Model.employeeInfo?.lastDesignation?.designationNameBN
+        কে অদ্য @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.transferLog?.from?.ToString("dd/MM/yyyy")) তারিখ কর্মদিবস শেষে  @if (Model.employeeInfo?.branchId != null)
+        {
+            @Model.employeeInfo?.hrBranch?.branchNameBn
+        }
+        else if (Model.employeeInfo?.departmentId != null)
+        {
+            @Model.employeeInfo?.department?.deptNameBn
+        }
+        else if (Model.employeeInfo?.hrDivisionId != null)
+        {
+            @Model.employeeInfo?.hrDivision?.divNameBn
+        }
+        else if (Model.employeeInfo?.hrUnitId != null)
+        {
+            @Model.employeeInfo?.hrUnit?.unitNameBn
+        }
+        else if (Model.employeeInfo?.functionInfoId != null)
+        {
+            @Model.employeeInfo?.functionInfo?.branchUnitNameBN
+        }
+        else if (Model.employeeInfo?.locationId != null)
+        {
+            @Model.employeeInfo?.location?.branchUnitNameBN
+        }
+        হতে বিমুক্ত করা হলো। তিনি তাঁর
+        উপর অর্পিত দায়িত্ব এ @if (Model.employeeInfo?.branchId != null)
+        {
+        <spane>ব্রাঞ্চের</spane>
+        }
+        else if (Model.employeeInfo?.departmentId != null)
+        {
+            <spane>ডিপার্টমেন্টের</spane>
+        }
+        else if (Model.employeeInfo?.hrDivisionId != null)
+        {
+            <spane>বিভাগের</spane>
+        }
+        else if (Model.employeeInfo?.hrUnitId != null)
+        {
+            <spane>ইউনিটের</spane>
+        }
+        else if (Model.employeeInfo?.functionInfoId != null)
+        {
+            <spane>অফিসের</spane>
+        }
+        else if (Model.employeeInfo?.locationId != null)
+        {
+            <spane>জোনের</spane>
+        }  @Model.employeeInfotransfer?.lastDesignation?.designationNameBN, @Model.employeeInfotransfer?.nameBangla -এর নিকট ব্যাংকের
+        নির্ধারিত ফরমে হস্তান্তরপূর্বক যথারীতি  @Model.transferLog?.toBranch?.branchNameBn ব্রাঞ্চে যোগদান করবেন।
+    </article>
+    <br />
+    <section style="float:right; text-align:center; margin-right:50px;">
+        স্বাঃ/= <br />
+        (@Model.employeeInfoSig?.nameBangla) <br />
+        @Model.employeeInfoSig?.lastDesignation?.designationNameBN
+    </section>
+    <br />
+    <br />
+    <br />
+    <section>
+        <div class="dbox">
+            <div class="sbox">
+                ০১।
+            </div>
+            <aside>
+                @Model.employeeInfo?.nameBangla <br />
+                @Model.employeeInfo?.lastDesignation?.designationNameBN <br />
+                @if (Model.employeeInfo?.branchId != null)
+                {
+                    @Model.employeeInfo?.hrBranch?.branchNameBn
+                }
+                else if (Model.employeeInfo?.departmentId != null)
+                {
+                    @Model.employeeInfo?.department?.deptNameBn
+                }
+                else if (Model.employeeInfo?.hrDivisionId != null)
+                {
+                    @Model.employeeInfo?.hrDivision?.divNameBn
+                }
+                else if (Model.employeeInfo?.hrUnitId != null)
+                {
+                    @Model.employeeInfo?.hrUnit?.unitNameBn
+                }
+                else if (Model.employeeInfo?.functionInfoId != null)
+                {
+                    @Model.employeeInfo?.functionInfo?.branchUnitNameBN
+                }
+                else if (Model.employeeInfo?.locationId != null)
+                {
+                    @Model.employeeInfo?.location?.branchUnitNameBN
+                }
+
+                <br />
+                বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড <br />
+                হেড অফিস, ঢাকা।
+            </aside>
+        </div>
+    </section>
+    <section>
+            <div class="dbox">
+                <div class="sbox">
+                    ০২।
+                </div>
+                <aside>
+                    @Model.employeeInfotransfer?.nameBangla <br />
+                    @Model.employeeInfotransfer?.lastDesignation?.designationNameBN <br />
+                    @if (Model.employeeInfotransfer?.branchId != null)
+                    {
+                        @Model.employeeInfotransfer?.hrBranch?.branchNameBn
+                    }
+                    else if (Model.employeeInfotransfer?.departmentId != null)
+                    {
+                        @Model.employeeInfotransfer?.department?.deptNameBn
+                    }
+                    else if (Model.employeeInfotransfer?.hrDivisionId != null)
+                    {
+                        @Model.employeeInfotransfer?.hrDivision?.divNameBn
+                    }
+                    else if (Model.employeeInfotransfer?.hrUnitId != null)
+                    {
+                        @Model.employeeInfotransfer?.hrUnit?.unitNameBn
+                    }
+                    else if (Model.employeeInfotransfer?.functionInfoId != null)
+                    {
+                        @Model.employeeInfotransfer?.functionInfo?.branchUnitNameBN
+                    }
+                    else if (Model.employeeInfotransfer?.locationId != null)
+                    {
+                        @Model.employeeInfotransfer?.location?.branchUnitNameBN
+                    }
+                     <br />
+                    বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড <br />
+                    হেড অফিস, ঢাকা।
+                </aside>
+            </div>
+        </section>
+    <u>
+        অবগতি ও প্রয়োজনীয় ব্যবস্থা গ্রহণের জন্য অনুলিপিঃ
+    </u>
+    <section>
+        <div class="dbox">
+            <div class="sbox" style="height:20px;">
+                ০১।
+            </div>
+            <aside>
+                ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট, বিডিবিএল, হেড অফিস, ঢাকা।
+            </aside>
+        </div>
+        <div class="dbox">
+            <div class="sbox" style="height:20px;">
+                ০২।
+            </div>
+            <aside>
+                ডেপুটি জেনারেল ম্যানেজার, অডিট এন্ড ইন্সপেকশন ডিপার্টমেন্ট, বিডিবিএল, হেড অফিস, ঢাকা।
+            </aside>
+        </div>
+        <div class="dbox">
+            <div class="sbox" style="height:40px;">
+                ০৩।
+            </div>
+            <aside>
+                ডেপুটি জেনারেল ম্যানেজার, হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্ট, বিডিবিএল, হেড অফিস, ঢাকা। ২(দুই) প্রস্থ দায়িত্ব হস্তান্ত সম্পর্কিত ফর্মসহ প্রেরণ করা হলো।
+            </aside>
+        </div>
+        <div class="dbox">
+                <div class="sbox" style="height:60px;">
+                    ০৪।
+                </div>
+                <aside>
+                    ডিপুটি জেনারেল ম্যানেজার, বাংলাদেশ ডেভেলপম্টে ব্যাংক লিমিটেড,জোনাল অফিস ঢাকা উত্তর। জনাব/জনাবা মোঃ ইউনুছ আলী এসিসট্যান্ট জেনালেল ম্যানেজার চলতি ২০২১ পঞ্জিকা বর্ষে ৬(ছয়) দিন
+                    নৈমিত্তিক ছুটি ভোগ করেছেন ও কোন সাশারণ ছুটি ভোগ করেননি।
+                </aside>
+            </div>
+        <br />
+        <footer>
+            ডেপুটি জেনারেল ম্যানেজার
+        </footer>
+    </section>
+</section>
+
+

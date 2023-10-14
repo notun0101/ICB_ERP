@@ -1,0 +1,135 @@
+﻿@model FixationViewModel
+@{
+	ViewData["Title"] = "Process Fixation Increment";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Style{
+	<style>
+		ul.ui-autocomplete {
+			z-index: 99999999;
+		}
+	</style>
+}
+
+<div class="card" style="width: 100%;">
+	<div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+		<div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+
+			<h5 class="card-title" style="color: black; margin: 8px;">Process Increment</h5>
+
+		</div>
+		<div class="col-md-8">
+			<div style="float: right; margin: 16px;">
+				<a class='btn btn-info mr-4' style="margin-right:6px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1013&perentId=5926'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="card-body">
+		<div class="container">
+			<div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-2 form-control-label">Year</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="year" name="year">
+                                <option value="0">Choose Year</option>
+                                <option value="@DateTime.Now.Year">@DateTime.Now.Year</option>
+                            </select>
+                        </div>
+                        <label class="col-sm-2 form-control-label">Employee</label>
+                        <div class="col-sm-4">
+                            <input type="hidden" name="employeeInfoId" id="employeeInfoId" value="0" />
+                            <input type="text" class="form-control" name="employeeName" id="employeeName" value="" placeholder="Leave Blank to Process All" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+						<div class="col-sm-9 fa-pull-right">
+						</div>
+						<div class="col-sm-1 fa-pull-right">
+							<a href="javascript:void(0)" onclick="ProcessIncrement()" class="btn btn-success btn-sm fa-pull-right">Process</a>
+						</div>
+						<div class="col-sm-2 fa-pull-right">
+							<a href="javascript:void(0)" onclick="CreateIncrementProposal()" class="btn btn-success btn-sm fa-pull-right">Create Proposal</a>
+						</div>
+                    </div>
+                </div>
+			</div>
+		</div>
+	</div>
+</div>
+<br />
+
+@section Scripts{
+	<script>
+		$(document).ready(function () {
+            Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo', [], 'json', ajaxGetEmployees);
+		});
+
+		function CreateIncrementProposal() {
+			var year = $('#year').val();
+            var employeeInfoId = $('#employeeInfoId').val()
+			Common.Ajax('GET', '/Payroll/Fixation/CreateIncrementProposalApi?year=' + year + '&employeeInfoId=' + employeeInfoId, [], 'json', ajaxIncrementProposal, false);
+		}
+
+		function ajaxIncrementProposal(response) {
+			console.log(response);
+			if (response >= 0) {
+				swal('success', 'Increment Proposal Processed Successfully', 'success').then(function () {
+					$('#year').val(0);
+				});
+			}
+		}
+
+		//Asad added on 26.07.2023
+		function ProcessIncrement() {
+			var year = $('#year').val();
+			var employeeInfoId = $('#employeeInfoId').val()
+			Common.Ajax('GET', '/Payroll/Fixation/ProcessIncrementApi?year=' + year + '&employeeInfoId=' + employeeInfoId, [], 'json', ajaxProcessIncrement, false);
+		}
+		//Asad added on 26.07.2023
+		function ajaxProcessIncrement(response) {
+			console.log(response);
+			if (response >= 0) {
+				swal('success', 'Increment Processed Successfully', 'success').then(function () {
+					$('#year').val(0);
+				});
+			}
+		}
+
+
+        function ajaxGetEmployees(response) {
+            var GeEmployeesList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+                obj.designation = option.designation;
+                obj.employeeCode = option.employeeCode;
+                GeEmployeesList[GeEmployeesList.length] = obj;
+            });
+            $('#employeeName').autocomplete({
+                source: GeEmployeesList,
+                select: function (event, ui) {
+                    $("#employeeName").val(ui.item.value);
+                    $("#employeeInfoId").val(ui.item.key);
+                }
+            });
+        }
+		function formatDate(date) {
+			date = new Date(date);
+			var year = date.getFullYear(),
+				month = date.getMonth() + 1, // months are zero indexed
+				day = date.getDate(),
+				hour = date.getHours(),
+				minute = date.getMinutes(),
+				second = date.getSeconds(),
+				hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+				minuteFormatted = minute < 10 ? "0" + minute : minute,
+				morning = hour < 12 ? "am" : "pm";
+
+			return day + "/" + + month + "/" + year;
+		}
+	</script>
+}

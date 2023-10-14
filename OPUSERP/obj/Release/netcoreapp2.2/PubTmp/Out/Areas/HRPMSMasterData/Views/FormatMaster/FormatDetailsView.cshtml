@@ -1,0 +1,22 @@
+﻿@model HrFormatDetailsViewModel
+
+@{
+	ViewData["TitleMD"] = "Format Details";
+	Layout = "~/Areas/HRPMSMasterData/Views/Shared/_MasterDataForm.cshtml";
+}
+
+<input type="hidden" id="rawHtml" value="@Model.hrFormatDetail.editedFormat" />
+<div class="box">
+
+</div>
+
+@section ScriptsMD{
+
+	<script>
+		$(document).ready(function () {
+			var data = $('#rawHtml').val();
+			console.log(data);
+			$('.box').html(data);
+		})
+	</script>
+}

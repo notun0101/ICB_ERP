@@ -1,0 +1,577 @@
+﻿@model ItemViewModel
+@{
+    ViewData["Title"] = "Item";
+    Layout = "~/Areas/Auth/Views/Shared/_MasterLayout.cshtml";
+}
+<style>
+    .tabButton {
+        font-size: 20px;
+        padding: 10px 20px;
+    }
+
+    .width {
+        width: 83% !important;
+    }
+
+    #myDIV {
+        background-color: white;
+        padding: 20px;
+        box-shadow: 3px 3px 3px 3px lightgray;
+        max-height: 415px;
+        overflow-y: scroll;
+        padding-top: 5px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+        background-color: white;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #F3F3F3;
+    }
+
+    .g {
+        text-decoration: none;
+        color: #1492a5;
+    }
+
+        .g:hover {
+            text-decoration: none;
+            color: #070a67;
+        }
+
+        .g span {
+            font-family: serif;
+        }
+
+    .small-box {
+        text-align: center;
+        border-radius: 10px;
+        padding: 10px;
+        transition: transform .5s;
+    }
+
+        .small-box:hover {
+            background-color: #e8f0fe;
+            transform: scale(.95);
+        }
+
+        .small-box i {
+            font-size: 35px;
+            margin: 10px;
+        }
+</style>
+<div class="row mt-2">
+    <div class="col-md-12">
+        <div class="card" style="width: 100%;">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3 class="card-title" style="color:black; margin: 0;">Add Item</h3>
+                    </div>
+                    <div class="col-md-6">
+
+                        <a href="/SCMMasterData/Item/NewItemList" class="btn btn-success btn-sm fa-pull-right">
+                            All Items
+                        </a>
+                        <a id="btngle" href="javascript:void(0)" class="btn btn-outline-secondary btn-sm fa-pull-right pr-3 mr-3"
+                           style="position: absolute; right: 82px; box-shadow: none; font-size: 20px;">
+                            <i class="fas fa-th"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form asp-area="SCMMasterData" asp-controller="Item" enctype="multipart/form-data" id="FormId" asp-action="NewIndex" method="post" data-parsley-validate="parsley">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <p>@ViewBag.message</p>           
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-3">Item Code</label>
+                                <div class="col-md-5">
+                                    <input type="text" class="form-control" id="itemCode" value="@ViewBag.itemCode" name="itemCode" data-parsley-required="true" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control" onchange="getItemCode()" id="NumType" name="NumType">
+                                        <option value="1">Default</option>
+                                        <option value="3">Free</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-md-3">Item Category</label>
+                                <div class="col-md-9">
+                                    @*<input type="text" class="form-control" name="ItemCategory" />*@
+                                    <label id="select_parent_label_id" onclick="parentFun()" class="form-control btn btn-info" href="#"><span style="color: white; font-size: 15px;">select parent</span></label>
+                                    <input type="text" class="form-control" id="select_parent_label_id1" data-parsley-required="true" autocomplete="off">
+                                </div>
+                                <div id="parent_list_div_id" style="display: none;">
+                                    <div class="card" style="width: 1040px">
+                                        <div class="card-body">
+
+											<div class="custom-control-inline" id="category_block_row_id" style="max-width:1000px; overflow-x:scroll;">
+												<div class="caregory_block_col_cls" id="categoryBlockColId_1" style="width:252px; height:320px; overflow:auto; padding-left: 10px; border: 1px solid lightgray; padding-right: 10px; padding-top: 12px;">
+													<div>
+														<input type="text" id="filter_category_id_1" onkeyup="filterCategoryFun(1)" class="form-control" placeholder="name" style="width: 230px; margin-bottom: 10px;">
+													</div>
+													@foreach (var data in Model.itemCategories.Where(x => x.isParent == null))
+													{
+														<label class="btn category_common_cls category_cls_1" id="label_id_@data.Id" href="#" onclick="viewSubParent(@data.Id, 1)" style="border-radius: 0; border-left: 5px solid silver; text-align: left; width: 230px; background: #E9EBEC; margin-top: -7px;color:gray">@data.categoryName &nbsp;<span><img src="~/images/arrow.png" style="height: 12px; width: 12px; float: right;margin-top: 6px;" /></span></label>
+													}
+												</div>
+											</div>
+											<div class="row" style="width: 100%; background: #E9EBEC; margin-top: 20px; margin-left: 5px; border-radius: 5px;">
+												<p id="current_location_id" style="color: gray; margin-top: 2px; margin-top: 10px; padding-left: 48px; font-weight: bold">Current Location : </p>
+											</div>
+											<div class="custom-control-inline" style=" margin-top: 10px;">
+												<button class="btn" type="button" onclick="confirmFun()" style="border-radius: 0; background: #FF4E01; margin-left: 5px; color: whitesmoke">confirm</button>
+												<button class="btn" type="button" onclick="cancelFun()" style="border-radius: 0;margin-left: 5px; background: none; border: 1px solid lightgray">cancel</button>
+												<button class="btn" type="button" onclick="clearFun()" style="border-radius: 0;margin-left: 5px; background: none; border: 1px solid lightgray">clear</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-form-label col-md-3">Description</label>
+								<div class="col-md-9">
+									<textarea maxlength="250" class="form-control" id="itemDescription" value="" name="itemDescription"></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group row">
+								<input type="hidden" id="parentId" name="parentId" />
+								<label class="col-form-label col-md-3">Item Name</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="itemName" value="" name="itemName" data-parsley-required="true" />
+									<input id="itemId" name="itemId" value="" type="hidden" />
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-form-label col-md-3">Item Unit</label>
+								<div class="col-md-9">
+									<select class="form-control" name="unitId" id="unitId" data-parsley-required="true">
+										<option value="">Select</option>
+										@foreach (var data in Model.units)
+										{
+											<option value="@data.Id">@data.unitName</option>
+										}
+									</select>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-form-label col-md-3">Type</label>
+								<div class="col-md-9">
+									<select class="form-control" name="itemTypeId" id="itemTypeId">
+										<option value="">Select</option>
+										@foreach (var data in Model.itemTypes)
+										{
+											<option value="@data.Id">@data.itemTypeName</option>
+										}
+									</select>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-form-label col-md-3"></label>
+								<div class="col-md-9">
+									<a href="javascript:void(0)" onclick="uploadImage1()" style="display: flex; margin-top: 20px;">
+										<img src="https://www.phoca.cz/images/projects/phoca-gallery-r.png" id="img1" width="100" height="100" style="border-radius: 50%; margin: 0 auto;">
+									</a>
+									<input type="file" name="itemPhoto" style="display: none;" id="imagePath" onchange="imageChange1(this)">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+                <div class="col-md-12" id="InfoDiv">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="javascript:void(0)" id="AddSpecBtn" class="btn btn-success btn-sm" onclick="AddSpec()">+</a>
+                        </div>
+                        <div class="col-md-12 row" id="outer-box">
+                            @*<div class="card card_1 mb-2 col-md-4">
+                                    <a href="javascript:void(0)" style="width: 30px; position: absolute; right: 5px; top: 5px;" class="addNewCard btn btn-info btn-sm" onclick="addNewCard()">+</a>
+                                    <a href="javascript:void(0)" style="width: 30px; position: absolute; right: 5px; top: 40px;" class="RemoveCard btn btn-success btn-sm" onclick="removeCard(1)">-</a>
+                                    <img src="~/images/defaultperson.png" width="100" height="100" style="border-radius: 50%; margin: 0 auto;" />
+                                    <div class="card-body row">
+                                        <div class="col-md-12">
+                                            <input type="text" class="form-control" placeholder="Specification name" name="variation" />
+                                        </div>
+                                        <div class="col-md-12">
+                                            <input type="text" class="form-control" placeholder="SKU No." name="sku" />
+                                        </div>
+                                        <div class="col-md-12" style="display: flex; justify-content: center;">
+                                            <a href="javascript:void(0)" class="btn btn-info btn-sm" style="border-radius: 50%;" onclick="AddType(1)">+</a>
+                                        </div>
+                                        <div class="row typeSection">
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control" placeholder="Variation Type" name="variationType" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input class="form-control" type="text" placeholder="Value" name="typeValue" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-4 pb-4">
+                <button type="submit" class="btn btn-info btn-sm fa-pull-right">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div id="myDIV" style="display: none; width: 311px; position: absolute; right: 50px; top: 167px;">
+    <div class="row">
+
+        <a href="/SCMMasterData/ItemCategory/" class="col-md-4 small-box g">
+            <i class="fa fa-chart-line"></i><span>Item Category</span>
+        </a>
+
+
+        <a href="/SCMMasterData/SCMUnit/" class="col-md-4 small-box g">
+            <i class="fas fa-sitemap"></i><span>Unit</span>
+        </a>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+
+        function getItemCode() {
+            var numType = $('#NumType').val();
+            if (numType == 1) {
+                Common.Ajax('GET', '/SCMMasterData/Item/GetItemCode/' + numType, [], 'json', ajaxItemCode, false);
+            } else {
+                $('#itemCode').val('').prop('readonly', false);
+            }
+        }
+
+        function ajaxItemCode(response) {
+            $('#itemCode').val(response).prop('readonly', true);
+        }
+
+        $("#btngle").click(function () {
+            $("#myDIV").slideToggle("slow");
+        });
+
+        var i = 1;
+        var j = 1;
+        $(document).ready(function () {
+            $('#unitId').select2();
+            $('.select2-results').css('width', '83%');
+            $('.select2-search__field').addClass('width');
+            $('.select2-selection').css('width', '83%');
+        })
+
+        function AddSpec() {
+            $('#outer-box').append(`<div class="card card_1 mb-2 col-md-4">
+                                                                    <a href="javascript:void(0)" style="width: 30px; position: absolute; right: 5px; top: 5px;" class="addNewCard btn btn-info btn-sm" onclick="addNewCard()">+</a>
+                                                                    <a href="javascript:void(0)" style="width: 30px; position: absolute; right: 5px; top: 40px;" class="RemoveCard btn btn-success btn-sm" id="del1" onclick="removeCard(1)">-</a>
+                                                                    <a href="javascript:void(0)" onclick="uploadImage(${i})" style="display: flex; margin-top: 20px;">
+                                                                        <img src="https://www.phoca.cz/images/projects/phoca-gallery-r.png" id="imgsmall1" width="100" height="100" style="border-radius: 50%; margin: 0 auto;">
+                                                                    </a>
+                                                                    <input type="file" name="skuPhotes" style="display: none;" id="my_file1" onchange="imageChange(this, 1)">
+                                                                    <div class="card-body row">
+                                                                        <div class="col-md-12">
+
+                                                                        <input type="text" class="form-control" placeholder="Specification name" name="itemSpecificationName" required/>
+                                                                        </div>
+                                                                        <div class="col-md-12">
+                                                                            <input type="text" class="form-control" placeholder="SKU No." name="skuList" required/>
+                                                                        </div>
+                                                                        <div class="col-md-12" style="display: flex; justify-content: center;">
+                                                                            <a href="javascript:void(0)" class="btn btn-info btn-sm" style="border-radius: 50%;" onclick="AddType(1)">+</a>
+                                                                        </div>
+                                                                        <div class="row typeSection">
+    
+                                                                        </div>
+                                                                    </div>
+                                                                </div>`);
+            $('#AddSpecBtn').attr("disabled", true);
+        }
+
+        function getskuno(Id) {
+            var itemid = $("#itemId").val();
+            if (itemid == "") {
+                itemid = 0;
+            }
+            if (Id <= 0) {
+                Id = 0;
+            }
+            Common.Ajax('GET', '/SCMMasterData/Item/getitemspecno/?Id=' + Id + '&&itemId=' + itemid, [], 'json', ajaxskuno, false);
+        }
+        function ajaxskuno(response) {
+            //$('#sku'+).val(response);
+            var numTypeId = $('#NumType').val();
+            if (numTypeId == 3) {
+                $('#Lgsku' + skuid).val(response).removeAttr('disabled');
+            } else {
+                $('#Lgsku' + skuid).val(response).attr('disabled', 'disabled');
+            }
+
+        }
+        //function removeType(index2) {
+        //    $('.t_' + index2).remove();
+        //}
+        function AddType(index) {
+            $('.card_' + index + ' .typeSection').append(`<div class="ppp row">
+            <div class="aavv col-md-6 t_${j}">
+              <input type="text" class="form-control" placeholder="Variation Type" name="specificationCategoryname" required/>
+                </div>
+                <div class="col-md-6 ss t_${j}">
+                    <div class="input-group mb-3">
+                        <input class="form-control" type="text" placeholder="Value" name="CategoryValue" required/>
+                        <div class="input-group-append">
+                        <button class="btn btn-outline-secondary btn-sm" type="button" id="del2">x</button>
+                        </div>
+                    </div>
+                </div>
+                </div>
+              `);
+                    j++;
+                }
+
+        //function removeCard(index) {
+        //    $('.card_' + index).remove();
+        //}
+
+        $(document).on('click', '#del1', function () {
+            $(this).closest('.card_1').toggleClass('strike').fadeOut('slow', function () { $(this).parent('.col-md-4').remove(); });
+        });
+
+        $(document).on('click', '#del2', function () {
+            $(this).closest('.ppp').toggleClass('strike').fadeOut('slow', function () { $(this).parent('.col-md-6').remove(); });
+        });
+
+        function addNewCard() {
+            $('#outer-box').append(`<div class="card card_${i + 1} mb-2 col-md-4">
+                                                                        <a href="javascript:void(0)" style="width: 30px; position: absolute; right: 5px; top: 5px;" class="addNewCard btn btn-info btn-sm" onclick="addNewCard()">+</a>
+                                                                        <a href="javascript:void(0)" style="width: 30px; position: absolute; right: 5px; top: 40px;" id="del1" class="RemoveCard btn btn-success btn-sm">-</a>
+                                                                        <a href="javascript:void(0)" onclick="uploadImage(${i + 1})" style="display: flex; margin-top: 20px;">
+                                                                            <img src="https://www.phoca.cz/images/projects/phoca-gallery-r.png" id="imgsmall${i + 1}" width="100" height="100" style="border-radius: 50%; margin: 0 auto;">
+                                                                        </a>
+                                                                        <input type="file" name="skuPhotes" style="display: none;" id="my_file${i + 1}" onchange="imageChange(this, ${i + 1})">
+                                                                        <div class="card-body row">
+                                                                            <div class="col-md-12">
+
+                                                                                <input type="text" class="form-control" placeholder="Specification name" name="itemSpecificationName" />
+                                                                            </div>
+                                                                            <div class="col-md-12">
+                                                                                <input type="text" class="form-control" placeholder="SKU No." name="skuList" />
+                                                                            </div>
+                                                                            <div class="col-md-12" style="display: flex; justify-content: center;">
+                                                                                <a href="javascript:void(0)" class="btn btn-info btn-sm" style="border-radius: 50%;" onclick="AddType(${i + 1})">+</a>
+                                                                            </div>
+                                                                            <div class="row typeSection">
+
+                                                                        </div>
+                                                                    </div>`)
+            i++;
+        }
+
+        $('.addTypeBtn').click(function () {
+            //alert("ok")
+            console.log($(this).parent().parent().parent().parent().find('.type-outer-box').html());
+            $(this).parent().parent().parent().parent().parent().parent().find('.type-outer-box').append(`<div class="col-md-6">
+                                                                                <input type="text" class="form-control" name="variationType" />
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <div class="input-group mb-3">
+                                                                                    <input class="form-control" type="text" name="typeValue" />
+                                                                                    <div class="input-group-append">
+                                                                                        <button class="btn btn-outline-secondary btn-sm" id="del2" onclick="addModeTypeBtn()" type="button" title="Add Variation Type">+</button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>`);
+        })
+
+
+        function uploadImage(id) {
+            $("input[id='my_file" + id + "']").click();
+        }
+        function imageChange(e, id) {
+            console.log(e);
+            readImgURL(e, id);
+        }
+        function sleep(milliseconds) {
+            const date = Date.now();
+            let currentDate = null;
+            do {
+                currentDate = Date.now();
+            } while (currentDate - date < milliseconds);
+        }
+        function readImgURL(input, id) {
+            sleep(200);
+            if (input.files && input.files[0]) {
+                var filerdr = new FileReader();
+                filerdr.onload = function (e) {
+                    $('#imgsmall' + id).attr('src', e.target.result);
+                }
+                filerdr.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+
+        function uploadImage1() {
+            $("#imagePath").click();
+        }
+        function imageChange1(e) {
+            console.log(e);
+            readImageUrl1(e);
+        }
+        function readImageUrl1(input) {
+            // console.log(input.files)
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (ev) {
+                    // console.log("ok: " + ev.target.result);
+                    $('#img1').attr('src', ev.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+
+
+        //Parent child parent child load
+
+        function parentFun() {
+            $("#parent_list_div_id").show();
+        }
+
+        var lastClicked = 0;
+        var lastChild = 0;
+        var col = 2;
+        var spanTag = 1;
+        var searchId = 2;
+        function viewSubParent(id, colClicked, lastNode) {
+            console.log('ok2')
+            console.log(id + ' ' + colClicked + ' ' + lastNode)
+            //alert(id);
+            //alert(colClicked);
+
+            $(".caregory_block_col_cls").each(function () {
+
+                var id = this.id;
+                var test = id.split("_");
+                var index = test[test.length - 1];
+                console.log('index = ' + index);
+                console.log('colClicked = ' + colClicked);
+                if (index > colClicked) {
+
+                    $("#categoryBlockColId_" + index).remove();
+                }
+
+            });
+
+            for (var i = 0; i <= spanTag; i++) {
+
+                if (colClicked <= i) {
+                    $("#currentLocationId_" + i).remove();
+                }
+            }
+
+            $("#select_parent_label_id").text($("#label_id_" + id).text());
+            if (lastClicked == id) {
+
+                return false;
+            }
+            else if (lastNode == 0) {
+
+                lastClicked = id;
+                lastChild = 1;
+                var locationText = $("#label_id_" + id).text();
+                $("#current_location_id").append('<span id="currentLocationId_' + spanTag + '" style="color: #1e90ff">' + locationText + '</span>');
+                $("#parentId").val(id);
+                $(".category_cls_" + colClicked).css('border-left', '5px solid silver');
+                $("#label_id_" + id).css('border-left', '5px solid red');
+
+            } else if (lastNode == null) {
+
+                lastClicked = id;
+                $("#parentId").val(id);
+                $(".category_cls_" + colClicked).css('border-left', '5px solid silver');
+                $("#label_id_" + id).css('border-left', '5px solid red');
+                var locationText = $("#label_id_" + id).text() + '> ';
+                $("#current_location_id").append('<span id="currentLocationId_' + spanTag + '" style="color: #1e90ff">' + locationText + '</span>');
+
+            }
+
+            if (lastNode == null) {
+
+                $.ajax({
+                    url: "/SCMMasterData/Item/GetItemCategoryByParentId/" + id,
+                    type: "get",
+                    success: function (res) {
+                        console.log("ok");
+                        console.log(res);
+                        if (res != null) {
+
+                            if (res.length > 0) {
+
+                                $("#category_block_row_id").append('<div class="caregory_block_col_cls" id="categoryBlockColId_' + col + '" style="width:252px; height:320px; overflow:auto; padding-left: 10px; border: 1px solid lightgray; padding-right: 10px; padding-top: 12px;"> <div><input type="text" id="filter_category_id_' + searchId + '" onkeyup="filterCategoryFun(' + searchId + ')" class="form-control" placeholder="name" style="width: 230px; margin-bottom: 10px;"></div></div>');
+
+                            }
+                            $.each(res, function (i, e) {
+                                //alert(e.countChild);
+                                //alert(e.Id)
+
+                                if (e.countChild > 0) {
+
+                                    $("#categoryBlockColId_" + col).append('<label class="btn category_common_cls category_cls_' + searchId + '" id="label_id_' + e.Id + '" href="#" onclick="viewSubParent(' + e.Id + "," + col + ')" style="border-radius: 0; border-left: 5px solid silver; text-align: left; width: 230px; background: #E9EBEC; margin-top: -7px;color:gray">' + e.categoryName + '&nbsp;<span><img src="/images/arrow.png" style="height: 12px; width: 12px; float: right;margin-top: 6px;"/></span></label>');
+                                }
+                                else {
+
+                                    $("#categoryBlockColId_" + col).append('<label class="btn category_common_cls category_cls_' + searchId + '" id="label_id_' + e.Id + '" href="#" onclick="viewSubParent(' + e.Id + "," + col + ')" style="border-radius: 0; border-left: 5px solid silver; text-align: left; width: 230px; background: #E9EBEC; margin-top: -7px;color:gray">' + e.categoryName + '&nbsp;</label>');
+                                    //$("#categoryBlockColId_" + col).append('<label class="btn category_common_cls category_cls_' + searchId + '" id="label_id_' + e.Id + '" href="#" onclick="viewSubParent(' + e.Id + "," + col + "," + 0 + ')" style="border-radius: 0; border-left: 5px solid silver; text-align: left; width: 230px; background: #E9EBEC; margin-top: -7px;color:gray">' + e.categoryName + '&nbsp;</label>');
+                                }
+
+                            });
+
+                            col++;
+                            spanTag++;
+                            searchId++;
+                        }
+                    }
+                });
+            }
+
+        }
+
+        function filterCategoryFun(searchId) {
+
+            console.log(searchId);
+            var value = $('#filter_category_id_' + searchId).val().toLowerCase();
+            $(".category_cls_" + searchId).filter(function () {
+                $(this).toggle($(this).html().toLowerCase().indexOf(value) > -1);
+            });
+        }
+
+        function confirmFun() {
+            var cat = $("#current_location_id").text();
+            $("#select_parent_label_id").text($("#current_location_id").text());
+            $("#select_parent_label_id1").val(cat.substring(19, cat.length - 4));
+            $("#parent_list_div_id").hide();
+        }
+        function clearFun() {
+            location.reload();
+        }
+        function cancelFun() {
+            $('#parent_list_div_id').hide();
+        }
+
+    </script>
+}

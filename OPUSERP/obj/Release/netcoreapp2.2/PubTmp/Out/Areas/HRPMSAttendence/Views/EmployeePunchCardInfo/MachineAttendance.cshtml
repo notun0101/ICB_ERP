@@ -1,0 +1,114 @@
+﻿@model EmployeePunchCardInfoViewModel
+@{
+    ViewData["Title"] = "MachineAttendance";
+}
+<div class="loading" style="display: none;">Loading&#8230;</div>
+<link href="~/Assets/fullpageloading.css" rel="stylesheet" />
+
+<div class="card" style="width: 100%;">
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+            <h5 class="card-title" style="color: black; margin: 8px;">Process Machine Attendance </h5>
+        </div>
+        <div class="col-md-8">
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info mr-4' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1020&perentId=6296'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <form asp-area="HRPMSAttendence" asp-controller="EmployeePunchCardInfo" asp-action="MachineAttendance" id="FormId" method="post" data-parsley-validate="parsley">
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="form-group row">
+                    <label for="Fdate" class="col-sm-2 col-form-label">From Date</label>
+                    <div class="col-sm-4">
+                        <input type="text" value="@DateTime.Now.ToString("dd-MMM-yyyy")" class="form-control" id="Fdate" name="Fdate" readonly data-parsley-required="true" data-parsley-trigger="keyup">
+                    </div>
+                    <label for="Tdate" class="col-sm-2 col-form-label">To Date</label>
+                    <div class="col-sm-4">
+                        <input type="text" value="@DateTime.Now.ToString("dd-MMM-yyyy")" class="form-control" id="Tdate" name="Tdate" readonly data-parsley-required="true" data-parsley-trigger="keyup">
+                    </div>
+                </div>
+
+                <button type="button" id="Machinebtn" onclick="Process()" class="btn btn-light btn-lg" style="float:right; margin-top:5px;font-size: 2.25rem; color:#0a79af" data-toggle="tooltip" title="Process"><i class="fas fa-sync-alt"></i></button>
+            </form>
+            <br />
+            <br />
+            <br />
+            <br />
+            <div class="card" id="list" style="display:none;">
+                <div class="card-header">
+                    <h4>Uploaded Attendances</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Punch Card No</th>
+                                <th>Work Date</th>
+                                <th>From</th>
+                                <th>To</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="tree">
+
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            //$("#Machinebtn").click(function () {
+            //    window.location.href = "/HRPMSTrainingNew/TrainingPlanning/TrainingAttendanceNew/" + $("#trainingId").val();
+
+            //});
+            $('#Fdate').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2030" });
+            $('#Tdate').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2030" });
+        });
+        function Edit(Id, cost, date) {
+            $("#Id").val(Id);
+            $("#Fdate").val(cost);
+            $("#Tdate").val(date);
+        }
+        function Process() {
+            var Fdate = $('#Fdate').val();
+            var Tdate = $('#Tdate').val();
+            console.log(Fdate)
+            console.log(Tdate)
+
+            $('.loading').show();
+            Common.Ajax('GET', '/HRPMSAttendence/EmployeePunchCardInfo/MachineAttendanceApi?Fdate=' + Fdate + '&Tdate=' + Tdate, [], 'json', ajaxFunctionProcess, false);
+        }
+        function ajaxFunctionProcess(response) {
+            console.log(response);
+
+            if (response != null) {
+                swal('success', 'Process Completed Successfully!', 'success').then(function () {
+                    var option = '';
+                    $.each(response, function (i, item) {
+
+                        option += `<tr>
+                                                <td>${item.punchCardNo}</td>
+                                                <td>${item.workDate}</td>
+                                                <td>${item.startTime.split(' ')[1]}</td>
+                                                <td>${item.endTime.split(' ')[1]}</td>
+                                            </tr>`
+                    })
+
+                    //$('table tbody').empty();
+                    //$('table tbody').append(option);
+                });
+            }
+            $('.loading').hide();
+        }
+    </script>
+}
+

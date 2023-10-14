@@ -1,0 +1,461 @@
+﻿@model RequisitionRaiserDashViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .aaa {
+        width: 24.3%;
+    }
+
+        .aaa button {
+            height: 120px !important;
+        }
+
+    .btn {
+        border-radius: 0 !important
+    }
+
+    .a_color {
+        background-color: #ddd;
+        color: #134684 !important;
+    }
+
+    .bbb {
+        width: 32%;
+    }
+
+
+    #storekeeper ul {
+        overflow: hidden !important;
+    }
+
+        #storekeeper ul li {
+            list-style: none;
+            padding: 0 !important;
+            overflow: hidden;
+        }
+
+    .btn {
+        background-color: DodgerBlue;
+        border: none;
+        color: white;
+        padding: 12px 16px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+        /* Darker background on mouse-over */
+        .btn:hover {
+            background-color: RoyalBlue;
+        }
+
+
+    /* Top Counter */
+    .leftImgBox {
+        width: 20%;
+        height: 100%;
+        float: left;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .leftImgBox img {
+            width: 100%;
+        }
+
+    .counterBox {
+        float: right;
+        text-align: center;
+    }
+
+    .counter {
+        font-size: 33px;
+        margin-bottom: 0;
+    }
+
+    .title {
+        font-size: 17px;
+    }
+
+    #storekeeper a {
+        color: white !important;
+    }
+
+        #storekeeper a:hover {
+            color: white;
+        }
+
+    .card-body {
+        font-size: 20px !important;
+    }
+
+    #AllItemLists {
+        height: 553px;
+        overflow: scroll;
+    }
+
+
+    .hover01 figure {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        -webkit-transition: .3s ease-in-out;
+        transition: .3s ease-in-out;
+    }
+
+        .hover01 figure:hover {
+            -webkit-transform: scale(1.3);
+            transform: scale(1.3);
+        }
+
+    a {
+        text-decoration: none !important;
+    }
+
+    .aaa a:hover{
+        background-color:red!important;
+    }
+</style>
+
+<div class="container-fluid mt-4" id="storekeeper">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+
+
+                <div class="aaa" style="margin-right:10px;">
+                    <a href="/SCMRequisition/RequisitionNew/StoreKeeper"
+                       style="text-decoration:none; float:right; background-color:#309FDB;border-radius:10px!important"
+                       class="btn  w-100 pr-0 pl-2 title pr-0 mr-0">
+                        <i class="fa fa-circle-notch" style="font-size:40px; float:left"></i>
+                        <b style="font-size:30px">@Model.ApprovedRequisition</b><br /> Approved Requisition
+                    </a>
+                    @*<a class="p-2 a_color d-block">View Details <span class="oi float-right p-2 text-success" data-glyph="arrow-circle-right"></span></a>*@
+                </div>
+
+                <div class="aaa" style="margin-right:10px">
+                    <a href="/SCMRequisition/RequisitionNew/StoreKeeper" class="btn title w-100 pr-0 pl-2 text-light"
+                       style="float:right; background-color:#C8D657;border-radius:10px!important">
+                        <span class="fa fa-location-arrow" style="font-size:40px;float:left"></span>
+                        <b style="font-size:30px;">@Model.OnGoingRequisition</b><br />
+                        On Going Requisition
+                    </a>
+                    @*<a class="p-2 a_color d-block">View Details <span class="oi float-right p-2 text-info" data-glyph="arrow-circle-right"></span></a>*@
+                </div>
+
+                <div class="aaa" style="margin-right:10px">
+                    <a href="/SCMRequisition/RequisitionNew/Index"
+                       style="text-decoration:none; float:right; background-color:#E85C63!important; border-radius:10px!important"
+                       class="btn title bg-danger w-100 pr-0 pl-2">
+                        <i class="fa fa-check" style="font-size:40px; float:left"></i>
+                        <b style="font-size:30px">@Model.CompleteRequisition</b><br /> Complete Requisition
+                    </a>
+                    @*<a class="p-2 a_color d-block">View Details <span class="oi float-right p-2 text-primary" data-glyph="arrow-circle-right"></span></a>*@
+                </div>
+
+
+                <div class="aaa">
+                    <a href="/SCMRequisition/RequisitionNew/Index"
+                       style="text-decoration:none; float:right;background-color:#AA529B!important; border-radius:10px!important"
+                       class="btn title bg-warning w-100 pr-0 pl-2 mr-0">
+                        <i class="fa fa-times" style="font-size:40px; float:left">
+                        </i><b style="font-size:30px">@Model.RejectRequisition</b><br />Reject Requisition
+                    </a>
+                    @*<a class="p-2 a_color d-block">View Details <span class="oi float-right p-2 text-warning" data-glyph="arrow-circle-right"></span></a>*@
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-xl- 12 col-lg-12 col-md-12 col-12 mt-4">
+            <div class="row">
+
+
+                <div class="col-3 py-1 box" style="background-color: #F7B440;border-radius:15px!important; color: white; border: 5px solid white;">
+                    <a href="#" id="department-btn">
+                        <div class="leftImgBox">
+                            <img src="~/Assets/RequisitionNew/shopping-bag.png" alt="">
+                        </div>
+                        <div class="counterBox">
+                            <p class="counter">@Model.itemSpecificationDepartmentModels.Where(x => x.storeDepartmentId == 2).FirstOrDefault()?.qty</p>
+                            <p class="title">Departmental Store</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-3 py-1 box" style="background-color: #E85D88;border-radius:15px!important; color: white; border: 5px solid white;">
+                    <a href="#" id="computer-btn">
+                        <div class="leftImgBox">
+                            <img src="~/Assets/RequisitionNew/desktop.png" alt="">
+                        </div>
+                        <div class="counterBox">
+                            <p class="counter">@Model.itemSpecificationDepartmentModels.Where(x => x.storeDepartmentId == 3).FirstOrDefault()?.qty</p>
+                            <p class="title">Computer Store</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-3 py-1 box" style="background-color: #00B8ED;border-radius:15px!important; color: white; border: 5px solid white;">
+                    <a href="#" id="clothing-btn">
+                        <div class="leftImgBox">
+                            <img src="~/Assets/RequisitionNew/clothing.png" alt="">
+                        </div>
+                        <div class="counterBox">
+                            <p class="counter">@Model.itemSpecificationDepartmentModels.Where(x => x.storeDepartmentId == 4).FirstOrDefault()?.qty</p>
+                            <p class="title">Clothing Store</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-3 py-1 box" style="background-color: #2DB3AC; border-radius:15px!important; color: white; border: 5px solid white;">
+                    <a href="#" id="stationary-btn">
+                        <div class="leftImgBox">
+                            <img src="~/Assets/RequisitionNew/stationary.png" alt="">
+                        </div>
+                        <div class="counterBox">
+                            <p class="counter">@Model.itemSpecificationDepartmentModels.Where(x => x.storeDepartmentId == 5).FirstOrDefault()?.qty</p>
+                            <p class="title">Stationary Store</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <div class="col-xl- 12 col-lg-12 col-md-12 col-12 mt-4">
+            <div class="row">
+                <div class="" style=" margin-right:14px; width:32%; ">
+
+                    <div class="mb-2 border ">
+
+                        <p class="p-2 mb-2 hover01 d-block" style="background-color:#eee;">Chart Name</p>
+                        <figure>
+                            <div id="sumon" style="height:220px">
+
+                            </div>
+                        </figure>
+                    </div>
+                </div>
+
+                <div class="bbb" style=" margin-right:14px;width:24%;">
+                    <div class="mb-4">
+                        <p class="p-2 hover01  mb-2 d-block" style="background-color:#eee;">Chart Name</p>
+                        <figure>
+                            <div id="pychart" style="height:220px">
+
+                            </div>
+                        </figure>
+                    </div>
+                </div>
+
+                <div class="" style="width:40%;">
+                    <div class="mb-4">
+                        <p class="p-2 hover01  mb-2 d-block" style="background-color:#eee;">Chart Name</p>
+                        <figure>
+                            <div id="mychart" style="height:220px">
+
+                            </div>
+                        </figure>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+        <div class="col-xl- 12 col-lg-12 col-md-12 col-12 mt-4">
+            @*<div class="row">
+                    <div class="bbb" style=" margin-right:14px;">
+
+                        <div class="mb-4">
+                            <p class="pl-2 pt-1 pb-1 badge-danger mb-2 d-block" href="#">Most recent Product</p>
+                        </div>
+
+                        <div class="bbb border w-100" style="overflow: scroll; height: 350px">
+
+                            <ul>
+                                @foreach (var item in Model.MostRecent)
+                                {
+                                    <li class="pt-3"><img src="../../SKUImages/@item.specImageUrl" width="40" /> <span class="pt-1 pr-2"> @item.specificationName</span> </li>
+                                }
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bbb" style=" margin-right:14px;">
+                        <div class="mb-4">
+                            <p class="pl-2 pt-1 pb-1 badge-info mb-2 d-block" href="#">Top 10 Item</p>
+                        </div>
+
+                        <div class="bbb border w-100" style="overflow: scroll; height: 350px">
+                            <ul>
+                                @foreach (var item in Model.TopTen)
+                                {
+                                    <li class="pt-3"><img src="../../SKUImages/@item.specImageUrl" width="40" /> <span class="pt-1 pr-2"> @item.specificationName (@item.total.ToString("#"))</span> </li>
+                                }
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bbb">
+                        <div class="mb-4">
+                            <p class="pl-2 pt-1 pb-1 badge-primary mb-2 d-block" href="#">Feature Items</p>
+                        </div>
+
+                        <div class="bbb border w-100" style="overflow: scroll; height: 350px">
+                            <ul>
+                                @foreach (var item in Model.Featured)
+                                {
+                                    <li class="pt-3"><img src="../../SKUImages/@item.specImageUrl" width="40" /> <span class="pt-1 pr-2"> @item.specificationName</span> </li>
+                                }
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>*@
+            @*<div class="row" id="AllItemLists">
+
+                </div>*@
+        </div>
+
+    </div>
+</div>
+
+
+<script src="~/highcharts/highcharts.js"></script>
+<script src="~/js/chart.js"></script>
+
+@section Scripts{
+    <script>
+
+        window.onload = function () {
+
+            var options = {
+                animationEnabled: true,
+                title: {
+                    text: "ACME Corporation Apparel Sales"
+                },
+                data: [{
+                    type: "doughnut",
+                    innerRadius: "40%",
+                    showInLegend: true,
+                    legendText: "{label}",
+                    indexLabel: "{label}: #percent%",
+                    dataPoints: [
+                        { label: "Department Stores", y: 6492917 },
+                        { label: "Discount Stores", y: 7380554 },
+                        { label: "Stores for Men / Women", y: 1610846 },
+                        { label: "Teenage Specialty Stores", y: 950875 },
+                        { label: "All other outlets", y: 900000 }
+                    ]
+                }]
+            };
+            $("#doughnut-chart").CanvasJSChart(options);
+
+        }
+
+
+                        //$(document).ready(function () {
+                        //	$("#loadRecent").click();
+                        //})
+
+                        //function DataLoad(id) {
+                        //	Common.Ajax('GET', '/SCMMasterData/Item/GetItemSpecificationsByDepartmentId/' + id, [], 'json', ajaxPermanentThana, false);
+                        //}
+
+                        //function ajaxPermanentThana(response) {
+                        //	console.log(response);
+                        //	var option = "";
+                        //	$.each(response, function (i, item) {
+                        //		option += `<div class="col-3">
+                        //								<div class="card itemCard mb-3" onclick="clickNow(event,${item.itemSpecificationId},'${item.specImageUrl}')">
+                        //									<img class="card-img-top" src="/../../SKUImages/${item.specImageUrl}" alt="Card image">
+                        //									<div class="card-body text-center px-0 pt-0" style="font-size: 14px;">${item.specificationName}
+                        //									</div>
+                        //								</div>
+                        //							</div>`
+                        //		//option += '<div class="col-3"><div class="card" onclick="clickNow(event,${item.itemSpecificationId},'${item.specImageUrl }')"> <img class="card-img-top" src="drink-water.png" alt="Card image"><div class="card-body text-center px-0 pt-0" style="font-size: 14px;">Mineral Water-500 ml</div></div></div>'
+                        //	});
+
+                        //	$('#AllItemLists').empty();
+                        //	$('#AllItemLists').append(option);
+
+
+                        //}
+
+                        //function loadRecent() {
+                        //	Common.Ajax('GET', '/SCMRequisition/RequisitionNew/GetRecentItems', [], 'json', ajaxRecent, false);
+                        //}
+
+                        //function ajaxRecent(response) {
+                        //	console.log(response);
+                        //	var option = "";
+                        //	$.each(response, function (i, item) {
+                        //		option += `<div class="col-3">
+                        //								<div class="card itemCard mb-3" onclick="clickNow(event,${item.itemSpecificationId},'${item.specImageUrl}')">
+                        //									<img class="card-img-top" src="/../../SKUImages/${item.specImageUrl}" alt="Card image">
+                        //									<div class="card-body text-center px-0 pt-0" style="font-size: 14px;">${item.specificationName}
+                        //									</div>
+                        //								</div>
+                        //							</div>`
+                        //		//option += '<div class="col-3"><div class="card" onclick="clickNow(event,${item.itemSpecificationId},'${item.specImageUrl }')"> <img class="card-img-top" src="drink-water.png" alt="Card image"><div class="card-body text-center px-0 pt-0" style="font-size: 14px;">Mineral Water-500 ml</div></div></div>'
+                        //	});
+
+                        //	$('#AllItemLists').empty();
+                        //	$('#AllItemLists').append(option);
+
+
+                        //}
+
+                        //function loadTop10() {
+                        //	Common.Ajax('GET', '/SCMRequisition/RequisitionNew/GetTopTen', [], 'json', ajaxTopTen, false);
+                        //}
+
+                        //function ajaxTopTen(response) {
+                        //	console.log(response);
+                        //	var option = "";
+                        //	$.each(response, function (i, item) {
+                        //		option += `<div class="col-3">
+                        //								<div class="card itemCard mb-3" onclick="clickNow(event,${item.itemSpecificationId},'${item.specImageUrl}')">
+                        //									<img class="card-img-top" src="/../../SKUImages/${item.specImageUrl}" alt="Card image">
+                        //									<div class="card-body text-center px-0 pt-0" style="font-size: 14px;">${item.specificationName}
+                        //									</div>
+                        //								</div>
+                        //							</div>`
+                        //		//option += '<div class="col-3"><div class="card" onclick="clickNow(event,${item.itemSpecificationId},'${item.specImageUrl }')"> <img class="card-img-top" src="drink-water.png" alt="Card image"><div class="card-body text-center px-0 pt-0" style="font-size: 14px;">Mineral Water-500 ml</div></div></div>'
+                        //	});
+
+                        //	$('#AllItemLists').empty();
+                        //	$('#AllItemLists').append(option);
+
+
+                        //}
+
+                        //function loadFeatured() {
+                        //	Common.Ajax('GET', '/SCMRequisition/RequisitionNew/GetFeatured', [], 'json', ajaxFeatured, false);
+                        //}
+
+                        //function ajaxFeatured(response) {
+                        //	console.log(response);
+                        //	var option = "";
+                        //	$.each(response, function (i, item) {
+                        //		option += `<div class="col-3">
+                        //								<div class="card itemCard mb-3" onclick="clickNow(event,${item.itemSpecificationId},'${item.specImageUrl}')">
+                        //									<img class="card-img-top" src="/../../SKUImages/${item.specImageUrl}" alt="Card image">
+                        //									<div class="card-body text-center px-0 pt-0" style="font-size: 14px;">${item.specificationName}
+                        //									</div>
+                        //								</div>
+                        //							</div>`
+                        //		//option += '<div class="col-3"><div class="card" onclick="clickNow(event,${item.itemSpecificationId},'${item.specImageUrl }')"> <img class="card-img-top" src="drink-water.png" alt="Card image"><div class="card-body text-center px-0 pt-0" style="font-size: 14px;">Mineral Water-500 ml</div></div></div>'
+                        //	});
+
+                        //	$('#AllItemLists').empty();
+                        //	$('#AllItemLists').append(option);
+
+
+                        //}
+    </script>
+}

@@ -1,0 +1,259 @@
+﻿@model HrDivisionViewModel
+@{
+    ViewData["TitleMD"] = "HR Division";
+    Layout = "~/Areas/HRPMSMasterData/Views/Shared/_MasterDataForm.cshtml";
+}
+
+@section StyleMD{
+    <style>
+        .redStar {
+            color: red;
+            float:right;
+        }
+    </style>
+}
+
+    <div class="card" style="width: 100%;">
+        <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+            <h5 class="m-0 font-weight-bold text-primary"> HR Division</h5>
+            <a class='btn btn-info mr-4' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=5701'>@*<i class="fas fa-backward fa-2x "></i>*@<i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+        </div>
+        <div class="card-body">
+            @*<h5 class="card-title" style="color: black">Division Create</h5>
+            <hr>*@
+            <div class="container">
+				<form asp-area="HRPMSMasterData" id="FormId" asp-controller="HrDivision" asp-action="Index" method="post" data-parsley-validate="parsley">
+
+					<div asp-validation-summary="All" class="text-danger"></div>
+
+					<div class="form-group row">
+
+
+						<label for="name" class="col-sm-3 col-form-label">Division Code</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control" name="divCode" id="divCode">
+							<input type="hidden" value="0" class="form-control" name="divId" id="divId">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label for="divName" class="col-sm-3 col-form-label">Division Name <span class="redStar">*</span></label>
+						<div class="col-sm-9">
+							<input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="divName" id="divName">
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="divNameBn" class="col-sm-3 col-form-label">Division Name (Bangla)</label>
+						<div class="col-sm-9">
+
+							<input type="text" class="form-control" name="divNameBn" id="divNameBn">
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="shortName" class="col-sm-3 col-form-label">Division Short Name</label>
+						<div class="col-sm-9">
+
+							<input type="text" class="form-control" name="shortName" id="shortName">
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="functionId" class="col-sm-3 col-form-label">Office </label>
+						<div class="col-sm-9">
+							<select class="form-control" name="functionId" id="functionId" data-parsley-required="false">
+								<option value="0">Select</option>
+								@foreach (var data in Model.functionInfos)
+								{
+									<option value="@data.Id">@data.branchUnitName</option>
+								}
+							</select>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="hrBranchId" class="col-sm-3 col-form-label">Branch Name </label>
+						<div class="col-sm-9">
+							<select class="form-control" id="hrBranchId" name="hrBranchId">
+								<option value="">Select</option>
+								@foreach (var data in Model.hrBranch)
+								{
+									<option value="@data.Id">@data.branchName</option>
+								}
+							</select>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="status" class="col-sm-3 col-form-label">Status </label>
+						<div class="col-sm-9">
+							<select class="form-control" id="status" name="status">
+								<option value="1" selected>Active</option>
+								<option value="0">Inactive</option>
+								
+							</select>
+						</div>
+					</div>
+
+					@*<div class="form-group row">
+			<label for="startDate" class="col-sm-3 col-form-label">Start Date</label>
+			<div class="col-sm-9">
+
+				<input type="text"  class="form-control" name="startDate" id="startDate" readonly>
+			</div>
+		</div>*@
+
+
+					<hr>
+					@*<button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+
+					<button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;" data-toggle='tooltip' title='Save'><i class="fas fa-save"></i></button>
+					<button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;" data-toggle='tooltip' title='Save'><i class="fas fa-save"></i> Save</button>
+				</form>
+            </div>
+        </div>
+    </div>
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Division List</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="designationTable">
+                    <thead>
+                        <tr>
+                            <th>Division Code</th>
+                            <th>Division Name</th>
+                            <th>Division Name (Bangla)</th>
+                            <th>Division Short Names</th>
+                            <th>Status</th>
+                            @*<th>Start Date</th>*@
+                            @*<th>Office</th>*@
+                            <th>Action</th>
+                            
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.hrDivisions)
+                        {
+                            <tr>
+                                <td>@data.divCode</td>
+                                <td>@data.divName</td>
+                                <td>@data.divNameBn</td>
+                                <td>@data.shortName</td>
+                                <td>@(data.isDelete == 1 ? "Active" : "Inactive")</td>
+                                @*<td>@data.startDate</td>*@
+                                @*<td>@data.functionInfo?.branchUnitName</td>*@
+                               
+                                
+                                <td>
+                                    <a class="btn btn-success" onclick="Edit('@data.Id','@data.divCode','@data.divName','@data.divNameBn','@data.shortName','@data.startDate','@data.functionId', @data.hrBranchId, @data.isDelete)" href="#"><i class="fa fa-edit"></i></a>
+                                    <a class="btn btn-danger" href="javascript:void(0)" onclick="DeleteMaster(@data.Id)"><i class="fa fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ScriptsMD{
+    <script>
+        
+        $(document).ready(function () {
+
+            $('#startDate').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100" });
+
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+            });
+            $("#designation").addClass("active");
+            $('#designationTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        title: "HR Division",
+                        messageTop: 'List Of HR Division',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        title: "HR Division",
+                        messageTop: 'List Of HR Division'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "HR Division",
+                        messageTop: 'List Of HR Division',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+
+        });
+
+        function Edit(Id, divCode, divName, divNameBn, shortName, startDate, functionId, hrBranchId, status) {
+            $("#divId").val(Id);
+            $("#divCode").val(divCode);
+            $("#divName").val(divName);
+            $("#divNameBn").val(divNameBn);
+            $("#shortName").val(shortName);
+            $("#startDate").val(startDate);
+            $("#functionId").val(functionId);
+            $("#hrBranchId").val(hrBranchId);
+			$("#status").val(statuss);
+
+           
+        }
+        function DeleteMaster(Id) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+
+                $.ajax({
+                    url: '@Url.Action("DeleteHrDivisionById", "HrDivision")',
+                    data: { Id: Id },
+                    type: 'POST',
+                })
+                    .done(function () {
+                        swal('', 'Deleted Successfully!', 'success');
+                        window.location.href = "/HRPMSMasterData/HrDivision/Index";
+                    })
+                    .fail(function () {
+                        swal('Cancelled', 'It will not be deleted. Please try again later !!!', 'error');
+                    });
+            });
+        }
+
+
+    </script>
+}

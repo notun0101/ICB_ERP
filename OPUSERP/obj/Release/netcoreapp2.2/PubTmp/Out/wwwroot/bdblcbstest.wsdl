@@ -1,0 +1,66 @@
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://api" xmlns:intf="http://api" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://api">
+<!-- WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT) -->
+<wsdl:types>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://api">
+<element name="dataInsert">
+<complexType>
+<sequence>
+<element name="in_user_id" type="xsd:string"/>
+<element name="in_Auth_Key" type="xsd:string"/>
+<element name="in_ChkSum" type="xsd:string"/>
+<element name="in_request_id" type="xsd:string"/>
+<element name="in_xml_data" type="xsd:string"/>
+<element name="in_Bin_data" type="xsd:string"/>
+<element name="in_request_type" type="xsd:string"/>
+<element name="in_Add_Param_One" type="xsd:string"/>
+<element name="in_Add_Param_Two" type="xsd:string"/>
+</sequence>
+</complexType>
+</element>
+<element name="dataInsertResponse">
+<complexType>
+<sequence>
+<element name="dataInsertReturn" type="impl:ApiResponse"/>
+</sequence>
+</complexType>
+</element>
+<complexType name="ApiResponse">
+<sequence>
+<element name="out_BIN_Data" nillable="true" type="xsd:string"/>
+<element name="out_Status" nillable="true" type="xsd:string"/>
+<element name="out_XML_Data" nillable="true" type="xsd:string"/>
+</sequence>
+</complexType>
+</schema>
+</wsdl:types>
+<wsdl:message name="dataInsertRequest">
+<wsdl:part element="impl:dataInsert" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:message name="dataInsertResponse">
+<wsdl:part element="impl:dataInsertResponse" name="parameters"> </wsdl:part>
+</wsdl:message>
+<wsdl:portType name="DataInsertMain">
+<wsdl:operation name="dataInsert">
+<wsdl:input message="impl:dataInsertRequest" name="dataInsertRequest"> </wsdl:input>
+<wsdl:output message="impl:dataInsertResponse" name="dataInsertResponse"> </wsdl:output>
+</wsdl:operation>
+</wsdl:portType>
+<wsdl:binding name="DataInsertMainSoapBinding" type="impl:DataInsertMain">
+<wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+<wsdl:operation name="dataInsert">
+<wsdlsoap:operation soapAction=""/>
+<wsdl:input name="dataInsertRequest">
+<wsdlsoap:body use="literal"/>
+</wsdl:input>
+<wsdl:output name="dataInsertResponse">
+<wsdlsoap:body use="literal"/>
+</wsdl:output>
+</wsdl:operation>
+</wsdl:binding>
+<wsdl:service name="DataInsertMainService">
+<wsdl:port binding="impl:DataInsertMainSoapBinding" name="DataInsertMain">
+<wsdlsoap:address location="http://10.100.7.234:8084/isteler_CBS_API/services/DataInsertMain"/>
+</wsdl:port>
+</wsdl:service>
+</wsdl:definitions>

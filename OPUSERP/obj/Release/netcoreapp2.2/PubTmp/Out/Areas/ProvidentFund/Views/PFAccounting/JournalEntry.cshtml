@@ -1,0 +1,195 @@
+﻿
+@{
+    ViewData["Title"] = "JournalEntry";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            @*<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h2 class="m-0 font-weight-bold text-primary">Journal Entry</h2>
+        </div>*@
+
+
+            <div class="card-body bg-white">
+                    <h5 class="m-0 font-weight-bold text-primary">Add Journal</h5>
+                <hr />
+
+                <form id="FormId" >
+
+                    <div class="row col-sm-12">
+                        <div class="col-sm-6">
+
+                            <div class="form-group row">
+                                <label for="" class="col-sm-5 col-form-label">Transaction Date</label>
+                                <div class="col-sm-6 input-group">
+                                    <input name="tranDate" id="tranDate" class="form-control input-group-sm Date" value="" />
+                                    <div class="input-group-prepend">
+                                        <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="" class="col-sm-5 col-form-label">Attachment</label>
+                                <div class="col-sm-6 ">
+                                    <input type="file" class="form-control" name="attachment" id="attachment">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6">
+
+                            <div class="form-group row">
+                                <label for="" class="col-sm-5 col-form-label">Journal No</label>
+                                <div class="col-sm-6 ">
+                                    <input type="text" class="form-control" name="journalNo" id="journalNo">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="" class="col-sm-5 col-form-label">Description</label>
+                                <div class="col-sm-6 ">
+                                    @*<input type="text" class="form-control" name="" id="">*@
+                                    <textarea class="form-control" rows="2" name="description" id="description"></textarea>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+
+
+
+                    <table class="table table-striped table-bordered table-hover bg-white" id="TblJournalList">
+                        <thead>
+                            <tr>
+
+                                <th>Account</th>
+                                <th>Debits</th>
+                                <th>Credits</th>
+                                <th>Description</th>
+                                <th>Party Ref.</th>
+                                <th>Project Ref.</th>
+                                <th>Manage</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="tblTbody">
+                            <tr id="tr_0">
+                                <td>
+                                    <select class="form-control" name="account" id="">
+                                        <option value="">Select an Option</option>
+                                        <option value="Checking-Bank">Checking-Bank</option>
+                                        <option>Savings-Bank</option>
+                                        <option>Accounts Receivable</option>
+                                        <option>Inventory Asset</option>
+                                        <option>Prepaid Expenses</option>
+                                        <option>Uncategorized Asset</option>
+                                        <option>Undeposited Funds</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="debits" id="">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="credits" id="">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="tbldescription" id="">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="partyRef" id="">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="projRef" id="">
+                                </td>
+
+                                <td>
+                                    <a href="">
+                                        <i class="fa fa-trash" onclick="Remove(this)" style="color:red"></i>
+                                    </a>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                    <br />
+                    <br />
+                    <a class="btn btn-sm btn-outline-info" onclick="AddTR()"><i class="fa fa-plus"></i></a>&nbsp;
+
+                    <button type="button" id="submit"  class="btn btn-sm btn-success">Save & Close</button> &nbsp;
+                    <a id="reset" class="btn btn-sm btn-outline-info">Reset</a>
+
+
+
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#TblJournalList').DataTable();
+        $("#tranDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+
+        $("#reset").on("click", function () {
+            $('#tranDate').val('');
+            $('#attachment').val('');
+            $('#journalNo').val('');
+            $('#description').val('');
+        });
+
+
+    });
+
+    var nm = 0
+    function AddTR() {
+        nm = 1 + nm;
+        $('#tblTbody').append('<tr id="tr_' + nm + '">' +
+            '<td><select class="form-control" name="" id=""><option>Select an Option</option><option>Checking-Bank</option><option>Savings-Bank</option><option>Accounts Receivable</option><option>Inventory Asset</option><option>Prepaid Expenses</option><option>Uncategorized Asset</option><option>Undeposited Funds</option></select></td ><td><input type="text" class="form-control" name="" id=""></td><td><input type="text" class="form-control" name="" id=""></td><td><input type="text" class="form-control" name="" id=""></td><td><input type="text" class="form-control" name="" id=""></td><td><input type="text" class="form-control" name="" id=""></td><td><a onclick="Remove(this)" href="javascript:void(0)"><i class="fa fa-trash"  style="color:red"></i></a></td>')
+
+    }
+    function Remove(res) {
+        $(res).closest('tr').remove()
+    }
+
+    $('#submit').click(function () {
+        console.log($('#FormId').serializeArray());
+        var data = $('#FormId').serializeArray();
+
+        console.log(data[0].value)
+        swal({
+            title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+        }).then(function () {
+            $.ajax({
+                url: '/ProvidentFund/PFAccounting/JournalEntry',
+                type: 'POST',
+                data: data
+            }).done(function () {
+                if (data[0].value == 0) {
+                    swal('success', 'Saved Successfully!', 'success').then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    swal('success', 'Updated Successfully!', 'success').then(function () {
+                        location.reload();
+                    });;
+                }
+            }).fail(function () {
+                swal('warning', 'Failed!', 'warning');
+            })
+        });
+    })
+
+</script>

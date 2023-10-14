@@ -1,0 +1,86 @@
+﻿@model EmployeeInfoViewModel
+@using OPUSERP.Helpers;
+@{
+    ViewData["Title"] = "Appointment Letter";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+<style>
+
+    .p {
+        font-size: 20px;
+        margin-bottom: 90px;
+        margin-top: 200px;
+    }
+
+    .header {
+        text-align: center;
+        margin: 30px
+    }
+
+    .box {
+        margin-top: 95px;
+        margin-left: 95px;
+        margin-left: 95px;
+        margin-bottom: 95px;
+        color: black;
+    }
+
+    table th {
+        width: 70%;
+        border: 10px;
+        line-height: inherit
+    }
+
+    td {
+        height: 50px;
+    }
+
+    .f {
+        font-size: 20px;
+    }
+</style>
+<div class="box p">
+    <h4 style="text-align:center">
+        <u> হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্ট</u>
+    </h4><br />
+    <div>
+        <p style="float:left">প্রত্যায়ন পত্র নম্বর- ___/ ____/  খণ্ড -____/______/______/ </p>
+        <div style="float:right">
+            <div style="float:left;">
+                তারিখঃ @*@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.Now.ToString("dd/MM/yyyy"))*@ @Model.employeeInfo?.PRLreportDateBn
+            </div>
+
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <h4 style="text-align:center">
+        <u> যার জন্য প্রযোজ্য </u>
+    </h4>
+    <br />
+    <br />
+    <p style="text-indent: 50px;">
+        এই মর্মে প্রত্যায়ন কয়ড়া যাচ্ছে যে , জনাব/জনাবা @Model.employeeInfo?.nameBangla (পিতা -@Model.employeeInfo?.fatherNameBangla, 
+        মাতা- @Model.employeeInfo?.motherNameBangla আইডি নং - @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.employeeInfo?.employeeCode), 
+        পদবি - @Model.employeeInfo?.lastDesignation?.designationNameBN) এই ব্যাংকের একজন স্থায়ী কর্মচারী । তিনি
+        @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.employeeInfo?.joiningDateGovtService?.ToString("dd/MM/yyyy"))
+        তারিখে তৎকালীন বাংলাদেশ শিল্প ব্যাংক (বর্তমানে বাংলাদেশের ডেভেলপমেন্ট ব্যাংক লিমিটেড)-
+        এ ব্যাংক @Model.employeeInfo?.joiningDesignation পদের চাকুরীতে যোগদান করেন। 
+        তাঁর জন্ম তারিখ @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.employeeInfo?.dateOfBirth?.ToString("dd/MM/yyyy")) এবং তিনি আগামী
+        @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.employeeInfo?.prlDate?.ToString("dd/MM/yyyy")) তারিখে অবসর উত্তর ছুটি পিআরএল-এ গমন করবেন ।
+    </p>
+    <p style="text-indent: 50px;">আমরা তাঁর সুস্বাস্থ্য এবং সর্বাঙ্গীণ উন্নতি ও সাফল্য কামনা করছি । </p>
+    <br />
+    <br />
+    <br />
+    <br />
+    <div style="text-align:right">
+        (কবির আহমেদ ) <br />
+        ডেপুটি জেনারাল ম্যানেজার<br />
+        হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্ট<br />
+        ফোনঃ ৯৫৫৬৭৫০<br />
+        ইমেইলঃ<span style="font-size:15px;">hrm_head@bdbl.com.bd</span><br />
+    </div>
+
+</div>

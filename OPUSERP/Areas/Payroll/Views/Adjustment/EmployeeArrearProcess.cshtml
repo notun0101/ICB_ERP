@@ -1,0 +1,112 @@
+﻿@model EmployeeArrearViewModel
+@{
+    ViewData["Title"] = "EmployeeArrear";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Style{
+    <style>
+        ul.ui-autocomplete {
+            z-index: 99999999;
+        }
+    </style>
+}
+
+    <div class="card" style="width: 100%;">
+        <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+            <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+                <h5 class="card-title" style="color: black; margin: 8px;">Employee's Arrear Calculation</h5>
+            </div>
+            <div class="col-md-8">
+                <div style="float: right; margin: 16px;">
+                    <a class='btn btn-info mr-4' style="margin-right:6px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=10&perentId=1268'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="container">
+                <form asp-area="Payroll" asp-controller="Adjustment" asp-action="" id="FormId" method="post" data-parsley-validate="parsley">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="row">
+                        <input type="hidden" id="employeeArrearId" name="employeeArrearId" value=0>
+
+                        <div class="col-sm-6">
+
+                            <div class="form-group row">
+                                <label for="hrBranchId" class="col-sm-4 col-form-label">Branche Name <span style="color:red;">*</span></label>
+                                <div class="col-sm-8">
+                                    <select name="hrBranchId" id="hrBranchId" class="form-control" data-parsley-required="true">
+                                        <option value="">Select Branche Name</option>
+                                        @foreach (var data in Model.hrBranches)
+                                        {
+                                            <option value="@data.Id">@data.branchName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <label for="salaryPeriodId" class="col-sm-4 col-form-label">Salary Period <span style="color:red;">*</span></label>
+                                <div class="col-sm-8">
+                                    <select name="salaryPeriodId" id="salaryPeriodId" class="form-control" data-parsley-required="true">
+                                        <option value="">Select Salary Period</option>
+                                        @foreach (var data in Model.salaryPeriods)
+                                        {
+                                            <option value="@data.Id">@data.periodName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <button type="button" onclick="ProcessData()" class="btn btn-success btn-md" style="float:right; margin-top:5px;">Process</button>
+                    <br />
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+@section Scripts{
+    <script>
+         
+        $(document).ready(function () {
+
+           
+            $("#hrBranchId").select2();
+
+        });
+
+       
+
+       
+
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

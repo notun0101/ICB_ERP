@@ -1,0 +1,353 @@
+﻿@*@model IEnumerable<ApprovalMatrixsVM1>*@
+@model ApprovalMatrixListViewModel
+@{
+    ViewData["Title"] = "NewApprovalMatrix";
+}
+<style>
+    .seqNo {
+        background: lightgray;
+        color: black;
+        text-align: center;
+        font-weight: bold;
+        width: fit-content;
+        padding: 5px 10px;
+        border-radius: 30%;
+        margin: 0 auto;
+    }
+
+
+    .pagination > li > a,
+    .pagination > li > span {
+        position: relative;
+        float: left;
+        padding: 6px 12px;
+        margin-left: -1px;
+        line-height: 1.42857143;
+        color: #337ab7;
+        text-decoration: none;
+        background-color: #fff;
+        border: 1px solid #ddd;
+    }
+
+    .pagination > .active > a,
+    .pagination > .active > a:focus,
+    .pagination > .active > a:hover,
+    .pagination > .active > span,
+    .pagination > .active > span:focus,
+    .pagination > .active > span:hover {
+        z-index: 3;
+        color: #fff;
+        cursor: default;
+        background-color: #337ab7;
+        border-color: #337ab7;
+    }
+
+    .pagination-container {
+        margin: 20px 0;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .card-footer {
+        border: 0;
+    }
+</style>
+<br />
+<div class="row">
+    @*<div class="col-md-6">
+            <input type="text" style="width: 50%;" placeholder="Type to search..." class="form-control mt-2" id="myInput1" />
+        </div>*@
+
+    @*<div class="col-md-5">
+            <select class="form-control" id="matrixTypeId" name="matrixTypeId" required data-parsley-required="true">
+                <option value="" id="mtrxTypeHead">Select Matrix Type</option>
+                @foreach (var data in Model.FirstOrDefault().matrixTypes)
+                {
+                <option id="myInput1" value="@data.Id">@data.matrixTypeName</option>
+                }
+            </select>
+        </div>*@
+
+    <div class="col-md-5">
+        <select class="form-control" id="matrixTypeId" onchange="matrixType()" name="matrixTypeId" required data-parsley-required="true">
+            <option value="" id="mtrxTypeHead">Select Matrix Type</option>
+            @foreach (var data in Model.matrixTypes)
+            {
+                <option id="myInput1" value="@data.matrixTypeName">@data.matrixTypeName</option>
+            }
+        </select>
+    </div>
+
+    <div class="col-md-6"> </div>
+    <div class="col-md-1">
+        <a href="/SCMMatrix/ApprovalMatrix/CreateNewApprovalMatrix" class="btn btn-sm pb-1 btn-success">Create</a>
+    </div>
+</div>
+<div id="searchDiv">
+    @foreach (var item in Model.approvalMatricess)
+    {
+
+        if (item.raiserPhoto == null)
+        {
+            item.raiserPhoto = "EmpImages\\defaultperson.png";
+        }
+        <div class="card mb-2 sDiv1" id="display">
+
+            <div class="card-header font-weight-bold">
+                <img src="/@item.raiserPhoto" class="" style="height: 50px; width: 50px; border-radius: 50%; border: 1px solid gray;" /> <span class="searchString">@item.raiserName <span style="color: darkblue;">( @item.projectName )</span> </span>
+                <a class="btn btn-warning btn-sm fa-pull-right" href="/SCMMatrix/ApprovalMatrix/EditNewApprovalMatrix?projectId=@item.projectId&raiserId=@item.raiserId&matrixTypeId=@item.matrixTypeId">Edit</a>
+                <a class="btn btn-danger btn-sm fa-pull-right mx-1" onclick="RemoveApprovalMatrix(@item.projectId,@item.raiserId, @item.matrixTypeId)" href="javascript:void(0)">Delete</a>
+                <a style="color:#337ab7;" class="fa-pull-right mr-3 pt-2" href="#">(@item.matrixTypeName)</a>
+
+            </div>
+
+            <div class="card-body searchDiv1" id="">
+                @foreach (var data in item.Approvars)
+                {
+                    if (data.Photo == null)
+                    {
+                        data.Photo = "EmpImages\\defaultperson.png";
+                    }
+                    if (data.sequenceNo == 1)
+                    {
+                        <div class="card" style="width: 25%; float: left; background-color: #D5F5E3;">
+                            <img src="/@data.Photo" class="card-img-top" style="height: 100px; width: 100px; margin: 0 auto; border-radius: 50%; border: 1px solid gray; margin-top: 10px;" />
+                            <div class="card-body" style="height: 75px;">
+                                <p style="text-align: center;">@data.ApprovarName</p>
+                            </div>
+                            <div class="card-footer" style="height: 50px; margin: 0 auto; background: transparent;">
+                                <span class="seqNo">@data.sequenceNo</span>
+                            </div>
+                        </div>
+                    }
+                    else if (data.sequenceNo == 2)
+                    {
+                        <div class="card" style="width: 25%; float: left; background-color: #58D68D;">
+                            <img src="/@data.Photo" class="card-img-top" style="height: 100px; width: 100px; margin: 0 auto; border-radius: 50%; border: 1px solid gray; margin-top: 10px;" />
+                            <div class="card-body" style="height: 75px;">
+                                <p style="text-align: center; color: black;">@data.ApprovarName</p>
+                            </div>
+                            <div class="card-footer" style="height: 50px; margin: 0 auto; background: transparent;">
+                                <span class="seqNo">@data.sequenceNo</span>
+                            </div>
+                        </div>
+                    }
+                    else if (data.sequenceNo == 3)
+                    {
+                        <div class="card" style="width: 25%; float: left; background-color: #28B463;">
+                            <img src="/@data.Photo" class="card-img-top" style="height: 100px; width: 100px; margin: 0 auto; border-radius: 50%; border: 1px solid gray; margin-top: 10px;" />
+                            <div class="card-body" style="height: 75px;">
+                                <p style="text-align: center; color: black;">@data.ApprovarName</p>
+                            </div>
+                            <div class="card-footer" style="height: 50px; margin: 0 auto; background: transparent;">
+                                <span class="seqNo">@data.sequenceNo</span>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="card" style="width: 25%; float: left; background-color: #F5B041;">
+                            <img src="/@data.Photo" class="card-img-top" style="height: 100px; width: 100px; margin: 0 auto; border-radius: 50%; border: 1px solid gray; margin-top: 10px;" />
+                            <div class="card-body" style="height: 75px;">
+                                <p style="text-align: center; color: black;">@data.ApprovarName</p>
+                            </div>
+                            <div class="card-footer" style="height: 50px; margin: 0 auto; background: transparent;">
+                                <span class="seqNo">@data.sequenceNo</span>
+                            </div>
+                        </div>
+                    }
+
+                }
+
+            </div>
+
+        </div>
+    }
+</div>
+@section Scripts{
+    <script src="~/Assets/paginathing.js"></script>
+    <script>
+
+		//function matrixType() {
+		//    var data = $('#matrixTypeId').val();
+		//    location.replace('/SCMMatrix/ApprovalMatrix/NewApprovalMatrix/' + data);
+		@*var data = $('#matrixTypeId').val();
+		$.ajax({
+			type: 'GET',
+			contentType: "application/json; charset=utf-8",
+			url: '@Url.Action("MatrixTypeList", "ApprovalMatrix", "SCMMatrix")',
+			data: { matrixTypeId: data },
+			dataType: 'json',
+			async: true,
+			success: function (res) {
+				var resData = "";
+				$.each(res, function (k, v) {
+					resData += `<div>${v.Raiser}</div>`;
+				})
+				$('#searchDiv').html('');
+				$('#searchDiv').html(resData);
+			}
+		}) *@
+		//}
+
+
+		function matrixType() {
+			var data = $('#matrixTypeId').val();
+			$.ajax({
+				type: 'GET',
+				contentType: "application/json; charset=utf-8",
+				url: '@Url.Action("MatrixTypeList", "ApprovalMatrix", "SCMMatrix")',
+				data: { mTypeName: data },
+				dataType: 'json',
+				async: true,
+				success: function (res) {
+					console.log('res');
+					console.log(res);
+					var resData = "";
+					var resItem = "";
+
+					$.each(res, function (k, v) {
+
+						resData += `
+							 <div class="card mb-2 sDiv1" id="display">
+
+
+								<div class="card-header font-weight-bold">
+									<img src="/${v.Photo}" class="" style="height: 50px; width: 50px; border-radius: 50%; border: 1px solid gray;" /> <span class="searchString">${v.Raiser} <span style="color: darkblue;">( ${v.projectName} )</span> </span>
+									<a class="btn btn-warning btn-sm fa-pull-right mx-1" href="/SCMMatrix/ApprovalMatrix/EditNewApprovalMatrix?projectId=${v.projectId}&raiserId=${v.userid}&matrixTypeId=${v.approvalList[0].matrixTypeId}">Edit</a>
+									<a class="btn btn-danger btn-sm fa-pull-right" onclick="RemoveApprovalMatrix(${v.projectId}, ${v.userid}, ${v.approvalList[0].matrixTypeId})" href="javascript:void(0)">Delete</a>
+									<a style="color:#337ab7;" class="fa-pull-right mr-3 pt-2" href="#">${v.matrixTypeName}</a>
+
+								</div>
+
+						 <div class="card-body searchDiv1" id="">
+					`
+
+						$.each(v.approvalList, function (i, item) {
+							if (item.sequenceNo == 1) {
+
+								resData += `
+							<div class="card" style = "width: 25%; float: left; background-color: #D5F5E3;" >
+								<img src="/${item.Photo}" class="card-img-top" style="height: 100px; width: 100px; margin: 0 auto; border-radius: 50%; border: 1px solid gray; margin-top: 10px;" />
+								<div class="card-body" style="height: 75px;">
+									<p style="text-align: center;">${item.approvalName}</p>
+								</div>
+								<div class="card-footer" style="height: 50px; margin: 0 auto; background: transparent;">
+									<span class="seqNo">${item.sequenceNo}</span>
+								</div>
+							</div >
+
+						`;
+							} else if (item.sequenceNo == 2) {
+
+								resData += `
+							<div class="card" style="width: 25%; float: left; background-color: #58D68D;">
+								<img src="/${item.Photo}" class="card-img-top" style="height: 100px; width: 100px; margin: 0 auto; border-radius: 50%; border: 1px solid gray; margin-top: 10px;" />
+								<div class="card-body" style="height: 75px;">
+									<p style="text-align: center; color: black;">${item.approvalName}</p>
+								</div>
+								<div class="card-footer" style="height: 50px; margin: 0 auto; background: transparent;">
+									<span class="seqNo">${item.sequenceNo}</span>
+								</div>
+							</div>
+
+							 `;
+							} else if (item.sequenceNo == 3) {
+
+								resData += `
+							<div class="card" style="width: 25%; float: left; background-color: #28B463;">
+								<img src="/${item.Photo}" class="card-img-top" style="height: 100px; width: 100px; margin: 0 auto; border-radius: 50%; border: 1px solid gray; margin-top: 10px;" />
+								<div class="card-body" style="height: 75px;">
+									<p style="text-align: center; color: black;">${item.approvalName}</p>
+								</div>
+								<div class="card-footer" style="height: 50px; margin: 0 auto; background: transparent;">
+									<span class="seqNo">${item.sequenceNo}</span>
+								</div>
+							</div>
+
+							`;
+							}
+							else {
+
+								resData += `
+							<div class="card" style="width: 25%; float: left; background-color: #F5B041;">
+								<img src="/${item.Photo}" class="card-img-top" style="height: 100px; width: 100px; margin: 0 auto; border-radius: 50%; border: 1px solid gray; margin-top: 10px;" />
+								<div class="card-body" style="height: 75px;">
+									<p style="text-align: center; color: black;">${item.approvalName}</p>
+								</div>
+								<div class="card-footer" style="height: 50px; margin: 0 auto; background: transpsequenceNo                                <span class="seqNo">${item.sequenceNo}</span>
+								</div>
+							</div>
+
+							`;
+							}
+
+						})
+						resData += `</div></div>`;
+					})
+					//resData += `</div>`;
+					$('#searchDiv').html('');
+					$('#searchDiv').html(resData);
+
+				}
+			})
+		}
+
+		function RemoveApprovalMatrix(projectId, raiserId, mTypeId) {
+			swal({
+				title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+			}).then(function () {
+				$.ajax({
+					url: '@Url.Action("DeleteNewApprovalMatrix", "ApprovalMatrix")',
+					data: { projectId: projectId, raiserId: raiserId, matrixTypeId:mTypeId},
+					type: 'GET',
+				})
+				.done(function () {
+					swal('', 'Deleted Successfully!', 'success').then(function () {
+						window.location.reload();
+					});
+				})
+				.fail(function () {
+					swal('', 'Unable to Delete!', 'warning');
+				});
+			});
+		}
+
+		//      $(document).ready(function () {
+
+		//	$("#myInput1").on("keyup", function () {
+
+		//		var value = $(this).val().toLowerCase();
+		//		$(".sDiv1").filter(function () {
+		//			//console.log($(this).find('.searchString').text())
+
+		//			$(this).toggle($(this).find('.searchString').text().toLowerCase().indexOf(value) > -1);
+		//		});
+		//	});
+		//})
+
+		$('#searchDiv').paginathing({
+
+			// Limites your pagination number
+			// false or number
+			limitPagination: $("#searchDiv").length,
+			// limitPagination: false,
+
+			// Pagination controls
+			perPage: 6,
+			prevNext: true,
+			firstLast: true,
+			prevText: '&laquo;',
+			nextText: '&raquo;',
+			firstText: 'First',
+			lastText: 'Last',
+			containerClass: 'pagination-container',
+			ulClass: 'pagination',
+			liClass: 'page',
+			activeClass: 'active',
+			disabledClass: 'disabled',
+			pageNumbers: true,
+			insertAfter: '#searchDiv'
+		})
+    </script>
+}

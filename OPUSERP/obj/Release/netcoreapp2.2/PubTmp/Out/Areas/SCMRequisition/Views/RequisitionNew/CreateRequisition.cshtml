@@ -1,0 +1,965 @@
+﻿@model ItemSpecificationDepartmentModel
+@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+	/* Top Counter */
+	.leftImgBox {
+		width: 20%;
+		height: 100%;
+		float: left;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-left: 13px;
+	}
+
+		.leftImgBox img {
+			width: 100%;
+		}
+
+	.counterBox {
+		float: right;
+		text-align: center;
+		margin: 10px;
+	}
+
+	.counter {
+		font-size: 25px;
+		margin-bottom: 0;
+	}
+
+	.title {
+		font-size: 15px;
+	}
+
+	a {
+		color: white !important;
+	}
+
+		a:hover {
+			color: white;
+		}
+
+	/* Searching */
+	input[type="text"] {
+		box-shadow: none !important;
+		border: 1px solid #6C757D;
+	}
+
+	/* Filtered Items */
+	.card {
+		display: flex;
+		align-items: center;
+		border: none;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+		transition: all 0.3s ease-in-out;
+	}
+
+		.card img {
+			padding: 10px;
+			width: 46%;
+		}
+
+	#filtered-items {
+		overflow-y: scroll;
+		height: 650px;
+	}
+
+	.card:hover {
+		/* box-shadow: 0 0 11px rgba(33, 33, 33, .2); */
+		transform: scale(0.9, 0.9);
+		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+	}
+
+		.card:hover::after {
+			opacity: 1;
+		}
+
+	/* Add to Cart */
+	.addtocart {
+		padding: 5px;
+	}
+
+	.fa-minus {
+		color: #FB4C5D;
+	}
+
+	.fa-plus {
+		color: #F0BA02;
+	}
+
+	#addtocart {
+		padding-bottom: 0px;
+		margin-bottom: 5px;
+		background-color: #00A75A;
+		border: none;
+		padding: 2px;
+		text-align: center;
+		font-size: 20px;
+		color: white;
+		height: 43px;
+		width: 95%;
+		padding-top: 5px;
+	}
+
+	.list-item-cart img {
+		width: 20px;
+		height: 20px;
+	}
+
+	.list-item-cart span {
+		color: black;
+		font-size: 15px;
+	}
+
+	.list-item-cart a:first-child {
+		color: #EF5160;
+	}
+
+	.list-item-cart a:last-child {
+		color: #EEB907;
+	}
+
+	.list-item-cart input {
+		width: 25px;
+		text-align: center;
+		font-size: 15px;
+		outline: none;
+	}
+
+	/* Bottom List Group */
+	.list-item-bottom {
+		display: flex;
+		align-items: center;
+	}
+
+	.list-group .list-group-item {
+		border-top: none;
+		padding: 5px !important;
+		border-bottom: none;
+		border-left: 1px solid #949494;
+		border-right: 1px solid #949494;
+	}
+
+		.list-group .list-group-item:first-child {
+			border-top: 1px solid #949494;
+		}
+
+		.list-group .list-group-item:last-child {
+			border-bottom: 1px solid #949494;
+		}
+
+	.list-img {
+		width: 40px;
+	}
+
+	.list-text {
+		padding-left: 6px;
+		font-size: 22px;
+	}
+
+	.list-num {
+		font-size: 20px;
+		text-align: right;
+	}
+
+	.box {
+		width: 14.28%;
+		/*transition: width 2s, height 2s, transform 2s;*/
+		transition: background-color 2s, color 2s;
+		border-radius: 15px;
+	}
+
+		.box:hover {
+			background-color: #E5E5E5 !important;
+		}
+
+		.box a {
+			transition: color 2s;
+		}
+
+			.box a:hover {
+				color: black !important;
+			}
+
+	.counterBox1 {
+		width: 60%;
+		/* float: left; */
+		font-size: 140%;
+		margin-left: 14px;
+		/* left: 30px; */
+		float: right;
+		text-align: center;
+		margin-top: 22px !important;
+		margin-right: 10px;
+	}
+
+	.leftImgBox i {
+		font-size: 45px;
+		margin-left: 24px;
+	}
+
+	#itemDetails .list-group {
+		width: 92%;
+		margin-left: 8px;
+	}
+
+	#del {
+		cursor: pointer;
+	}
+
+	#addtocart {
+		background-color: gray;
+	}
+
+	.itemCard {
+		height: 200px;
+	}
+
+	button {
+		box-shadow: none !important;
+	}
+
+	.counter1 {
+		font-size: 29px;
+	}
+
+	.itemCard .card-body {
+		font-size: 22px !important;
+	}
+
+	#myInput {
+		font-size: 20px !important;
+	}
+
+	#description {
+		font-size: 20px;
+		text-align: left;
+	}
+
+		#description table tbody tr td {
+			text-align: left;
+		}
+
+	#previewData {
+		font-size: 20px;
+	}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+<link href="~/css/site.css" rel="stylesheet" />
+
+<div class="container-fluid">
+	<!-- Top Counter -->
+	<div class="row" style="width: 100%;  margin-bottom: 20px;">
+		<div class="col-sm-3 py-1 box" style="background-color: #309FDB; border: 5px solid white;" onclick="DataLoad(2)">
+			<a href="#" id="stationary-btn">
+				<div class="leftImgBox">
+					<i class="fas fa-store"></i>
+				</div>
+				<div class="counterBox1">
+					<p class="counter1">Departmental <br /> Store</p>
+				</div>
+			</a>
+		</div>
+		<div class="col-sm-3 py-1 box" style="background-color: #C8D657; color: white; border: 5px solid white;" onclick="DataLoad(3)">
+			<a href="#" id="stationary-btn">
+				<div class="leftImgBox">
+					<i class="fas fa-laptop-house"></i>
+				</div>
+				<div class="counterBox1">
+					<p class="counter1">Computer <br />Store</p>
+				</div>
+			</a>
+		</div>
+		<div class="col-sm-3 py-1 box" style="background-color: #E85C63; color: white; border: 5px solid white;" onclick="DataLoad(4)">
+			<a href="#" id="stationary-btn">
+				<div class="leftImgBox">
+					<i class="fas fa-tshirt"></i>
+				</div>
+				<div class="counterBox1">
+					<p class="counter1">Clothing <br /> Store</p>
+				</div>
+			</a>
+		</div>
+		<div class="col-sm-3 py-1 box" style="background-color: #AA529B; color: white; border: 5px solid white;" onclick="DataLoad(5)">
+			<a href="#" id="stationary-btn">
+				<div class="leftImgBox">
+					<i class="fas fa-swatchbook"></i>
+				</div>
+				<div class="counterBox1">
+					<p class="counter1">Stationary <br /> Store</p>
+				</div>
+			</a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-9">
+			<!-- Search -->
+			<div class="row">
+				<div class="col-12">
+					<div class="input-group mb-3" style="width: 100%;">
+						<input type="text" class="form-control" id="myInput" placeholder="Type item name and search..."
+							   style="border-top-left-radius: 50px; border-bottom-left-radius: 50px; height: 45px">
+						<div class="input-group-append">
+							<button class="btn btn-outline-secondary" style="color: #FBAD63;" type="button" onclick="mySearchFunction()">
+								<i class="fas fa-search"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="filtered-items">
+				<!-- Filtered Items (Departmental) -->
+				<div id="department">
+					<!-- First Row -->
+					<div class="row" id="AllItemLists">
+
+					</div>
+					<!-- Second Row -->
+
+				</div>
+
+			</div>
+		</div>
+		<div class="col-3">
+			<p id="addtocart">Add to Cart <span></span></p>
+			<div class="row">
+				<!-- Add to Cart -->
+				<div class="col-12 px-1">
+					<div class="row" style="height:400px;overflow-x:scroll;">
+						<div class="col-12">
+							<ul class="list-group" id="itemDetails"></ul>
+						</div>
+					</div>
+				</div>
+
+
+
+				<div class="row mt-4" id="formBody">
+					<div class="col-12">
+						<div class="form-group row">
+							<label for="reqNo" class="col-sm-3 col-form-label">Req No</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="reqNo" name="reqNo" value="" readonly />
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="reqDate" class="col-sm-3 col-form-label">Req Date</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="reqDate" name="reqDate" disabled />
+							</div>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="form-group row">
+							<label for="subject" class="col-sm-3 col-form-label">Subject<span style="color:red;">*</span></label>
+							<div class="col-sm-9">
+								<textarea class="form-control" id="subject" name="subject"></textarea>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="subject" class="col-sm-3 col-form-label">Status</label>
+							<div class="col-sm-9">
+								<select class="form-control" id="reqType" name="status">
+									<option value="Final">Final</option>
+									<option value="Draft">Draft</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 text-center">
+						<div class="form-group row" style="padding-top:20px;">
+							<div class="col-sm-12">
+								<a href="javascript:void(0)" onclick="refresh()" class="btn btn-warning" style="background-color: #74B701; border: none;"><i class="fas fa-sync"></i> Refresh</a>&nbsp;&nbsp;
+								<button id="btnSave" type="button" onclick="SaveMasterDetails()" class="btn btn-info" style="background-color: #1DC792; border: none;"><i class="fas fa-paper-plane"></i> Submit</button>
+								<button id="btnPreview" type="button" onclick="Preview()" class="btn btn-info" style="background-color: #DF0B2E; border: none;"><i class="fas fa-search"></i> Preview</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="PreviewModal" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-lg">
+
+			<!-- Modal content-->
+			<div class="modal-content" id="reqModal">
+				<div class="modal-header">
+					<h4 class="modal-title">Requisition Preview</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body" id="printSelect">
+					<div id="description" style="text-align: center">
+						@*<table>
+								<tr>
+									<td>req</td>
+									<td>date</td>
+									<td>subject</td>
+									<td>type</td>
+								</tr>
+							</table>*@
+					</div>
+					<table class="table table-warning table-hover" id="previewData">
+						<thead>
+							<tr>
+								<td>Sl</td>
+								<td>Photo</td>
+								<td>Name</td>
+								<td>Quantity</td>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" onclick="printDiv('printSelect')">Print</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+@section Scripts{
+	<script>
+		$(document).ready(function () {
+			loadRecent();
+			$("#formBody").hide();
+		})
+
+		function printDiv(divName) {
+			var printContents = document.getElementById(divName).innerHTML;
+			var originalContents = document.body.innerHTML;
+
+			document.body.innerHTML = printContents;
+
+			window.print();
+
+			document.body.innerHTML = originalContents;
+			location.reload();
+		}
+
+		function loadRecent() {
+		}
+		function loadTop10() {
+		}
+		function Preview() {
+			var req = $("#reqNo").val();
+			var date = $("#reqDate").val();
+			var subject = $("#subject").val();
+			var type = $("#reqType").val();
+
+			$("#description").text('');
+			$("#description").append('<table class="table table-light"><tr><td><strong>Requisition no.: </strong>' + req + '</td><td><strong>Date: </strong>' + date + '</td></tr><tr><td><strong>Subject: </strong>' + subject + '</td><td><strong>Type: </strong>' + type + '</td></tr></table>');
+
+			var itemDetails = [];
+			$("#itemDetails").find('li').each(function () {
+				console.log(this);
+				itemDetails.push({
+					itemSpecificationId: $(this).find(".totalItem").val(),
+					itemSpecificationName: $(this).find(".validItem").html(),
+					itemSpecificationImage: $(this).find("img").attr('src'),
+					reqQty: $(this).find(".clsreqQty").val()
+				});
+			});
+
+			$("#previewData tbody").text("");
+
+			var qty = parseInt('0');
+			for (var i = 0; i < itemDetails.length; i++) {
+				console.log(itemDetails[i])
+				qty += parseInt(itemDetails[i].reqQty);
+				var sl = parseInt(i) + parseInt('1');
+				$("#previewData tbody").append('<tr><td>' + sl + '</td><td><img width="40" height="40" src="' + itemDetails[i].itemSpecificationImage + '"/></td><td>' + itemDetails[i].itemSpecificationName + '</td><td>' + itemDetails[i].reqQty + '</td></tr>');
+			}
+			$("#previewData tbody").append('<tr><td></td><td></td><td></td><td><strong>Total: </strong>'+qty+'</td></tr>');
+			$('#PreviewModal').modal('show');
+			console.log(itemDetails);
+		}
+		function loadFeatured() {
+		}
+
+		$("#addtocart").click(function () {
+			$("#formBody").show();
+		})
+
+        function SaveMasterDetails() {
+            $('#btnSave').prop('disabled', true);
+            var tablelength = $(".totalItem").length;
+            var reqMasterId = $("#reqMasterId").val();
+            var reqNo = $("#reqNo").val();
+            var reqDate = $("#reqDate").val();
+            var subject = $("#subject").val();
+            var reqType = $("#reqType").val();
+            var isPostPR = 1;
+            var reqDept = 1;
+            var fundsourceId =1;
+            var deliveryaddress = "";
+            var employeeId = $("#employeeId").val();
+
+            var id = parseInt($("#id").val()) ? parseInt($("#id").val()):0;
+
+            if (reqDate == '') {
+                $('#btnSave').prop('disabled', false);
+                alert("Please enter Requisition Date")
+                return false;
+            } else if (reqNo=='') {
+                $('#btnSave').prop('disabled', false);
+                alert("Please enter Requisition No")
+                return false;
+            }else if (subject == '') {
+                $('#btnSave').prop('disabled', false);
+                alert("Please enter Subject")
+                return false;
+            } else if (reqType == '' || reqType == null || reqType == 'undifined') {
+                $('#btnSave').prop('disabled', false);
+                alert("Please enter Requisition Status")
+                return false;
+            }else if (tablelength < 1) {
+                $('#btnSave').prop('disabled', false);
+                alert("there is no data in the table")
+                return false;
+            }
+
+            var itemDetails = [];
+            $("#itemDetails").find('li').each(function () {
+                console.log(this);
+                itemDetails.push({
+                    itemSpecificationId: $(this).find(".totalItem").val(),
+                    itemSpecificationName: $(this).find(".validItem").html(),
+                    reqQty: $(this).find(".clsreqQty").val()
+                });
+            });
+            //$("#itemDetails .clsLI").each(function () {
+            //    itemDetails.push({
+            //        itemSpecificationId: $(this).find(".totalItem").val(),
+            //        itemSpecificationName: $(this).find(".validItem").val(),
+            //        reqQty: $(this).find(".clsreqQty").val()
+            //    });
+            //});
+
+            //var appPanel = [];
+            //$("#divPanel > #divChieldPanel").each(function () {
+            //    appPanel.push({
+            //        sequenceNo: $(this).find(".clsSequenceNo").val(),
+            //        userId: $(this).find(".clsUserId").val(),
+            //    });
+            //});
+
+            //var supplierDetails = [];
+            //$("#tblSupplier tbody>tr").each(function () {
+            //    supplierDetails.push({
+            //        Id: $(this).find(".clsIdSupplier").val(),
+            //        itemId: $(this).find(".clsItemIdSupplier").val(),
+            //        itemSpecificationId: $(this).find(".clsitemSpecificationIdSupplier").val(),
+            //        supplierId: $(this).find(".clssupplier").val(),
+            //    });
+            //});
+
+            var allTrx = new Object();
+            allTrx.reqMasterId = reqMasterId;
+            allTrx.projectId = 2;
+            allTrx.reqNo = reqNo;
+            allTrx.reqDate = reqDate;
+            allTrx.subject = subject;
+            allTrx.reqType = reqType;
+            allTrx.isPostPR = isPostPR;
+            allTrx.foundsourceId = fundsourceId;
+            allTrx.deliveryaddress = deliveryaddress;
+            allTrx.employeeId = employeeId;
+            allTrx.reqDept = reqDept;
+            allTrx.Details = itemDetails;
+            //allTrx.panels = appPanel;
+            //allTrx.preferableVendors = supplierDetails;
+
+            $('#progress').show();
+            $.ajax({
+                url: '@Url.Action("SaveMasterDetailsNew", "RequisitionMaster")',
+                type: 'Post',
+                data: allTrx
+            })
+                .done(function (data) {
+                    alert("Save Successfully");
+
+                        $('#btnSave').prop('disabled', false);
+                        $('#progress').hide();
+                     var link = '@Url.Action("Index", "RequisitionMaster", "http")'
+                        window.location.href = link;
+
+
+                })
+                .fail(function () {
+                    $('#btnSave').prop('disabled', false);
+                    $('#progress').hide();
+                    alert("Unable to Save. Please Try Again");
+                });
+        }
+
+        function GetReqNo(response) {
+            //$('#reqNo').val(response.AutoNumber);
+            $('#reqNo').val(response);
+        }
+        //add product
+        function clickNow(event,itemSpecId,imgUrl) {
+            var addbutton = event.target
+            var items = addbutton.parentElement.parentElement
+            var cardImage = items.getElementsByClassName('card-img-top')[0].src
+            var cardBody = items.getElementsByClassName('card-body')[0].innerText
+			addItems(cardImage, cardBody, itemSpecId, imgUrl);
+
+
+			var a = $("#itemDetails li").length;
+			$("#addtocart span").text(a);
+			$("#addtocart span").css('background-color', 'red');
+			$("#addtocart span").css('border-radius', '50%');
+			$("#addtocart span").css('padding', '2px 8px');
+
+			if (a == 1) {
+				$("#formBody").show();
+			}
+
+        }
+
+        function addItems(cardImage, cardBody, itemSpecId, imgUrl) {
+            var addRow = document.createElement('div')
+            addRow.classList.add('list-group')
+            addRow.innerText = cardBody
+            var cartItem = document.getElementsByClassName('list-group')[0]
+            var cartrowitem = `
+                <li class="list-group-item list-item-cart clsLI">
+
+                    <div class="div" style="float: left;">
+                         <span><i class="fa fa-trash del text-danger mr-1 ml-0 pl-0" id="del"></i></span>
+                        <img src="/../../SKUImages/${imgUrl}" alt="">
+                        <span class="validItem" name="validItems" style="font-size:12px">${cardBody}</span>
+                        <input type="hidden" class="totalItem" value="${itemSpecId}" name="itemSpecificationId" />
+                    </div>
+
+                    <div style="float: right;">
+                        <i class="fa fa-minus pr-2 altera decrescimo" aria-hidden="true" id="subs${itemSpecId}" onclick="subst(${itemSpecId})"></i>
+                        <input type="text" id="reqQty${itemSpecId}" class="clsreqQty" name="reqQty"value="1">
+                        <i class="fa fa-plus pl-2 altera  acrescimo" aria-hidden="true" id="adds${itemSpecId}" onclick="add(${itemSpecId})"></i>
+                    </div>
+
+                </li>         `
+
+            //alert($('.div span').hasClass('validItem'));
+
+            if ($('.div span').hasClass("validItem") == false) {
+                addRow.innerHTML = cartrowitem
+                cartItem.append(addRow);
+            } else {
+                $('.validItem').each(function () {
+                    var name = $(this).text();
+                    if (name === cardBody) {
+                        alert("Product Is already in Cart");
+                        return false;
+                    }
+                });
+                addRow.innerHTML = cartrowitem
+                cartItem.append(addRow);
+            }
+
+            //addRow.innerHTML = cartrowitem
+            //cartItem.append(addRow);
+        }
+        //end
+
+
+
+        //delete
+        $(document).on('click', ' #del', function () {
+			$(this).closest('li').toggleClass('strike').fadeOut('slow', function () {
+				$(this).remove(); var a = $("#itemDetails li").length;
+				$("#addtocart span").text(a);
+				$("#addtocart span").css('background-color', 'red');
+				$("#addtocart span").css('border-radius', '50%');
+				$("#addtocart span").css('padding', '2px 8px');});
+        });
+        //end
+        //increment
+        function add(specId) {
+            var a = $("#reqQty" + specId).val();
+            a++;
+            if (a => 1) {
+                $("#subs" + specId).removeAttr("disabled");
+            }
+            $("#reqQty" + specId).val(a);
+        };
+
+        function subst(specId) {
+            var b = $("#reqQty" + specId).val();
+            if (b.length > 0 && b >= 1) {
+                b--;
+                $("#reqQty" + specId).val(b);
+            }
+            else {
+                $("#subs" + specId).attr("disabled", "disabled");
+            }
+        };
+
+        //end
+
+
+        //addResent
+
+        function clickResent(event) {
+            var addbtn = event.target
+            var items = addbtn.parentElement.parentElement
+            var imgSrc = items.getElementsByClassName('list-img')[0].src
+            var productName = items.getElementsByClassName('list-text')[0].innerText
+            addItemsR(imgSrc, productName)
+        }
+
+        function addItemsR(imgSrc, productName) {
+            var addRowR = document.createElement('div')
+            addRowR.classList.add('list-group')
+            addRowR.innerText = productName
+            var cartItem = document.getElementsByClassName('list-group')[0]
+
+            var cartRowItem = `
+                     <li class="list-group-item list-item-cart">
+
+                                <div class="div" style="float: left;">
+                                     <span><i class="fa fa-trash del text-danger mr-1 ml-0 pl-0" id="del"></i></span>
+                                    <img src="/Assets/RequisitionNew/tissue-box.png" alt="">
+                                    <span  class="validItem" style="font-size:12px">${productName}</span>
+                                </div>
+
+                                <div style="float: right;">
+                                    <i class="fa fa-minus pr-2 altera decrescimo" aria-hidden="true" id="subs" onclick="subst()"></i>
+                                    <input type="text" id="noOfRoom" name="noOfRoom"value="0">
+                                    <i class="fa fa-plus pl-2 altera  acrescimo" aria-hidden="true" id="adds" onclick="add()"></i>
+                                </div>
+
+                            </li>
+                    `
+            if ($('.div span').hasClass("validItem") == false) {
+                addRowR.innerHTML = cartRowItem
+                cartItem.append(addRowR);
+            } else {
+                alert("true");
+                $('.validItem').each(function () {
+                    var names = $(this).text();
+                    if (names === productName) {
+                        alert(2);
+                        alert("Product Is already in Cart");
+                        return false;
+                    }
+                });
+                addRow.innerHTML = cartrowitem
+                cartItem.append(addRow);
+            }
+        };
+
+        //end
+
+        function clickTop(event) {
+            var addbtnT = event.target
+            var itemsT = addbtnT.parentElement.parentElement
+            var imgSrcT = itemsT.getElementsByClassName('list-img')[0].src
+            var ProductName = itemsT.getElementsByClassName('list-text')[0].innerText
+
+            addTopItems(imgSrcT, ProductName);
+        }
+
+
+        function addTopItems(imgSrcT, ProductName) {
+            var addRowT = document.createElement('div')
+            addRowT.classList.add('list-group')
+            addRowT.innerText = ProductName
+            var cartItemsT = document.getElementsByClassName('list-group')[0]
+            var cartRowItemT = `
+                     <li class="list-group-item list-item-cart">
+                        <div style="float: left;">
+                                <span><i class="fa fa-trash del text-danger mr-1 ml-0 pl-0" id="del"></i></span>
+                            <img src="/Assets/RequisitionNew/drink-water.png" alt="">
+                            <span class="validItem" style="font-size:12px">${ProductName}</span>
+                        </div>
+
+                        <div style="float: right;">
+                            <i class="fa fa-minus pr-2 altera decrescimo" aria-hidden="true" id="subs" onclick="subst()"></i>
+                            <input type="text" id="noOfRoom" name="noOfRoom"value="0">
+                            <i class="fa fa-plus pl-2 altera  acrescimo" aria-hidden="true" id="adds" onclick="add()"></i>
+                        </div>
+
+                    </li>
+                    `
+            addRowT.innerHTML = cartRowItemT
+            cartItemsT.append(addRowT)
+
+        }
+
+
+        function clickFeature(event, itemSpecId, imgUrl) {
+            var addbtnF = event.target
+            var itemsF = addbtnF.parentElement.parentElement
+            var imgSrcF = itemsF.getElementsByClassName('list-img')[0].src
+            var Product = itemsF.getElementsByClassName('list-text')[0].innerText
+            addItems(imgSrcF, Product, itemSpecId, imgUrl);
+            //addFeatureItems(imgSrcF, Product);
+        }
+
+
+        function addFeatureItems(imgSrcF, Product) {
+            var addRowT = document.createElement('div')
+            addRowT.classList.add('list-group')
+            addRowT.innerText = Product
+            var cartItemsT = document.getElementsByClassName('list-group')[0]
+            var cartRowItemT = `
+                     <li class="list-group-item list-item-cart">
+
+                        <div style="float: left;">
+                                <span><i class="fa fa-trash del text-danger mr-1 ml-0 pl-0" id="del"></i></span>
+                            <img src="/Assets/RequisitionNew/tissue-box.png" alt="">
+                            <span class="validItem" style="font-size:12px">${Product}</span>
+                        </div>
+
+                        <div style="float: right;">
+                            <i class="fa fa-minus pr-2 altera decrescimo" aria-hidden="true" id="subs" onclick="subst()"></i>
+                            <input type="text" id="noOfRoom" name="noOfRoom"value="0">
+                            <i class="fa fa-plus pl-2 altera  acrescimo" aria-hidden="true" id="adds" onclick="add()"></i>
+                        </div>
+
+                    </li>
+
+                    `
+            addRowT.innerHTML = cartRowItemT
+			cartItemsT.append(addRowT)
+
+
+		}
+
+        $(document).ready(function () {
+            $("#reqDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+
+            Common.Ajax('GET', '/api/RequisitionMaster/GetRequisitionNo/' + 1, [], 'json', GetReqNo);
+        })
+
+
+        $('.fa-minus').click(function () {
+            console.log($(this).closest(".input").find("input[name=input]").val());
+        })
+
+        function DataLoad(id) {
+            Common.Ajax('GET', '/SCMMasterData/Item/GetItemSpecificationsByDepartmentId/' + id, [], 'json', ajaxPermanentThana, false);
+        }
+
+        function ajaxPermanentThana(response) {
+            console.log(response);
+            var option = "";
+            $.each(response, function (i, item) {
+				option += `<div class="col-3">
+                                <div class="card itemCard mb-3" onclick="clickNow(event,${item.itemSpecificationId},'${item.specImageUrl}')">
+                                    <img class="card-img-top" src="/../../SKUImages/${item.specImageUrl}" alt="Card image">
+                                    <div class="card-body text-center px-0 pt-0" style="font-size: 14px;">${item.specificationName}
+                                    </div>
+                                </div>
+                            </div>`
+				//option += '<div class="col-3"><div class="card" onclick="clickNow(event,${item.itemSpecificationId},'${item.specImageUrl }')"> <img class="card-img-top" src="drink-water.png" alt="Card image"><div class="card-body text-center px-0 pt-0" style="font-size: 14px;">Mineral Water-500 ml</div></div></div>'
+            });
+
+            $('#AllItemLists').empty();
+			$('#AllItemLists').append(option);
+
+
+		}
+
+		function loadRecent() {
+			Common.Ajax('GET', '/SCMRequisition/RequisitionNew/GetRecentItems', [], 'json', ajaxRecent, false);
+        }
+
+        function ajaxRecent(response) {
+            console.log(response);
+            var option = "";
+            $.each(response, function (i, item) {
+				option += `<div class="col-3">
+                                <div class="card itemCard mb-3" onclick="clickNow(event,${item.itemSpecificationId},'${item.specImageUrl}')">
+                                    <img class="card-img-top" src="/../../SKUImages/${item.specImageUrl}" alt="Card image">
+                                    <div class="card-body text-center px-0 pt-0" style="font-size: 14px;">${item.specificationName}
+                                    </div>
+                                </div>
+                            </div>`
+				//option += '<div class="col-3"><div class="card" onclick="clickNow(event,${item.itemSpecificationId},'${item.specImageUrl }')"> <img class="card-img-top" src="drink-water.png" alt="Card image"><div class="card-body text-center px-0 pt-0" style="font-size: 14px;">Mineral Water-500 ml</div></div></div>'
+            });
+
+            $('#AllItemLists').empty();
+			$('#AllItemLists').append(option);
+
+
+		}
+
+		function loadTop10() {
+			Common.Ajax('GET', '/SCMRequisition/RequisitionNew/GetTopTen', [], 'json', ajaxTopTen, false);
+		}
+
+		function ajaxTopTen(response) {
+			console.log(response);
+			var option = "";
+			$.each(response, function (i, item) {
+				option += `<div class="col-3">
+                                <div class="card itemCard mb-3" onclick="clickNow(event,${item.itemSpecificationId},'${item.specImageUrl}')">
+                                    <img class="card-img-top" src="/../../SKUImages/${item.specImageUrl}" alt="Card image">
+                                    <div class="card-body text-center px-0 pt-0" style="font-size: 14px;">${item.specificationName}
+                                    </div>
+                                </div>
+                            </div>`
+				//option += '<div class="col-3"><div class="card" onclick="clickNow(event,${item.itemSpecificationId},'${item.specImageUrl }')"> <img class="card-img-top" src="drink-water.png" alt="Card image"><div class="card-body text-center px-0 pt-0" style="font-size: 14px;">Mineral Water-500 ml</div></div></div>'
+			});
+
+			$('#AllItemLists').empty();
+			$('#AllItemLists').append(option);
+
+
+		}
+
+		function loadFeatured() {
+			Common.Ajax('GET', '/SCMRequisition/RequisitionNew/GetFeatured', [], 'json', ajaxFeatured, false);
+		}
+
+		function ajaxFeatured(response) {
+			console.log(response);
+			var option = "";
+			$.each(response, function (i, item) {
+				option += `<div class="col-3">
+                                <div class="card itemCard mb-3" onclick="clickNow(event,${item.itemSpecificationId},'${item.specImageUrl}')">
+                                    <img class="card-img-top" src="/../../SKUImages/${item.specImageUrl}" alt="Card image">
+                                    <div class="card-body text-center px-0 pt-0" style="font-size: 14px;">${item.specificationName}
+                                    </div>
+                                </div>
+                            </div>`
+				//option += '<div class="col-3"><div class="card" onclick="clickNow(event,${item.itemSpecificationId},'${item.specImageUrl }')"> <img class="card-img-top" src="drink-water.png" alt="Card image"><div class="card-body text-center px-0 pt-0" style="font-size: 14px;">Mineral Water-500 ml</div></div></div>'
+			});
+
+			$('#AllItemLists').empty();
+			$('#AllItemLists').append(option);
+
+
+		}
+
+
+		function mySearchFunction() {
+			var input, filter, div, card, a, i, txtValue;
+			input = document.getElementById("myInput");
+			filter = input.value.toUpperCase();
+			div = document.getElementById("AllItemLists");
+			card = div.getElementsByClassName("card");
+			for (i = 0; i < card.length; i++) {
+				a = card[i].getElementsByClassName("card-body")[0];
+				txtValue = a.textContent || a.innerText;
+				if (txtValue.toUpperCase().indexOf(filter) > -1) {
+					card[i].style.display = "";
+				} else {
+					card[i].closest(".col-3").style.display = "none";
+				}
+			}
+		}
+
+	</script>
+}

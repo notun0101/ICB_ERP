@@ -1,0 +1,126 @@
+﻿@model ProfitDistributionViewModel
+@{
+    ViewData["Title"] = "DistrbuteProcess";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            @*<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h2 class="m-0 font-weight-bold text-primary">Process Profit Distribution</h2>
+        </div>*@
+
+            <div class="card-body bg-white">
+                <div class="">
+                    <h5 class="m-0 font-weight-bold text-primary">Process Profit Distribution</h5>
+                </div>
+                <hr />
+                <form id="FormId">
+                    <table class="table table-striped table-bordered table-hover bg-white" id="">
+                        <thead>
+                            <tr>
+                                <th>Member Name</th>
+                                <th>Contribution</th>
+                                <th>Accumulated Profit</th>
+                                <th>Surplus % per Contribution & Distributed Profit</th>
+                                <th>Profit for the period</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tblTbody">
+                            <tr id="tr_0">
+                                <td>
+                                    <select class="form-control " name="memberName" id="">
+                                        <option>Select Member Name</option>
+                                        <option value="Kamal Hosen">Kamal Hosen</option>
+                                    </select>
+
+
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="contribution" id="">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="accumulatedProfit" id="">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="surplus" id="">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="profitPeriod" id="">
+                                </td>
+
+
+                                <td><a href="#"><i class="fa fa-trash" style="border:none; color:red"></i></a></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                    <a class="btn btn-sm btn-outline-info" onclick="AddTR()"><i class="fa fa-plus"></i></a>&nbsp;
+                    <button type="button" id="submit" class="btn btn-sm btn-success">Process Distribution</button>
+                </form>
+
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+
+    });
+    var nm = 0
+    function AddTR() {
+        nm = 1 + nm;
+        $('#tblTbody').append('<tr id="tr_' + nm + '">' +
+            '<td><select class="form-control " name="" id=""><option>Select Member Name</option>  <option value="">Kamal Hosen</option></select>                            </td >            <td>                <input type="text" class="form-control" name="" id=""> </td><td><input type="text" class="form-control" name="" id=""></td><td><input type="text" class="form-control" name="" id=""> </td> <td><input type="text" class="form-control" name="" id=""></td><td><a  onclick="Remove(this)" href="javascript:void(0)"><i class="fa fa-trash" style="color:red"></i></a></td></tr>')
+
+
+        Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo', [], 'json', ajaxGetEmployees);
+
+    }
+    function Remove(res) {
+        $(res).closest('tr').remove()
+    }
+
+    $('#submit').click(function () {
+        console.log($('#FormId').serializeArray());
+        var data = $('#FormId').serializeArray();
+
+        console.log(data[0].value)
+        swal({
+            title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+        }).then(function () {
+            $.ajax({
+                url: '/ProvidentFund/PFAccounting/DistrbuteProcess',
+                type: 'POST',
+                data: data
+            }).done(function () {
+                if (data[0].value == 0) {
+                    swal('success', 'Saved Successfully!', 'success').then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    swal('success', 'Updated Successfully!', 'success').then(function () {
+                        location.reload();
+                    });;
+                }
+            }).fail(function () {
+                swal('warning', 'Failed!', 'warning');
+            })
+        });
+    })
+
+
+</script>

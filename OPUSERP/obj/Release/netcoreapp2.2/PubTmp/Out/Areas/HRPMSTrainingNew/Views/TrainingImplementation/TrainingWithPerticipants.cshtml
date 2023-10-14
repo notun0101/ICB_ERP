@@ -1,0 +1,66 @@
+﻿@model TrainingEnrollViewModel
+@{
+    ViewData["Title"] = "Training Participants";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<style>
+    body{
+        color: black !important;
+    }
+
+</style>
+<div class="text-center p-2">
+	<h5 style="font-weight: 900">Bangladesh Development Bank Limited</h5>
+	<h6 style="text-decoration: underline">BDBL Bhaban-2 (Level-16), 12, Karwan Bazar, Dhaka-1215</h6>
+	<h6 style="text-decoration: underline">Training Institute</h6>
+
+	<h6>@Model.trainingWithPerticipants?.FirstOrDefault()?.courseTypeNameEN</h6>
+	<h6>"@Model.trainingWithPerticipants?.FirstOrDefault()?.courseTitle"</h6>
+
+	@{
+		TimeSpan? Difference = @Model.trainingWithPerticipants?.FirstOrDefault()?.endDate - @Model.trainingWithPerticipants?.FirstOrDefault()?.startDate;
+	}
+	@if (Difference.Value.Days > 0)
+	{
+		<h6 style="text-decoration: underline">Duration: <span> @(Difference.Value.Days + 1)</span> Days; Date: @Model.trainingWithPerticipants?.FirstOrDefault()?.startDate?.ToString("dd MMM, yyyy")-@Model.trainingWithPerticipants?.FirstOrDefault()?.endDate?.ToString("dd MMM, yyyy")</h6>
+
+	}
+	<h6 style="text-decoration: underline">List of Participants</h6>
+</div>
+
+<table class="report-table-1" border="1"cellpadding="3"cellspacing="0" id="participantTable" style="font-size: 16px !important;">
+    <thead>
+        <tr>
+            <th>SL No.</th>
+            <th>Name of the Officers</th>
+            <th>Perticipants ID</th>
+            <th>Educational Qualification</th>
+            <th>Present Place of Posting</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+
+            @foreach (var data in Model.trainingWithPerticipants.Select(x => x.designationName).Distinct())
+			{
+				int i = 1;
+                <tr>
+                    <td colspan="5" style="font-weight:bold;"> <u>@data</u></td>
+                </tr>
+                
+                @foreach (var item in Model.trainingWithPerticipants.Where(x => x.designationName == data))
+                {
+                    <tr>
+                        <td style="text-align:center;">@i</td>
+                        <td>@item.employeeName</td>
+                        <td style="text-align:center;">@item.employeeCode</td>
+                        <td>@item.Qualification</td>
+                        <td>@item.placeOfPosting</td>
+                    </tr>
+                    i++;
+                }
+            }
+        }
+    </tbody>
+</table>

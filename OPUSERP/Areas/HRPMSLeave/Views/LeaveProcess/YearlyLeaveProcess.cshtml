@@ -1,0 +1,94 @@
+﻿@model YearlyLeaveProcessViewModel
+@{
+    ViewData["Title"] = "Leave Process";
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+            <h5 class="card-title" style="color: black; margin: 8px; text-transform: uppercase;">Leave Process</h5>
+        </div>
+        <div class="col-md-8">
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info mr-2' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1018&perentId=6282'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <form asp-area="HRPMSLeave" asp-controller="LeaveProcess" asp-action="YearlyLeaveProcess" id="FormId" method="post" data-parsley-validate="parsley">
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="form-group row">
+                    <label for="yearId" class="col-sm-2 col-form-label"> Select Year </label>
+                    <div class="col-sm-4">
+                        <select id="selectYears" class="form-control" name="year">
+                           @foreach (var data in Model.AllYears)
+                           {
+                               
+                               <option value="@data.Id" selected>@data.year</option>
+                           }
+
+                        </select>
+                    </div>
+                   
+                </div>
+               
+                <button type="button" id="Leavebtn" onclick="Process()" class="btn btn-light btn-lg" style="float:right; margin-top:5px;font-size: 2.25rem; color:#0a79af" data-toggle="tooltip" title="Process"><i class="fas fa-sync-alt"></i></button>
+            </form>
+			<br />
+			<br />
+		
+			@*<div class="card" id="list" style="display:none;">
+				<div class="card-header">
+					<h4>Leave Process List</h4>
+				</div>
+				<div class="card-body">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Employee Name</th>
+								<th>Leave Type</th>
+								<th>Year</th>
+								<th>Leave Days</th>
+								<th>Leave Carry Days</th>
+								<th>Leave Availed</th>
+							</tr>
+						</thead>
+						<tbody>
+
+						</tbody>
+					</table>
+				</div>
+			</div>*@
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {  
+           
+        });
+       
+		function Process() {
+           
+            var year = $('#selectYears').val();
+		
+			
+            Common.Ajax('GET', '/HRPMSLeave/LeaveProcess/YearlyLeaveProcessApi?yearid=' + year, [], 'json', ajaxFunctionProcess, false);
+		}
+		function ajaxFunctionProcess(response) {
+            $('#selectYears :selected').val();
+
+
+            if (response != null) {
+                swal('success', 'Process Completed Successfully!', 'success').then(function () {
+                
+                    window.location.href = "/HRPMSLeave/LeaveProcess/LeaveProcessList";
+                });
+            }
+          
+		}
+    </script>
+}
+

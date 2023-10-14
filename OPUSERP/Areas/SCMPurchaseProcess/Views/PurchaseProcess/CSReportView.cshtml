@@ -1,0 +1,194 @@
+﻿@model CSRequisitionList
+@{
+	ViewData["Title"] = "CSReportView";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+<style>
+	table {
+		border: 1px solid black;
+		width: 100%;
+		font-size: 12px;
+	}
+
+	tr {
+	}
+
+	td {
+		border: 1px solid black;
+	}
+</style>
+
+
+<div class="container-fluid">
+    <div class="fa-pull-right">
+        <p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+    </div>
+    <div class="row" style="padding-top:0px;">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <div style="color:black;text-align:center;">
+                <img src="@Model.companies.FirstOrDefault().filePath" alt="OPUS ERP" style="height:80px;" /><br /><br />
+                <h3>
+                    LabRight
+                </h3>
+                <label style="font-weight:bold">
+                    80, Park Road, Baridhara Diplomatic Zone,
+                </label><br />
+                <label style="font-weight:bold">
+                    TEL: 088-02-8828590,9898646,
+                    
+                </label><br />
+                <label style="font-weight:bold">
+                    FAX: 088-01713164591
+                </label>
+
+                <br />
+            </div>
+        </div>
+        
+    </div>
+</div>
+<br />
+<br />
+<div class="row p-2 m-2">
+
+
+	<div style=" padding-right:0px; padding-left:0px;">
+
+		<table style="" class="table table-striped table-bordered">
+			@{
+				int totalItem = Model.cSDetailsReports.Select(x => x.ItemSpac).Distinct().Count();
+				totalItem = totalItem + 1;
+				int endCount = totalItem + 5;
+				int cnt = 0;
+				<tr style="text-align: center; font-weight: bold;">
+					<th style="width:15%;">Name Of The  Supplier</th>
+					@foreach (var data in Model.cSDetailsReports.Select(x => x.organizationName).Distinct())
+					{
+
+						<td colspan="4">@data</td>
+					}
+					<th rowspan="2" style="width:16%;">Special reason of selecting price for supplier at a higher rate</th>
+				</tr>
+				<tr style="text-align: center;">
+					<td rowspan="@totalItem"></td>
+					@foreach (var data in Model.cSDetailsReports.Select(x => x.organizationName).Distinct())
+					{
+
+						<td style="width:20%">Particulars</td>
+						<td style="text-align:center; width:8% ">Req. Qty.</td>
+						<td style="text-align:center; width:8%">Unit Price</td>
+						<td style="text-align:center;"> Total </td>
+					}
+
+				</tr>
+
+				foreach (var item in Model.cSDetailsReports.Select(x => x.ItemSpac).Distinct())
+				{
+					<tr style="text-align: center;">
+						@foreach (var detail in Model.cSDetailsReports.Where(x => x.ItemSpac == item))
+						{
+							<td>@detail.ItemSpac</td>
+							<td>@detail.Qty</td>
+							<td>@detail.Rate</td>
+							<td>@detail.Total</td>
+						}
+						@if (cnt == 0)
+						{
+							<td rowspan="@endCount"></td>
+							cnt = 1;
+						}
+
+
+					</tr>
+				}
+
+
+				<tr style="text-align: center;">
+					<th>Govt. Vat  0 %</th>
+					@foreach (var data in Model.cSDetailsReports.Select(x => x.organizationName).Distinct())
+					{
+
+						<td colspan="3"></td>
+						<td></td>
+
+					}
+
+				</tr>
+				<tr style="text-align: center;">
+					<th>Total Cost</th>
+					@foreach (var data in Model.cSDetailsReports.Select(x => x.organizationName).Distinct())
+					{
+
+						<td colspan="3"></td>
+						<td></td>
+
+					}
+				</tr>
+				<tr style="text-align: center;">
+					<th>Delivery Date</th>
+					@foreach (var data in Model.cSDetailsReports.Select(x => x.organizationName).Distinct())
+					{
+
+						<td colspan="4"></td>
+
+					}
+				</tr>
+				<tr style="text-align: center;">
+					<th>Time Required For Supply</th>
+					@foreach (var data in Model.cSDetailsReports.Select(x => x.organizationName).Distinct())
+					{
+
+						<td colspan="4"></td>
+
+					}
+				</tr>
+				<tr style="text-align: center;">
+					<th>Payment Terms</th>
+					@foreach (var data in Model.cSDetailsReports.Select(x => x.organizationName).Distinct())
+					{
+
+						<td colspan="4"></td>
+
+					}
+
+				</tr>
+			}
+
+		</table>
+	</div>
+
+</div>
+<div class="row p-2 m-2" style="padding-bottom:0" >
+    <span style="font-weight:bold;font-size:20px; color:black">
+        C.S Committee Members:
+    </span>
+</div>
+<div class="row p-2 m-2">
+    
+    <table class="table table-striped table-bordered">
+        <tbody>
+            @*<tr style="text-align:center; border:none">
+                <td colspan="3">C.S Committee Members</td>
+            </tr>*@
+            <tr>
+                <th style="text-align:center; width:17%">Name</th>
+                <th style="text-align:center;width:60%">Comment</th>
+                <th style="text-align:center;">Signature</th>
+            </tr>
+            @foreach (var item in Model.approerPanelList)
+            {
+                <tr>
+                    <td>@item.EmpName</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<br />
+<br />
+
+

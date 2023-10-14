@@ -1,0 +1,318 @@
+﻿@using System.Collections.Generic
+@using System.Linq
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Http.Authentication
+@using OPUSERP.ERPServices.MasterData.Interfaces
+@using OPUSERP.ERPService.AuthService.Interfaces
+@using System
+@model LogInViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+@inject IERPCompanyService eRPCompanyService
+@{
+    Layout = null;
+}
+@{
+    var companies = await eRPCompanyService.GetAllCompany();
+    var company = companies.FirstOrDefault()?.filePath;
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Login</title>
+	<link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+	<link href="~/css/loginnew.css" rel="stylesheet">
+
+	<link href="~/SweetAlert/sweetalert2.css" rel="stylesheet" />
+	<style>
+
+		#passShowHide {
+			position: absolute;
+			top: 6px;
+			right: -24px;
+			outline: none;
+			border: none;
+			background: transparent;
+		}
+
+		#login-box {
+			padding-bottom: 20px;
+			padding-top: 20px;
+		}
+	</style>
+</head>
+<body style="background-color:#D6EAF8">
+	<div class="bg">
+		<div class="columns ">
+            <div class="login-box" id="login-box">
+                <div style="display: flex; justify-content: center;">
+                    <img src="/EmpImages/@companies.FirstOrDefault().filePath" width="100" style="position: absolute; top: -45px; background: white; border: 4px solid #093cff; border-radius: 50%;" />
+                </div>
+                <div style="text-align: center; margin-top: 50px;">
+                    <h2 class="m-0" style="margin: 0;">HR & Payroll</h2>
+                    <h2 class="m-0" style="margin: 0;">Management System</h2>
+                </div>
+
+                <form class="user" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="signin" [hidden]="login">
+                        <h1 class="topline" style="font-size: 20px; margin: 0;">Login</h1>
+                        <br />
+                        <div class="input-field">
+                            <input id="exampleInputEmail" type="text" name="Name" aria-describedby="emailHelp" placeholder="Enter ID" formControlName="email" />
+                        </div>
+
+                        <div class="input-field">
+							<input type="hidden" name="latitude" id="latitude" value="" />
+							<input type="hidden" name="longitude" id="longitude" value="" />
+							<input type="hidden" name="city" id="city" value="" />
+							<input type="hidden" name="ip1" id="ip1" value="" />
+                            <input id="exampleInputPassword" formControlName="password" class="passmask form-control form-control-user activepass" type="password" name="Password" placeholder="Password" />
+                            <input id="exampleInputPassword1" formControlName="password" class="passread form-control form-control-user" type="text" style="display: none" name="Password" placeholder="Password" />
+                            <button type="button" id="passShowHide"><i class="fas fa-eye"></i></button>
+                        </div>
+
+                        <div class="action">
+                            @*<a class="forgot">Forgot Password?</a>
+                    <a class="signup" (click)="signOption()">Sign Up</a>*@
+                        </div>
+
+                        <div class="login-box-button">
+                            <button type="submit">
+                                <i class="fas fa-sign-in-alt"></i>
+                                LOG IN
+                            </button>
+                        </div>
+                        <div style="text-align: center; padding: 15px; color: darkred;">
+                            <a href="javascript:void(0)" onclick="openForgotPassModal()">Forgot Password</a>
+                        </div>
+                        <div class="" style="text-align: center; padding: 15px;">
+                            <a href="http://opus-bd.com" target="_blank" style="opacity: .7">OPUS TECHNOLOGY LTD. &copy; @DateTime.Now.Year</a>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+
+
+
+			<div class="login-box" id="forgot-box" style="display: none">
+				<div style="display: flex; justify-content: center;">
+					<img src="/EmpImages/@companies.FirstOrDefault().filePath" width="150"/>
+				</div>
+
+				<form class="user" method="post">
+					<div asp-validation-summary="All" class="text-danger"></div>
+					<div class="signin forgot" [hidden]="login">
+						<h1 class="topline headf">Forgot Password</h1>
+						<br />
+						<div class="input-field">
+							<input id="exampleInputEmail1" type="email" name="emailF" aria-describedby="emailHelp" placeholder="Enter Your Employee ID" formControlName="email" />
+						</div>
+						<div class="input-field" style="display: none;" id="code">
+							<input id="exampleInputCode" type="text" name="Code" placeholder="Enter Code (within 5 minutes)" formControlName="text" />
+						</div>
+						<div class="input-field" style="display: none;" id="fpass1Div">
+							<input id="fpass1" type="password" name="fpass1" placeholder="Enter Password" formControlName="text" />
+						</div>
+						<div class="input-field" style="display: none;" id="fpass2Div">
+							<input id="fpass2" type="password" name="fpass2" placeholder="Re-Type Password" formControlName="text" />
+						</div>
+
+						<div class="login-box-button">
+							<button type="button" id="fBtn" style="cursor: pointer;">
+								<i class="fas fa-sign-in-alt"></i>
+								Submit
+							</button>
+						</div>
+						<div style="text-align: center; padding: 15px; color: darkred;">
+							<a href="javascript:void(0)" onclick="openLoginModal()">Go Back To Login</a>
+						</div>
+						<div class="" style="text-align: center; padding: 15px;">
+							<a href="#">OPUS TECHNOLOGY LTD. &copy; @DateTime.Now.Year</a>
+						</div>
+					</div>
+
+
+					<div class="action1" style="display: none; display: flex; justify-content: center;">
+						<img src="~/Assets/lockload.gif" style="width: 250px;" />
+					</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+
+
+	<script type="text/javascript" src="~/js/common.js"></script>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+	<script src="~/SweetAlert/sweetalert2.common.js"></script>
+	<script src="~/SweetAlert/sweetalert2.js"></script>
+	<script type="text/javascript">
+		function handleClick(cb) {
+			if (cb.checked == true) {
+				$('#customCheck').val(true);
+			} else {
+				$('#customCheck').val(false);
+			}
+		}
+
+		$(document).ready(function () {
+			$('#exampleInputPassword').on('change', function () {
+				$('#exampleInputPassword1').val($(this).val());
+			})
+
+			$('#exampleInputPassword1').on('change', function () {
+				$('#exampleInputPassword').val($(this).val());
+			})
+
+			$('#passShowHide').click(function () {
+				var passmaskClass = $('.passmask').hasClass('activepass');
+				//var passreadClass = $('.passread').hasClass('activepass');
+				if (passmaskClass == true) {
+					$('#exampleInputPassword').removeClass('activepass').hide();
+					$('#exampleInputPassword1').addClass('activepass').show();
+					$(this).find('i').removeClass('fa-eye').addClass('fa-eye-slash');
+					$('#exampleInputPassword1').focus();
+				}
+				else {
+					$('#exampleInputPassword1').removeClass('activepass').hide();
+					$('#exampleInputPassword').addClass('activepass').show();
+					$(this).find('i').removeClass('fa-eye-slash').addClass('fa-eye');
+					$('#exampleInputPassword').focus();
+				}
+			})
+
+			$('#fBtn').click(function () {
+				$('.forgot').hide();
+				$('.action1').show();
+
+                var email = $('#exampleInputEmail1').val();
+				var code = $('#exampleInputCode').val();
+				var pass1 = $('#fpass1').val();
+				var pass2 = $('#fpass2').val();
+				if (email != '' && code == '' && pass2 == '') {
+					Common.Ajax('GET', '/Auth/Account/ForgotPassMailSent?email=' + email, [], 'json', ajaxFunctionForgotPassMailSent, true);
+				}
+				if (email != '' && code != '' && pass2 == '') {
+					Common.Ajax('GET', '/Auth/Account/VarifyPassCode?email=' + email + '&code=' + code, [], 'json', ajaxFunctionVarifyPassCode, true);
+				}
+				if (email != '' && code != '' && pass1 != '' && pass2 != '') {
+					if (pass1 == pass2) {
+						Common.Ajax('GET', '/Auth/Account/SetNewPassword?email=' + email + '&code=' + code + '&pass1=' + pass1 + '&pass2=' + pass2, [], 'json', ajaxFunctionSetNewPassword, true);
+					}
+					else {
+						console.log("pass missmatch");
+					}
+				}
+			})
+
+
+			$.getJSON('http://www.geoplugin.net/json.gp', function (data) {
+				//var data1 = JSON.stringify(data, null, 2);
+				$('#latitude').val(data.geoplugin_latitude);
+				$('#longitude').val(data.geoplugin_longitude);
+				$('#city').val(data.geoplugin_city);
+			});
+		})
+		function ajaxFunctionVarifyPassCode(response) {
+			if (response == "success") {
+				$('#fpass1Div').show();
+				$('#fpass2Div').show();
+
+				$('.forgot').show();
+				$('.action1').hide();
+			}
+			else {
+				console.log(response)
+			}
+		}
+		function ajaxFunctionSetNewPassword(response) {
+			if (response == "success") {
+				swal('success', 'Password changed successfully!', 'success').then(function () {
+					window.location.href = "/Auth/Account/Loginnew"
+				})
+				$('#exampleInputCode').val('');
+				$('#fpass1').val('');
+				$('#fpass2').val('');
+
+				$('#exampleInputCode').hide();
+				$('#fpass1Div').hide();
+				$('#fpass2Div').hide();
+
+				$('.forgot').show();
+				$('.action1').hide();
+			}
+			else {
+				$('#exampleInputCode').val('');
+				$('#fpass1').val('');
+				$('#fpass2').val('');
+
+				$('#exampleInputCode').hide();
+				$('#fpass1Div').hide();
+				$('#fpass2Div').hide();
+
+				$('.forgot').show();
+				$('.action1').hide();
+			}
+		}
+		function ajaxFunctionForgotPassMailSent(response) {
+			console.log(response)
+			if (response == "success") {
+				$('#code').show();
+				$('.headf').text('Verification');
+
+				$('.forgot').show();
+				$('.action1').hide();
+
+				$('.forgot').show();
+				$('.action1').hide();
+			}
+			else {
+                swal('warning!', 'Email not found. Try again!', 'warning').then(function () {
+                    $('#login-box').hide();
+                    $('#forgot-box').show();
+
+                    $('.action1').hide();
+
+                    $('.forgot').show();
+                });
+			}
+		}
+		function VarifyPassCode(response) {
+			console.log(response);
+			if (response == "success") {
+				$('#fpass1').show();
+				$('#fpass2').show();
+
+				$('.forgot').show();
+				$('.action1').hide();
+			}
+			else {
+
+			}
+		}
+		function openForgotPassModal() {
+			$('#login-box').hide();
+			$('#forgot-box').show();
+
+			$('.action1').hide();
+		}
+		function openLoginModal() {
+			$('#login-box').show();
+			$('#forgot-box').hide();
+		}
+	</script>
+	<script src="~/vendor/jquery/jquery.min.js"></script>
+	<script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
+	<script src="~/js/sb-admin-2.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,470 @@
+﻿@model CertificateViewModel
+@{
+    ViewData["Title"] = "GenerateCertificate";
+
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+
+
+<style>
+
+        hr {
+            background-color: black;
+            /*margin: 3px;*/
+        }
+
+        div#cert-footer {
+            position: absolute;
+            width: 100%;
+            top: 348px;
+            text-align: center;
+            margin-left: 5%;
+        }
+
+        #cert-stamp, #cert-ceo-sign {
+            width: 60%;
+            display: inline-block;
+        }
+
+        .smaller, div#cert-issued-by, div#cert-ceo-design {
+            width: 40%;
+            display: inline-block;
+            float: left;
+            color: gray;
+        }
+
+        div#cert-ceo-design {
+            margin-left: 10%;
+        }
+
+        h4 {
+            font-family: 'Saira Condensed', sans-serif;
+            margin: 5px 0px;
+            color: black;
+        }
+
+        body {
+            /*width: 950px;
+            height: 690px;
+            position: absolute;
+            left: 30px;
+            top: 30px;*/
+        }
+
+        /*p {
+            color:black;
+            top: 220px;
+            font-family: 'Arial', sans-serif;
+            font-size: 24px;
+            margin: 5px 0px;
+        }*/
+
+        /*html {
+            display: inline-block;
+            width: 1024px;
+            height: 768px;
+            background-size: 100%;
+        }*/
+
+        h1#cert-holder {
+            font-size: 40px;
+            color: #be2d24;
+        }
+
+        p.smaller {
+            font-size: 22px !important;
+        }
+
+    div#cert-desc {
+        width: 100%;
+        margin-left: 1%;
+    }
+
+        p#cert-from {
+            color: #be2d24;
+            font-family: 'Saira Condensed', sans-serif;
+        }
+
+        div#cert-verify {
+            opacity: 1;
+            position: absolute;
+            top: 680px;
+            left: 60%;
+            font-size: 12px;
+            color: grey;
+        }
+
+        /*/////////////////*/
+        .cursive {
+            font-family: 'Pinyon Script', cursive;
+        }
+
+        .sans {
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .block {
+            display: block;
+        }
+
+        .underline {
+            border-bottom: 1px solid #777;
+            padding: 5px;
+            margin-bottom: 15px;
+        }
+
+        .margin-0 {
+            margin: 0;
+        }
+
+        .padding-0 {
+            padding: 0;
+        }
+
+        .pm-empty-space {
+            height: 40px;
+            width: 100%;
+        }
+
+        /*body {
+      padding: 20px 0;
+      background: #ccc;
+    }*/
+
+        .pm-certificate-container {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            background-color: #618597;
+            padding: 30px;
+            color: #333;
+            font-family: 'Open Sans', sans-serif;
+            box-shadow: 0 0 5px rgba(0, 0, 0, .5);
+        }
+        /*background: -webkit-repeating-linear-gradient(
+        45deg,
+        #618597,
+        #618597 1px,
+        #b2cad6 1px,
+        #b2cad6 2px
+      );
+      background: repeating-linear-gradient(
+        90deg,
+        #618597,
+        #618597 1px,
+        #b2cad6 1px,
+        #b2cad6 2px
+      );*/
+
+        .outer-border {
+            width: 794px;
+            height: 594px;
+            position: absolute;
+            left: 50%;
+            margin-left: -397px;
+            top: 50%;
+            margin-top: -297px;
+            border: 2px solid #fff;
+        }
+
+        .inner-border {
+            width: 730px;
+            height: 530px;
+            position: absolute;
+            left: 50%;
+            margin-left: -365px;
+            top: 50%;
+            margin-top: -265px;
+            border: 2px solid #fff;
+        }
+
+        .pm-certificate-border {
+            position: relative;
+            width: 720px;
+            height: 520px;
+            padding: 0;
+            border: 1px solid #E1E5F0;
+            background-color: rgba(255, 255, 255, 1);
+            background-image: none;
+            left: 50%;
+            margin-left: -360px;
+            top: 50%;
+            margin-top: -260px;
+        }
+
+        .pm-certificate-block {
+            width: 650px;
+            height: 200px;
+            position: relative;
+            left: 50%;
+            margin-left: -325px;
+            top: 70px;
+            margin-top: 0;
+        }
+
+        .pm-certificate-header {
+            margin-bottom: 10px;
+        }
+
+        .pm-certificate-title {
+            position: relative;
+            top: 40px;
+        }
+
+        h2 {
+            font-size: 34px !important;
+        }
+
+
+        .pm-certificate-body {
+            padding: 20px;
+        }
+
+        .pm-name-text {
+            font-size: 20px;
+        }
+
+
+        .pm-earned {
+            margin: 15px 0 20px;
+        }
+
+        .pm-earned-text {
+            font-size: 20px;
+        }
+
+        .pm-credits-text {
+            font-size: 15px;
+        }
+
+
+
+        .pm-earned-text {
+            font-size: 20px;
+        }
+
+        .pm-credits-text {
+            font-size: 15px;
+        }
+
+
+        .pm-certified {
+            font-size: 12px;
+        }
+
+        .underline {
+            margin-bottom: 5px;
+        }
+
+
+        .pm-certificate-footer {
+            width: 650px;
+            height: 100px;
+            position: relative;
+            left: 50%;
+            margin-left: -325px;
+            bottom: -105px;
+        }
+</style>
+@using OPUSERP.ERPServices.MasterData.Interfaces
+@using OPUSERP.ERPService.AuthService.Interfaces
+@using System
+@inject IERPCompanyService eRPCompanyService
+@inject IUserInfoes userInfo
+@{
+    var companies = await eRPCompanyService.GetAllCompany();
+    var company = companies.FirstOrDefault()?.filePath;
+    var companyName = companies.FirstOrDefault()?.companyName;
+    var companyAddress = companies.FirstOrDefault()?.addressLine;
+    var comImage = companies.FirstOrDefault()?.filePath;
+}
+
+
+<div class="col-sm-12" style="">
+
+    @*<h4 id="cert-title">
+            Serial No : 88/2019
+        </h4>
+        <br><br><br><br>
+
+
+
+        <div id="cert-desc">
+            <p class="" id='cert-details'>
+                This is to certify that       <span style="font:bold;"> @Model.employee?.nameEnglish</span>
+                ,       <span style="font:bold;">@Model.employee?.lastDesignation?.designationName</span>
+                of Bangladesh Development Bank Limited participated in the training course titled "@Model.trainingInfoNews?.course
+                " conducted by the Training Institute during @Model.trainingInfoNews?.startDate?.ToString("dd/MM/yyyy") to @Model.trainingInfoNews?.endDate?.ToString("dd/MM/yyyy") .
+            </p>
+        </div>
+
+        <div id="cert-footer">
+            <div id="cert-issued-by">
+
+                <hr>
+                <p style="color:gray;">Head of Training Institute</p>
+            </div>
+
+
+            <div id="cert-ceo-design">
+
+                <hr>
+                <p style="color:gray;">Managing  Director of (Add. Charge)</p>
+            </div>
+
+            <div>
+                <p class="smaller text-center" id='cert-issued'>
+                    <b>Date :</b> @DateTime.Now.ToString("dd MMM yyyy")
+                </p>
+            </div>
+
+        </div>*@
+
+
+
+
+    <div class="container pm-certificate-container">
+        <div class="outer-border"></div>
+        <div class="inner-border"></div>
+
+        <div class="pm-certificate-border col-xs-12">
+            <div class="row pm-certificate-header" style="margin-left: 13%;">
+                <div class="pm-certificate-title cursive col-xs-12 text-center">
+                    
+
+                        <div class="col-2">
+                            @*<img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="OPUS ERP" style="height:60px;" />*@
+                        </div>
+                        <div class="col-12">
+                            <div style="color:black;text-align:center;">
+                                <img src="/EmpImages/@comImage" alt="OPUS ERP" style="height:60px;" />
+
+                                <h3>@companyName</h3>
+                                <label>@companyAddress</label>
+                                <h3 style="font-size:20px;"><u>Training Certificate</u></h3>
+                            </div>
+                        </div>
+
+                   
+                </div>
+            </div>
+            @*<h4 id="cert-title">
+                    Serial No : 88/2019
+                </h4>*@
+            <br><br><br>
+
+
+
+            <div id="cert-desc">
+
+                This is to certify that       <span style="font:bold;"> @Model.employee?.nameEnglish</span>
+                ,       <span style="font:bold;">@Model.employee?.lastDesignation?.designationName</span>
+                of Bangladesh Development Bank Limited participated in the training course titled "@Model.trainingInfoNews?.course
+                " conducted by the Training Institute during @Model.trainingInfoNews?.startDate?.ToString("dd/MM/yyyy") to @Model.trainingInfoNews?.endDate?.ToString("dd/MM/yyyy") .
+
+            </div>
+
+            <div id="cert-footer">
+                <div id="cert-issued-by">
+
+                    <hr>
+                    <p style="color:gray;">Head of Training Institute</p>
+                </div>
+
+
+                <div id="cert-ceo-design">
+
+                    <hr>
+                    <p style="color:gray;">Managing  Director of (Add. Charge)</p>
+                </div>
+
+                <div>
+                    <p class="smaller text-center" id='cert-issued'>
+                        <b>Date :</b> @DateTime.Now.ToString("dd MMM yyyy")
+                    </p>
+                </div>
+
+            </div>
+            @*<div class="row pm-certificate-body">
+
+                    <div class="pm-certificate-block">
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="col-xs-2"></div>
+                                <div class="pm-certificate-name underline margin-0 col-xs-8 text-center">
+                                    <span class="pm-name-text bold">TrueNorth Administrator</span>
+                                </div>
+                                <div class="col-xs-2"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="col-xs-2"></div>
+                                <div class="pm-earned col-xs-8 text-center">
+                                    <span class="pm-earned-text padding-0 block cursive">has earned</span>
+                                    <span class="pm-credits-text block bold sans">PD175: 1.0 Credit Hours</span>
+                                </div>
+                                <div class="col-xs-2"></div>
+                                <div class="col-xs-12"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="col-xs-2"></div>
+                                <div class="pm-course-title col-xs-8 text-center">
+                                    <span class="pm-earned-text block cursive">while completing the training course entitled</span>
+                                </div>
+                                <div class="col-xs-2"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="col-xs-2"></div>
+                                <div class="pm-course-title underline col-xs-8 text-center">
+                                    <span class="pm-credits-text block bold sans">BPS PGS Initial PLO for Principals at Cluster Meetings</span>
+                                </div>
+                                <div class="col-xs-2"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12">
+                        <div class="row">
+                            <div class="pm-certificate-footer">
+                                <div class="col-xs-4 pm-certified col-xs-4 text-center">
+                                    <span class="pm-credits-text block sans">Buffalo City School District</span>
+                                    <span class="pm-empty-space block underline"></span>
+                                    <span class="bold block">Crystal Benton Instructional Specialist II, Staff Development</span>
+                                </div>
+                                <div class="col-xs-4">
+
+                                </div>
+                                <div class="col-xs-4 pm-certified col-xs-4 text-center">
+                                    <span class="pm-credits-text block sans">Date Completed</span>
+                                    <span class="pm-empty-space block underline"></span>
+                                    <span class="bold block">DOB: </span>
+                                    <span class="bold block">Social Security # (last 4 digits)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>*@
+
+        </div>
+    </div>
+
+
+</div>
+
+
+
+

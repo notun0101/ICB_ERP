@@ -1,0 +1,135 @@
+﻿
+@{
+    ViewData["Title"] = "EditChartAccount";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h5 class="m-0 font-weight-bold text-primary">Edit Accounts</h5>
+            </div>
+            <div class="card-body bg-white">
+
+                <form id="FormId">
+
+                    <div class="row col-sm-12">
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <label for="" class="col-sm-5 col-form-label">Journal No.</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control "  name="accountType" id="accountType">
+                                        <option>Current Asset</option>
+                                        <option>Fixed Asset</option>
+                                        <option>Cash & Cash Equivalent</option>
+                                        <option>Inventory</option>
+                                        <option>Accounts Receivable</option>
+                                        <option>Other Current Asset</option>
+                                        <option>Other Asset</option>
+                                        <option>Cost & Sale</option>
+                                        <option>Direct Cost</option>
+                                        <option>Overhead Cost</option>
+                                        <option>Expenses</option>
+                                        <option>Current Libality</option>
+                                        <option>Non-Current Libality</option>
+                                        <option>Accounts Payble</option>
+                                        <option>Other Libality</option>
+                                        <option>Sale</option>
+                                        <option>Other Income</option>
+
+                                    </select>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="" class="col-sm-5 col-form-label">Account Code</label>
+                                <div class="col-sm-6 ">
+                                    <input type="text" class="form-control" value="COA15464" name="accountCode" id="accountCode">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="" class="col-sm-5 col-form-label">Sub-Account of</label>
+                                <div class="col-sm-6 ">
+                                    <input type="text" class="form-control" value="Nom" name="subAccountOf" id="subAccountOf">
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <label for="" class="col-sm-5 col-form-label">Account Name</label>
+                                <div class="col-sm-6 ">
+                                    <input type="text" class="form-control" value="Nazrul Islam" name="accountName" id="accountName">
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <label for="" class="col-sm-5 col-form-label">Description</label>
+                                <div class="col-sm-6 ">
+                                    @*<input type="text" class="form-control" name="" id="">*@
+                                    <textarea class="form-control" rows="2"  name="description" id="description"></textarea>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+
+                    <button type="button" id="submit" class="btn btn-sm btn-success">Update</button> &nbsp;
+                    <button type="button" class="btn btn-sm btn-outline-info">Inactive</button>
+
+
+
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+    });
+
+    $('#submit').click(function () {
+        console.log($('#FormId').serializeArray());
+        var data = $('#FormId').serializeArray();
+
+        console.log(data[0].value)
+        swal({
+            title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+        }).then(function () {
+            $.ajax({
+                url: '/ProvidentFund/PFAccounting/EditChartAccount',
+                type: 'POST',
+                data: data
+            }).done(function () {
+                if (data[0].value == 0) {
+                    swal('success', 'Saved Successfully!', 'success').then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    swal('success', 'Updated Successfully!', 'success').then(function () {
+                        location.reload();
+                    });;
+                }
+            }).fail(function () {
+                swal('warning', 'Failed!', 'warning');
+            })
+        });
+    })
+
+</script>

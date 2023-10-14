@@ -1,0 +1,283 @@
+﻿@using DocumentFormat.OpenXml.Office.CustomUI;
+@model FixationPeriodViewModel
+
+@{
+    ViewData["Title"] = "CreateFixationPeriod";
+    Layout = "~/Areas/Payroll/Views/Shared/_SalaryMasterForm.cshtml";
+
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+        <h5 class="m-0 font-weight-bold text-primary">Fixation Period</h5>
+        <a class='btn btn-info mr-4' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1013&perentId=5926'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <form id = "formFixationPeriod" asp-area="payroll" asp-controller="FixationPeriod" asp-action="CreateFixationPeriod" method="post" data-parsley-validate="parsley">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="row">
+                    <input type="hidden" id="fixationPeriodId" name="fixationPeriodId" value=0>
+                    <input type="hidden" id="Id" name="Id" value="0">
+                    <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="PeriodName" class="col-sm-4 col-form-label">Period Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="PeriodName" id="PeriodName">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="FixationYear" class="col-sm-4 col-form-label">Fixation Year</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="FixationYear" name="FixationYear">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="FixationTypeId" class="col-sm-4 col-form-label">Fixation Type </label>
+                            <div class="col-sm-8">
+                               
+                                <select class="form-control" id="FixationTypeId" name="FixationTypeId" data-parsley-required="true">
+                                    <option value="">Select</option>
+                                    <option value="1">Increment</option>
+                                    <option value="2">Promotion</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="ContextId" class="col-sm-4 col-form-label">Context Name</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="ContextId" name="ContextId" data-parsley-required="true">
+                                    <option value="">Select</option>
+                                    <option value="1">Individual</option>
+                                    <option value="2">All</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="LockLevel" class="col-sm-4 col-form-label">Lock Level</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="LockLevel" name="LockLevel" data-parsley-required="true">
+                                    <option value="">Select</option>
+                                    <option value="1">Lock</option>
+                                    <option value="2">Unlock</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <hr>
+                <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+                <button type="button" id="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i>Save</button>
+            </form>
+
+        </div>
+   
+
+<br />
+<br />
+<br />
+<br />
+<table class="table table-bordered table-hover table-striped" id="fixationPeriodTable">
+    <thead>
+        <tr>
+            
+            <th>Period Name</th>
+            <th>Fixation Year</th>
+            <th>Fixation Type</th>
+            <th>Context Name</th>
+            <th>Lock Level</th>
+            
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.fixationPeriods)
+        {
+            <tr>
+                     
+                        <td>@item?.PeriodName</td>
+                        <td>@item?.FixationYear.ToString()</td>
+                       
+                        <td>
+                            @if (item?.FixationTypeId == 1)
+                            {
+                                <label>Increment</label>
+                            }
+                            else
+                            {
+                                <label>Promotion</label>
+                            }
+                        </td>
+                        <td>
+                            @if (item?.ContextId == 1)
+                            {
+                                <label>Individual</label>
+                            }
+                            else
+                            {
+                                <label>All</label>
+                            }
+                        </td>
+                        <td>
+                            @if (item?.LockLevel == 1)
+                            {
+                                <label>Lock</label>
+                            }
+                            else
+                            {
+                                <label>Unlock</label>
+                            }
+                        </td>
+                <td>
+                    <a href="javascript:void(0)" class="btn btn-info btn-sm" onclick="Edit(@item?.Id,'@item?.PeriodName', @item?.FixationYear, @item?.FixationTypeId, @item?.ContextId,  @item.LockLevel)">Edit</a>
+                    <a href="javascript:void(0)" class="btn btn-danger btn-sm" onclick="Delete(@item.Id)">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+   </table>
+  </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#submit").click(function () {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+            }).then(function () {
+                 //alert(hi);
+                var pName = $("#PeriodName").val();
+                if (pName == '' || pName == null || pName == 'undefined') {
+                    alert('Please enter Period Name');
+                    return false;
+                }
+
+               
+                var fYear = $("#FixationYear").val();
+                if (fYear == '' || fYear == null || fYear == 'undefined') {
+                    alert('Please enter Fixation Year');
+                    return false;
+                }
+
+                var fTypeId = $("#FixationTypeId option:selected").val();
+                if (fTypeId == '' || fTypeId == null || fTypeId == 'undefined') {
+                    alert('Please select Fixation Type');
+                    return false;
+                }
+
+                var CtId = $("#ContextId option:selected").val();
+                if (CtId == '' || CtId == null || CtId == 'undefined') {
+                    alert('Please select Context Name');
+                    return false;
+                }
+
+                var lLevel = $("#LockLevel option:selected").val();
+                if (lLevel == '' || lLevel == null || lLevel == 'undefined') {
+                    alert('Please select Lock Level');
+                    return false;
+                }
+
+
+
+                var form = $("#formFixationPeriod");
+                $.ajax({
+                    url: '/Payroll/FixationPeriod/CreateFixationPeriod',
+                    data: form.serialize(),
+                    type: 'POST',
+                    success: function (data) {
+                        if (data.Status != "NOK") {
+                            swal({
+                                title: '', text: 'Save Successfully!', type: 'success', showCancelButton: false, confirmButtonColor: '#3085d6', confirmButtonText: 'Ok!',
+                            }).then(function () {
+                                window.location.href = "/Payroll/FixationPeriod/CreateFixationPeriod";
+                            });
+                        } else {
+                            alert(data.Message);
+                        }
+                    }
+                });
+
+                //$("#submitbtn").click();
+
+            });
+        });
+
+        $('#fixationPeriodTable').DataTable({
+            stateSave: false,
+            dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                "<'row'<'col-sm-12't>>" +
+                "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fa fa-file-excel"></i> Excel',
+                    titleAttr: 'Excel',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3]
+                    },
+                    title: "District Information",
+                    messageTop: 'List Of District Information',
+                    class: 'btn btn-info'
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: '<i class="fa fa-file-excel"></i> CSV',
+                    titleAttr: 'CSV',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3]
+                    },
+                    title: "District Information",
+                    messageTop: 'List Of District Information',
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i> Print',
+                    titleAttr: 'Print',
+                    title: "District Information",
+                    exportOptions: {
+                        columns: [0, 1, 2, 3]
+                    },
+                    customize: function (doc) {
+                        $(doc.document.body).find('h1').css('font-size', '20pt');
+                        $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                        $(doc.document.body).find('h1').css('text-align', 'center');
+                    }
+                }
+            ]
+        });
+
+    });
+    function Edit(Id, periodName, fixationYear, fixationTypeId, contextId, lockLevel) {
+
+        //console.log(Id);
+
+        $('#Id').val(Id);
+        $('#PeriodName').val(periodName);
+        $('#FixationYear').val(fixationYear);
+        $('#FixationTypeId').val(fixationTypeId);
+        $('#ContextId').val(contextId);
+        $('#LockLevel').val(lockLevel);
+    }
+    function Delete(Id) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+                $.ajax({
+                    url: "/Payroll/FixationPeriod/DeleteFixationPeriod?id=" + Id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (res) {
+                        swal('', 'Deleted Successfully!', 'success').then(function () {
+                            location.reload();
+                        })
+                    }
+                });
+            });
+        }
+</script>
+
+

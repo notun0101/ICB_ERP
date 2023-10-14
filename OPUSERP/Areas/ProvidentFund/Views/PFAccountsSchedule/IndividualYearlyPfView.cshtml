@@ -1,0 +1,173 @@
+﻿@model OPUSERP.Areas.Payroll.Models.PFLoanViewModel
+@{
+	ViewData["Title"] = "IndividualYearlyPfView";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+@section Style{
+	<style>
+		.print-card-body {
+			width: 100%;
+			padding-bottom: 10px;
+		}
+
+		.vartical-table th {
+			width: 25%;
+		}
+
+		.vartical-table td {
+			width: 25%;
+		}
+
+		.table td, .table th {
+			padding: .3rem;
+			font-size: 14px;
+		}
+
+		table {
+			page-break-inside: auto;
+			border-collapse: collapse;
+		}
+
+		tr {
+			page-break-inside: avoid;
+			page-break-after: auto;
+		}
+
+		thead {
+			display: table-header-group;
+		}
+
+		tfoot {
+			display: table-footer-group;
+		}
+
+		h6 {
+			font-size: 14px;
+			background-color: gray;
+			color: white !important;
+			padding: 3px;
+		}
+
+		th {
+			border: 1px solid;
+		}
+	</style>
+}
+
+<div class="print-card" style="width: 100%;">
+	<div class="print-card-body">
+
+		<div class="container-fluid">
+			<div class="fa-pull-right">
+				<p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+			</div>
+			<div class="row" style="padding-top:0px;">
+				<div class="col-2">
+					<img src="/EmpImages/@Model.companies?.FirstOrDefault()?.filePath" alt="BDBL Logo" style="height:80px;" />
+				</div>
+				<div class="col-8">
+					<div style="color:black;text-align:center;">
+						<h3 style="font-size:20px;">BANGLADESH DEVELOPMENT BANK LIMITED</h3>
+						<h3 style="font-size:20px;">HEAD OFFICE: DHAKA</h3>
+						<h3 style="font-size:18px;">Central Accounts Depertment</h3>
+						<h3 style="font-size:15px;">(Provident Fund Section) </h3>
+						<h3 style="font-size:20px;">
+							@*<u> Provident Fund Account Statement from @Model.firstDate?.ToString("dd-MMM-yy") to @Model.lastDate?.ToString("dd-MMM-yy")</u>*@
+							<u>Employee PF Yearly Report</u>
+						</h3>
+						<br />
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid" style="color:black;">
+			<div class="row">
+				<div class="col-4">
+					<h3 style="font-size:15px;">PF: @Model.pFMember?.Id </h3>
+				</div>
+				<div class="col-4">
+					<h3 style="font-size:15px;">Name: @Model.pFMember?.memberName </h3>
+				</div>
+				<div class="col-4">
+					<h3 style="font-size:15px;">Designation: @Model.pFMember?.employeeInfo?.lastDesignation?.designationName </h3>
+				</div>
+
+			</div>
+			<br />
+
+
+			<table class="table table-default table-bordered">
+				<thead>
+					<tr style="border-bottom: 1px solid !important">
+						@*<th>Sl</th>*@
+						<th>Date</th>
+						<th>Description</th>
+						<th>Amount</th>
+						@*<th></th>*@
+						<th>Monthly Product Calculation</th>
+						<th>Average Product/Year</th>
+						<th>Intt. On Product During The Year</th>
+						<th>Closing Bal. On 31.12.2018</th>
+					</tr>
+				</thead>
+				<tbody>
+					@{
+						int i = 0;
+						decimal totalAmount = 0;
+						decimal totalMonthPro = 0;
+					}
+					@foreach (var item in Model.pFYearlyIndividuals)
+					{
+						i++;
+
+						var monthPro = @Convert.ToDecimal(item.pfAmount) * @Convert.ToInt32(item.MonthOrder);
+						var avgPro = @Convert.ToDecimal(Model.pFYearlyIndividuals.Sum(x => Convert.ToDecimal(x.pfAmount) * Convert.ToInt32(x.MonthOrder))) / @Convert.ToInt32(12);
+						var intPro = avgPro * 13 / 100;
+						var final = avgPro + intPro;
+
+						<tr>
+							@*<td>@i</td>*@
+							<td>@item.effectiveDate</td>
+							<td>@item.description</td>
+							<td style="text-align: right;">@String.Format("{0:n0}", item.pfAmount)</td>
+							@*<td>@item.MonthOrder</td>*@
+							<td style="text-align: right;">@String.Format("{0:n0}", Math.Round(monthPro))</td>
+							@if (i == 1)
+							{
+								<td rowspan="13" style="text-align: center;">@String.Format("{0:n2}", Math.Round(avgPro))</td>
+								<td rowspan="13" style="text-align: center;">@String.Format("{0:n2}", Math.Round(intPro))</td>
+								<td rowspan="13" style="text-align: center;">@String.Format("{0:n2}", Math.Round(final))</td>
+							}
+						</tr>
+						totalAmount += Convert.ToDecimal(item.pfAmount);
+						totalMonthPro += Convert.ToDecimal(monthPro);
+					}
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td style="text-align: right;">@String.Format("{0:n2}", Math.Round(totalAmount))</td>
+						<td></td>
+						<td style="text-align: right;">@String.Format("{0:n2}", Math.Round(totalMonthPro))</td>
+						<td style="text-align: center;"></td>
+						<td style="text-align: center;"></td>
+						<td style="text-align: center;"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+
+@section Scripts{
+	<script>
+		$(document).ready(function () {
+			alert(numberWithCommas(50000))
+		})
+		function numberWithCommas(x) {
+			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+	</script>
+}

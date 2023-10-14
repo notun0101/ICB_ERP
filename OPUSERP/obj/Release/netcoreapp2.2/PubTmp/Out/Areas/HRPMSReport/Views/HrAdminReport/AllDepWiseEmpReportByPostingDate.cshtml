@@ -1,0 +1,206 @@
+﻿@model AllHrReportViewModel
+@{
+    ViewData["Title"] = "Division Wise Report";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+@section Style{
+    <style>
+
+        .print-card-body {
+            width: 100%;
+            padding-bottom: 10px;
+        }
+
+        .vartical-table th {
+            width: 25%;
+        }
+
+        .vartical-table td {
+            width: 25%;
+        }
+
+        .table td, .table th {
+            padding: .3rem;
+            font-size: 14px;
+        }
+
+        table {
+            page-break-inside: auto;
+            border-collapse: collapse;
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        tfoot {
+            display: table-footer-group;
+        }
+
+       
+    </style>
+}
+
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+
+        <div class="container-fluid">
+            <div class="fa-pull-right">
+                <p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+            </div>
+            <div class="row" style="padding-top:0px;">
+                <div class="col-2">
+                    <img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="OPUS ERP" style="height:80px;" />
+                </div>
+                <div class="col-8">
+                    <div style="color:black;text-align:center;">
+                        <h5 >BANGLADESH DEVELOPMENT BANK LIMITED</h5>
+                        <h5 >HEAD OFFICE: DHAKA</h5>
+                        <h5 ><u>HUMAN RESOURCE MANAGEMENT DEPARTMENT</u></h5>
+                        <h6 ><u>Department Wise Employee Information List As on @ViewBag.postingdate?.ToString("dd/MM/yyyy")</u></h6>
+
+                        <br />
+                    </div>
+                </div>
+                <div class="col-2"></div>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="container-fluid" style="color:black;">
+
+
+            <div class="row" style="padding: 0px 15px 0px 15px;">
+
+                <table class="table table-bordered" id="myTable">
+                    <thead style="border: 1px solid black;">
+                        <tr style="background-color:lightgray; border: 1px solid black;">
+                            <th style="text-align:center;width:2%;border: none; border: 1px solid black;">Name of Department</th>
+                            <th style="text-align:center;width:4%;border: none; border: 1px solid black;"><span>Strength</span> <br /><span style="border-right: 1px solid">Sanc.</span><span>Exist</span> </th>
+                            <th style="text-align:center;width:11%;border: none; border: 1px solid black;">NAME</th>
+                            <th style="text-align:center;width:16%;border: none; border: 1px solid black;">Qualification</th>
+                            <th style="text-align:center;width:2%;border: none; border: 1px solid black;">File No</th>
+                            <th style="text-align:center;width:2%;border: none; border: 1px solid black;">Posting Date</th>
+                            <th style="text-align:center;width:4%;border: none; border: 1px solid black;">Home District</th>
+                        </tr>
+                    </thead>
+
+                    @foreach (var item1 in Model.allDivisionEmpViewModels)
+                    {
+
+                        int counter = 0;
+
+                        <tbody>
+
+                            <tr style="background-color:#faf6f6 ;border: none;">
+                                <td colspan="7" style="border: none; font-weight:bold"><u>@item1.department?.deptName</u> </td>
+
+
+                            </tr>
+                            @foreach (var data in item1.divEmpListVM)
+                            {
+
+
+
+                                <tr id="tr1">
+
+                                    <td style="border: none; width:2%;">@data.designation</td>
+
+                                    <td colspan="6" style="padding: 0; border:none">
+
+                                        <table style="width:100%; border:none;">
+
+                                            @{
+                                                var i = 0;
+
+                                                @foreach (var item in data.DegWiseEmpList)
+                                                {
+
+                                                    i++;
+                                                    <tr>
+                                                        <td style="text-align:center;border: none; width:12%">@i</td>
+                                                        <td style="width:17%;border: none;">
+                                                            @item.nameEnglish
+                                                        </td>
+                                                        <td style="border:none;width:30%">
+                                                            @item.qualification
+
+                                                        </td>
+                                                        <td style="width:83px;border: none;">
+                                                            @item.employeeCode
+                                                        </td>
+                                                        <td style="border: none;">
+                                                            @item.postingDate?.ToString("dd/MM/yyyy")
+                                                        </td>
+                                                        <td style="border: none;">
+                                                            @item.homeDistrict
+
+                                                        </td>
+
+
+                                                    </tr>
+
+                                                    counter++;
+
+                                                }
+
+                                            }
+                                        </table>
+                                    </td>
+
+                                </tr>
+
+
+
+                                                   
+
+                                                }
+                            <tr>
+                                <th style="border: none;">Sub Total</th>
+                                <td style="text-align:center;padding-right:30px">@counter  </td>
+                            </tr>
+
+
+                        </tbody>
+                    }
+                </table>
+            </div>
+
+
+
+
+            <br />
+
+
+        </div>
+
+
+
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Assets/paginathing.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            //var rowCount = $('#myTable >tbody >#tr1').length;
+            //alert(rowCount)
+
+
+
+        });
+
+    </script>
+
+
+}

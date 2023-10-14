@@ -1,0 +1,465 @@
+﻿@model PayrollReportViewModel
+@{
+	ViewData["Title"] = "StaffLoanTypeWiseReportView";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+
+<style>
+
+	.print-card-body {
+		width: 100%;
+		padding-bottom: 10px;
+	}
+
+	.vartical-table th {
+		width: 25%;
+	}
+
+	.vartical-table td {
+		width: 25%;
+	}
+
+	.table td, .table th {
+		padding: .3rem;
+		font-size: 14px;
+		border: 1px solid black !important;
+	}
+
+	table {
+		page-break-inside: auto;
+		border-collapse: collapse;
+		border: 1px solid black !important;
+	}
+
+	tr {
+		page-break-inside: avoid;
+		page-break-after: auto;
+		border: 1px solid black !important;
+	}
+
+	thead {
+		display: table-header-group;
+		border: 1px solid black !important;
+	}
+
+	tfoot {
+		display: table-footer-group;
+		border: 1px solid black !important;
+	}
+
+	h6 {
+		font-size: 14px;
+		background-color: gray;
+		color: white !important;
+		padding: 3px;
+	}
+</style>
+
+
+<div class="print-card" style="width: 100%;">
+	<div class="print-card-body">
+
+		<div class="container-fluid">
+			@*<div class="fa-pull-right">
+				<p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+			</div>*@
+			<div class="row" style="padding-top:0px;">
+				<div class="col-2">
+					<img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="BDBL Logo" style="height:80px;" />
+				</div>
+				<div class="col-8">
+					<div style="color:black;text-align:center;">
+						<h3 style="font-size:20px;">@Model.companies.FirstOrDefault()?.companyName</h3>
+						<h3 style="font-size:18px;">Central Accounts Department</h3>
+						<h3 style="font-size:18px;">Staff Loan Balance As On @Convert.ToDateTime(ViewBag.asonDate).ToString("dd MMMM yyyy")</h3>
+						<h3 style="font-size:18px;"> @(Model.staffLoanAsOn.FirstOrDefault()?.branchName == null ? "All Branch" : Model.staffLoanAsOn.FirstOrDefault()?.branchName)</h3>
+						<br />
+					</div>
+				</div>
+				<div class="col-2">
+
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid ">
+			<div class="col-12">
+				<h3 style="font-size:18px;color:black"> </h3>
+			</div>
+		</div>
+		<br />
+		<div class="container-fluid" style="color:black;">
+			@if (Model.staffLoanAsOn.Where(x => x.loanType == "HBA-B13").Count() > 0)
+			{
+				<br />
+				<h5><u>House Building Loan (Before 2013)</u></h5>
+				@foreach (var item in Model.designations)
+				{
+					if (Model.staffLoanAsOn.Where(x => x.designationName == item.designationName && x.loanType == "HBA-B13").Count() > 0)
+					{
+						<h5>@item.designationName</h5>
+						<table class="table table-bordered">
+							<thead>
+								<tr style="text-align: center;">
+									<th>Emp Id</th>
+									<th>Name</th>
+									<th>A/C</th>
+									<th>Loan Type</th>
+									<th>Int. Rate</th>
+									<th>Principal</th>
+									<th>Interest</th>
+									<th>Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								@{
+									int count = 0;
+									decimal totalPrincipal = 0;
+									decimal totalInterest = 0;
+									decimal totalTotal = 0;
+
+								}
+								@foreach (var data in Model.staffLoanAsOn.Where(x => x.designationName == item.designationName && x.loanType == "HBA-B13"))
+								{
+									<tr>
+										<td>@data.empCode</td>
+										<td>@data.employeeName</td>
+										<td style="text-align: center;">@data.accountNo</td>
+										<td style="text-align: center;">@data.loanType</td>
+										<td style="text-align: center;">
+											@if (data.loanType == "MCAR")
+											{
+												<span>0</span>
+											}
+											else
+											{
+												<span>4</span>
+											}
+										</td>
+										<td style="text-align: right;">@data.Principal?.ToString("N2")</td>
+										<td style="text-align: right;">@data.Interest?.ToString("N2")</td>
+										<td style="text-align: right;">@data.Total?.ToString("N2")</td>
+									</tr>
+									count++;
+									totalPrincipal += Convert.ToDecimal(data.Principal);
+									totalInterest += Convert.ToDecimal(data.Interest);
+									totalTotal += Convert.ToDecimal(data.Total);
+								}
+								<tr>
+									<td style="text-align: right;" colspan="5">Total</td>
+									<td style="text-align: right;">@totalPrincipal.ToString("N2")</td>
+									<td style="text-align: right;">@totalInterest.ToString("N2")</td>
+									<td style="text-align: right;">@totalTotal.ToString("N2")</td>
+								</tr>
+							</tbody>
+						</table>
+					}
+				}
+				
+				<table class="table table-bordered">
+					<tbody>
+						<tr>
+							<td style="text-align: right;" colspan="5">Total</td>
+							<td style="text-align: right;">Hello</td>
+							<td style="text-align: right;">0</td>
+							<td style="text-align: right;">@Model.staffLoanAsOn.Where(x => x.loanType == "HBA-B13").Sum(x => x.Total)?.ToString("N2")</td>
+						</tr>
+					</tbody>
+				</table>
+			}
+
+
+
+			@if (Model.staffLoanAsOn.Where(x => x.loanType == "HBA-A13").Count() > 0)
+			{
+				<br />
+				<h5><u>House Building Loan (After 2013)</u></h5>
+				@foreach (var item in Model.designations)
+				{
+					if (Model.staffLoanAsOn.Where(x => x.designationName == item.designationName && x.loanType == "HBA-A13").Count() > 0)
+					{
+						<h5>@item.designationName</h5>
+						<table class="table table-bordered">
+							<thead>
+								<tr style="text-align: center;">
+									<th>Emp Id</th>
+									<th>Name</th>
+									<th>A/C</th>
+									<th>Loan Type</th>
+									<th>Int. Rate</th>
+									<th>Principal</th>
+									<th>Interest</th>
+									<th>Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								@{
+									int count = 0;
+									decimal totalPrincipal = 0;
+									decimal totalInterest = 0;
+									decimal totalTotal = 0;
+
+								}
+								@foreach (var data in Model.staffLoanAsOn.Where(x => x.designationName == item.designationName && x.loanType == "HBA-A13"))
+								{
+									<tr>
+										<td>@data.empCode</td>
+										<td>@data.employeeName</td>
+										<td style="text-align: center;">@data.accountNo</td>
+										<td style="text-align: center;">@data.loanType</td>
+										<td style="text-align: center;">
+											@if (data.loanType == "MCAR")
+											{
+												<span>0</span>
+											}
+											else
+											{
+												<span>4</span>
+											}
+										</td>
+										<td style="text-align: right;">@data.Principal?.ToString("N2")</td>
+										<td style="text-align: right;">@data.Interest?.ToString("N2")</td>
+										<td style="text-align: right;">@data.Total?.ToString("N2")</td>
+									</tr>
+									count++;
+									totalPrincipal += Convert.ToDecimal(data.Principal);
+									totalInterest += Convert.ToDecimal(data.Interest);
+									totalTotal += Convert.ToDecimal(data.Total);
+								}
+								<tr>
+									<td style="text-align: right;" colspan="5">Total</td>
+									<td style="text-align: right;">@totalPrincipal.ToString("N2")</td>
+									<td style="text-align: right;">@totalInterest.ToString("N2")</td>
+									<td style="text-align: right;">@totalTotal.ToString("N2")</td>
+								</tr>
+							</tbody>
+						</table>
+					}
+				}
+
+			}
+
+
+
+
+
+			@if (Model.staffLoanAsOn.Where(x => x.loanType == "MCA").Count() > 0)
+			{
+				<br />
+				<h5><u>Motor Cycle Loan</u></h5>
+				@foreach (var item in Model.designations)
+				{
+					if (Model.staffLoanAsOn.Where(x => x.designationName == item.designationName && x.loanType == "MCA").Count() > 0)
+					{
+						<h5>@item.designationName</h5>
+						<table class="table table-bordered">
+							<thead>
+								<tr style="text-align: center;">
+									<th>Emp Id</th>
+									<th>Name</th>
+									<th>A/C</th>
+									<th>Loan Type</th>
+									<th>Int. Rate</th>
+									<th>Principal</th>
+									<th>Interest</th>
+									<th>Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								@{
+									int count = 0;
+									decimal totalPrincipal = 0;
+									decimal totalInterest = 0;
+									decimal totalTotal = 0;
+
+								}
+								@foreach (var data in Model.staffLoanAsOn.Where(x => x.designationName == item.designationName && x.loanType == "MCA"))
+								{
+									<tr>
+										<td>@data.empCode</td>
+										<td>@data.employeeName</td>
+										<td style="text-align: center;">@data.accountNo</td>
+										<td style="text-align: center;">@data.loanType</td>
+										<td style="text-align: center;">
+											@if (data.loanType == "MCAR")
+											{
+												<span>0</span>
+											}
+											else
+											{
+												<span>4</span>
+											}
+										</td>
+										<td style="text-align: right;">@data.Principal?.ToString("N2")</td>
+										<td style="text-align: right;">@data.Interest?.ToString("N2")</td>
+										<td style="text-align: right;">@data.Total?.ToString("N2")</td>
+									</tr>
+									count++;
+									totalPrincipal += Convert.ToDecimal(data.Principal);
+									totalInterest += Convert.ToDecimal(data.Interest);
+									totalTotal += Convert.ToDecimal(data.Total);
+								}
+								<tr>
+									<td style="text-align: right;" colspan="5">Total</td>
+									<td style="text-align: right;">@totalPrincipal.ToString("N2")</td>
+									<td style="text-align: right;">@totalInterest.ToString("N2")</td>
+									<td style="text-align: right;">@totalTotal.ToString("N2")</td>
+								</tr>
+							</tbody>
+						</table>
+					}
+				}
+
+			}
+
+
+
+
+
+
+			@if (Model.staffLoanAsOn.Where(x => x.loanType == "MCAR").Count() > 0)
+			{
+				<br />
+				<h5><u>Motor Car Loan</u></h5>
+				@foreach (var item in Model.designations)
+				{
+					if (Model.staffLoanAsOn.Where(x => x.designationName == item.designationName && x.loanType == "MCAR").Count() > 0)
+					{
+						<h5>@item.designationName</h5>
+						<table class="table table-bordered">
+							<thead>
+								<tr style="text-align: center;">
+									<th>Emp Id</th>
+									<th>Name</th>
+									<th>A/C</th>
+									<th>Loan Type</th>
+									<th>Int. Rate</th>
+									<th>Principal</th>
+									<th>Interest</th>
+									<th>Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								@{
+									int count = 0;
+									decimal totalPrincipal = 0;
+									decimal totalInterest = 0;
+									decimal totalTotal = 0;
+
+								}
+								@foreach (var data in Model.staffLoanAsOn.Where(x => x.designationName == item.designationName && x.loanType == "MCAR"))
+								{
+									<tr>
+										<td>@data.empCode</td>
+										<td>@data.employeeName</td>
+										<td style="text-align: center;">@data.accountNo</td>
+										<td style="text-align: center;">@data.loanType</td>
+										<td style="text-align: center;">
+											@if (data.loanType == "MCAR")
+											{
+												<span>0</span>
+											}
+											else
+											{
+												<span>4</span>
+											}
+										</td>
+										<td style="text-align: right;">@data.Principal?.ToString("N2")</td>
+										<td style="text-align: right;">@data.Interest?.ToString("N2")</td>
+										<td style="text-align: right;">@data.Total?.ToString("N2")</td>
+									</tr>
+									count++;
+									totalPrincipal += Convert.ToDecimal(data.Principal);
+									totalInterest += Convert.ToDecimal(data.Interest);
+									totalTotal += Convert.ToDecimal(data.Total);
+								}
+								<tr>
+									<td style="text-align: right;" colspan="5">Total</td>
+									<td style="text-align: right;">@totalPrincipal.ToString("N2")</td>
+									<td style="text-align: right;">@totalInterest.ToString("N2")</td>
+									<td style="text-align: right;">@totalTotal.ToString("N2")</td>
+								</tr>
+							</tbody>
+						</table>
+					}
+				}
+
+			}
+
+
+
+
+
+
+			@if (Model.staffLoanAsOn.Where(x => x.loanType == "CL").Count() > 0)
+			{
+				<br />
+				<h5><u>Computer Loan</u></h5>
+				@foreach (var item in Model.designations)
+				{
+					if (Model.staffLoanAsOn.Where(x => x.designationName == item.designationName && x.loanType == "CL").Count() > 0)
+					{
+						<h5>@item.designationName</h5>
+						<table class="table table-bordered">
+							<thead>
+								<tr style="text-align: center;">
+									<th>Emp Id</th>
+									<th>Name</th>
+									<th>A/C</th>
+									<th>Loan Type</th>
+									<th>Int. Rate</th>
+									<th>Principal</th>
+									<th>Interest</th>
+									<th>Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								@{
+									int count = 0;
+									decimal totalPrincipal = 0;
+									decimal totalInterest = 0;
+									decimal totalTotal = 0;
+
+								}
+								@foreach (var data in Model.staffLoanAsOn.Where(x => x.designationName == item.designationName && x.loanType == "CL"))
+								{
+									<tr>
+										<td>@data.empCode</td>
+										<td>@data.employeeName</td>
+										<td style="text-align: center;">@data.accountNo</td>
+										<td style="text-align: center;">@data.loanType</td>
+										<td style="text-align: center;">
+											@if (data.loanType == "MCAR")
+											{
+												<span>0</span>
+											}
+											else
+											{
+												<span>4</span>
+											}
+										</td>
+										<td style="text-align: right;">@data.Principal?.ToString("N2")</td>
+										<td style="text-align: right;">@data.Interest?.ToString("N2")</td>
+										<td style="text-align: right;">@data.Total?.ToString("N2")</td>
+									</tr>
+									count++;
+									totalPrincipal += Convert.ToDecimal(data.Principal);
+									totalInterest += Convert.ToDecimal(data.Interest);
+									totalTotal += Convert.ToDecimal(data.Total);
+								}
+								<tr>
+									<td style="text-align: right;" colspan="5">Total</td>
+									<td style="text-align: right;">@totalPrincipal.ToString("N2")</td>
+									<td style="text-align: right;">@totalInterest.ToString("N2")</td>
+									<td style="text-align: right;">@totalTotal.ToString("N2")</td>
+								</tr>
+							</tbody>
+						</table>
+					}
+				}
+
+			}
+		</div>
+	</div>
+</div>
+

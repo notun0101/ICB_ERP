@@ -1,0 +1,113 @@
+﻿@model IEnumerable<TrainingWithPerticipantVm>
+@{
+	ViewData["Title"] = "SubjectwiseTrainningReport";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+<div class="container mt-5">
+    <h3 class="text-center" style="color:black">Subject wise Trainning Report</h3>
+	<hr />
+
+    @foreach (var item in Model)
+    {
+    <div style="width: 100%; background-color: white; color: black; font-size: 17px; margin-bottom: 10px;">
+        <div style="width: 50%; border: 1px solid black; padding: 10px 5px;float: left; height: 220px;">
+            Course Title: <span style="font-weight: bold">@item.training?.course</span><br />
+            Subject: <span>@item.training?.subject?.name</span><br />
+            Start Date: <span>@item.training?.startDate?.ToString("dd-MMM-yyyy")</span><br />
+            End Date: <span>@item.training?.endDate?.ToString("dd-MMM-yyyy")</span><br />
+            Perticipants: <span>@item.training?.noOfParticipants</span><br />
+            Amount: <span>@item.training?.amount</span><br />
+            Budget: <span>@item.training?.budget</span><br />
+        </div>
+        <div style="width: 50%; border: 1px solid black; padding: 10px 5px; float: left; height: 220px;">
+            Trainer Name : <span>@item.training?.trainer?.name</span><br />
+            Performance : <span>@item.training?.trainer?.performance</span><br />
+            Specialization : <span>@item.training?.trainer?.specialization</span><br />
+            Remarks: <span>@item.training?.trainer?.remarks</span><br />
+        </div>
+       
+    </div>
+       
+     
+      <div style="margin-top:6%;">
+          <div>
+              <h4 style="color:black;">Trainee Information :</h4>
+          </div>
+          <br />
+          <table class="table">
+              <thead>
+                  <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Phone</th>
+                      <th>Designation</th>
+                      <th>Attendance</th>
+                      <th>Marks</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  @foreach (var data in item.trainees)
+                  {
+                      <tr>
+                          <td>@data.name</td>
+                          <td>@data.email</td>
+                          <td>@data.mobile</td>
+                          <td>@data.employee?.lastDesignation?.designationName</td>
+                          @if (data.isPresent == 0)
+                          {
+                              <td>Absent</td>
+                          }
+                          else
+                          {
+                              <td><b>Present</b></td>
+                          }
+                          <td>
+                              @data.marks
+                          </td>
+                      </tr>
+                  }
+              </tbody>
+          </table>
+      </div>
+        <br />
+        <hr />
+        <br />
+    }
+</div>
+@*<div class="container mt-5">
+    <h3 class="text-center" style="color:black">Subject Wise Training  Report</h3>
+    <hr />
+
+    @foreach (var item in Model)
+    {
+        <div style="background-color: lightgray; padding: 5px;">
+            <h4 style="color:black;  font-family: arial, sans-serif; font-size:150%">Course Title:@item.training?.course</h4>
+            <h4 style="color:black;  font-family: arial, sans-serif; font-size:150%">Subject Title:@item.training?.subject?.name</h4>
+            <h3 style="color:black;  font-family: arial, sans-serif; font-size:150%">Trainer Name:@item.training?.trainer?.name</h3>
+        </div>
+
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Designation</th>
+                        <th>Marks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var data in item.trainees)
+                    {
+                        <tr>
+                            <td>@data.name</td>
+                            <td>@data.designation</td>
+                            <td>
+                                @data.marks
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>*@

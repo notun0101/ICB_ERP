@@ -1,0 +1,160 @@
+﻿@{
+	ViewData["Title"] = "Appointment";
+	Layout = "~/Areas/Payroll/Views/Shared/_SalaryMasterForm.cshtml";
+}
+<style>
+	.cabin {
+		text-align: center;
+		width: 100%;
+		height: 100px;
+		background-color: #E5E7E9;
+		border: 1px solid gray;
+	}
+	#calendar {
+		max-width: 1000px !important;
+		margin: 0 auto;
+	}
+	.fc-day-past a{
+		color: black;
+	}
+	.card p{
+		padding: 5px;
+		background-color: 5px;
+	}
+	/*.cabin:hover {
+			background-color: gray;
+		}*/
+</style>
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.5.1/main.css" rel="stylesheet" />
+<br />
+<br />
+<div class="row">
+	<div class="col-md-3">
+		<div class="card">
+			<img src="~/images/defaultperson.png" style="width: 150px; height: 150px; border-radius: 50%; margin: 0 auto; margin-top: 10px;" class="card-img-top" />
+			<div class="card-body text-center card">
+				<p>Name: Dr. ABC</p>
+				<p>Specialist: Surgeon</p>
+				<p>Education: DMC</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-8" id="calendar">
+
+	</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<p id="bedDescription"></p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section ScriptsMD{
+	<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.5.1/main.js"></script>
+	<script>
+		$(document).ready(function () {
+			$('.fc-day-past').css('disabled', true);
+		})
+		document.addEventListener('DOMContentLoaded', function () {
+			var calendarEl = document.getElementById('calendar');
+
+			var calendar = new FullCalendar.Calendar(calendarEl, {
+				headerToolbar: {
+					left: 'prev,next today',
+					center: 'title',
+					right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+				},
+				initialDate: Date.now(),
+				navLinks: true, // can click day/week names to navigate views
+				businessHours: true, // display business hours
+				editable: true,
+				selectable: true,
+				dateClick: function (info) {
+					ClickDate(1, info.dateStr);
+				},
+				events: [
+					{
+						title: 'Booked: 2, Free: 7',
+						start: '2021-03-18',
+						constraint: 'Available For Booking', // defined below
+						color: '#257e4a'
+					},
+					{
+						title: 'Booked: 9, Free: 0',
+						start: '2021-03-20',
+						constraint: 'Booked All Slots', // defined below
+						color: 'red'
+					}
+				]
+				//events: [
+				//	{
+				//		title: 'Business Lunch',
+				//		start: '2020-09-03T13:00:00',
+				//		constraint: 'businessHours'
+				//	},
+				//	{
+				//		title: 'Booked: 2, Free: 5',
+				//		start: '2021-03-18',
+				//		constraint: 'Available For Booking', // defined below
+				//		color: '#257e4a'
+				//	},
+				//	{
+				//		title: 'Conference',
+				//		start: '2020-09-18',
+				//		end: '2020-09-20'
+				//	},
+				//	{
+				//		title: 'Party',
+				//		start: '2020-09-29T20:00:00'
+				//	},
+
+				//	// areas where "Meeting" must be dropped
+				//	{
+				//		groupId: 'availableForMeeting',
+				//		start: '2020-09-11T10:00:00',
+				//		end: '2020-09-11T16:00:00',
+				//		display: 'background'
+				//	},
+				//	{
+				//		groupId: 'availableForMeeting',
+				//		start: '2020-09-13T10:00:00',
+				//		end: '2020-09-13T16:00:00',
+				//		display: 'background'
+				//	},
+
+				//	// red areas where no events can be dropped
+				//	{
+				//		start: '2020-09-24',
+				//		end: '2020-09-28',
+				//		overlap: false,
+				//		display: 'background',
+				//		color: '#ff9f89'
+				//	},
+				//	{
+				//		start: '2020-09-06',
+				//		end: '2020-09-08',
+				//		overlap: false,
+				//		display: 'background',
+				//		color: '#ff9f89'
+				//	}
+				//]
+			});
+
+			calendar.render();
+			calendar.setOption('width', 700);
+		});
+
+		function ClickDate(doctId, date) {
+			window.location.href = '/HospitalManagement/HospitalCommon/AppointmentBar?doctorId=' + doctId + '&date=' + date
+		}
+	</script>
+}

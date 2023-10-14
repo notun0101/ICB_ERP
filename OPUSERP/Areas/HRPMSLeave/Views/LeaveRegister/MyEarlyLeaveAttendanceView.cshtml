@@ -1,0 +1,118 @@
+﻿@model LateAttendanceReportVM
+@{
+	ViewData["Title"] = "Early Leave Attendance";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+<div class="print-card" style="width: 100%;">
+	<div class="print-card-body">
+		<div class="container-fluid">
+			<div style="width:100%;overflow:hidden;">
+
+				<div style="width:15%;float:left;">
+					<img src="/Assets/bdbl.png" alt="" style="height:100px;">
+				</div>
+				<div style="width:80%;float:left;">
+					<h3 style="text-align:center;color:black;"><b>@Model.companies.FirstOrDefault().companyName</b></h3>
+					<h4 style="text-align:center;color:black;">Head Office</h4>
+					<h4 style="text-align:center;color:black;">Early Leave Attendance Report</h4>
+				</div>
+			</div>
+		</div>
+		<br />
+		<div class="container-fluid" style="color:black;">
+			<div class="row" style="padding: 0px 15px 0px 15px;">
+				<table class="table table-bordered vartical-table" style="width: 100%; background-color: white !important;">
+					<thead>
+						<tr>
+							<th style="width: 5%;">Employee Name</th>
+							<th style="width: 5%; text-align: center;">Designation</th>
+							<th style="width: 5%; text-align: center;">Working Day</th>
+							<th style="width: 5%; text-align: center;">Start Time</th>
+							<th style="width: 5%; text-align: center;">End Time</th>
+							<th style="width: 5%; text-align: center;">Reason</th>
+						</tr>
+					</thead>
+					<tbody>
+						@{
+							@foreach (var item in Model.lateAttandenceDataVMs)
+							{
+								<tr>
+									<td style="width: 5%; text-align: center;">@item.EmpName</td>
+									<td style="width: 5%; text-align:center;">@item.designationName</td>
+									<td style="width: 5%; text-align: center;">@item.workDate</td>
+									<td style="width: 5%; text-align: center;">@item.startTime</td>
+									<td style="width: 5%; text-align: center;">@item?.endTime</td>
+									<td style="width: 5%; text-align: center;">@item.reason</td>
+								</tr>
+
+							}
+						}
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts{
+
+}
+<style>
+	.divstyle {
+		color: black;
+	}
+
+	.divstyleee {
+		text-align: center;
+		vertical-align: middle;
+		padding-top: 70px;
+	}
+
+	.spanStyle {
+		color: black;
+		font-size: small;
+		text-align: center;
+	}
+
+	.boldspanStyle {
+		color: black;
+		font-weight: bolder;
+		text-align: center;
+	}
+
+	.print-card-body {
+		width: 100%;
+		padding-bottom: 10px;
+	}
+
+	.vartical-table th {
+		width: 25%;
+		text-align: center;
+		vertical-align: top;
+	}
+
+	.table td, .table th {
+		padding: .3rem;
+		font-size: 10px;
+	}
+
+	table {
+		page-break-inside: auto
+	}
+
+	tr {
+		page-break-inside: avoid;
+		page-break-after: auto;
+	}
+
+	thead {
+		display: table-header-group;
+	}
+
+	tfoot {
+		display: table-footer-group;
+	}
+</style>

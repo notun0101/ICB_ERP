@@ -1,0 +1,91 @@
+﻿@model EmpAttendanceViewModel
+@{
+	ViewData["Title"] = "Attendance Upload";
+}
+
+
+<div class="card" style="width: 100%;" id="div1">
+	<div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+		<div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+			<h5 class="card-title" style="color: black; margin: 8px;">Attendance Upload</h5>
+		</div>
+		<div class="col-md-8">
+			<div style="float: right; margin: 16px;">
+				<a class='btn btn-info' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=1240'><i class="fas fa-backward"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="card-body">
+        <div class="col-12">
+            <form asp-area="HRPMSAttendence" asp-controller="EmployeePunchCardInfo" asp-action="AttendanceUpload" method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-2"><label>Upload File</label></div>
+                    <div class="col-5"><input type="file" name="formFile" class="btn" style="border-radius:5px" /></div>
+                    <div class="col-5"><input type="submit" class="btn btn-success" style="border-radius:5px" value="Upload" /></div>
+                </div>
+</form>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row" id="attendenceDiv">
+    <div class="col-12">
+        <div class="card" id="list">
+            <div class="card-header">
+                <h4>Added Attendance</h4>
+            </div>
+            <div class="card-body" style="height:500px;overflow-y:scroll">
+                <table class="table table-bordered" id="attendenceTable">
+                    <thead>
+                        <tr>
+                            <th>Emp Code</th>
+                            <th>Punch Card</th>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model?.addedAttendence)
+                        {
+                            <tr>
+                                <td>@item?.empCode</td>
+                                <td>@item?.Reason</td>
+                                <td>@item?.EmpName</td>
+                                <td>@item?.Longitudeout</td>
+                                <td>@item?.entryDate?.ToString("dd/MMM/yyyy")</td>
+                                <td>@item?.LoginTime?.ToString("hh:mm")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+@section Scripts{
+	<script>
+        $(document).ready(function () {
+            $('#attendenceTable').DataTable()
+        });
+
+
+		function formatDate(date) {
+			date = new Date(date);
+			var year = date.getFullYear(),
+				month = date.getMonth() + 1, // months are zero indexed
+				day = date.getDate(),
+				hour = date.getHours(),
+				minute = date.getMinutes(),
+				second = date.getSeconds(),
+				hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+				minuteFormatted = minute < 10 ? "0" + minute : minute,
+				morning = hour < 12 ? "am" : "pm";
+
+			return day + "/" + + month + "/" + year;
+		}
+	</script>
+}
+

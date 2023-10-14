@@ -1,0 +1,240 @@
+﻿@model LeaveRegisterViewModel
+
+@{
+    ViewData["Title"] = "LeaveReportActual";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+
+}
+
+@using OPUSERP.Helpers;
+@using System;
+
+@section Style{
+    <style>
+        .header {
+            text-align: center;
+            margin: 30px
+        }
+
+        .box {
+            margin-top: 100px;
+            margin-left: 85px;
+       
+            color: black;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        .f {
+            font-size: 20px;
+        }
+
+        div.a {
+            text-indent: 20px;
+        }
+        .status {
+            position: absolute;
+            font-size: 20px;
+            right: 50px;
+            top: 40px;
+            transform: rotate( 314deg );
+            font-family: cursive;
+            padding: 10px 20px;
+            font-weight: bold;
+            background: lightgrey;
+        }
+    </style>
+}
+    <div class="box" style="font-size:20px;">
+
+        <div class="container-fluid">
+            <div class="fa-pull-right">
+                @*<p style="font-size:12px;color:gray;">Print at: @DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")</p>*@
+            </div>
+            @*<div class="row" style="padding-top:0px;font-size:25px;">
+                <div class="col-2">
+                    <img src="/EmpImages/@Model.companies?.FirstOrDefault().filePath" alt="OPUS ERP" style="height:70px; margin-left:-50PX;    margin-top: 16px;" />
+                </div>
+                <div class="col-8">
+                    <div style="color:black;text-align:center;">
+                        <h3>বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড</h3>
+                        <h3><u>প্রধান কার্যালয়</u> ,</h3>
+                        <h4><u>৮ ,রাজউক এভিনিউ ,ঢাকা</u></h4>
+                        <h4><u> @Model.leaveRegister?.employee?.department?.deptNameBn</u></h4>
+                    </div>
+                </div>
+                <div class="col-2"></div>
+            </div>*@
+        </div>
+       
+        <div style="float:right">
+            তারিখঃ  @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.leaveRegister?.createdAt?.ToString("dd/MM/yyyy"))
+        </div>
+
+        @*<div class="col-12" style="float:left;">
+            <p>
+                @Model.leaveRegister?.employee?.lastDesignation?.designationNameBN
+            </p>
+        </div>*@
+        <div class="col-12" style="float:left;line-height:.7">
+            <p>
+                ডেপুটি জেনারেল ম্যানেজার
+
+                @*@if (Model.leaveRegister?.employee?.hrBranchId != null)
+                {
+                    <span>@Model.leaveRegister?.employee?.hrBranch?.branchNameBn</span>
+                }
+                else if (Model.leaveRegister?.employee?.departmentId != null)
+                {
+                    <span> @Model.leaveRegister?.employee?.department?.deptNameBn</span>
+                }
+
+                else if (Model.leaveRegister?.employee?.hrDivisionId != null)
+                {
+                    <span> @Model.leaveRegister?.employee?.hrDivision?.divNameBn</span>
+                }
+                else if (Model.leaveRegister?.employee?.functionInfoId != null)
+                {
+                    <span> @Model.leaveRegister?.employee?.functionInfo?.branchUnitNameBN</span>
+                }*@
+
+
+
+            </p>
+            <p>হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্ট</p>
+        </div>
+
+        
+        <div class="col-12" style="float:left;">
+            <p>
+                বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড<br />
+                হেড অফিস<br />
+                <u>ঢাকা ।</u>
+            </p>
+        </div>
+
+
+        <br />
+        <div style="text-align:center">
+            <div>
+                <b style="font-size:27px;">
+                    বিষয়: <u>
+                        বাধ্যতা মূলক  @Model.leaveRegister?.leaveType?.nameBn ও ভাতা মঞ্জুরীর আবেদন ।
+                    </u>
+                </b>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="row p-2 m-2">
+
+            <div style=" padding-right:0px; padding-left:0px; color:black;font-size:22px; text-align: justify;">
+                <article>
+                    প্রিয় মহোদয়,<br />
+
+                    <span style="padding-left: 75px;"></span> হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্টের ১৭/০৫/২০১৫
+                    তারিখের  ১১৯/২০১৫ নং এবং ০৫/১১/২০১৭ তারিখের ১৭১/২০১৭ নং প্রশাসনিক  প্রজ্ঞাপনের মাধ্যমে জারীকৃত
+                    বাধ্যতামূলক  @Model.leaveRegister?.leaveType?.nameBn ও ভাতা মঞ্জুরী
+                    নীতিমালা-২০১৫ এর আওতায় নিম্মস্বাক্ষরকারী ছুটি ও ভাতা পেতে ইচ্ছুক ।
+
+                </article>
+                <p></p>
+                <p>
+
+                    ২। <span style="padding-left: 50px;">
+                    </span>
+                    এমতাবস্থায়, আগামী   @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.leaveRegister.leaveFrom?.ToString("dd/MM/yyy")) তারিখ হতে  @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.leaveRegister.leaveTo?.ToString("dd/MM/yyy")) তারিখ পর্যন্ত
+                    @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.leaveRegister?.daysLeave?.ToString("N0"))
+                    (@AmountInWord.ConvertEnNumToBnWord(Convert.ToInt32(Model.leaveRegister?.daysLeave).ToString())) দিনের
+                    বাধ্যতা মূলক  @Model.leaveRegister?.leaveType?.nameBn এবং ভাতা মঞ্জুরীপূর্বক নিয়মানুযায়ী অর্থ প্রদানের জন্য আবেদন করছি ।
+                    উল্লেখ্য, @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(ViewBag.leaveYear.ToString()) সালে শ্রান্তি বিনোদনের Leave Plan-এ আমার নাম অন্তর্ভুক্ত আছে ।
+                    @if (Model.leaveRegister?.substitutionUserId != null)
+                    {
+                        <span>আমার অনুপুস্থিতিতে আমার স্থলে কর্মরত থাকবেন @Model.leaveRegister?.substitutionUser?.nameBangla (@Model.leaveRegister?.substitutionUser?.lastDesignation?.designationNameBN )  ।</span>
+                    }
+                </p>
+                <p></p>
+
+            </div>
+
+
+
+        </div>
+
+
+
+
+
+
+        <div class="container-fluid">
+            <div class="row" style="color:black">
+                <div class="col-3">
+                    <p>
+                        <span style="color:black;font-size:22px; padding-left: 75px;">
+                            ধন্যবাদান্তে,
+                        </span>
+                    </p>
+                </div>
+                <div class="col-3"></div>
+                <div class="col-1"></div>
+                <div class="col-5 text-center" style="margin-top: 30px;line-height:.7">
+                    <h3 style="font-size:22px;color:black">
+                        আপনার বিশ্বস্ত ,<br />
+                    </h3>
+                    <div style="margin-top:30px;">
+
+
+                        @if (Model?.employeeSignature?.url == null || Model?.employeeSignature?.url == "")
+                        {
+                        }
+                        else
+                        {
+                            <img id="user_img_current" style="width:280px;height:70px" src="/EmpImages/@Model.employeeSignature?.url" alt="" class="img-thumbnail float-left">
+                        }
+                       
+                       
+                    </div>
+                    <p>(@Model.leaveRegister?.employee?.nameBangla)</p>
+                    <p>
+                        @Model.leaveRegister?.employee?.lastDesignation?.designationNameBN
+                    </p>
+                    <p>
+                        আইডি নং-  @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.leaveRegister?.employee?.employeeCode)
+          </p>
+          <p>
+
+              @if (Model.leaveRegister?.employee?.hrBranchId != null)
+              {
+                  <span>@Model.leaveRegister?.employee?.hrBranch?.branchNameBn</span>
+              }
+              else if (Model.leaveRegister?.employee?.departmentId != null)
+              {
+                  <span> @Model.leaveRegister?.employee?.department?.deptNameBn</span>
+              }
+
+              else if (Model.leaveRegister?.employee?.hrDivisionId != null)
+              {
+                  <span> @Model.leaveRegister?.employee?.hrDivision?.divNameBn</span>
+              }
+              else if (Model.leaveRegister?.employee?.functionInfoId != null)
+              {
+                  <span> @Model.leaveRegister?.employee?.functionInfo?.branchUnitNameBN</span>
+              }
+
+
+
+          </p>
+          <h4>হেড অফিস, ঢাকা ।</h4>
+
+
+      </div>
+         </div>
+
+  </div>
+  </div>
+

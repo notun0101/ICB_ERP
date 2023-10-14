@@ -1,0 +1,264 @@
+﻿@model EmpAttendanceViewModel
+@{
+    ViewData["Title"] = "Attendance List";
+}
+<link href="~/Assets/MD_Time_Picker/mdtimepicker.css" rel="stylesheet" />
+@section Style{
+    <style>
+        
+
+        .pagination > li > a,
+        .pagination > li > span {
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #337ab7;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+
+        .pagination > .active > a,
+        .pagination > .active > a:focus,
+        .pagination > .active > a:hover,
+        .pagination > .active > span,
+        .pagination > .active > span:focus,
+        .pagination > .active > span:hover {
+            z-index: 3;
+            color: #fff;
+            cursor: default;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+
+        .pagination-container {
+            margin: 20px 0;
+            display: flex;
+            justify-content: flex-end;
+        }
+    </style>
+}
+
+<div class="card" id="list">
+    <div class="card-header" style="display: flex;justify-content: space-between; align-items: center;">
+        <h4>Attendance List</h4>
+        <a class='btn btn-info mr-4' style="float: right;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1020&perentId=6295'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+    </div>
+    <div class="card-body">
+        <div class="form-group row" style="padding-bottom: 38px;">
+            <div class="col-sm-1">
+            </div>
+            <label class="col-sm-1 col-form-label" style="padding-left:0px;">From Date : </label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" id="FromDate" name="workDate" value="" placeholder="From Date" readonly="readonly">
+            </div>
+            <label class="col-sm-1 col-form-label" style="padding-left: 0px;">To Date : </label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" id="ToDate" name="workDate" value="" placeholder="To Date" readonly="readonly">
+            </div>
+            <button type="submit" id="searchBtn" value="Sharch" class="btn btn-success col-sm-1 mr-2" style="float:right;height: 35px;width:15px;"><i class="fas fa-search"></i>Search</button>
+            @*<input type="button" value="Reset" id="Reset" class="btn btn-secondary btn-sm right" />*@
+            <div class="col-sm-1">
+            </div>
+            @*<input type="hidden" id="hidden" value="@DateTime.Now.ToString("dd-MMM-yyyy")" />*@
+        </div>
+        <table class="table table-bordered table-striped" id="attendenceTable">
+            <thead>
+                <tr>
+                    <th>Employee  Id</th>
+                    <th>Employee Name</th>
+                    <th>Designation</th>
+                    <th>Department</th>
+                    <th>Work Date</th>
+                    <th>In Time</th>
+                    <th>Out Time</th>
+                    @*<th></th>*@
+                </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/Assets/MD_Time_Picker/mdtimepicker.js"></script>
+    <script>
+
+
+        $(document).ready(function () {
+
+            //$('#attendenceTable').DataTable({
+
+            //});
+            //$('#attendenceTable').DataTable().destroy();
+            //$('#attendenceTable').DataTable({
+            //    stateSave: false,
+            //    dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+            //        "<'row'<'col-sm-12't>>" +
+            //        "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+            //    "pageLength": 10,
+            //    retrieve: true,
+            //    buttons: [
+            //        {
+            //            extend: 'excelHtml5',
+            //            text: '<i class="fa fa-file-excel"></i> Excel',
+            //            titleAttr: 'Excel',
+            //            exportOptions: {
+            //                columns: [0, 1, 2, 3, 4, 5]
+            //            },
+            //            title: "ERP-HRPMS",
+            //            messageTop: 'CV Black List',
+            //            class: 'btn btn-info'
+            //        },
+            //        {
+            //            extend: 'csvHtml5',
+            //            text: '<i class="fa fa-file-excel"></i> CSV',
+            //            titleAttr: 'CSV',
+            //            exportOptions: {
+            //                columns: [0, 1, 2, 3, 4, 5]
+            //            },
+            //            title: "ERP-HRPMS",
+            //            messageTop: 'CV Black List'
+            //        },
+            //        {
+            //            extend: 'print',
+            //            text: '<i class="fa fa-print"></i> Print',
+            //            titleAttr: 'Print',
+            //            title: "ERP-HRPMS",
+            //            messageTop: 'CV Black List',
+            //            exportOptions: {
+            //                columns: [0, 1, 2, 3, 4, 5]
+            //            },
+            //            customize: function (doc) {
+            //                $(doc.document.body).find('h1').css('font-size', '20pt');
+            //                $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+            //                $(doc.document.body).find('h1').css('text-align', 'center');
+            //            }
+            //        }
+            //    ]
+            //});
+
+            $("#FromDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2050" }).datepicker();
+
+            $("#ToDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2050" }).datepicker();
+
+            $('#searchBtn').click(function () {
+                var from = formatDate($('#FromDate').val());
+                var to = formatDate($('#ToDate').val());
+
+                Common.Ajax('GET', '/HRPMSAttendence/EmployeePunchCardInfo/ManualAttendanceListApi?from=' + from + '&to=' + to, [], 'json', ajaxFunction, false);
+            })
+        });
+
+        function formatDate(date) {
+            date = new Date(date);
+            var year = date.getFullYear(),
+                month = date.getMonth() + 1, // months are zero indexed
+                day = date.getDate(),
+                hour = date.getHours(),
+                minute = date.getMinutes(),
+                second = date.getSeconds(),
+                hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+                minuteFormatted = minute < 10 ? "0" + minute : minute,
+                morning = hour < 12 ? "am" : "pm";
+
+            return month + "/" + + day + "/" + year;
+        }
+
+        function ajaxFunction(response) {
+            console.log(response)
+            var option = "";
+            $.each(response.empAttendances, function (i, item) {
+                console.log(item)
+                var startTime = item.empAttendance ?.startTime;
+                var endTime = item.empAttendance ?.endTime;
+                if (item.empAttendance?.startTime == null) {
+                    startTime = "";
+                }
+                if (item.empAttendance?.endTime == null) {
+                    endTime = "";
+                }
+                option += `<tr>
+                                            <td>${item.employeeInfo ?.employeeCode}</td>
+                                            <td>${item.employeeInfo ?.nameEnglish}</td>
+                                            <td>${item.employeeInfo ?.lastDesignation ?.designationName}</td>
+                                            <td>${item.employeeInfo ?.department?.deptName}</td>
+                                            <td>${item.empAttendance ?.workDate}</td>
+                                            <td>${startTime}</td>
+                                            <td>${endTime}</td>
+
+                                        </tr>`
+            });
+            $('#tbody').empty();
+            $('#tbody').append(option);
+            //$('#attendenceTable').DataTable().destroy();
+            //$('#attendenceTable').DataTable({
+            //    //dom: 'Bfrtip',
+            //    "pageLength": 10,
+            //    retrieve: true
+            //});
+            $('#attendenceTable').DataTable().destroy();
+            $('#attendenceTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                "pageLength": 10,
+                retrieve: true,
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'Attendance List',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'Attendance List'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "ERP-HRPMS",
+                        messageTop: 'Attendance List',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+        }
+        //$('#Reset').click(function () {
+        //    var date = $('#hidden').val();
+        //    $('#FromDate').val(date);
+        //    $('#ToDate').val(date);
+           
+          
+        //})
+
+    </script>
+}
+
+
+

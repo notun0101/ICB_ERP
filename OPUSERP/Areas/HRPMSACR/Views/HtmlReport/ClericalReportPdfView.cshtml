@@ -1,0 +1,579 @@
+﻿@model ReportViewModel
+@{
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<div class="row">
+    <div class="print-card" style="width: 100%;">
+        <div class="print-card-body">
+            <div class="container-fluid">
+                <div>
+                    <div class="row">
+                        <div class="col-4">
+                            <div style="float:right;"><img src="~/Assets/bdbl.png" style="height:50px;width:350px;" /></div>
+                        </div>
+                        <div class="col-5" style="text-align:center;">
+                            <h1>বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড</h1>
+                        </div>
+                        <div class="col-3 tdLargeFontSize">
+                            <div style="float:right;position:relative;">করণিক</div>
+                        </div>
+                    </div>
+                    <div style="color:black;text-align:center">
+                        <h6>@Model.employeeInfoViewModel?.FirstOrDefault()?.BranchName শাখা/কার্যালয়/বিভাগ/অফিস</h6>
+                        <label style="float:right;">নথি নং: @Model.employeeInfoViewModel?.FirstOrDefault()?.FileNo</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                        </div>
+                        <div class="col-8">
+                            <div style="text-align:center">
+                                <h4>বার্ষিক গোপনীয় প্রতিবেদন</h4>
+                                <label>@Model.employeeInfoViewModel.FirstOrDefault()?.fromDate তারিখ থেকে @Model.employeeInfoViewModel.FirstOrDefault()?.toDate পর্যন্ত</label>
+                                <br />
+                                <h5><u>১ম অংশ</u></h5>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div style="float:right;">
+                                <img src="@Model.employeeInfoViewModel.FirstOrDefault()?.ImagePath" height="120" width="100" class="img-circle" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-5">
+                        <div class="form-group row">
+                            <div class="col-4 tdFontSize">পার্সোনেল নং</div>
+                            <div class="col-8 tdFontSize">
+                                <div>@Model.employeeInfoViewModel.FirstOrDefault().EmpCode</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-4 tdFontSize">কর্মচারীর নাম</div>
+                            <div class="col-8 tdFontSize">
+                                <div>@Model.employeeInfoViewModel.FirstOrDefault().EmpName</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-4 tdFontSize">পদবী</div>
+                            <div class="col-8 tdFontSize">
+                                <div>@Model.employeeInfoViewModel.FirstOrDefault().DesignationName</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-4 tdFontSize">পিতার নাম</div>
+                            <div class="col-8 tdFontSize">
+                                <div>@Model.employeeInfoViewModel.FirstOrDefault().FatherName</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-4 tdFontSize">মাতার নাম</div>
+                            <div class="col-8 tdFontSize">
+                                <div>@Model.employeeInfoViewModel.FirstOrDefault().MotherName</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-4 tdFontSize">নিজ জেলা</div>
+                            <div class="col-8 tdFontSize">
+                                <div>@Model.employeeInfoViewModel.FirstOrDefault().PerDistrict</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-4 tdFontSize">জন্ম তারিখ</div>
+                            <div class="col-8 tdFontSize">
+                                <div>@Model.employeeInfoViewModel.FirstOrDefault().BirthDate</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-4 tdFontSize">শিক্ষাগত যোগ্যতা</div>
+                            <div class="col-8 tdFontSize">
+                                <div>@Model.employeeInfoViewModel.FirstOrDefault().LastEducation</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-5 tdFontSize">ব্যাংকিং ডিপ্লোমা পরীক্ষা</div>
+                            <div class="col-7 tdFontSize">
+                                <div>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr class="tdFontSize">
+                                                <th style="vertical-align:middle;text-align:center;width:60%;">পর্ব</th>
+                                                <th style="vertical-align:middle;text-align:center;width:40%;">পাশের সন</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (@Model.employeeInfoViewModel.FirstOrDefault().DiplomaYearOne != "")
+                                            {
+                                                <tr class="tdFontSize">
+                                                    <td style="vertical-align:middle;text-align:center;height:15px;"><label>1st Part</label></td>
+                                                    <td style="vertical-align:middle;text-align:center;height:15px;">@Model.employeeInfoViewModel.FirstOrDefault().DiplomaYearOne</td>
+                                                </tr>
+                                            }
+                                            @if (@Model.employeeInfoViewModel.FirstOrDefault().DiplomaYearTwo != "")
+                                            {
+                                                <tr class="tdFontSize">
+                                                    <td style="vertical-align:middle;text-align:center;height:15px;"><label>2nd Part</label></td>
+                                                    <td style="vertical-align:middle;text-align:center;height:15px;">@Model.employeeInfoViewModel.FirstOrDefault().DiplomaYearTwo</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-7">
+                        <div class="form-group row">
+                            <div class="col-4 tdFontSize"> </div>
+                            <div class="col-8 tdFontSize">
+                                <div>.</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-4 tdFontSize">ব্যাংকে যোগদানের তারিখ</div>
+                            <div class="col-8 tdFontSize">
+                                <div>@Model.employeeInfoViewModel.FirstOrDefault().JoiningDate</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-4 tdFontSize">যোগদানকালে পদবী</div>
+                            <div class="col-8 tdFontSize">
+                                <div>@Model.employeeInfoViewModel.FirstOrDefault().JoiningDesignationName</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-4 tdFontSize">সর্বশেষ পদোন্নতির তারিখ</div>
+                            <div class="col-8 tdFontSize">
+                                <div>@Model.employeeInfoViewModel.FirstOrDefault().LastPromotionDate</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-4 tdFontSize">বর্তমান কর্মস্থল</div>
+                            <div class="col-8 tdFontSize">
+                                <div>@Model.employeeInfoViewModel.FirstOrDefault().BranchName</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-4 tdFontSize">বর্তমান মূল বেতন টাকা </div>
+                            <div class="col-8 tdFontSize">
+                                <div>@Model.employeeInfoViewModel.FirstOrDefault().BasicAmount</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-4 tdFontSize">ব্যাংকে চাকুরীর সংক্ষিপ্ত বিবরণ</div>
+                            <div class="col-8 tdFontSize">
+                                <div>@Model.employeeInfoViewModel.FirstOrDefault().JobDurationAsOthers</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-5 tdFontSize">প্রাপ্ত প্রশিক্ষণের বিবরণ ও সময়সূচী :</div>
+                            <div class="col-7 tdFontSize">
+                                <div>তালিকা সংযুক্ত</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-5">
+                        <label>পূর্ব অভিজ্ঞতা (যদি থাকে)</label>
+                        <br />
+                        <label>১। ব্যাংকিং &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: @Model.acrOtherTableViewModel.FirstOrDefault().bankingExperience</label>
+                        <br />
+                        <label>২। ব্যাংকিং ছাড়া : @Model.acrOtherTableViewModel.FirstOrDefault().nobankingExperience</label>
+                    </div>
+                    <div class="col-7">
+                        <span class="tdFontSize">এই মর্মে ঘোষণা করছি যে, উপরোল্লিখিত তথ্যাদি সঠিক।</span>
+                        <br />
+                        <span class="tdFontSize">কর্মচারীর স্বাক্ষর <img src="@Model.employeeInfoViewModel.FirstOrDefault().OwnSignaturePath" height="80" width="150" class="img-circle" /></span>
+                        <br />
+                        <span class="tdFontSize">নাম : </span><span style="text-align:center"> @Model.employeeInfoViewModel.FirstOrDefault().EmpName</span>
+                        <br />
+                        <span class="tdFontSize">মোবাইল : </span><span style="text-align:center"> @Model.employeeInfoViewModel.FirstOrDefault().OfficMobile</span>
+                        <br />
+                        <span class="tdFontSize">আবাসিক ঠিকানা : </span><span style="text-align:center"> @Model.employeeInfoViewModel.FirstOrDefault().PresentAddress</span>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <div style="color:black;text-align:center">
+                            <h5><u>২য় অংশ</u></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr class="tdFontSize">
+                                            <th rowspan="2" style="width:60%;vertical-align:middle;text-align:center;">মূল্যায়ণের বিষয়</th>
+                                            <th colspan="4" style="vertical-align:middle;text-align:center;">প্রাপ্ত মান</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="width:10%;vertical-align:middle;text-align:center;">উত্তম</th>
+                                            <th style="width:10%;vertical-align:middle;text-align:center;">ভাল</th>
+                                            <th style="width:10%;vertical-align:middle;text-align:center;">সাধারণ</th>
+                                            <th style="width:10%;vertical-align:middle;text-align:center;">নিম্নমান</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            int index = 0;
+                                            foreach (var data in Model?.employeesAcrsViewModel?.Where(a => a.acrForId == 3 && a.acrTypeId == 1))
+                                            {
+                                                <tr class="tdFontSize">
+                                                    <td>@data.evaluationName</td>
+                                                    <td>
+                                                        @if (@data.forthValue == 1 && (@data.thirdValue == 2 || @data.sencondValue == 2 || @data.firstValue == 2))
+                                                        {
+                                                            <div class="showcircle">
+                                                                <img src="@data.signaturePath" style="width:30px;height:8px;padding-bottom:2px;" />
+                                                            </div>
+                                                        }
+                                                        else if (@data.forthValue == 1)
+                                                        {
+                                                            <img src="@data.signaturePath" style="width:53px;height:16px;padding-top:0px;" />
+                                                        }
+                                                        else if (@data.forthValue == 2)
+                                                        {
+                                                            <img src="@data.signaturePath2" style="width:53px;height:16px;padding-right:0px;" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <label></label>
+                                                        }
+
+                                                    </td>
+                                                    <td>
+                                                        @if (@data.thirdValue == 1 && (@data.forthValue == 2 || @data.sencondValue == 2 || @data.firstValue == 2))
+                                                        {
+                                                            <div class="showcircle">
+                                                                <img src="@data.signaturePath" style="width:30px;height:8px;padding-bottom:2px;" />
+                                                            </div>
+                                                        }
+                                                        else if (@data.thirdValue == 1)
+                                                        {
+                                                            <img src="@data.signaturePath" style="width:53px;height:16px;padding-right:0px;" />
+                                                        }
+                                                        else if (@data.thirdValue == 2)
+                                                        {
+                                                            <img src="@data.signaturePath2" style="width:53px;height:16px;padding-right:0px;" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <label></label>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @if (@data.sencondValue == 1 && (@data.forthValue == 2 || @data.thirdValue == 2 || @data.firstValue == 2))
+                                                        {
+                                                            <div class="showcircle">
+                                                                <img src="@data.signaturePath" style="width:30px;height:8px;padding-bottom:2px;" />
+                                                            </div>
+                                                        }
+                                                        else if (@data.sencondValue == 1)
+                                                        {
+                                                            <img src="@data.signaturePath" style="width:53px;height:16px;padding-right:0px;" />
+                                                        }
+                                                        else if (@data.sencondValue == 2)
+                                                        {
+                                                            <img src="@data.signaturePath2" style="width:53px;height:16px;padding-right:0px;" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <label></label>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @if (@data.firstValue == 1 && (@data.forthValue == 2 || @data.thirdValue == 2 || @data.sencondValue == 2))
+                                                        {
+                                                            <div class="showcircle">
+                                                                <img src="@data.signaturePath" style="width:30px;height:8px;padding-bottom:2px;" />
+                                                            </div>
+                                                        }
+                                                        else if (@data.firstValue == 1)
+                                                        {
+                                                            <img src="@data.signaturePath" style="width:53px;height:16px;padding-right:0px;" />
+                                                        }
+                                                        else if (@data.firstValue == 2)
+                                                        {
+                                                            <img src="@data.signaturePath2" style="width:53px;height:16px;padding-right:0px;" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <label></label>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                                index++;
+                                            }
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <div class="col-3"><label class="tdFontSize">সর্বমোট প্রাপ্ত নম্বর </label></div>
+                                <div class="col-2">
+                                    <input type="text" name="totalNumber" id="totalNumber" style="text-align:right;width:60px;" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group row">
+                                <div class="col-4">নির্দিষ্ট কোন ডিপার্টমেন্টের কাজের বিশেষ প্রবণতা :</div>
+                                <div class="col-8">
+                                    <div>@Model.employeeInfoViewModel.FirstOrDefault().specificJob</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="page-break-after:always"></div>
+                <div>
+                    <div>
+                        <div style="color:black;text-align:center">
+                            <h5><u>২য় পৃষ্ঠা</u></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group row">
+                                <div class="col-2 tdLargeFontSize">সাধারণ মন্তব্য :</div>
+                                <div class="col-10 tdLargeFontSize">
+                                    <div>@Model.employeeInfoViewModel.FirstOrDefault().remarks</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div>
+                        <div class="row">
+                            <div class="col-6">
+                                <br /><br /><br /><br /><br /><br />
+                                <span class="tdLargeFontSize">তারিখ : </span><span style="text-align:center"> @Model.employeeInfoViewModel.FirstOrDefault().recommendationDate</span>
+                                <br />
+                                <span class="tdLargeFontSize">স্থান : </span><span style="text-align:center"> @Model.employeeInfoViewModel.FirstOrDefault().BranchName</span>
+
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group row">
+                                    <div class="col-4"></div>
+                                    <div class="col-8">
+                                        <img src="@Model.employeeInfoViewModel.FirstOrDefault().RecommendetorPath" height="80" width="150" class="img-circle" /><br />
+                                        <span class="tdLargeFontSize">প্রতিবেদন প্রদানকারী অফিসারের নাম <br /> পদবি, এসএস নম্বর এবং দাপ্তরিক সীলসহ দস্তখত।</span><br />
+                                        <span class="tdLargeFontSize">নাম : </span><span style="text-align:center"> @Model.employeeInfoViewModel.FirstOrDefault().RecommendatorName</span><br />
+                                        <span class="tdLargeFontSize">পদবী : </span><span style="text-align:center"> @Model.employeeInfoViewModel.FirstOrDefault().RecommendatorDesignation</span><br />
+                                        <span class="tdLargeFontSize">পরিচিতি নং : </span><span style="text-align:center"> @Model.employeeInfoViewModel.FirstOrDefault().RecommendatorEmpCode</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group row">
+                                <div class="col-4 tdLargeFontSize">প্রতিস্বাক্ষরকারী নির্বাহী/ কর্মকর্তার মন্তব্য :</div>
+                                <div class="col-8 tdLargeFontSize">
+                                    <div>@Model.employeeInfoViewModel.FirstOrDefault().additionalComment</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div>
+                        <div class="row">
+                            <div class="col-6">
+                                <br /><br />
+                                <span class="tdLargeFontSize">তারিখ : </span><span style="text-align:center"> @Model.employeeInfoViewModel.FirstOrDefault().signatoryDate</span>
+
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group row">
+                                    <div class="col-4"></div>
+                                    <div class="col-8">
+                                        @if (@Model.employeeInfoViewModel.FirstOrDefault().statusInfoId == 7)
+                                        {
+                                            <img src="@Model.employeeInfoViewModel.FirstOrDefault().SignatoryPath" height="80" width="150" class="img-circle" />
+                                        }
+                                        else
+                                        {
+                                            <label></label>
+                                        }
+                                        <br />
+                                        <span class="tdLargeFontSize">প্রতিস্বাক্ষরকারী নির্বাহী/ কর্মকর্তার <br /> স্বাক্ষর ও সীল</span>
+                                        <br />
+                                        <span class="tdLargeFontSize">নাম : </span><span style="text-align:center"> @Model.employeeInfoViewModel.FirstOrDefault().SignatoryName</span><br />
+                                        <span class="tdLargeFontSize">পদবী : </span><span style="text-align:center"> @Model.employeeInfoViewModel.FirstOrDefault().SignatoryDesignation</span><br />
+                                        <span class="tdLargeFontSize">পরিচিতি নং : </span><span style="text-align:center"> @Model.employeeInfoViewModel.FirstOrDefault().SignatoryEmpCode</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="divTraining">
+                    <div style="page-break-after:always"></div>
+                    <div style="color:black;text-align:left">
+                        <label class="tdLargeFontSize">১.১৬ প্রশিক্ষণ (দেশে/বিদেশে) এর বিবরণ ও সময়সীমা</label><br />
+                        <label class="tdLargeFontSize">@Model.employeeInfoViewModel.FirstOrDefault().EmpName</label><br />
+                        <label class="tdLargeFontSize">@Model.employeeInfoViewModel.FirstOrDefault().DesignationName</label><br />
+                        <label class="tdLargeFontSize">@Model.employeeInfoViewModel.FirstOrDefault().BankName</label><br />
+                        <label class="tdLargeFontSize">@Model.employeeInfoViewModel.FirstOrDefault().BranchName</label>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-12">
+                            <div>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr class="tdFontSize">
+                                            <th rowspan="2" style="vertical-align:middle;text-align:center;">ক্রমিক নং</th>
+                                            <th rowspan="2" style="vertical-align:middle;text-align:center;">কোর্সের নাম</th>
+                                            <th colspan="2" style="vertical-align:middle;text-align:center;">সময়কাল</th>
+                                            <th rowspan="2" style="vertical-align:middle;text-align:center;">প্রশিক্ষণ ইনিস্টিটিউটের নাম</th>
+                                            <th rowspan="2" style="vertical-align:middle;text-align:center;">দেশের নাম</th>
+                                            <th rowspan="2" style="vertical-align:middle;text-align:center;">মন্তব্য</th>
+                                            <th rowspan="2" style="vertical-align:middle;text-align:center;">ফলাফল</th>
+                                        </tr>
+                                        <tr class="tdFontSize">
+                                            <th style="vertical-align:middle;text-align:center;">হইতে</th>
+                                            <th style="vertical-align:middle;text-align:center;">পর্যন্ত</th>
+                                        </tr>
+                                    </thead>
+                                    @*<tbody>
+                                            @{
+                                                int i = 1;
+                                                foreach (var data in Model.employeeTrainingViewModel)
+                                                {
+                                                    <tr class="tdFontSize">
+                                                        <td style="text-align:center;">@i</td>
+                                                        <td>@data.TrainingTitle</td>
+                                                        <td>@data.FromDate</td>
+                                                        <td>@data.ToDate</td>
+                                                        <td>@data.TraingInstitute</td>
+                                                        <td>@data.TrainingCountry</td>
+                                                        <td>@data.Remarks</td>
+                                                        <td>@data.Result</td>
+                                                    </tr>
+                                                    i++;
+                                                }
+                                            }
+
+                                        </tbody>*@
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-6">
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <div class="col-4"></div>
+                                <div class="col-8">
+                                    <img src="@Model.employeeInfoViewModel.FirstOrDefault().OwnSignaturePath" height="80" width="150" class="img-circle" /><br />
+                                    <label class="tdLargeFontSize">(@Model.employeeInfoViewModel.FirstOrDefault().EmpName)</label><br />
+                                    <label class="tdLargeFontSize">@Model.employeeInfoViewModel.FirstOrDefault().DesignationName</label><br />
+                                    <label class="tdLargeFontSize">@Model.employeeInfoViewModel.FirstOrDefault().BankName</label><br />
+                                    <label class="tdLargeFontSize">@Model.employeeInfoViewModel.FirstOrDefault().BranchName</label>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var marks = parseFloat(@Model.employeesAcrsViewModel.FirstOrDefault().TotalValueSignatory);
+            $("#totalNumber").val((marks).toFixed(2));
+
+            @*if(@Model.employeeTrainingViewModel.Count()>0)
+            {
+                $("#divTraining").show();
+            }
+            else{
+                $("#divTraining").hide();
+            }*@
+        });
+    </script>
+}
+
+
+<style>
+    .paddingAllSide {
+        padding: 10px 0px 10px 0px;
+    }
+
+    .borderAll {
+        border: solid 1px;
+        border-color: black;
+        text-align: center;
+    }
+
+    .showcircle {
+        height: 35px;
+        width: 35px;
+        -webkit-border-radius: 25px;
+        -moz-border-radius: 25px;
+        border-radius: 30px;
+        border: 1px solid red;
+        line-height: 30px;
+        text-align: center;
+    }
+
+    .table td, .table th {
+        padding: .3rem;
+    }
+
+    .tdFontSize {
+        font-size: 15px;
+        color: black;
+    }
+
+    .tdLargeFontSize {
+        font-size: 20px;
+        color: black;
+    }
+
+    table {
+        page-break-inside: auto;
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+
+

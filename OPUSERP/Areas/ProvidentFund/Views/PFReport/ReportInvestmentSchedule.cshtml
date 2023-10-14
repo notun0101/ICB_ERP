@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewData["Title"] = "ReportInvestmentSchedule";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4 bg-light">
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="m-0 font-weight-bold text-primary">Investment Schedule Report</h5>
+                    <hr />
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <input type="hidden" id="id" name="id" />
+                            <select id="allDate" name="" formControlName="" class="form-control input-sm">
+                                <option value="">All Dates</option>
+                                <option value="Custom">Custom</option>
+                                <option value="Today">Today</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4 input-group">
+                            <input name="fromDate" id="fromDate" class="form-control input-group-sm" placeholder="From Date" readonly />
+                            <div class="input-group-prepend">
+                                <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 input-group">
+                            <input name="toDate" id="toDate" class="form-control input-group-sm" placeholder="To Date" readonly />
+                            <div class="input-group-prepend">
+                                <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <button onclick="search()" class="btn btn-sm btn-primary" style="background-color:darkcyan; color:white" id="addcoa" value="View PF Statement">Run Report</button>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="row clearfix">
+            <div class="col-12">
+                <div class="card mb-lg-4">
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class="row col-sm-12">
+                            <div class="col-sm-2">
+                                <div class="form-group text-center card cardBtn bg-white">
+                                    <a class="text-center btn btn-default text-info" align="center" href="/ProvidentFund/PFReport/ReportExMemberFund">
+                                        <p>
+                                            <i class="fa fa-file-excel" style="font-size:80px"></i>
+                                        </p>
+                                        <hr />
+                                        <div class="file-name">
+                                            Annual report 2021.xls
+                                            <br>
+                                            <small>Added: 01 Jan 2021</small>
+                                        </div>
+                                    </a>
+                                    <a href="/ProvidentFund/PFReport/ReportExMemberFund" class="btn btn-primary btn-sm" style="background-color:teal; color:white"><i class="fa fa-cloud-download "></i>Download</a>
+                                </div>
+                                <div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+            $("#fromDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker(new Date());
+            $("#toDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker(new Date());
+        });
+
+        function search() {
+            var AllDate = $("#allDate").val();
+            var FromDate = $("#fromDate").val();
+            var ToDate = $("#toDate").val();
+
+            if (AllDate == "") {
+                swal('Warning', 'please try again', 'warning');
+                return false;
+            }
+
+            if (FromDate == "") {
+                swal('Warning', 'please try again', 'warning');
+                return false;
+            }
+            if (ToDate == "") {
+                swal('Warning', 'please try again', 'warning');
+                return false;
+            }
+        }
+
+    </script>
+}

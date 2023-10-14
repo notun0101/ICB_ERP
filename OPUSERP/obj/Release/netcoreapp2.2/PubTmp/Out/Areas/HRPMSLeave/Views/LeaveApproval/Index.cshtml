@@ -1,0 +1,977 @@
+﻿@model LeaveRegisterViewModel
+@{
+    ViewData["Title"] = "Approval Que";
+}
+
+<style>
+
+
+    .fas {
+        margin-top: 10px;
+        font-size: 25px;
+    }
+
+    .b {
+        font-size: 12px;
+        margin: 5px;
+    }
+
+    .active {
+        color: darkgreen;
+    }
+
+    .c {
+        min-height: 300px;
+        background-color: #FDF2E9;
+    }
+
+        .c .card-footer {
+            height: 50px;
+            background-color: #E9F7EF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+    .cb {
+        height: 382px;
+    }
+
+    .c .cb {
+        transition: .3s all;
+        /*cursor: pointer;*/
+    }
+
+    .c:hover .cb {
+        background-color: #D6DBE9;
+    }
+
+    #myInput1 {
+        width: 46%;
+        position: absolute;
+        right: 13%;
+        box-shadow: none;
+    }
+
+
+
+    .pagination > li > a,
+    .pagination > li > span {
+        position: relative;
+        float: left;
+        padding: 6px 12px;
+        margin-left: -1px;
+        line-height: 1.42857143;
+        color: #337ab7;
+        text-decoration: none;
+        background-color: #fff;
+        border: 1px solid #ddd;
+    }
+
+    .pagination > .active > a,
+    .pagination > .active > a:focus,
+    .pagination > .active > a:hover,
+    .pagination > .active > span,
+    .pagination > .active > span:focus,
+    .pagination > .active > span:hover {
+        z-index: 3;
+        color: #fff;
+        cursor: default;
+        background-color: #337ab7;
+        border-color: #337ab7;
+    }
+
+    .pagination-container {
+        margin: 20px 0;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+    }
+
+    a i {
+        font-size: 15px !important;
+        margin: 0 !important;
+    }
+
+    .delete {
+        float: right;
+        border: none;
+        box-shadow: none;
+    }
+
+    #userRoles, #assignedPage {
+        height: 200px;
+        overflow: scroll;
+    }
+    .activeDiv {
+        background-color: #FF8D85 !important;
+        background: #FF8D85 !important;
+    }
+</style>
+
+
+<i class="fas fa-th text-left mx-2" style="font-size: 24px; margin: 5px; background-color: lightgray; padding: 5px; cursor: pointer !important;"></i>
+<i class="fas fa-list-alt text-left mx-2" style="font-size: 24px; margin: 5px; background-color: lightgray; padding: 5px; cursor: pointer !important;"></i>
+<input type="hidden" id="masterId" value="@ViewBag.masterId" />
+<div class="row clearfix" id="listView" style="display: none;">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Leave Approval</h6>
+                <a class='btn btn-info btn-sm' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1018&perentId=6282'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+            </div>
+            <!-- Card Body -->
+			<form id="allform" asp-area="" asp-controller="" asp-action="ActionAll" method="post" data-parsley-validate="parsley">
+				<div asp-validation-summary="All" class="text-danger"></div>
+				<div class="card-body">
+					<table class="table table-striped table-bordered" id="leaveApplyTable" style="width:100%;">
+						<thead>
+							<tr>
+								<th style="display: none;"><input type="checkbox" id="main" title="Select All" style="height:20px; width:20px;" onclick="check()" /></th>
+								<th>@Model.fLang.employeeName</th>
+								<th>@Model.visualEmpCodeName</th>
+								<th>Department</th>
+								<th>@Model.fLang.leaveFrom</th>
+								<th>@Model.fLang.leaveTo</th>
+								<th>@Model.fLang.totalDays</th>
+								<th>Leave Remarks</th>
+								<th>@Model.fLang.action</th>
+						</thead>
+						<tbody>
+
+							@foreach (var data in Model.leaveRoutes)
+							{
+								<tr>
+									<td style="display: none;"><input class="SelectCheckBox" type="checkbox" name="child" id="-@data.Id-@data.leaveRegisterId" style="height:20px; width:20px;" onclick="AddInfo(this)" /></td>
+									<td>@data.leaveRegister?.employee?.nameEnglish</td>
+									<td>@data.leaveRegister?.employee?.employeeCode</td>
+									<td>@data.leaveRegister?.employee?.department?.deptName</td>
+									<td>@data.leaveRegister?.leaveFrom?.ToString("dd-MMM-yyyy")</td>
+									<td>@data.leaveRegister?.leaveTo?.ToString("dd-MMM-yyyy")</td>
+									<td>@data.leaveRegister?.daysLeave</td>
+									<td>@data.leaveRegister?.purposeOfLeave</td>
+                                    <td>
+
+
+                                        <a class="btn btn-success btn-sm" style="margin-left: 7px;margin-bottom:2px ;background-color:#6ab56a" data-toggle="modal" data-target="#ValidatModal" title="View for Action" onclick="AddValue(@data.Id,@data.employeeId,@data.leaveRegisterId,@data.leaveRegister?.leaveTypeId,'@data.leaveRegister?.whenLeave','@data.leaveRegister?.leaveType?.nameEn','@data.leaveRegister?.emergencyContactNo','@data.leaveRegister?.purposeOfLeave','@data.leaveRegister?.address','@data.leaveRegister?.leaveFrom?.ToString("dd-MMM-yyyy")','@data.leaveRegister?.leaveTo?.ToString("dd-MMM-yyyy")',@data.leaveRegister?.daysLeave,@data.leaveRegister?.employeeId,'@data.leaveRegister?.leaveDayId', '@data.leaveRegister?.substitutionUser?.nameEnglish', '@data.leaveRegister?.substitutionUser?.designation', '@data.leaveRegister?.employee?.nameEnglish')"><i class="fa fa-eye"> View</i></a>
+                                        <a class="btn btn-info btn-sm ml-2" data-toggle='tooltip' title='Print' target="_blank" href='/HRPMSLeave/LeaveRegister/LeaveCasualPdf?id=@data.leaveRegisterId'><i class="fa fa-print"> Print</i></a>
+
+                                        @if (data.leaveRegister.fileUrl != String.Empty)
+                                        {
+                                            <a class="btn btn-success" href="~/@data.leaveRegister.fileUrl" target="_blank"><i class="fa fa-file"></i></a>
+                                        }
+                                        else
+                                        {
+
+                                        }
+
+                                    </td>
+								</tr>
+							}
+
+						</tbody>
+					</table>
+				</div>
+				<div class="row" id="divselectedListTable" style="display:none">
+					<div class="card-body">
+
+						<table class="table table-bordered" id="selectedListTable">
+							<thead style="background:whitesmoke; text-align:center">
+								<tr>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table>
+					</div>
+				</div>
+				<div class="row" style="display: none;">
+					<label class="col-md-3">Comments</label>
+					<div class="col-md-9">
+						<input type="text" name="comments" id="comments" value="" />
+					</div>
+				</div>
+				@*<button type="button" id="btnApprove" class="btn btn-success btn-xs  ml-2" style="float:right; margin-top:5px;">Approve</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<button type="button" id="btnReject" class="btn btn-danger btn-xs ml-2" style="float:right; margin-top:5px;">Reject</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<button type="button" id="btnReturn" class="btn btn-facebook btn-xs ml-2" style="float:right; margin-top:5px;">Return</button>*@
+			</form>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="row clearfix" id="gridView">
+    <div class="col-12">
+        <div class="card mb-4" id="requisitionListTable">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    Leave Approval
+                </h6>
+                <input type="text" class="form-control" placeholder="Search here..." id="myInput1" />
+                @*<a class="btn btn-info btn-sm fa-pull-right" style="margin-left: 77%;" data-toggle='tooltip' title='Leave Apply' href='/HRPMSLeave/LeaveRegister/LeaveApply'>Leave Apply</a>*@
+
+                <a class='btn btn-info fa-pull-right btn-sm' style=" margin-left: 80%;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1018&perentId=6282'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="row" id="cards">
+                    @foreach (var data in Model.leaveRoutes)
+                    {
+                        <div class="col-md-3 mb-1 searchdiv">
+                            <a href="javascript:void(0)" style="text-decoration: none; color: black; cursor: default;">
+
+                                <div class="card c " style="font-size: 16px;" id="reg_@data.leaveRegister?.Id">
+
+                                    <div class="card-body cb text-center">
+                                        <p style="display: none;"><input class="SelectCheckBox" type="checkbox" name="child" id="-@data.Id-@data.leaveRegisterId" style="height:20px; width:20px;" onclick="AddInfo(this)" /></p>
+                                        <p>@data.leaveRegister?.employee?.nameEnglish</p>
+                                        <p><strong>Emp Code :</strong>@data.leaveRegister?.employee?.employeeCode</p>
+                                        <p><strong>Department :</strong>@data.leaveRegister?.employee?.department?.deptName</p>
+                                        <p class="mb-0">@data.leaveRegister?.leaveFrom?.ToString("dd-MMM-yyyy")</p>
+                                        <p class="mb-0">To</p>
+                                        <p>@data.leaveRegister?.leaveTo?.ToString("dd-MMM-yyyy")</p>
+                                        <p><strong>Days Leave :</strong>@data.leaveRegister?.daysLeave</p>
+                                        <p><strong>Leave Purpose :</strong>@data.leaveRegister?.purposeOfLeave</p>
+                                    </div>
+                                    <div class="card-footer text-center font-weight-bold">
+                                        @*<a href="javascript:void(0)" class="btn btn-danger btn-sm" onclick="CancelLeave(@data.Id)">Cancel</a>*@
+                                        <a class="btn btn-success btn-sm" data-toggle="modal" style="background-color:#6ab56a" data-target="#ValidatModal" title="View for Action" onclick="AddValue(@data.Id,@data.employeeId,@data.leaveRegisterId,@data.leaveRegister?.leaveTypeId,'@data.leaveRegister?.whenLeave','@data.leaveRegister?.leaveType?.nameEn','@data.leaveRegister?.emergencyContactNo','@data.leaveRegister?.purposeOfLeave','@data.leaveRegister?.address','@data.leaveRegister?.leaveFrom?.ToString("dd-MMM-yyyy")','@data.leaveRegister?.leaveTo?.ToString("dd-MMM-yyyy")',@data.leaveRegister?.daysLeave,@data.leaveRegister?.employeeId,'@data.leaveRegister?.leaveDayId', '@data.leaveRegister?.substitutionUser?.nameEnglish', '@data.leaveRegister?.substitutionUser?.designation', '@data.leaveRegister?.employee?.nameEnglish')"><i class="fa fa-eye" style="cursor:pointer;"> View</i></a>
+                                        <a class="btn btn-info btn-sm ml-2" data-toggle='tooltip' title='Print'target="_blank" href='/HRPMSLeave/LeaveRegister/LeaveCasualPdf?id=@data.leaveRegisterId'><i class="fa fa-print"> Print</i></a>
+
+                                        @if (data.leaveRegister.fileUrl != String.Empty)
+                                        {
+                                            <a class="btn btn-success" href="~/@data.leaveRegister.fileUrl" target="_blank"><i class="fa fa-file"></i></a>
+                                        }
+                                        else
+                                        {
+
+                                        }
+                                    </div>
+                                </div>
+                            </a> <br />
+
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="ValidatModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <label class="modal-title pull-left" id="myModalLabel" style="color:rgb(9, 7, 161);font-size:1em;">
+                    Leave Approval Process ( <span id="popEmpName"></span> )
+                </label>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <br />
+            </div>
+            <div class="modal-body">
+                <form id="allform1" asp-area="HRPMSLeave" asp-controller="LeaveApproval" asp-action="Action" method="post" data-parsley-validate="parsley">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    Leave Apply
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group row">
+                                                <label for="leaveTypeId" class="col-sm-4 col-form-label">@Model.fLang.leaveType<span style="color:red">*</span></label>
+                                                <div class="col-sm-8">
+                                                    <input type="hidden" id="leaveRegId" />
+                                                    <input type="text" class="form-control" id="leaveTypeId" value="" name="leaveTypeId" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="leave" class="col-sm-4 col-form-label">Leave Balance</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" name="leaveBalance" min="1" id="lOb" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="leaveFrom" class="col-sm-4 col-form-label">@Model.fLang.leaveFrom<span style="color:red">*</span></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" name="leaveFrom" id="leaveFrom" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row" id="LeaveToDiv">
+                                                <label for="leaveTo" class="col-sm-4 col-form-label">@Model.fLang.leaveTo<span style="color:red">*</span></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" name="leaveTo" id="leaveTo" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row" id="LeaveDayDiv">
+                                                <label for="daysLeave" class="col-sm-4 col-form-label">@Model.fLang.totalDays</label>
+                                                <div class="col-sm-8">
+                                                    <input type="number" class="form-control" name="daysLeave" id="daysLeave" min="1" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="purposeOfLeave" class="col-sm-4 col-form-label">@Model.fLang.leavePurpose</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" name="purposeOfLeave" id="purposeOfLeave" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="whenLeave" class="col-sm-4 col-form-label">@Model.fLang.whenLeave<span style="color:red">*</span></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" id="whenLeave" value="" name="whenLeave" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <label for="address" class="col-sm-4 col-form-label">@Model.fLang.addressDuringLeave</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="address" id="address" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="emergencyContactNo" class="col-sm-4 col-form-label">@Model.fLang.emergencyNo<span style="color:red">*</span></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="emergencyContactNo" id="emergencyContactNo" readonly>
+                                            <input type="hidden" id="employeeId" value="0" name="employeeId" />
+                                            <input type="hidden" id="leaveId" name="leaveId" value="0" />
+                                            <input type="hidden" id="id" name="id" value="0" />
+                                            <input type="hidden" id="leaveOpenBalance" name="lOb" value="0" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <label for="substitutionEmpCode" class="col-sm-4 col-form-label">Subs. Employee Name</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" value="" name="substitutionEmpCode" id="substitutionEmpCode" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="substitutionEmpDes" class="col-sm-4 col-form-label">Designation</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" readonly class="form-control" value="" name="" id="substitutionEmpDes">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    Leave Balance
+                                </div>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-sm-12">
+											<div class="row" style="">
+												<div class="col-md-12">
+                                                    <div class="container fill">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-striped table-bordered" style="width: 100%;">
+                                                                <thead class="text-center">
+                                                                    <tr>
+                                                                        <th>Type</th>
+                                                                        <th>Opening Balance</th>
+                                                                        <th>Availed</th>
+                                                                        <th>Balance</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="stats"></tbody>
+                                                            </table>
+                                                        </div>
+
+
+                                                        <div class="row" id="divselectedListTable1" style="display:none">
+                                                            <div class="card-body">
+
+                                                                <table class="table table-bordered" id="selectedListTable1">
+                                                                    <thead style="background:whitesmoke; text-align:center">
+                                                                        <tr>
+                                                                            <th></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody></tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label class="col-md-12 col-form-label">Comments</label>
+										<div class="col-md-12">
+											<input type="text" class="form-control" name="comments" placeholder="Write Comment.." id="commentss" value="" />
+										</div>
+									</div>
+								</div>
+                                <div class="card-footer">
+                                    <button type="button" id="btnApprove" class="btn btn-success btn-xs  ml-2" style="float:right; margin-top:5px;">Approve</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    @*<button type="button" id="btnUpdateAndApprove" class="btn btn-success btn-xs  ml-2" style="float:right; margin-top:5px;">Update & Approve</button>*@&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button type="button" id="btnReject" onclick=" Rejectdata()" class="btn btn-danger btn-xs ml-2" style="float:right; margin-top:5px;">Reject</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button type="button" id="btnReturn" onclick="Return()" class="btn btn-facebook btn-xs ml-2" style="float:right; margin-top:5px;">Return</button>
+                                </div>
+                                <input type="hidden" id="checkboxId" value="" />
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    Approval Matrix
+                                </div>
+                                <div class="card-body row" id="popMatrix">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*<hr>
+                        <button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-arrow-left"></i> Back</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/Assets/paginathing.js"></script>
+	<script>
+        $(document).ready(function () {
+
+            $("#divHalfDay").hide();
+            $("#divLeaveDay").hide();
+
+
+			$('#commentss').keyup(function () {
+				$('#comments').val($(this).val());
+			})
+
+            $("#leaveFrom").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2015:2050" }).datepicker();
+            $("#leaveTo").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2015:2050" }).datepicker();
+            $('#leaveFrom').change(function () {
+                GetTotalLeaveDaysByType();
+            });
+            $('#leaveTo').change(function () {
+                GetTotalLeaveDaysByType();
+            });
+
+			var masterId = $('#masterId').val();
+			$('#reg_' + masterId).addClass('activeDiv');
+			$('#reg_' + masterId).css('background-color', 'yellow !important');
+
+			var orgFullTitle = "Leave Approval";
+            $('#leaveApplyTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        title: orgFullTitle,
+                        messageTop: 'List Of Foreign Training',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        title: orgFullTitle,
+                        messageTop: 'List Of Employee Training'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: orgFullTitle,
+                        messageTop: 'List Of Foreign Training',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+            $('#gridView').show();
+            $('#listView').hide();
+
+            $('.fas').removeClass('active');
+            $('.fa-th').addClass('active');
+
+            $("#myInput1").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $(".searchdiv").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+
+            if ($("#cards").length != null) {
+
+                $('#cards').paginathing({
+
+                    // Limites your pagination number
+                    // false or number
+                    //limitPagination: limit,
+                    // limitPagination: false,
+
+                    // Pagination controls
+                    perPage: 8,
+                    prevNext: true,
+                    firstLast: true,
+                    prevText: '&laquo;',
+                    nextText: '&raquo;',
+                    firstText: 'First',
+                    lastText: 'Last',
+                    containerClass: 'pagination-container',
+                    ulClass: 'pagination',
+                    liClass: 'page',
+                    activeClass: 'active',
+                    disabledClass: 'disabled',
+                    pageNumbers: true,
+                    insertAfter: '#cards'
+                })
+            }
+
+            $('#btnReject').click(function () {
+                Rejectdata();
+            });
+            $('#btnApprove').click(function () {
+                Approve();
+            });
+            //$('#btnReturn').click(function () {
+            //    Return();
+            //});
+        });
+        $('.fa-list-alt').click(function () {
+            $('#listView').show();
+            $('#gridView').hide();
+
+            $('.fas').removeClass('active');
+            $('.fa-list-alt').addClass('active');
+        })
+        $('.fa-th').click(function () {
+            $('#listView').hide();
+            $('#gridView').show();
+
+            $('.fas').removeClass('active');
+            $('.fa-th').addClass('active');
+        })
+
+        $.fn.dataTable.ext.classes.sPageButton = 'your class';
+
+
+
+
+        $('.DataPage').paginathing({
+
+            // Limites your pagination number
+            // false or number
+            limitPagination: length,
+            // limitPagination: false,
+
+            // Pagination controls
+            perPage: 8,
+            prevNext: true,
+            firstLast: true,
+            prevText: '&laquo;',
+            nextText: '&raquo;',
+            firstText: 'First',
+            lastText: 'Last',
+            containerClass: 'pagination-container',
+            ulClass: 'pagination',
+            liClass: 'page',
+            activeClass: 'active',
+            disabledClass: 'disabled',
+            pageNumbers: true,
+            insertAfter: '.DataPage'
+        })
+        //function btnUpdateAndApprove() {
+        //    var fromD = $('#fromDate').val();
+        //    var toD = $('#toDate').val();
+        //    var daysLeave = $('#daysLeave').val();
+        //    var regId = $('#leaveRegId').val();
+
+        //}
+
+        function Approve() {
+            var isChecked = $('.SelectCheckBox:checkbox:checked').length;
+            if (isChecked == 0) {
+                swal('Attention!', 'Please select minimum 1 !!!', 'warning');
+                return false;
+            }
+
+            $('#btnApprove').attr("disabled", true);
+			var form = $("#allform1");
+			swal({
+				title: 'Are you sure?', text: 'Do you want to Approved this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, approve it!'
+			}).then(function () {
+				$.ajax({
+					url: '@Url.Action("ActionAll", "LeaveApproval")',
+                    data: form.serialize(),
+                    type: 'POST',
+
+                    success: function (res) {
+                        if (res == 'Saved') {
+                            swal({
+                                title: '',
+                                text: 'Approved Successfully!',
+                                type: 'success',
+                                showCancelButton: false,
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ok!',
+                            }).then(function () {
+                                location.reload();
+                            });
+                        }
+                        else {
+                            swal('warning', 'Something went wrong!', 'warning').then(function () {
+                                location.reload();
+                            });
+                        }
+
+                    }
+
+				})
+				                 //.done(function () {
+				                 //	swal({
+                     //               title: '',
+                     //               text: 'Approved Successfully!',
+                     //               type: 'success',
+                     //               showCancelButton: false,
+                     //               confirmButtonColor: '#3085d6',
+                     //               confirmButtonText: 'Ok!',
+                     //                     }).then(function () {
+                     //                   location.reload();
+					                //  });
+			                  // 	})
+				                 //       .fail(function () {
+				                 //   	location.reload();
+				                 //     });
+
+            });
+
+            function ajaxUpdateLeave(response) {
+                console.log(response)
+                if (response == 'ok') {
+                    localtion.reload();
+                }
+            }
+        }
+        function GetTenure() {
+            //var Tenure = GetDayMonthYear($("#leaveFrom").val(), $("#leaveTo").val());
+            //$('#daysLeave').val(Tenure.TDay + 1);
+
+            let x = parseInt($("#daysLeave").val());
+            let y = parseInt($("#leaveOpenBalance").val());
+            let maxSick = parseInt($("#maxSickCarry").val());
+            if (x > y) {
+                alert("Your Leave Balance is Over!!");
+                $("#daysLeave").val(0);
+                return false;
+            }
+
+            if ($("#leaveTypeId").val() == 2 && x > 3) {
+                alert("Casual Leave not more then 3 days!!");
+                $("#daysLeave").val(0);
+            }
+
+            if ($("#leaveTypeId").val() == 1 && x > maxSick) {
+                alert("Sick Leave not more then 2 days!!");
+                $("#daysLeave").val(0);
+            }
+        }
+
+        function GetTotalLeaveDaysByType() {
+            var a = $("#leaveFrom").val();
+            var b = $("#leaveTo").val();
+            var c = $("#leaveTypeId").val();
+            if (a != '' && b != '' && c != '') {
+                Common.Ajax('GET', '/HRPMSLeave/LeaveRegister/GetTotalLeaveDaysBetweenDate?frmDate=' + a + '&toDate=' + b + '&leaveType=' + c, [], 'json', ajaxGetTotalLeaveDaysBetweenDate1, true);
+            }
+            //Common.Ajax('GET', '/HRPMSLeave/LeaveRegister/GetTotalLeaveDaysBetweenDate?frmDate=' + a + "&toDate=" + b + "&leaveType=" + c, [], 'json', ajaxGetTotalLeaveDaysBetweenDate);
+        }
+
+        function ajaxGetTotalLeaveDaysBetweenDate1(response) {
+            console.log(response);
+            if (response == 'Error') {
+                swal('warning', 'Shift group not found', 'warning');
+            }
+            else {
+                //$('#daysLeave').empty();
+                $('#daysLeave').val(response.daysLeave);
+                GetTenure();
+            }
+        }
+
+        function Rejectdata() {
+            var isChecked = $('.SelectCheckBox:checkbox:checked').length;
+            if (isChecked == 0) {
+                swal('Attention!', 'Please select minimum 1 !!!', 'warning');
+                return false;
+			}
+
+            //$('#btnReject').attr("disabled", true);
+            @*var form = $("#allform");
+                $.ajax({
+                    url: '@Url.Action("ActionAllReject", "LeaveApproval")',
+                    data: form.serialize(),
+                    type: 'POST',
+                    success: function (records) {
+                        swal({
+                            title: '', text: 'Reject Successfully!', type: 'success', showCancelButton: false, confirmButtonColor: '#3085d6', confirmButtonText: 'Ok!',
+                        }).then(function () {
+                            //$('#btnReject').attr("disabled", false);
+							location.reload();
+                        });
+                    }
+            });*@
+
+            var form = $("#allform1");
+			swal({
+				title: 'Are you sure?', text: 'Do you want to reject this!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, reject it!'
+			}).then(function () {
+				$.ajax({
+					url: '@Url.Action("ActionAllReject", "LeaveApproval")',
+                    data: form.serialize(),
+                    type: 'POST',
+				})
+				.done(function () {
+					swal({
+						title: '', text: 'Rejected Successfully!', type: 'success', showCancelButton: false, confirmButtonColor: '#3085d6', confirmButtonText: 'Ok!',
+					}).then(function () {
+						location.reload();
+					});
+				})
+				.fail(function () {
+					location.reload();
+				});
+			});
+        }
+
+        function Return() {
+            var isChecked = $('.SelectCheckBox:checkbox:checked').length;
+            if (isChecked == 0) {
+                swal('Attention!', 'Please select minimum 1 !!!', 'warning');
+                return false;
+            }
+            //$('#btnReturn').attr("disabled", true);
+          //  let id = $('#operationMasterIdDoc').val();
+			var form = $("#allform1");
+			swal({
+				title: 'Are you sure?', text: 'Do you want to return this!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, return it!'
+			}).then(function () {
+				$.ajax({
+					url: '@Url.Action("ActionAllReturn", "LeaveApproval")',
+                    data: form.serialize(),
+                    type: 'POST',
+				})
+				.done(function () {
+					swal({
+						title: '', text: 'Return Successfully!', type: 'success', showCancelButton: false, confirmButtonColor: '#3085d6', confirmButtonText: 'Ok!',
+					}).then(function () {
+						location.reload();
+					});
+				})
+				.fail(function () {
+					location.reload();
+				});
+			});
+        }
+
+        function check() {
+            if (document.getElementById("main").checked == true) {
+                $(".SelectCheckBox").trigger("click");
+            } else {
+                $('input[name="child"]').each(function () {
+                    this.checked = false;
+                    var id = this.getAttribute('id');
+                    var leaveid = parseInt(id.split('-')[2]);
+                    DeleteMultiple(leaveid);
+                });
+            }
+        }
+
+        function AddInfo(arg) {
+            var dtTable = $("#selectedListTable1");
+            var tableBody = dtTable.find('tbody');
+            var trHtml = "";
+            var trId = 0;
+            var isValid = true;
+            var id = arg.getAttribute('id');
+            var leaveid = parseInt(id.split('-')[2]);
+            var vid= parseInt(id.split('-')[1]);
+            if (arg.checked) {
+                // Add New Item in the List
+                trId = id;
+                var locationList = "";
+                var index = $("#selectedListTable1 tbody>tr").length;
+                trHtml = '<tr class=' + leaveid + ' id=' + index + "_" + leaveid +
+                    '>' +
+                    '<td>' + leaveid +
+                    '<input type="hidden"  class="leadsId"  name="registerids" value="' + leaveid + '"/>' +
+                    '<input type="hidden"  class="leadsId"  name="ids" value="' + vid + '"/>' +
+                    '</td>' +
+                    '</tr>';
+                tableBody.append(trHtml);
+            } else {
+                DeleteMultiple(leaveid);
+            }
+        }
+
+        function DeleteMultiple(index) {
+            $("#selectedListTable ." + index).remove();
+            //swal('', 'Uncheck Successfully!', 'success');
+            return false;
+        }
+		$("#ValidatModal").on("hidden.bs.modal", function () {
+			$('#' + $("#checkboxId").val()).click();
+		});
+
+
+        function AddValue(id, empId, leaveId, leaveTypeId, whenLeave, leaveType, contactnumber, purpose, address, from, to, days, employeeId, leaveDayId, subName, subDes, empNameEng) {
+            $("#whenLeave").val(whenLeave);
+            $("#leaveTypeId").val(leaveType);
+            $("#emergencyContactNo").val(contactnumber);
+            $("#employeeId").val(empId);
+            $("#leaveId").val(leaveId);
+            $("#id").val(id);
+            $("#leaveRegId").val(id);
+            $("#address").val(address);
+            $("#purposeOfLeave").val(purpose);
+            $("#leaveFrom").val(from);
+            $("#leaveTo").val(to);
+            $("#daysLeave").val(days);
+            $("#substitutionEmpCode").val(subName);
+			$("#substitutionEmpDes").val(subDes);
+			$("#popEmpName").text(empNameEng);
+			Common.Ajax('GET', '/HRPMSLeave/LeaveApproval/GetBalanceStats?id=' + employeeId, [], 'json', ajaxBalanceStats, false);
+
+
+			Common.Ajax('GET', '/HRPMSLeave/LeaveApproval/GetApprovalMatrixByEmpId?id=' + employeeId, [], 'json', ajaxMatrix);
+
+
+			$('#-' + id + '-' + leaveId).click();
+			$('#checkboxId').val('-' + id + '-' + leaveId);
+
+
+            if (leaveType == "Half Day Leave") {
+                leaveTypeId = 2;
+            }
+            Common.Ajax('GET', '/global/api/GetLeaveBalanceByempId/' + employeeId + '/' + leaveTypeId, [], 'json', ajaxLeaveBalance);
+
+            if (leaveType == "Sick Leave" || leaveType == "Earned Leave") {
+                if (leaveDayId == null || leaveDayId == 0 || leaveDayId == "") {
+                    $('#divHalfDay').hide();
+                }
+                else {
+                    $('#divHalfDay').show();
+                    $('#divLeaveDay').show();
+                    $('#HalfDay').attr('checked', true);
+                    $('#FullDay').attr('checked', false);
+                    $('#leaveDayId').val(leaveDayId);
+                }
+			}
+
+		}
+		function ajaxBalanceStats(response) {
+			var option = "";
+			$.each(response.leaveStatusViewModels, function (i, item) {
+				option += `<tr>
+                                <td>${item.LeaveTypeName}</td>
+                                <td>${item.leaveCarryDays}</td>
+                                <td>${item.leaveAvailed}</td>
+                                <td>${item.cumLeaveBalance}</td>
+                            </tr>`
+			});
+			$('#stats').empty();
+			$('#stats').append(option);
+		}
+        //<p>${item.approvalDetails?.approver?.designation}</p>
+		function ajaxMatrix(response) {
+            var option = "";
+            //console.log("okkkkkkkkkkk");
+            console.log(response);
+			$.each(response.approvalDetails, function (i, item) {
+				if (item.isDelete == 1) {
+					option += `<div class="col-md-4 p-0">
+								<div class="card" style="width: 100%; background-color: lightsalmon !important; min-height: 100% !important;">
+									<img src="/images/defaultperson.png" style="width: 70px; height: 70px; border-radius: 50%; text-align: center; margin: 0 auto;" class="card-img-top" />
+									<div class="card-body text-center px-1">
+										<p>${item.approver?.nameEnglish}</p>
+									 
+										<span class="badge-success px-1">${item.sortOrder}</span>
+									</div>
+								</div>
+							</div>`
+				}
+				else {
+					option += `<div class="col-md-4 p-0">
+								<div class="card" style="width: 100%; background-color: lightgreen !important;  min-height: 100% !important;">
+									<img src="/images/defaultperson.png" style="width: 70px; height: 70px; border-radius: 50%; text-align: center; margin: 0 auto;" class="card-img-top" />
+									<div class="card-body text-center px-1">
+										<p>${item.approver?.nameEnglish}</p>
+										
+										<span class="badge-success px-1">${item.sortOrder}</span>
+									</div>
+								</div>
+							</div>`
+				}
+
+			});
+			$('#popMatrix').empty();
+			$('#popMatrix').append(option);
+		}
+
+        function ajaxLeaveBalance(response) {
+            var value = response;
+            $("#leaveOpenBalance").val(value);
+            $("#lOb").val(value);
+		}
+
+
+	</script>
+}

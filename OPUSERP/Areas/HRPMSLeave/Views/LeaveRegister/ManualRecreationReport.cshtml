@@ -1,0 +1,103 @@
+﻿@{
+    ViewData["Title"] = "Manual Recreation Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .redStar {
+        color: red;
+    }
+
+    ul.ui-autocomplete {
+        z-index: 99999999;
+    }
+</style>
+<div class="card">
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+            <h5 class="card-title" style="color: black; margin: 8px;">Manual Recreation Report</h5>
+        </div>
+        <div class="col-md-8">
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1018&perentId=6282'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <label for="report" class="col-sm-3 col-form-label">Report By <span class="redStar">*</span></label>
+            <div class="col-sm-9">
+                <select class="form-control" id="report" name="report" required>
+                    <option value="">Please Select Report Type</option>
+                    <option value="1">Manual Recreation Report- Head Office</option>
+                    <option value="2">Manual Recreation Report- Branch Office</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-12">
+                <div class="form-group row">
+                    <label for="" class="col-sm-3 col-form-label">From Date</label>
+                    <div class="col-sm-3">
+                        <input type="text" value="" id="fromDate" readonly class="form-control datepicker" />
+                    </div>
+                    <div class="col-sm-3">
+                        To Date
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="text" value="" id="toDate" readonly class="form-control datepicker" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <input type="button" value="Report" id="button" class="btn btn-info btn-sm " style="margin-left: 85%;" />
+        <input type="button" value="Reset" id="Reset" class="btn btn-secondary btn-sm right" />
+    </div>
+    <input type="hidden" id="hidden" value="@DateTime.Now.ToString("dd-MMM-yyyy")" />
+</div>
+@section Scripts{
+    <script>
+		$(document).ready(function () {
+			$("#enrollID").select2();
+            $(".datepicker").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2080" }).datepicker("setDate", new Date());
+            $("#fromDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2080" }).datepicker("setDate", new Date());
+            $("#toDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2080" }).datepicker("setDate", new Date());
+            $("#trainingDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2080" }).datepicker("setDate", new Date());
+            $('.HideShow').hide();
+            var year = new Date().getFullYear();  // returns the current year: 2021
+            var startyear = (year - 20);
+            var endyear = (year + 10);
+            var option = '<option value="">Select</option>';
+            for (var i = startyear; i < endyear + 1; i++) {
+                option += '<option value="' + i + '">' + i + '</option>';
+            }
+            $(".year").html(option);
+            $(".year").val(year);
+
+            $("#button").click(function (e) {
+                //alert($("#fromDate").val());
+                //alert($("#toDate").val());
+                let report = $('#report :selected').val();
+                var from = $('#from').val();
+                if (report == 1) {
+                    window.open('/HRPMSLeave/LeaveRegister/ManualRecreationHeadOfficeReportPDF?fromDate=' + $("#fromDate").val() + "&toDate=" + $("#toDate").val(), '_blank');
+                    //window.open('/HRPMSTrainingNew/TrainingImplementation/CourseWiseTrainingDateRangePdf?courseId=' + $("#courseID").val() + "&startDate=" + $("#fromDate").val() + "&endDate=" + $("#toDate").val(), '_blank');
+                    //window.open('/HRPMSTrainingNew/TrainingImplementation/InstituteWiseYearlyTrainingReportPdf?year=' + $("#yearYearhwise").val());
+                }
+                else if (report == 2) {
+                    window.open('/HRPMSLeave/LeaveRegister/ManualRecreationBranchReportPDF?fromDate=' + $("#fromDate").val() + "&toDate=" + $("#toDate").val(), '_blank');
+                    //window.open('/HRPMSTrainingNew/TrainingImplementation/InstituteWiseMonthlyTrainingReportPdf?year=' + $("#yearMonthwise").val() + "&month=" + $("#monthMonthwise").val(), '_blank');
+                }
+
+            });
+
+        });
+        
+        $('#Reset').click(function () {
+            $('#report').val("");
+            $('.HideShow').hide();
+            $(".year").val(new Date().getFullYear());
+        });
+    </script>
+}

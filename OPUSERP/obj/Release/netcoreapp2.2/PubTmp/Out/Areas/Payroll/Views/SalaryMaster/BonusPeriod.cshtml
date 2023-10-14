@@ -1,0 +1,305 @@
+﻿@model SalaryPeriodViewModel
+@{
+    ViewData["Title"] = "Bonus Period";
+    Layout = "~/Areas/Payroll/Views/Shared/_SalaryMasterForm.cshtml";
+}
+
+@section StyleMD{
+    <style>
+        .redStar {
+            color: red;
+            float:right;
+        }
+    </style>
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Bonus Period</h6>
+        <div style="float: right;">
+            <a class='btn btn-info mr-4' style=" margin-top: -10px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=10&perentId=1265'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <form asp-area="Payroll" id="FormId" asp-controller="SalaryMaster" asp-action="BonusPeriod" method="post" data-parsley-validate="parsley">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div class="form-group row">
+                            <label for="salaryTypeId" class="col-sm-4 col-form-label">Type <span class="redStar">*</span></label>
+                            <div class="col-sm-8">
+                                <select name="salaryTypeId" id="salaryTypeId" class="form-control" data-parsley-required="true">
+                                    <option value="">Select Type</option>
+                                    @foreach (var data in Model.salaryTypesList)
+                                    {
+                                        <option value="@data.Id">@data.salaryTypeName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" id="divBonus">
+                            <label for="bonusTypeId" class="col-sm-4 col-form-label">Bonus Type </label>
+                            <div class="col-sm-8">
+                                <select name="bonusTypeId" id="bonusTypeId" class="form-control">
+                                    <option value="">Select Bonus Type</option>
+                                    @foreach (var data in Model.bonusTypesList)
+                                    {
+                                        <option value="@data.Id">@data.bonusTypeName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="salaryYearId" class="col-sm-4 col-form-label">Salary Year<span class="redStar">*</span></label>
+                            <div class="col-sm-8">
+                                <select name="salaryYearId" id="salaryYearId" class="form-control" data-parsley-required="true">
+                                    <option value="">Select Year</option>
+                                    @foreach (var data in Model.salaryYearsList)
+                                    {
+                                        <option value="@data.Id">@data.yearName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="taxYearId" class="col-sm-4 col-form-label">Tax Year <span class="redStar">*</span></label>
+                            <div class="col-sm-8">
+                                <select name="taxYearId" id="taxYearId" class="form-control" data-parsley-required="true">
+                                    <option value="">Select Tax Year</option>
+                                    @foreach (var data in Model.taxYearsList)
+                                    {
+                                        <option value="@data.Id">@data.taxYearName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="form-group row">
+                            <label for="monthName" class="col-sm-3 col-form-label">Month Name <span class="redStar">*</span></label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="monthName" name="monthName" data-parsley-required="true">
+                                    <option value="">Select Month</option>
+                                    <option value="January">January</option>
+                                    <option value="February">February</option>
+                                    <option value="March">March</option>
+                                    <option value="April">April</option>
+                                    <option value="May">May</option>
+                                    <option value="June">June</option>
+                                    <option value="July">July</option>
+                                    <option value="August">August</option>
+                                    <option value="September">September</option>
+                                    <option value="October">October</option>
+                                    <option value="November">November</option>
+                                    <option value="December">December</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="periodName" class="col-sm-3 col-form-label">Period Name <span class="redStar">*</span></label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="periodName" value="" name="periodName" data-parsley-required="true">
+                                <input type="hidden" id="editId" name="editId" value=0>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="daysWorking" class="col-sm-3 col-form-label">Working Days <span class="redStar">*</span></label>
+                            <div class="col-sm-9">
+                                <input type="number" class="form-control" id="daysWorking" value="" name="daysWorking" data-parsley-required="true">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="mailText" class="col-sm-3 col-form-label">Narration</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="mailText" value="" name="mailText">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"> Save</i></button>
+            </form>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Bonus Period List</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="educationalTable">
+                    <thead>
+                        <tr>
+                            <th>SL#</th>
+                            <th>Period Name</th>
+                            <th>Year</th>
+                            <th>Month Name</th>
+                            <th>Tax Year</th>
+                            <th>Salary Type</th>
+                            <th>Lock Type</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 1;
+
+                            @foreach (var data in Model.salaryPeriodsList.Where(a => a.salaryTypeId == 2))
+                            {
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@data.periodName</td>
+                                    <td>@data.salaryYear.yearName</td>
+                                    <td>@data.monthName</td>
+                                    <td>@data.taxYear.taxYearName</td>
+                                    <td>@data.salaryType.salaryTypeName</td>
+                                    @if (@data.lockLabel == 5)
+                                    {
+                                        <td>Locked</td>
+                                    }
+                                    else if (@data.lockLabel == 4)
+                                    {
+                                        <td>In Disburse</td>
+                                    }
+                                    else if (@data.lockLabel == 3)
+                                    {
+                                        <td>In Approve</td>
+                                    }
+                                    else if (@data.lockLabel == 2)
+                                    {
+                                        <td>Ongoing</td>
+                                    }
+                                    else if (@data.lockLabel == 0)
+                                    {
+                                        <td>In Process</td>
+                                    }
+                                    @if (@data.lockLabel == 0 || @data.lockLabel == 1 || @data.lockLabel == 2 || @data.lockLabel == 3)
+                                    {
+                                        <td>
+                                            <a class="btn btn-success" onclick="Edit(@data.Id,'@data.periodName','@data.monthName','@data.salaryYearId','@data.taxYearId','@data.salaryTypeId','@data.bonusTypeId','@data.daysWorking', '@data.mailText')" href="javascript:void(0)"><i class="fa fa-edit"></i></a>
+                                            &nbsp;&nbsp;
+                                            <a class="btn btn-danger" href="javascript:void(0)" onclick="DeleteMaster(@data.Id)"><i class="fa fa-trash-alt"></i></a>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td></td>
+                                    }
+                                </tr>
+                                i++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ScriptsMD{
+    <script>
+        $('#submit').click(function () {
+		console.log($('#FormId').serializeArray());
+		var data = $('#FormId').serializeArray();
+
+		console.log(data[0].value)
+		swal({
+			title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+		}).then(function () {
+			$.ajax({
+                url: '@Url.Action("BonusPeriod", "SalaryMaster")',
+				type: 'POST',
+				data: data
+			}).done(function () {
+                if (data[0].value == 0) {
+                    swal('success', 'Saved Successfully!', 'success').then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    swal('success', 'Updated Successfully!', 'success').then(function () {
+                        location.reload();
+                    });;
+                }
+			}).fail(function () {
+				swal('warning', 'Failed!', 'warning');
+			})
+		});
+	})
+
+        $(document).ready(function () {
+
+            $('#educationalTable').DataTable();
+            $("#divBonus").hide();
+
+            $("#salaryTypeId").change(function () {
+                if ($('#salaryTypeId').val() == 2) {
+                    $("#divBonus").show();
+                }
+                else {
+                    $("#divBonus").hide();
+                }
+            });
+
+            $("#salaryYearId").change(function () {
+                GetPeriodName();
+            });
+            $("#monthName").change(function () {
+                GetPeriodName();
+            });
+            $("#salaryTypeId").change(function () {
+                GetPeriodName();
+            });
+        });
+
+        function GetPeriodName() {
+            var period = $("#salaryTypeId option:selected").text() + "-" + $("#monthName").val() + "-" + $("#salaryYearId option:selected").text();
+            $("#periodName").val(period);
+        }
+
+        function Edit(Id, periodName, monthName, salaryYearId, taxYearId, salaryTypeId, bonusTypeId, daysWorking, mailText) {
+            $('#editId').val(Id);
+            $('#periodName').val(periodName);
+            $('#monthName').val(monthName);
+            $('#salaryYearId').val(salaryYearId);
+            $('#taxYearId').val(taxYearId);
+            $('#salaryTypeId').val(salaryTypeId);
+            if (bonusTypeId == '') {
+                $("#divBonus").hide();
+                $('#bonusTypeId').val('');
+            }
+            else {
+                $("#divBonus").show();
+                $('#bonusTypeId').val(bonusTypeId);
+            }
+            $('#daysWorking').val(daysWorking);
+            $('#mailText').val(mailText);
+        }
+
+        function DeleteMaster(Id) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+
+                $.ajax({
+                    url: '@Url.Action("DeleteSalaryPeriodById", "SalaryMaster")',
+                    data: { Id: Id },
+                    type: 'POST',
+                })
+                    .done(function () {
+                        swal('', 'Deleted Successfully!', 'success');
+                        window.location.href = "/Payroll/SalaryMaster/BonusPeriod";
+                    })
+                    .fail(function () {
+                        swal('Cancelled', 'It will not be deleted. Please try again later !!!', 'error');
+                    });
+            });
+        }
+
+    </script>
+}

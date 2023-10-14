@@ -1,0 +1,115 @@
+﻿
+@{
+    ViewData["Title"] = "OrganogramView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="~/css/site.css" />
+<style>
+	#orgDiv td.google-visualization-orgchart-node.google-visualization-orgchart-node-medium {
+		background: lightgray;
+		border: 1px solid black;
+		padding: 5px;
+		box-shadow: none;
+	}
+
+	#orgDiv td.google-visualization-orgchart-node.google-visualization-orgchart-node-medium.google-visualization-orgchart-nodesel {
+		background: lightseagreen;
+		border: 1px solid black;
+		padding: 5px;
+		box-shadow: none;
+	}
+	.childTbl tbody tr td{
+		padding: 0;
+		text-align: left;
+	}
+    .childTbl{
+        margin-bottom: 0;
+    }
+</style>
+
+<div class="card" style="width: 100%;">
+    <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+        <h5 class="m-0 font-weight-bold text-primary">Organogram</h5>
+        <a class='btn btn-info mr-4' style="float:right"  href='/Home/GridMenuPage?moduleId=3&perentId=5701'>@*<i class="fas fa-backward fa-2x "></i>*@<i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+    </div>
+    <div class="card-body" id="box" style="overflow: scroll">
+        <div id="orgDiv"></div>
+    </div>
+</div>
+
+@section Scripts{
+	@*<script src="~/lib/jquery/dist/jquery.min.js"></script>*@
+	@*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+		<script src="~/js/site.js" asp-append-version="true"></script>*@
+
+	@*<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>*@
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+	<script type="text/javascript">
+        $(document).ready(function () {
+            var myDiv = $("#box");
+            var scrollto = myDiv.offset().left + ((myDiv.width() / 2)-200);
+            myDiv.animate({ scrollLeft: scrollto });
+        })
+		google.load("visualization", "1", { packages: ["orgchart"] });
+		google.setOnLoadCallback(drawEmpChart);
+
+		function drawEmpChart() {
+			$.ajax({
+				type: 'GET',
+				url: "/HRPMSEmployee/Organogram/OrganogramApi",
+				success: function (empData) {
+					console.log(empData);
+
+					var chartData = new google.visualization.DataTable();
+
+					chartData.addColumn('string', 'id');
+					chartData.addColumn('string', 'title');
+					chartData.addColumn('string', 'subTitle');
+					chartData.addColumn('string', 'url');
+
+
+					$.each(empData, function (index, row) {
+						var option = '';
+
+						var sum = 0;
+						$.each(row.children, function (i, item) {
+                            option += `<tr>
+											<td>${item.memberCount} =</td>
+											<td>${item.designation?.shortName}</td>
+										</tr>`
+							sum += item.memberCount;
+						})
+						if (row.children.length > 0) {
+							option += `<tr>
+										<td>Total = </td>
+										<td> ${sum}</td>
+									</tr>`
+						}
+
+						var Id = row.parentId.toString() == "0" ? '' : row.parentId.toString();
+						var url = 'Assets/man.jpg';
+						if (row.url != null && row.url != '') {
+							url = row.url;
+						}
+
+						chartData.addRows([[{
+							v: row.Id.toString(),
+							//f: row.title + '<div><img height="50px" width="50px" src="/OrgImg/' + url + '" /></div><div><table class="table childTbl" style="">'+option+'</table></div>'
+							f: '<div><span style="font-weight: bold; text-align: center; display: block; background: lightgoldenrodyellow;">' + row.title + '</span></div>' + '<img height="50px" width="50px" src="/' + url + '" /><div><table class="table childTbl" style="">'+option+'</table></div>'
+						}, Id, row.subTitle, row.url]]);
+						option = '';
+
+					});
+
+
+					var chart = new google.visualization.OrgChart($("#orgDiv")[0]);
+					chart.draw(chartData, { allowHtml: true });
+				}
+			});
+		}
+	</script>
+}

@@ -1,0 +1,271 @@
+﻿@model ApplicationFormViewModel
+@{
+    ViewData["Title"] = "AcceptedCandidates";
+    Layout = "~/Areas/HRPMSEmployee/Views/Shared/_EmployeeForm.cshtml";
+}
+<div class="modal" id="IdMarkingModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Mark</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="container">
+                <form asp-area="HRPMSRecruitment" asp-controller="ValidApplicants" asp-action="AcceptedCandidates" method="post" enctype="multipart/form-data" data-parsley-validate="parsley">
+                    <input type="hidden" name="Id" id="Id"  data-parsley-validate="parsley"/>
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label for="ApplicationNo">Application Number</label>
+                        </div>
+                        <div class="col-7">
+                            <input type="text" class="form-control" id="ApplicationNo" name="ApplicationNo" readonly  data-parsley-validate="parsley"/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label for="ApplicantName">Applicant Name</label>
+                        </div>
+                        <div class="col-7">
+                            <input type="text" class="form-control" id="ApplicantName" name="ApplicantName" readonly  data-parsley-validate="parsley"/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label for="WrittenMarks">Written Marks</label>
+                        </div>
+                        <div class="col-7">
+                            <input type="text" class="form-control" id="WrittenMarks" name="WrittenMarks"  data-parsley-validate="parsley"/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label for="VivaMarks">Viva Marks</label>
+                        </div>
+                        <div class="col-7">
+                            <input type="text" class="form-control" id="VivaMarks" name="VivaMarks"  data-parsley-validate="parsley"/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label for="TotalMarks">Total Marks</label>
+                        </div>
+                        <div class="col-7">
+                            <input type="text" class="form-control" id="TotalMarks" name="TotalMarks" readonly  data-parsley-validate="parsley"/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-5">
+                            <label for="ApplicantRemarks">Applicant Remarks</label>
+                        </div>
+                        <div class="col-7">
+                            <input type="text" class="form-control" id="ApplicantRemarks" name="ApplicantRemarks"  data-parsley-validate="parsley"/>
+                        </div>
+                    </div>
+                    <hr>
+                    <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>
+                    <button type="button" id="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+                    <br />
+                    <br />
+                    <br />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h5 class="m-0 font-weight-bold text-primary">List of Accepted Applicants</h5>
+                <button type="button" class="btn btn-info float-right btn-sm" style="display:none;" id="CheckSubmit" onclick="ClickShortList()">Short Listed</button>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="AcceptedApplicantsTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="checkedAll" name="Check">
+                                    <label class="form-check-label" for="CheckAll">Check All</label>
+                                </div>
+                            </th>
+                            <th>SN</th>
+                            <th>Application Number</th>
+                            <th>Applicant Name</th>
+                            <th>Written Marks</th>
+                            <th>Viva Marks</th>
+                            <th>Total Marks</th>
+                            <th>Applicant Remarks</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ var Count = 1;
+                            @foreach (var data in Model.applicationForms)
+                            {
+                                var st = @data.status;
+                                if (st == 2)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input checkSingle" id="Check" name="Check" value="@data.Id">
+                                                <label class="form-check-label" for="Check">Check</label>
+                                            </div>
+                                        </td>
+                                        <td>@Count</td>
+                                        <td>@data.applicationNo</td>
+                                        <td>@data.nameEN</td>
+                                        <td>@data.writtenMarks</td>
+                                        <td>@data.vivaResult</td>
+                                        <td>@data.totalMarks</td>
+                                        <td>@data.remarks</td>
+                                        <td>
+                                            <a class="btn btn-outline-info btn-sm" href="javascript:void(0)" type="button" onclick="MarkingModal(@data.Id,'@data.applicationNo','@data.nameEN',)" id="MarkingModal">Marking</a>
+                                        </td>
+                                    </tr>
+                                    Count++;
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section ScriptsEmp{
+    <script>
+        function MarkingModal(id, applicationNo, name) {
+            $('#Id').val(id);
+            $('#ApplicationNo').val(applicationNo);
+            $('#ApplicantName').val(name);
+            $('#IdMarkingModal').modal('show');
+        }
+        $(document).ready(function () {
+            $('#WrittenMarks').on('keyup',function () {
+                var wm = $('#WrittenMarks').val();
+                var vm = $('#VivaMarks').val();
+                if (wm != '' && vm != '') {
+                    var sum = parseInt(wm) + parseInt(vm);
+                    $('#TotalMarks').val(sum);
+                }
+            });
+            $('#VivaMarks').on('keyup',function () {
+                var wm = $('#WrittenMarks').val();
+                var vm = $('#VivaMarks').val();
+                if (wm != '' && vm != '') {
+                    var sum = parseInt(wm) + parseInt(vm);
+                    $('#TotalMarks').val(sum);
+                }
+            });
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+            });
+            //$('#AcceptedApplicantsTable').DataTable();
+            $('#AcceptedApplicantsTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                        },
+                        title: " Accepted Applicants Information",
+                        messageTop: 'List of Accepted Applicants',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6,7]
+                        },
+                        title: " Accepted Applicants Information",
+                        messageTop: 'List of Accepted Applicants'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: " Accepted Applicants Information",
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+            $("#checkedAll").change(function () {
+                if (this.checked) {
+                    $(".checkSingle").each(function () {
+                        this.checked = true;
+                    });
+                } else {
+                    $(".checkSingle").each(function () {
+                        this.checked = false;
+                        $('#CheckSubmit').hide();
+                    });
+                }
+            });
+            $(".checkSingle").click(function () {
+                if ($(this).is(":checked")) {
+                    var isAllChecked = 0;
+
+                    $(".checkSingle").each(function () {
+                        if (!this.checked)
+                            isAllChecked = 1;
+                    });
+
+                    if (isAllChecked == 0) {
+                        $("#checkedAll").prop("checked", true);
+                    }
+                }
+                else {
+                    $("#checkedAll").prop("checked", false);
+                }
+            });
+            var $submit = $("#CheckSubmit").hide(),
+                $checkboxSubmit = $('input[name="Check"]').click(function () {
+                $submit.toggle($checkboxSubmit.is(":checked"));
+                });
+        });
+        function ClickShortList() {
+            var checkedId = "";
+            $('input[name="Check"]:checked').each(function () {
+                if (this.value != 'on') {
+                    checkedId += this.value + 'A'
+                }
+            });
+
+            Common.Ajax('GET', '/HRPMSRecruitment/ValidApplicants/CandidateStatusChange?id=' + checkedId + '&status=' + 6, [], 'json', ajaxFunction, false);
+        }
+        function ajaxFunction(res) {
+            if (res == "ok") {
+                swal('success', 'sussessfully updated', 'success').then(function () {
+                    window.location.reload();
+                })
+            }
+        } 
+    </script>
+}

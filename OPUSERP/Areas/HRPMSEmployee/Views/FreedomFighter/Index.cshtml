@@ -1,0 +1,607 @@
+﻿@model FreedomFighterViewModel
+@{
+    ViewData["Title"] = "Freedom Fighter Information";
+    Layout = "~/Areas/HRPMSEmployee/Views/Shared/_EmployeeForm.cshtml";
+}
+@section StyleEmp{
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        .redStar {
+            color: red;
+        }
+
+        #myDIV {
+            background-color: white;
+            padding: 20px;
+            box-shadow: 3px 3px 3px 3px lightgray;
+            max-height: 415px;
+            overflow-y: scroll;
+            padding-top: 5px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+            background-color: white;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #F3F3F3;
+        }
+
+        .g {
+            text-decoration: none;
+            color: #1492a5;
+        }
+
+            .g:hover {
+                text-decoration: none;
+                color: #070a67;
+            }
+
+            .g span {
+                font-family: serif;
+            }
+
+        .small-box {
+            text-align: center;
+            border-radius: 10px;
+            padding: 10px;
+            transition: transform .5s;
+        }
+
+            .small-box:hover {
+                background-color: #e8f0fe;
+                transform: scale(.95);
+            }
+
+            .small-box i {
+                font-size: 35px;
+                margin: 10px;
+            }
+    </style>
+}
+
+<div class="card" style="width: 100%;">
+
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; border-right: 1px solid #D9D8DB">
+            <h5 class="card-title" style="color: black; margin: 0;">Freedom Fighter Information</h5>
+        </div>
+        <div class="col-md-8">
+            @if (User.IsInRole("HRAdmin") || User.IsInRole("admin"))
+            {
+                <div style="float: left;">
+
+                    @if (Model.photograph?.url == null || Model.photograph?.url == "")
+                    {
+                        <img src="~/images/user-icon-png.png" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                    }
+                    else
+                    {
+                        <img src="~/@Model.photograph?.url" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                    }
+                    @*<img src="~/@Model.photograph?.url" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />*@
+                    <input type="hidden" id="hiddenFile" />
+                </div>
+            }
+            else
+            {
+                <div style="float: left;">
+
+                    @if (Model.photograph?.url == null || Model.photograph?.url == "")
+                    {
+                        <img src="~/images/user-icon-png.png" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                    }
+                    else
+                    {
+                        <img src="~/@Model.photograph?.url" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                    }
+                    @*<img src="~/@Model.photograph?.url" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />*@
+                    <input type="hidden" id="hiddenFile" />
+                </div>
+            }
+            <div style="float: left;">
+                <div style="padding: 5px;text-align: center;">
+                    <p style="margin: 0; text-transform: uppercase;">@Model.employeeInfo?.nameEnglish</p>
+                    <p style="margin: 0">@Model.employeeInfo?.lastDesignation?.designationName</p>
+                </div>
+            </div>
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info mr-2' style="" data-toggle='tooltip' title='Go Back' href='/HRPMSEmployee/Photograph/EditGrid/@Model.employeeInfo?.Id'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+                @*<a class='btn btn-info' style="" data-toggle='tooltip' title='Print' target='_blank' href='/HRPMSEmployee/InfoView/pdspdf/@Model.employeeInfo?.Id'><i class='fa fa-print'></i></a>*@
+                <a id="btngle" href="javascript:void(0)" class="btn btn-outline-success mr-5"
+                   style="position: absolute; right: 82px; top: 17px; box-shadow: none; font-size: 17px;"><i class="fas fa-th"></i></a>
+
+            </div>
+        </div>
+    </div>
+
+    @*<div class="card-header row">
+            <div class="col-8">
+                <h5 class="card-title" style="color: black">Freedom Fighter Information</h5>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="card-body row">
+                <div class="col-2">
+                    <img id="user_img_current" style="width: 180px;height: 165px;border-radius: 120px;cursor:pointer;" src="~/@Model.photograph?.url" alt="" class="img-thumbnail float-left">
+                    <i class="fa fa-camera" data-toggle="modal" data-target="#updateEmpPhotoModal" style="position:relative;margin-top:120px;margin-left:-22px;cursor:pointer;"></i>
+                    <input type="hidden" id="hiddenFile" />
+                </div>
+                <div class="col-9" style="color: black; font-size: 15px; padding-top: 24px;">
+                    <span style="font-weight:bold;">Employee Name :</span> <span style="margin-left:10px">@Model.employeeInfo?.nameEnglish</span><br />
+                    <span style="font-weight:bold;">Designation :</span> <span style="margin-left:10px">@Model.employeeInfo?.designation</span><br />
+                    <span style="font-weight:bold;">Department :</span> <span style="margin-left:10px">@Model.employeeInfo?.department.deptName</span><br />
+                    <span style="font-weight:bold;">Joining Date :</span><span style="margin-left:10px">@Model.employeeInfo?.joiningDateGovtService</span><br />
+                    <span style="font-weight:bold;">Job Nature :</span><span style="margin-left:10px">@Model.employeeInfo?.employeeType?.empType</span><br />
+                    <span style="font-weight:bold;">Job Status :</span><span style="margin-left:10px">@(Model.employeeInfo?.activityStatus == 1 ? "Active" : "Inactive")</span>
+                </div>
+                <div class="col-1">
+                    <a class='btn btn-info' style="float:right;" data-toggle='tooltip' title='Print' target='_blank' href='/HRPMSEmployee/InfoView/pdspdf/@Model.employeeInfo.Id'><i class='fa fa-print'></i></a>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-12 row" style="color: black; font-size: 15px; padding-top: 24px;">
+                    <span style="font-weight:bold;">Employee Code :</span> <span style="padding: 0 86% 1% 1%;">@Model.employeeInfo.employeeCode</span>
+
+                    <br />
+
+                    <span style="font-weight:bold;"> Name :</span> <span style="margin-left:10px">@Model.employeeInfo?.nameEnglish </span>
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <h5 class="card-title" style="color: black">@Model.employeeNameCode</h5>
+                </div>
+            </div>
+        </div>
+        <hr />*@
+    <div class="container">
+        <form asp-area="HRPMSEmployee" asp-controller="FreedomFighter" asp-action="Index" id="FormId" method="post" data-parsley-validate="parsley">
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group row">
+                        <label for="ffNo" class="col-sm-4 col-form-label">F.F No. <span style="color:red;">*</span></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="ffNo" name="ffNo" value="" data-parsley-required="true" /> @*@Model.freedomFighter?.number*@
+                            <input type="hidden" id="employeeID" name="employeeID" value="@Model.employeeID">
+                            <input type="hidden" id="FFID" name="FFID" value="0">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="owner" class="col-sm-4 col-form-label">Owner </label>
+                        <div class="col-sm-8">
+                            <select class="form-control" id="owner" name="owner">
+                                <option value="">Select</option>
+                                <option value="Own">Own</option>
+                                <option value="Relative">Relative</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row" id="divRelationShip" style="display:none;">
+                        <label for="relationShip" class="col-sm-4 col-form-label">RelationShip </label>
+                        <div class="col-sm-8">
+                            <select class="form-control" id="relationShip" name="relationShip">
+                                <option value="">Select</option>
+                                <option value="Father">Father</option>
+                                <option value="Mother">Mother</option>
+                                <option value="GrandFather">Grand Father</option>
+                                <option value="GrandMother">Grand Mother</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group row">
+                        <label for="sectorNo" class="col-sm-4 col-form-label">Sector No </label>
+                        <div class="col-sm-8">
+                            <select class="form-control" id="sectorNo" name="sectorNo">
+                                <option value="">Select</option>
+                                <option value="1">Sector 1</option>
+                                <option value="2">Sector 2</option>
+                                <option value="3">Sector 3</option>
+                                <option value="4">Sector 4</option>
+                                <option value="5">Sector 5</option>
+                                <option value="6">Sector 6</option>
+                                <option value="7">Sector 7</option>
+                                <option value="8">Sector 8</option>
+                                <option value="9">Sector 9</option>
+                                <option value="10">Sector 10</option>
+                                <option value="11">Sector 11</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="remark" class="col-sm-4 col-form-label">Remark </label>
+                        <div class="col-sm-8">
+                            <textarea rows="3" class="form-control" id="remarks" name="remark"></textarea> @*@Model.freedomFighter?.remarks*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+            @*<button type="submit" id="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+            <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+            <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+
+
+        </form>
+    </div>
+
+</div>
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold">Freedom Fighter List</h6>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="ffTable">
+                    <thead>
+                        <tr>
+                            <th>F.F No.</th>
+                            <th>Sector No</th>
+                            <th>Owner</th>
+                            <th>Remark</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.freedomFighters)
+                        {
+                            <tr>
+                                <td>@data.number</td>
+                                <td>@data.sectorNo</td>
+                                <td>@data.owner</td>
+                                <td>@data.remarks</td>
+                                <td>
+                                    <a class="btn btn-success" onclick="Edit('@data.number',@data.Id,'@data.sectorNo','@data.owner','@data.remarks')" href="#"><i class="fa fa-edit"></i></a>
+                                    <a class="btn btn-danger" onclick="Remove(@data.Id,@data.employeeID,)" href="#"><i class="fa fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myDIV" style="display: none; width: 311px; position: absolute; right: 50px; top: 167px;">
+    <div class="row">
+        <a href="/HRPMSEmployee/Info/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-tie"></i><span>Basic</span>
+        </a>
+
+        <a href="/HRPMSEmployee/Address/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-map-marker-alt"></i><span>Address</span>
+        </a>
+        <a href="/HRPMSEmployee/Spouse/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-female"></i><span>Spouse</span>
+        </a>
+        <a href="/HRPMSEmployee/Children/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-child"></i><span>Children</span>
+        </a>
+        <a href="/HRPMSEmployee/EmergencyContact/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-blender-phone"></i><span>Emergency Contact</span>
+        </a>
+        <a href="/HRPMSEmployee/Nominee/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-sitemap"></i><span>Nominee</span>
+        </a>
+        <a href="/HRPMSEmployee/Nominee/EmployeeInsurance/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-university"></i><span>Insurance</span>
+        </a>
+        <a href="/HRPMSEmployee/EducationalQualification/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-graduation-cap"></i><span>Education</span>
+        </a>
+        <a href="/HRPMSEmployee/ProfessionalQualifications/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-chalkboard-teacher"></i><span>Qualification</span>
+        </a>
+        <a href="/HRPMSEmployee/OtherQualifications/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-book-reader"></i><span>Other Qualification</span>
+        </a>
+        <a href="/HRPMSEmployee/Training/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-clipboard-list"></i><span>Training History</span>
+        </a>
+        <a href="/HRPMSEmployee/TransferLog/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-stream"></i><span>Service</span>
+        </a>
+        <a href="/HRPMSEmployee/PromotionLog/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-chart-line"></i><span>Promotion</span>
+        </a>
+        <a href="/HRPMSEmployee/ACRLog/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-clipboard-check"></i><span>History</span>
+        </a>
+        <a href="/HRPMSEmployee/Disciplinary/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-times"></i><span>Disciplinary Action</span>
+        </a>
+        <a href="/HRPMSEmployee/Supervisor/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-shield"></i><span>Supervisor</span>
+        </a>
+        <a href="/HRPMSEmployee/License/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-id-badge"></i><span>Driving License</span>
+        </a>
+        <a href="/HRPMSEmployee/Passport/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-passport "></i><span>Passport</span>
+        </a>
+        <a href="/HRPMSEmployee/Travel/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-suitcase-rolling"></i><span>Travel</span>
+        </a>
+        <a href="/HRPMSEmployee/Membership/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-tag"></i><span>Membership</span>
+        </a>
+        <a href="/HRPMSEmployee/Award/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-medal"></i><span>Award</span>
+        </a>
+        <a href="/HRPMSEmployee/Publication/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-atlas"></i><span>Publication</span>
+        </a>
+        <a href="/HRPMSEmployee/Language/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-language"></i><span>Language</span>
+        </a>
+
+        <a href="/HRPMSEmployee/OtherActivities/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-skating"></i><span>Other Activities</span>
+        </a>
+        <a href="/HRPMSEmployee/BankInfo/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-university"></i><span>Bank Acounts</span>
+        </a>
+        <a href="/HRPMSEmployee/Belongings/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-bold"></i><span>Belongings</span>
+        </a>
+        <a href="/HRPMSEmployee/PreviousEmployment/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-th-list"></i><span>Prev.Employment</span>
+        </a>
+        @*<a href="/HRPMSEmployee/FreedomFighter/Index/@Model.employeeID" class="col-md-4 small-box g">
+                <i class="fa fa-user-check"></i><span>Freedom Fighter</span>
+            </a>*@
+
+
+        <a href="/HRPMSEmployee/Reference/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-clock"></i><span>Reference</span>
+        </a>
+        <a href="/HRPMSEmployee/OfficeAssign/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-map-marker-alt"></i><span>Office Assign</span>
+        </a>
+        <a href="/HRPMSEmployee/Photograph/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-circle"></i><span>Picture</span>
+        </a>
+        <a href="/HRPMSEmployee/Photograph/Signature/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-circle"></i><span>Signature</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeContractInfo/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-file-signature"></i><span>Contract</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-sitemap"></i><span>Project Activity</span>
+        </a>
+        <a href="/HRPMSEmployee/FinanceCode/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fas fa-code-branch"></i><span>Financial Code</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeAttachment/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fas fa-file"></i><span>Attachment</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/ProjectAssign/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fas fa-air-freshener"></i><span>Project Assign</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/EmployeeOtherInfo/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fas fa-info-circle"></i><span>Other Info</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/EmployeeCostCentre/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fas fa-dollar-sign"></i><span>Cost Centre</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/EmployeeGrade/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fab fa-glide-g"></i><span>Employee Grade</span>
+        </a>
+
+    </div>
+</div>
+<div class="modal fade" id="updateEmpPhotoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                @*<img src="~/images/Aloha New Logo.png" style="height:50px;" />*@
+                <h5 class="modal-title" id="exampleModalLabel">Update Photo</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-area="HRPMSEmployee" asp-controller="Photograph" asp-action="Index" method="post" enctype="multipart/form-data" data-parsley-validate="parsley">
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="form-group row">
+                        @*<div class="col-5">
+                                <img id="user_img_current" style="width:200px;height:200px" src="~/@Model.photograph.url" alt="" class="img-thumbnail float-left">
+                                <input type="hidden" id="hiddenFile" />
+                            </div>*@
+                        <div class="col-7">
+                            <input type="hidden" name="queryString" id="queryString" value="" />
+                            @if (Model.photograph?.url != null || Model.photograph?.url != "")
+                            {
+                                <img id="user_img" style="width:200px;height:200px;cursor:pointer;" src="~/@Model.photograph?.url" alt="" class="img-thumbnail float-left">
+                            }
+                            else
+                            {
+                                <img id="user_img" style="width:200px;height:200px;cursor:pointer;" src="/images/user-icon-png.png" alt="" class="img-thumbnail float-left">
+                            }
+                            <input type="hidden" name="employeeID" value="@Model.employeeInfo.Id" />
+                            <input type="hidden" name="photographID" value="@Model.photograph?.Id" />
+                            <input type="file" title="Photo Upload" id="imagePath" data-parsley-required="true" name="empPhoto" class="btn btn-default btn-sm pull-right" />
+                            <span style="float:left;color:red;" class="redStar">*</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section ScriptsEmp{
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+
+         @*$('#submit').click(function () {
+		console.log($('#FormId').serializeArray());
+		var data = $('#FormId').serializeArray();
+
+		console.log(data[0].value)
+		swal({
+			title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+		}).then(function () {
+			$.ajax({
+				url: '@Url.Action("Index", "FreedomFighter")',
+				type: 'POST',
+				data: data
+			}).done(function () {
+                if (data[0].value == 0) {
+                    swal('success', 'Saved Successfully!', 'success').then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    swal('success', 'Updated Successfully!', 'success').then(function () {
+                        location.reload();
+                    });;
+                }
+			}).fail(function () {
+				swal('warning', 'Failed!', 'warning');
+			})
+		});
+        })*@
+        $(document).ready(function () {
+
+            var pathname = window.location.pathname;
+            $('#queryString').val(pathname);
+
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+            });
+            $("#btngle").click(function () {
+                $("#myDIV").slideToggle("slow");
+            });
+            //$("#freedomFighter").addClass("active");
+            //$('#startDate').flatpickr({ dateFormat: "d-M-Y" });
+            //$('#endDate').flatpickr({ dateFormat: "d-M-Y" });
+
+            //$('#otherQualificationsTable').DataTable();
+
+            $("#owner").change(function () {
+                if ($("#owner").val() == "Relative") {
+                    $("#divRelationShip").show();
+                }
+                else {
+                    $("#divRelationShip").hide();
+                    $("#relationShip").val('');
+                }
+            });
+
+            @*$("#owner").val('@Model.freedomFighter?.owner');
+            $("#sectorNo").val('@Model.freedomFighter?.sectorNo');*@
+            if ($("#owner").val() == "Relative") {
+                $("#relationShip").val('@Model.freedomFighter?.relationship');
+                $("#divRelationShip").show();
+            }
+            else {
+                $("#relationShip").val('');
+                $("#divRelationShip").hide();
+            }
+            $('#ffTable').DataTable();
+        });
+
+        function Edit(number, Id, sectorNo, owner, remarks) {
+            $("#ffNo").val(number);
+            $("#FFID").val(Id);
+            $("#sectorNo").val(sectorNo);
+            $("#owner").val(owner);
+            $("#remarks").val(remarks);
+        }
+
+        function Remove(Id, employeeId) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+                location.replace("/HRPMSEmployee/FreedomFighter/Delete/" + Id + "?empId=" + employeeId);
+                swal('', 'Deleted Successfully!', 'success')
+            });
+            return false;
+        }
+        //function Remove(Id, employeeId) {
+        //    swal({
+        //        title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+        //    }).then(function () {
+        //        location.replace("/HRPMSEmployee/FreedomFighter/Delete/" + Id + "?empId=" + employeeId);
+        //        swal('', 'Deleted Successfully!', 'success').then(function () {
+        //            window.location.reload();
+        //        });
+        //    });
+        //    return false;
+        //}
+        @*function Remove(Id) {
+	        swal({
+		        title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+	        }).then(function () {
+		        $.ajax({
+			        url: '@Url.Action("Delete", "FreedomFighter")',
+                    data: { FFID: Id},
+			        type: 'GET',
+		        })
+		        .done(function () {
+                    swal('', 'Deleted Successfully!', 'success').then(function () {
+                        window.location.reload();
+                    });
+		        })
+		        .fail(function () {
+			        swal('', 'Unable to Delete!', 'warning');
+		        });
+	        });
+
+            //calendar.render();
+        }*@
+
+
+
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var filerdr = new FileReader();
+                filerdr.onload = function (e) {
+                    $('#user_img').attr('src', e.target.result);
+                    $('#user_img_current').attr('src', e.target.result);
+                }
+                filerdr.readAsDataURL(input.files[0]);
+            }
+        }
+        $(document).ready(function () {
+            $("#photo").addClass("active");
+            $("#imagePath").change(function () {
+                readURL(this);
+            });
+
+        });
+
+    </script>
+}
+
+
+

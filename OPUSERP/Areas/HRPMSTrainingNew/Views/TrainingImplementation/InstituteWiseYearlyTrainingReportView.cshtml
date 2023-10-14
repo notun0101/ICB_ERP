@@ -1,0 +1,65 @@
+﻿@model TrainingEnrollViewModel
+@{
+    ViewData["Title"] = "Yearly Training Report";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<style>
+    body {
+        color: black !important;
+    }
+    #footertbl tr td p {
+        margin: 0;
+    }
+</style>
+<div class="text-center p-2">
+    <h5 style="font-weight: 900">Bangladesh Development Bank Limited</h5>
+    <h6 style="text-decoration: underline">BDBL Bhaban-2 (Level-16), 12, Karwan Bazar, Dhaka-1215</h6>
+    <h6 style="text-decoration: underline">Training Institute</h6>
+    <br />
+    <h6 style="text-decoration: underline">Training Course/Workshop Arranged in the Year @Model.instituteTrainings?.FirstOrDefault()?.startDate?.Year</h6>
+</div>
+@foreach (var inst in Model.instituteTrainings.Select(x => x.trainingInstituteName).Distinct())
+{
+    <h5><u>@inst</u></h5>
+    <table class="report-table-1" id="participantTable" border="1" cellpadding="3"cellspacing="0">
+        <thead>
+            <tr>
+                <th>SL No.</th>
+                <th>Name of The Participants</th>
+                <th>Designation</th>
+                <th>ID No.</th>
+                <th>Present Place of Posting</th>
+                <th>Name Of The Course</th>
+                <th>Organized By</th>
+                <th>City & Country</th>
+                @*<th>Date</th>*@
+                <th>Duration & Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int i = 1;
+            }
+            @foreach (var item in Model.instituteTrainings.Where(x => x.trainingInstituteName == inst))
+            {
+                <tr>
+                    <td style="text-align:center;">@i</td>
+                    <td>@item.participantName</td>
+                    <td>@item.designation</td>
+                    <td style="text-align:center;">@item.employeeCode</td>
+                    <td>@item.placeOfPosting</td>
+                    <td style="text-align:center;">@item.course</td>
+                    <td>@item.trainingInstituteName</td>
+                    <td>@item.countryName</td>
+                    <td>
+                        <span> @item.durationDays </span><br/>
+                        <span>@item.startDate?.ToString("dd MMM yyyy") to @item.endDate?.ToString("dd MMM yyyy")</span> 
+                    </td>
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+}
+

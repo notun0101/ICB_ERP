@@ -1,0 +1,349 @@
+﻿@model PayrollReportViewModel
+@{
+	ViewData["Title"] = "Staff Loan Interest Process";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Style{
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+	<link href="~/css/site.css" rel="stylesheet" />
+
+	<link href="~/lib/main.css" rel="stylesheet" />
+	<style>
+		#calendar a, #ui-datepicker-div a {
+			color: black !important;
+		}
+		/* Top Counter */
+		.leftImgBox {
+			width: 20%;
+			height: 100%;
+			float: left;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-left: 13px;
+		}
+
+			.leftImgBox img {
+				width: 100%;
+			}
+
+			.leftImgBox i {
+				font-size: 42px !important;
+			}
+
+		.counterBox {
+			float: right;
+			text-align: center;
+			margin: 10px;
+		}
+
+		.counter {
+			font-size: 25px;
+			margin-bottom: 0;
+		}
+
+		.counterBox1 {
+			float: right;
+			text-align: right;
+			margin: 0;
+		}
+
+		.counter1 {
+			font-size: 20px !important;
+			margin-bottom: 0;
+		}
+
+		.counter p {
+			text-align: right;
+		}
+
+		.title {
+			font-size: 15px;
+		}
+
+		a {
+			color: white !important;
+		}
+
+			a:hover {
+				color: white;
+			}
+
+		.active5 {
+			color: darkgreen;
+		}
+
+		.redstar {
+			color: red;
+			float: right;
+		}
+	</style>
+}
+<div class="card" style="width: 100%;">
+	<div class="card-header  d-flex flex-row align-items-center justify-content-between">
+		<h5 class="m-0 font-weight-bold text-primary">Staff Loan Interest Process</h5>
+		<a class='btn btn-info mr-4' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1017&perentId=6229'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+	</div>
+	<div class="card-body">
+		<div class="container">
+			<form>
+				<div class="row">
+					@*<input type="hidden" id="employeeId" name="employeeId">*@
+					<div class="col-sm-12">
+						<div class="form-group row">
+							<label for="processDate" class="col-sm-2 col-form-label">Process Date</label>
+							<div class="col-sm-3">
+								<input type="text" class="form-control datepicker" id="processDate" readonly>
+							</div>
+							<label for="hrBranchId" class="col-sm-2 col-form-label">Branch</label>
+							<div class="col-sm-3">
+								<select class="form-control" id="hrBranchId">
+									<option value="">Choose Branch</option>
+									<option value="1000">All</option>
+									@foreach (var item in Model.hrBranches.OrderBy(x => x.branchName))
+									{
+										<option value="@item.Id">@item.branchName</option>
+									}
+								</select>
+							</div>
+							<div class="col-md-2">
+
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-12">
+						<div class="form-group row">
+							<label for="processDate" class="col-sm-2 col-form-label">Employee Code</label>
+							<div class="col-sm-3">
+								<input type="hidden" id="employeeCode" value="0" />
+								<input type="text" class="form-control" id="employeeName" value="" />
+							</div>
+							<label for="zoneId" class="col-sm-2 col-form-label">Zone</label>
+							<div class="col-sm-3">
+								<select class="form-control" id="zoneId">
+									<option value="">Choose Zone</option>
+									<option value="1000">All</option>
+									@foreach (var item in Model.locations.OrderBy(x => x.branchUnitName))
+									{
+										<option value="@item.Id">@item.branchUnitName</option>
+									}
+								</select>
+							</div>
+							<div class="col-md-2">
+								
+                            
+                            </div>
+						</div>
+					</div>
+
+					<div class="col-sm-12">
+                        <div class="form-group row">
+                            <label for="loanType" class="col-sm-2 col-form-label">Type</label>
+                            <div class="col-sm-3">
+                                <select class="form-control" id="loanType">
+                                    <option value="1000">All Type</option>
+                                </select>
+                            </div>
+                            <label for="hrBranchId" class="col-sm-2 col-form-label">Others</label>
+                            <div class="col-sm-3">
+                                <select class="form-control" id="otherStaff">
+                                    <option value="">Select Option</option>
+                                    <option value="noposting">Other</option>
+                                </select>
+                            </div>
+                            
+                        </div>
+					</div>
+                    
+                    <div class="col-sm-12">
+                        <div class="form-group row">
+                            
+                            <label for="totalInterest" class="col-sm-2 col-form-label">Total Interest</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" id="totalInterest" value="" readonly />
+                            </div>
+                            <div class="col-sm-5">
+                                <a id="previewintst" type="button" class="btn btn-success" style="float:right; " href='javascript:void(0)'><i class="fas fa-save"></i> Preview</a> 
+                                <a id="submit" type="button" class="btn btn-info" style="float:right;margin-right: 13px; " href='javascript:void(0)'><i class="fas fa-clock"></i> Submit</a>
+                            </div>
+
+                        </div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+
+    $(document).ready(function () {
+        $('.datepicker').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100" });
+		Common.Ajax('GET', '/global/api/GetAllEmployeeInfos', [], 'json', ajaxGetEmployees, false);
+
+		$('#otherStaff').on('change', function () {
+			if ($(this).val() != '' && $(this).val() != null) {
+				$('#hrBranchId').val('');
+				$('#zoneId').val('');
+				$('#employeeName').val('');
+				$('#employeeCode').val(0);
+
+				$('#loanType').empty();
+				$('#loanType').append(`<option value='1000'>All Type</option>`);
+				$('#loanType').append(`<option value='MCA'>MCA</option>`);
+				$('#loanType').append(`<option value='MCAR'>MCAR</option>`);
+				$('#loanType').append(`<option value='CL'>CL</option>`);
+				$('#loanType').append(`<option value='HBA-B13'>HBA-B13</option>`);
+				$('#loanType').append(`<option value='HBA-A13'>HBA-A13</option>`)
+			}
+		})
+	});
+
+	function ajaxGetEmployees(response) {
+		var GeEmployeesList = [];
+
+		$.each(response, function (id, option) {
+			//console.log(option)
+			var obj = new Object();
+			obj.key = option.employeeId;
+			obj.value = option.empName + "(" + option.employeeCode + ")";
+			obj.lastDesignation = option.designation;
+			obj.employeeCode = option.employeeCode;
+			obj.gradeName = option.currentGradeId;
+			obj.currentBasic = option.currentBasic;
+			GeEmployeesList[GeEmployeesList.length] = obj;
+		});
+		$('#employeeName').autocomplete({
+			source: GeEmployeesList,
+			select: function (event, ui) {
+				$('#employeeName').val(ui.item.value)
+				$('#employeeCode').val(ui.item.employeeCode)
+				$('#hrBranchId').val('');
+				$('#zoneId').val('');
+				Common.Ajax('GET', '/Payroll/PayrollReport/GetLoansByEmployeeCode?empCode=' + ui.item.employeeCode, [], 'json', ajaxGetLoansByEmployeeId);
+			}
+		});
+	}
+
+    $('#previewintst').click(function () {
+        var processDate = $('#processDate').val();
+        if (processDate == null || processDate == "") {
+            swal('Attention', 'Date required', 'warning');
+            return false;
+        }
+        var employeeCode = $('#employeeCode').val();
+        if (employeeCode == null || employeeCode == "") {
+            swal('Attention', 'Emoloyee required', 'warning');
+            return false;
+        }
+        var loanType = $('#loanType').val();
+        if (loanType == null || loanType == "") {
+            swal('Attention', 'Loan required', 'warning');
+            return false;
+        }
+       
+        Common.Ajax('GET', '/Payroll/PayrollReport/StaffLoanInterest?processDate=' + processDate + '&code=' + employeeCode + '&type=' + loanType, [], 'json', ajaxInterest, false);
+
+	});
+     $('#submit').click(function () {
+        var processDate = $('#processDate').val();
+        var hrBranchId = $('#hrBranchId').val();
+		var zoneId = $('#zoneId').val();
+		var otherStaff = $('#otherStaff').val();
+		var employeeCode = $('#employeeCode').val();
+		var totalInterest = $('#totalInterest').val();
+		
+        if (hrBranchId != '') {
+            Common.Ajax('GET', '/Payroll/PayrollReport/ProcessStaffLoanInterest?processDate=' + processDate + '&hrBranchId=' + hrBranchId + '&type=branch', [], 'json', ajaxProcessInterest, false);
+		}
+		else if (zoneId != '') {
+			Common.Ajax('GET', '/Payroll/PayrollReport/ProcessStaffLoanInterest?processDate=' + processDate + '&hrBranchId=' + zoneId + '&type=zone', [], 'json', ajaxProcessInterest, false);
+		}
+		else if (otherStaff != '') {
+			Common.Ajax('GET', '/Payroll/PayrollReport/ProcessStaffLoanInterest?processDate=' + processDate + '&hrBranchId=' + 0 + '&type=noposting', [], 'json', ajaxProcessInterest, false);
+		}
+		else if (employeeCode != '') {
+			var loanId = $('#loanType').val();
+
+			if (loanId != '1000') {
+				Common.Ajax('GET', '/Payroll/PayrollReport/ProcessStaffLoanInterestIndividual?processDate=' + processDate + '&empCode=' + employeeCode + '&type=' + loanId, [], 'json', ajaxProcessInterest, false);
+			}
+			else {
+				Common.Ajax('GET', '/Payroll/PayrollReport/ProcessStaffLoanInterestIndividual?processDate=' + processDate + '&empCode=' + employeeCode + '&type=0', [], 'json', ajaxProcessInterest, false);
+			}
+		}
+	});
+
+	$('#hrBranchId').on('change', function () {
+		if ($(this).val() != '') {
+			$('#zoneId').val('');
+			$('#otherStaff').val('');
+			$('#loanType').empty();
+			$('#loanType').append(`<option value='1000'>All Type</option>`);
+		}
+    })
+
+
+	$('#zoneId').on('change', function () {
+		if ($(this).val() != '') {
+			$('#hrBranchId').val('');
+			$('#otherStaff').val('');
+			$('#loanType').empty();
+			$('#loanType').append(`<option value='1000'>All Type</option>`);
+		}
+	})
+ //   $('#processDate').on('keyup', function () {
+        
+ //       console.log('d');
+	//})
+ //   $('#employeeName').on('keyup', function () {
+ //       console.log('e');
+	//})
+ //   $('#loanType').on('keyup', function () {
+ //       console.log('l');
+	//})
+
+	function ajaxGetLoansByEmployeeId(response) {
+		//console.log(response);
+		$('#loanType').empty();
+		$('#loanType').append(`<option value='1000'>All Type</option>`)
+		$.each(response, function (i, item) {
+			$('#loanType').append(`<option value='${item.loanId}'>${item.loanName}</option>`)
+		})
+	}
+    function ajaxInterest(response) {
+		console.log(response);
+        $('#totalInterest').val(response.totalInterest);
+	}
+
+	function ajaxProcessInterest(response) {
+		//console.log(response);
+		if (response == 1) {
+			swal('success', 'Processed Successfully Done!', 'success').then(function () {
+				//location.reload();
+			});
+		}
+		else {
+			swal('warning', 'Processed Failed!', 'warning').then(function () {
+				//location.reload();
+			});
+		}
+	}
+
+	function formatDate(date) {
+		date = new Date(date);
+		var year = date.getFullYear(),
+			month = date.getMonth() + 1, // months are zero indexed
+			day = date.getDate(),
+			hour = date.getHours(),
+			minute = date.getMinutes(),
+			second = date.getSeconds(),
+			hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+			minuteFormatted = minute < 10 ? "0" + minute : minute,
+			morning = hour < 12 ? "am" : "pm";
+
+		return month + "/" + + day + "/" + year;
+	}
+	
+</script>

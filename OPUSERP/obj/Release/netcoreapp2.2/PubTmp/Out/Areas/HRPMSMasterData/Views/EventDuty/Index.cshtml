@@ -1,0 +1,271 @@
+﻿@model EventDutyViewModel
+
+@{
+    ViewData["TitleMD"] = "Special Event Duty";
+    Layout = "~/Areas/HRPMSMasterData/Views/Shared/_MasterDataForm.cshtml";
+}
+
+
+@section StyleMD{
+    <style>
+        .redStar {
+            color: red;
+        }
+    </style>
+}
+
+
+    <div class="card" style="width: 100%;">
+        <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+            <h5 class="m-0 font-weight-bold text-primary"> Special Event Duty Information</h5>
+            <a class='btn btn-info mr-4 float-right' style="margin-right:6px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=202'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+        </div>
+        <div class="card-body">
+            @*<a class='btn btn-outline-info mr-3' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=5701'><i class="fas fa-backward"></i></a>
+
+            <h5 class="card-title" style="color: black">Branch Information</h5>
+            <hr>*@
+            <div class="container">
+                <form asp-area="HRPMSMasterData" id="FormId" asp-controller="EventDuty" asp-action="Index" method="post" data-parsley-validate="parsley">
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="form-group row">
+                        <label for="dutyId" class="col-sm-2 col-form-label">Event Duty Name<span style="float:right;" class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="hidden" name="AllocationId" id="AllocationId" value="0" />
+                            <select class="form-control" id="dutyId" value="" name="dutyId" data-parsley-trigger="keyup" data-parsley-required="ture">
+                                <option value="">Select</option>
+                                @foreach (var data in Model.dutyMasters)
+                                {
+                                    <option value="@data.Id">@data.name</option>
+                                }
+                            </select>
+                        </div>
+                        <label for="employeename" class="col-sm-2 col-form-label">Employee Name</label>
+                        <div class="col-sm-4">
+                            <input type="hidden" name="employeeInfoId" id="employeeInfoId" value="" />
+                            <input type="text" class="form-control" id="employeeName" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="branchName" class="col-sm-2 col-form-label">From Date</label>
+                        <div class="col-sm-4">
+                           
+                            <input type="text" class="form-control datepicker" name="fromDate" id="fromDate" readonly>
+                        </div>
+                        <label for="department" class="col-sm-2 col-form-label">Department</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control"  id="department" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+
+                        <label for="branchNamebn" class="col-sm-2 col-form-label">To Date</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control datepicker" name="toDate" id="toDate" readonly>
+                        </div>
+                        <label for="designation" class="col-sm-2 col-form-label">Designation</label>
+                        <div class="col-sm-4">
+
+                            <input type="text" class="form-control"  id="designation" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label for="location" class="col-sm-2 col-form-label">Location</label>
+                        <div class="col-sm-4">
+                           
+                            <input type="text" class="form-control" name="location" id="location" >
+                        </div>
+                       
+                    </div>
+                    
+
+
+                    
+                    
+					<hr>
+					@*<button type="button" id="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+					<button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;" data-toggle='tooltip' title='Save'><i class="fas fa-save"></i></button>
+					<button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;" data-toggle='tooltip' title='Save'><i class="fas fa-save"></i> Save</button>
+				</form>
+            </div>
+        </div>
+    </div>
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">All Special Event duties</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="departmentTable">
+                    <thead>
+                        <tr>
+                           
+                            <th>Event Duty Name</th>
+                            <th>Employee Name</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>location</th>
+                            <th>Action</th>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.employeeAllocations)
+                        {
+                            <tr>
+                                <td>@data.duty?.name</td>
+                                <td>@data.employeeInfo?.nameEnglish (@data.employeeInfo?.employeeCode)</td>
+                                <td>@data.fromDate?.ToString("dd-MMM-yyyy")</td>
+                                <td>@data.toDate?.ToString("dd-MMM-yyyy")</td>
+                                <td>@data.location</td>
+                                
+                                <td>
+                                    <a class="btn btn-success" onclick="Edit(@data.Id, '@data.dutyId', '@data.employeeInfoId','@data.fromDate?.ToString("dd-MMM-yyyy")', '@data.toDate?.ToString("dd-MMM-yyyy")', '@data.location', '@data.employeeInfo?.nameEnglish', '@data.employeeInfo?.employeeCode', '@data.employeeInfo?.lastDesignation?.designationName', '@data.employeeInfo?.department?.deptName')" href="#"><i class="fa fa-edit"></i></a>
+                                    <a class="btn btn-danger" href="javascript:void(0)" onclick="DeleteMaster(@data.Id)"><i class="fa fa-trash-alt"></i></a>
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ScriptsMD{
+    <script>
+
+        $(document).ready(function () {
+            Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo1', [], 'json', ajaxGetEmployees);
+            $('.datepicker').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100" });
+
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+            });
+           
+            $('#departmentTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'List Of Local Training',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'List Of Employee Training'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "ERP-HRPMS",
+                        messageTop: 'List Of Local Training',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+        });
+
+        function Edit(Id, dutyId, employeeInfoId, fromDate, toDate, location, employeeName, employeeCode, designationName, deptName) {
+            //alert(branchName);
+            $("#AllocationId").val(Id);
+            $("#dutyId").val(dutyId);
+            $("#employeeInfoId").val(employeeInfoId);
+            $("#fromDate").val(fromDate);
+            $("#toDate").val(toDate);
+            $("#location").val(location);
+            $("#designation").val(designationName);
+            $("#department").val(deptName);
+            $("#employeeName").val(employeeName + "(" + employeeCode + ")");
+            Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo1', [], 'json', ajaxGetEmployees);
+			
+        }
+        function DeleteMaster(Id) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+
+                $.ajax({
+                    url: '@Url.Action("Delete", "EventDuty")',
+                    data: { Id: Id },
+                    type: 'POST',
+                })
+                    .done(function () {
+                        swal('', 'Deleted Successfully!', 'success').then(function () {
+                            location.reload();
+                        });
+
+                        //swal('', 'Deleted Successfully!', 'success');
+                        //window.location.href = "/HRPMSMasterData/Branch/Index";
+                    })
+                    .fail(function () {
+                        swal('Cancelled', 'It is related with another info, can not deleted !!!', 'error');
+                    });
+            });
+        }
+
+
+        function ajaxGetEmployees(response) {
+            var GeEmployeesList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+                obj.designation = option.lastDesignation?.designationName;
+                obj.department = option.department?.deptName;
+                obj.employeeCode = option.employeeCode;
+                GeEmployeesList[GeEmployeesList.length] = obj;
+            });
+            //console.log(GeEmployeesList);
+            $('#employeeName').autocomplete({
+                source: GeEmployeesList,
+                select: function (event, ui) {
+                    $("#employeeName").val(ui.item.value);
+                    $("#employeeInfoId").val(ui.item.key);
+                    $("#department").val(ui.item.department);
+                    $("#designation").val(ui.item.designation);
+                   
+
+                }
+            });
+        }
+
+    </script>
+}
+
+

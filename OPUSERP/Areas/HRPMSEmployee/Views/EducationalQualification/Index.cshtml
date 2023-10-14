@@ -1,0 +1,1179 @@
+﻿@model EducationalQualificationViewModel
+
+@{
+    ViewData["Title"] = Model.fLang.title;
+    Layout = "~/Areas/HRPMSEmployee/Views/Shared/_EmployeeForm.cshtml";
+}
+
+@section StyleEmp{
+    <style>
+        .redStar {
+            color: red;
+        }
+
+        #myDIV {
+            background-color: white;
+            padding: 20px;
+            box-shadow: 3px 3px 3px 3px lightgray;
+            max-height: 415px;
+            overflow-y: scroll;
+            padding-top: 5px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+            background-color: white;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #F3F3F3;
+        }
+
+        .g {
+            text-decoration: none;
+            color: #1492a5;
+        }
+
+            .g:hover {
+                text-decoration: none;
+                color: #070a67;
+            }
+
+            .g span {
+                font-family: serif;
+            }
+
+        .small-box {
+            text-align: center;
+            border-radius: 10px;
+            padding: 10px;
+            transition: transform .5s;
+        }
+
+            .small-box:hover {
+                background-color: #e8f0fe;
+                transform: scale(.95);
+            }
+
+            .small-box i {
+                font-size: 35px;
+                margin: 10px;
+            }
+    </style>
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; border-right: 1px solid #D9D8DB">
+
+
+            <h5 class="card-title" style="color: black; margin: 0;">Educational Information</h5>
+        </div>
+        <div class="col-md-8">
+            @if (User.IsInRole("HRAdmin") || User.IsInRole("admin"))
+            {
+                <div style="float: left;">
+
+                    @if (Model.photograph?.url == null || Model.photograph?.url == "")
+                    {
+                        <img src="~/images/user-icon-png.png" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                    }
+                    else
+                    {
+                        <img src="~/@Model.photograph?.url" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                    }
+                    @*<img src="~/@Model.photograph?.url" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />*@
+                    <input type="hidden" id="hiddenFile" />
+                </div>
+            }
+            else
+            {
+                <div style="float: left;">
+
+                    @if (Model.photograph?.url == null || Model.photograph?.url == "")
+                    {
+                        <img src="~/images/user-icon-png.png" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                    }
+                    else
+                    {
+                        <img src="~/@Model.photograph?.url" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                    }
+                    @*<img src="~/@Model.photograph?.url" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />*@
+                    <input type="hidden" id="hiddenFile" />
+                </div>
+            }
+            <div style="float: left;">
+                <div style="padding: 5px;text-align: center;">
+                    <p style="margin: 0; text-transform: uppercase;">@Model.employeeInfo?.nameEnglish</p>
+                    <p style="margin: 0">@Model.employeeInfo?.lastDesignation?.designationName</p>
+                </div>
+            </div>
+
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info mr-3' style="" data-toggle='tooltip' title='Go Back' href='/HRPMSEmployee/Photograph/EditGrid/@Model.employeeInfo?.Id'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+                @*<a class='btn btn-info' style="" data-toggle='tooltip' title='Print' target='_blank' href='/HRPMSEmployee/InfoView/pdspdf/@Model.employeeInfo?.Id'><i class='fa fa-print'></i></a>*@
+                <a id="btngle" href="javascript:void(0)" class="btn btn-outline-success mr-5"
+                   style="position: absolute; right: 82px; top: 17px; box-shadow: none; font-size: 17px;"><i class="fas fa-th"></i></a>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        <div class="container">
+            <form asp-area="HRPMSEmployee" asp-controller="EducationalQualification" asp-action="Index" id="FormId" method="post" data-parsley-validate="parsley">
+
+                @*<div asp-validation-summary="All" class="text-danger"></div>*@
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+
+                            @if (User.IsInRole("Button Access"))
+                            {
+                                <div class="form-group row">
+                                    <input type="hidden" id="employeeId" name="employeeId" value="@Model.employeeId">
+                                    <input type="hidden" id="educationId" name="educationId" value="0">
+                                    <label for="levelOfEducation" class="col-sm-4 col-form-label">@Model.fLang.levelOfEducation<span class="redStar">*</span></label>
+                                    <div class="col-sm-7">
+                                        <div class="input-group mb-3">
+                                            <select class="form-control" name="levelOfEducation" id="levelOfEducation" data-parsley-required="true" style="width: 175px;"></select>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1" style="padding: 0;">
+                                        <a href="javascript:void(0)" type="button" onclick="AddNewLevelModal()" id="AddNewLevelModal"><i class="fa fa-plus-circle fa-2x col-1" aria-hidden="true" style="padding-left:0;"></i></a>
+
+                                        @*<div class="input-group-append">
+                                                <a href="javascript:void(0)" type="button" onclick="AddNewLevelModal()" id="AddNewLevelModal"><i class="fa fa-plus-circle fa-2x col-1" aria-hidden="true" style="padding-left:5px;"></i></a>
+                                            </div>*@
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-group row">
+                                    <input type="hidden" id="employeeId" name="employeeId" value="@Model.employeeId">
+                                    <input type="hidden" id="educationId" name="educationId" value="0">
+                                    <label for="levelOfEducation" class="col-sm-4 col-form-label">@Model.fLang.levelOfEducation<span class="redStar">*</span></label>
+                                    <div class="col-sm-8">
+                                        <div class="input-group mb-3">
+                                            <select class="form-control" name="levelOfEducation" id="levelOfEducation" data-parsley-required="true" style="width: 175px;"></select>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            }
+                        </div>
+                        <div class="col-sm-6">
+                            @if (User.IsInRole("Button Access"))
+                            {
+
+
+                                <div class="form-group row">
+                                    <label for="degree" class="col-sm-4 col-form-label">@Model.fLang.degree<span class="redStar">*</span></label>
+                                    <div class="col-sm-7">
+                                        <div class="input-group mb-3">
+                                            <select class="form-control" name="degreeId" id="degreeId" data-parsley-required="true" style="width: 175px;"></select>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1" style="padding: 0;">
+                                        <a href="javascript:void(0)" type="button" onclick="AddNewDegreeModal()" id="AddNewDegreeModal"><i class="fa fa-plus-circle fa-2x col-1" aria-hidden="true" style="padding-left:0;"></i></a>
+
+                                        @*<div class="input-group-append">
+                                                <a href="javascript:void(0)" type="button" onclick="AddNewDegreeModal()" id="AddNewDegreeModal"><i class="fa fa-plus-circle fa-2x col-1" aria-hidden="true" style="padding-left:5px;"></i></a>
+                                            </div>*@
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-group row">
+                                    <label for="degree" class="col-sm-4 col-form-label">@Model.fLang.degree<span class="redStar">*</span></label>
+                                    <div class="col-sm-8">
+                                        <div class="input-group mb-3">
+                                            <select class="form-control" name="degreeId" id="degreeId" data-parsley-required="true" style="width: 175px;"></select>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            }
+                        </div>
+                    </div>
+					<div class="row">
+						<div class="col-sm-6">
+							@if (User.IsInRole("Button Access"))
+							{
+
+
+								<div class="form-group row">
+									<label for="country" class="col-sm-4 col-form-label">@Model.fLang.subject</label>
+									<div class="col-sm-8">
+										<div class="input-group mb-3">
+											<select class="form-control" name="reldegreesubjectId" id="reldegreesubjectId"></select>
+											<div class="input-group-append">
+												<a href="javascript:void(0)" type="button" onclick="AddNewSubjectModal()" id="AddNewSubjectModal"><i class="fa fa-plus-circle fa-2x col-1" aria-hidden="true" style="padding-left: 15px; margin-right: -11px;"></i></a>
+											</div>
+										</div>
+									</div>
+								</div>
+							}
+							else
+							{
+								<div class="form-group row">
+									<label for="country" class="col-sm-4 col-form-label">@Model.fLang.subject</label>
+									<div class="col-sm-8">
+
+										<select class="form-control" name="reldegreesubjectId" id="reldegreesubjectId"></select>
+
+
+									</div>
+								</div>
+
+							}
+						</div>
+						<div class="col-sm-6">
+							@if (User.IsInRole("Button Access"))
+							{
+								<div class="form-group row">
+									<label for="country" class="col-sm-4 col-form-label">@Model.fLang.organization</label>
+									<div class="col-sm-8">
+										<div class="input-group mb-3">
+											<select class="form-control" name="organizationId" id="organizationId"></select>
+											<div class="input-group-append">
+												<a href="javascript:void(0)" type="button" onclick="AddNewOrgModal()" id="AddNewOrgModal"><i class="fa fa-plus-circle fa-2x col-1" aria-hidden="true" style="padding-left: 15px; margin-right: -11px;"></i></a>
+											</div>
+										</div>
+									</div>
+								</div>
+							}
+							else
+							{
+								<div class="form-group row">
+									<label for="country" class="col-sm-4 col-form-label">@Model.fLang.organization</label>
+									<div class="col-sm-8">
+
+										<select class="form-control" name="organizationId" id="organizationId"></select>
+
+
+									</div>
+								</div>
+							}
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group row durationDiv">
+								<label class="col-sm-4 col-form-label">Duration</label>
+								<div class="col-sm-8">
+									<select class="form-control" name="duration" id="duration">
+										<option value="1 Year">1 Year</option>
+										<option value="2 Year">2 Year</option>
+										<option value="3 Year">3 Year</option>
+										<option value="4 Year">4 Year</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group row otherOrg">
+								<label class="col-sm-4 col-form-label"></label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" id="organizationName" name="organizationName">
+								</div>
+							</div>
+						</div>
+					</div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <label for="instritution" class="col-sm-4 col-form-label">@Model.fLang.instritution </label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="instritution" name="institution">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <label for="result" class="col-sm-4 col-form-label">@Model.fLang.result</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" name="resultId" id="resultId">
+                                        <option value="">Select </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <label for="result" class="col-sm-4 col-form-label">@Model.fLang.grade</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="grade" name="grade">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <label for="passingYear" class="col-sm-4 col-form-label">@Model.fLang.passingYear <span class="redStar">*</span></label>
+                                <div class="col-sm-8">
+                                    <input data-parsley-type="number" min="1" data-parsley-length="[4, 4]" data-parsley-trigger="keyup" class="form-control" id="passingYear" value="" name="passingYear" data-parsley-required="true">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @*<hr>
+                        <button type="submit" id="submit"  value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+                    <hr>
+                    <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+                    <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold">@Model.fLang.title</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="educationalTable">
+                    <thead>
+                        <tr>
+                            <th>@Model.fLang.degree</th>
+                            <th>@Model.fLang.organization</th>
+                            <th>@Model.fLang.passingYear</th>
+                            <th>@Model.fLang.grade</th>
+                            <th>@Model.fLang.action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.educationalQualifications)
+                        {
+                            <tr>
+                                <td>@data?.degree?.degreeName</td>
+                                <td>@data?.organizationName </td>
+                                <td>@data?.passingYear</td>
+                                <td>@data?.grade</td>
+                                <td>
+                                    <a class="btn btn-success" onclick="Edit(@data.Id,'@data?.degree?.levelofeducationId','@data.degreeId','@data.reldegreesubjectId','@data.organizationId','@data.organizationName','@data.institution','@data.resultId','@data.grade','@data.passingYear','@data.duration')" href="#"><i class="fa fa-edit"></i></a>
+                                    <a class="btn btn-danger" onclick="Remove(@data.Id,@data.employeeId)" href="#"><i class="fa fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myDIV" style="display: none; width: 311px; position: absolute; right: 50px; top: 167px;">
+    <div class="row">
+        <a href="/HRPMSEmployee/Info/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-user-tie"></i><span>Basic</span>
+        </a>
+
+        <a href="/HRPMSEmployee/Address/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-map-marker-alt"></i><span>Address</span>
+        </a>
+        <a href="/HRPMSEmployee/Spouse/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-female"></i><span>Spouse</span>
+        </a>
+        <a href="/HRPMSEmployee/Children/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-child"></i><span>Children</span>
+        </a>
+        <a href="/HRPMSEmployee/EmergencyContact/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-blender-phone"></i><span>Emergency Contact</span>
+        </a>
+        <a href="/HRPMSEmployee/Nominee/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-sitemap"></i><span>Nominee</span>
+        </a>
+        <a href="/HRPMSEmployee/Nominee/EmployeeInsurance/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-university"></i><span>Insurance</span>
+        </a>
+        @*<a href="/HRPMSEmployee/EducationalQualification/Index/@Model.employeeId" class="col-md-4 small-box g">
+                <i class="fa fa-graduation-cap"></i><span>Education</span>
+            </a>*@
+        <a href="/HRPMSEmployee/ProfessionalQualifications/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-chalkboard-teacher"></i><span>Qualification</span>
+        </a>
+        <a href="/HRPMSEmployee/OtherQualifications/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-book-reader"></i><span>Other Qualification</span>
+        </a>
+        <a href="/HRPMSEmployee/Training/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-clipboard-list"></i><span>Training History</span>
+        </a>
+        <a href="/HRPMSEmployee/TransferLog/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-stream"></i><span>Service</span>
+        </a>
+        <a href="/HRPMSEmployee/PromotionLog/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-chart-line"></i><span>Promotion</span>
+        </a>
+        <a href="/HRPMSEmployee/ACRLog/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-clipboard-check"></i><span>History</span>
+        </a>
+        <a href="/HRPMSEmployee/Disciplinary/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-user-times"></i><span>Disciplinary Action</span>
+        </a>
+        <a href="/HRPMSEmployee/Supervisor/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-user-shield"></i><span>Supervisor</span>
+        </a>
+        <a href="/HRPMSEmployee/License/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-id-badge"></i><span>Driving License</span>
+        </a>
+        <a href="/HRPMSEmployee/Passport/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-passport "></i><span>Passport</span>
+        </a>
+        <a href="/HRPMSEmployee/Travel/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-suitcase-rolling"></i><span>Travel</span>
+        </a>
+        <a href="/HRPMSEmployee/Membership/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-user-tag"></i><span>Membership</span>
+        </a>
+        <a href="/HRPMSEmployee/Award/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-medal"></i><span>Award</span>
+        </a>
+        <a href="/HRPMSEmployee/Publication/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-atlas"></i><span>Publication</span>
+        </a>
+        <a href="/HRPMSEmployee/Language/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-language"></i><span>Language</span>
+        </a>
+
+        <a href="/HRPMSEmployee/OtherActivities/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-skating"></i><span>Other Activities</span>
+        </a>
+        <a href="/HRPMSEmployee/BankInfo/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-university"></i><span>Bank Acounts</span>
+        </a>
+        <a href="/HRPMSEmployee/Belongings/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-bold"></i><span>Belongings</span>
+        </a>
+        <a href="/HRPMSEmployee/PreviousEmployment/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-th-list"></i><span>Prev.Employment</span>
+        </a>
+        <a href="/HRPMSEmployee/FreedomFighter/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-user-check"></i><span>Freedom Fighter</span>
+        </a>
+
+
+        <a href="/HRPMSEmployee/Reference/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-user-clock"></i><span>Reference</span>
+        </a>
+        <a href="/HRPMSEmployee/OfficeAssign/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-map-marker-alt"></i><span>Office Assign</span>
+        </a>
+        <a href="/HRPMSEmployee/Photograph/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-user-circle"></i><span>Picture</span>
+        </a>
+        <a href="/HRPMSEmployee/Photograph/Signature/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-user-circle"></i><span>Signature</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeContractInfo/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-file-signature"></i><span>Contract</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-sitemap"></i><span>Project Activity</span>
+        </a>
+        <a href="/HRPMSEmployee/FinanceCode/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fas fa-code-branch"></i><span>Financial Code</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeAttachment/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fas fa-file"></i><span>Attachment</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/ProjectAssign/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fas fa-air-freshener"></i><span>Project Assign</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/EmployeeOtherInfo/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fas fa-info-circle"></i><span>Other Info</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/EmployeeCostCentre/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fas fa-dollar-sign"></i><span>Cost Centre</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/EmployeeGrade/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fab fa-glide-g"></i><span>Employee Grade</span>
+        </a>
+
+    </div>
+</div>
+
+<div class="modal fade" id="updateEmpPhotoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                @*<img src="~/images/Aloha New Logo.png" style="height:50px;" />*@
+                <h5 class="modal-title" id="exampleModalLabel">Update Photo</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-area="HRPMSEmployee" asp-controller="Photograph" asp-action="Index" method="post" enctype="multipart/form-data" data-parsley-validate="parsley">
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="form-group row">
+                        @*<div class="col-5">
+                                <img id="user_img_current" style="width:200px;height:200px" src="~/@Model.photograph.url" alt="" class="img-thumbnail float-left">
+                                <input type="hidden" id="hiddenFile" />
+                            </div>*@
+                        <div class="col-7">
+                            <input type="hidden" name="queryString" id="queryString" value="" />
+                            @if (Model.photograph?.url != null || Model.photograph?.url != "")
+                            {
+                                <img id="user_img" style="width:200px;height:200px;cursor:pointer;" src="~/@Model.photograph?.url" alt="" class="img-thumbnail float-left">
+                            }
+                            else
+                            {
+                                <img id="user_img" style="width:200px;height:200px;cursor:pointer;" src="/images/user-icon-png.png" alt="" class="img-thumbnail float-left">
+                            }
+                            <input type="hidden" name="employeeID" value="@Model.employeeInfo?.Id" />
+                            <input type="hidden" name="photographID" value="@Model.photograph?.Id" />
+                            <input type="file" title="Photo Upload" id="imagePath" data-parsley-required="true" name="empPhoto" class="btn btn-default btn-sm pull-right" />
+                            <span style="float:left;color:red;" class="redStar">*</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModalLevel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add New Level of Education</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/" method="post" id="LevelAddForm" data-parsley-validate="parsley">
+
+
+                    <div class="form-group row">
+                        <input type="hidden" name="Id" id="Id" value="0" />
+                        <label for="levelofeducationName" class="col-form-label col-md-3">Level Name</label>
+                        <div class="col-md-9">
+                            <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="levelofeducationName" id="levelofeducationName">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" value="Submit" id="LevelAddBtn" class="btn btn-success">Add</button>
+                    </div>
+                    @*<button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModalDegree" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add New Certificate/Degree</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/" method="post" id="DegreeAddForm" data-parsley-validate="parsley">
+
+
+                    <div class="form-group row">
+                        <input type="hidden" name="Id" id="Id" value="0" />
+                        <label for="sectorName" class="col-form-label col-md-3">Level Name</label>
+                        <div class="col-md-9">
+                            <select class="form-control" name="levelofeducationId" id="levelofeducationId" data-parsley-required="true">
+                                @*<option value="">Select </option>*@
+                                @*@foreach (var data in Model.levelofeducationNamelist)
+                                    {
+                                        <option value="@data.Id">@data.levelofeducationName</option>
+                                    }*@
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="degreeName" class="col-sm-3 col-form-label">Degree Name <span style="float:right;" class="redStar">*</span></label>
+                        <div class="col-sm-9">
+                            <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="degreeName" id="degreeName">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" value="Submit" id="DegreeAddBtn" class="btn btn-success">Add</button>
+                    </div>
+                    @*<button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModalSubject" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add New Group/Subject</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/" method="post" id="SubjectAddForm" data-parsley-validate="parsley">
+
+
+                    <div class="form-group row">
+                        <input type="hidden" name="Id" id="Id" value="0" />
+                        <label for="degreeSubjectId" class="col-form-label col-md-3">Degree Name</label>
+                        <div class="col-sm-9">
+                            <select name="degreeSubjectId" id="degreeSubjectId" class="form-control">
+                                @*<option value="">Select </option>*@
+                                @*@foreach (var data in Model.degreeslist)
+                                    {
+                                        <option value="@data.Id">@data.degreeName</option>
+                                    }*@
+
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <label for="subjectId" class="col-sm-3 col-form-label">Subject Name</label>
+                        <div class="col-sm-9">
+                            <select name="subjectId" id="subjectId" class="form-control">
+                                @*<option value="">Select </option>
+                                @foreach (var data in Model.subjectslist)
+                                {
+                                    <option value="@data.Id">@data.subjectName</option>
+                                }*@
+
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" value="Submit" id="SubjectAddBtn" class="btn btn-success">Add</button>
+                    </div>
+                    @*<button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModalOrg" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add New Board/University</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/" method="post" id="OrgAddForm" data-parsley-validate="parsley">
+
+                    <div class="form-group row">
+
+                        <input type="hidden" name="Id" id="Id" value="0" />
+
+                        <label for="organizationType" class="col-sm-3 col-form-label">Type<span class="redStar">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="organizationType" name="organizationType" data-parsley-required="true" data-parsley-trigger="keyup">
+                                <option value="">Select Organization Type</option>
+                                <option value="University">University</option>
+                                <option value="Board">Board</option>
+                                <option value="Institute">Institute</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="organizationName" class="col-form-label col-md-3"> Name<span class="redStar">*</span></label>
+                        <div class="col-md-9">
+                            <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="organizationName" id="organizationName">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" value="Submit" id="OrgAddBtn" class="btn btn-success">Add</button>
+                    </div>
+                    @*<button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section ScriptsEmp{
+    <script>
+        @*$('#submit').click(function () {
+		console.log($('#FormId').serializeArray());
+		var data = $('#FormId').serializeArray();
+
+		console.log(data[0].value)
+		swal({
+			title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+		}).then(function () {
+			$.ajax({
+				url: '@Url.Action("Index", "EducationalQualification")',
+				type: 'POST',
+				data: data
+			}).done(function () {
+                if (data[0].value == 0) {
+                    swal('success', 'Saved Successfully!', 'success').then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    swal('success', 'Updated Successfully!', 'success').then(function () {
+                        location.reload();
+                    });;
+                }
+			}).fail(function () {
+				swal('warning', 'Failed!', 'warning');
+			})
+		});
+        })*@
+        $(document).ready(function () {
+            var pathname = window.location.pathname;
+			$('#queryString').val(pathname);
+			$('.durationDiv').hide();
+			$('.otherOrg').hide();
+            $("#submit").click(function () {
+                //if ($("#levelOfEducation").val() == null || $("#levelOfEducation").val() == '') {
+                //    alert('Level of Education  required');
+                //   return false;
+                //}
+                //if ($("#degreeId").val() == null || $("#degreeId").val() == '') {
+                //    alert('Certificate/Degree required');
+                //   return false;
+                //}
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+            });
+
+            //$('#levelOfEducation').change(function () {
+            //    var id = $(this).val();
+            //    if (id == 17) {
+            //        Common.Ajax('GET', '/EducationalQualification/EducationalQualification/GetAllboard', [], 'json', ajaxGetAllboard);
+            //    }
+
+            //});
+
+            $("#photo").addClass("active");
+            $("#imagePath").change(function () {
+                readURL(this);
+            });
+
+            $("#btngle").click(function () {
+                $("#myDIV").slideToggle("slow");
+            });
+            $("#education").addClass("active");
+          //  $('#educationalTable').DataTable();
+            $('#educationalTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'CV Black List',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'CV Black List'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "ERP-HRPMS",
+                        messageTop: 'CV Black List',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+
+           Common.Ajax('GET', '/global/api/levelOfEducations', [], 'json', ajaxLevelOfEducation, false);
+            //Common.Ajax('GET', '/global/api/organizations', [], 'json', ajaxOrganization, false);
+            Common.Ajax('GET', '/global/api/results', [], 'json', ajaxResult, false);
+
+            $("#levelOfEducation").change(function () {
+                var id = $(this).val();
+                Common.Ajax('GET', '/global/api/degrees/' + id, [], 'json', ajaxDegrees, false);
+               
+			});
+
+			$("#organizationId").change(function () {
+				if ($(this).val() != 'select' && $(this).val() != 'other') {
+					$('#organizationName').val($(this).find('option:selected').text());
+					$('.otherOrg').hide();
+				}
+				else {
+					$('#organizationName').val('');
+					$('.otherOrg').show();
+				}
+			});
+			$("#levelOfEducation").change(function () {
+				if ($(this).val() == 19 || $(this).val() == 20 || $(this).val() == 24) {
+					$('.durationDiv').show();
+				}
+				else {
+					$('.durationDiv').hide();
+				}
+			});
+
+            $("#degreeId").change(function () {
+                var id = $(this).val();
+                Common.Ajax('GET', '/global/api/relDegreeSubjects/' + id, [], 'json', ajaxRelDegreeSubjects);
+            });
+        });
+        $('#LevelAddBtn').click(function () {
+            var form = $('#LevelAddForm');
+					swal({
+					title: 'Are you sure?', text: 'Do you want to add this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#007ACC', cancelButtonColor: '#d33', confirmButtonText: 'Yes, Add it!'
+						}).then(function () {
+							$.ajax({
+								url: '@Url.Action("LevelEducation", "EducationalQualification")',
+								type: 'Post',
+								data: form.serialize()
+							})
+							.done(function () {
+								swal('Success', 'Saved Successfully!', 'success').then(function () {
+
+                                    //$('#groupAddForm #companyGroupName').val('');
+                                    Common.Ajax('GET', '/global/api/levelOfEducations', [], 'json', ajaxLevelOfEducation, false);
+                                    $('#levelofeducationName').val('');
+                                    $('#exampleModalLevel').modal('hide');
+
+
+								});
+							})
+							.fail(function () {
+								alert("Unable to Save. Please Try Again");
+							});
+					});
+        })
+
+        $('#DegreeAddBtn').click(function () {
+
+            var form = $('#DegreeAddForm');
+
+					swal({
+					title: 'Are you sure?', text: 'Do you want to add this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#007ACC', cancelButtonColor: '#d33', confirmButtonText: 'Yes, Add it!'
+						}).then(function () {
+							$.ajax({
+								url: '@Url.Action("Degree", "EducationalQualification")',
+								type: 'Post',
+								data: form.serialize()
+							})
+							.done(function () {
+                                swal('Success', 'Saved Successfully!', 'success').then(function () {
+
+                                    var id = $("#levelOfEducation").val();
+                                    Common.Ajax('GET', '/global/api/degrees/' + id, [], 'json', ajaxDegrees);
+									$('#degreeName').val('');
+                                    $('#levelofeducationId').val('');
+
+									$('#exampleModalDegree').modal('hide');
+
+                                 });
+                            })
+                             .fail(function () {
+                                 alert("Unable to Save. Please Try Again");
+							});
+					});
+        })
+
+        $('#SubjectAddBtn').click(function () {
+            var form = $('#SubjectAddForm');
+					swal({
+					title: 'Are you sure?', text: 'Do you want to add this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#007ACC', cancelButtonColor: '#d33', confirmButtonText: 'Yes, Add it!'
+						}).then(function () {
+							$.ajax({
+								url: '@Url.Action("Subject", "EducationalQualification")',
+								type: 'Post',
+								data: form.serialize()
+							})
+							.done(function () {
+								swal('Success', 'Saved Successfully!', 'success').then(function () {
+                                    //$('#groupAddForm #Id').val(0);
+                                    //$('#groupAddForm #companyGroupName').val('');
+                                    var id = $("#degreeId").val();
+                                    Common.Ajax('GET', '/global/api/relDegreeSubjects/' + id, [], 'json', ajaxRelDegreeSubjects);
+                                    $('#degreeSubjectId').val('');
+                                    $('#subjectId').val('');
+                                    $('#exampleModalSubject').modal('hide');
+
+								});
+							})
+							.fail(function () {
+								alert("Unable to Save. Please Try Again");
+							});
+					});
+        })
+
+        $('#OrgAddBtn').click(function () {
+            var form = $('#OrgAddForm');
+					swal({
+					title: 'Are you sure?', text: 'Do you want to add this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#007ACC', cancelButtonColor: '#d33', confirmButtonText: 'Yes, Add it!'
+						}).then(function () {
+							$.ajax({
+								url: '@Url.Action("Organization", "EducationalQualification")',
+								type: 'Post',
+								data: form.serialize()
+							})
+							.done(function () {
+								swal('Success', 'Saved Successfully!', 'success').then(function () {
+                                    //$('#groupAddForm #Id').val(0);
+                                    //$('#groupAddForm #companyGroupName').val('');
+                                    Common.Ajax('GET', '/global/api/organizations', [], 'json', ajaxOrganization, false);
+                                    $('#organizationType').val('');
+                                    $('#organizationName').val('');
+                                    $('#exampleModalOrg').modal('hide');
+
+								});
+							})
+							.fail(function () {
+								alert("Unable to Save. Please Try Again");
+							});
+			});
+		 })
+        function ajaxGetAllboard(res) {
+            $('#organizationId').empty();
+			var option = "";
+			option += `<option value="">Select</option>`;
+            $.each(res, function (i, item) {
+                option += `<option value="${item.Id}">${item.organizationName}</option>`;
+			})
+			option += `<option value="other">Other</option>`;
+			$('#organizationId').append(option);
+        }
+
+		function AddNewLevelModal() {
+            $('#exampleModalLevel').modal('show');
+		}
+
+        function AddNewDegreeModal() {
+
+		 Common.Ajax('GET', '/HRPMSEmployee/EducationalQualification/GetAllLevelOfEducation', [], 'json', ajaxFunctionLevel, false);
+
+            $('#exampleModalDegree').modal('show');
+		}
+
+		function ajaxFunctionLevel(response) {
+			console.log(response)
+			var option = "";
+			$.each(response, function (i, item) {
+				option += `<option value="${item.Id}">${item.levelofeducationName}</option>`
+			});
+			$('#levelofeducationId').empty();
+			$('#levelofeducationId').append(`<option value="">Select </option>`);
+			$('#levelofeducationId').append(option);
+		}
+
+        function AddNewSubjectModal() {
+            Common.Ajax('GET', '/HRPMSEmployee/EducationalQualification/GetAllDegree', [], 'json', ajaxFunctionDegree, false);
+
+            $('#exampleModalSubject').modal('show');
+        }
+
+        function ajaxFunctionDegree(response) {
+            console.log(response)
+            var option = "";
+            $.each(response, function (i, item) {
+                option += `<option value="${item.Id}">${item.degreeName}</option>`
+            });
+            $('#degreeSubjectId').empty();
+            $('#degreeSubjectId').append(`<option value="">Select </option>`);
+            $('#degreeSubjectId').append(option);
+        }
+
+        function AddNewOrgModal() {
+            $('#exampleModalOrg').modal('show');
+        }
+
+        function ajaxLevelOfEducation(response) {
+
+            var option = "";
+            $('#levelOfEducation').empty();
+            $('#levelOfEducation').append(`<option value="">Select</option>`);
+            $.each(response, function (i, item) {
+                option += `<option value="${item.Id}">${item.levelofeducationName}</option>`
+            });
+
+            $('#levelOfEducation').append(option);
+
+        }
+
+        function ajaxOrganization(response) {
+            var option = "";
+            $('#organizationId').empty();
+            $('#organizationId').append(`<option value="">Select</option>`);
+            $.each(response, function (i, item) {
+                option += `<option value="${item.Id}">${item.organizationName}</option>`
+            });
+
+            $('#organizationId').append(option);
+
+        }
+
+        function ajaxResult(response) {
+            console.log(response);
+            var options = '<option value="">Select </option>';
+            $.each(response, function (i, item) {
+                options += '<option value="' + item.Id + '">' + item.resultName + '</option>';
+            });
+            $('#resultId').empty();
+            $('#resultId').append(options);
+        }
+
+
+        function ajaxDegrees(response) {
+            var option = "";
+            $('#degreeId').empty();
+            $('#degreeId').append(`<option value="">Select</option>`);
+            $.each(response, function (i, item) {
+                option += `<option value="${item.Id}">${item.degreeName}</option>`
+            });
+
+            $('#degreeId').append(option);
+            //alert($('#levelOfEducation').val())
+            if ($('#levelOfEducation').val() == 17 || $('#levelOfEducation').val() == 18) {
+                Common.Ajax('GET', '/HRPMSEmployee/EducationalQualification/GetAllOrgs?type=board', [], 'json', ajaxGetAllboard, false);
+            }
+            else {
+                Common.Ajax('GET', '/HRPMSEmployee/EducationalQualification/GetAllOrgs?type=university', [], 'json', ajaxGetAllboard, false);
+            }
+
+        }
+
+        function ajaxRelDegreeSubjects(response) {
+			console.log('ok')
+			console.log(response)
+            var option = "";
+            $('#reldegreesubjectId').empty();
+            $('#reldegreesubjectId').append(`<option value="">Select</option>`);
+            $.each(response, function (i, item) {
+                option += `<option value="${item.Id}">${item.subject.subjectName}</option>`
+            });
+
+            $('#reldegreesubjectId').append(option);
+
+        }
+
+		function Edit(Id, levelofeducationId, degreeId, reldegreesubjectId, organizationId, organizationName, institution, resultId, grade, passingYear, duration) {
+            $('#educationId').val(Id);
+            $("#levelOfEducation").val(levelofeducationId);
+			
+			if ($('#levelOfEducation').val() == 17 || $('#levelOfEducation').val() == 18) {
+				Common.Ajax('GET', '/HRPMSEmployee/EducationalQualification/GetAllOrgs?type=board', [], 'json', ajaxGetAllboard, false);
+			}
+			else {
+				Common.Ajax('GET', '/HRPMSEmployee/EducationalQualification/GetAllOrgs?type=university', [], 'json', ajaxGetAllboard, false);
+			}
+			
+			$('#organizationName').val(organizationName);
+			$('#duration').val(duration);
+			if (organizationId != '') {
+				$('#organizationId').val(organizationId);
+			}
+			else {
+				$('.otherOrg').show();
+				$('#organizationId').val('');
+			}
+			$('#instritution').val(institution);
+			$('#resultId').val(resultId);
+			$('#grade').val(grade);
+			$('#passingYear').val(passingYear);
+            Common.Ajax('GET', '/global/api/degrees/' + levelofeducationId, [], 'json', ajaxDegrees, false);
+			//if ($('#levelOfEducation').val() == 17 || $('#levelOfEducation').val() == 18) {
+			//	Common.Ajax('GET', '/HRPMSEmployee/EducationalQualification/GetAllOrgs?type=board', [], 'json', ajaxGetAllboard, false);
+			//}
+			//else {
+			//	Common.Ajax('GET', '/HRPMSEmployee/EducationalQualification/GetAllOrgs?type=university', [], 'json', ajaxGetAllboard, false);
+			//}
+            Common.Ajax('GET', '/global/api/relDegreeSubjects/' + degreeId, [], 'json', ajaxRelDegreeSubjects, false);
+			$('#organizationId').val(organizationId);
+			$('#degreeId').val(degreeId);
+			$('#reldegreesubjectId').val(reldegreesubjectId);
+        }
+
+        function Remove(Id, employeeId) {
+            chk = confirm('Do you want to delete this?');
+            if (chk) {
+                //return true;
+                location.replace("/HRPMSEmployee/EducationalQualification/Delete/" + Id + "?empId=" + employeeId);
+            } else {
+                return false;
+            }
+        }
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var filerdr = new FileReader();
+                filerdr.onload = function (e) {
+                    $('#user_img').attr('src', e.target.result);
+                    $('#user_img_current').attr('src', e.target.result);
+                }
+                filerdr.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+    </script>
+}

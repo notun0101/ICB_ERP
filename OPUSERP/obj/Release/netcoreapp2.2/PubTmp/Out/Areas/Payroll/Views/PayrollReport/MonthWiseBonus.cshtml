@@ -1,0 +1,265 @@
+﻿@model PayrollReportViewModel
+@{
+    ViewData["Title"] = "SalarySheet";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Style{
+    <style>
+        ul.ui-autocomplete {
+            z-index: 99999999;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .active {
+            color: darkcyan;
+        }
+
+        .c {
+            /*min-height: 300px;*/
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: black;
+        }
+
+            .c a {
+                color: black;
+                outline: none;
+                box-shadow: none !important;
+                border: none;
+            }
+
+            .c .card-footer {
+                height: 50px;
+                background-color: #E9F7EF;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .c:hover {
+                background-color: lightblue;
+                border: 1px solid black !important;
+            }
+
+        .name:hover {
+            cursor: pointer;
+            color: black;
+        }
+
+        a i {
+            font-size: 20px !important;
+            /*margin: 0 !important;*/
+        }
+        .redstar{
+            color:red;
+            float:right;
+        }
+    </style>
+}
+
+    <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+        <h5 class="m-0 font-weight-bold text-primary">Month wise SalarySheet Report</h5>
+        <a class='btn btn-info btn-sm' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=10&perentId=3322'>@*<i class="fas fa-backward fa-2x "></i>*@<i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+    </div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="container">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                    <input type="hidden" id="employeeInfoId" name="employeeInfoId">
+                    <div class="form-group row" id="forReportType">
+                        <label for="reportTypeId" class="col-sm-3 col-form-label">Report Type <span class="redstar">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control" name="reportTypeId" id="reportTypeId">
+                                <option class="form-control" value="MWBS">Month Wise Bonus Sheet</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row" id="forPeriod">
+                        <label for="salaryPeriodId" class="col-sm-3 col-form-label">Period Name <span class="redstar">*</span></label>
+                        <div class="col-sm-9">
+                            <select name="salaryPeriodId" id="salaryPeriodId" class="form-control">
+                                <option value="">Select Salary Period</option>
+                                @foreach (var data in Model.salaryPeriods)
+                                {
+                                    <option value="@data.Id">@data.periodName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    @*<div class="form-group row" id="forEmployee">
+                            <label for="employeeInfoId" class="col-sm-3 col-form-label">Employee's Name <span style="color:red;">*</span></label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="employeeName" name="employeeName" data-parsley-required="true" data-parsley-trigger="keyup" autocomplete="off">
+                            </div>
+                        </div>*@
+                    <div class="form-group row" id="forSbu">
+                        <label for="sbu" class="col-sm-3 col-form-label">SBU Name </label>
+                        <div class="col-sm-9">
+                            <select name="sbu" id="sbu" class="form-control">
+                                <option value="">Select SBU</option>
+                                @foreach (var data in Model.specialBranchUnits)
+                                {
+                                    <option value="@data.Id">@data.branchUnitName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row" id="forButton">
+                        <label class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input type="button" value="Export To PDF" id="btnPrint" class="btn btn-facebook btn-sm" style="width:120px;" />
+                            &nbsp;&nbsp;&nbsp;
+                            @*<input type="button" value="Load" id="btnExcel" class="btn btn-warning btn-sm" style="width:120px;display:none" />*@
+                            <button id="btnExcel" class="btn btn-facebook btn-sm" title="Excel" style="width:140px;display:none">Load</button>
+                            &nbsp;&nbsp;&nbsp;
+                            <input type="button" id="btnRefresh" value="Refresh" class="btn btn-info btn-sm" style="width:80px;" />
+                            <input type="hidden" id="hidden" value="@DateTime.Now.ToString("dd-MMM-yyyy")" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script>
+        function ajaxGetEmployees(response) {
+            var GeEmployeesList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+                GeEmployeesList[GeEmployeesList.length] = obj;
+            });
+            $('#employeeName').autocomplete({
+                source: GeEmployeesList,
+                select: function (event, ui) {
+                    $("#employeeName").val(ui.item.value);
+                    $("#employeeInfoId").val(ui.item.key);
+                }
+            });
+        }
+
+        $(document).ready(function(){
+            Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo', [], 'json', ajaxGetEmployees);
+
+            $('#btnRefresh').click(function () {
+                var date = $('#hidden').val();
+                $('#reportTypeId').val('MWBS');
+                @* $('#to').val(date); *@
+                $('#salaryPeriodId').val('');
+                $('#sbu').val('');
+                //$('#employeeName').val("");
+                //$('#employeeInfoId').val('');
+
+            })
+
+            $("#btnPrint").click(function (e) {
+                let rptType = $('#reportTypeId').val();
+                let employeeInfoId = $('#employeeInfoId').val();
+                let salaryPeriodId = $('#salaryPeriodId').val();
+                let taxYearId = $('#taxYearId').val();
+                let sbuId = $('#sbu').val();
+                let pnsId = $('#pns').val();
+                if (rptType == "") {
+                    swal('Warning', 'Select Report Type', 'warning');
+                    return false;
+                }
+                if (rptType == 'PSLIP') {
+                    if (employeeInfoId == 0) {
+                        swal('Warning', 'Select Employee', 'warning');
+                        return false;
+                    }
+                    if (salaryPeriodId == 0) {
+                        swal('Warning', 'Select Salary Period', 'warning');
+                        return false;
+                    }
+                    window.open('/Payroll/PayrollReport/SalaryReport?rptType=' + rptType + '&employeeInfoId=' + employeeInfoId + '&salaryPeriodId=' + salaryPeriodId, '_blank');
+                }
+                if (rptType == 'MWSS' || rptType == 'MWSSBWC' || rptType == 'MWBS') {
+                    if (salaryPeriodId == 0) {
+                        swal('Warning', 'Select Salary Period', 'warning');
+                        return false;
+                    }
+                    if (sbuId == 0) {
+                        sbuId = 0;
+                    }
+                    if (pnsId == 0) {
+                        pnsId = 0;
+                    }
+                    //if (sbuId == 6) {
+                    //    window.open('/Payroll/PayrollReport/SubMonthlySalaryReportPdf?rptType=' + 'MWSS789' + '&sbuId=' + sbuId + '&pnsId=' + pnsId + '&salaryPeriodId=' + salaryPeriodId, '_blank');
+
+                    //}
+                    //else {
+                    window.open('/Payroll/PayrollReport/MonthlySalaryReport?rptType=' + rptType + '&sbuId=' + sbuId + '&pnsId=' + pnsId + '&salaryPeriodId=' + salaryPeriodId, '_blank');
+                    //}
+                }
+                if (rptType == 'BNKSTMNT' || rptType == 'WALLSTMNT' || rptType == 'CASHSTMNT') {
+                    if (salaryPeriodId == 0) {
+                        swal('Warning', 'Select Salary Period', 'warning');
+                        return false;
+                    }
+                    if (sbuId == 0) {
+                        sbuId = 0;
+                    }
+                    if (pnsId == 0) {
+                        pnsId = 0;
+                    }
+                    window.open('/Payroll/PayrollReport/BankStatementReport?rptType=' + rptType + '&sbuId=' + sbuId + '&pnsId=' + pnsId + '&salaryPeriodId=' + salaryPeriodId, '_blank');
+                }
+                if (rptType == 'BNKSTMNTWTHOUTPAD' || rptType == 'BNKAPP') {
+                    if (salaryPeriodId == 0) {
+                        swal('Warning', 'Select Salary Period', 'warning');
+                        return false;
+                    }
+                    if (sbuId == 0) {
+                        sbuId = 0;
+                    }
+                    if (pnsId == 0) {
+                        pnsId = 0;
+                    }
+                    window.open('/Payroll/PayrollReport/BankStatementReport_PAD?rptType=' + rptType + '&sbuId=' + sbuId + '&pnsId=' + pnsId + '&salaryPeriodId=' + salaryPeriodId, '_blank');
+                }
+
+                if (rptType == 'FTAXCERT') {
+                    if (employeeInfoId == 0) {
+                        swal('Warning', 'Select Employee', 'warning');
+                        return false;
+                    }
+                    if (taxYearId == 0) {
+                        swal('Warning', 'Select Tax Year', 'warning');
+                        return false;
+                    }
+                    window.open('/Payroll/PayrollReport/FinalTaxCertificateReportPdfAction?rptType=' + rptType + '&employeeInfoId=' + employeeInfoId + '&taxYearId=' + taxYearId, '_blank');
+                }
+                if (rptType == 'TAXCAL') {
+                    if (employeeInfoId == 0) {
+                        swal('Warning', 'Select Employee', 'warning');
+                        return false;
+                    }
+                    if (taxYearId == 0) {
+                        swal('Warning', 'Select Tax Year', 'warning');
+                        return false;
+                    }
+                    window.open('/Payroll/PayrollReport/FinalTaxCertificateReportPdfAction?rptType=' + rptType + '&employeeInfoId=' + employeeInfoId + '&taxYearId=' + taxYearId, '_blank');
+                }
+            });
+        })
+    </script>
+}

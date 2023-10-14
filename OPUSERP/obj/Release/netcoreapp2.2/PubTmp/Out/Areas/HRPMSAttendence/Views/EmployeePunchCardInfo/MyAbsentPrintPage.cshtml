@@ -1,0 +1,137 @@
+﻿@model AllEmployeeLate
+@{
+    ViewData["Title"] = "My Absent Attendance";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+@using OPUSERP.ERPServices.MasterData.Interfaces
+@using OPUSERP.ERPService.AuthService.Interfaces
+@using System
+@inject IERPCompanyService eRPCompanyService
+@inject IUserInfoes userInfo
+@{
+    var companies = await eRPCompanyService.GetAllCompany();
+    var company = companies.FirstOrDefault()?.filePath;
+    var companyName = companies.FirstOrDefault()?.companyName;
+    var companyAddress = companies.FirstOrDefault()?.addressLine;
+    var comImage = companies.FirstOrDefault()?.filePath;
+}
+
+<div class="card" style="width: 100%;">
+    <div class="container-fluid">
+        <div class="fa-pull-right">
+            <p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+        </div>
+
+        <div class="row" style="padding-top:0px;">
+
+            <div class="col-2">
+                @*<img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="OPUS ERP" style="height:60px;" />*@
+            </div>
+            <div class="col-8">
+                <div style="color:black;text-align:center;">
+                    <img src="/EmpImages/@comImage" alt="OPUS ERP" style="height:60px;" />
+
+                    <h3>@companyName</h3>
+                    <label>@companyAddress</label>
+                    <h3 style="font-size:20px;"><u>Absent Sheet for @ViewBag.Name @*(@ViewBag.month, @DateTime.Now.Year)*@</u></h3>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-12 row">
+                <div class="col-6" style="color: black; font-size: 17px; padding-top: 4px; ">
+                    <table style="border:none;">
+                        <tr>
+                            <td>Employee Name </td>
+                            <td>: @ViewBag.Name</td>
+                        </tr>
+                        <tr>
+                            <td>Employee Id</td>
+                            <td>: @ViewBag.Code</td>
+                        </tr>
+                        <tr>
+                            <td>Month</td>
+                            <td>: @ViewBag.month , @DateTime.Now.Year</td>
+                        </tr>
+
+
+                    </table>
+
+
+                </div>
+                <div class="col-6">
+
+                    <div class="card-body">
+                        <table class="table table-striped table-bordered" id="particularTable">
+                            <thead>
+                                <tr style="background-color:gray;">
+                                    <th>Particular</th>
+                                    <th>Days</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr>
+                                    <td>Total Working Days</td>
+                                    <td id="tPresent">@Model.indAbsent?.totalWorking</td>
+                                </tr>
+                                <tr>
+                                    <td>Total Absent Days</td>
+                                    <td id="tLate">@Model.indAbsent?.totalAbsent</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<div class="row clearfix">
+    <div class="col-12">
+       
+                <table class="table table-striped table-bordered" id="attendenceTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.indAbsent?.empAbsentDates)
+                        {
+                            @if (item.isPresent == 0)
+                            {
+                                <tr>
+                                    <td>@item.date?.ToString("dd-MM-yyy")</td>
+                                    <td>Absent</td>
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+           
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Assets/paginathing.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('#attendenceTable').DataTable({
+
+            });
+        });
+    </script>
+}

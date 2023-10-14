@@ -1,0 +1,215 @@
+﻿@model PFMemberInfoViewModel
+@{
+    ViewData["Title"] = "ViewMember";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card" style="width: 100%;">
+            
+                <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+                    <h5 class="m-0 font-weight-bold text-primary">Review Application</h5>
+                    <a class='btn btn-info mr-4' style="float:right" data-toggle='tooltip' title='Go Back' href='/ProvidentFund/Member/PendingMemberList'>@*<i class="fas fa-backward fa-2x "></i>*@<i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+                </div>
+
+                <div class="card-body">
+                   
+
+                    <div class="">
+                        <form id="FormId" asp-area="" asp-controller="" asp-action="" data-parsley-validate="parsley">
+
+                            <input type="hidden" name="memberID" id="memberID" value="0">
+                            <input type="hidden" name="employeeCode" id="employeeCodeId" value="0">
+                            <input type="hidden" name="employeeInfoId" id="employeeInfoId" value="" />
+
+                            <div class="form-group row">
+                                <label for="employeeId" class="col-sm-2 col-form-label">Member ID </label>
+                                <div class="col-sm-4">
+
+                                    <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="memberCode" value="@Model.memberCode" id="memberCode" readonly>
+                                </div>
+
+                                <label for="name" class="col-sm-2 col-form-label">Member's Name </label>
+                                <div class="col-sm-4">
+                                    <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" value="@Model.memberName" name="memberName" id="memberName" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="Designation" class="col-sm-2 col-form-label"> Designation </label>
+                                <div class="col-sm-4">
+
+                                    <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" value="" class="form-control" value="@Model.designation" name="" id="designation" readonly>
+
+                                </div>
+
+                                <label for="department" class="col-sm-2 col-form-label">Department </label>
+                                <div class="col-sm-4">
+
+                                    <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" value="" class="form-control" name="" value="@Model.department" id="department" Readonly>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+
+                                <label for="hrBranchId" class="col-sm-2 col-form-label">SBU</label>
+                                <div class="col-sm-4">
+                                    <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" value="" class="form-control" name=""  id="branch" Readonly>
+                                </div>
+
+                                <label for="dateOfJoining" class="col-sm-2 col-form-label">Date of Joining </label>
+                                <div class="col-sm-4 input-group">
+                                    <input name="joiningDateGovtService" id="joiningDateGovtService" class="form-control input-group-sm" value="" value="@Model.dateOfJoining" readonly />
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group row">
+                                <label for="mobile" class="col-sm-2 col-form-label">Mobile </label>
+                                <div class="col-sm-4">
+                                    <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" value="@Model.mobile" name="mobile" id="mobileNumberOffice" Readonly>
+                                </div>
+                                <label for="email" class="col-sm-2 col-form-label">Email </label>
+                                <div class="col-sm-4">
+                                    <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" value="@Model.email" name="email" id="emailAddressPersonal" Readonly>
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group row">
+
+                                <label for="applicationDate" class="col-sm-2 col-form-label">Application Date </label>
+                                <div class="col-sm-4 input-group">
+                                    <input name="applicationDate" value="@Model.applicationDate" id="applicationDate" class="form-control input-group-sm"  readonly />
+                                </div>
+                                <label for="note" class="col-sm-2 col-form-label">Note</label>
+                                <div class="col-sm-4">
+                                    <textarea name="note" id="note" value="@Model.note" class="form-control" readonly rows="3"> @Model.note</textarea>
+                                </div>
+
+                            </div>
+                            <br />
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <input type="button" onclick="MemberApprove(@Model.memberID)" class="btn btn-sm btn-primary bg-success text-white" id="btnApprove" value="Approve">&nbsp;
+                                   
+                                    <input type="button" onclick="MemberReject(@Model.memberID)" class="btn btn-sm btn-danger" id="btnReject" value="Reject" style="border: 1px">&nbsp;
+                                    <a href="/ProvidentFund/Member/PendingMemberList" class="btn btn-sm btn-default" style="border: 1px solid #1bb394;">Hold</a>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<br />
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+           
+          
+
+        });
+
+       
+
+      
+
+        function MemberApprove(id) {
+            console.log($('#FormId').serializeArray());
+            //var data = $('#FormId').serializeArray();
+
+            //console.log(data[0].value)
+            swal({
+                title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+            }).then(function () {
+                $.ajax({
+                    url: '/ProvidentFund/Member/UpdateMemberStatus',
+                    type: 'POST',
+                    data: { id: id, status:2}
+                }).done(function () {
+                    //if (data[0].value == 0) {
+                        swal('success', 'Approve Successfully!', 'success').then(function () {
+                           // location.reload();
+                            window.location.href = '/ProvidentFund/Member/MemberOverView';
+                        });
+                  
+                }).fail(function () {
+                    swal('warning', 'Failed!', 'warning');
+                })
+            });
+        };
+
+        function MemberReject(id) {
+            console.log($('#FormId').serializeArray());
+            //var data = $('#FormId').serializeArray();
+
+            //console.log(data[0].value)
+            swal({
+                title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+            }).then(function () {
+                $.ajax({
+                    url: '/ProvidentFund/Member/UpdateMemberStatus',
+                    type: 'POST',
+                    data: { id: id, status: 1 }
+                }).done(function () {
+                    //if (data[0].value == 0) {
+                    swal('success', 'Reject Successfully!', 'success').then(function () {
+                        //location.reload();
+                        window.location.href = '/ProvidentFund/Member/MemberOverView';
+                    });
+                    //}
+                    //else {
+                    //    swal('success', 'Updated Successfully!', 'success').then(function () {
+                    //        location.reload();
+                    //    });;
+                    //}
+                }).fail(function () {
+                    swal('warning', 'Failed!', 'warning');
+                })
+            });
+        };
+
+
+
+
+
+        function Remove(Id) {
+
+            if (Id == "") {
+                swal('Warning', 'please try again', 'warning');
+                return false;
+            }
+            swal({
+                title: 'Are you sure?', text: 'Do you want to Reject this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, Reject it!'
+            }).then(function () {
+                $.get("/ProvidentFund/Member/DeleteMember?id=" + Id, function (data) {
+                    if (data.Success) {
+                        swal('', data.Message, 'success').then(function () {
+                            location.reload();
+                        })
+                    } else {
+                        swal('Warning', data.Message, 'warning');
+                    }
+
+
+                });
+
+            })
+
+        }
+
+    </script>
+}

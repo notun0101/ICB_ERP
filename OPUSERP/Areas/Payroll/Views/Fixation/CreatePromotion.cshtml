@@ -1,0 +1,547 @@
+﻿@model FixationIntegrationViewModel
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Payroll/Views/Shared/_SalaryMasterForm.cshtml";
+
+}
+<style>
+	.redStar {
+		color: red;
+        float:right;
+	}
+</style>
+
+<div class="card" style="width: 100%;">
+    <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+        <h5 class="m-0 font-weight-bold text-primary">Promotion Information</h5>
+        <a class='btn btn-info mr-4' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1013&perentId=5926'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+    </div>
+    <div class="card-body">
+
+        <div class="container">
+            <form asp-area="Payroll" asp-controller="Fixation" asp-action="Create" method="post" data-parsley-validate="parsley">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="row">
+                    <input type="hidden" id="fixationintegrationId" name="fixationintegrationId" value=0>
+                    <input type="hidden" id="employeeId" name="employeeId">
+                    <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="empcode" class="col-sm-4 col-form-label">Employee Name</label>
+                            <div class="col-sm-8">
+                                <input type="hidden" class="form-control" id="empCode" name="empCode">
+                                <input type="text" class="form-control" autocomplete="off" id="employeeName">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="joiningDate" class="col-sm-4 col-form-label">Joining Date</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="joiningDate" id="joiningDate" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="dateOfBirth" class="col-sm-4 col-form-label">Birth Date</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="dateOfBirth" id="dateOfBirth" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="currentGradeId" class="col-sm-4 col-form-label">Current Grade</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="currentGradeId" name="currentGradeId" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="lastIncrementDate" class="col-sm-4 col-form-label">Last Increment date</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="lastIncrementDate" id="lastIncrementDate" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="postingPlace" class="col-sm-4 col-form-label">Posting Place</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="postingPlace" id="postingPlace" readonly>
+
+                            </div>
+                        </div>
+                        @*<div class="form-group row">
+                            <label for="initialBasic" class="col-sm-4 col-form-label">Initial basic</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="initialBasic" name="initialBasic">
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="startingBasic" class="col-sm-4 col-form-label">Starting Basic</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="initialstartingBasicBasic" name="startingBasic">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="newBasicPoint" class="col-sm-4 col-form-label">New basic point</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="newBasicPoint" name="newBasicPoint">
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                    <label for="basicPay" class="col-sm-4 col-form-label">Basic Pay as on</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="basicPay" name="basicPay">
+                    </div>
+                </div>*@
+                        <div class="form-group row">
+                            <label for="lastPromotionDate" class="col-sm-4 col-form-label">Promotion Date</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="lastPromotionDate" name="lastPromotionDate" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="effectiveDate" class="col-sm-4 col-form-label">Effective Date </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="effectiveDate" id="effectiveDate" readonly>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-6">
+
+                        <div class="form-group row">
+                            <label for="brachCode" class="col-sm-4 col-form-label">Branch</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="hrBranchId" id="hrBranchId" readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="designation" class="col-sm-4 col-form-label">Designation</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" name="lastDesignationId" id="lastDesignationId">
+                                    <option value="">Choose Designation</option>
+                                    @foreach (var item in Model.designations)
+                                    {
+                                        <option value="@item.Id">@item.designationName</option>
+                                    }
+                                </select>
+                                <input type="text" class="form-control d-none" name="designation" id="designation" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row d-none">
+                            <label for="fixationType" class="col-sm-4 col-form-label">Fixation Type </label>
+                            <div class="col-sm-8">
+                                <input type="hidden" name="fixationType" id="fixationType" value="Promotion" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="fixationGrade" class="col-sm-4 col-form-label">Fixation Grade <span class="redStar">*</span> </label>
+                            <div class="col-sm-8">
+                                <select data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="fixationGrade" id="fixationGrade">
+                                    <option value="">Select</option>
+                                    @foreach (var data in Model.salaryGrades)
+                                    {
+                                        <option value="@data.Id">@data.gradeName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="amount" class="col-sm-4 col-form-label">New Basic <span class="redStar">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="amount" id="amount">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="refNo" class="col-sm-4 col-form-label">Ref. No <span class="redStar">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="refNo" id="refNo" data-parsley-required="true">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="note" class="col-sm-4 col-form-label">File No </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="fileNo" id="fileNo">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="letterDate" class="col-sm-4 col-form-label">Letter Date </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="letterDate" id="letterDate" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="nextIncrementDate" class="col-sm-4 col-form-label">Next Increment Date </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="nextIncrementDate" id="nextIncrementDate" readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="fixationGrade" class="col-sm-4 col-form-label">Category of Promotion <span class="redStar">*</span></label>
+                            <div class="col-sm-8">
+                                <select data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="categoryId" id="categoryId">
+                                    <option value="500">Select</option>
+
+                                    <option value="1">৫ বছর পূর্ণ না হওয়ায়</option>
+                                    <option value="2">৫ বছর পূর্ণ হওয়ায়</option>
+
+                                    <option value="3">১০ বছর পূর্ণ না হওয়ায়</option>
+                                    <option value="4">১০ বছর পূর্ণ হওয়ায়</option>
+
+                                    <option value="5">১২ বছর পূর্ণ না হওয়ায়</option>
+                                    <option value="6">১২ বছর পূর্ণ  হওয়ায়</option>
+
+                                    <option value="7">১৪বছর পূর্ণ না হওয়ায়</option>
+                                    <option value="8">১৪বছর পূর্ণ  হওয়ায়</option>
+
+                                    <option value="9">১৭ বছর পূর্ণ না হওয়ায়</option>
+                                    <option value="10">১৭ বছর পূর্ণ  হওয়ায়</option>
+
+                                    <option value="11">২০ বছর পূর্ণ না হওয়ায়</option>
+                                    <option value="12">২০ বছর পূর্ণ হওয়ায়</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <hr>
+                @*<button type="button" id="generateBtn" onclick="PreView()" class="btn btn-info ml-2" style="float:right; margin-top:5px;"><i class="fas fa-eye"></i>PreView</button>*@
+
+                <a id="viewBtn" type="button" class="btn btn-info ml-2" style="float:right; margin-top:5px; " href='javascript:void(0)'><i class="fas fa-eye"></i> View</a>
+                <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+                <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(document).ready(function () {
+        $("#submit").click(function () {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+            }).then(function () {
+                $("#submitbtn").click();
+            });
+        });
+        Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo', [], 'json', ajaxGetEmployees);
+
+        $("#lastIncrementDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2090" }).datepicker("setDate", new Date());
+        $("#lastPromotionDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2090" });
+        $("#letterDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2090" }).datepicker("setDate", new Date());
+        $("#effectiveDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2090" }).datepicker("setDate", new Date());
+        $("#nextIncrementDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2090" }).datepicker("setDate", new Date());
+
+
+        $('#viewBtn').click(function () {
+
+        
+
+            var empId = $("#employeeId").val();
+            var empCode = $("#empCode").val();
+            var designId = $("#lastDesignationId").val();
+            //var desigName = $("#designation").val();
+            //$("#designationId").val(ui.item.designationId);
+            var joinDate = $("#joiningDate").val();
+            var DOB = $("#dateOfBirth").val();
+            var increDate = $("#lastIncrementDate").val();
+            var effectDate = $("#effectiveDate").val();
+            var pPlace = $("#postingPlace").val();
+            var currentgradeId = $("#currentGradeId").val();
+            var branchId = $("#hrBranchId").val();
+            var fixationType = $("#fixationType").val();
+            var fixationGrade = $("#fixationGrade").val();
+            var amount = $("#amount").val();
+            //$("#brachCode").val(ui.item.hrBranchId);
+            var fileN = $("#fileNo").val();
+            var refNo = $("#refNo").val();
+            var letterDate = $("#letterDate").val();
+            var nextIncrementDate = $("#nextIncrementDate").val();
+            var categoryId = $("#categoryId").val();
+            var promotionDate = $("#lastPromotionDate").val();
+
+            //alert(designId)
+            //alert(fixationGrade)
+            //alert(desigName)
+
+            if (categoryId == null || categoryId == '' || categoryId == 500) {
+                window.open("/Payroll/Fixation/PromotionReportPreViewPdf?empId=" + empId + "&empCode=" + empCode + "&designId=" + designId + "&increDate=" + increDate + "&effectDate=" + effectDate + "&fixationGrade=" + fixationGrade + "&fixationType=" + fixationType + "&amount=" + amount + "&fileN=" + fileN + "&refNo=" + refNo + "&letterDate=" + letterDate + "&nextIncrementDate=" + nextIncrementDate +  "&promotionDate=" + promotionDate);
+
+            }
+            else
+            {
+               
+                window.open("/Payroll/Fixation/PromotionReportPreViewByYearsPdf?empId=" + empId + "&empCode=" + empCode + "&designId=" + designId + "&increDate=" + increDate + "&effectDate=" + effectDate + "&fixationGrade=" + fixationGrade + "&fixationType=" + fixationType + "&amount=" + amount + "&fileN=" + fileN + "&refNo=" + refNo + "&letterDate=" + letterDate + "&nextIncrementDate=" + nextIncrementDate + "&categoryId=" + categoryId + "&promotionDate=" + promotionDate);
+
+            }
+        });
+
+
+    });
+    function ajaxGetEmployees(response) {
+        //console.log(response)
+        var GeEmployeesList = [];
+        $.each(response, function (id, option) {
+            var obj = new Object();
+            obj.key = option.Id;
+            obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+            obj.employeeCode = option.employeeCode;
+            obj.designation = option.lastDesignation ?.designationName;
+            obj.designationId = option.lastDesignation ?.Id;
+            obj.joiningDate = option.joiningDateGovtService;
+            obj.dateOfBirth = option.dateOfBirth;
+            obj.postingPlace = option.placeOfPosting;
+            obj.currentGrade = option.currentGrade ?.gradeName;
+            obj.currentBasic = option.currentBasic;
+            obj.branchName = option.hrBranch ?.branchName;
+            obj.fileNo = option.employeeCode;
+            obj.lastPromotionDate = option.lastPromotionDate;
+            GeEmployeesList[GeEmployeesList.length] = obj;
+        });
+        $('#employeeName').autocomplete({
+            source: GeEmployeesList,
+            select: function (event, ui) {
+                //$("#employeeName").val(ui.item.value);
+                var Bdate = formatingDate(ui.item.dateOfBirth)
+                $("#employeeId").val(ui.item.key);
+                $("#empCode").val(ui.item.employeeCode);
+                $("#lastDesignationId").val(ui.item.designationId);
+                $("#designation").val(ui.item.designation);
+                //$("#designationId").val(ui.item.designationId);
+                $("#joiningDate").val(formatingDate(ui.item.joiningDate));
+                $("#dateOfBirth").val(Bdate);
+                $("#postingPlace").val(ui.item.postingPlace);
+                $("#currentGradeId").val(ui.item.currentGrade + ' (' + ui.item.currentBasic + ')');
+                $("#hrBranchId").val(ui.item.branchName);
+                //$("#brachCode").val(ui.item.hrBranchId);
+                $("#fileNo").val(ui.item.fileNo);
+                $("#lastPromotionDate").val(formatingDate(ui.item.lastPromotionDate));
+				//Common.Ajax('GET', '/Payroll/Fixation/GetSalaryAndGradeByEmpCode?code=' + ui.item.employeeCode, [], 'json', ajaxFiationGrade, false);
+				//Common.Ajax('GET', '/Payroll/Fixation/GetNewIncrementSalaryAndGradeByEmpCode1?code=' + ui.item.employeeCode + '&type=promotion', [], 'json', ajaxNewFiationGrade, true);
+                Common.Ajax('GET', '/Payroll/Fixation/GetNewIncrementSalaryAndGradeByEmpCode1?code=' + ui.item.employeeCode, [], 'json', ajaxNewFiationGrade, true);
+                Common.Ajax('GET', '/Payroll/Fixation/GetDisciplinaryInfobyEmp?code=' + ui.item.employeeCode, [], 'json', ajaxDisciplinary, true);
+
+            }
+        });
+    }
+    function ajaxFiationGrade(res) {
+        alert(res)
+		//$('#fixationGrade').val(res.fixationGradeId).css('background-color', '#EAECF4');
+        //$('#amount').val(res.amount)
+		//$('#fixationGrade').on('mousedown', function (e) {
+		//	e.preventDefault();
+		//	this.blur();
+		//	window.focus();
+		//});
+		//Common.Ajax('GET', '/Payroll/Fixation/GetNewIncrementSalaryAndGradeByEmpCode?code=' + res.employeeCode + '&type=promotion', [], 'json', ajaxNewFiationGrade, true);
+		//if (parseInt(res) <= parseInt(0)) {
+		//	swal('warning', 'Please add initial basic first!');
+		//}
+		//else {
+		//	$('#amount').val(res);
+		//}
+    }
+
+    function ajaxDisciplinary(res) {
+       
+        console.log("Disciplinary")
+        console.log(res)
+        if (res != 0) {
+            $('#fixationGrade').val();
+            $('#amount').val();
+            swal('warning', 'The employee is not eligible for promotion, because of punishment!');
+        }
+    }
+    function ajaxNewFiationGrade(res) {
+		console.log("promotion");
+        console.log(res);
+        $('#fixationGrade').val(res.ngradeId);
+        //$('#fixationGrade').on('mousedown', function (e) {
+        //    e.preventDefault();
+        //    this.blur();
+        //    window.focus();
+        //});
+        if (parseInt(res.gradeBasic) <= parseInt(0)) {
+           
+			swal('warning', 'Please add initial basic first!');
+		}
+		else {
+            //$('#amount').val(res.gradeBasic);
+            if (res.ngradeName == "Grade 8") {
+                
+
+                //$('#amount').val('');
+
+                //$('#amount').on('mousedown', function (e) {
+                //    $(this).unbind('mousedown');
+                //});
+            }
+            else {
+                $('#amount').val(res.gradeBasic);
+                $('#amount').val(res.gradeBasic);
+                    //.css('background-color', '#EAECF4');
+                //$('#amount').on('mousedown', function (e) {
+                //    e.preventDefault();
+                //    this.blur();
+                //    window.focus();
+                //});
+            }
+
+		}
+        ///Common.Ajax('GET', '/Payroll/Fixation/GetNewGradeByEmpCode?code=' + res.employee ?.employeeCode, [], 'json', ajaxGetNewGradeByEmpCode, false);
+        Common.Ajax('GET', '/Payroll/Fixation/GetNewGradeByEmpCodeNew?code=' + res.employee ?.employeeCode, [], 'json', ajaxGetNewGradeByEmpCode, false);
+	}
+    $('#fixationGrade').on('change', function () {
+        var empCode = $('#empCode').val();
+        Common.Ajax('GET', '/Payroll/Fixation/GetNewIncrementFixationByEmpCode?code=' + res.employee ?.employeeCode, [], 'json', ajaxNewFixationPromotion, false);
+
+    })
+    function ajaxNewFixationPromotion(res) {
+		console.log(res)
+		
+    }
+
+    function ajaxGetNewGradeByEmpCode(res) {
+
+		//console.log("PromotionCheck");
+  //      console.log(res)
+  //      console.log(res.jobDuration)
+        if (res.jobDuration < 4 && res.ngradeName == "Grade 7") {
+            swal('warning', 'Job Duration must be 4 years or more for promotion !')
+        }
+        else if (res.jobDuration < 5 && res.ngradeName == "Grade 6") {
+            //alert(res.jobDuration)
+            //alert(res.ngradeName)
+            swal('warning', 'Job Duration must be 5 years or more for promotion !')
+        }
+        else if (res.jobDuration < 10 && res.ngradeName == "Grade 5") {
+
+            swal('warning', 'Job Duration must be 10 years or more for promotion !')
+        }
+        else if (res.jobDuration < 12 && res.ngradeName == "Grade 4") {
+
+            swal('warning', 'Job Duration must be 12 years or more for promotion !')
+        }
+        else if (res.jobDuration < 14 && res.ngradeName == "Grade 3") {
+            swal('warning', 'Job Duration must be 14 years or more for promotion !')
+        }
+        else if (res.jobDuration < 17 && res.ngradeName == "Grade 2") {
+            swal('warning', 'Job Duration must be 17 years or more for promotion !')
+        }
+        else if (res.jobDuration < 20 && res.ngradeName == "Grade 1") {
+            swal('warning', 'Job Duration must be 20 years or more for promotion !')
+        }
+
+        else {
+
+            if (res.ngradeName == "Grade 8") {
+               
+
+                $('#fixationGrade').val(res.ngradeId);
+                //$('#fixationGrade').on('mousedown', function (e) {
+                //    $(this).unbind('mousedown');
+                //});
+            }
+            else {
+                $('#fixationGrade').val(res.ngradeId);
+                $('#fixationGrade').val(res.ngradeId);
+                    //.css('background-color', '#EAECF4');
+                //$('#fixationGrade').on('mousedown', function (e) {
+                //    e.preventDefault();
+                //    this.blur();
+                //    window.focus();
+                //});
+            }
+        }
+       
+        
+		
+	}
+    $('#fixationType').on('change', function () {
+        if ($(this).val() == 'Promotion') {
+            var code = $('#empCode').val();
+            var type = "Promotion";
+            Common.Ajax('GET', '/Payroll/Fixation/GetPromotionSalaryByEmpCodeAndType?code=' + code + '&type='+type, [], 'json', ajaxFunctionGetGrade, false);
+        }
+        if ($(this).val() == 'Increment') {
+            var code = $('#empCode').val();
+            var type = "Increment";
+            Common.Ajax('GET', '/Payroll/Fixation/GetPromotionSalaryByEmpCodeAndType?code=' + code + '&type=' + type, [], 'json', ajaxFunctionGetGrade, false);
+        }
+    })
+    function ajaxFunctionGetGrade(res) {
+        console.log(res);
+    }
+    //function formatDate(date) {
+    //    date = new Date(date);
+    //    var year = date.getFullYear(),
+    //        month = date.getMonth() + 1, // months are zero indexed
+    //        day = date.getDate(),
+    //        hour = date.getHours(),
+    //        minute = date.getMinutes(),
+    //        second = date.getSeconds(),
+    //        hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+    //        minuteFormatted = minute < 10 ? "0" + minute : minute,
+    //        morning = hour < 12 ? "am" : "pm";
+
+    //    return day + "/" + + month + "/" + year;
+
+    //}
+    function formatingDate(date) {
+        var monthName = "";
+        date = new Date(date);
+        var year = date.getFullYear(),
+            month = date.getMonth() + 1, // months are zero indexed
+            day = date.getDate(),
+            hour = date.getHours(),
+            minute = date.getMinutes(),
+            second = date.getSeconds(),
+            hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+            minuteFormatted = minute < 10 ? "0" + minute : minute,
+            morning = hour < 12 ? "am" : "pm";
+        if (month == 1) {
+            monthName = 'Jan';
+        }
+        else if (month == 2) {
+            monthName = 'Feb';
+        }
+        else if (month == 3) {
+            monthName = 'Mar';
+        }
+        else if (month == 4) {
+            monthName = 'Apr';
+        }
+        else if (month == 5) {
+            monthName = 'May';
+        }
+        else if (month == 6) {
+            monthName = 'Jun';
+        }
+        else if (month == 7) {
+            monthName = 'Jul';
+        }
+        else if (month == 8) {
+            monthName = 'Aug';
+        }
+        else if (month == 9) {
+            monthName = 'Sep';
+        }
+        else if (month == 10) {
+            monthName = 'Oct';
+        }
+        else if (month == 11) {
+            monthName = 'Nov';
+        }
+        else {
+            monthName = 'Dec';
+        };
+
+        return day + "-" + monthName + "-" + year;
+    }
+
+    
+
+
+</script>

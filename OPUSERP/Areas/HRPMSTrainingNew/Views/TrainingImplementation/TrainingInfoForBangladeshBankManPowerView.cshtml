@@ -1,0 +1,133 @@
+﻿@model TrainingEnrollViewModel
+@{
+    ViewData["Title"] = "TrainingInfo BD Bank Manpower";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+@using OPUSERP.Helpers;
+@using System;
+<style>
+    body {
+        color: black !important;
+    }
+
+   
+</style>
+<div class="text-center p-2">
+    <h3>বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড</h3>
+    <p style="font-size:25px"><u>বিডিবিএল ভবন, ১২, কারওয়ান বাজার, ঢাকা</u></p>
+    <p style="font-size:25px"> <u>ট্রেনিং ইনস্টিটিউট</u></p>
+    <h6 style="font-size:25px"> <u>
+    বিষয় :মাসিক কার্যাবলীর
+    (@if (ViewBag.month == 1)
+    {
+        <span>জানুয়ারী</span>
+    }
+    else if (ViewBag.month == 2)
+    {
+        <span>ফেব্রুয়ারী</span>
+    }
+    else if (ViewBag.month == 3)
+    {
+        <span>মার্চ</span>
+    }
+    else if (ViewBag.month == 4)
+    {
+        <span>এপ্রিল</span>
+    }
+    else if (ViewBag.month == 5)
+    {
+        <span>মে</span>
+    }
+    else if (ViewBag.month == 6)
+    {
+        <span>জুন</span>
+    }
+    else if (ViewBag.month == 7)
+    {
+        <span>জুলাই</span>
+    }
+    else if (ViewBag.month == 8)
+    {
+        <span>অগাস্ট</span>
+    }
+    else if (ViewBag.month == 9)
+    {
+        <span>সেপ্টেম্বর</span>
+    }
+    else if (ViewBag.month == 10)
+    {
+        <span>অক্টোবর</span>
+    }
+    else if (ViewBag.month == 11)
+    {
+        <span>নভেম্বর</span>
+    }
+    else
+    {
+        <span>ডিসেম্বর</span>},@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(ViewBag.year.ToString()) ) সংক্ষিপ্ত বিবরণী
+</u></h6>
+    <br />
+</div>
+<h4><u>মানব সম্পদ উন্নয়ন:</u></h4>
+<table class="report-table-1" border="1" cellpadding="3"cellspacing="0" id="participantTable" style="font-size: 16px !important;">
+    <thead style="font-size:22px">
+        <tr>
+
+            <th rowspan="2">
+                প্রশিক্ষণ কর্মসূচির নাম
+            </th>
+            <th rowspan="2">প্রশিক্ষণের মেয়াদ</th>
+            <th rowspan="2">উদ্যোগী সংস্থা/এজেন্সীর নাম</th>
+            <th colspan="3">
+                মন্ত্রণালয় এবং আওতাধীন সংস্থা সমূহ থেকে অংশগ্রহণকারীর সংখ্যা
+            </th>
+        </tr>
+        <tr>
+            <th>কর্মকর্তা</th>
+            <th>কর্মচারী</th>
+            <th>মোট</th>
+
+        </tr>
+        @*<tr><th style=" text-align:left" colspan="6">বৈদেশিক প্রশিক্ষন/সেমিনার/কর্মশালা:</th></tr>*@
+    </thead>
+    <tbody>
+        <tr></tr>
+
+        @foreach (var data in Model.bangladeshBankManpowerReportVMs.Select(x => x.trainingType).Distinct())
+        {
+            <tr style="font-size:22px">
+                @if (data == 2)
+                {
+                    <th style=" text-align:left" colspan="6">বৈদেশিক প্রশিক্ষন/সেমিনার/কর্মশালা:</th>
+                }
+                else if (data == 1)
+                {
+                    <th style=" text-align:left" colspan="6">দেশের অভ্যন্তরে:</th>
+                }
+                 else if (data == 3)
+                {
+                    <th style=" text-align:left" colspan="6">ব্যাংকের অভ্যন্তরে:</th>
+                }
+               
+            </tr>
+
+           
+            @foreach (var item in Model.bangladeshBankManpowerReportVMs.Where(x => x.trainingType == data))
+            {
+                <tr>
+                    <td>@item.course</td>
+                    <td style="font-size:22px;text-align:center;">
+                        <span >@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(item.startDate?.ToString("dd/MM/yyyy"))</span><br />
+                        <span style="text-align:center;">হতে</span><br />
+                        <span> @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(item.endDate?.ToString("dd/MM/yyyy"))</span>
+                    </td>
+                    <td>@item.trainingInstituteName</td>
+                    <td style="font-size:22px;text-align:center;">@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(item.Officer.ToString())</td>
+                    <td style="font-size:22px;text-align:center;">@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(item.Staff.ToString())</td>
+                    <td style="font-size:22px;text-align:center;">@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(item.Total.ToString())</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<br />

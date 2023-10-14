@@ -1,0 +1,169 @@
+﻿@model NavbarViewModel
+@{
+    ViewData["Title"] = "Grid Menu Page";
+}
+@using OPUSERP.ERPServices.MasterData.Interfaces
+@using OPUSERP.ERPService.AuthService.Interfaces
+@using System
+@inject IERPCompanyService eRPCompanyService
+@inject IUserInfoes userInfo
+@{
+    var companies = await eRPCompanyService.GetAllCompany();
+    var labelColor = companies.FirstOrDefault()?.labelColor;
+}
+<style>
+    .h {
+        text-decoration: none;
+        border: 2px solid lightgray;
+        transition: .3s all;
+    }
+
+        .h:hover {
+            background-color: #ADD8E6;
+            /*height:78px;*/
+            /*width:190px;*/
+            /*transform:translate(-7%,-7%);*/
+            /* background:#413b3b;*/
+            background: #73ddff;
+            border: 2px solid #0b9ac8;
+            /*  box-shadow: 20px 20px 20px;*/
+            /*    box-shadow: 30px 30px 30px #82d9f5;*/
+            /*z-index:1;*/
+            overflow: hidden;
+            color: #ffffff;
+            transform: scale(1.05)
+        }
+
+    .d {
+        color: black;
+        font-size: 10pt;
+        font-weight: 400;
+    }
+
+        .d:hover {
+            color: #ffffff;
+        }
+
+    .fas:hover, .fa:hover {
+        color: #0b9ac8;
+    }
+
+    #myInput {
+        height: 31px;
+        border: none;
+        outline: none;
+        border-radius: 20px;
+        text-align: center;
+    }
+
+    input[type="checkbox"] {
+        display: none;
+    }
+    /*.box{
+        position:absolute;
+        transform:translate(-50%, -50%);
+        width:500px;
+        height:60px;
+    }
+    .box lable{
+        position:absolute;
+        right:0;
+        width:60px;
+        line-height:60px;
+        border-radius:50%;
+        box-shadow: -5px -5px 8px #edeff1;
+    }*/
+
+    body, .sticky-footer {
+        background-color: #E5EEEF !important;
+    }
+
+    /*Menu Btn*/
+    i.fa-2x {
+        /*color: #129647;*/
+        color: #AEB6BF;
+        /*text-shadow: 2px 2px 2px #2d3490;*/
+        text-shadow: 1px 1px 1px #2d3490;
+    }
+
+    .cardBtn {
+        border: 1px solid black;
+    }
+
+        .cardBtn .h:hover {
+            background-color: #ADD8E6 !important;
+            border: 2px solid black !important;
+        }
+
+            .cardBtn .h:hover i.fa-2x {
+                color: #00AA5B !important;
+                text-shadow: 0px 2px 2px #2d3490;
+            }
+        .cardBtn:hover .d {
+            color: #0079BE;
+            font-weight: bold !important;
+        }
+
+        .cardBtn .d {
+            color: black;
+            font-weight: bold !important;
+        }
+
+    #box .card-header {
+        color: black;
+    }
+</style>
+ 
+@foreach (var parentItem in Model.navbarsbyparent)
+{
+    <div class="row clearfix">
+        <div class="col-12">
+            <div class="card mb-4" id="box">
+                @{ 
+                    var lblColor = "lightgray";
+                    if (labelColor != null)
+                    {
+                        lblColor = labelColor;
+                    }
+                }
+                <div class="card-header" style="background-color:@lblColor;color:black;">
+                    <div class="col-md-12" style="display: flex; justify-content: space-between; align-items: center;">
+                        <h4 class="m-0 font-weight-bolder" style="font-size:20px;">@parentItem.nameOption</h4>
+                        @if (Model.navbars.Where(x => x.parentID == parentItem.Id).Count() > 12)
+                        {
+                            <input type="text" name="name" placeholder="Search" id="myInput" class="myInput" />
+                        }
+                    </div>
+
+                </div>
+                <div class="card-body row" id="myDIV">
+                    @foreach (var itemchid in Model.navbars.Where(x => x.parentID == parentItem.Id))
+                    {
+                        <div class="col-2">
+                            <div class="form-group text-center card cardBtn" style="background-color:#efecee;">
+                                <a class="text-center btn btn-default h" asp-area="@itemchid.area" asp-controller="@itemchid.controller" asp-action="@itemchid.action">
+                                    <i class="@itemchid.imageClass fa-2x "></i>
+                                    <br /><span class="d">@itemchid.nameOption</span>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $(this).parent().parent().parent().parent().find("#myDIV .col-2").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+
+
+    });
+</script>

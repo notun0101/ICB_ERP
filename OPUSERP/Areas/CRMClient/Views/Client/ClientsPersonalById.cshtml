@@ -1,0 +1,184 @@
+﻿@model LeadViewModel
+@{
+    ViewData["Title"] = "ClientsById";
+}
+
+<style>
+    .redStar {
+        color: red;
+    }
+</style>
+
+<div class="card" style="width: 100%;">
+    <div class="card-header row">
+        <div class="col-9">
+            <h5 class="card-title" style="color: black">Personal Client</h5>
+        </div>
+        <div class="col-3">
+            <a href='/CRMClient/Client/AllClientList' style="text-decoration:none;"><h6 class="identity-box">Back To The List</h6></a>
+
+        </div>
+    </div>
+
+    <div class="card-body row">
+        @*<div class="col-1">
+                <img id="user_img_current" style="width: 180px;height: 165px;border-radius: 120px;" src="" alt="" class="img-thumbnail float-left">
+            <i class="fa fa-camera" data-toggle="modal" data-target="#updateEmpPhotoModal" style="position:relative;margin-top:120px;margin-left:-22px"></i>
+            <input type="hidden" id="hiddenFile" />
+            </div>*@
+        <div class="col-12" style="color: black; font-size: 15px;">
+            <span style="font-weight:bold;">Cleint Name : </span><span>@Model.GetLeadDetailsById?.leadName</span><br />
+            <span style="font-weight:bold;">Short Name : </span><span>@Model.GetLeadDetailsById?.leadShortName</span><br />
+            <span style="font-weight:bold;">Cleint Number : </span><span>@Model.GetLeadDetailsById?.leadNumber</span><br />
+            <span style="font-weight:bold;">Email : </span><span>@Model?.contacts?.FirstOrDefault()?.resource?.email</span><br />
+            <span style="font-weight:bold;">Mobile : </span><span>@Model?.contacts?.FirstOrDefault()?.resource?.mobile</span><br />
+        </div>
+        @*<div class="col-1">
+                <a class='btn btn-info' style="float:right;" data-toggle='tooltip' title='Print' target='_blank' href='/HRPMSEmployee/InfoView/pdspdf/@Model'><i class='fa fa-print'></i></a>
+            </div>*@
+    </div>
+
+    <div class="card-body row" style="padding-top: 0;">
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="@Url.Action("ClientInfoPersonal", "Client", new { id = @Model.GetLeadDetailsById?.Id,area="CRMClient"})" style="text-decoration:none;">
+                    <i class="fa fa-user-tie fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Lead Info</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="@Url.Action("ClientAddress", "Address", new { id = @Model.GetLeadDetailsById?.Id ,leadName=@Model.GetLeadDetailsById?.leadName,addressTypeId=2,area="CRMLead"})" style="text-decoration:none;">
+                    <i class="fa fa-address-book fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Address</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="@Url.Action("ContactsPersonal", "LeadManagement", new { id = @Model.GetLeadDetailsById?.Id ,leadName=@Model.GetLeadDetailsById?.leadName,area="CRMLead"})" style="text-decoration:none;">
+                    <i class="fa fa-file-contract fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Contact</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="@Url.Action("ActivityMaster", "Activity", new { id = @Model.GetLeadDetailsById?.Id ,leadName=@Model.GetLeadDetailsById?.leadName,area="CRMLead"})" style="text-decoration:none;">
+                    <i class="fa fa-tasks fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Activities</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="@Url.Action("LeadFilePersonal", "LeadManagement", new { id = @Model.GetLeadDetailsById?.Id ,leadName=@Model.GetLeadDetailsById?.leadName,area="CRMLead"})" style="text-decoration:none;">
+                    <i class="fa fa-file fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Files</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="@Url.Action("Index", "Proposal", new { id = @Model.GetLeadDetailsById?.Id ,leadName=@Model.GetLeadDetailsById?.leadName,area="CRMLead"})" style="text-decoration:none;">
+                    <i class="fa fa-handshake fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Proposal</span>
+                </a>
+            </div>
+        </div>
+        @*<div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="@Url.Action("LeadBankList", "LeadManagement", new { id = @Model.GetLeadDetailsById?.Id ,leadName=@Model.GetLeadDetailsById?.leadName,area="CRMLead"})" style="text-decoration:none;">
+                    <i class="fas fa-university fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Bank</span>
+                </a>
+            </div>
+        </div>*@
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="@Url.Action("AgreementListForLead", "Agreement", new { id = @Model.GetLeadDetailsById?.Id ,leadName=@Model.GetLeadDetailsById?.leadName,area="CRMLead"})" style="text-decoration:none;">
+                    <i class="fa fa-file-contract fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Agreement</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="@Url.Action("LeadHistory", "LeadManagement", new { id = @Model.GetLeadDetailsById?.Id ,leadName=@Model.GetLeadDetailsById?.leadName,area="CRMLead"})" style="text-decoration:none;">
+                    <i class="fa fa-history fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">History</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="@Url.Action("Index", "Notes", new { id = @Model.GetLeadDetailsById?.Id ,leadName=@Model.GetLeadDetailsById?.leadName,area="CRMLead"})" style="text-decoration:none;">
+                    <i class="fa fa-notes-medical fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Notes</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="updateEmpPhotoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                @*<img src="~/images/Aloha New Logo.png" style="height:50px;" />*@
+                <h5 class="modal-title" id="exampleModalLabel">Update Photo</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-area="HRPMSEmployee" asp-controller="Photograph" asp-action="Index" method="post" enctype="multipart/form-data" data-parsley-validate="parsley">
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    @*<div class="form-group row">
+                        <div class="col-5">
+                            <img id="user_img_current" style="width:200px;height:200px" src="~/@Model.photograph.url" alt="" class="img-thumbnail float-left">
+                            <input type="hidden" id="hiddenFile" />
+                        </div>
+                        <div class="col-7">
+                            <img id="user_img" style="width:200px;height:200px" src="~/images/user.png" alt="" class="img-thumbnail float-left">
+                            <input type="hidden" name="employeeID" value="@Model.employeeInfo.Id" />
+                            <input type="hidden" name="photographID" value="@Model.photograph.Id" />
+                            <input type="file" title="Photo Upload" id="imagePath" data-parsley-required="true" name="empPhoto" class="btn btn-default btn-sm pull-right" />
+                            <span style="float:left;" class="redStar">*</span>
+                        </div>
+                    </div>*@
+                    <hr>
+                    <button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var filerdr = new FileReader();
+                filerdr.onload = function (e) {
+                    $('#user_img').attr('src', e.target.result);
+                }
+                filerdr.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $(document).ready(function () {
+            //$("#photo").addClass("active");
+            //$("#imagePath").change(function () {
+            //    readURL(this);
+            //});
+        });
+    </script>
+}
+
+
+

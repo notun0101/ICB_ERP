@@ -1,0 +1,195 @@
+﻿
+@{
+    ViewData["Title"] = "ApplyDiscountinuation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4 bg-light">
+
+            <div class="card" style="width: 100%;">
+                <div class="card-body">
+                    <h5 class="m-0 font-weight-bold text-primary ">Find PF Statement</h5>
+                    <hr>
+                    <div class="">
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <input type="hidden" id="employeeId" name="employeeId" />
+                                <input style="" type="text" id="employeeName" name="employeeId" placeholder="Employee Id" class="form-control " />
+                            </div>
+                        </div>
+                        <br />
+                        <button type="button" onclick="search()" class="btn btn-sm btn-primary" style="background-color:darkcyan; color:white">View PF Statement</button>
+
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row clearfix">
+                <div class="col-12">
+                    <div class="card mb-lg-4">
+                        <!-- Card Body -->
+                        <div class="card-body" style="padding:40px">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h4 align="center" class="text-navy">Employees' Provident Fund Trust of BDBL Finance</h4>
+                                    <p align="center">Address: Gulshan<br><strong>PF Statement</strong><br>From 13/1/2019 to 1/4/2019</p>
+                                </div>
+
+                                <div class="table-responsive m-t">
+                                    <table class="table invoice-table" style="width:40%">
+                                        <tbody>
+                                            <tr>
+                                                <th width="40%">Employee ID:</th>
+                                                <td id="empId"></td>
+                                            </tr>
+
+                                            <tr>
+                                                <th>Name of the Member:</th>
+                                                <td id="memberName"></td>
+                                            </tr>
+
+                                            <tr>
+                                                <th>Designation:</th>
+                                                <td id="designation"></td>
+                                            </tr>
+
+                                            <tr>
+                                                <th>Date of Joining PF:</th>
+                                                <td>12/4/2019</td>
+                                            </tr>
+
+                                            <tr>
+                                                <th>Date of Joining:</th>
+                                                <td>12/4/2019</td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th width="5%">Sl</th>
+                                                <th width="50%">Particulars</th>
+                                                <th>Opening Balance</th>
+                                                <th>Transaction during the period</th>
+                                                <th>Closing Balance</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td align="right">1</td>
+                                                <td align="left">Member's Contribution</td>
+                                                <td align="right">135,831</td>
+                                                <td align="right">61,218</td>
+                                                <td align="right">197,049</td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right">2</td>
+                                                <td align="left">Company's Contribution</td>
+                                                <td align="right">135,831</td>
+                                                <td align="right">61,218</td>
+                                                <td align="right">197,049</td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right">3</td>
+                                                <td align="left">Revenue Surplus</td>
+                                                <td align="right">16,950</td>
+                                                <td align="right">-</td>
+                                                <td align="right">16,950</td>
+                                            </tr>
+
+                                            <tr>
+
+                                                <td colspan="2" align="right"><strong>Total:</strong></td>
+                                                <td align="right"><strong>288,612</strong></td>
+                                                <td align="right"><strong>122,436</strong></td>
+                                                <td align="right"><strong>411,048</strong></td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class=""><strong>Note*</strong>Revenue surplus will be credited after the year end calculation.</div>	<br>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <button type="button" id="submit" value="Submit" class="btn btn-success btn-sm" style="float:right; color:white; margin-top:5px;">Apply</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+            $("#fromDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+            $("#toDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+            Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo', [], 'json', ajaxGetEmployees);
+
+        });
+
+        function search() {
+            var empId = $("#employeeId").val();
+            if (empId == 0) {
+                swal('Warning', 'please try again', 'warning');
+                return false;
+            }
+            var url = '/global/api/GetAllEmployessbyId/' + empId;
+            Common.Ajax('GET', url, [], 'json', ajaxGetEmployeesbyId);
+
+        }
+
+        function Refresh() {
+            location.reload();
+        }
+
+        function ajaxGetEmployees(response) {
+            console.log(response);
+            var GetEmployeesList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+                obj.name = option.nameEnglish;
+                obj.designation = option.designation;
+                obj.department = option.department.deptName;
+                obj.nationalID = option.nationalID;
+                obj.dateOfBirth = option.dateOfBirth;
+                GetEmployeesList[GetEmployeesList.length] = obj;
+            });
+
+            $('#employeeName').autocomplete({
+                source: GetEmployeesList,
+                select: function (event, ui) {
+                    $("#employeeName").val(ui.item.value);
+                    $("#memberName").val(ui.item.name);
+                    $("#Designation").val(ui.item.designation);
+                    $("#department").val(ui.item.department);
+                    $("#nationalID").val(ui.item.nationalID);
+                    $("#dateOfBirth").val(ui.item.dateOfBirth);
+                    $("#employeeId").val(ui.item.key);
+                }
+            });
+        }
+
+        function ajaxGetEmployeesbyId(response) {
+            console.log(response);
+            $("#memberName").html(response.nameEnglish);
+            $("#empId").html(response.nameEnglish + "(" + response.employeeCode + ")");
+            $("#designation").html(response.designation);
+        }
+
+    </script>
+}

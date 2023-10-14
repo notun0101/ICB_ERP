@@ -1,0 +1,516 @@
+﻿@model AllegationViewModel
+@{
+    ViewData["TitleMD"] = "Allegation List";
+    Layout = "~/Areas/HRPMSMasterData/Views/Shared/_MasterDataForm.cshtml";
+}
+
+@section StyleMD{
+    <style>
+        .redStar {
+            color: red;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+            .close:hover,
+            .close:focus {
+                color: #bbb;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+        .user_img:hover {
+            border-radius: 5px;
+            cursor: zoom-in;
+            transition: 0.3s !important;
+            opacity: 0.5;
+            box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+        }
+    </style>
+}
+
+    <div class="modal fade" id="AllegationModal" style="height:100% !important;" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" style="height: 100%;" role="document">
+            <div class="modal-content" style="height:100% !important;">
+                <div class="modal-header">
+
+                    <h5 class="modal-title" id="exampleModalLabel1">Allegation</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="container">
+                        <form asp-area="HRPMSDisciplineInvestigation" asp-controller="Allegation" asp-action="AllegationList" method="post" enctype="multipart/form-data" data-parsley-validate="parsley">
+                            <div asp-validation-summary="All" class="text-danger"></div>
+
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group row">
+                                        <label for="Allegation Detail" class="col-sm-4 col-form-label">Allegation Detail <span class="redStar">*</span></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="allegationDetail" id="allegationDetail" data-parsley-required="true">
+                                            <input type="hidden" id="allegationID" name="allegationID" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group row">
+                                        <label class="col-3">Attatched File</label>
+
+
+                                        <div class="col-8">
+                                            <img id="user_img1" style="width:150px;height:150px;" src="~/images/file_imge.jpg" alt="" class="img-thumbnail float-left user_img">
+                                            <input type="hidden" id="userFile" />
+                                            <input type="hidden" name="allegationID" value="@Model.allegationID" />
+                                            <input type="file" title="Photo Upload" id="imagePath1" name="allegationUrl" class="btn btn-default btn-sm pull-right" />
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group row">
+                                        <label for="clarification " class="col-sm-4 col-form-label">Clarification<span class="redStar">*</span> </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="clarification" id="clarification" data-parsley-required="true">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group row">
+                                        <label class="col-3">Attatched File</label>
+
+
+                                        <div class="col-8">
+                                            <img id="user_img2" style="width:150px;height:150px;" src="~/images/file_imge.jpg" alt="" class="img-thumbnail float-left user_img">
+                                            <input type="hidden" id="userFile2" />
+                                            <input type="hidden" name="allegationID" value="@Model.allegationID" />
+                                            <input type="file" title="Photo Upload" id="imagePath2" name="clarificationUrl" class="btn btn-default btn-sm pull-right" />
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+
+                                    <div class="form-group row">
+                                        <label for="management " class="col-sm-4 col-form-label">Management<span class="redStar">*</span> </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="management" id="management" data-parsley-required="true">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group row">
+                                        <label class="col-3">Attatched File</label>
+
+
+                                        <div class="col-8">
+                                            <img id="user_img3" style="width:150px;height:150px;" src="~/images/file_imge.jpg" alt="" class="img-thumbnail float-left user_img">
+                                            <input type="hidden" id="userFile3" />
+                                            <input type="hidden" name="allegationID" value="@Model.allegationID" />
+                                            <input type="file" title="Photo Upload" id="imagePath3" name="managementUrl" class="btn btn-default btn-sm pull-right" />
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <button type="submit" id="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>
+                        </form>
+                        <br />
+                    </div>     
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    Allegation List
+                </h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="offenseTable">
+                    <thead>
+                        <tr>
+                            <th>Allegation Detail</th>
+                            <th>Clarification </th>
+                            <th>Management</th>
+                            <th>Action</th>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.allegations)
+                        {
+                        <tr>
+                            <td>@data.allegationDetail</td>
+                            <td>@data.clarification</td>
+                            <td>@data.management</td>
+                            <td>
+                                <a class="btn btn-success" onclick="Edit(@data.Id, '@data.allegationDetail', '@data.allegationUrl', '@data.clarification','@data.clarificationUrl', '@data.management', '@data.managementUrl')" href="#"><i class="fa fa-edit"></i></a>
+                                <a class="btn btn-danger" onclick="Delete(@data.Id)" href="#"><i class="fa fa-trash-alt"></i></a>
+                            </td>
+                            @*<td>
+                                <a class="btn btn-info" data-toggle="tooltip" title="Edit" onclick="Edit(@data.Id,'@data.name','@data.description')" href="javascript:void(0)"><i class="fa fa-edit"></i></a> 
+                                <a class="btn btn-danger" data-toggle="tooltip" title="Remove" onclick="Delete(@data.Id)" href="javascript:void(0)"><i class="fa fa-trash-alt"></i></a>
+                            </td>*@
+                        </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="imgViewModal" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLabel">Photo Preview</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" style="color: black; box-shadow: none !important; outline: none!important;">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <img class="" src="" id="imgView" style="height:545px;width:465px;">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="pdfViewModal" style="height:100% !important;" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" style="height: 100%;" role="document">
+        <div class="modal-content" style="height:100% !important;">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLabel">PDF Preview</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <iframe id="pdfFrame" src="yourpdffile.pdf" style="width:100%;height:100% !important;"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="imgViewModal2" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLabel">Photo Preview</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" style="color: black; box-shadow: none !important; outline: none!important;">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <img class="" src="" id="imgView2" style="height:545px;width:465px;">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="pdfViewModal2" style="height:100% !important;" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" style="height: 100%;" role="document">
+        <div class="modal-content" style="height:100% !important;">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLabel">PDF Preview</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <iframe id="pdfFrame2" src="yourpdffile.pdf" style="width:100%;height:100% !important;"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="imgViewModal3" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLabel">Photo Preview</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" style="color: black; box-shadow: none !important; outline: none!important;">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <img class="" src="" id="imgView3" style="height:545px;width:465px;">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="pdfViewModal3" style="height:100% !important;" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" style="height: 100%;" role="document">
+        <div class="modal-content" style="height:100% !important;">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLabel">PDF Preview</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <iframe id="pdfFrame3" src="yourpdffile.pdf" style="width:100%;height:100% !important;"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ScriptsMD{
+<script>
+        //const id = $('#offenseID');
+        //const name = $('#offense');
+        //const description = $('#description');
+
+        //function Edit(...params) {
+        //    id.val(params[0]);
+        //    name.val(params[1]);
+        //    description.val(params[2]);
+        //}
+   
+
+        function Delete(Id) {
+            chk = confirm('Do you want to delete this?');
+            if (chk) {
+                //return true;
+                Common.Ajax('Delete', '/global/api/allegation/' + Id, [], 'json', Result, false);
+            } else {
+                return false;
+            }
+           
+        }
+
+        function Result(response) {
+            window.location = '@Url.Action("AllegationList", "Allegation")';
+        }
+
+    $("#submit").click(function () {
+        chk = confirm('Do you want to submit this record!');
+        if (chk) {
+           // swal('success', 'Updated Successfully!', 'success').then(function () {
+           //   // location.reload();
+           //});
+           // alert('Updated Successfully!');
+            location.reload();
+        } else {
+            return false;
+        }
+        //swal({
+        //    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+        //}).then(function () {
+        //    swal('success', 'Updated Successfully!', 'success').then(function () {
+        //        location.reload();
+        //    });;
+        //});
+    });
+
+
+        $(document).ready(function () {
+            $("#offense").addClass("active");
+            $('#offenseTable').DataTable();
+
+            $("#imagePath1").change(function () {
+                readURL1(this);
+            });
+            $("#imagePath2").change(function () {
+                readURL2(this);
+            });
+            $("#imagePath3").change(function () {
+                readURL3(this);
+            });
+
+            $("#user_img1").click(function () {
+                var img = $(this).attr('src');
+                if (img.indexOf("pdfIcon.png") >= 0) {
+                    //alert($("#userFile").val())
+                    $("#pdfFrame").attr('src', $("#userFile").val());
+                    $("#pdfViewModal").modal('show');
+                }
+                else {
+                    $("#imgView").attr('src', img);
+                    $("#imgViewModal").modal('show');
+                }
+
+
+            });
+
+            $("#user_img2").click(function () {
+                var img = $(this).attr('src');
+                if (img.indexOf("pdfIcon.png") >= 0) {
+                    //alert($("#userFile").val())
+                    $("#pdfFrame2").attr('src', $("#userFile2").val());
+                    $("#pdfViewModal2").modal('show');
+                }
+                else {
+                    $("#imgView2").attr('src', img);
+                    $("#imgViewModal2").modal('show');
+                }
+
+
+            });
+
+            $("#user_img3").click(function () {
+                var img = $(this).attr('src');
+                if (img.indexOf("pdfIcon.png") >= 0) {
+                    //alert($("#userFile").val())
+                    $("#pdfFrame3").attr('src', $("#userFile3").val());
+                    $("#pdfViewModal3").modal('show');
+                }
+                else {
+                    $("#imgView3").attr('src', img);
+                    $("#imgViewModal3").modal('show');
+                }
+
+
+            });
+        });
+
+        function Edit(Id, allegationDetail, allegationUrl, clarification, clarificationUrl, management, managementUrl) {
+            $("#AllegationModal").modal('show');
+            $("#allegationID").val(Id);
+            $("#allegationDetail").val(allegationDetail);
+            $("#clarification").val(clarification);
+            $("#management").val(management);
+
+            if (allegationUrl.indexOf(".pdf") >= 0) {
+                //alert(attachmentUrl)
+                 $('#user_img1').attr("src", "/DisciplineImg/pdfIcon.png");
+                $('#userFile').val("/DisciplineImg/" + allegationUrl);
+            }
+            else {
+                $('#user_img1').attr("src", "/DisciplineImg/" + allegationUrl);
+            }
+
+            if (clarificationUrl.indexOf(".pdf") >= 0) {
+                //alert(attachmentUrl)
+
+                 $('#user_img2').attr("src", "/DisciplineImg/pdfIcon.png");
+                 $('#userFile2').val("/DisciplineImg/" + clarificationUrl);
+            }
+            else {
+                $('#user_img2').attr("src", "/DisciplineImg/" + clarificationUrl);
+            }
+
+            if (managementUrl.indexOf(".pdf") >= 0) {
+                //alert(attachmentUrl)
+                 $('#user_img3').attr("src", "/DisciplineImg/pdfIcon.png");
+                $('#userFile3').val("/DisciplineImg/" + managementUrl);
+            }
+            else {
+                $('#user_img3').attr("src", "/DisciplineImg/" + managementUrl);
+            }
+
+
+        }
+
+        // function readURL1(input) {
+        //    if (input.files && input.files[0]) {
+        //        var filerdr = new FileReader();
+        //        filerdr.onload = function (e) {
+        //            $('#user_img1').attr('src', e.target.result);
+        //        }
+        //        filerdr.readAsDataURL(input.files[0]);
+        //    }
+        //}
+
+        function readURL1(input) {
+            if (input.files && input.files[0]) {
+                var filerdr = new FileReader();
+                filerdr.onload = function (e) {
+                    console.log(e);
+                    var srcUrl = e.target.result;
+                    if (srcUrl.indexOf("application/pdf") > 0) {
+                        $('#user_img1').attr('src', "/DisciplineImg/pdfIcon.png");
+                        $('#userFile').val(e.target.result);
+                    }
+                    else {
+                        $('#user_img1').attr('src', e.target.result);
+                    }
+
+                }
+                filerdr.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function readURL2(input) {
+            if (input.files && input.files[0]) {
+                var filerdr = new FileReader();
+                filerdr.onload = function (e) {
+                    console.log(e);
+                    var srcUrl = e.target.result;
+                    if (srcUrl.indexOf("application/pdf") > 0) {
+                        $('#user_img2').attr('src', "/DisciplineImg/pdfIcon.png");
+                        $('#userFile2').val(e.target.result);
+                    }
+                    else {
+                        $('#user_img2').attr('src', e.target.result);
+                    }
+
+                }
+                filerdr.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function readURL3(input) {
+            if (input.files && input.files[0]) {
+                var filerdr = new FileReader();
+                filerdr.onload = function (e) {
+                    console.log(e);
+                    var srcUrl = e.target.result;
+                    if (srcUrl.indexOf("application/pdf") > 0) {
+                        $('#user_img3').attr('src', "/DisciplineImg/pdfIcon.png");
+                        $('#userFile3').val(e.target.result);
+                    }
+                    else {
+                        $('#user_img3').attr('src', e.target.result);
+                    }
+
+                }
+                filerdr.readAsDataURL(input.files[0]);
+            }
+        }
+</script>
+}
+
+
+
+

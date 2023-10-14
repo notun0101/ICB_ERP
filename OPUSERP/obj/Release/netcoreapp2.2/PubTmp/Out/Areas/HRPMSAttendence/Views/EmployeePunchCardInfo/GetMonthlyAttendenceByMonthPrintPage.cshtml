@@ -1,0 +1,163 @@
+﻿@model IEnumerable<MonthlyEmployeeAttendence>
+@{
+    ViewData["Title"] = "MonthlyTimeSheet";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+
+<div class="card" style="width: 100%;">
+    <div class="card-header row" style="">
+        <div class="col-12">
+            <h5 class="card-title" style="color: black">Monthly Time Sheet</h5>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-12 row">
+                <div class="col-6" style="color: black; font-size: 17px; padding-top: 24px;">
+                    <table style="border:none">
+                        <tr>
+                            <td><span style="font-weight:bold;">Month</span></td>
+                            <td>: @ViewBag.month , @ViewBag.year</td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-weight:bold;">Department</span></td>
+                            <td>: @Model.FirstOrDefault()?.employeeInfo?.department?.deptName</td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-weight:bold;">Designation </span></td>
+                            <td>: @Model.FirstOrDefault()?.employeeInfo?.lastDesignation?.designationName</td>
+                        </tr>
+
+
+                        @*<tr>
+            <td><span style="font-weight:bold;">Shift  </span></td>
+            <td>: @Model.FirstOrDefault()?.employeeInfo?.shiftGroup?.shiftName</td>
+        </tr>*@
+
+
+
+                    </table>
+                </div>
+                <div class="col-6">
+
+                    <div class="card-body">
+                        <table class="table table-striped table-bordered" style="margin-left:51%;width:55%">
+                            <thead>
+                                <tr style="background-color:gray">
+                                    <th>Particular</th>
+                                    <th>Days</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr>
+                                    <td>Total Present</td>
+                                    <td id="tPresent">@ViewBag.totalPresent</td>
+                                </tr>
+                                <tr>
+                                    <td>Total Absent</td>
+                                    <td id="tAbsent">@ViewBag.totalAbsent</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Total Late</td>
+                                    <td id="tLate">@ViewBag.totalLate</td>
+                                </tr>
+                                @*<tr>
+                                        <td>Total Leave</td>
+                                        <td id="tLeave">@Model.FirstOrDefault()?.totalLeave</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Leave (Without Pay)</td>
+                                        <td id="tLeaveWP">@Model.FirstOrDefault()?.totalLeaveWP</td>
+                                    </tr>*@
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+@*<br />
+    <hr />*@
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card">
+            @*<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style="background-color: #EAF6FA;">
+                    <h6 class="m-0 font-weight-bold">Attendance List</h6>
+                </div>*@
+            <div class="card-body" style="width: 100%">
+                <table class="table table-striped table-bordered nowrap" id="attendenceTable" style="width: 100%; font-size: 11px;">
+                    <thead>
+						<tr style="background-color: #CCCCCC">
+							<th>Employee Id</th>
+							<th>Name</th>
+							<th>Designation</th>
+							@for (int i = 1; i <= Model.FirstOrDefault()?.empAttendances?.Count(); i++)
+							{
+								<th>@i</th>
+							}
+						</tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+						<tr>
+							<td>@item.employeeInfo?.employeeCode</td>
+							<td>@item.employeeInfo?.nameEnglish</td>
+							<td>@item.employeeInfo?.lastDesignation?.designationName</td>
+							@foreach (var data in item.empAttendances)
+							{
+								@if (data.empAttendance == null)
+								{
+									<td style="background-color: #999999; text-align: center;">A</td>
+								}
+								else
+								{
+									<td style="background-color: white; text-align: center;">P</td>
+								}
+							}
+						</tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Assets/paginathing.js"></script>
+    <script>
+        $(document).ready(function () {
+            //$('#attendenceTable').hide();
+            var currentYear = new Date().getFullYear();
+            var currentMonth = new Date().getMonth();
+            var cascadedDropDownMonthId = "#dropDownYearMonth";
+            for (var i = currentYear; i > currentYear - 10; i--) {
+                $("#dropDownYear1").append('<option value="' + i.toString() + '">' + i.toString() + '</option>');
+            }
+
+            $(cascadedDropDownMonthId).prop("disabled", true);
+
+        });
+
+        function PrintPdf() {
+            var year = $('#dropDownYear1').val();
+            var month = $('#dropDownYearMonth').val();
+            Common.Ajax('GET', '/HRPMSAttendence/EmployeePunchCardInfo/GetMonthlyAttendenceByMonthPrintPage?month=' + month + '&year=' + year, [], 'json', ajaxFunctionMonthly, false);
+        }
+
+
+
+    </script>
+}

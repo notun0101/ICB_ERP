@@ -1,0 +1,414 @@
+﻿@model TrainingPlanningViewModel
+@{
+    ViewData["Title"] = "MyTrainingCalender";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Style{
+
+    <link rel="stylesheet" href="https://unpkg.com/multiple-select@1.3.1/dist/multiple-select.min.css">
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/lib/main.css" rel="stylesheet" />
+
+    <style>
+        #calendar a, #ui-datepicker-div a {
+            color: black !important;
+        }
+
+        .redStar {
+            color: red;
+        }
+
+        .page-link {
+            color: black !important;
+            font-size: 15px !important;
+            padding: 8px !important;
+            line-height: 20px !important;
+        }
+
+        .active5 {
+            color: darkgreen;
+        }
+    </style>
+}
+<br />
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header py-3  align-items-center justify-content-start d-block">
+                <h6 class="m-0 font-weight-bold text-primary d-inline-block">My Training Calender</h6>
+                <a class='btn btn-info mr-3 mt-1 float-right' style="float:right !important" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1019&perentId=1239'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+                <input type="hidden" name="employeeID" id="employeeID" value="@Model.employeeID" />
+                <input type="hidden" name="trainingId" id="trainingId" value="@Model.trainingId" />
+                <input type="hidden" name="traineeId" id="traineeId" value="@Model.traineeId" />
+            </div>
+            <div class="card-body">
+                <div class="boxContent listContent">
+                    <table class="table table-striped table-bordered" id="trainingPlaneTable">
+                        <thead>
+                            <tr>
+                                <th>@Model.fLang.course</th>
+                                <th>@Model.fLang.planeStartDate</th>
+                                <th>@Model.fLang.planeEndDate</th>
+                                @*<th>@Model.fLang.year</th>*@
+                                <th>@Model.fLang.participant</th>
+                                <th>@Model.fLang.budget</th>
+                                @*<th>Start Time</th>
+                                <th>End Date</th>
+                                <th>Start Time</th>*@
+                                <th>Remarks</th>
+                                <th>@Model.fLang.action</th>
+                        </thead>
+                        <tbody>
+                            @foreach (var data in Model.trainingInfoNews)
+                            {
+                                <tr>
+                                    <td>@data.course</td>
+                                    <td>@data.startDate?.ToString("MM/dd/yy")</td>
+                                    <td>@data.endDate?.ToString("MM/dd/yy")</td>
+                                    @*<td>@data.year</td>*@
+                                    <td>@data.noOfParticipants</td>
+                                    <td>@data.budget</td>
+                                    @*<td>@data.startTime</td>
+                                    <td>@data.endTime</td>
+                                    <td>@data.durationMinutes</td>*@
+                                    <td>@data.remarks</td>
+
+                                    <td>
+                                        <a class="btn btn-success" onclick="Edit(@data.Id, '@data.course', '@data.courseObjective','@data.amount', '@data.startDate?.ToString("MM/dd/yy")', '@data.endDate?.ToString("MM/dd/yy")', '@data.year', '@data.noOfParticipants', '@data.employeeTypes', '@data.budget','@data.remarks')" href="#"><i class="fa fa-edit"></i></a>
+                                        <a class="btn btn-danger" onclick="Remove(@data.Id)" href="#"><i class="fa fa-trash-alt"></i></a>
+                                        @*<a class="btn btn-danger" href="#"><i class="fa fa-trash-alt"></i></a>*@
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card boxContent calenderContent" id="calenderDiv">
+                    <div class="card-body">
+                        <div class="row" id='calendar' title="click for confirmation" style="height:20%; width:100%; color: black !important;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="popupModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <br />
+            </div>
+            <div class="modal-body">
+                <div class="row clearfix">
+                    <div class="col-12">
+                        <div class="card mb-4">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">All Courses</h6>
+                                <input type="hidden" name="employeeID" id="employeeID" value="@Model.employeeID" />
+                                <input type="hidden" name="trainingId" id="trainingId" value="@Model.trainingId" />
+                                <input type="hidden" name="traineeId" id="traineeId" value="@Model.traineeId" />
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-striped table-bordered" id="trainingPlaneTable">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:30%">@Model.fLang.course</th>
+                                            <th style="width:12%">@Model.fLang.planeStartDate</th>
+                                            <th style="width:12%">@Model.fLang.planeEndDate</th>
+                                            <th style="width:6%">@Model.fLang.participant</th>
+                                            <th style="width:15%">@Model.fLang.budget</th>
+                                            <th style="width:15%">Training Type</th>
+                                            @*<th style="width:12%">StartTime</th>
+        <th style="width:12%">EndTime</th>
+        <th style="width:5%">Duration(Minutes)</th>*@
+                                            <th style="width:10%">Remark</th>
+</thead>
+                                    <tbody id="DisplayData"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fa fa-times-circle"></i> Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="https://unpkg.com/multiple-select@1.3.1/dist/multiple-select.min.js"></script>
+    <script src="~/lib/main.js"></script>
+    <script>
+        var events = [];
+        $(document).ready(function () {
+
+            $('.boxContent').hide();
+            $('.calenderContent').show();
+            $('.calender').addClass('active5');
+
+            getEvents();
+            $('#trainingPlaneTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'List Of Local Training',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'List Of Employee Training'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "ERP-HRPMS",
+                        messageTop: 'List Of Local Training',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+            $('#planeStartDate').datepicker({ uiLibrary: 'bootstrap4' });
+            $('#planeEndDate').datepicker({ uiLibrary: 'bootstrap4' });
+            $('#employeeType').multipleSelect();
+        });
+
+        $('.list').click(function () {
+            $('.boxContent').hide();
+            $('.listContent').show();
+            $('.list').removeClass('active5');
+            $('.calender').removeClass('active5');
+            $('.list').addClass('active5');
+        })
+        $('.calender').click(function () {
+            $('.boxContent').hide();
+            $('.calenderContent').show();
+            $('.list').removeClass('active5');
+            $('.calender').removeClass('active5');
+            $('.calender').addClass('active5');
+        })
+
+        function formatDateNew(date) {
+            date = new Date(date);
+            var dateNew = new Date(date.setMonth(date.getMonth() + 1));
+            var m = '';
+            var d = '';
+            if (parseInt(dateNew.getMonth()) < 10) {
+                m = '0' + dateNew.getMonth();
+            }
+            else {
+                m = dateNew.getMonth();
+            }
+            if (parseInt(dateNew.getDate()) < 10) {
+                d = '0' + dateNew.getDate();
+            }
+            else {
+                d = dateNew.getDate();
+            }
+            return dateNew.getFullYear() + '-' + m + '-' + d;
+        }
+
+
+        function DayDiffrence(date1, date2) {
+            //var date1, date2;
+            //define two date object variables with dates inside it
+            date1 = new Date(date1);
+            date2 = new Date(date2);
+
+            //calculate time difference
+            var time_difference = date2.getTime() - date1.getTime();
+
+            //calculate days difference by dividing total milliseconds in a day
+            var days_difference = time_difference / (1000 * 60 * 60 * 24);
+
+            return days_difference;
+        }
+        function formatDate(date) {
+            var monthNames = [
+                "Jan", "Feb", "Mar",
+                "Apr", "May", "Jun", "Jul",
+                "Aug", "Sep", "Oct",
+                "Nov", "Dec"
+            ];
+            date = new Date(date);
+            var day = date.getDate();
+            var monthIndex = date.getMonth();
+            var year = date.getFullYear();
+            return day + ' ' + monthNames[monthIndex] + ' ' + year;
+        }
+
+        function getEvents() {
+            $.ajax({
+				url: "/global/api/MyTrainingInfoNewsDetails",
+                type: "GET",
+                dataType: "JSON",
+                success: function (result) {
+                    $.each(result, function (i, data) {
+                        events.push({
+                            startDate: formatDateNew(data.planeStartDate),
+                            totalCount: data.CountTotalTrainingInfo,
+                        });
+                    });
+                    GenerateCalender();
+                },
+                error: function (xhr, err) {
+                    //alert("readyState: " + xhr.readyState + "\nstatus: " + xhr.status);
+                    //alert("responseText: " + xhr.responseText);
+                }
+            });
+            return events;
+        }
+
+        function GenerateCalender() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                initialDate: Date.now(),
+                navLinks: true, // can click day/week names to navigate views
+                selectable: true,
+                selectMirror: true,
+                select: function (arg) {
+                    var diff = DayDiffrence(formatDate(new Date()), formatDate(arg.startStr));
+                    if (diff < 0) {
+                        swal('warning', "You Can't Set Schedule in previous day!!", "warning");
+                        return false;
+                    }
+                    calendar.unselect()
+                },
+                eventClick: function (arg) {
+                    Common.Ajax('GET', '/global/api/TrainingInfoNewsByStartDate/' + formatDateNew(arg.event._instance.range.start), [], 'json', ajaxTrainingNewsByStartDate, false);
+                },
+                editable: true,
+                dayMaxEvents: true, // allow "more" link when too many events
+                events: function (info, successCallback, failureCallback) {
+                    var calenderData = [];
+                    $.each(events, function (i, item) {
+                            calenderData.push({
+                                //url: '/global/api/TrainingInfoNewsByStartDate/?startdate=' + formatDateNew(item.startDate),
+                                start: formatDateNew(item.startDate),
+                                title:"Training Assigned : "+item.totalCount
+                             })
+                        })
+                        successCallback(calenderData);
+                },
+                eventRender: function (event, element) {
+                    if (event.description == "yes") {
+                        element.css('background-color', '#000');
+                    }
+                },
+                editable: false
+            });
+
+            calendar.render();
+        }
+
+
+
+        function ajaxTrainingNewsByStartDate(response) {
+
+            console.log(response.trainingInfoNews);
+
+            var htmlData = "";
+            $("#DisplayData").empty();
+            $.each(response.trainingInfoNews, function(index,item) {
+                console.log(item);
+                var sourceFund = '';
+                if (item.year == null) {
+                    item.year = "";
+                }
+                if (item.sourceOfFundId == 1) {
+                    sourceFund = 'Government';
+                }
+                else if (item.sourceOfFundId == 2) {
+                    sourceFund = 'Own';
+                }
+                else {
+                    sourceFund = 'Other';
+                }
+                var trainingTypes = '';
+
+                if (item.trainingType == 1) {
+                    trainingTypes = 'Local (In House)';
+                }
+                else if (item.sourceOfFundId == 3) {
+                    trainingTypes = 'Local (Outside)';
+                }
+                else {
+                    trainingTypes = 'Other';
+                }
+                var d = new Date();
+                var month = d.getMonth() + 1;
+                var day = d.getDate();
+                var toDayDate = d.getFullYear() + '/' + month + '/' + day;
+                if (new Date(item.endDate) <= new Date(toDayDate)) {
+                    htmlData += `<tr class="bg-danger">
+                            <td>${item.course}</td>
+                            <td>${formatDate(item.startDate)}</td>
+                            <td>${formatDate(item.endDate)}</td>
+                            <td>${item.noOfParticipants}</td>
+                             <td>${sourceFund}</td>
+                            <td>${trainingTypes}</td>
+                            <td>${item.remarks}</td>
+
+                        </tr>`;
+                }
+                else {
+                    htmlData += `<tr>
+                            <td>${item.course}</td>
+                            <td>${formatDate(item.startDate)}</td>
+                            <td>${formatDate(item.endDate)}</td>
+                            <td>${item.noOfParticipants}</td>
+                            <td>${sourceFund}</td>
+                            <td>${trainingTypes}</td>
+                            <td>${item.remark}</td>
+                        </tr>`;
+                }
+            })
+            $("#DisplayData").empty();
+            $("#DisplayData").append(htmlData);
+            $("#popupModal").modal('show');
+        }
+
+    </script>
+}
+
+
+

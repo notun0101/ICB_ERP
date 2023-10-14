@@ -1,0 +1,202 @@
+﻿@model FixationViewModel
+@{
+    ViewData["Title"] = "FixationPRF";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+  
+
+}
+
+
+<style>
+
+    .print-card-body {
+        /*width: 100%;*/
+        padding-bottom: 10px;
+        background-color: white;
+    }
+</style>
+
+
+<div class="print-card">
+    <div class="print-card-body">
+        <div class="container-fluid">
+            <div class="fa-pull-right">
+                <p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+            </div>
+            <div class="row" style="padding-top:0px;">
+                <div class="col-2"></div>
+                <div class="col-8">
+                    <div style="color:black;text-align:center;">
+                        <img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="OPUS ERP" style="height:80px;" />
+                        <h3>@Model.companies.FirstOrDefault().companyName</h3>
+                        <label>@Model.companies.FirstOrDefault().addressLine</label>
+                        <label> <u>Human Resource Management Department</u></label>
+
+                        <br />
+                    </div>
+
+                </div>
+
+                <div class="col-2">
+
+                </div>
+            </div><br />
+
+            <div class="row" style="color:black">
+                <div class="col-3">
+                    <p><span style="color:black">Ref No. @Model.fixationIntegration?.refNo , @Model.fixationIntegration?.empCode</span></p>
+                </div>
+                <div class="col-3"></div>
+                <div class="col-3"></div>
+                    <div class="col-3">
+                        <p><span style="color:black;float:right;">Date: @Model.fixationIntegration?.effectiveDate?.ToString("MM/dd/yyyy") </span></p>
+                    </div>
+
+            </div>
+          
+
+            @*<pre style="font-size:15px;color:black">Human Resource Planning Deployment and Operations Division(PD)                                             @Model.fixationIntegration?.refNo</pre>*@
+            <hr style="border-top: 2px solid black;" />
+            <br />
+            <h3 style="text-align:center; color:black"><u style="color:black">Annual Increment Sanction letter</u></h3>
+            <br />
+            <p style="color:black">We are pleased to inform that authority has sanctioned Annual Increment with effect from @Model.fixationIntegration?.effectiveDate?.ToString("MM/dd/yyyy") under 'National pay scale-2015' as follows :</p>
+            <br />
+            <table style="width:100% ;">
+                <tr>
+                    <td style="border:1px solid black; width:430px;">Personnel No: @Model.fixationIntegration?.employee?.employeeCode</td>
+                    <td style="border:none; width:432px;"></td>
+                    <td style="border:1px solid black;width:320px;">File No : @Model.fixationIntegration?.fileNo</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid black; width:430px;">National ID NO : @Model.fixationIntegration?.employee?.nationalID</td>
+                    <td style="border:none ; width:432px;"></td>
+                    <td style="border:1px solid black; width:320px;">Mobile No : @Model.fixationIntegration?.employee?.mobileNumberPersonal</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid black; width:430px;">Account No : @Model.fixationIntegration?.employee?.sbAccount</td>
+                    
+
+                </tr>
+            </table>
+            <br />
+            <table style="width:100% ; border:1px solid black; ">
+                <tr>
+                    <th style="border:1px solid black;width: 50%;">Name</th>
+                    <td style="border:1px solid black;text-align:center;">@Model.fixationIntegration?.employee?.nameEnglish</td>
+                </tr>
+                @*<tr>
+                    <th style="border:1px solid black;">Father's Name</th>
+                    <td style="border:1px solid black;text-align:center;">@Model.fixationIntegration?.employee?.fatherNameEnglish</td>
+                </tr>*@
+                <tr>
+                    <th style="border:1px solid black;">Place Of Posting</th>
+                    <td style="border:1px solid black;text-align:center;">@Model.fixationIntegration?.employee?.presentPosting</td>
+                </tr>
+                @*<tr>
+                    <th style="border:1px solid black;">Date of Birth</th>
+                    <td style="border:1px solid black;text-align:center;">@Model.fixationIntegration?.employee?.dateOfBirth</td>
+                </tr>*@
+                <tr>
+                    <th style="border:1px solid black;">Date Of Joining</th>
+                    <td style="border:1px solid black;text-align:center;">@Model.fixationIntegration?.employee?.joiningDateGovtService?.ToString("MM/dd/yyyy")</td>
+                </tr>
+                <tr>
+                    <th style="border:1px solid black;">Designation</th>
+                    <td style="border:1px solid black;text-align:center;">@Model.fixationIntegration?.employee?.lastDesignation?.designationName</td>
+                </tr>
+                <tr>
+                    <th style="border:1px solid black;">Present Grade</th>
+                    <td style="border:1px solid black;text-align:center;">@Model.fixationIntegration?.employee?.currentGrade?.gradeName</td>
+                </tr>
+                <tr>
+                    <th style="border:1px solid black;">Increment Due date</th>
+                    <td style="border:1px solid black;text-align:center;">@Model.fixationIntegration?.lastIncrementDate?.ToString("MM/dd/yyyy")</td>
+                </tr>
+
+            </table>
+
+            <br />
+            <table style="width:100% ; border:1px solid black; ">
+                <tr>
+                    <th style="border:1px solid black;width: 3%;">SI</th>
+                    <th style="border:1px solid black;width: 50%; text-align:center"><strong>Particular</strong> </th>
+                    <th style="border:1px solid black;text-align:right;"><strong>Amount</strong> </th>
+                </tr>
+                <tr>
+                    <td style="border:1px solid black;">1</td>
+                    <th style="border:1px solid black;">Present Scale as per NPS-2015</th>
+                    @*<td style="border:1px solid black;text-align:right;">@Model.fixationIntegration?.startingBasic</td>*@
+                    <td style="border:1px solid black;text-align:right;">
+
+                        @{
+                            var slabN = "";
+                            var strings = new List<string>();
+                            foreach (var item in Model.AllSlab)
+                            {
+                                if (!strings.Contains(item.slabName))
+                                {
+                                    strings.Add(item.slabName);
+                                }
+                               
+                            }
+                            slabN = string.Join("-", strings);
+                        }
+
+                        <span>@slabN</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid black;">2</td>
+                    <th style="border:1px solid black;">Present Basic</th>
+                    <td style="border:1px solid black;text-align:right;">@Model.fixationIntegration?.employee?.currentBasic</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid black;">3</td>
+                    <th style="border:1px solid black;">Basic after Increment (as on @Model.fixationIntegration?.effectiveDate?.ToString("MM/dd/yyyy"))</th>
+                    <td style="border:1px solid black;text-align:right;">@Model.newbasicAmount</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid black;">4</td>
+                    <th style="border:1px solid black;">Next Increment Due On</th>
+                    <td style="border:1px solid black;text-align:center;">@Model.fixationIntegration?.nextIncrementDate?.ToString("MM/dd/yyyy")</td>
+                </tr>
+
+
+            </table>
+            <br />
+            <p style="color:black">N.B.  The authorities hope that the above salary increase will help in improving your work ethic and skills.</p>
+            <br />
+            <br />
+            <br />
+            <div class="row" style="color:black">
+                <div class="col-1"></div>
+                <div class="col-4">Prepared By</div>
+                <div class="col-4">Officer-in-Charge</div>
+                <div class="col-3">AGM/DGM/GM</div>
+
+            </div>
+            <br />
+            <br />
+            <br />
+            <hr style="border-top: 3px solid black;" />
+
+            @*<p>
+            CC To: 1.Secretariat of Managing Director and CEO, BDBL,8, Rajuk Avenue, Dhaka - 1000, Bangladesh
+        </p>
+        <p>2.DGM/AGM/Manager/Secretariat of GM, BDBL</p>*@
+
+            <pre style="color:black !important; font-size:15px">
+    CC To: 1.Secretariat of Managing Director and CEO, BDBL,8, Rajuk Avenue, Dhaka - 1000, Bangladesh
+           2.DGM/AGM/Manager/Secretariat of GM, BDBL
+           3.Officer in Charge,Salary Section,HRPDOD,H/O,Dhaka
+           4.Personal File/Office Copy
+      </pre>
+
+        </div>
+
+    </div>
+</div>
+
+
+

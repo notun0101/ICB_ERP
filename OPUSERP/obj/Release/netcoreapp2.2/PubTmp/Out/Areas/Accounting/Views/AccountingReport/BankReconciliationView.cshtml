@@ -1,0 +1,306 @@
+﻿@model BankReconciliationModel
+@{
+    ViewData["Title"] = "Reconcilation  Reports";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+@section Style{
+    <style>
+        .print-card-body {
+            width: 100%;
+            padding-bottom: 10px;
+        }
+
+        .vartical-table th {
+            width: 25%;
+        }
+
+        .vartical-table td {
+            width: 25%;
+        }
+
+        .horizontal-table {
+            /*width: 100%;*/
+        }
+
+        .table td, .table th {
+            padding: .3rem;
+            font-size: 15px;
+        }
+
+        table {
+            page-break-inside: auto
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto
+        }
+
+        thead {
+            display: table-header-group
+        }
+
+        tfoot {
+            display: table-footer-group
+        }
+
+        h6 {
+            font-size: 14px;
+            background-color: gray;
+            color: white !important;
+            padding: 3px;
+        }
+    </style>
+}
+
+
+@{
+    decimal? Sumdebit = 0;
+    decimal? Sumcredit = 0;
+    decimal? totalReconAmount = 0;
+    decimal? balanceAsPerBankBooksoft = @Model.bankReconcileMaster?.closingBalance;
+    decimal? ReconcilledbalanceAsPerBankBook = 0;
+    decimal? balanceAsPerBankstatement = @Model.bankReconcileMaster?.bankStatementClosingBalance;
+    decimal? difference = 0;
+    <div class="print-card" style="width: 100%;">
+        <div class="print-card-body">
+            <div class="container-fluid">
+                <div class="row" style="padding-top:0px;">
+                    <div class="col-2">
+                        <img src="@Model.ledgerBookViewModel?.Company.filePath" alt="OPUS ERP" style="height:50px;" />
+                    </div>
+                    <div class="col-8" style="color:black;text-align:center">
+                        <h3>@Model.ledgerBookViewModel?.Company.companyName</h3>
+                        <p style="text-align:center;">@Model.ledgerBookViewModel?.Company.addressLine</p>
+
+                        @*@if (ViewBag.SBUName != null)
+        {
+            <p style="margin-top:-15px;">SBU : @ViewBag.SBUName</p>
+        }
+        @if (ViewBag.projectName != null)
+        {
+            <p style="margin-top:-15px;">Project Name : @ViewBag.projectName</p>
+        }*@
+                        <h5 style="text-align:center;">Bank Reconciliation Statement</h5>
+                        <p style="text-align:center;">@Model.bankReconcileMaster?.ledger?.accountName</p>
+                        @*<h6 style="text-align:center;">@Model.bankReconcileMaster?.ledger?.accountName</h6>*@
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid" style="color:black;">
+                <hr style="border:1px solid grey;">
+                <div class="row" style="padding: 5px 0px 5px 0px;">
+                    <div class="col-6">
+                        @*<span style="font-weight:bold;font-size: 15px;">Voucher Type Name: @Model?.VoucherTypeName</span>*@
+                    </div>
+                    <div class="col-6 text-right">
+                        <span style="font-weight:bold;font-size: 15px;">Date: <i>@Model.bankReconcileMaster?.reconFromDate?.ToString("dd-MMM-yyyy")</i>&nbsp;&nbsp; to &nbsp; <i>@Model.bankReconcileMaster?.reconToDate?.ToString("dd-MMM-yyyy")</i></span>
+                    </div>
+                </div>
+                <div class="row" style="padding: 0px 15px 0px 15px;">
+                    <table class="table table-bordered">
+
+                        <thead style="background-color:lightblue;border-bottom:groove;">
+                            <tr>
+                                @*<th style="width:5%">Sl</th>*@
+                                <th style="width:15%">Date</th>
+                                <th style="width:15%">Chq no.</th>
+                                <th style="width:15%">Account</th>
+                                <th style="width:15%">Party</th>
+                                <th style="width:15%">Voucher No</th>
+                                <th style="width:15%">Taka</th>
+                                <th style="width:25%">Balance</th>
+                            </tr>
+                        </thead>
+
+
+
+                        <thead style="background-color:lightgray;border-bottom:groove;">
+                            <tr>
+                                <th colspan="6" style="text-align:left;">Balance as per bank book (software) </th>
+                                <th style="text-align:right">@balanceAsPerBankBooksoft?.ToString("0,0.00")</th>
+                            </tr>
+                        </thead>
+
+
+
+                        @if (Model.ledgerBookViewModel?.ledgerBookViewModelWithoutSPs.Count() > 0)
+                        {
+
+                            <thead style="border-bottom:groove;">
+                                <tr>
+                                    <th colspan="7" style="text-align:left;">Add : Unpresented cheque (Payments recorded in software, but not recorded by Bank) </th>
+                                </tr>
+                            </thead>
+                            //int sl = 1;
+                            @foreach (var @item in Model.ledgerBookViewModel?.ledgerBookViewModelWithoutSPs.Where(x => x.accountName != "Opening Balance" && x.tranMode == 2))
+                            {
+
+
+
+                                //var accountC = @item.accountName + " (" + @item.accountName + ")";
+                                Sumcredit += @item.credit;
+                                <tr>
+                                    <th>
+                                        @item.voucherDate
+                                    </th>
+                                    <th>
+                                        @item.chequeNo
+                                    </th>
+                                    <th>@item.subledgerName</th>
+                                    @if (item.voucherDetails.Count() > 0)
+                                    {
+                                        <th>
+
+                                            @foreach (var itm in item.voucherDetails)
+                                            {
+                                                <ul>
+                                                    <li>@itm.accountName --- @itm.amount?.ToString("0,0.00")</li>
+                                                </ul>
+                                            }
+                                        </th>
+                                    }
+                                    else
+                                    {
+                                        <th></th>
+                                    }
+
+                                    <th>
+                                        @item.voucherNo
+                                    </th>
+
+                                    <th>
+                                        @item.credit
+                                    </th>
+
+
+
+                                    <th></th>
+                                </tr>
+
+
+                            }
+                            <thead style="background-color:lightgray;border-bottom:groove;">
+                                <tr>
+                                    <th colspan="6" style="text-align:right;">Total </th>
+                                    <th style="text-align:right">@Sumcredit?.ToString("0,0.00")</th>
+                                </tr>
+                            </thead>
+
+                            <thead style="border-bottom:groove;">
+                                <tr>
+                                    <th colspan="7" style="text-align:left;">Less: Uncredited deposit (Deposits recorded in software, but not recorded by Bank) </th>
+                                </tr>
+                            </thead>
+                            @foreach (var @item in Model.ledgerBookViewModel?.ledgerBookViewModelWithoutSPs.Where(x => x.accountName != "Opening Balance" && x.tranMode == 1))
+                            {
+
+                                //var account = @item.accountName + " (" + @item.accountName + ")";
+                                Sumdebit += @item.debit;
+                                <tr>
+                                    <th>
+                                        @item.voucherDate
+                                    </th>
+                                    <th>
+                                        @item.chequeNo
+                                    </th>
+                                    <th>@item.subledgerName</th>
+                                    @if (item.voucherDetails.Count() > 0)
+                                    {
+                                        <th>
+
+                                            @foreach (var itm in item.voucherDetails)
+                                            {
+                                                <ul>
+                                                    <li>@itm.accountName --- @itm.amount?.ToString("0,0.00")</li>
+                                                </ul>
+                                            }
+                                        </th>
+                                    }
+                                    else
+                                    {
+                                        <th></th>
+                                    }
+
+                                    <th>
+                                        @item.voucherNo
+                                    </th>
+
+                                    <th>
+                                        @item.debit
+                                    </th>
+
+
+                                    <th></th>
+                                </tr>
+                            }
+                            <thead style="background-color:lightgray;border-bottom:groove;">
+                                <tr>
+                                    <th colspan="6" style="text-align:right;">Total </th>
+                                    <th style="text-align:right">@Sumdebit?.ToString("0,0.00")</th>
+                                </tr>
+                            </thead>
+
+
+
+                            //sl++;
+                            //Sumdebit = Sumdebit + data.debit;
+                            //Sumcredit = Sumcredit + data.credit;
+
+                        }
+
+                        @{
+                            totalReconAmount = Sumcredit - Sumdebit;
+                            ReconcilledbalanceAsPerBankBook = totalReconAmount + balanceAsPerBankBooksoft;
+                            totalReconAmount = Sumcredit - Sumdebit;
+                            difference = ReconcilledbalanceAsPerBankBook - balanceAsPerBankstatement;
+                            <thead style="background-color:aliceblue;border-bottom:groove;">
+                                <tr>
+                                    <th colspan="6" style="text-align:left;">Total Reconsiliaion Amount </th>
+                                    <th style="text-align:right">@totalReconAmount?.ToString("0,0.00")</th>
+                                </tr>
+                            </thead>
+
+
+                            <thead style="border-bottom:groove;">
+                                <tr>
+                                    <th colspan="6" style="text-align:left;">Reconcilled balance as per bank book </th>
+                                    <th style="text-align:right">@ReconcilledbalanceAsPerBankBook?.ToString("0,0.00")</th>
+                                </tr>
+                            </thead>
+
+
+                            <thead style="border-bottom:groove;">
+                                <tr>
+                                    <th colspan="3" style="text-align:left;">Balance as per bank statement </th>
+                                    <th colspan="3" style="text-align:left;">@Model.bankReconcileMaster?.closingDate?.ToString("dd-MMM-yyyy") </th>
+                                    <th style="text-align:right">@balanceAsPerBankstatement?.ToString("0,0.00")</th>
+                                </tr>
+                            </thead>
+
+                            <thead style="border-bottom:groove;">
+                                <tr>
+                                    <th colspan="6" style="text-align:left;">Difference </th>
+                                    <th style="text-align:right">@difference?.ToString("0,0.00")</th>
+                                </tr>
+                            </thead>
+                        }
+
+                    </table>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <span style="font-weight:bold;font-size: 15px;">Prepared by: </span>
+                        @*<span style="font-weight:bold;font-size: 15px;">Date: </span>*@
+                    </div>
+                    <div class="col-6">
+                        <span style="font-weight:bold;font-size: 15px;">Approved by: </span>
+                        @*<span style="font-weight:bold;font-size: 15px;">Date: </span>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

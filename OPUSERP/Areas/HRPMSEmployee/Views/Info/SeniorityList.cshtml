@@ -1,0 +1,100 @@
+﻿@model SeniorViewModel
+@{
+	ViewData["Title"] = "SeniorityList";
+}
+
+<div class="card">
+	<div class="card-header">
+		<h4>Update Seniority List</h4>
+		<br />
+		<div class="form-group row">
+			<label class="col-md-2">Designation</label>
+			<div class="col-md-4">
+				<select class="form-control" id="designationId">
+					@foreach (var item in Model.designations)
+					{
+						<option value="@item.Id">@item.designationName</option>
+					}
+				</select>
+			</div>
+			<div class="col-md-2">
+				<input type="button" class="btn btn-sm btn-secondary" value="Search" onclick="SearchSeniorityList()" />
+			</div>
+		</div>
+	</div>
+	<form asp-area="HRPMSEmployee" asp-controller="Info" asp-action="UpdateSeniorityList" method="post">
+		<div class="card-body">
+			<table class="table table-bordered table-hover" id="seniorTbl">
+				<thead>
+					<tr>
+						<th>Emp Id</th>
+						<th>Emp Name</th>
+						<th>Designation</th>
+						<th>Seniority Order</th>
+					</tr>
+				</thead>
+				<tbody>
+					
+				</tbody>
+			</table>
+		</div>
+		<div class="card-footer">
+			<button type="submit" class="btn btn-success btn-sm fa-pull-right">Save</button>
+		</div>
+	</form>
+</div>
+
+
+
+@section Scripts{ 
+	<script>
+		function SearchSeniorityList() {
+			var designationId = $('#designationId').val();
+			Common.Ajax('GET', '/HRPMSEmployee/Info/GetSeniorityListAPI?designationId=' + designationId, [], 'json', ajaxSearchSeniorityList, false);
+		}
+		function ajaxSearchSeniorityList(res) {
+			console.log(res);
+			var option = '';
+			$.each(res, function (i, item) {
+				option += `<tr>
+								<td>${item.employeeCode} <input type="hidden" name="empIdSeniority" value="${item.employeeId}" /><input type="hidden" name="designationIdSeniority" value="${item.designationId}" /><input type="hidden" name="empCodeSeniority" value="${item.employeeCode}" /></td>
+								<td>${item.nameEnglish}</td>
+								<td>${item.designationName}</td>
+								<td>
+									<input type="number" name="seniorityNum" value="${i + 1}" onchange="updateListOrder()"/>
+								</td>
+							</tr>`
+			})
+			$('#seniorTbl tbody').empty();
+			$('#seniorTbl tbody').append(option);
+		}
+
+
+
+        function updateListOrder() {
+            // Get all the rows
+            var rows = $('#seniorTbl tbody tr');
+
+            // Sort the rows based on the seniorityNum input values
+            rows.sort(function (a, b) {
+                var aValue = parseInt($(a).find('input[name="seniorityNum"]').val());
+                var bValue = parseInt($(b).find('input[name="seniorityNum"]').val());
+                return aValue - bValue - 1;
+			});
+
+
+            // Clear the table and append the sorted rows
+            $('#seniorTbl tbody').empty();
+            $('#seniorTbl tbody').append(rows);
+
+
+            // Update the seniorityNum values based on the new order
+            $('#seniorTbl tbody tr').each(function (index, row) {
+                $(row).find('input[name="seniorityNum"]').val(index + 1);
+            });
+
+
+        }
+
+	</script>
+}

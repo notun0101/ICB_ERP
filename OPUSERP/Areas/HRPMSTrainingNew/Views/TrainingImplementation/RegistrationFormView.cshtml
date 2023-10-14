@@ -1,0 +1,68 @@
+﻿@model TrainingEnrollViewModel
+@{
+    ViewData["Title"] = "Registration Form";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<style>
+    body {
+        color: black !important;
+    }
+
+    table {
+        font-size: 14px !important;
+    }
+
+        table thead tr th {
+            text-align: center;
+        }
+</style>
+<div class="text-center p-4">
+	<h5 style="font-weight: 900">Bangladesh Development Bank Limited</h5>
+	<h6 style="text-decoration: underline">BDBL Bhaban-2 (Level-16), 12, Karwan Bazar, Dhaka-1215</h6>
+	<h6 style="text-decoration: underline">Training Institute</h6>
+	<h6>@Model.trainingWithPerticipants?.FirstOrDefault()?.courseTypeNameEN</h6>
+	<h6>"@Model.trainingWithPerticipants?.FirstOrDefault()?.courseTitle"</h6>
+	@{
+		TimeSpan? Difference = (new TimeSpan());
+		@if (@Model.trainingWithPerticipants.ToList().Count > 0)
+		{
+			Difference = Model.trainingWithPerticipants.ToList()[0].endDate - Model.trainingWithPerticipants.ToList()[0].startDate;
+		}
+	}
+	<h6 style="text-decoration: underline">Duration: <span> @(Difference.Value.Days + 1)</span> Days; Date: @Model.trainingWithPerticipants?.FirstOrDefault()?.startDate?.ToString("dd MMM, yyyy")-@Model.trainingWithPerticipants?.FirstOrDefault()?.endDate?.ToString("dd MMM, yyyy")</h6>
+	<h6 style="text-decoration: underline">Registration Form</h6>
+</div>
+<table class="report-table-1" id="participantTable" border="1" cellpadding="3"cellspacing="1" style="font-size: 16px !important;">
+    <thead>
+		<tr>
+			<th>SL No.</th>
+			<th>Participants Id</th>
+			<th>Name of the Participants</th>
+			<th>Designation</th>
+			<th>Present Place of Posting</th>
+			<th>Mobile No.</th>
+			<th>E-mail</th>
+			<th>Signature</th>
+		</tr>
+    </thead>
+    <tbody>
+        @{ 
+            int i = 1;
+        }
+        @foreach (var item in Model.trainingWithPerticipants)
+        {
+		<tr>
+			<td style="text-align:center;">@i</td>
+			<td style="text-align:center;">@item.employeeCode</td>
+			<td>@item.employeeName</td>
+			<td style="text-align:center;">@item.designationName</td>
+			<td>@item.placeOfPosting</td>
+			<td style="min-width:170px;">@item.mobileNumberOffice</td>
+			<td>@item.emailAddress</td>
+			<td style="min-width:200px;"></td>
+		</tr>
+            i++;
+        }
+    </tbody>
+</table>

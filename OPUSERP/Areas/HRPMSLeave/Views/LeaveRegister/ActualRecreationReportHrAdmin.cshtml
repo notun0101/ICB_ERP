@@ -1,0 +1,348 @@
+﻿@{
+    ViewData["Title"] = "Actual Recreation Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .redStar {
+        color: red;
+    }
+
+    ul.ui-autocomplete {
+        z-index: 99999999;
+    }
+    .select2-container {
+        display: block; 
+        position: relative;
+        vertical-align: middle;
+    }
+
+</style>
+<div class="card">
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+            <h5 class="card-title" style="color: black; margin: 8px;">Actual Recreation Report</h5>
+        </div>
+        <div class="col-md-8">
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1018&perentId=6282'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <div class="col-1"></div>
+            <label for="report" class="col-sm-3 col-form-label">Report By <span class="redStar">*</span></label>
+            <div class="col-sm-6">
+                <select class="form-control" id="report" name="report" required>
+                    <option value="">Please Select Report Type</option>
+                    <option value="1">Year Wise</option>
+                    <option value="2">Indivisual Employee Wise</option>
+                    <option value="3">Department Wise Report</option>
+                    <option value="4">Branch wise Report</option>
+                    <option value="5">Zone wise Report</option>
+                    @*<option value="6">Finally  Approved By Hr Admin</option>
+                    <option value="7">Finally Rejected By Hr Admin</option>*@
+                </select>
+            </div>
+            <div class="col-1"></div>
+        </div>
+
+        @*1.//*@
+
+        <div class="form-group row HideShow" id="selectYear">
+            <div class="col-1"></div>
+            <label for="employeeId" class="col-sm-3 col-form-label">Select Year <span style="color:red">*</span></label>
+
+            <div class="col-sm-6">
+                <select id="Year1" class="form-control" data-parsley-required="true" data-parsley-trigger="keyup" >
+                    <option value="">Year</option>
+                </select>
+            </div>
+
+            <div class="col-1"></div>
+        </div>
+
+        @*2.//*@
+        <div class="form-group row HideShow" id="employee-block">
+            <div class="col-1"></div>
+            <label for="employeeId" class="col-sm-3 col-form-label">Employee<span style="color:red">*</span></label>
+            <div class="col-sm-6">
+                <input type="hidden" class="form-control" id="employeeId" name="employeeId" value="0" />
+                <input type="text" class="form-control" id="employeeName" name="" data-parsley-required="true" data-parsley-trigger="keyup" autocomplete="off">
+            </div>
+            <div class="col-1"></div>
+        </div>
+        @*3.//*@
+        <div class="form-group row HideShow" id="deparmentList">
+            <div class="col-1"></div>
+            <label for="deppartmentId" class="col-sm-3 col-form-label">Deparment Name <span class="redStar">*</span></label>
+            <div class="col-sm-6">
+                <select type="text" class="form-control" id="deppartmentId" name="">
+                    <option value="0">Select Department</option>
+                    <option value="1000">All Department</option>
+                    @foreach (var data in Model.departments)
+                    {
+                        <option value="@data.Id">@data.deptName</option>
+                    }
+                </select>
+            </div>
+            <div class="col-1"></div>
+        </div>
+        @*4.//*@
+        <div class="form-group row HideShow" id="BranchSelect">
+            <div class="col-1"></div>
+            <label for="branchId" class="col-sm-3 col-form-label">Branch <span class="redStar">*</span></label>
+            <div class="col-sm-6">
+
+                <select name="hrBranchId" id="hrBranchId" class="form-control" data-parsley-required="true">
+                    <option value="0">Select Branch</option>
+                    <option value="2000">All Branch</option>
+                    @foreach (var item in Model.hrBranches)
+                    {
+                        <option value="@item.Id">@item.branchName</option>
+                    }
+                </select>
+
+            </div>
+            <div class="col-1"></div>
+        </div>
+         @*5.//*@
+        <div class="form-group row HideShow" id="ZoneSelect">
+            <div class="col-1"></div>
+            <label for="branchId" class="col-sm-3 col-form-label">Zone <span class="redStar">*</span></label>
+            <div class="col-sm-6">
+
+
+                <select name="hrBranchId" id="LZoneId" class="form-control col-sm-6" data-parsley-required="true">
+                    <option value="0">Select Zone</option>
+                    <option value="5000">All Zone</option>
+                    @foreach (var item in Model.zoneList)
+                    {
+                        <option value="@item.Id">@item.branchUnitName</option>
+                    }
+                </select>
+
+            </div>
+            <div class="col-1"></div>
+        </div>
+
+
+    </div>
+   
+    <div class="card-footer">
+        <button id="SubmitButton" style="margin-left: 75%;" class="btn btn-success btn-xs" title="Preview"><i class="fas fa-print"> Print</i></button>
+    </div>
+</div>
+@section Scripts{
+    <script>
+		$(document).ready(function () {
+            $('.HideShow').hide();
+            Common.Ajax('GET', '/global/api/GetAllEmployeeInfo', [], 'json', ajaxGetEmployees, false);
+         
+
+            var currentYear = new Date().getFullYear();
+         
+            for (var i = currentYear; i > currentYear - 10; i--) {
+                $("#Year1").append('<option value="' + i.toString() + '">' + i.toString() + '</option>');
+            }
+
+
+            $("#deppartmentId").select2();
+            $("#hrBranchId").select2();
+            $("#LZoneId").select2();
+
+            $('#report').change(function () {
+                let report = $('#report').val();
+                if (report == 1) {
+
+                    $('.HideShow').hide();
+                    $('#selectYear').show();
+                    $('#ZoneSelect').hide();
+                    $('#BranchSelect').hide();
+                    $('#deparmentList').hide();
+                    $('#employee-block').hide();
+                 
+                }
+                else if (report == 2) {
+                    $('#levelName').html('  Designation Wise');
+
+                 
+                    $('#employee-block').show();
+                    $('#selectYear').show();
+                    $('#deparmentList').hide();
+                    $('#BranchSelect').hide();
+                    $('#ZoneSelect').hide();
+                }
+                else if (report == 3) {
+                    $('#levelName').html('  Blood Group Wise');
+
+                    $('.HideShow').hide();
+                    $('#deparmentList').show();
+                    $('#ZoneSelect').hide();
+                    $('#BranchSelect').hide();
+                    $('#employee-block').hide();
+                    $('#selectYear').show();
+                }
+                else if (report == 4) {
+                    $('#levelName').html('  SBU Wise');
+                    $('.HideShow').hide();
+                    $('#BranchSelect').show();
+
+                    $('#ZoneSelect').hide();
+                    $('#deparmentList').hide();
+                    $('#employee-block').hide();
+                    $('#selectYear').show();
+                }
+                else if (report == 5) {
+                    $('#levelName').html('  Subject Wise');
+                    $('.HideShow').hide();
+                    $('#ZoneSelect').show();
+                    $('#BranchSelect').hide();
+                    $('#deparmentList').hide();
+                    $('#employee-block').hide();
+                    $('#selectYear').show();
+                }
+
+               // else if (report == 6) {
+               //     $('#levelName').html('  Subject Wise');
+               //     $('.HideShow').hide();
+               //     $('#ZoneSelect').hide();
+               //     $('#BranchSelect').hide();
+               //     $('#deparmentList').hide();
+               //     $('#employee-block').hide();
+               //     $('#selectYear').show();
+               // }
+               //else if (report == 7) {
+               //     $('#levelName').html('  Subject Wise');
+               //     $('.HideShow').hide();
+               //     $('#ZoneSelect').hide();
+               //     $('#BranchSelect').hide();
+               //     $('#deparmentList').hide();
+               //     $('#employee-block').hide();
+               //     $('#selectYear').show();
+               // }
+
+
+                else {
+                    $('#ZoneSelect').hide();
+                    $('#BranchSelect').hide();
+                    $('#deparmentList').hide();
+                    $('#employee-block').hide();
+                    $('#selectYear').hide();
+                }
+            });
+
+
+
+            $("#SubmitButton").click(function (e) {
+                let report = $('#report :selected').val();
+           
+                let deptId = $('#deppartmentId').val();
+                let hrBranchId = $('#hrBranchId').val();
+                let LZoneId = $('#LZoneId').val();
+                let empID = $('#employeeId').val();
+                let yearId = $('#Year1').val();
+               
+                if ($("#Year1").val() == null || $("#Year1").val() == "") {
+                    alert("Please select leave year!!!");
+                    return false;
+                }
+
+                if (report == 3) {
+                        deptId = deptId,
+                        hrBranchId = 0,
+                        LZoneId = 0,
+                        empID = 0,
+                        yearId = yearId
+                }
+                else if (report == 4) {
+                        deptId = 0,
+                        hrBranchId = hrBranchId,
+                        LZoneId = 0,
+                        empID = 0,
+                        yearId = yearId
+                }
+                else if (report == 5) {
+                        deptId = 0,
+                        hrBranchId = 0,
+                        LZoneId = LZoneId,
+                        empID = 0,
+                        yearId = yearId
+                }
+                else if (report == 2) {
+                        deptId = 0,
+                        hrBranchId = 0,
+                        LZoneId = 0,
+                        empID = empID,
+                        yearId = yearId
+                }
+                else if (report == 1) {
+                        deptId = 0,
+                        hrBranchId = 0,
+                        LZoneId = 0,
+                        empID = 0,
+                        yearId = yearId
+                }
+
+ 
+                ////window.open('/HRPMSLeave/LeaveRegister/ProposedListForHrAdminByBranchDepZonePDF?deptId=' + deptId + "&hrBranchId=" + hrBranchId + "&LZoneId=" + LZoneId + "&empID=" + empID + "&yearId=" + yearId, '_blank');
+
+                if (report == 1 || report == 2|| report == 3|| report == 4|| report == 5) {
+                    //alert(yearID)
+                    window.open('/HRPMSLeave/LeaveRegister/ActualListForHrAdminByBranchDepZonePDF?deptId=' + deptId + "&hrBranchId=" + hrBranchId + "&LZoneId=" + LZoneId + "&empID=" + empID + "&yearId=" + yearId, '_blank');
+                }
+
+
+                //else if (report == 6) {
+                //    window.open('/HRPMSLeave/LeaveRegister/AnumoditoProposedListForHrAdminByPDF?year=' + yearId, '_blank');
+                //}
+
+                //else if (report == 7) {
+                //    window.open('/HRPMSLeave/LeaveRegister/FinalRejectProposedForHrAdminByPDF?year=' + yearId, '_blank');
+                //}
+
+
+                else
+                {
+                    window.open('/HRPMSLeave/LeaveRegister/ActualListForHrAdminByBranchDepZonePDF?deptId=' + deptId + "&hrBranchId=" + hrBranchId + "&LZoneId=" + LZoneId + "&empID=" + empID + "&yearId=" + yearId, '_blank');
+
+                }
+
+
+                
+                //if (report == 1) {
+                //    //alert(yearID)
+                //    window.open('/HRPMSLeave/LeaveRegister/ProposedListForHrAdminByYearPDF?year=' + yearID, '_blank');
+                //}
+                //else if (report == 2) {
+                //    window.open('/HRPMSLeave/LeaveRegister/ApprovedListForHrAdminByEmpIdPDF?empID=' + empID, '_blank');
+                //}
+                //else
+
+              
+
+            });
+
+        });
+
+        function ajaxGetEmployees(response) {
+            var GeEmployeesList = [];
+
+            $.each(response, function (id, option) {
+                //console.log(option)
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+                GeEmployeesList[GeEmployeesList.length] = obj;
+            });
+            $('#employeeName').autocomplete({
+                source: GeEmployeesList,
+                select: function (event, ui) {
+                    $("#employeeName").val(ui.item.value);
+                    $("#employeeId").val(ui.item.key);
+
+                }
+            });
+        }
+    </script>
+}

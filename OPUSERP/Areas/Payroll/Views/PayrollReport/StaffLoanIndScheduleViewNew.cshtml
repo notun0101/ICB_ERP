@@ -1,0 +1,179 @@
+﻿@model PayrollReportViewModel
+@{
+	ViewData["Title"] = "Staff Loan Report";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<style>
+
+	.print-card-body {
+		width: 100%;
+		padding-bottom: 10px;
+	}
+
+	.vartical-table th {
+		width: 25%;
+	}
+
+	.vartical-table td {
+		width: 25%;
+	}
+
+	.table td, .table th {
+		padding: .3rem;
+		font-size: 14px;
+		border: 1px solid black !important;
+	}
+
+	table {
+		page-break-inside: auto;
+		border-collapse: collapse;
+		border: 1px solid black !important;
+	}
+
+	tr {
+		page-break-inside: avoid;
+		page-break-after: auto;
+		border: 1px solid black !important;
+	}
+
+	thead {
+		display: table-header-group;
+		border: 1px solid black !important;
+	}
+
+	tfoot {
+		display: table-footer-group;
+		border: 1px solid black !important;
+	}
+
+	h6 {
+		font-size: 14px;
+		background-color: gray;
+		color: white !important;
+		padding: 3px;
+	}
+</style>
+
+
+<div class="print-card" style="width: 100%;">
+	<div class="print-card-body">
+
+		<div class="container-fluid">
+			<div class="fa-pull-right">
+				<p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+			</div>
+			<div class="row" style="padding-top:0px;">
+				<div class="col-2">
+					<img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="BDBL Logo" style="height:80px;" />
+				</div>
+				<div class="col-8">
+					<div style="color:black;text-align:center;">
+						<h3 style="font-size:20px;">@Model.companies.FirstOrDefault()?.companyName</h3>
+						<h3 style="font-size:18px;"> Central Accounts Department</h3>
+						<h3 style="font-size:18px;"> Staff Loan Section</h3>
+						<h3 style="font-size:18px;"> @ViewBag.branchName</h3>
+						<br />
+					</div>
+				</div>
+				<div class="col-2">
+
+				</div>
+			</div>
+
+			<div class="row" style="padding-top:0px; color: black;">
+				<div class="col-6">
+					FY: Transaction Details
+				</div>
+				<div class="col-6 text-right">
+					Date Range: @ViewBag.startDate to @ViewBag.endDate
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid ">
+			<div class="col-12">
+				<h3 style="font-size:18px;color:black"> </h3>
+			</div>
+		</div>
+		<br />
+		<div class="container-fluid" style="color:black;">
+			@foreach (var loanId in Model.staffLoanSchedules.GroupBy(x => x.staffLoanId).Select(x => x.Key).Distinct())
+			{
+				<table class="table table bordered" style="border:1px solid black !important; border-top: none !important;">
+					<thead>
+						<tr style="border: none !important;">
+							<th colspan="4" style="border: none !important;">
+								Id & Name: (@Model.staffLoanEmployees.Where(x => x.loanId == loanId).Select(x => x.empCode).FirstOrDefault()), @Model.staffLoanEmployees.Where(x => x.loanId == loanId).Select(x => x.empName).FirstOrDefault()
+							</th>
+							<th colspan="5" class="text-right" style="border: none !important;">
+								Loan No/Type: (@Model.staffLoanEmployees.Where(x => x.loanId == loanId).Select(x => x.loanNo).FirstOrDefault()), @Model.staffLoanEmployees.Where(x => x.loanId == loanId).Select(x => x.loanType).FirstOrDefault()
+							</th>
+						</tr>
+						<tr>
+							<th>Date</th>
+							<th>Salary Period</th>
+							<th>Particular</th>
+							<th>Debit</th>
+							<th>Credit</th>
+							<th>Principal</th>
+							<th>Interest</th>
+							<th>Charge</th>
+							<th>Total</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						@{
+							decimal debit = 0;
+							decimal credit = 0;
+						}
+
+						@foreach (var item in Model.staffLoanSchedules.Where(x => x.staffLoanId == loanId))
+						{
+							debit += Convert.ToDecimal(item.debit);
+							credit += Convert.ToDecimal(item.credit);
+
+							<tr>
+								<td>@item.effectiveDate?.ToString("dd/MM/yyyy")</td>
+								<td style="text-align: center;">@item.periodName</td>
+								<td style="text-align: center;">
+									@if (item.particular == "Loan Installment")
+									{
+										<span>Recovery From Salary</span>
+									}
+									else
+									{
+										<span>@item.particular</span>
+									}
+								</td>
+								<td style="text-align: right;">@item.debit?.ToString("N2")</td>
+								<td style="text-align: right;">@item.credit?.ToString("N2")</td>
+								<td style="text-align: right;">@item.principal?.ToString("N2")</td>
+								<td style="text-align: right;">@item.interest?.ToString("N2")</td>
+								<td style="text-align: right;">@item.charge?.ToString("N2")</td>
+								<td style="text-align: right;">@item.total?.ToString("N2")</td>
+							</tr>
+						}
+						<tr style="font-weight: bold;">
+							<td colspan="3"></td>
+							<td style="text-align: right;">@debit.ToString("N2")</td>
+							<td style="text-align: right;">@credit.ToString("N2")</td>
+							<td colspan="4"></td>
+						</tr>
+					</tbody>
+				</table>
+			}
+		</div>
+
+
+
+	</div>
+</div>
+
+@section Scripts{ 
+	<script>
+		$(document).ready(function(){
+			
+		})
+	</script>
+}

@@ -1,0 +1,58 @@
+﻿@model TrainingEnrollViewModel
+@{
+    ViewData["Title"] = "Participants Training Report";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<style>
+    body {
+        color: black !important;
+		font-family:'Times New Roman';
+    }
+    #footertbl tr td p {
+        margin: 0;
+    }
+</style>
+<div class="text-center p-1">
+    <h5 style="font-weight: 900">Bangladesh Development Bank Limited</h5>
+    <h6 style="text-decoration: underline">BDBL Bhaban-2 (Level-16), 12, Karwan Bazar, Dhaka-1215</h6>
+    <h6 style="text-decoration: underline">Training Institute</h6>
+    <h6 style="text-decoration: underline">Training Course/Workshop Arranged in the Year @ViewBag.Date?.ToString("dd-MMM, yyyy")</h6>
+</div>
+<br />
+    <h6><span><u>Name</u> :</span> @Model.enrolledTraineeForTraining?.name</h6>
+    <h6><span><u>Designation</u> :</span> @Model.enrolledTraineeForTraining?.designation</h6>
+    <h6><span><u>Email</u> :</span> @Model.enrolledTraineeForTraining?.email</h6><br />
+   <h5><u>Trainings Information</u> </h5>
+    <table class="report-table-1" border="1" cellpadding="3"cellspacing="0" id="participantTable">
+        <thead>
+            <tr>
+                <th>SL No.</th>
+                <th>Name Of The Course</th>
+                <th>Organized By</th>
+                @*<th>City & Country</th>*@
+                <th>Start Date</th>
+                <th>End Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int i = 1;
+            }
+            @foreach (var item in Model.myTraining.Where(x=>x.trainingInfoNew.status==255))
+            {
+            <tr>
+                <td style="text-align:center;">@i</td>
+                <td>@item.trainingInfoNew?.course</td>
+                <td>@item.trainingInfoNew?.trainingInstitute?.trainingInstituteName</td>
+                <td  style="text-align:center;">@item.trainingInfoNew?.startDate?.ToString("dd-MMM-yyy")</td>
+                <td  style="text-align:center;">@item.trainingInfoNew?.endDate?.ToString("dd-MMM-yyy")</td>  
+            </tr>
+                i++;
+            }
+
+        </tbody>
+    </table>
+    <br />
+
+

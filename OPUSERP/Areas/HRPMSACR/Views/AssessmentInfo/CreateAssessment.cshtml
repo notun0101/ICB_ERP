@@ -1,0 +1,55 @@
+﻿@model OPUSERP.Areas.HRPMSACR.Models.ACRAssessmentVM
+@{
+    ViewData["Title"] = "CreateAssessment";
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+        <h5 class="m-0 font-weight-bold text-primary"> Assessment Create</h5>
+        @*<a class='btn btn-info btn-sm' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1018&perentId=6282'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>*@
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <form id="formAssessment" asp-area="HRPMSACR" asp-controller="AssessmentInfo" asp-action="CreateAssessment" method="get" data-parsley-validate="parsley">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="row">
+                    <input type="hidden" id="Id" name="Id" value="0">
+                    <table class="table table-bordered table-hover table-striped" id="Assesstable" ">
+                        <thead>
+                            <tr>
+                                <th>Assessment Year </th>
+                                <th>Assessment Date</th>
+                                <th>Assessment No</th>
+                                <th>From Date</th>
+                                <th>To Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    @foreach (var data in Model?.assessments)
+                    {
+                                <tr>
+
+                                    <td>@data?.assessmentYear</td>
+                                    <td>@data?.assessmentDate</td>
+                                    <td>@data?.assessmentNo</td>
+                                    <td>@data?.fromDate</td>
+                                    <td>@data?.toDate</td>
+
+                                    <td>
+
+                                        <a href="javascript:void(0)" class="btn btn-info btn-sm" onclick="Edit()">Edit</a>
+
+                                        <a href="javascript:void(0)" class="btn btn-danger btn-sm" onclick="Delete()">Delete</a>
+                                    </td>
+                                </tr>
+                    }
+                        </tbody>
+                    </table>
+                    </div>
+                  </form>
+                </div> 
+             </div>   
+            </div>
+
+

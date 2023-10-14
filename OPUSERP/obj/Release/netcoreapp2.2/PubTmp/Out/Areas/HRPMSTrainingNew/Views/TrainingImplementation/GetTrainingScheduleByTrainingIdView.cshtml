@@ -1,0 +1,157 @@
+﻿@model TrainingScheduleViewModel
+@{
+    ViewData["Title"] = "Training Schedule  Report";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<style>
+    body {
+        color: black !important;
+        font-family: 'Times New Roman';
+    }
+    #footertbl tr td p {
+        margin: 0;
+    }
+</style>
+
+
+<div class="text-center p-2">
+    <h5 style="font-weight: 900">Bangladesh Development Bank Limited</h5>
+    <h6 style="text-decoration: underline">BDBL Bhaban-2 (Level-16), 12, Karwan Bazar, Dhaka-1215</h6>
+    <h6 style="text-decoration: underline">Training Institute</h6>
+    <br />
+    <h6 style="text-decoration: underline">@*Training Course on: @Model.?.FirstOrDefault()?.*@</h6>
+    <h6 style="text-decoration: underline">@*@ViewBag.startDate to @ViewBag.endDate*@</h6>
+    <h6 style="">@Model.trainingInfoNews.ToList()[0].courseType.typeNameEN</h6>
+    @*<h6 style="">Training Course/Workshop on</h6>*@
+    <h6 style="">
+        "@Model.trainingInfoNews.ToList()[0].course"
+    </h6>
+    @{
+        TimeSpan? Difference = @Model.trainingInfoNews.ToList()[0].endDate - @Model.trainingInfoNews.ToList()[0].startDate;
+    }
+    <h6 style="text-decoration: underline">
+        @if (@Difference.Value.Days > 0)
+        {
+            <span>Duration:</span> @(Difference.Value.Days + 1) <span> Working Days; Date: @Model.trainingInfoNews.ToList()[0].startDate?.ToString("dd MMMM, yyyy") to @Model.trainingInfoNews.ToList()[0].endDate?.ToString("dd MMMM, yyyy")</span>
+        }
+    </h6>
+    <h6 style="text-decoration: underline">Session Schedule</h6>
+</div>
+<br />
+<table class="report-table-1" border="1" cellpadding="3" cellspacing="0" id="participantTable">
+    <thead>
+        <tr>
+            <th>Day</th>
+            <th>Time</th>
+            <th>Topic</th>
+            <th>Guest/Speaker</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.trainingSchedules)
+        {
+            var t = 0;
+            @foreach (var data in item.trainingScheduleVms.Where(x => x.effectiveDate == item.effectiveDate))
+            {
+                t++;
+                <tr>
+                    @if (t <= 1)
+                    {
+                        int rows = item.trainingScheduleVms.Where(x => x.effectiveDate == item.effectiveDate).Count();
+                    <td rowspan="@rows" class="text-center font-weight-bold">@data.effectiveDate?.ToString("dd MMM yyyy") <br />( @data.effectiveDate?.DayOfWeek )</td>
+                    }
+                    @if (data.isBreak == "Yes")
+                    {
+                        <td class="text-center" style="width: 100px;">@data?.startTime?.Substring(0, 5) - @data?.endTime?.Substring(0, 5)</td>
+                        <td colspan="1" class="text-center">@data.topic</td>
+                        <td></td>
+                    }
+                    else
+                    {
+                        <td class="text-center" style="width: 100px;">@data?.startTime?.Substring(0, 5) - @data?.endTime?.Substring(0, 5)</td>
+                        <td class="text-center">@data?.topic</td>
+                        <td>
+                           
+                            @if (data.trainers != null)
+                            {
+                                @foreach (var trainer in data.trainers.Split(","))
+                                {
+                                    @trainer.Split('-')[1]<br />
+                                    @trainer.Split('-')[2]<br />
+                                    @trainer.Split('-')[3]<br />
+                                    @trainer.Split('-')[4]<br />
+                                }
+                            }
+                            else
+                            {
+
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        }
+    <tbody>
+</table>
+
+<table class="table table-borderless" id="footertbl">
+    <thead>
+        <tr>
+            <td><p><u>Course Coordinator</u></p></td>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            @foreach (var data in Model.courseCoordinators)
+            {
+                <tr>
+                    <td>
+                        <p>@i. @data.employeeInfo?.nameEnglish , @data.employeeInfo?.lastDesignation?.designationName</p>
+
+                    </td>
+                </tr>
+                i++;
+            }
+        }
+
+    </tbody>
+
+</table>
+
+
+@*@if (Model.courseWiseTrainings.Where(x => x.trainingType == 1).Count() != 0)
+    {
+        <h4><u>In House Training:</u></h4>
+        <table class="report-table-1" border="1" cellpadding="3"cellspacing="0" id="participantTable">
+            <thead>
+                <tr>
+                    <th>SL No.</th>
+                    <th>Name of The Course</th>
+                    <th>No. of Participants</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Duration (Working Days)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int i = 1;
+                }
+                @foreach (var item in Model.courseWiseTrainings.Where(x => x.trainingType == 1))
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@item.course</td>
+                        <td>@item.perticipants</td>
+                        <td>@item.startDate?.ToString("dd-MM-yyyy")</td>
+                        <td>@item.endDate?.ToString("dd-MM-yyyy")</td>
+                        <td>@item.durationDays</td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+        <br />
+    }*@

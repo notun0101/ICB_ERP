@@ -1,0 +1,814 @@
+﻿
+@{
+    ViewData["Title"] = "SaveSampleInfo";
+}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<style>
+    .crdheader {
+        text-align: left;
+        color: black;
+    }
+
+    .crdlevel {
+        color: black !important;
+    }
+
+    .chkTest {
+        transform: scale(0.7);
+    }
+    
+    option:hover{
+        background-color:none;
+    }
+
+</style>
+
+<div class="card" style="width: 100%;">
+    <form method="post" enctype="multipart/form-data" data-parsley-validate="parsley">
+        <div class="card-body">
+            
+            <div class="card-header">
+                <ul class="nav nav-pills" id="pills-tab" role="tablist" style="margin-left: 21px;">
+                    <li class="nav-item active" role="presentation">
+                        <a class="nav-link rounded-pill  "
+                           data-toggle="tab"
+                           id="basicInfo" href="#info_tab">Basic Info</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link rounded-pill  " id="sample"
+                           data-toggle="tab" href="#sample_tab">Sample</a>
+                    </li>
+
+                    <li class="nav-item" role="presentation" id="liPreview">
+                        <a class="nav-link rounded-pill "
+                           id="preview" data-toggle="tab" href="#preview_tab">
+                            Preview
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="info_tab">
+                    <div class="row justify-content-center">
+                        <div class="col-xl-12 col-lg-12 col-md-12">
+                            <div class="card o-hidden border-0 shadow-lg">
+                                <div class="card-body p-0">
+                                    <!-- Nested Row within Card Body -->
+                                    <div class="row">
+                                        <div class=" col">
+                                            <div class=" col departdiv">
+                                                <div class="card ">
+                                                    <h1 class="crdheader card-header">
+                                                        Basic Info
+                                                    </h1>
+                                                    <div class="card-body">
+                                                        <div class="form-group row">
+                                                            <label for="" class="crdlevel col-sm-4 col-form-label">Test No</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control" id="testNo" name="" value="" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="" class="crdlevel col-sm-4 col-form-label">Test Date</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="date" class="form-control" id="testDate" name="" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row">
+                                                            <label for="" class="crdlevel col-sm-4 col-form-label">Buyer Name</label>
+                                                            <div class="col-sm-8">
+                                                                <select class="form-control">
+                                                                    <option value="">Select Buyer</option>
+                                                                    <option value="1">Yasir</option>
+                                                                    <option value="2">Arafat</option>
+                                                                </select>
+                                                                @*<input type="text" class="form-control" id="buyerName" name="" value="" />*@
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="" class="crdlevel col-sm-4 col-form-label">Customer Name</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control" id="customerName" name="" value="" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="sample_tab">
+                    <div class="row justify-content-center">
+
+                        <div class="col-xl-12 col-lg-12 col-md-12">
+                            <div class="card o-hidden border-0 shadow-lg ">
+                                <div class="card-body p-0">
+                                    <!-- Nested Row within Card Body -->
+                                    <div class="row">
+                                        <div class=" col">
+                                            <div class="col departdiv">
+                                                <div class="card mb-4 ">
+                                                    <h1 class="crdheader card-header">
+                                                        Sample
+                                                    </h1>
+                                                    <div class="card-body">
+                                                        <div class="form-group row">
+                                                            <label for="" class="crdlevel col-sm-4 col-form-label">Component</label>
+                                                            <div class="col-sm-8">
+                                                                <input type="text" class="form-control" id="component" name="" value="" required />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="" class="crdlevel col-sm-4 col-form-label">Description</label>
+                                                            <div class="col-sm-8">
+                                                                <textarea class="form-control" id="description" required></textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row">
+                                                            <label for="" class="crdlevel col-sm-4 col-form-label">Color</label>
+                                                            <div class="col-sm-8 select">
+                                                                <select class="form-control text-center" onfocus="this.size=10;" onblur="this.size=0;"
+                                                                        onchange="this.size=1; this.blur();">
+                                                                    <option class="text-center" value="" style=" font-size:170%;">Choose Color</option>
+                                                                    <option class="text-center" value="1" style="background:red; font-size:170%; color:white">Red</option>
+
+
+                                                                    <option class="text-center" value="4" style=" background:Green; font-size:170%; color:white">Green</option>
+                                                                    <option class="text-center" value="5" style=" background:Purple; font-size:170%; color:white">Purple</option>
+                                                                    <option class="text-center" value="6" style="background:Pink; font-size:170%; color:white">Pink</option>
+                                                                    <option class="text-center" value="7" style="background:Yellow; font-size:170%; color:black">Yellow</option>
+                                                                    <option class="text-center" value="3" style="  background:Blue; font-size:170%; color:white">Blue</option>
+                                                                    <option class="text-center" value="8" style=" background:Orange; font-size:170%; color:white">Orange</option>
+                                                                    <option class="text-center" value="9" style=" background:skyblue; font-size:170%; color:white">skyblue</option>
+                                                                    <option class="text-center" value="10" style="background:deeppink; font-size:170%; color:white">deeppink</option>
+                                                                    <option class="text-center" value="2" style="background:Black; font-size:170%; color:white">Black</option>
+                                                                </select>
+                                                                @*<input type="text" class="form-control" id="color" name="" value="" required />*@
+                                                            </div>
+                                                        </div>
+                                                        <div class="float-right">
+                                                            <button type="button" id="btnAddTest" class="btn btn-info">Add Test</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="hddnDiv">
+                                                    <div>
+                                                        <hr />
+                                                        <div class="row container">
+                                                            <div class="col-3">
+                                                                <h5 class="crdlevel card-title" style="padding-left: 9px;font-weight: bold;">Department 1</h5>
+                                                                <div class="form-group row">
+                                                                    <div class="col-sm-3">
+                                                                        <input type="checkbox" class="form-control chkTest" value="Azo Dyes" />
+                                                                    </div>
+                                                                    <label class="crdlevel col-sm-8 col-form-label">Azo Dyes</label>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <div class="col-sm-3">
+                                                                        <input type="checkbox" class="form-control chkTest" value="Formaldehyde" />
+                                                                    </div>
+                                                                    <label class="crdlevel col-sm-8 col-form-label">Formaldehyde</label>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <div class="col-sm-3">
+                                                                        <input type="checkbox" class="form-control chkTest" value="Test 3" />
+                                                                    </div>
+                                                                    <label class="crdlevel col-sm-8 col-form-label">Test 3</label>
+                                                                </div>
+                                                                <div class="form-group row">
+
+                                                                    <div class="col-sm-3">
+                                                                        <input type="checkbox" class="form-control chkTest" value="Test 4" />
+                                                                    </div>
+                                                                    <label class="crdlevel col-sm-8 col-form-label">Test 4</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-3">
+                                                                <h5 class="crdlevel card-title" style="padding-left: 9px;font-weight: bold;">Department 2</h5>
+                                                                <div class="form-group row">
+
+                                                                    <div class="col-sm-3">
+                                                                        <input type="checkbox" class="form-control chkTest" value="Azo Dyes" />
+                                                                    </div>
+                                                                    <label class="crdlevel col-sm-8 col-form-label">Azo Dyes</label>
+                                                                </div>
+                                                                <div class="form-group row">
+
+                                                                    <div class="col-sm-3">
+                                                                        <input type="checkbox" class="form-control chkTest" value="Formaldehyde" />
+                                                                    </div>
+                                                                    <label class="crdlevel col-sm-8 col-form-label">Formaldehyde</label>
+                                                                </div>
+                                                                <div class="form-group row">
+
+                                                                    <div class="col-sm-3">
+                                                                        <input type="checkbox" class="form-control chkTest" value="Test 3" />
+                                                                    </div>
+                                                                    <label class="crdlevel col-sm-8 col-form-label">Test 3</label>
+                                                                </div>
+                                                                <div class="form-group row">
+
+                                                                    <div class="col-sm-3">
+                                                                        <input type="checkbox" class="form-control chkTest" value="Test 4" />
+                                                                    </div>
+                                                                    <label class="crdlevel col-sm-8 col-form-label">Test 4</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-3">
+                                                                <h5 class="crdlevel card-title" style="padding-left: 9px;font-weight: bold;">Department 3</h5>
+                                                                <div class="form-group row">
+
+                                                                    <div class="col-sm-3">
+                                                                        <input type="checkbox" class="form-control chkTest" value="Azo Dyes" />
+                                                                    </div>
+                                                                    <label class="crdlevel col-sm-8 col-form-label">Azo Dyes</label>
+                                                                </div>
+                                                                <div class="form-group row">
+
+                                                                    <div class="col-sm-3">
+                                                                        <input type="checkbox" class="form-control chkTest" value="Formaldehyde" />
+                                                                    </div>
+                                                                    <label class="crdlevel col-sm-8 col-form-label">Formaldehyde</label>
+                                                                </div>
+                                                                <div class="form-group row">
+
+                                                                    <div class="col-sm-3">
+                                                                        <input type="checkbox" class="form-control chkTest" value="Test 3" />
+                                                                    </div>
+                                                                    <label class="crdlevel col-sm-8 col-form-label">Test 3</label>
+                                                                </div>
+                                                                <div class="form-group row">
+
+                                                                    <div class="col-sm-3">
+                                                                        <input type="checkbox" class="form-control chkTest" value="Test 4" />
+                                                                    </div>
+                                                                    <label class="crdlevel col-sm-8 col-form-label">Test 4</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-3">
+                                                                <h5 class="crdlevel card-title" style="padding-left: 9px;font-weight: bold;">Department 4</h5>
+                                                                <div class="form-group row">
+
+                                                                    <div class="col-sm-3">
+                                                                        <input type="checkbox" class="form-control chkTest" value="Azo Dyes" />
+                                                                    </div>
+                                                                    <label class="crdlevel col-sm-8 col-form-label">Azo Dyes</label>
+                                                                </div>
+                                                                <div class="form-group row">
+
+                                                                    <div class="col-sm-3">
+                                                                        <input type="checkbox" class="form-control chkTest" value="Formaldehyde" />
+                                                                    </div>
+                                                                    <label class="crdlevel col-sm-8 col-form-label">Formaldehyde</label>
+                                                                </div>
+                                                                <div class="form-group row">
+
+                                                                    <div class="col-sm-3">
+                                                                        <input type="checkbox" class="form-control chkTest" value="Test 3" />
+                                                                    </div>
+                                                                    <label class="crdlevel col-sm-8 col-form-label">Test 3</label>
+                                                                </div>
+                                                                <div class="form-group row">
+
+                                                                    <div class="col-sm-3">
+                                                                        <input type="checkbox" class="form-control chkTest" value="Test 4" />
+                                                                    </div>
+                                                                    <label class="crdlevel col-sm-8 col-form-label">Test 4</label>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <hr />
+                                                        <div class="row">
+
+                                                            <div class="col-10" style="margin-left: 70px;"></div>
+                                                            <button type="button" class="btn btn-success col-1" onclick="SaveData()">Save</button>
+                                                            <div class="col-1"></div>
+                                                        </div>
+                                                        <hr />
+                                                    </div>
+
+                                                    <div class="col departDetaildiv">
+                                                        <div class=" card mb-4">
+                                                            <div class="card-header">
+                                                                <h1 class="crdheader card-header">Sample Test List</h1>
+                                                                <div class="card-body">
+                                                                    <table class="table table-hover" id="tblSmpl">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Name</th>
+                                                                                <th>Description</th>
+                                                                                <th>Color</th>
+                                                                                <th>Test</th>
+
+                                                                                <th>Action</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody></tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="details_tab">
+
+                </div>
+
+                <div class="tab-pane fade" id="preview_tab">
+                    <div class="row justify-content-center">
+
+                        <div class="col-xl-12 col-lg-12 col-md-9" id="pills-all" role="tabpanel"
+                             aria-labelledby="pills-all-tab">
+                            <div class="card o-hidden border-0 shadow-lg">
+                                <div class="card-body p-0">
+                                    <!-- Nested Row within Card Body -->
+                                    <div class="row">
+
+                                        <div class=" col">
+                                            <div class="card mb-4">
+                                                <h4 class="crdheader card-header" style="text-align:center">
+                                                    TEST RESULT REPORT
+                                                </h4>
+                                                <div class="card-body">
+                                                    <div class="card-header">
+                                                        <div class="form-group row">
+                                                            <label class="crdlevel"><b style="margin-left:10px;">Test Request No. <label id="tNo"></label></b></label>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label class="crdlevel col-sm-2">Customer Name</label>
+                                                            <div class="crdlevel col-sm-4">
+                                                                <span>:&nbsp;</span><label id="cName"></label>
+                                                            </div>
+                                                            <label class="crdlevel col-sm-2">Customer Address</label>
+                                                            <div class="crdlevel col-sm-4">
+                                                                <span>:&nbsp;</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label class="crdlevel col-sm-2">Contact Person</label>
+                                                            <div class="crdlevel col-sm-4">
+                                                                <span>:&nbsp;</span>
+                                                            </div>
+                                                            <label class="crdlevel col-sm-2">Email ID</label>
+                                                            <div class="crdlevel col-sm-4">
+                                                                <span>:&nbsp;</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <br />
+                                                    <br />
+
+
+                                                    <div class="form-group row">
+                                                        <label class="crdlevel col-sm-2">Sample Description</label>
+                                                        <div class="crdlevel col-sm-4">
+                                                            <span id="smplDesc">:&nbsp;</span>
+                                                        </div>
+                                                        <label class="crdlevel col-sm-2">Color</label>
+                                                        <div class="crdlevel col-sm-4">
+                                                            <span>:&nbsp;</span><label id="clr"></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="crdlevel col-sm-2">Fibre Content</label>
+                                                        <div class="crdlevel col-sm-4">
+                                                            <span>:&nbsp;</span>100% Cotton
+                                                        </div>
+                                                        <label class="crdlevel col-sm-2">Fabric Weight</label>
+                                                        <div class="crdlevel col-sm-4">
+                                                            <span>:&nbsp;</span>380g/m2
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="crdlevel col-sm-2">End Uses</label>
+                                                        <div class="crdlevel col-sm-4">
+                                                            <span>:&nbsp;</span>-
+                                                        </div>
+                                                        <label class="crdlevel col-sm-2">Quantity Of Sample</label>
+                                                        <div class="crdlevel col-sm-4">
+                                                            <span>:&nbsp;</span>-
+                                                        </div>
+                                                    </div>
+                                                    <div class="crdlevel form-group row">
+                                                        <label class="col-sm-2">Buyer's Name</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span><label id="bName"></label>
+                                                        </div>
+                                                        <label class="crdlevel col-sm-2">Age Grade</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span>-
+                                                        </div>
+                                                    </div>
+                                                    <div class="crdlevel form-group row">
+                                                        <label class="col-sm-2">Country Of Destination</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span>-
+                                                        </div>
+                                                        <label class="col-sm-2">Fabric Country Of Origin</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span>-
+                                                        </div>
+                                                    </div>
+                                                    <div class="crdlevel form-group row">
+                                                        <label class="col-sm-2">Department Code</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span>-
+                                                        </div>
+                                                        <label class="col-sm-2">Department Name</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span>-
+                                                        </div>
+                                                    </div>
+                                                    <div class="crdlevel form-group row">
+                                                        <label class="col-sm-2">Season</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span>SS-20
+                                                        </div>
+                                                        <label class="crdlevel col-sm-2">Finishing</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span>-
+                                                        </div>
+                                                    </div>
+                                                    <div class="crdlevel form-group row">
+                                                        <label class="col-sm-2">Standard</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span>Next Test Method
+                                                        </div>
+                                                        <label class="crdlevel col-sm-2">Order No</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span>-
+                                                        </div>
+                                                    </div>
+                                                    <div class="crdlevel form-group row">
+                                                        <label class="col-sm-2">Style No</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span>-
+                                                        </div>
+                                                        <label class="crdlevel col-sm-2">Quality</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span>-
+                                                        </div>
+                                                    </div>
+                                                    <div class="crdlevel form-group row">
+                                                        <label class="col-sm-2">Manufacturer Name</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span>-
+                                                        </div>
+                                                        <label class="crdlevel col-sm-2">Supplier Name</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span>-
+                                                        </div>
+                                                    </div>
+                                                    <div class="crdlevel form-group row">
+                                                        <label class="col-sm-2">Mill Name</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span>-
+                                                        </div>
+                                                        <label class="crdlevel col-sm-2">Testing Stage</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span>-
+                                                        </div>
+                                                    </div>
+                                                    <div class="crdlevel form-group row">
+                                                        <label class="col-sm-2">Testing Code</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span>-
+                                                        </div>
+                                                        <label class="crdlevel col-sm-2">Package Code</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span>-
+                                                        </div>
+                                                    </div>
+                                                    <div class="crdlevel form-group row">
+                                                        <label class="col-sm-2">Reference</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span>-
+                                                        </div>
+                                                        <label class="crdlevel col-sm-2">Item No</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span>-
+                                                        </div>
+                                                    </div>
+                                                    <div class="crdlevel form-group row">
+                                                        <label class="col-sm-2">Request ID</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span>-
+                                                        </div>
+                                                        <label class="crdlevel col-sm-2">Acceptance Date</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span>-
+                                                        </div>
+                                                    </div>
+                                                    <div class="crdlevel form-group row">
+                                                        <label class="col-sm-2">Reporting Date</label>
+                                                        <div class="col-sm-4">
+                                                            <span>:&nbsp;</span> <label id="rDate"></label>
+                                                        </div>
+                                                        @*<label class="col-sm-2"></label>
+                                                            <div class="col-sm-4">
+                                                                <span>:&nbsp;</span>
+                                                            </div>*@
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class=" area pills-deactivated subdetective">
+                        <div class="area subdetective" id="pills-all">*@
+                    <div class="row justify-content-center">
+                        <div class="col-xl-12 col-lg-12 col-md-9" id="pills-all" role="tabpanel"
+                             aria-labelledby="pills-all-tab">
+                            <div class="card o-hidden border-0 shadow-lg">
+                                <div class="card-body p-0">
+
+                                    <div class="row">
+
+                                        <div class="col">
+                                            <h4 class="crdlevel card-header"> Test REQUEST NO: 32423</h4>
+                                            <div class="card-body">
+                                                <div class="crdlevel card-title">
+                                                    <h5> TEST CONDUCTED: AS PER THE REQUEST OF THE CUSTOMER FOR FURTHER DETAILS PLEASE REER TO ENCLOSED PAGE(S).</h5>
+                                                    <br />
+                                                    <b>SUMMARY:</b>
+
+                                                </div>
+                                                <table class="crdlevel table table-bordered" id="tblPrvw">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>S/N</th>
+                                                            <th>Test Name</th>
+                                                            <th>Test Method</th>
+                                                            <th>Remarks</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @*<tr>
+                                                                <td>11</td>
+                                                                <td>Azo Dyes</td>
+                                                                <td>BS EN ISO 14362 parts 1 & 3</td>
+                                                                <td>P</td>
+                                                            </tr>*@
+                                                    </tbody>
+                                                </table>
+                                                <u><b class="crdlevel">Note :</b></u><br />
+                                                <div class="crdlevel">
+                                                    p<span>&nbsp;&nbsp;&nbsp;</span>=<span>&nbsp;</span>Meet Buyer Requirement<br />
+                                                    F<span>&nbsp;&nbsp;&nbsp;</span>=<span>&nbsp;</span>Didn't Meet Buyer Requirement<br />
+                                                    N.D<span>&nbsp;&nbsp;&nbsp;</span>=<span>&nbsp;</span>Not Detected<br />
+                                                    N/A<span>&nbsp;&nbsp;&nbsp;</span>=<span>&nbsp;</span>Not Applicable<br />
+                                                    #<span>&nbsp;&nbsp;&nbsp;</span>=<span>&nbsp;</span>No Comment<br />
+                                                    -<span>&nbsp;&nbsp;&nbsp;</span>=<span>&nbsp;</span>Did Not Perform<br />
+                                                    *<span>&nbsp;&nbsp;&nbsp;</span>=<span>&nbsp;</span>See the Results<br />
+
+                                                </div>
+                                                <br />
+                                                <hr style="border:3px solid" />
+                                                <br />
+                                                <br />
+                                                <table class="crdlevel table table-bordered" style="text-align:center">
+
+                                                    <tr>
+                                                        <th colspan="3" class="text-center"><b>COMPONENT LIST</b></th>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <th><b>COMPONENT NO.</b></th>
+                                                        <th><b>COMPONENT DESCRIPTION</b></th>
+                                                        <th><b>Remarks</b></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>C1</td>
+                                                        <td>Estate Blue Colour Single Jersey Fabric</td>
+                                                        <td>Azo Dyes-White N/A</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    @*</div>
+                        </div>*@
+                </div>
+
+            </div>
+            <hr />
+
+
+
+
+
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+        var cpid = 0;
+        $(document).ready(function () {
+            $("#hddnDiv").hide();
+            $("#liPreview").click(function () {
+                var testNo = $("#testNo").val();
+                var testDate = $("#testDate").val();
+                var buyerName = $("#buyerName").val();
+                var customerName = $("#customerName").val();
+                var component = $("#component").val();
+                var description = $("#description").val();
+                var color = $("#color").val();
+
+                $("#smplDesc").val(description);
+                $("#tNo").text(testNo);
+                $("#cName").text(customerName);
+                $("#clr").text(color);
+                $("#rDate").text(testDate);
+                $("#bName").text(buyerName);
+                TableData();
+                TableColor();
+            });
+        })
+        function TableColor() {
+            var html_table_Color = "";
+            var testarray = [];
+            var sl = 1;
+            sl++;
+            var bRowStarted = true;
+            $('#tblSmpl tbody>tr').each(function () {
+                $('td:nth-child(3)', this).each(function () {
+                    if (html_table_Color.length == 0 || bRowStarted == true) {
+                        html_table_Color += $(this).text();
+                        bRowStarted = false;
+                    }
+                    else
+                        html_table_Color += ", " + $(this).text();
+                });
+                //html_table_data += "\n";
+                html_table_Color += ", ";
+                testarray = html_table_Color.split(', ');
+                bRowStarted = true;
+            });
+            $("#clr").append(html_table_Color.slice(0, -2))
+        }
+
+        function TableData() {
+            var html_table_data = "";
+            var testarray = [];
+            var sl = 1;
+            sl++;
+            var bRowStarted = true;
+            $('#tblSmpl tbody>tr').each(function () {
+                $('td:nth-child(4)', this).each(function () {
+                    if (html_table_data.length == 0 || bRowStarted == true) {
+                        html_table_data += $(this).text();
+                        bRowStarted = false;
+                    }
+                    else
+                        html_table_data += "," + $(this).text();
+                });
+                //html_table_data += "\n";
+                html_table_data += ",";
+                testarray = html_table_data.split(',');
+                bRowStarted = true;
+            });
+            var array = [];
+
+            $.each(testarray, function (index, value) {
+                array.push(value.trim())
+            });
+
+            var uniqueTest = array.filter(function (itm, i, a) {
+                return i == a.indexOf(itm);
+            });
+
+            console.log(uniqueTest);
+
+            $.each(uniqueTest, function (k, v) {
+                var sl = k + 1;
+                if (v !== "") {
+                    $("#tblPrvw tbody").append('<tr><td>' + sl + '</td><td>' + v + '</td><td>PM-' + sl + '</td><td>P</td></tr>')
+                }
+
+            })
+
+            //alert(html_table_data);
+            //console.log(testarray);
+            // alert(tblarray);
+
+        }
+
+        $("#btnAddTest").click(function () {
+            var component = $("#component").val();
+            
+            var color = $("#color").val();
+            if (component == "" ) {
+                alert("Please select Component");
+                return false;
+            }
+            if (color == "") {
+                alert("Please select Color");
+                return false;
+            }
+            if (cpid == 0) {
+                $("#hddnDiv").show();
+                cpid = 1;
+            }
+            else {
+                $("#hddnDiv").hide();
+                cpid = 0;
+            }
+        })
+
+        $('.nav-link').click(function () {
+            $('.nav-link').removeClass('active');
+            $(this).addClass('active');
+        })
+
+        function SaveData() {
+            var testNo = $("#testNo").val();
+            var testDate = $("#testDate").val();
+            var buyerName = $("#buyerName").val();
+            var customerName = $("#customerName").val();
+            var component = $("#component").val();
+            var description = $("#description").val();
+            var color = $("#color").val();
+            if ($(".chkTest").is(":checked") && component != "" && color != "") {
+
+
+                var val = [];
+                $(':checkbox:checked').each(function (i) {
+                    val[i] = $(this).val();
+                });
+                var i = "";
+                $.each(val, function (k, v) {
+                    i += v + ", ";
+                });
+                $("#tblSmpl tbody").append('<tr>' +
+                    '<td>' + component + '</td><td>' + description + '</td><td>' + color
+                    + '</td><td>' + i.slice(0, -2) + '</td> <td><a href="#"  class="btn btn-success btn circle"> <i class="fas fa-edit" style="margin-right: 3px;"></i></a>' +
+                    '<a href="javascript:void(0)"  class="btn btn-danger btn circle btnDelete"><i class="fas fa-trash"></i></a></td> </tr>')
+                Clear();
+                $("#tNo").text(testNo);
+                $("#cName").text(buyerName);
+                $("#clr").text(color);
+            }
+            else {
+                alert("Please select Test, Component, Color");
+                return false;
+            }
+        };
+
+        function CheckBeforeSave() {
+            if ($(".chkTest").prop("checked") == false) {
+                alert("Please select Test");
+                return false;
+            }
+        };
+
+        function Clear() {
+            $(".chkTest").prop("checked", false);
+            $("#color").val("");
+            $("#description").val("");
+            $("#component").val("");
+        };
+
+        $("#tblSmpl").on('click', '.btnDelete', function () {
+            $(this).closest('tr').remove();
+        });
+    </script>
+}

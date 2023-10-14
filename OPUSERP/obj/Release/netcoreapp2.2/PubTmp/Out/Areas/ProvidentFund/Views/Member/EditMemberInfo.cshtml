@@ -1,0 +1,257 @@
+﻿@model PFMemberInfoViewModel
+@{
+    ViewData["Title"] = "EditMemberInfo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card" style="width: 100%;">
+
+                <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+                    <h5 class="m-0 font-weight-bold text-primary"> Update Member Info</h5>
+                    <a class='btn btn-info mr-4' style="float:right" data-toggle='tooltip' title='Go Back' href='/ProvidentFund/Member/MemberList'>@*<i class="fas fa-backward fa-2x "></i>*@<i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+                </div>
+
+
+                <div class="card-body">
+                    <div class="">
+                        <form id="FormId" data-parsley-validate="parsley">
+
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <input type="hidden" id="employeeId" name="" />
+                                    <input type="hidden" id="memberID" name="memberID" value="@Model.memberID" />
+                                    <input type="hidden" id="memberID" name="approveStatus" value="@Model.approveStatus" />
+                                    <input type="hidden" id="employeeInfoId" name="employeeInfoId" value="@Model.employeeInfoId" />
+                                    <input type="hidden" id="isPfContinuing" name="isPfContinuing" value="@Model.isPfContinuing" />
+                                    <input type="hidden" id="isActive" name="isActive" value="@Model.isActive" />
+
+                                    <label for="">Member ID </label>
+                                    <input style="" type="hidden" id="employeeName" name="employeeCode" class="form-control " value="@Model.employeeCode" readonly />
+                                    <input style="" type="text" id="memberCode" name="memberCode" class="form-control " value="@Model.memberCode" />
+                                    <br />
+                                    <label for="">Designation </label>
+                                    <select class="form-control" name="designation" id="joiningDesignation">
+                                        <option>Select</option>
+                                        @foreach (var data in Model.designations)
+                                        {
+                                            <option value="@data.Id">@data.designationName</option>
+                                        }
+                                    </select>
+                                    <br />
+                                    <label for="">Mobile No </label>
+                                    <input style="" type="text" id="mobileNumberPersonal" name="mobile" class="form-control" value="@Model.mobile" />
+                                    <br />
+                                    <label for="">Note</label>
+                                    <textarea name="note" id="" class="form-control" rows="1"> @Model.note</textarea>
+
+
+                                    <br />
+
+
+                                </div>
+
+
+                                <div class="form-group col-md-4">
+                                    <label for="">Members' Name </label>
+                                    <input style="" type="text" id="memberName" name="memberName" class="form-control" value="@Model.memberName" />
+                                    <br />
+                                    <label for="">Department</label>
+                                    <select class="form-control" name="department" id="departmentId">
+                                        <option>Select</option>
+                                        @foreach (var data in Model.departments)
+                                        {
+                                            <option value="@data.Id">@data.deptName</option>
+                                        }
+
+                                    </select>
+                                    <br />
+                                    <label for="">NID</label>
+                                    <input style="" type="text" id="nationalID" name="nid" class="form-control " value="@Model.nid" />
+
+
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="birthDate">Date of Birth</label>
+                                    <input name="dateOfBirth" id="dateOfBirth" class="form-control input-group-sm" value="@Model.dateOfBirth?.ToString("dd-MMM-yyyy")" />
+                                    <br />
+                                    <label for="joiningDate">Date of Joining</label>
+                                    <input name="dateOfJoining" id="joiningDate" class="form-control input-group-sm" value="@Model.dateOfJoining?.ToString("dd-MMM-yyyy")" />
+                                    <br />
+                                    <label for="">Email</label>
+                                    <input style="" type="text" id="emailAddressPersonal" name="email" class="form-control " value="@Model.email" />
+                                    <input style="" type="hidden" id="applicationDate" name="applicationDate" class="form-control " value="@Model.applicationDate" />
+
+                                </div>
+                            </div>
+                            <br />
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <input type="button" class="btn btn-sm btn-primary bg-success text-white" id="btnSave" value="Update">&nbsp;
+                                    <input type="button" class="btn btn-sm btn-default" onclick="Remove(@Model.memberID)" value="Delete" style="border: 1px solid #CC3333;">
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<br />
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+            $("#contract").hide();
+            $("#dateOfBirth").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker(new Date());
+            $("#joiningDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker(new Date());
+            //Common.Ajax('GET', '/HRPMSEmployee/Info/GetAllDepartment', [], 'json', ajaxFunctiDepartment, false);
+            //Common.Ajax('GET', '/HRPMSEmployee/Info/GetAllJoiningDesignation', [], 'json', ajaxFunctijoiningDesignation, false);
+            Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo', [], 'json', ajaxGetEmployees);
+            $("#joiningDesignation").val(@Model.designation);
+            $("#departmentId").val(@Model.department);
+             $("#memberType").val(@Model.memberType);
+        });
+
+        function Refresh() {
+            location.reload();
+        }
+
+
+        function ajaxFunctiDepartment(response) {
+            console.log(response)
+            var option = "";
+            $.each(response, function (i, item) {
+                option += `<option value="${item.deptName}">${item.deptName}</option>`
+            });
+            $('#departmentId').empty();
+            $('#departmentId').append(`<option value="">Select </option>`);
+            $('#departmentId').append(option);
+        }
+
+        function ajaxFunctijoiningDesignation(response) {
+            console.log(response)
+            var option = "";
+            $.each(response, function (i, item) {
+                option += `<option value="${item.designationName}">${item.designationName}</option>`
+            });
+            $('#joiningDesignation').empty();
+            $('#joiningDesignation').append(`<option value="">Select </option>`);
+            $('#joiningDesignation').append(option);
+        }
+
+        $('#memberType').on('change', function () {
+            if (this.value == '2') {
+                $("#contract").show();
+            }
+            else {
+                $("#contract").hide();
+            }
+        });
+
+        function ajaxGetEmployees(response) {
+            console.log(response);
+            var GetEmployeesList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                //obj.key = option.Id;
+                obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+                obj.name = option.nameEnglish;
+                obj.designation = option.designation;
+                obj.department = option.department.deptName;
+                obj.nationalID = option.nationalID;
+                obj.dateOfBirth = option.dateOfBirth;
+                obj.joiningDateGovtService = option.joiningDateGovtService;
+                obj.mobileNumberPersonal = option.mobileNumberOffice;
+                obj.emailAddressPersonal = option.emailAddress;
+                obj.employeeCode = option.employeeCode;
+                obj.dateOfJoining = option.dateOfJoining;
+                GetEmployeesList[GetEmployeesList.length] = obj;
+            });
+
+            $('#employeeName').autocomplete({
+                source: GetEmployeesList,
+                select: function (event, ui) {
+                    $("#employeeName").val(ui.item.value);
+                    $("#memberName").val(ui.item.name);
+                    $("#designation").val(ui.item.designation);
+                    $("#department").val(ui.item.department);
+                    $("#nationalID").val(ui.item.nationalID);
+                    $("#dateOfBirth").val(ui.item.dateOfBirth);
+                    $("#dateOfJoining").val(ui.item.dateOfJoining);
+                    $("#mobileNumberPersonal").val(ui.item.mobileNumberPersonal);
+                    $("#emailAddressPersonal").val(ui.item.emailAddressPersonal);
+                    $("#employeeInfoId").val(ui.item.key);
+                }
+            });
+        }
+
+        $('#btnSave').click(function () {
+            console.log($('#FormId').serializeArray());
+            var data = $('#FormId').serializeArray();
+
+            console.log(data[0].value)
+            swal({
+                title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+            }).then(function () {
+                $.ajax({
+                    url: '/ProvidentFund/Member/EditMemberInfo',
+                    type: 'POST',
+                    data: data
+                }).done(function () {
+                    if (data[0].value == 0) {
+                        swal('success', 'Saved Successfully!', 'success').then(function () {
+                            //location.reload();
+                            window.location.href = '/ProvidentFund/Member/MemberList';
+                        });
+                    }
+                    else {
+                        swal('success', 'Updated Successfully!', 'success').then(function () {
+                            //location.reload();
+                            window.location.href = '/ProvidentFund/Member/MemberList';
+                        });;
+                    }
+                }).fail(function () {
+                    swal('warning', 'Failed!', 'warning');
+                })
+            });
+        })
+
+
+
+
+        function Remove(Id) {
+
+            if (Id == "") {
+                swal('Warning', 'please try again', 'warning');
+                return false;
+            }
+            swal({
+                title: 'Are you sure?', text: 'Do you want to Delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, Delete it!'
+            }).then(function () {
+                $.get("/ProvidentFund/Member/DeleteMember?id=" + Id, function (data) {
+                    if (data.Success) {
+                        swal('', data.Message, 'success').then(function () {
+                            //location.reload();
+                            window.location.href = '/ProvidentFund/Member/MemberList';
+                        })
+                    }
+                    else {
+                        swal('Warning', data.Message, 'warning');
+                    }
+
+
+                });
+
+            })
+
+        }
+
+    </script>
+}

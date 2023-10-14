@@ -1,0 +1,190 @@
+﻿@model LunchPageViewModel
+
+@{
+    ViewData["Title"] = "Lunch Subsidy";
+    var roles = new System.Collections.Generic.List<string> { "admin", "OPUSAdmin", "ERPAdmin", "SCMAdmin", "PayrollAdmin", "HRAdmin", "HRAttendanceAdmin" };
+    var role = Model.userInfo.Select(x => x.roleId.ToString()).ToList();
+}
+
+@section Style{
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        .redStar {
+            color: red;
+        }
+
+        .active {
+            background: beige;
+            padding: 3px;
+        }
+    </style>
+}
+    <div class="card" style="width: 100%;">
+        <div class="card-header row" style="background-color:#EAF6FA;">
+            <div class="col-10">
+                <h5 class="card-title" style="color: black"> Report</h5>
+            </div>
+            <div class="col-2" style="text-align: right;">
+                <a class='btn btn-info mr-lg-4 float-right' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1020&perentId=6295'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+        </div>
+                    <div class="card-body">
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <label for="report" class="col-sm-3 col-form-label">Report By <span class="redStar">*</span></label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="report" name="report" required>
+                                        <option value="">Please Select Report Type</option>
+                                        <option value="1">Month Wise LunchSubsidy List </option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-1"></div>
+                            </div><br />
+                            <div class="col-md-12">
+
+                                <div class="form-group row HideShow" id="reportselect">
+                                    <div class="col-sm-3"></div>
+                                    <div class="col-sm-4">
+                                        <select type="text" class="form-control" id="year" name="year">
+                                            <option value="">Year</option>
+                                            <option value="2018">2018</option>
+                                            <option value="2019">2019</option>
+                                            <option value="2020">2020</option>
+                                            <option value="2021">2021</option>
+                                            <option value="2022">2022</option>
+                                            <option value="2023">2023</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <select type="text" class="form-control" id="month" name="month">
+                                            <option value="">Month</option>
+                                            <option value="1">January</option>
+                                            <option value="2">February</option>
+                                            <option value="3">March</option>
+                                            <option value="4">April</option>
+                                            <option value="5">May</option>
+                                            <option value="6">June</option>
+                                            <option value="7">July</option>
+                                            <option value="8">August</option>
+                                            <option value="9">September</option>
+                                            <option value="10">October</option>
+                                            <option value="11">November</option>
+                                            <option value="12">December</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-1"></div><br /><br />
+                                    <div class="col-sm-3" style="float:left"></div>
+                                    <div class="col-sm-4">
+                                        <select type="text" class="form-control" id="type" name="type">
+                                            @if(role.Intersect(roles).Any() ){
+                                                <option value="">Type</option>
+                                                <option value="department">Department</option>
+                                                <option value="branch">Branch</option>
+                                                <option value="zone">Zone</option>
+                                                <option value="office">Office</option>
+                                            }
+                                            else if(role.Contains("Lunch Subsidy") && Model.userInfo?.FirstOrDefault()?.specialBranchUnitId==205)
+                                            {
+                                                <option value="">Type</option>
+                                                <option value="department">Department</option>
+                                            }
+                                            else if (role.Contains("Lunch Subsidy"))
+                                            {
+                                                <option value="branch" selected>Branch</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-4" for="">
+                                        <select type="text" class="form-control" id="typeid" name="typeid">
+                                            if (role.Contains("Lunch Subsidy"))
+                                            {
+                                                <option value="@Model.userInfo.FirstOrDefault().specialBranchUnitId" selected>@Model.userInfo.FirstOrDefault().BranchUnit</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4" style="float:right">
+                                    <a id="submit" type="button" style="margin-left: 160px;" class="btn btn-success btn-xs" title="Preview" href='javascript:void(0)'><i class="fas fa-print"></i> Print</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+    <script>
+        $(document).ready(function () {
+            $('#report').change(function () {
+                let report = $('#report').val();
+                if (report == 1) {
+                    $('.HideShow').hide();
+                    $('#reportselect').show();
+                    $('#year').val('');
+                    $('#month').val('');
+                    $('#type').val('');
+                }
+            });
+            $('.HideShow').hide();
+        });
+        $('#submit').click(function () {
+            window.open( "/HRPMSAttendence/EmployeePunchCardInfo/LunchSubsidyReportPDF?month=" + $('#month').val() + "&year=" + $('#year').val() + "&type=" + $('#type').val() + "&typeId=" + $('#typeid').val());
+
+        });
+        $('#type').change(function () {
+            if ('@role.Contains("Lunch Subsidy")'=='True'){
+                if ($(this).val()=='department'){
+                    Common.Ajax('GET', '/HRPMSAttendence/EmployeePunchCardInfo/GetAllDepartments', [], 'json', ajaxGetAllDepartments);
+                }
+            }else{
+                var type = $(this).val();
+                if (type == 'department') {
+                    Common.Ajax('GET', '/HRPMSAttendence/EmployeePunchCardInfo/GetAllDepartments', [], 'json', ajaxGetAllDepartments);
+                    //window.location.href = "/HRPMSAttendence/EmployeePunchCardInfo/LunchSubsidyReportView? month = " + $('month').val() + " & year=" + $('year').val() + " & type=" + $('type') + " & typeID=" + $('#typeID').val();
+                }
+                else if (type == 'branch') {
+                    Common.Ajax('GET', '/HRPMSAttendence/EmployeePunchCardInfo/GetAllBranch', [], 'json', ajaxGetAllBranch);
+
+                }
+                else if (type == 'zone') {
+                    Common.Ajax('GET', '/HRPMSAttendence/EmployeePunchCardInfo/GetAllZone', [], 'json', ajaxGetAllZone);
+
+                }
+                else {
+                    Common.Ajax('GET', '/HRPMSAttendence/EmployeePunchCardInfo/GetAlloffice', [], 'json', ajaxGetAllOffice);
+
+                }
+            }
+        });
+
+        function ajaxGetAllDepartments(res) {
+            $('#typeid').empty();
+            var option = "";
+            $.each(res, function (i, item) {
+                option += `<option value="${item.Id}">${item.deptName}</option>`;
+            })
+            $('#typeid').append(option);
+        }
+        function ajaxGetAllBranch(res) {
+            $('#typeid').empty();
+            var option = "";
+            $.each(res, function (i, item) {
+                option += `<option value="${item.Id}">${item.branchName}</option>`;
+            })
+            $('#typeid').append(option);
+        }
+        function ajaxGetAllZone(res) {
+            $('#typeid').empty();
+            var option = "";
+            $.each(res, function (i, item) {
+                option += `<option value="${item.Id}">${item.branchUnitName}</option>`;
+            })
+            $('#typeid').append(option);
+        }
+        function ajaxGetAllOffice(res) {
+            $('#typeid').empty();
+            var option = "";
+            $.each(res, function (i, item) {
+                option += `<option value="${item.Id}">${item.branchUnitName}</option>`;
+            })
+            $('#typeid').append(option);
+        }
+
+    </script>

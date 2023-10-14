@@ -1,0 +1,134 @@
+﻿@model ApplicationFormViewModel
+@using OPUSERP.Helpers;
+
+@{
+    ViewData["Title"] = "Confirmation Letter";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+@using OPUSERP.ERPServices.MasterData.Interfaces
+@using OPUSERP.ERPService.AuthService.Interfaces
+@using System
+@inject IERPCompanyService eRPCompanyService
+@inject IUserInfoes userInfo
+@{
+    var companies = await eRPCompanyService.GetAllCompany();
+    var company = companies.FirstOrDefault()?.filePath;
+    var companyName = companies.FirstOrDefault()?.companyName;
+}
+<link href="https://fonts.maateen.me/adorsho-lipi/font.css" rel="stylesheet">
+
+<style>
+
+ 
+
+    .header {
+        text-align: center;
+        margin: 30px;
+        font-size:35px;
+    }
+
+    .box {
+      
+        color: black;
+    }
+
+
+
+  
+    table th {
+        width: 70%;
+        border: 10px;
+        line-height: inherit
+    }
+
+    td {
+        height: 50px;
+    }
+
+</style>
+<div class="box">
+    <div class="header">
+        <h5 style="font-size:48px !important;">বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড</h5>
+        <p> <u>হেড অফিস,ঢাকা ।</u></p>
+    </div>
+    <h5 style="text-align: center; text-decoration: underline; font-size: 38px;">হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্ট</h5>
+    <div style="width: 100%;">
+        <div style="width: 50%; float: left; font-size:28px;">
+            নং- ০৬.১/১.২৬৬৭/
+        </div>
+        <div style="width: 50%; float: left; text-align: right; font-size:28px;">
+            তারিখ- @Model.applicationForm?.reportDateBn
+            @*@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.Today.ToString("dd-MM-yyyy")) <br />*@
+
+        </div>
+    </div>
+    <div style="width: 100%;">
+        <div style="width: 50%;  height: 250px; margin-top: 30px;">
+            <strong style="font-size: 40px;">@Model.applicationForm?.nameBN</strong><br />
+            @Model.applicationForm?.newDesignation <br />
+              <span style="font-size:35px">বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড</span> <br />
+            @Model.applicationForm?.newBranch?.branchNameBn <br />
+            <u>@Model.permanent?.district?.districtNameBn </u>
+
+        </div>
+        @*<div style="width: 50%; float: right; font-weight: bolder; font-size: 25px; float: right; text-align: right; margin-top: 30px; height: 250px;">
+                <span style="text-decoration: underline;">রেজিষ্টার্ড এ/ডি</span>
+            </div>*@
+    </div>
+    @*<h1 class="h4 text-center">
+        <strong>বিষয়ঃ <span style="text-decoration: underline;">'@Model.applicationForm?.occupation' পদে চাকুরী স্থায়ীকরণ ।</span></strong>
+    </h1><br />
+    <p>প্রিয় মহোদয়,</p>*@
+
+    <div style="font-size:36px !important;">
+        <h1 class="h4 text-center">
+            <strong style="font-size: 36px;">বিষয়ঃ <span style="text-decoration: underline;font-size: 36px;">'@Model.applicationForm?.occupation' পদে চাকুরী স্থায়ীকরণ ।</span></strong>
+        </h1><br />
+        <p>প্রিয় মহোদয়,</p>
+
+        <br />
+        <sbox>
+            <p style="">
+                অত্যন্ত আনন্দের সাথে জানাচ্ছি যে, ব্যাংকের যথাযথ কর্তৃপক্ষ কর্তৃক__________________________- তারিখ হতে '@Model.applicationForm?.occupation'
+                পদে ২২০০০-২৩১০০-২৪২৮০-২৫৪৬০-২৮০-২৬১০০-২৯৫১০-৩০৩০৯৯০-৩২৫৪০-৩৪১৬০-৩৫৬০-৩৮০-৩৯৫৬০-৪১৫৫০-৪৩৬৩০<br />
+                -৪৫৮২০-৪৮১২০-৫০৫
+                টাকা বেতন স্কেলে আপনার চাকুরী স্থায়ীকরণ করা হয়েছে।<br />
+                ২ । @Model.applicationForm?.occupation পদে চাকুরী স্থায়ীকরণ কর্মস্পৃহা ও দক্ষতা আপনার উন্নতিকরণে সহায়ক হবে বলে কর্তৃপক্ষ আশা করে।
+
+            </p>
+        </sbox>
+
+
+        <div>
+            <table>
+                <tr>
+                    <th style="margin-bottom:16px !important;"> ধন্যবাদান্তে, </th>
+                    <th @*style="margin-bottom:16px !important;"*@>
+                        আপনার বিশ্বস্ত<br />
+
+                        স্বা/-<br />
+
+                        (কবির আহমেদ)<br />
+
+                        ডেপুটি জেনারেল ম্যানেজার<br />
+                    </th>
+                </tr>
+
+
+            </table>
+
+        </div>
+        <br />
+        <br />
+        <br />
+
+    </div>
+</div>
+@section Scripts{
+    <script>
+		$(document).ready(function () {
+			alert('@Html.Raw(Model.applicationForm?.mailingAddress)')
+			$('#mailAddress').text('@Html.Raw(Model.applicationForm?.mailingAddress)');
+		});
+    </script>
+}

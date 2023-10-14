@@ -1,0 +1,297 @@
+﻿@model OPUSERP.Areas.HRPMSACR.Models.ACRAssessmentVM
+@{
+    ViewBag.Title = "AcrCompletedList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div id="tabs" class="project-tab col-sm-12">
+        <div class="row">
+            <nav style="padding-left:100px;font-weight:bold;font-size:20px;">
+                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                    <a class="nav-link active" id="nav-3rdPart-tab" data-toggle="tab" href="#nav-3rdPart" role="tab" aria-controls="nav-3rdPart" aria-selected="false">সম্পন্ন তালিকা</a>
+                </div>
+            </nav>
+        </div>
+        @*<div class="row" style="height:10px;"></div>*@
+        <div class="row">
+            <div class="col-3">
+            </div>
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label class="col-md-4 control-label">ACR for Year</label>
+                    <div class="col-md-6">
+                        <select id="acrYear" class="form-control">
+                            <option value="" selected="selected">--Select ACR Year--</option>
+                            @*<option value="2021">2021</option>*@
+                            <option value="2022">2022</option>
+                            <option selected="selected" value="2023">2023</option>
+                        </select>
+                    </div>
+                    <input type="button" id="btnLoad" class="btn-sm btn btn-info" value="Load" />
+                </div>
+            </div>
+            <div class="col-3"></div>
+        </div>
+
+        <div class="tab-content" id="nav-tabContent">
+
+            <div class="tab-pane fade show active" id="nav-3rdPart" role="tabpanel" aria-labelledby="nav-3rdPart-tab">
+
+                <div class="row col-sm-12">
+                    <div class="card" style="width: 100%;">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-3">
+
+                                </div>
+                                <div class="col-6">
+                                    <h5 class="card-title" style="color: black">প্রতিবেদনাধীন কর্মকর্তা/কর্মচারীদের সম্পন্ন তালিকা</h5>
+                                </div>
+                                <div class="col-3">
+
+                                </div>
+                            </div>
+
+                            <div class="container">
+
+                                <div class="card">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <input type="hidden" id="EmpCode" name="EmpCode" />
+                                            <div>
+                                                <table class="table table-striped" id="tblAssessment">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>পরিচিতি (আই ডি) নং</th>
+                                                            <th>নাম</th>
+                                                            <th>বৎসর</th>
+                                                            <th>তারিখ থেকে</th>
+                                                            <th>তারিখ পর্যন্ত</th>
+                                                            <th>প্রতিবেদনকারী</th>
+                                                            <th>প্রতিস্বাক্ষরকারী</th>
+                                                            <th>প্রক্রিয়া <i style="color:white">Ac</i></th>
+                                                        </tr>
+                                                    </thead>
+                                                    @*<tbody>
+                                                            @{
+                                                                //int index = 1;
+                                                                foreach (var data in Model.lstFinal)
+                                                                {
+                                                                    <tr>
+                                                                        <td>@data.empCode</td>
+                                                                        <td>@data.empName</td>
+                                                                        <td>@data.assessmentYear</td>
+                                                                        <td>@data.fromDate.Value.ToString("yyyy-MM-dd")</td>
+                                                                        <td>@data.toDate.Value.ToString("yyyy-MM-dd")</td>
+                                                                        <td>@data.recommendatorName</td>
+                                                                        <td>@data.signatoryName</td>
+                                                                        <td>
+
+                                                                            @if (data.empType == "Top")
+                                                                            {
+                                                                                <button onclick="getPrint(@data.assessmentId,1)" class="btn btn-info btn-xs" title="Preview"><i class="fa fa-print"></i></button>
+                                                                            }
+                                                                            else if (data.empType == "Officer")
+                                                                            {
+                                                                                <button onclick="getPrint(@data.assessmentId,2)" class="btn btn-info btn-xs" title="Preview"><i class="fa fa-print"></i></button>
+                                                                            }
+                                                                            else if (data.empType == "Clerk")
+                                                                            {
+                                                                                <button onclick="getPrint(@data.assessmentId,3)" class="btn btn-info btn-xs" title="Preview"><i class="fa fa-print"></i></button>
+                                                                            }
+                                                                            else if (data.empType == "NonClerk")
+                                                                            {
+                                                                                <button onclick="getPrint(@data.assessmentId,4)" class="btn btn-info btn-xs" title="Preview"><i class="fa fa-print"></i></button>
+                                                                            }
+
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            }
+
+                                                        </tbody>*@
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="hrDepartmentModal" tabindex="-1" role="dialog" aria-labelledby="hrDepartmentModalLabel" aria-hidden="true" style="width:100%">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="hrDepartmentModalLabel">Add HRM Info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <label class="col-form-label col-md-4">Form Receiving Date</label>
+                    <div class="col-md-8">
+                        <input type="hidden" name="assessmentId" id="assessmentId" value="" />
+                        <input type="text" class="form-control" id="finalSignatoryDate" name="finalSignatoryDate" value="@DateTime.Now" />
+                        <input type="hidden" class="form-control" id="empCode" name="empCode" value="@Model.ACRUsers.EmpCode" />
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-form-label col-md-4">Reason of Late</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="reasonoflate" name="reasonoflate" value="" />
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-form-label col-md-4">Action on application (if any)</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="actionOn" name="actionOn" value="" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="SaveHRMInfo()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#btnLoad").click(function () {
+                let year = $('#acrYear').val();
+                if (year == '') {
+                    swal("Please Select ACR Year");
+                    return false;
+                }
+                else {
+                    GetAssessmentInfoByYear(year);
+                }
+            });
+        });
+
+        function GetAssessmentInfoByYear(year) {
+            $("#tblAssessment").DataTable().destroy();
+            $("#tblAssessment tbody").empty();
+
+            $('#tblAssessment').DataTable({
+                ajax: {
+                    url: '@Url.Action("GetAssessmentInfo_Final", "AssessmentInfo")',
+                    dataSrc: "",
+                    data: { year: year }
+                },
+
+                columns: [
+
+                    { data: "empCode" },
+                    { data: "empName" },
+                    { data: "assessmentYear" },
+                    { data: "fDate" },
+                    { data: "tDate" },
+                    { data: "recommendatorName" },
+                    { data: "signatoryName" },
+                    {
+                        title: "প্রক্রিয়া", width: 10,
+                        "render": function (data, type, e, meta) {
+                            if (e.empType == "Top" && (@ViewBag.UserEmpCode== '2064' ||@ViewBag.UserEmpCode== '2503') && e.responsibleUser==null) {
+                                return '<button onclick = "HrDepartmentData(' + e.assessmentId + ')" class="btn btn-info btn-xs" title = "Preview" > <i class="fa fa-eye"></i></button>&nbsp;&nbsp;<button onclick="getPrint(' + e.assessmentId + ',\'' + e.assessmentYear + '\',' + '\'' + e.empType + '\'' + ')" class="btn btn-info btn-xs" title="Print"><i class="fa fa-print"></i></button> &nbsp;';
+                            }
+                            else if (e.empType == "Officer" && (@ViewBag.UserEmpCode== '2064' ||@ViewBag.UserEmpCode== '2503') && e.responsibleUser == null) {
+                                return '<button onclick = "HrDepartmentData(' + e.assessmentId + ')" class="btn btn-info btn-xs" title = "Preview" > <i class="fa fa-eye"></i></button>&nbsp;&nbsp;<button onclick="getPrint(' + e.assessmentId + ',\'' + e.assessmentYear + '\',' + '\'' + e.empType + '\'' + ')" class="btn btn-info btn-xs" title="Print"><i class="fa fa-print"></i></button> &nbsp;';
+                            }
+                            else if (e.empType == "Clerk" && (@ViewBag.UserEmpCode== '2064' ||@ViewBag.UserEmpCode== '2503') && e.responsibleUser == null) {
+                                return '<button onclick = "HrDepartmentData(' + e.assessmentId + ')" class="btn btn-info btn-xs" title = "Preview" > <i class="fa fa-eye"></i></button>&nbsp;&nbsp;<button onclick="getPrint(' + e.assessmentId + ',\'' + e.assessmentYear + '\',' + '\'' + e.empType + '\'' + ')" class="btn btn-info btn-xs" title="Print"><i class="fa fa-print"></i></button>';
+                            }
+                            else if (e.empType == "NonClerk" && (@ViewBag.UserEmpCode== '2064' ||@ViewBag.UserEmpCode== '2503') && e.responsibleUser == null) {
+                                return '<button onclick = "HrDepartmentData(' + e.assessmentId + ')" class="btn btn-info btn-xs" title = "Preview" > <i class="fa fa-eye"></i></button>&nbsp;&nbsp;<button onclick="getPrint(' + e.assessmentId + ',\'' + e.assessmentYear + '\',' + '\'' + e.empType + '\'' + ')" class="btn btn-info btn-xs" title="Print"><i class="fa fa-print"></i></button>';
+                            }
+                            else {
+                                return '<button onclick="getPrint(' + e.assessmentId + ',\'' + e.assessmentYear + '\',' + '\'' + e.empType + '\'' + ')" class="btn btn-info btn-xs" title="Print"><i class="fa fa-print"></i></button>';
+                            }
+                            console.log(e);
+                        }
+                    },
+                ],
+                pageLength: 100
+            });
+            $("#tblAssessment").DataTable();
+        }
+        function HrDepartmentData(assId) {
+            $('#assessmentId').val(assId);
+            $('#hrDepartmentModal').modal('show');
+        }
+        function SaveHRMInfo() {
+            var assId = $('#assessmentId').val();
+            var date = $('#finalSignatoryDate').val();
+            var empCode = $('#empCode').val();
+            var reason = $('#reasonoflate').val();
+            var action = $('#actionOn').val();
+
+            swal({
+					title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    Common.Ajax('GET', '/HRPMSACR/AssessmentInfo/SaveHRMInfo?assId=' + assId + '&receivingdate=' + date + '&empCode=' + empCode + '&reason=' + reason + '&actionOn=' + action, [], 'json', ajaxGetList, true);
+				});
+
+            //location.href = '/HRPMSACR/AssessmentInfo/SaveHRMInfo?assId=' + assId + '&receivingdate=' + date + '&empCode=' + empCode + '&reason=' + reason + '&actionOn=' + action;
+            
+        }
+
+        function ajaxGetList (res) {
+            if (res == 'ok') {
+                var year = $('#acrYear').val();
+                GetAssessmentInfoByYear(year);
+                $('#hrDepartmentModal').modal('hide');
+            }
+        }
+
+
+        function getPrint(assesId, assesYear, reporttype) {
+            if (reporttype == "Top" && assesYear == '2019') {
+                window.open('@Url.Action("AcrReportExcecutive2019Pdf", "HtmlReport")?assesmentId=' + assesId + '', '_blank');
+            }
+			else if (reporttype == "Top" && assesYear != '2019') {
+                window.open('@Url.Action("AcrReportExcecutivePdf", "HtmlReport", new { Area = "HRPMSACR" })?assessmentId=' + assesId + '', '_blank');
+            }
+            else if (reporttype == "Officer" && assesYear == '2019') {
+                window.open('@Url.Action("AcrReportOfficer2019Pdf", "HtmlReport")?assesmentId=' + assesId + '', '_blank');
+            }
+			else if (reporttype == "Officer" && assesYear != '2019') {
+                window.open('@Url.Action("AcrReportOfficerPdf", "HtmlReport")?assessmentId=' + assesId + '', '_blank');
+            }
+            else if (reporttype == "Clerk" && assesYear == '2019') {
+                window.open('@Url.Action("AcrReportClerical2019Pdf", "HtmlReport")?assesmentId=' + assesId + '', '_blank');
+            }
+			else if (reporttype == "Clerk" && assesYear != '2019') {
+                window.open('@Url.Action("AcrReportClericalPdf", "HtmlReport")?assessmentId=' + assesId + '', '_blank');
+            }
+            else if (reporttype == "NonClerk" && assesYear == '2019') {
+                window.open('@Url.Action("AcrReportNonClerical2019Pdf", "HtmlReport")?assesmentId=' + assesId + '', '_blank');
+            }
+			else if (reporttype == "NonClerk" && assesYear != '2019') {
+                window.open('@Url.Action("AcrReportNonClericalPdf", "HtmlReport")?assessmentId=' + assesId + '', '_blank');
+            }
+        }
+
+    </script>
+
+}
+
+<style>
+</style>
+
+
+

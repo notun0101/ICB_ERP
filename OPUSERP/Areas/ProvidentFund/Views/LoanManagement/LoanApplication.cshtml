@@ -1,0 +1,331 @@
+﻿@model LoanApplicationViewModel
+@{
+    ViewData["Title"] = "LoanApplication";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4 bg-light">
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="m-0 font-weight-bold text-primary">Employee's Provident Fund Loan Application</h5>
+                    <hr />
+
+                    <div class="form-group row">
+                        <div class="col-sm-4">
+                            <input type="text" data-parsley-trigger="keyup" class="form-control " id="membersName" placeholder="Search member">
+                         
+
+                        </div>
+                        <div class="col-sm-4">
+                            <button onclick="search()" type="button" class="btn btn-sm btn-primary" style="background-color:darkcyan; color:white" id="addcoa" value="View PF Statement">Search</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row clearfix">
+                <div class="col-12">
+                    <div class="card-body">
+                        <h5 class="m-0 font-weight-bold text-primary">Apply for Loan</h5>
+                        <hr />
+                        <div class="form-row">
+                            <div class="form-group col-md-7">
+                                <form id="FormId">
+                                    <div>
+                                        <div class="form-group row">
+                                            <input type="hidden" name="loanId" value="@Model.loanId" />
+                                            <input type="hidden" class="form-control" id="membersCode" name="">
+                                            <input type="hidden" id="memberId" name="pfmember" value="@Model.pfmember" /> 
+                                            <input type="hidden" id="employeeInfoId" name="employeeInfoId" value="@Model.employeeInfoId" />
+                                            <label for="settlemtntDate" class="col-sm-5 col-form-label">Application Date</label>
+                                            <div class="col-sm-6 input-group">
+                                                <input name="applicationDate" id="applicationDate" class="form-control input-group-sm" value="@Model.applicationDate" readonly />
+                                                <div class="input-group-prepend">
+                                                    <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label for="loanAmount" class="col-sm-5 col-form-label">Loan Amount</label>
+                                            <div class="col-sm-6 ">
+                                                <input type="number" class="form-control" onkeyup="ValidAmount()" name="loanAmount" id="loanAmount" value="@Model.loanAmount">
+                                            </div>
+                                        </div>
+
+                                    
+                                        <div class="form-group row d-none">
+                                            <label for="installmentAmount" class="col-sm-5 col-form-label">Installment Amount</label>
+                                            <div class="col-sm-6 ">
+                                                <input type="text" class="form-control"  name="installmentAmount" id="installmentAmount" value="@Model.installmentAmount">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label for="interestRate" class="col-sm-5 col-form-label">Interest Rate</label>
+                                            <div class="col-sm-6 ">
+                                                <input type="text" class="form-control" name="interestRate" id="interestRate" value="@Model.interestRate">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label for="installmentPeriod" class="col-sm-5 col-form-label">Installment Period</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control" name="" id="" readonly>
+                                                    @Model.installmentPeriod
+                                                    <option>Select Period</option>
+                                                    <option selected value="1">Monthly</option>
+                                                   @* <option value="2">Querterly </option>
+                                                    <option value="3">Half-Yearly </option>
+                                                    <option value="4">Yearly</option>*@
+                                                </select>
+                                            </div>
+                                        </div>
+                                          <div class="form-group row">
+                                            <label for="installmentPeriod" class="col-sm-5 col-form-label">Installment number</label>
+                                            <div class="col-sm-6">
+                                                <input type="text"  onkeyup="GetsettlemetDate()" class="form-control" name="installmentPeriod"  id="installmentPeriod"  value="">
+
+                                            </div>
+                                        </div>
+                                            <div class="form-group row ">
+                                            <label for="settlemtntDate" class="col-sm-5 col-form-label">Payment Date</label>
+                                            <div class="col-sm-6 input-group">
+                                                <input name="expectedDate" id="expectedDate" onchange="GetsettlemetDate()" class="form-control input-group-sm" value="@Model.expectedDate" readonly />
+                                                <div class="input-group-prepend">
+                                                    <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                      
+                                        <div class="form-group row">
+                                            <label for="settlementDate" class="col-sm-5 col-form-label">Expected Settlement Date</label>
+                                            <div class="col-sm-6 input-group">
+                                                <input name="expectedSettlementDate" id="expectedSettlementDate" class="form-control input-group-sm" value="@Model.expectedSettlementDate" readonly />
+                                                <div class="input-group-prepend">
+                                                    <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        
+                                       
+                                        <div class="form-group row">
+                                            <label for="note" class="col-sm-5 col-form-label">Note</label>
+                                            <div class="col-sm-6 ">
+                                                <textarea name="note" id="note" class="form-control input-group-sm"> @Model.note </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <br />
+                                    <div class="form-group">
+                                        <input type="button" class="btn btn-sm btn-default" id="reset" value="Reset" style="border: 1px solid #1bb394;">
+                                        <input type="button" class="btn btn-sm btn-success" id="submit" value="Apply">
+
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="form-group col-md-5">
+                                <table class="table invoice-table">
+                                    <tbody>
+                                        <tr>
+                                            <th>Members' ID:</th>
+                                            <td id="memId"> </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Members' Name:</th>
+                                            <td id="memberName"></td>
+                                        </tr> 
+                                        <tr>
+                                            <th>Designation:</th>
+                                            <td id="designation"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Department:</th>
+                                            <td id="department"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>PF Balance:</th>
+                                            <td id="contributionAmount"></td>
+                                        </tr>
+                                       @* <tr>
+                                            <th>E-mail:</th>
+                                            <td id="email"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Mobile No:</th>
+                                            <td id="mobile"></td>
+                                        </tr>     
+                                      
+                                        <tr>
+                                            <th>Member Type:</th>
+                                            <td id="memberType"></td>
+                                        </tr>*@
+                                        
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#expectedDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+        //$("#expectedSettlementDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+        $("#applicationDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+       
+
+        Common.Ajax('GET', '/ProvidentFund/Member/GetAllMembers', [], 'json', ajaxFunctionAllMembers, false);
+        $("#reset").on("click", function (event) {
+            $('#loanAmount').val('');
+            $('#applicationDate').val('');
+            $('#expectedDate').val('');
+            $('#installmentAmount').val('');
+            $('#installmentPeriod').val('');
+            $('#expectedSettlementDate').val('');
+            $('#interestRate').val('');
+            $('#note').val('');
+            $('#employeeInfoId').val('');
+        });
+
+    });
+
+    function search() {
+        var memId = $("#memberId").val();
+        if (memId == 0) {
+            swal('Warning', 'please try again', 'warning');
+            return false;
+        }
+        var url = '/global/api/GetAllMembersbyId/' + memId;
+        Common.Ajax('GET', url, [], 'json', ajaxGetAllmembersbyId);
+
+        var url2 = '/global/api/GetContributionAmountByMemberId/' + memId;
+        Common.Ajax('GET', url2, [], 'json', ajaxGetContributionAmount);
+
+
+    }
+    function ajaxFunctionAllMembers(response) {
+        console.log(response);
+        var GetMemberList = [];
+        $.each(response, function (id, option) {
+            var obj = new Object();
+            obj.key = option.Id;
+            obj.employeeInfoId = option.employeeInfo.Id;
+            obj.value = option.memberName + "(" + option.memberCode + ")";
+            GetMemberList[GetMemberList.length] = obj;
+        });
+
+        $('#membersName').autocomplete({
+            source: GetMemberList,
+            select: function (event, ui) {
+                $("#membersName").val(ui.item.value);
+                $("#memberId").val(ui.item.key);
+                $("#employeeInfoId").val(ui.item.employeeInfoId);
+            }
+        });
+    }
+
+
+   
+    function ajaxGetAllmembersbyId(response) {
+        console.log(response);
+        $("#memberName").html(response.memberName);
+        $("#mobile").html(response.mobile);
+        $("#email").html(response.email);
+        $("#memId").html(response.memberCode);
+        $("#department").html(response?.employeeInfo?.department?.deptName);
+        $("#designation").html(response?.employeeInfo?.lastDesignation?.designationName);
+       // $("#memberType").html(response?.memberType?.empType);
+    }
+
+   
+    
+    function ajaxGetContributionAmount(response) {
+        console.log(response);
+        $("#contributionAmount").html(response.contributionAmount);
+       
+    }
+
+    function ValidAmount()
+    {
+        var loanAmount= $("#loanAmount").val();
+        var contributionAmount= $("#contributionAmount").text();
+        var validLoanAmount = parseInt(contributionAmount) * 75/100; // 75% for BDBL 
+       
+        
+        if (parseInt(loanAmount) > parseInt(validLoanAmount)) 
+        {
+            swal('warning', 'Loan Amount is higer than PF Balance!', 'warning')
+          
+            $("#loanAmount").val(0);
+            return false;
+        }
+
+
+    }
+
+    function GetsettlemetDate(){
+        debugger
+         var expectedDate = $("#expectedDate").val();
+        var Tenure = $("#installmentPeriod").val();
+        var d = new Date(expectedDate);
+        var newDate = new Date(d.setMonth(d.getMonth() + parseInt(Tenure)));
+        $("#expectedSettlementDate").val(formatDate(newDate));
+    }
+     function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [day, month, year].join('-');
+    }
+
+    $('#submit').click(function () {
+        console.log($('#FormId').serializeArray());
+        var data = $('#FormId').serializeArray();
+
+        console.log(data[0].value)
+        swal({
+            title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+        }).then(function () {
+            $.ajax({
+                url: '/ProvidentFund/LoanManagement/LoanApplication',
+                type: 'POST',
+                data: data
+            }).done(function () {
+                if (data[0].value == 0) {
+                    swal('success', 'Loan Application Submit Successfully Done!', 'success').then(function () {
+                        location.reload();
+                       
+                        //window.location.href = '/ProvidentFund/LoanManagement/AllApplicationList';
+                    });
+                }
+                else {
+                    swal('success', 'Updated Successfully!', 'success').then(function () {
+                        //location.reload();
+                        window.location.href = '/ProvidentFund/LoanManagement/AllApplicationList';
+                    });;
+                }
+            }).fail(function () {
+                swal('warning', 'Failed!', 'warning');
+            })
+        });
+    })
+
+
+</script>

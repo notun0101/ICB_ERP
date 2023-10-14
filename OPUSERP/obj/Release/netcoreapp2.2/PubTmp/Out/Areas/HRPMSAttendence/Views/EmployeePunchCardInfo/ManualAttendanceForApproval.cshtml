@@ -1,0 +1,213 @@
+﻿@model EmpWithManualAttendence
+@{
+	ViewData["Title"] = "Manual Attendance Approval";
+
+}
+<link href="~/Assets/MD_Time_Picker/mdtimepicker.css" rel="stylesheet" />
+@section Style{
+	<style>
+		.redStar {
+			color: red;
+		}
+
+		ul.ui-autocomplete {
+			z-index: 99999999;
+		}
+	</style>
+}
+
+<div class="card" id="list">
+	<div class="card-header">
+		<h4>Manual Attendance For Approval</h4>
+	</div>
+	<div class="card-body">
+		<table class="table table-bordered  table-striped" id="attendenceTable">
+			<thead>
+				<tr>
+					<th>Sl.</th>
+					<th style="width: 49px;">Emp-Id</th>
+					<th>Employee Name</th>
+					<th>Designation</th>
+					<th>Login Date</th>
+					<th>Login Time</th>
+					<th>Out Time</th>
+					<th>Reason</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				@{
+					int i = 1;
+					@foreach (var data in Model.manualAttendanceApprovals.Where(x=>x.summaryId==8))
+                    {
+                        var _startTime = "";
+                        var _endTime = "";
+                        _startTime = data.startTime;
+                        _endTime = data.endTime;
+
+                        @*@if (data.startTime != null)
+
+                        {
+                            _startTime = data.startTime.Substring(data.startTime.Length - 7);
+                        };
+
+						@if (data?.endTime != null)
+						{
+							_endTime = data.endTime.Substring(data.endTime.Length - 8);
+						};*@
+
+
+
+						<tr>
+							<td style="text-align:center">@i .</td>
+							<td style="text-align:center">@data.employeeCode</td>
+							<td>@data.nameEnglish</td>
+							<td>@data.designationName</td>
+							<td style="text-align:center">@data.workDate</td>
+							<td style="text-align:center">@_startTime</td>
+							<td style="text-align:center">@_endTime</td>
+							<td style="text-align:center">@data.reason</td>
+							<td style="text-align:center">
+								@if (data.summaryId == 8)
+								{
+									<a href="javascript:void(0)" onclick="ApproveManualLeave(@data.Id)" class="btn btn-success btn-sm">Approve</a>
+									<a href="javascript:void(0)" onclick="ApproveManualReject(@data.Id)" class="btn btn-danger btn-sm">Reject</a>
+								}
+								else if (data.summaryId == 9)
+								{
+									<a href="javascript:void(0)" class="btn btn-info btn-sm" disable="disabled">Approved</a>
+								}
+								else if (data.summaryId == 10)
+								{
+									<a href="javascript:void(0)" class="btn btn-danger btn-sm" disable="disabled">Rejected</a>
+								}
+							</td>
+						</tr>
+						i++;
+					}
+				}
+
+			</tbody>
+		</table>
+	</div>
+</div>
+
+
+
+
+
+@section Scripts{
+	<script src="~/Assets/MD_Time_Picker/mdtimepicker.js"></script>
+	<script>
+
+        $(document).ready(function () {
+            
+			$('#attendenceTable').DataTable({
+				stateSave: false,
+				dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+					"<'row'<'col-sm-12't>>" +
+					"<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+				buttons: [
+					{
+						extend: 'excelHtml5',
+						text: '<i class="fa fa-file-excel"></i> Excel',
+						titleAttr: 'Excel',
+						exportOptions: {
+							columns: [0, 1, 2, 3, 4, 5]
+						},
+						title: "ERP-HRPMS",
+						messageTop: 'CV Black List',
+						class: 'btn btn-info'
+					},
+					{
+						extend: 'csvHtml5',
+						text: '<i class="fa fa-file-excel"></i> CSV',
+						titleAttr: 'CSV',
+						exportOptions: {
+							columns: [0, 1, 2, 3, 4, 5]
+						},
+						title: "ERP-HRPMS",
+						messageTop: 'CV Black List'
+					},
+					{
+						extend: 'print',
+						text: '<i class="fa fa-print"></i> Print',
+						titleAttr: 'Print',
+						title: "ERP-HRPMS",
+						messageTop: 'CV Black List',
+						exportOptions: {
+							columns: [0, 1, 2, 3, 4, 5]
+						},
+						customize: function (doc) {
+							$(doc.document.body).find('h1').css('font-size', '20pt');
+							$(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+							$(doc.document.body).find('h1').css('text-align', 'center');
+						}
+					}
+				]
+			});
+
+        });
+
+		function ApproveManualLeave(Id) {
+			swal({
+				title: 'Are you sure?', text: 'Do you want to Approve!', type: 'warning', showCancelButton: true, confirmButtonColor: '#007ACC', cancelButtonColor: '#d33', confirmButtonText: 'Yes, Approve it!'
+			}).then(function () {
+				$.ajax({
+					url: '@Url.Action("ApproveManualAttendance", "EmployeePunchCardInfo")',
+					type: 'Post',
+					data: { Id: Id}
+				})
+				.done(function () {
+					swal('Success', 'Updated Successfully!', 'success').then(function () {
+						location.reload();
+					});
+				})
+				.fail(function () {
+					alert("Unable to Approve. Please Try Again");
+				});
+			});
+		}	
+
+
+		function ApproveManualReject(Id) {
+			swal({
+				title: 'Are you sure?', text: 'Do you want to Reject!', type: 'warning', showCancelButton: true, confirmButtonColor: '#007ACC', cancelButtonColor: '#d33', confirmButtonText: 'Yes, Approve it!'
+			}).then(function () {
+				$.ajax({
+					url: '@Url.Action("RejectManualAttendance", "EmployeePunchCardInfo")',
+					type: 'Post',
+					data: { Id: Id}
+				})
+				.done(function () {
+					swal('Success', 'Rejected Successfully!', 'success').then(function () {
+						location.reload();
+					});
+				})
+				.fail(function () {
+					alert("Unable to Rejected. Please Try Again");
+				});
+			});
+		}	
+
+
+
+
+
+        function formatDate(date) {
+            date = new Date(date);
+            var year = date.getFullYear(),
+                month = date.getMonth() + 1, // months are zero indexed
+                day = date.getDate(),
+                hour = date.getHours(),
+                minute = date.getMinutes(),
+                second = date.getSeconds(),
+                hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+                minuteFormatted = minute < 10 ? "0" + minute : minute,
+                morning = hour < 12 ? "am" : "pm";
+
+            return day + "/" + + month + "/" + year;
+        }
+	</script>
+}
+

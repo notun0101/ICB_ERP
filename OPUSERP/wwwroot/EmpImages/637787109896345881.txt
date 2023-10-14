@@ -1,0 +1,17 @@
+Hide and Show Script:-
+
+<button type="button" id="hide">Hide</button>
+<button type="button" id="show">show</button>
+
+
+<script>
+$(document).ready(function(){
+	$("#hide").click(function(){
+	$("#list").hide();
+	});
+	
+	$("#show").click(function(){
+	$("#list").show();
+});
+});
+</script>

@@ -1,0 +1,89 @@
+﻿@model EmailingViewModel
+@{
+    ViewData["Title"] = "Check Email Sending Status";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h4>Email Sending Status</h4>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped" id="certificateSentTbl">
+            <thead>
+                <tr>
+                    <th>Emp Id</th>
+                    <th>Emp Name</th>
+                    <th>Designation</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.emailStatusViewModels)
+                {
+                    <tr>
+                        <td>@item.employeeCode</td>
+                        <td>@item.nameEnglish</td>
+                        <td>@item.designationName</td>
+                        <td>@item.emailAddress</td>
+                        <td>
+                            @if (item.status == "Send")
+                            {
+                                <span class="badge badge-success">Sent</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-warning">Pending</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.status != "Send")
+                            {
+                                <a href="javascript:void(0)" onclick="SendIndividualSalaryCertificate(@item.Id)" class="btn btn-success btn-sm">Send</a>
+                            }
+                            else
+                            {
+                                <a href="@item.url" target="_blank" class="btn btn-info btn-sm">View</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{ 
+    <script>
+        $(document).ready(function(){
+            $('#certificateSentTbl').DataTable({
+                dom: 'Bfrtip',
+                buttons: [{
+                    extend: 'excel',
+                    text: '<i class="fas fa-file-excel"></i> Export to Excel',
+                    titleAttr: 'Click to Export',
+                    //title: 'Click to Export',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                }]
+            });
+        })
+
+        function SendIndividualSalaryCertificate(emailLogId) {
+            $.ajax({
+		        url: '@Url.Action("SendIndividualSalaryCertificate", "Emailing")',
+		        type: 'POST',
+                data: { emailLogId: emailLogId }
+	        }).done(function () {
+                swal('success', 'Sent Success!', 'success').then(function () {
+                    location.reload();
+                });
+	        }).fail(function () {
+		        swal('warning', 'Sending Faild!', 'warning');
+	        })
+        }
+    </script>
+}

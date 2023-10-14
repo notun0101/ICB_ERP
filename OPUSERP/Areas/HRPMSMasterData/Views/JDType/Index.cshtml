@@ -1,0 +1,236 @@
+﻿@model JDTypeViewModel
+
+@{
+    ViewData["TitleMD"] = "JDType";
+    Layout = "~/Areas/HRPMSMasterData/Views/Shared/_MasterDataForm.cshtml";
+}
+
+
+@section StyleMD{
+    <style>
+        .redStar {
+            color: red;
+        }
+    </style>
+}
+
+
+    <div class="card" style="width: 100%;">
+        <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+            <h5 class="m-0 font-weight-bold text-primary">Job Description</h5>
+            <a class=' mr-5' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=5702'><i class="fas fa-chevron-circle-left" style="font-size:33px;"></i></a>
+
+        </div>
+        <div class="card-body">
+            @*<a class='btn btn-outline-info mr-3' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=5701'><i class="fas fa-backward"></i></a>
+
+            <h5 class="card-title" style="color: black">Job Description Info</h5>
+            <hr>*@
+            <div class="container">
+                <form asp-area="HRPMSMasterData" id="FormId" asp-controller="JDType" asp-action="Index" method="post" data-parsley-validate="parsley">
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+
+                    <div class="form-group row">
+                        <label for="roleId" class="col-sm-3 col-form-label">Role ID <span style="float:right;" class="redStar">*</span></label>
+                        <div class="col-sm-9">
+                            <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="roleId" id="roleId">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <input type="hidden" name="JDTypeId" id="JDTypeId" value="0" />
+
+                        <label for="JDRoleName" class="col-sm-3 col-form-label">Role Name <span style="float:right;" class="redStar">*</span></label>
+                        <div class="col-sm-9">
+                            <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="JDRoleName" id="JDRoleName">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="departmnetTypeId" class="col-sm-3 col-form-label">Department</label>
+                        <div class="col-sm-9">
+
+                            <select class="form-control" id="departmnetTypeId" value="" name="departmnetTypeId" style="width: 752px;">
+                                <option value="">Select</option>
+                                @foreach (var data in Model.departments)
+                                {
+                                    <option value="@data.Id">@data.deptName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="designationTypeId" class="col-sm-3 col-form-label">Designation</label>
+                        <div class="col-sm-9">
+
+                            <select class="form-control" id="designationTypeId" value="" name="designationTypeId" style="width: 752px;">
+                                <option value="">Select</option>
+                                @foreach (var data in Model.designations)
+                                {
+                                    <option value="@data.Id">@data.designationName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="divisionTypeId" class="col-sm-3 col-form-label">Division</label>
+                        <div class="col-sm-9">
+
+                            <select class="form-control" id="divisionTypeId" value="" name="divisionTypeId">
+                                <option value="">Select</option>
+                                @foreach (var data in Model.divisions)
+                                {
+                                    <option value="@data.Id">@data.divisionName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <hr>
+                    @*<button type="button" id="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+                    <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+                    <button type="button" id="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Job Description List</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="JDTypeTable">
+                    <thead>
+                        <tr>
+                            <th>Role ID</th>
+                            <th>Role Name</th>
+                            <th>Department</th>
+                            <th>Designatin</th>
+                            <th>Division</th>
+                            <th>Action</th>
+
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.jDTypes)
+                        {
+                        <tr>
+                            <td>@data.roleId</td>
+                            <td>@data.JDRoleName</td>
+                            <td>@data.department?.deptName</td>
+                            <td>@data.designation?.designationName</td>
+                            <td>@data.division?.divisionName</td>
+                            <td>
+                                <a class="btn btn-success" onclick="Edit(@data.Id, '@data.roleId', '@data.JDRoleName','@data.departmentId','@data.designationId','@data.divisionId')" href="#"><i class="fa fa-edit"></i></a>
+                                <a class="btn btn-danger" href="javascript:void(0)" onclick="DeleteMaster(@data.Id)"><i class="fa fa-trash-alt"></i></a>
+
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ScriptsMD{
+    <script>
+
+        $(document).ready(function () {
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+            });
+            $("#departmnetTypeId").select2();
+            $("#designationTypeId").select2();
+            $("#JDType").addClass("active");
+            $('#JDTypeTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 5]
+                        },
+                        title: "Job Description List",
+                        messageTop: 'List Of Job Description List',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 5]
+                        },
+                        title: "Job Description List",
+                        messageTop: 'List Of Job Description List',
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "Job Description List",
+                        exportOptions: {
+                            columns: [0, 1, 2, 3,5]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+        });
+
+        function Edit(Id, roleId,JDRoleName, departmnetTypeId, designationTypeId, divisionTypeId) {
+            $("#JDTypeId").val(Id);
+            $("#roleId").val(roleId);
+            $("#JDRoleName").val(JDRoleName);
+            $("#departmnetTypeId").val(departmnetTypeId);
+            $("#designationTypeId").val(designationTypeId);
+            $("#departmnetTypeId").val(departmnetTypeId);
+            $("#designationTypeId").val(designationTypeId);
+            $("#divisionTypeId").val(divisionTypeId);
+            $('#departmnetTypeId').trigger('change');
+            $('#designationTypeId').trigger('change');
+        }
+        function DeleteMaster(Id) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+
+                $.ajax({
+                    url: '@Url.Action("DeleteJDType", "JDType")',
+                    data: { Id: Id },
+                    type: 'POST',
+                })
+                    .done(function () {
+                        swal('', 'Deleted Successfully!', 'success');
+                        window.location.href = "/HRPMSMasterData/JDType/Index";
+                    })
+                    .fail(function () {
+                        swal('Cancelled', 'It will not be deleted. Please try again later !!!', 'error');
+                    });
+            });
+        }
+    </script>
+}
+
+

@@ -1,0 +1,133 @@
+﻿@model TrainingEnrollViewModel
+@{
+    ViewData["Title"] = "Course Wise Training Report";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<style>
+    body {
+        color: black !important;
+    }
+
+ 
+
+    #footertbl tr td p {
+        margin: 0;
+    }
+</style>
+<div class="text-center p-4">
+    <h5 style="font-weight: 900">Bangladesh Development Bank Limited</h5>
+    <h6 style="text-decoration: underline">BDBL Bhaban-2 (Level-16), 12, Karwan Bazar, Dhaka-1215</h6>
+    <h6 style="text-decoration: underline">Training Institute</h6>
+    <br />
+    <h6 style="">Training Course/Workshop on:</h6>
+    <h6 style="">"@Model.courseWiseTrainings?.FirstOrDefault()?.course"</h6>
+    <h6 style="text-decoration: underline">@ViewBag.startDate to @ViewBag.endDate</h6>
+</div>
+
+@if (Model.courseWiseTrainings.Where(x => x.trainingType == 1).Count() != 0)
+{
+    <h5><u>In House Training:</u></h5>
+    <table class="report-table-1" id="participantTable" border="1" cellpadding="3" cellspacing="0">
+        <thead>
+            <tr>
+                <th>SL No.</th>
+                <th>Name of The Course</th>
+                <th>No. of Participants</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Duration (Working Days)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int i = 1;
+                @foreach (var item in Model.courseWiseTrainings.Where(x => x.trainingType == 1))
+                {
+                    <tr>
+                        <td style="text-align:center;">@i</td>
+                        <td>@item.course</td>
+                        <td  style="text-align:center;">@item.perticipants</td>
+                        <td  style="text-align:center;">@item.startDate?.ToString("dd-MM-yyyy")</td>
+                        <td  style="text-align:center;">@item.endDate?.ToString("dd-MM-yyyy")</td>
+                        <td  style="text-align:center;">@item.durationDays</td>
+                    </tr>
+                    i++;
+                }
+            }
+
+        </tbody>
+    </table>
+    <br />
+}
+
+@if (Model.courseWiseTrainings.Where(x => x.trainingType == 3).Count() != 0)
+{
+    <h5><u>Training Courses outside the Training Institute:</u></h5>
+    <table class="report-table-1" id="participantTable" cellpadding="3" cellspacing="0" border="1">
+        <thead>
+            <tr>
+                <th>SL No.</th>
+                <th>Name of The Course</th>
+                <th>No. of Participants</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Duration (Working Days)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int i = 1;
+            }
+            @foreach (var item in Model.courseWiseTrainings.Where(x => x.trainingType == 3))
+            {
+                <tr>
+                    <td>@i</td>
+                    <td>@item.course</td>
+                    <td>@item.perticipants</td>
+                    <td>@item.startDate?.ToString("dd-MM-yyyy")</td>
+                    <td>@item.endDate?.ToString("dd-MM-yyyy")</td>
+                    <td>@item.durationDays</td>
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+    <br />
+}
+
+
+@if (Model.courseWiseTrainings.Where(x => x.trainingType == 2).Count() != 0)
+{
+    <h5><u>Foreign Training:</u></h5>
+    <table class="report-table-1" id="participantTable"  border="1" cellpadding="3" cellspacing="0">
+        <thead>
+            <tr>
+                <th>SL No.</th>
+                <th>Name of The Course</th>
+                <th>No. of Participants</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Duration (Working Days)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int i = 1;
+            }
+            @foreach (var item in Model.courseWiseTrainings.Where(x => x.trainingType == 2))
+            {
+                <tr>
+                    <td>@i</td>
+                    <td>@item.course</td>
+                    <td>@item.perticipants</td>
+                    <td>@item.startDate?.ToString("dd-MM-yyyy")</td>
+                    <td>@item.endDate?.ToString("dd-MM-yyyy")</td>
+                    <td>@item.durationDays</td>
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+    <br />
+}

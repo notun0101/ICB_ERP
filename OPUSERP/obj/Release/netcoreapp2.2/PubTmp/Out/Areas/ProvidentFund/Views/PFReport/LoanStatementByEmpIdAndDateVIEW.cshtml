@@ -1,0 +1,93 @@
+﻿@model OPUSERP.ProvidentFund.VMS.PFReportViewModel
+@{
+    ViewData["Title"] = "ReportCenter";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+        <div class="container-fluid">
+            <div class="row" style="padding-top:0px;">
+                <div class="col-2">
+                    <img src="~/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="OPUS ERP" style="height:50px;" />
+                </div>
+                <div class="col-8" style="color:black;text-align:center">
+                    <h3>@Model.companies.FirstOrDefault().companyName</h3>
+                    <h5>@Model.companies.FirstOrDefault().addressLine</h5>
+                    <br />
+                    <h5 style="text-align:center;">Statement for Employee's Trustee Loan From <br /> @ViewBag.fromDate To @ViewBag.toDate</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid" style="color:black;">
+            <hr style="border:1px solid grey;">
+            <div class="row" style="padding: 5px 0px 5px 0px;">
+                <div class="col-10">
+                    <p>Name: @Model.loanStatementVMs?.FirstOrDefault()?.nameEnglish</p>
+                    <p>EMP Id: @Model.loanStatementVMs?.FirstOrDefault()?.employeeCode</p>
+                    <p>Designation: @Model.loanStatementVMs?.FirstOrDefault()?.designationName</p>
+                    <p>Department: @Model.loanStatementVMs?.FirstOrDefault()?.deptName</p>
+                </div>
+            </div>
+            <div class="row" style="padding: 0px 15px 0px 15px;">
+                <table class="table table-bordered">
+                    <thead>
+
+                        <tr class="text-center">
+                   
+                            <th class="align-text-top">Trans. Date</th>
+                            <th class="align-text-top">Particulars</th>
+                            <th class="align-text-top">Description</th>
+                            <th class="align-text-top">Debit</th>
+                            <th class="align-text-top">Credit</th>
+                            <th class="align-text-top">Balance</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            decimal? loanBalance = 0;
+                            decimal? totalDebit = 0;
+                            decimal? totalCredit = 0;
+
+                            int sl = 1;
+                        }
+                        @foreach (var item in Model.loanStatementVMs)
+                        {
+                            loanBalance += @item.debit - item.credit;
+                            totalDebit += @item.debit;
+                            totalCredit += item.credit;
+
+                            <tr>
+                               
+                                <td width="120px" class="">@item.transectionDate?.ToString("dd-MMM-yy")</td>
+                                <td class="">@item.transectionDate?.ToString("MMM yyyy")</td>
+                                <td>@item.particulars</td>
+                                <td class="text-right">@item.debit?.ToString("N2")</td>
+                                <td class="text-right">@item.credit?.ToString("N2")</td>
+                                <td class="text-right">@loanBalance</td>
+
+                            </tr>
+
+
+                            sl++;
+
+                        }
+                        <tr>
+                            <td colspan="3" class="text-right">Total </td>
+                            <td class="text-right">@totalDebit</td>
+                            <td class="text-right">@totalCredit</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,2260 @@
+﻿@model ConferenceBookingViewModel
+@{
+	ViewData["Title"] = "CalenderBar";
+
+	var Shapla = Model.hallRentalApplicationInfos.Where(x => x.hallInfoId == 1).ToList();
+	var Krisnochura = Model.hallRentalApplicationInfos.Where(x => x.hallInfoId == 2).ToList();
+	var Kopotakkho = Model.hallRentalApplicationInfos.Where(x => x.hallInfoId == 3).ToList();
+	var Dhanshiri = Model.hallRentalApplicationInfos.Where(x => x.hallInfoId == 4).ToList();
+	var Shurma = Model.hallRentalApplicationInfos.Where(x => x.hallInfoId == 5).ToList();
+	var ConferenceRoom7 = Model.hallRentalApplicationInfos.Where(x => x.hallInfoId == 6).ToList();
+	var ConferenceRoomEast = Model.hallRentalApplicationInfos.Where(x => x.hallInfoId == 7).ToList();
+	var ConferenceRoomWest = Model.hallRentalApplicationInfos.Where(x => x.hallInfoId == 8).ToList();
+	var ConferenceRoom9 = Model.hallRentalApplicationInfos.Where(x => x.hallInfoId == 9).ToList();
+
+}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+<style>
+	.slot-section {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 50px;
+	}
+
+	.slot {
+		width: 6.25%;
+		height: 65px;
+		border: 1px solid black;
+		position: relative;
+	}
+
+		.slot span {
+			position: absolute;
+			font-size: 20px;
+			top: -31px;
+			left: -18px;
+		}
+
+		.slot input[type="checkbox"] {
+			width: 100%;
+			height: 100%;
+			opacity: 0;
+		}
+
+
+	.not-booked {
+		background-color: greenyellow;
+	}
+
+	.pending {
+		background-color: green;
+	}
+
+	.booked {
+		background-color: red;
+	}
+
+	#header {
+		padding: 5px;
+		border: 1px solid gray;
+		font-size: 20px;
+		font-weight: 500;
+	}
+	.outer-slot-section {
+		height: 693px;
+		overflow: scroll;
+	}
+</style>
+<script>
+	var shapla = 0;
+	var krisnochura = 0;
+	var kopotakkho = 0;
+	var dhanshiri = 0;
+	var shurma = 0;
+	var ConferenceRoom7 = 0;
+	var ConferenceRoomEast = 0;
+	var ConferenceRoomWest = 0;
+	var ConferenceRoom9 = 0;
+</script>
+
+<div class="container">
+	<div class="row mt-4" >
+		<div class="col-md-12" id="header">
+			<div class="row">
+				<div class="col-md-4">
+					<span>Booking Date: </span><span>@ViewBag.date</span>
+				</div>
+				<div class="col-md-4">
+					<span id="conferenceName"></span>
+				</div>
+				<div class="col-md-4" style="text-align: right !important;">
+					<span>Time: </span><span class="time-difference" id="shaplatiming">0.00-0.00</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row outer-slot-section">
+		<div class="col-md-12">
+			<h1>Main Building</h1>
+		</div>
+		<div class="col-md-12">
+			<div style="display: flex; justify-content: space-between;">
+                <h2>1. Shapla (1st floor)[ <i class="fa fa-users"></i>  - 100 <i class="fa fa-desktop"></i>  - 5]</h2>
+				@*<h2 class="time-difference" id="shaplatiming"></h2>*@
+			</div>
+		</div>
+
+		@* Shapla *@
+
+		@if (Shapla.Count() > 0)
+		{
+			var starttimeshapla = "";
+			var endtimeshapla = "";
+			@foreach (var item in Shapla)
+			{
+				starttimeshapla += item.startTime + ",";
+				endtimeshapla += item.endTime + ",";
+			}
+			@if (starttimeshapla.Length > 1)
+			{
+				starttimeshapla = starttimeshapla.Remove(starttimeshapla.Length - 1);
+				endtimeshapla = endtimeshapla.Remove(endtimeshapla.Length - 1);
+			}
+			<script>
+				shapla = 1;
+			</script>
+			<div class="col-md-12 slot-section shapla">
+				<input type="text" id="startshapla" hidden value="@starttimeshapla" />
+				<input type="text" id="endshapla" hidden value="@endtimeshapla" />
+				<input type="text" class="confName" hidden value="Shapla (1st floor)" />
+
+				<div class="slot s1">
+					<span>9.00</span>
+					<input type="checkbox" name="slotchk" value="9.00">
+				</div>
+				<div class="slot s2">
+					<span>9.30</span>
+					<input type="checkbox" name="slotchk" value="9.30">
+				</div>
+				<div class="slot s3">
+					<span>10.00</span>
+					<input type="checkbox" name="slotchk" value="10.00">
+				</div>
+				<div class="slot s4">
+					<span>10.30</span>
+					<input type="checkbox" name="slotchk" value="10.30">
+				</div>
+				<div class="slot s5">
+					<span>11.00</span>
+					<input type="checkbox" name="slotchk" value="11.00">
+				</div>
+				<div class="slot s6">
+					<span>11.30</span>
+					<input type="checkbox" name="slotchk" value="11.30">
+				</div>
+				<div class="slot s7">
+					<span>12.00</span>
+					<input type="checkbox" name="slotchk" value="12.00">
+				</div>
+				<div class="slot s8">
+					<span>12.30</span>
+					<input type="checkbox" name="slotchk" value="12.30">
+				</div>
+				<div class="slot s9">
+					<span>1.00</span>
+					<input type="checkbox" name="slotchk" value="1.00">
+				</div>
+				<div class="slot s10">
+					<span>1.30</span>
+					<input type="checkbox" name="slotchk" value="1.30">
+				</div>
+				<div class="slot s11">
+					<span>2.00</span>
+					<input type="checkbox" name="slotchk" value="2.00">
+				</div>
+				<div class="slot s12">
+					<span>2.30</span>
+					<input type="checkbox" name="slotchk" value="2.30">
+				</div>
+				<div class="slot s13">
+					<span>3.00</span>
+					<input type="checkbox" name="slotchk" value="3.00">
+				</div>
+				<div class="slot s14">
+					<span>3.30</span>
+					<input type="checkbox" name="slotchk" value="3.30">
+				</div>
+				<div class="slot s15">
+					<span>4.00</span>
+					<input type="checkbox" name="slotchk" value="4.00">
+				</div>
+				<div class="slot s16">
+					<span>4.30</span>
+					<input type="checkbox" name="slotchk" value="4.30">
+				</div>
+				<div class="slot s17">
+					<span>5.00</span>
+					<input type="checkbox" name="slotchk" value="5.00">
+				</div>
+			</div>
+		}
+		else
+		{
+			<div class="col-md-12 slot-section shapla">
+				<div class="slot s1">
+					<span>9.00</span>
+					<input type="checkbox" name="slotchk" value="9.00">
+				</div>
+				<div class="slot s2">
+					<span>9.30</span>
+					<input type="checkbox" name="slotchk" value="9.30">
+				</div>
+				<div class="slot s3">
+					<span>10.00</span>
+					<input type="checkbox" name="slotchk" value="10.00">
+				</div>
+				<div class="slot s4">
+					<span>10.30</span>
+					<input type="checkbox" name="slotchk" value="10.30">
+				</div>
+				<div class="slot s5">
+					<span>11.00</span>
+					<input type="checkbox" name="slotchk" value="11.00">
+				</div>
+				<div class="slot s6">
+					<span>11.30</span>
+					<input type="checkbox" name="slotchk" value="11.30">
+				</div>
+				<div class="slot s7">
+					<span>12.00</span>
+					<input type="checkbox" name="slotchk" value="12.00">
+				</div>
+				<div class="slot s8">
+					<span>12.30</span>
+					<input type="checkbox" name="slotchk" value="12.30">
+				</div>
+				<div class="slot s9">
+					<span>1.00</span>
+					<input type="checkbox" name="slotchk" value="1.00">
+				</div>
+				<div class="slot s10">
+					<span>1.30</span>
+					<input type="checkbox" name="slotchk" value="1.30">
+				</div>
+				<div class="slot s11">
+					<span>2.00</span>
+					<input type="checkbox" name="slotchk" value="2.00">
+				</div>
+				<div class="slot s12">
+					<span>2.30</span>
+					<input type="checkbox" name="slotchk" value="2.30">
+				</div>
+				<div class="slot s13">
+					<span>3.00</span>
+					<input type="checkbox" name="slotchk" value="3.00">
+				</div>
+				<div class="slot s14">
+					<span>3.30</span>
+					<input type="checkbox" name="slotchk" value="3.30">
+				</div>
+				<div class="slot s15">
+					<span>4.00</span>
+					<input type="checkbox" name="slotchk" value="4.00">
+				</div>
+				<div class="slot s16">
+					<span>4.30</span>
+					<input type="checkbox" name="slotchk" value="4.30">
+				</div>
+				<div class="slot s17">
+					<span>5.00</span>
+					<input type="checkbox" name="slotchk" value="5.00">
+				</div>
+			</div>
+		}
+		<div class="col-md-12">
+			<a href="javascript:void(0)" type="button" class="btn btn-success" onclick="next(1,'@ViewBag.date')" name="name">Next</a>
+		</div>
+
+
+
+
+		@*Krisnochura*@
+		<div class="col-md-12">
+			<div style="display: flex; justify-content: space-between;">
+				<h2>2.Krisnochura (3rd floor) [ <i class="fa fa-users"></i>  - 150 <i class="fa fa-desktop"></i>  - 5]</h2>
+				@*<h2 class="time-difference" id="krisnochuratiming"></h2>*@
+			</div>
+		</div>
+
+		@if (Krisnochura.Count() > 0)
+		{
+			var starttimekrisnochura = "";
+			var endtimekrisnochura = "";
+			@foreach (var item in Krisnochura)
+			{
+				starttimekrisnochura += item.startTime + ",";
+				endtimekrisnochura += item.endTime + ",";
+			}
+			@if (starttimekrisnochura.Length > 1)
+			{
+				starttimekrisnochura = starttimekrisnochura.Remove(starttimekrisnochura.Length - 1);
+				endtimekrisnochura = endtimekrisnochura.Remove(endtimekrisnochura.Length - 1);
+			}
+			<script>
+				krisnochura = 1;
+			</script>
+			<div class="col-md-12 slot-section krisnochura">
+				<input type="text" id="startkrisnochura" hidden value="@starttimekrisnochura" />
+				<input type="text" id="endkrisnochura" hidden value="@endtimekrisnochura" />
+				<input type="text" class="confName" hidden value="Krisnochura (3rd floor)" />
+
+				<div class="slot s1">
+					<span>9.00</span>
+					<input type="checkbox" name="slotchk" value="9.00">
+				</div>
+				<div class="slot s2">
+					<span>9.30</span>
+					<input type="checkbox" name="slotchk" value="9.30">
+				</div>
+				<div class="slot s3">
+					<span>10.00</span>
+					<input type="checkbox" name="slotchk" value="10.00">
+				</div>
+				<div class="slot s4">
+					<span>10.30</span>
+					<input type="checkbox" name="slotchk" value="10.30">
+				</div>
+				<div class="slot s5">
+					<span>11.00</span>
+					<input type="checkbox" name="slotchk" value="11.00">
+				</div>
+				<div class="slot s6">
+					<span>11.30</span>
+					<input type="checkbox" name="slotchk" value="11.30">
+				</div>
+				<div class="slot s7">
+					<span>12.00</span>
+					<input type="checkbox" name="slotchk" value="12.00">
+				</div>
+				<div class="slot s8">
+					<span>12.30</span>
+					<input type="checkbox" name="slotchk" value="12.30">
+				</div>
+				<div class="slot s9">
+					<span>1.00</span>
+					<input type="checkbox" name="slotchk" value="1.00">
+				</div>
+				<div class="slot s10">
+					<span>1.30</span>
+					<input type="checkbox" name="slotchk" value="1.30">
+				</div>
+				<div class="slot s11">
+					<span>2.00</span>
+					<input type="checkbox" name="slotchk" value="2.00">
+				</div>
+				<div class="slot s12">
+					<span>2.30</span>
+					<input type="checkbox" name="slotchk" value="2.30">
+				</div>
+				<div class="slot s13">
+					<span>3.00</span>
+					<input type="checkbox" name="slotchk" value="3.00">
+				</div>
+				<div class="slot s14">
+					<span>3.30</span>
+					<input type="checkbox" name="slotchk" value="3.30">
+				</div>
+				<div class="slot s15">
+					<span>4.00</span>
+					<input type="checkbox" name="slotchk" value="4.00">
+				</div>
+				<div class="slot s16">
+					<span>4.30</span>
+					<input type="checkbox" name="slotchk" value="4.30">
+				</div>
+				<div class="slot s17">
+					<span>5.00</span>
+					<input type="checkbox" name="slotchk" value="5.00">
+				</div>
+			</div>
+		}
+		else
+		{
+			<div class="col-md-12 slot-section krisnochura">
+				<div class="slot s1">
+					<span>9.00</span>
+					<input type="checkbox" name="slotchk" value="9.00">
+				</div>
+				<div class="slot s2">
+					<span>9.30</span>
+					<input type="checkbox" name="slotchk" value="9.30">
+				</div>
+				<div class="slot s3">
+					<span>10.00</span>
+					<input type="checkbox" name="slotchk" value="10.00">
+				</div>
+				<div class="slot s4">
+					<span>10.30</span>
+					<input type="checkbox" name="slotchk" value="10.30">
+				</div>
+				<div class="slot s5">
+					<span>11.00</span>
+					<input type="checkbox" name="slotchk" value="11.00">
+				</div>
+				<div class="slot s6">
+					<span>11.30</span>
+					<input type="checkbox" name="slotchk" value="11.30">
+				</div>
+				<div class="slot s7">
+					<span>12.00</span>
+					<input type="checkbox" name="slotchk" value="12.00">
+				</div>
+				<div class="slot s8">
+					<span>12.30</span>
+					<input type="checkbox" name="slotchk" value="12.30">
+				</div>
+				<div class="slot s9">
+					<span>1.00</span>
+					<input type="checkbox" name="slotchk" value="1.00">
+				</div>
+				<div class="slot s10">
+					<span>1.30</span>
+					<input type="checkbox" name="slotchk" value="1.30">
+				</div>
+				<div class="slot s11">
+					<span>2.00</span>
+					<input type="checkbox" name="slotchk" value="2.00">
+				</div>
+				<div class="slot s12">
+					<span>2.30</span>
+					<input type="checkbox" name="slotchk" value="2.30">
+				</div>
+				<div class="slot s13">
+					<span>3.00</span>
+					<input type="checkbox" name="slotchk" value="3.00">
+				</div>
+				<div class="slot s14">
+					<span>3.30</span>
+					<input type="checkbox" name="slotchk" value="3.30">
+				</div>
+				<div class="slot s15">
+					<span>4.00</span>
+					<input type="checkbox" name="slotchk" value="4.00">
+				</div>
+				<div class="slot s16">
+					<span>4.30</span>
+					<input type="checkbox" name="slotchk" value="4.30">
+				</div>
+				<div class="slot s17">
+					<span>5.00</span>
+					<input type="checkbox" name="slotchk" value="5.00">
+				</div>
+			</div>
+		}
+		<div class="col-md-12">
+			<a href="javascript:void(0)" type="button" class="btn btn-success" onclick="next(2,'@ViewBag.date')" name="name">Next</a>
+		</div>
+
+
+
+		<div class="col-md-12 mt-4">
+			<h1>NCCOM Building</h1>
+		</div>
+		@*Kopotakkho*@
+		<div class="col-md-12">
+			<div style="display: flex; justify-content: space-between;">
+				<h2>1. Kopotakkho (1st floor) [ <i class="fa fa-users"></i>  - 100 <i class="fa fa-desktop"></i>  - 4]</h2>
+				@*<h2 class="time-difference" id="kopotakkhotiming"></h2>*@
+			</div>
+		</div>
+
+		@if (Kopotakkho.Count() > 0)
+		{
+			var starttimekopotakkho = "";
+			var endtimekopotakkho = "";
+			@foreach (var item in Kopotakkho)
+			{
+				starttimekopotakkho += item.startTime + ",";
+				endtimekopotakkho += item.endTime + ",";
+			}
+			@if (starttimekopotakkho.Length > 1)
+			{
+				starttimekopotakkho = starttimekopotakkho.Remove(starttimekopotakkho.Length - 1);
+				endtimekopotakkho = endtimekopotakkho.Remove(endtimekopotakkho.Length - 1);
+			}
+
+			<script>
+				kopotakkho = 1;
+			</script>
+			<div class="col-md-12 slot-section kopotakkho">
+				<input type="text" id="startkopotakkho" hidden value="@starttimekopotakkho" />
+				<input type="text" id="endkopotakkho" hidden value="@endtimekopotakkho" />
+				<input type="text" class="confName" hidden value="Kopotakkho (1st floor)" />
+
+				<div class="slot s1 s_9.00">
+					<span>9.00</span>
+					<input type="checkbox" name="slotchk" value="9.00">
+				</div>
+				<div class="slot s2 s_9.30">
+					<span>9.30</span>
+					<input type="checkbox" name="slotchk" value="9.30">
+				</div>
+				<div class="slot s3 s_10.00">
+					<span>10.00</span>
+					<input type="checkbox" name="slotchk" value="10.00">
+				</div>
+				<div class="slot s4 s_10.30">
+					<span>10.30</span>
+					<input type="checkbox" name="slotchk" value="10.30">
+				</div>
+				<div class="slot s5 s_11.00">
+					<span>11.00</span>
+					<input type="checkbox" name="slotchk" value="11.00">
+				</div>
+				<div class="slot s6 s_11.30">
+					<span>11.30</span>
+					<input type="checkbox" name="slotchk" value="11.30">
+				</div>
+				<div class="slot s7 s_12.00">
+					<span>12.00</span>
+					<input type="checkbox" name="slotchk" value="12.00">
+				</div>
+				<div class="slot s8 s_12.30">
+					<span>12.30</span>
+					<input type="checkbox" name="slotchk" value="12.30">
+				</div>
+				<div class="slot s9 s_1.00">
+					<span>1.00</span>
+					<input type="checkbox" name="slotchk" value="1.00">
+				</div>
+				<div class="slot s10 s_1.30">
+					<span>1.30</span>
+					<input type="checkbox" name="slotchk" value="1.30">
+				</div>
+				<div class="slot s11 s_2.00">
+					<span>2.00</span>
+					<input type="checkbox" name="slotchk" value="2.00">
+				</div>
+				<div class="slot s12 s_2.30">
+					<span>2.30</span>
+					<input type="checkbox" name="slotchk" value="2.30">
+				</div>
+				<div class="slot s13 s_3.00">
+					<span>3.00</span>
+					<input type="checkbox" name="slotchk" value="3.00">
+				</div>
+				<div class="slot s14 s_3.30">
+					<span>3.30</span>
+					<input type="checkbox" name="slotchk" value="3.30">
+				</div>
+				<div class="slot s15 s_4.00">
+					<span>4.00</span>
+					<input type="checkbox" name="slotchk" value="4.00">
+				</div>
+				<div class="slot s16 s_4.30">
+					<span>4.30</span>
+					<input type="checkbox" name="slotchk" value="4.30">
+				</div>
+				<div class="slot s17 s_5.00">
+					<span>5.00</span>
+					<input type="checkbox" name="slotchk" value="5.00">
+				</div>
+			</div>
+		}
+		else
+		{
+			<div class="col-md-12 slot-section kopotakkho">
+				<div class="slot s1">
+					<span>9.00</span>
+					<input type="checkbox" name="slotchk" value="9.00">
+				</div>
+				<div class="slot s2">
+					<span>9.30</span>
+					<input type="checkbox" name="slotchk" value="9.30">
+				</div>
+				<div class="slot s3">
+					<span>10.00</span>
+					<input type="checkbox" name="slotchk" value="10.00">
+				</div>
+				<div class="slot s4">
+					<span>10.30</span>
+					<input type="checkbox" name="slotchk" value="10.30">
+				</div>
+				<div class="slot s5">
+					<span>11.00</span>
+					<input type="checkbox" name="slotchk" value="11.00">
+				</div>
+				<div class="slot s6">
+					<span>11.30</span>
+					<input type="checkbox" name="slotchk" value="11.30">
+				</div>
+				<div class="slot s7">
+					<span>12.00</span>
+					<input type="checkbox" name="slotchk" value="12.00">
+				</div>
+				<div class="slot s8">
+					<span>12.30</span>
+					<input type="checkbox" name="slotchk" value="12.30">
+				</div>
+				<div class="slot s9">
+					<span>1.00</span>
+					<input type="checkbox" name="slotchk" value="1.00">
+				</div>
+				<div class="slot s10">
+					<span>1.30</span>
+					<input type="checkbox" name="slotchk" value="1.30">
+				</div>
+				<div class="slot s11">
+					<span>2.00</span>
+					<input type="checkbox" name="slotchk" value="2.00">
+				</div>
+				<div class="slot s12">
+					<span>2.30</span>
+					<input type="checkbox" name="slotchk" value="2.30">
+				</div>
+				<div class="slot s13">
+					<span>3.00</span>
+					<input type="checkbox" name="slotchk" value="3.00">
+				</div>
+				<div class="slot s14">
+					<span>3.30</span>
+					<input type="checkbox" name="slotchk" value="3.30">
+				</div>
+				<div class="slot s15">
+					<span>4.00</span>
+					<input type="checkbox" name="slotchk" value="4.00">
+				</div>
+				<div class="slot s16">
+					<span>4.30</span>
+					<input type="checkbox" name="slotchk" value="4.30">
+				</div>
+				<div class="slot s17">
+					<span>5.00</span>
+					<input type="checkbox" name="slotchk" value="5.00">
+				</div>
+			</div>
+		}
+		<div class="col-md-12">
+			<a href="javascript:void(0)" type="button" class="btn btn-success" onclick="next(3,'@ViewBag.date')" name="name">Next</a>
+		</div>
+
+
+
+
+		<div class="col-md-12">
+			<div style="display: flex; justify-content: space-between;">
+				<h2>2.Dhanshiri(2nd floor) [ <i class="fa fa-users"></i>  - 17 <i class="fa fa-desktop"></i>  - 1]</h2>
+				@*<h2 class="time-difference" id="dhanshiritiming"></h2>*@
+			</div>
+		</div>
+
+		@* Dhanshiri *@
+
+		@if (Dhanshiri.Count() > 0)
+		{
+			var starttimedhanshiri = "";
+			var endtimedhanshiri = "";
+			@foreach (var item in Dhanshiri)
+			{
+				starttimedhanshiri += item.startTime + ",";
+				endtimedhanshiri += item.endTime + ",";
+			}
+			@if (starttimedhanshiri.Length > 1)
+			{
+				starttimedhanshiri = starttimedhanshiri.Remove(starttimedhanshiri.Length - 1);
+				endtimedhanshiri = endtimedhanshiri.Remove(endtimedhanshiri.Length - 1);
+			}
+			<script>
+				dhanshiri = 1;
+			</script>
+			<div class="col-md-12 slot-section dhanshiri">
+				<input type="text" id="startdhanshiri" hidden value="@starttimedhanshiri" />
+				<input type="text" id="enddhanshiri" hidden value="@endtimedhanshiri" />
+				<input type="text" class="confName" hidden value="Dhanshiri(2nd floor)" />
+
+				<div class="slot s1">
+					<span>9.00</span>
+					<input type="checkbox" name="slotchk" value="9.00">
+				</div>
+				<div class="slot s2">
+					<span>9.30</span>
+					<input type="checkbox" name="slotchk" value="9.30">
+				</div>
+				<div class="slot s3">
+					<span>10.00</span>
+					<input type="checkbox" name="slotchk" value="10.00">
+				</div>
+				<div class="slot s4">
+					<span>10.30</span>
+					<input type="checkbox" name="slotchk" value="10.30">
+				</div>
+				<div class="slot s5">
+					<span>11.00</span>
+					<input type="checkbox" name="slotchk" value="11.00">
+				</div>
+				<div class="slot s6">
+					<span>11.30</span>
+					<input type="checkbox" name="slotchk" value="11.30">
+				</div>
+				<div class="slot s7">
+					<span>12.00</span>
+					<input type="checkbox" name="slotchk" value="12.00">
+				</div>
+				<div class="slot s8">
+					<span>12.30</span>
+					<input type="checkbox" name="slotchk" value="12.30">
+				</div>
+				<div class="slot s9">
+					<span>1.00</span>
+					<input type="checkbox" name="slotchk" value="1.00">
+				</div>
+				<div class="slot s10">
+					<span>1.30</span>
+					<input type="checkbox" name="slotchk" value="1.30">
+				</div>
+				<div class="slot s11">
+					<span>2.00</span>
+					<input type="checkbox" name="slotchk" value="2.00">
+				</div>
+				<div class="slot s12">
+					<span>2.30</span>
+					<input type="checkbox" name="slotchk" value="2.30">
+				</div>
+				<div class="slot s13">
+					<span>3.00</span>
+					<input type="checkbox" name="slotchk" value="3.00">
+				</div>
+				<div class="slot s14">
+					<span>3.30</span>
+					<input type="checkbox" name="slotchk" value="3.30">
+				</div>
+				<div class="slot s15">
+					<span>4.00</span>
+					<input type="checkbox" name="slotchk" value="4.00">
+				</div>
+				<div class="slot s16">
+					<span>4.30</span>
+					<input type="checkbox" name="slotchk" value="4.30">
+				</div>
+				<div class="slot s17">
+					<span>5.00</span>
+					<input type="checkbox" name="slotchk" value="5.00">
+				</div>
+			</div>
+		}
+		else
+		{
+			<div class="col-md-12 slot-section dhanshiri">
+				<div class="slot s1">
+					<span>9.00</span>
+					<input type="checkbox" name="slotchk" value="9.00">
+				</div>
+				<div class="slot s2">
+					<span>9.30</span>
+					<input type="checkbox" name="slotchk" value="9.30">
+				</div>
+				<div class="slot s3">
+					<span>10.00</span>
+					<input type="checkbox" name="slotchk" value="10.00">
+				</div>
+				<div class="slot s4">
+					<span>10.30</span>
+					<input type="checkbox" name="slotchk" value="10.30">
+				</div>
+				<div class="slot s5">
+					<span>11.00</span>
+					<input type="checkbox" name="slotchk" value="11.00">
+				</div>
+				<div class="slot s6">
+					<span>11.30</span>
+					<input type="checkbox" name="slotchk" value="11.30">
+				</div>
+				<div class="slot s7">
+					<span>12.00</span>
+					<input type="checkbox" name="slotchk" value="12.00">
+				</div>
+				<div class="slot s8">
+					<span>12.30</span>
+					<input type="checkbox" name="slotchk" value="12.30">
+				</div>
+				<div class="slot s9">
+					<span>1.00</span>
+					<input type="checkbox" name="slotchk" value="1.00">
+				</div>
+				<div class="slot s10">
+					<span>1.30</span>
+					<input type="checkbox" name="slotchk" value="1.30">
+				</div>
+				<div class="slot s11">
+					<span>2.00</span>
+					<input type="checkbox" name="slotchk" value="2.00">
+				</div>
+				<div class="slot s12">
+					<span>2.30</span>
+					<input type="checkbox" name="slotchk" value="2.30">
+				</div>
+				<div class="slot s13">
+					<span>3.00</span>
+					<input type="checkbox" name="slotchk" value="3.00">
+				</div>
+				<div class="slot s14">
+					<span>3.30</span>
+					<input type="checkbox" name="slotchk" value="3.30">
+				</div>
+				<div class="slot s15">
+					<span>4.00</span>
+					<input type="checkbox" name="slotchk" value="4.00">
+				</div>
+				<div class="slot s16">
+					<span>4.30</span>
+					<input type="checkbox" name="slotchk" value="4.30">
+				</div>
+				<div class="slot s17">
+					<span>5.00</span>
+					<input type="checkbox" name="slotchk" value="5.00">
+				</div>
+			</div>
+		}
+		<div class="col-md-12">
+			<a href="javascript:void(0)" type="button" class="btn btn-success" onclick="next(4,'@ViewBag.date')" name="name">Next</a>
+		</div>
+
+
+
+		<div class="col-md-12">
+			<div style="display: flex; justify-content: space-between;">
+				<h2>3.Shurma (3rd floor) [ <i class="fa fa-users"></i>  - 21 <i class="fa fa-desktop"></i>  - 1]</h2>
+				@*<h2 class="time-difference" id="shurmatiming"></h2>*@
+			</div>
+		</div>
+
+		@* Shurma *@
+
+		@if (Shurma.Count() > 0)
+		{
+			var starttimeshurma = "";
+			var endtimeshurma = "";
+			@foreach (var item in Shurma)
+			{
+				starttimeshurma += item.startTime + ",";
+				endtimeshurma += item.endTime + ",";
+			}
+			@if (starttimeshurma.Length > 1)
+			{
+				starttimeshurma = starttimeshurma.Remove(starttimeshurma.Length - 1);
+				endtimeshurma = endtimeshurma.Remove(endtimeshurma.Length - 1);
+			}
+			<script>
+				shurma = 1;
+			</script>
+			<div class="col-md-12 slot-section shurma">
+				<input type="text" id="startshurma" hidden value="@starttimeshurma" />
+				<input type="text" id="endshurma" hidden value="@endtimeshurma" />
+				<input type="text" class="confName" hidden value="Shurma (3rd floor)" />
+
+				<div class="slot s1">
+					<span>9.00</span>
+					<input type="checkbox" name="slotchk" value="9.00">
+				</div>
+				<div class="slot s2">
+					<span>9.30</span>
+					<input type="checkbox" name="slotchk" value="9.30">
+				</div>
+				<div class="slot s3">
+					<span>10.00</span>
+					<input type="checkbox" name="slotchk" value="10.00">
+				</div>
+				<div class="slot s4">
+					<span>10.30</span>
+					<input type="checkbox" name="slotchk" value="10.30">
+				</div>
+				<div class="slot s5">
+					<span>11.00</span>
+					<input type="checkbox" name="slotchk" value="11.00">
+				</div>
+				<div class="slot s6">
+					<span>11.30</span>
+					<input type="checkbox" name="slotchk" value="11.30">
+				</div>
+				<div class="slot s7">
+					<span>12.00</span>
+					<input type="checkbox" name="slotchk" value="12.00">
+				</div>
+				<div class="slot s8">
+					<span>12.30</span>
+					<input type="checkbox" name="slotchk" value="12.30">
+				</div>
+				<div class="slot s9">
+					<span>1.00</span>
+					<input type="checkbox" name="slotchk" value="1.00">
+				</div>
+				<div class="slot s10">
+					<span>1.30</span>
+					<input type="checkbox" name="slotchk" value="1.30">
+				</div>
+				<div class="slot s11">
+					<span>2.00</span>
+					<input type="checkbox" name="slotchk" value="2.00">
+				</div>
+				<div class="slot s12">
+					<span>2.30</span>
+					<input type="checkbox" name="slotchk" value="2.30">
+				</div>
+				<div class="slot s13">
+					<span>3.00</span>
+					<input type="checkbox" name="slotchk" value="3.00">
+				</div>
+				<div class="slot s14">
+					<span>3.30</span>
+					<input type="checkbox" name="slotchk" value="3.30">
+				</div>
+				<div class="slot s15">
+					<span>4.00</span>
+					<input type="checkbox" name="slotchk" value="4.00">
+				</div>
+				<div class="slot s16">
+					<span>4.30</span>
+					<input type="checkbox" name="slotchk" value="4.30">
+				</div>
+				<div class="slot s17">
+					<span>5.00</span>
+					<input type="checkbox" name="slotchk" value="5.00">
+				</div>
+			</div>
+		}
+		else
+		{
+			<div class="col-md-12 slot-section shurma">
+				<div class="slot s1">
+					<span>9.00</span>
+					<input type="checkbox" name="slotchk" value="9.00">
+				</div>
+				<div class="slot s2">
+					<span>9.30</span>
+					<input type="checkbox" name="slotchk" value="9.30">
+				</div>
+				<div class="slot s3">
+					<span>10.00</span>
+					<input type="checkbox" name="slotchk" value="10.00">
+				</div>
+				<div class="slot s4">
+					<span>10.30</span>
+					<input type="checkbox" name="slotchk" value="10.30">
+				</div>
+				<div class="slot s5">
+					<span>11.00</span>
+					<input type="checkbox" name="slotchk" value="11.00">
+				</div>
+				<div class="slot s6">
+					<span>11.30</span>
+					<input type="checkbox" name="slotchk" value="11.30">
+				</div>
+				<div class="slot s7">
+					<span>12.00</span>
+					<input type="checkbox" name="slotchk" value="12.00">
+				</div>
+				<div class="slot s8">
+					<span>12.30</span>
+					<input type="checkbox" name="slotchk" value="12.30">
+				</div>
+				<div class="slot s9">
+					<span>1.00</span>
+					<input type="checkbox" name="slotchk" value="1.00">
+				</div>
+				<div class="slot s10">
+					<span>1.30</span>
+					<input type="checkbox" name="slotchk" value="1.30">
+				</div>
+				<div class="slot s11">
+					<span>2.00</span>
+					<input type="checkbox" name="slotchk" value="2.00">
+				</div>
+				<div class="slot s12">
+					<span>2.30</span>
+					<input type="checkbox" name="slotchk" value="2.30">
+				</div>
+				<div class="slot s13">
+					<span>3.00</span>
+					<input type="checkbox" name="slotchk" value="3.00">
+				</div>
+				<div class="slot s14">
+					<span>3.30</span>
+					<input type="checkbox" name="slotchk" value="3.30">
+				</div>
+				<div class="slot s15">
+					<span>4.00</span>
+					<input type="checkbox" name="slotchk" value="4.00">
+				</div>
+				<div class="slot s16">
+					<span>4.30</span>
+					<input type="checkbox" name="slotchk" value="4.30">
+				</div>
+				<div class="slot s17">
+					<span>5.00</span>
+					<input type="checkbox" name="slotchk" value="5.00">
+				</div>
+			</div>
+		}
+		<div class="col-md-12">
+			<a href="javascript:void(0)" type="button" class="btn btn-success" onclick="next(5,'@ViewBag.date')" name="name">Next</a>
+		</div>
+
+
+
+
+
+		<div class="col-md-12">
+			<div style="display: flex; justify-content: space-between;">
+				<h2>4.Conference Room (7th floor) [ <i class="fa fa-users"></i>  - 18 <i class="fa fa-desktop"></i>  - 1]</h2>
+				@*<h2 class="time-difference" id="ConferenceRoom7timing"></h2>*@
+			</div>
+		</div>
+
+		@* ConferenceRoom7 *@
+
+		@if (ConferenceRoom7.Count() > 0)
+		{
+			var starttimeConferenceRoom7 = "";
+			var endtimeConferenceRoom7 = "";
+			@foreach (var item in ConferenceRoom7)
+			{
+				starttimeConferenceRoom7 += item.startTime + ",";
+				endtimeConferenceRoom7 += item.endTime + ",";
+			}
+			@if (starttimeConferenceRoom7.Length > 1)
+			{
+				starttimeConferenceRoom7 = starttimeConferenceRoom7.Remove(starttimeConferenceRoom7.Length - 1);
+				endtimeConferenceRoom7 = endtimeConferenceRoom7.Remove(endtimeConferenceRoom7.Length - 1);
+			}
+			<script>
+				ConferenceRoom7 = 1;
+			</script>
+			<div class="col-md-12 slot-section ConferenceRoom7">
+				<input type="text" id="startConferenceRoom7" hidden value="@starttimeConferenceRoom7" />
+				<input type="text" id="endConferenceRoom7" hidden value="@endtimeConferenceRoom7" />
+				<input type="text" class="confName" hidden value="Conference Room (7th floor)" />
+
+				<div class="slot s1">
+					<span>9.00</span>
+					<input type="checkbox" name="slotchk" value="9.00">
+				</div>
+				<div class="slot s2">
+					<span>9.30</span>
+					<input type="checkbox" name="slotchk" value="9.30">
+				</div>
+				<div class="slot s3">
+					<span>10.00</span>
+					<input type="checkbox" name="slotchk" value="10.00">
+				</div>
+				<div class="slot s4">
+					<span>10.30</span>
+					<input type="checkbox" name="slotchk" value="10.30">
+				</div>
+				<div class="slot s5">
+					<span>11.00</span>
+					<input type="checkbox" name="slotchk" value="11.00">
+				</div>
+				<div class="slot s6">
+					<span>11.30</span>
+					<input type="checkbox" name="slotchk" value="11.30">
+				</div>
+				<div class="slot s7">
+					<span>12.00</span>
+					<input type="checkbox" name="slotchk" value="12.00">
+				</div>
+				<div class="slot s8">
+					<span>12.30</span>
+					<input type="checkbox" name="slotchk" value="12.30">
+				</div>
+				<div class="slot s9">
+					<span>1.00</span>
+					<input type="checkbox" name="slotchk" value="1.00">
+				</div>
+				<div class="slot s10">
+					<span>1.30</span>
+					<input type="checkbox" name="slotchk" value="1.30">
+				</div>
+				<div class="slot s11">
+					<span>2.00</span>
+					<input type="checkbox" name="slotchk" value="2.00">
+				</div>
+				<div class="slot s12">
+					<span>2.30</span>
+					<input type="checkbox" name="slotchk" value="2.30">
+				</div>
+				<div class="slot s13">
+					<span>3.00</span>
+					<input type="checkbox" name="slotchk" value="3.00">
+				</div>
+				<div class="slot s14">
+					<span>3.30</span>
+					<input type="checkbox" name="slotchk" value="3.30">
+				</div>
+				<div class="slot s15">
+					<span>4.00</span>
+					<input type="checkbox" name="slotchk" value="4.00">
+				</div>
+				<div class="slot s16">
+					<span>4.30</span>
+					<input type="checkbox" name="slotchk" value="4.30">
+				</div>
+				<div class="slot s17">
+					<span>5.00</span>
+					<input type="checkbox" name="slotchk" value="5.00">
+				</div>
+			</div>
+		}
+		else
+		{
+			<div class="col-md-12 slot-section ConferenceRoom7">
+				<div class="slot s1">
+					<span>9.00</span>
+					<input type="checkbox" name="slotchk" value="9.00">
+				</div>
+				<div class="slot s2">
+					<span>9.30</span>
+					<input type="checkbox" name="slotchk" value="9.30">
+				</div>
+				<div class="slot s3">
+					<span>10.00</span>
+					<input type="checkbox" name="slotchk" value="10.00">
+				</div>
+				<div class="slot s4">
+					<span>10.30</span>
+					<input type="checkbox" name="slotchk" value="10.30">
+				</div>
+				<div class="slot s5">
+					<span>11.00</span>
+					<input type="checkbox" name="slotchk" value="11.00">
+				</div>
+				<div class="slot s6">
+					<span>11.30</span>
+					<input type="checkbox" name="slotchk" value="11.30">
+				</div>
+				<div class="slot s7">
+					<span>12.00</span>
+					<input type="checkbox" name="slotchk" value="12.00">
+				</div>
+				<div class="slot s8">
+					<span>12.30</span>
+					<input type="checkbox" name="slotchk" value="12.30">
+				</div>
+				<div class="slot s9">
+					<span>1.00</span>
+					<input type="checkbox" name="slotchk" value="1.00">
+				</div>
+				<div class="slot s10">
+					<span>1.30</span>
+					<input type="checkbox" name="slotchk" value="1.30">
+				</div>
+				<div class="slot s11">
+					<span>2.00</span>
+					<input type="checkbox" name="slotchk" value="2.00">
+				</div>
+				<div class="slot s12">
+					<span>2.30</span>
+					<input type="checkbox" name="slotchk" value="2.30">
+				</div>
+				<div class="slot s13">
+					<span>3.00</span>
+					<input type="checkbox" name="slotchk" value="3.00">
+				</div>
+				<div class="slot s14">
+					<span>3.30</span>
+					<input type="checkbox" name="slotchk" value="3.30">
+				</div>
+				<div class="slot s15">
+					<span>4.00</span>
+					<input type="checkbox" name="slotchk" value="4.00">
+				</div>
+				<div class="slot s16">
+					<span>4.30</span>
+					<input type="checkbox" name="slotchk" value="4.30">
+				</div>
+				<div class="slot s17">
+					<span>5.00</span>
+					<input type="checkbox" name="slotchk" value="5.00">
+				</div>
+			</div>
+		}
+		<div class="col-md-12">
+			<a href="javascript:void(0)" type="button" class="btn btn-success" onclick="next(6,'@ViewBag.date')" name="name">Next</a>
+		</div>
+
+
+
+
+		<div class="col-md-12">
+			<div style="display: flex; justify-content: space-between;">
+				<h2>5.Conference Room East (8th floor) [ <i class="fa fa-users"></i>  - 18 <i class="fa fa-desktop"></i>  - 1]</h2>
+				@*<h2 class="time-difference" id="ConferenceRoomEasttiming"></h2>*@
+			</div>
+		</div>
+
+		@* ConferenceRoomEast *@
+
+		@if (ConferenceRoomEast.Count() > 0)
+		{
+			var starttimeConferenceRoomEast = "";
+			var endtimeConferenceRoomEast = "";
+			@foreach (var item in ConferenceRoomEast)
+			{
+				starttimeConferenceRoomEast += item.startTime + ",";
+				endtimeConferenceRoomEast += item.endTime + ",";
+			}
+			@if (starttimeConferenceRoomEast.Length > 1)
+			{
+				starttimeConferenceRoomEast = starttimeConferenceRoomEast.Remove(starttimeConferenceRoomEast.Length - 1);
+				endtimeConferenceRoomEast = endtimeConferenceRoomEast.Remove(endtimeConferenceRoomEast.Length - 1);
+			}
+			<script>
+				ConferenceRoomEast = 1;
+			</script>
+			<div class="col-md-12 slot-section ConferenceRoomEast">
+				<input type="text" id="startConferenceRoomEast" hidden value="@starttimeConferenceRoomEast" />
+				<input type="text" id="endConferenceRoomEast" hidden value="@endtimeConferenceRoomEast" />
+				<input type="text" class="confName" hidden value="Conference Room East (8th floor)" />
+
+				<div class="slot s1">
+					<span>9.00</span>
+					<input type="checkbox" name="slotchk" value="9.00">
+				</div>
+				<div class="slot s2">
+					<span>9.30</span>
+					<input type="checkbox" name="slotchk" value="9.30">
+				</div>
+				<div class="slot s3">
+					<span>10.00</span>
+					<input type="checkbox" name="slotchk" value="10.00">
+				</div>
+				<div class="slot s4">
+					<span>10.30</span>
+					<input type="checkbox" name="slotchk" value="10.30">
+				</div>
+				<div class="slot s5">
+					<span>11.00</span>
+					<input type="checkbox" name="slotchk" value="11.00">
+				</div>
+				<div class="slot s6">
+					<span>11.30</span>
+					<input type="checkbox" name="slotchk" value="11.30">
+				</div>
+				<div class="slot s7">
+					<span>12.00</span>
+					<input type="checkbox" name="slotchk" value="12.00">
+				</div>
+				<div class="slot s8">
+					<span>12.30</span>
+					<input type="checkbox" name="slotchk" value="12.30">
+				</div>
+				<div class="slot s9">
+					<span>1.00</span>
+					<input type="checkbox" name="slotchk" value="1.00">
+				</div>
+				<div class="slot s10">
+					<span>1.30</span>
+					<input type="checkbox" name="slotchk" value="1.30">
+				</div>
+				<div class="slot s11">
+					<span>2.00</span>
+					<input type="checkbox" name="slotchk" value="2.00">
+				</div>
+				<div class="slot s12">
+					<span>2.30</span>
+					<input type="checkbox" name="slotchk" value="2.30">
+				</div>
+				<div class="slot s13">
+					<span>3.00</span>
+					<input type="checkbox" name="slotchk" value="3.00">
+				</div>
+				<div class="slot s14">
+					<span>3.30</span>
+					<input type="checkbox" name="slotchk" value="3.30">
+				</div>
+				<div class="slot s15">
+					<span>4.00</span>
+					<input type="checkbox" name="slotchk" value="4.00">
+				</div>
+				<div class="slot s16">
+					<span>4.30</span>
+					<input type="checkbox" name="slotchk" value="4.30">
+				</div>
+				<div class="slot s17">
+					<span>5.00</span>
+					<input type="checkbox" name="slotchk" value="5.00">
+				</div>
+			</div>
+		}
+		else
+		{
+			<div class="col-md-12 slot-section ConferenceRoomEast">
+				<div class="slot s1">
+					<span>9.00</span>
+					<input type="checkbox" name="slotchk" value="9.00">
+				</div>
+				<div class="slot s2">
+					<span>9.30</span>
+					<input type="checkbox" name="slotchk" value="9.30">
+				</div>
+				<div class="slot s3">
+					<span>10.00</span>
+					<input type="checkbox" name="slotchk" value="10.00">
+				</div>
+				<div class="slot s4">
+					<span>10.30</span>
+					<input type="checkbox" name="slotchk" value="10.30">
+				</div>
+				<div class="slot s5">
+					<span>11.00</span>
+					<input type="checkbox" name="slotchk" value="11.00">
+				</div>
+				<div class="slot s6">
+					<span>11.30</span>
+					<input type="checkbox" name="slotchk" value="11.30">
+				</div>
+				<div class="slot s7">
+					<span>12.00</span>
+					<input type="checkbox" name="slotchk" value="12.00">
+				</div>
+				<div class="slot s8">
+					<span>12.30</span>
+					<input type="checkbox" name="slotchk" value="12.30">
+				</div>
+				<div class="slot s9">
+					<span>1.00</span>
+					<input type="checkbox" name="slotchk" value="1.00">
+				</div>
+				<div class="slot s10">
+					<span>1.30</span>
+					<input type="checkbox" name="slotchk" value="1.30">
+				</div>
+				<div class="slot s11">
+					<span>2.00</span>
+					<input type="checkbox" name="slotchk" value="2.00">
+				</div>
+				<div class="slot s12">
+					<span>2.30</span>
+					<input type="checkbox" name="slotchk" value="2.30">
+				</div>
+				<div class="slot s13">
+					<span>3.00</span>
+					<input type="checkbox" name="slotchk" value="3.00">
+				</div>
+				<div class="slot s14">
+					<span>3.30</span>
+					<input type="checkbox" name="slotchk" value="3.30">
+				</div>
+				<div class="slot s15">
+					<span>4.00</span>
+					<input type="checkbox" name="slotchk" value="4.00">
+				</div>
+				<div class="slot s16">
+					<span>4.30</span>
+					<input type="checkbox" name="slotchk" value="4.30">
+				</div>
+				<div class="slot s17">
+					<span>5.00</span>
+					<input type="checkbox" name="slotchk" value="5.00">
+				</div>
+			</div>
+		}
+		<div class="col-md-12">
+			<a href="javascript:void(0)" type="button" class="btn btn-success" onclick="next(7,'@ViewBag.date')" name="name">Next</a>
+		</div>
+
+
+
+
+
+		<div class="col-md-12">
+			<div style="display: flex; justify-content: space-between;">
+				<h2>6.Conference Room west (8th floor) [ <i class="fa fa-users"></i>  - 18 <i class="fa fa-desktop"></i>  - 1]</h2>
+				@*<h2 class="time-difference" id="ConferenceRoomWesttiming"></h2>*@
+			</div>
+		</div>
+
+		@* ConferenceRoomWest *@
+
+		@if (ConferenceRoomWest.Count() > 0)
+		{
+			var starttimeConferenceRoomWest = "";
+			var endtimeConferenceRoomWest = "";
+			@foreach (var item in ConferenceRoomWest)
+			{
+				starttimeConferenceRoomWest += item.startTime + ",";
+				endtimeConferenceRoomWest += item.endTime + ",";
+			}
+			@if (starttimeConferenceRoomWest.Length > 1)
+			{
+				starttimeConferenceRoomWest = starttimeConferenceRoomWest.Remove(starttimeConferenceRoomWest.Length - 1);
+				endtimeConferenceRoomWest = endtimeConferenceRoomWest.Remove(endtimeConferenceRoomWest.Length - 1);
+			}
+			<script>
+				ConferenceRoomWest = 1;
+			</script>
+			<div class="col-md-12 slot-section ConferenceRoomWest">
+				<input type="text" id="startConferenceRoomWest" hidden value="@starttimeConferenceRoomWest" />
+				<input type="text" id="endConferenceRoomWest" hidden value="@endtimeConferenceRoomWest" />
+				<input type="text" class="confName" hidden value="Conference Room west (8th floor)" />
+
+				<div class="slot s1">
+					<span>9.00</span>
+					<input type="checkbox" name="slotchk" value="9.00">
+				</div>
+				<div class="slot s2">
+					<span>9.30</span>
+					<input type="checkbox" name="slotchk" value="9.30">
+				</div>
+				<div class="slot s3">
+					<span>10.00</span>
+					<input type="checkbox" name="slotchk" value="10.00">
+				</div>
+				<div class="slot s4">
+					<span>10.30</span>
+					<input type="checkbox" name="slotchk" value="10.30">
+				</div>
+				<div class="slot s5">
+					<span>11.00</span>
+					<input type="checkbox" name="slotchk" value="11.00">
+				</div>
+				<div class="slot s6">
+					<span>11.30</span>
+					<input type="checkbox" name="slotchk" value="11.30">
+				</div>
+				<div class="slot s7">
+					<span>12.00</span>
+					<input type="checkbox" name="slotchk" value="12.00">
+				</div>
+				<div class="slot s8">
+					<span>12.30</span>
+					<input type="checkbox" name="slotchk" value="12.30">
+				</div>
+				<div class="slot s9">
+					<span>1.00</span>
+					<input type="checkbox" name="slotchk" value="1.00">
+				</div>
+				<div class="slot s10">
+					<span>1.30</span>
+					<input type="checkbox" name="slotchk" value="1.30">
+				</div>
+				<div class="slot s11">
+					<span>2.00</span>
+					<input type="checkbox" name="slotchk" value="2.00">
+				</div>
+				<div class="slot s12">
+					<span>2.30</span>
+					<input type="checkbox" name="slotchk" value="2.30">
+				</div>
+				<div class="slot s13">
+					<span>3.00</span>
+					<input type="checkbox" name="slotchk" value="3.00">
+				</div>
+				<div class="slot s14">
+					<span>3.30</span>
+					<input type="checkbox" name="slotchk" value="3.30">
+				</div>
+				<div class="slot s15">
+					<span>4.00</span>
+					<input type="checkbox" name="slotchk" value="4.00">
+				</div>
+				<div class="slot s16">
+					<span>4.30</span>
+					<input type="checkbox" name="slotchk" value="4.30">
+				</div>
+				<div class="slot s17">
+					<span>5.00</span>
+					<input type="checkbox" name="slotchk" value="5.00">
+				</div>
+			</div>
+		}
+		else
+		{
+			<div class="col-md-12 slot-section ConferenceRoomWest">
+				<div class="slot s1">
+					<span>9.00</span>
+					<input type="checkbox" name="slotchk" value="9.00">
+				</div>
+				<div class="slot s2">
+					<span>9.30</span>
+					<input type="checkbox" name="slotchk" value="9.30">
+				</div>
+				<div class="slot s3">
+					<span>10.00</span>
+					<input type="checkbox" name="slotchk" value="10.00">
+				</div>
+				<div class="slot s4">
+					<span>10.30</span>
+					<input type="checkbox" name="slotchk" value="10.30">
+				</div>
+				<div class="slot s5">
+					<span>11.00</span>
+					<input type="checkbox" name="slotchk" value="11.00">
+				</div>
+				<div class="slot s6">
+					<span>11.30</span>
+					<input type="checkbox" name="slotchk" value="11.30">
+				</div>
+				<div class="slot s7">
+					<span>12.00</span>
+					<input type="checkbox" name="slotchk" value="12.00">
+				</div>
+				<div class="slot s8">
+					<span>12.30</span>
+					<input type="checkbox" name="slotchk" value="12.30">
+				</div>
+				<div class="slot s9">
+					<span>1.00</span>
+					<input type="checkbox" name="slotchk" value="1.00">
+				</div>
+				<div class="slot s10">
+					<span>1.30</span>
+					<input type="checkbox" name="slotchk" value="1.30">
+				</div>
+				<div class="slot s11">
+					<span>2.00</span>
+					<input type="checkbox" name="slotchk" value="2.00">
+				</div>
+				<div class="slot s12">
+					<span>2.30</span>
+					<input type="checkbox" name="slotchk" value="2.30">
+				</div>
+				<div class="slot s13">
+					<span>3.00</span>
+					<input type="checkbox" name="slotchk" value="3.00">
+				</div>
+				<div class="slot s14">
+					<span>3.30</span>
+					<input type="checkbox" name="slotchk" value="3.30">
+				</div>
+				<div class="slot s15">
+					<span>4.00</span>
+					<input type="checkbox" name="slotchk" value="4.00">
+				</div>
+				<div class="slot s16">
+					<span>4.30</span>
+					<input type="checkbox" name="slotchk" value="4.30">
+				</div>
+				<div class="slot s17">
+					<span>5.00</span>
+					<input type="checkbox" name="slotchk" value="5.00">
+				</div>
+			</div>
+		}
+		<div class="col-md-12">
+			<a href="javascript:void(0)" type="button" class="btn btn-success" onclick="next(8,'@ViewBag.date')" name="name">Next</a>
+		</div>
+
+
+
+
+		<div class="col-md-12">
+			<div style="display: flex; justify-content: space-between;">
+				<h2>7. Conference Room (9th floor) [ <i class="fa fa-users"></i>  - 26 <i class="fa fa-desktop"></i>  - 1]</h2>
+				@*<h2 class="time-difference" id="ConferenceRoom9timing"></h2>*@
+			</div>
+		</div>
+
+		@* ConferenceRoom9 *@
+
+		@if (ConferenceRoom9.Count() > 0)
+		{
+			var starttimeConferenceRoom9 = "";
+			var endtimeConferenceRoom9 = "";
+			@foreach (var item in ConferenceRoom9)
+			{
+				starttimeConferenceRoom9 += item.startTime + ",";
+				endtimeConferenceRoom9 += item.endTime + ",";
+			}
+			@if (starttimeConferenceRoom9.Length > 1)
+			{
+				starttimeConferenceRoom9 = starttimeConferenceRoom9.Remove(starttimeConferenceRoom9.Length - 1);
+				endtimeConferenceRoom9 = endtimeConferenceRoom9.Remove(endtimeConferenceRoom9.Length - 1);
+			}
+			<script>
+				ConferenceRoom9 = 1;
+			</script>
+			<div class="col-md-12 slot-section ConferenceRoom9">
+				<input type="text" id="startConferenceRoom9" hidden value="@starttimeConferenceRoom9" />
+				<input type="text" id="endConferenceRoom9" hidden value="@endtimeConferenceRoom9" />
+				<input type="text" class="confName" hidden value="Conference Room (9th floor)" />
+
+				<div class="slot s1">
+					<span>9.00</span>
+					<input type="checkbox" name="slotchk" value="9.00">
+				</div>
+				<div class="slot s2">
+					<span>9.30</span>
+					<input type="checkbox" name="slotchk" value="9.30">
+				</div>
+				<div class="slot s3">
+					<span>10.00</span>
+					<input type="checkbox" name="slotchk" value="10.00">
+				</div>
+				<div class="slot s4">
+					<span>10.30</span>
+					<input type="checkbox" name="slotchk" value="10.30">
+				</div>
+				<div class="slot s5">
+					<span>11.00</span>
+					<input type="checkbox" name="slotchk" value="11.00">
+				</div>
+				<div class="slot s6">
+					<span>11.30</span>
+					<input type="checkbox" name="slotchk" value="11.30">
+				</div>
+				<div class="slot s7">
+					<span>12.00</span>
+					<input type="checkbox" name="slotchk" value="12.00">
+				</div>
+				<div class="slot s8">
+					<span>12.30</span>
+					<input type="checkbox" name="slotchk" value="12.30">
+				</div>
+				<div class="slot s9">
+					<span>1.00</span>
+					<input type="checkbox" name="slotchk" value="1.00">
+				</div>
+				<div class="slot s10">
+					<span>1.30</span>
+					<input type="checkbox" name="slotchk" value="1.30">
+				</div>
+				<div class="slot s11">
+					<span>2.00</span>
+					<input type="checkbox" name="slotchk" value="2.00">
+				</div>
+				<div class="slot s12">
+					<span>2.30</span>
+					<input type="checkbox" name="slotchk" value="2.30">
+				</div>
+				<div class="slot s13">
+					<span>3.00</span>
+					<input type="checkbox" name="slotchk" value="3.00">
+				</div>
+				<div class="slot s14">
+					<span>3.30</span>
+					<input type="checkbox" name="slotchk" value="3.30">
+				</div>
+				<div class="slot s15">
+					<span>4.00</span>
+					<input type="checkbox" name="slotchk" value="4.00">
+				</div>
+				<div class="slot s16">
+					<span>4.30</span>
+					<input type="checkbox" name="slotchk" value="4.30">
+				</div>
+				<div class="slot s17">
+					<span>5.00</span>
+					<input type="checkbox" name="slotchk" value="5.00">
+				</div>
+			</div>
+		}
+		else
+		{
+			<div class="col-md-12 slot-section ConferenceRoom9">
+				<div class="slot s1">
+					<span>9.00</span>
+					<input type="checkbox" name="slotchk" value="9.00">
+				</div>
+				<div class="slot s2">
+					<span>9.30</span>
+					<input type="checkbox" name="slotchk" value="9.30">
+				</div>
+				<div class="slot s3">
+					<span>10.00</span>
+					<input type="checkbox" name="slotchk" value="10.00">
+				</div>
+				<div class="slot s4">
+					<span>10.30</span>
+					<input type="checkbox" name="slotchk" value="10.30">
+				</div>
+				<div class="slot s5">
+					<span>11.00</span>
+					<input type="checkbox" name="slotchk" value="11.00">
+				</div>
+				<div class="slot s6">
+					<span>11.30</span>
+					<input type="checkbox" name="slotchk" value="11.30">
+				</div>
+				<div class="slot s7">
+					<span>12.00</span>
+					<input type="checkbox" name="slotchk" value="12.00">
+				</div>
+				<div class="slot s8">
+					<span>12.30</span>
+					<input type="checkbox" name="slotchk" value="12.30">
+				</div>
+				<div class="slot s9">
+					<span>1.00</span>
+					<input type="checkbox" name="slotchk" value="1.00">
+				</div>
+				<div class="slot s10">
+					<span>1.30</span>
+					<input type="checkbox" name="slotchk" value="1.30">
+				</div>
+				<div class="slot s11">
+					<span>2.00</span>
+					<input type="checkbox" name="slotchk" value="2.00">
+				</div>
+				<div class="slot s12">
+					<span>2.30</span>
+					<input type="checkbox" name="slotchk" value="2.30">
+				</div>
+				<div class="slot s13">
+					<span>3.00</span>
+					<input type="checkbox" name="slotchk" value="3.00">
+				</div>
+				<div class="slot s14">
+					<span>3.30</span>
+					<input type="checkbox" name="slotchk" value="3.30">
+				</div>
+				<div class="slot s15">
+					<span>4.00</span>
+					<input type="checkbox" name="slotchk" value="4.00">
+				</div>
+				<div class="slot s16">
+					<span>4.30</span>
+					<input type="checkbox" name="slotchk" value="4.30">
+				</div>
+				<div class="slot s17">
+					<span>5.00</span>
+					<input type="checkbox" name="slotchk" value="5.00">
+				</div>
+			</div>
+		}
+		<div class="col-md-12">
+			<a href="javascript:void(0)" type="button" class="btn btn-success" onclick="next(9,'@ViewBag.date')" name="name">Next</a>
+		</div>
+
+
+
+
+
+	</div>
+	</div>
+
+
+	<script>
+		var myarray = [];
+		var allSlots = ['9.00', '9.30', '10.00', '10.30', '11.00', '11.30', '12.00', '12.30', '1.00', '1.30', '2.00', '2.30', '3.00', '3.30', '4.00', '4.30', '5.00'];
+		var allSlotNumbe = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
+
+		$(document).ready(function () {
+			//var allSlots = ['9.00', '9.30', '10.00', '10.30', '11.00', '11.30', '12.00', '12.30', '1.00', '1.30', '2.00', '2.30', '3.00', '3.30', '4.00', '4.30', '5.00'];
+
+			//jQuery for Shapla//
+			//-----------------//
+			if (shapla == 1) {
+				loadShapla();
+			}
+
+			//jQuery for Krisnochura//
+			//---------------------//
+			if (krisnochura == 1) {
+				loadKrisnochura();
+			}
+
+			//jQuery for Kopotakkho//
+			//---------------------//
+			if (kopotakkho == 1) {
+				loadKopotakkho();
+			}
+
+			//jQuery for Dhanshiri//
+			//---------------------//
+			if (dhanshiri == 1) {
+				loadDhanshiri();
+			}
+
+			//jQuery for Shurma//
+			//---------------------//
+			if (shurma == 1) {
+				loadShurma();
+			}
+
+			//jQuery for ConferenceRoom7//
+			//---------------------//
+			if (ConferenceRoom7 == 1) {
+				loadConferenceRoom7();
+			}
+
+			//jQuery for ConferenceRoomEast//
+			//---------------------//
+			if (ConferenceRoomEast == 1) {
+				loadConferenceRoomEast();
+			}
+
+			//jQuery for ConferenceRoomWest//
+			//---------------------//
+			if (ConferenceRoomWest == 1) {
+				loadConferenceRoomWest();
+			}
+
+			//jQuery for ConferenceRoom9//
+			//---------------------//
+			if (ConferenceRoom9 == 1) {
+				loadConferenceRoom9();
+			}
+			
+
+		})
+
+		$('.slot').click(function () {
+			var min = '';
+			var max = '';
+
+			$('#conferenceName').text($(this).parent().find('.confName').val());
+			console.log($(this).parent().find('.confName').text());
+			//var clickedValue = $(this).find('input[type="checkbox"]').val();
+			
+			var checkslotname1 = $(this).parent().prop('class').split(' ')[$(this).parent().prop('class').split(' ').length - 1];
+			
+
+			$('.' + checkslotname1).addClass('active1').siblings('.slot-section').removeClass('active1');
+			$('.' + checkslotname1).addClass('active1').siblings('.slot-section').find('.slot').removeClass('pending').find('input[type="checkbox"]').prop('checked', false);
+
+			
+			//if ($(".slot input:checkbox[name=slotchk]").is(":checked")) {
+			//	myarray.push($(this).text().trim());
+			//	$(this).closest('.slot').toggleClass('pending');
+			//}
+
+			//if (($(".slot input:checkbox[name=slotchk]").is(":checked")) == true) {
+			//	myarray = [];
+			//	console.log($(this).text())
+			//	myarray.push($(this).text().trim());
+			//	$(this).closest('.slot').toggleClass('pending');
+			//}
+			myarray = [];
+			$('.slot input:checkbox[name=slotchk]:checked').each(function () {
+				myarray.push($(this).val());
+			});
+
+			$(this).closest('.slot').toggleClass('pending');
+
+
+			if (myarray.length < 2) {
+				$('#shaplatiming').text(myarray[0])
+			}
+
+			if (myarray.length >= 2) {
+				min = myarray[0];
+				max = myarray[myarray.length - 1];
+
+				var minIndex = jQuery.inArray(min, allSlots);
+				var maxIndex = jQuery.inArray(max, allSlots);
+
+				if (maxIndex - minIndex > 1) {
+					for (var i = minIndex + 1; i < maxIndex; i++) {
+						if (jQuery.inArray(allSlots[i], myarray) == -1) {
+							myarray.push(allSlots[i]);
+						}
+					}
+				}
+			}
+
+            console.log(myarray)
+            //if (myarray.length > 1) {
+            //    loadShaplaGreen(myarray[0], myarray[1]);
+            //}
+
+			$(this).closest('.s1').siblings('.s1').addClass('pending');
+			//$(this).closest('.slot').next('.slot').addClass('pending');
+			for (var i = 0; i < myarray.length; i++) {
+				var className = '.s_' + myarray[i];
+				$(className).addClass('pending');
+			}
+
+			//console.log(min + ' ' + max);
+			if (min > 0 && max > 0) {
+				console.log(checkslotname1);
+				//var checkslotname = $(this).parent().prop('class').split(' ')[$(this).parent().prop('class').split(' ').length - 1];
+				//var getid = '#' + checkslotname1 + 'timing';
+				//console.log(grtid);
+
+				$('#shaplatiming').text(min + '-' + max);
+				//console.log($(this).parent().prop('class').split(' ')[$(this).parent().prop('class').split(' ').length - 1]);
+				////$(this).parent().parent().find('h2.time-difference').text(min + '-' + max);
+				//$(this).prev('.time-difference').text(min + '-' + max);
+			}
+
+		})
+
+		function next(hallId, date) {
+			var value = $('#shaplatiming').text();
+			window.location.href = '/SCMStock/IssueStock/Conferenceboooking?hallId=' + hallId + '&duration=' + value + '&date=' + date;
+		}
+
+		function loadShapla() {
+			//get array of all start and end time slot
+			var shaplaBookStartArr = $('#startshapla').val().split(",");
+			var shaplaBookEndArr = $('#endshapla').val().split(",");
+
+			//create a blank array to store booked time slot
+			var shaplaBooked = [];
+
+			//loop over the start or end time slot array
+			for (var i = 0; i < shaplaBookStartArr.length; i++) {
+				//push start and end time to the array
+				shaplaBooked.push(shaplaBookStartArr[i]);
+				shaplaBooked.push(shaplaBookEndArr[i]);
+				//calculate difference between start and end time slot
+				var dif = allSlots.indexOf(shaplaBookEndArr[i]) - allSlots.indexOf(shaplaBookStartArr[i]);
+				//if there any slot between the start and end time, push the slots to the array
+				if (dif > 1) {
+					for (var j = 1; j < dif; j++) {
+						shaplaBooked.push(allSlots[allSlots.indexOf(shaplaBookStartArr[i]) + j]);
+					}
+				}
+				else {
+					return false;
+				}
+			}
+			//get all the booked slot in console
+			//console.log(shaplaBooked);
+
+			//fill the slots with styles which are booked
+			shaplaBooked.forEach(e => {
+				$('.shapla .slot input[value="' + e + '"]').closest('.slot').addClass('booked');
+				$('.shapla .slot input[value="' + e + '"]').closest('.slot').click(false);
+				$('.shapla .slot input[value="' + e + '"]').click(false);
+			});
+
+			console.log(shaplaBooked);
+        }
+
+        function loadShaplaGreen(start, end) {
+            //alert(start + " End - " + end);
+            //get array of all start and end time slot
+            var shaplaBookStartArr = [start];
+            var shaplaBookEndArr = [end];
+
+            //create a blank array to store booked time slot
+            var shaplaBooked = [];
+
+            //loop over the start or end time slot array
+            for (var i = 0; i < shaplaBookStartArr.length; i++) {
+                //alert("loop");
+                //push start and end time to the array
+                shaplaBooked.push(shaplaBookStartArr[i]);
+                shaplaBooked.push(shaplaBookEndArr[i]);
+                //calculate difference between start and end time slot
+                var dif = allSlots.indexOf(shaplaBookEndArr[i]) - allSlots.indexOf(shaplaBookStartArr[i]);
+                //if there any slot between the start and end time, push the slots to the array
+                if (dif > 1) {
+                    for (var j = 1; j < dif; j++) {
+                        //alert("loop");
+                        shaplaBooked.push(allSlots[allSlots.indexOf(shaplaBookStartArr[i]) + j]);
+                    }
+                }
+                else {
+                    return false;
+                }
+            }
+            //get all the booked slot in console
+            //console.log(shaplaBooked);
+            console.log("Created Arrey");
+            console.log(shaplaBooked);
+            //fill the slots with styles which are booked
+            shaplaBooked.forEach(e => {
+                $('.shapla .slot input[value="' + e + '"]').closest('.slot').addClass('pending');
+                //$('.shapla .slot input[value="' + e + '"]').closest('.slot').click(false);
+                //$('.shapla .slot input[value="' + e + '"]').click(false);
+            });
+
+            console.log(shaplaBooked);
+        }
+
+		function loadKrisnochura() {
+			//get array of all start and end time slot
+			var krisnochuraBookStartArr = $('#startkrisnochura').val().split(",");;
+			var krisnochuraBookEndArr = $('#endkrisnochura').val().split(",");
+
+			//create a blank array to store booked time slot
+			var krisnochuraBooked = [];
+
+			//loop over the start or end time slot array
+			for (var i = 0; i < krisnochuraBookStartArr.length; i++) {
+				//push start and end time to the array
+				krisnochuraBooked.push(krisnochuraBookStartArr[i]);
+				krisnochuraBooked.push(krisnochuraBookEndArr[i]);
+				//calculate difference between start and end time slot
+				var dif = allSlots.indexOf(krisnochuraBookEndArr[i]) - allSlots.indexOf(krisnochuraBookStartArr[i]);
+				//if there any slot between the start and end time, push the slots to the array
+				if (dif > 1) {
+					for (var j = 1; j < dif; j++) {
+						krisnochuraBooked.push(allSlots[allSlots.indexOf(krisnochuraBookStartArr[i]) + j]);
+					}
+				}
+				else {
+					return false;
+				}
+			}
+			//get all the booked slot in console
+			console.log(krisnochuraBooked);
+
+			//fill the slots with styles which are booked
+			krisnochuraBooked.forEach(e => {
+				$('.krisnochura .slot input[value="' + e + '"]').closest('.slot').addClass('booked');
+				$('.krisnochura .slot input[value="' + e + '"]').closest('.slot').click(false);
+				$('.krisnochura .slot input[value="' + e + '"]').click(false);
+			});
+		}
+
+		function loadKopotakkho() {
+			//get array of all start and end time slot
+			var kopotakkhoBookStartArr = $('#startkopotakkho').val().split(",");;
+			var kopotakkhoBookEndArr = $('#endkopotakkho').val().split(",");
+
+			//create a blank array to store booked time slot
+			var kopotakkhoBooked = [];
+
+			//loop over the start or end time slot array
+			for (var i = 0; i < kopotakkhoBookStartArr.length; i++) {
+				//push start and end time to the array
+				kopotakkhoBooked.push(kopotakkhoBookStartArr[i]);
+				kopotakkhoBooked.push(kopotakkhoBookEndArr[i]);
+				//calculate difference between start and end time slot
+				var dif = allSlots.indexOf(kopotakkhoBookEndArr[i]) - allSlots.indexOf(kopotakkhoBookStartArr[i]);
+				//if there any slot between the start and end time, push the slots to the array
+				if (dif > 1) {
+					for (var j = 1; j < dif; j++) {
+						kopotakkhoBooked.push(allSlots[allSlots.indexOf(kopotakkhoBookStartArr[i]) + j]);
+					}
+				}
+				else {
+					return false;
+				}
+			}
+			//get all the booked slot in console
+			console.log(kopotakkhoBooked);
+
+			//fill the slots with styles which are booked
+			kopotakkhoBooked.forEach(e => {
+				$('.kopotakkho .slot input[value="' + e + '"]').closest('.slot').addClass('booked');
+				$('.kopotakkho .slot input[value="' + e + '"]').closest('.slot').click(false);
+				$('.kopotakkho .slot input[value="' + e + '"]').click(false);
+			});
+		}
+
+		function loadDhanshiri() {
+			//get array of all start and end time slot
+			var dhanshiriBookStartArr = $('#startdhanshiri').val().split(",");;
+			var dhanshiriBookEndArr = $('#enddhanshiri').val().split(",");
+
+			//create a blank array to store booked time slot
+			var dhanshiriBooked = [];
+
+			//loop over the start or end time slot array
+			for (var i = 0; i < dhanshiriBookStartArr.length; i++) {
+				//push start and end time to the array
+				dhanshiriBooked.push(dhanshiriBookStartArr[i]);
+				dhanshiriBooked.push(dhanshiriBookEndArr[i]);
+				//calculate difference between start and end time slot
+				var dif = allSlots.indexOf(dhanshiriBookEndArr[i]) - allSlots.indexOf(dhanshiriBookStartArr[i]);
+				//if there any slot between the start and end time, push the slots to the array
+				if (dif > 1) {
+					for (var j = 1; j < dif; j++) {
+						dhanshiriBooked.push(allSlots[allSlots.indexOf(dhanshiriBookStartArr[i]) + j]);
+					}
+				}
+				else {
+					return false;
+				}
+			}
+			//get all the booked slot in console
+			console.log(dhanshiriBooked);
+
+			//fill the slots with styles which are booked
+			dhanshiriBooked.forEach(e => {
+				$('.dhanshiri .slot input[value="' + e + '"]').closest('.slot').addClass('booked');
+				$('.dhanshiri .slot input[value="' + e + '"]').closest('.slot').click(false);
+				$('.dhanshiri .slot input[value="' + e + '"]').click(false);
+			});
+		}
+
+		function loadShurma() {
+			//get array of all start and end time slot
+			var shurmaBookStartArr = $('#startshurma').val().split(",");;
+			var shurmaBookEndArr = $('#endshurma').val().split(",");
+
+			//create a blank array to store booked time slot
+			var shurmaBooked = [];
+
+			//loop over the start or end time slot array
+			for (var i = 0; i < shurmaBookStartArr.length; i++) {
+				//push start and end time to the array
+				shurmaBooked.push(shurmaBookStartArr[i]);
+				shurmaBooked.push(shurmaBookEndArr[i]);
+				//calculate difference between start and end time slot
+				var dif = allSlots.indexOf(shurmaBookEndArr[i]) - allSlots.indexOf(shurmaBookStartArr[i]);
+				//if there any slot between the start and end time, push the slots to the array
+				if (dif > 1) {
+					for (var j = 1; j < dif; j++) {
+						shurmaBooked.push(allSlots[allSlots.indexOf(shurmaBookStartArr[i]) + j]);
+					}
+				}
+				else {
+					return false;
+				}
+			}
+			//get all the booked slot in console
+			console.log(shurmaBooked);
+
+			//fill the slots with styles which are booked
+			shurmaBooked.forEach(e => {
+				$('.shurma .slot input[value="' + e + '"]').closest('.slot').addClass('booked');
+				$('.shurma .slot input[value="' + e + '"]').closest('.slot').click(false);
+				$('.shurma .slot input[value="' + e + '"]').click(false);
+			});
+		}
+
+		function loadConferenceRoom7() {
+			//get array of all start and end time slot
+			var ConferenceRoom7BookStartArr = $('#startConferenceRoom7').val().split(",");;
+			var ConferenceRoom7BookEndArr = $('#endConferenceRoom7').val().split(",");
+
+			//create a blank array to store booked time slot
+			var ConferenceRoom7Booked = [];
+
+			//loop over the start or end time slot array
+			for (var i = 0; i < ConferenceRoom7BookStartArr.length; i++) {
+				//push start and end time to the array
+				ConferenceRoom7Booked.push(ConferenceRoom7BookStartArr[i]);
+				ConferenceRoom7Booked.push(ConferenceRoom7BookEndArr[i]);
+				//calculate difference between start and end time slot
+				var dif = allSlots.indexOf(ConferenceRoom7BookEndArr[i]) - allSlots.indexOf(ConferenceRoom7BookStartArr[i]);
+				//if there any slot between the start and end time, push the slots to the array
+				if (dif > 1) {
+					for (var j = 1; j < dif; j++) {
+						ConferenceRoom7Booked.push(allSlots[allSlots.indexOf(ConferenceRoom7BookStartArr[i]) + j]);
+					}
+				}
+				else {
+					return false;
+				}
+			}
+			//get all the booked slot in console
+			console.log(ConferenceRoom7Booked);
+
+			//fill the slots with styles which are booked
+			ConferenceRoom7Booked.forEach(e => {
+				$('.ConferenceRoom7 .slot input[value="' + e + '"]').closest('.slot').addClass('booked');
+				$('.ConferenceRoom7 .slot input[value="' + e + '"]').closest('.slot').click(false);
+				$('.ConferenceRoom7 .slot input[value="' + e + '"]').click(false);
+			});
+		}
+
+		function loadConferenceRoomEast() {
+			//get array of all start and end time slot
+			var ConferenceRoomEastBookStartArr = $('#startConferenceRoomEast').val().split(",");;
+			var ConferenceRoomEastBookEndArr = $('#endConferenceRoomEast').val().split(",");
+
+			//create a blank array to store booked time slot
+			var ConferenceRoomEastBooked = [];
+
+			//loop over the start or end time slot array
+			for (var i = 0; i < ConferenceRoomEastBookStartArr.length; i++) {
+				//push start and end time to the array
+				ConferenceRoomEastBooked.push(ConferenceRoomEastBookStartArr[i]);
+				ConferenceRoomEastBooked.push(ConferenceRoomEastBookEndArr[i]);
+				//calculate difference between start and end time slot
+				var dif = allSlots.indexOf(ConferenceRoomEastBookEndArr[i]) - allSlots.indexOf(ConferenceRoomEastBookStartArr[i]);
+				//if there any slot between the start and end time, push the slots to the array
+				if (dif > 1) {
+					for (var j = 1; j < dif; j++) {
+						ConferenceRoomEastBooked.push(allSlots[allSlots.indexOf(ConferenceRoomEastBookStartArr[i]) + j]);
+					}
+				}
+				else {
+					return false;
+				}
+			}
+			//get all the booked slot in console
+			console.log(ConferenceRoomEastBooked);
+
+			//fill the slots with styles which are booked
+			ConferenceRoomEastBooked.forEach(e => {
+				$('.ConferenceRoomEast .slot input[value="' + e + '"]').closest('.slot').addClass('booked');
+				$('.ConferenceRoomEast .slot input[value="' + e + '"]').closest('.slot').click(false);
+				$('.ConferenceRoomEast .slot input[value="' + e + '"]').click(false);
+			});
+		}
+
+		function loadConferenceRoomWest() {
+			//get array of all start and end time slot
+			var ConferenceRoomWestBookStartArr = $('#startConferenceRoomWest').val().split(",");;
+			var ConferenceRoomWestBookEndArr = $('#endConferenceRoomWest').val().split(",");
+
+			//create a blank array to store booked time slot
+			var ConferenceRoomWestBooked = [];
+
+			//loop over the start or end time slot array
+			for (var i = 0; i < ConferenceRoomWestBookStartArr.length; i++) {
+				//push start and end time to the array
+				ConferenceRoomWestBooked.push(ConferenceRoomWestBookStartArr[i]);
+				ConferenceRoomWestBooked.push(ConferenceRoomWestBookEndArr[i]);
+				//calculate difference between start and end time slot
+				var dif = allSlots.indexOf(ConferenceRoomWestBookEndArr[i]) - allSlots.indexOf(ConferenceRoomWestBookStartArr[i]);
+				//if there any slot between the start and end time, push the slots to the array
+				if (dif > 1) {
+					for (var j = 1; j < dif; j++) {
+						ConferenceRoomWestBooked.push(allSlots[allSlots.indexOf(ConferenceRoomWestBookStartArr[i]) + j]);
+					}
+				}
+				else {
+					return false;
+				}
+			}
+			//get all the booked slot in console
+			console.log(ConferenceRoomWestBooked);
+
+			//fill the slots with styles which are booked
+			ConferenceRoomWestBooked.forEach(e => {
+				$('.ConferenceRoomWest .slot input[value="' + e + '"]').closest('.slot').addClass('booked');
+				$('.ConferenceRoomWest .slot input[value="' + e + '"]').closest('.slot').click(false);
+				$('.ConferenceRoomWest .slot input[value="' + e + '"]').click(false);
+			});
+		}
+
+		function loadConferenceRoom9() {
+			//get array of all start and end time slot
+			var ConferenceRoom9BookStartArr = $('#startConferenceRoom9').val().split(",");;
+			var ConferenceRoom9BookEndArr = $('#endConferenceRoom9').val().split(",");
+
+			//create a blank array to store booked time slot
+			var ConferenceRoom9Booked = [];
+
+			//loop over the start or end time slot array
+			for (var i = 0; i < ConferenceRoom9BookStartArr.length; i++) {
+				//push start and end time to the array
+				ConferenceRoom9Booked.push(ConferenceRoom9BookStartArr[i]);
+				ConferenceRoom9Booked.push(ConferenceRoom9BookEndArr[i]);
+				//calculate difference between start and end time slot
+				var dif = allSlots.indexOf(ConferenceRoom9BookEndArr[i]) - allSlots.indexOf(ConferenceRoom9BookStartArr[i]);
+				//if there any slot between the start and end time, push the slots to the array
+				if (dif > 1) {
+					for (var j = 1; j < dif; j++) {
+						ConferenceRoom9Booked.push(allSlots[allSlots.indexOf(ConferenceRoom9BookStartArr[i]) + j]);
+					}
+				}
+				else {
+					return false;
+				}
+			}
+			//get all the booked slot in console
+			console.log(ConferenceRoom9Booked);
+
+			//fill the slots with styles which are booked
+			ConferenceRoom9Booked.forEach(e => {
+				$('.ConferenceRoom9 .slot input[value="' + e + '"]').closest('.slot').addClass('booked');
+				$('.ConferenceRoom9 .slot input[value="' + e + '"]').closest('.slot').click(false);
+				$('.ConferenceRoom9 .slot input[value="' + e + '"]').click(false);
+			});
+		}
+	</script>

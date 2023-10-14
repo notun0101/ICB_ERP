@@ -1,0 +1,281 @@
+﻿@model AllHrReportViewModel
+@{
+    ViewData["Title"] = "HR Report CSR Age Group";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+@section Style{
+    <style>
+
+        .print-card-body {
+            width: 100%;
+            padding-bottom: 10px;
+        }
+
+        .vartical-table th {
+            width: 25%;
+        }
+
+        .vartical-table td {
+            width: 25%;
+        }
+
+        .table td, .table th {
+            padding: .3rem;
+            font-size: 14px;
+        }
+
+        /*table {
+            page-break-inside: auto;
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }*/
+
+        /*thead {
+            display: table-header-group;
+        }
+
+        tfoot {
+            display: table-footer-group;
+        }
+
+        h6 {
+            font-size: 14px;
+            background-color: gray;
+            color: white !important;
+            padding: 3px;
+        }*/
+    </style>
+}
+
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+        <div class="container-fluid">
+            <div class="fa-pull-right">
+                <p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+            </div>
+            <div class="row" style="padding-top:0px;">
+                <div class="col-2">
+                    <img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="OPUS ERP" style="height:80px;" />
+                </div>
+                <div class="col-10">
+                    <div style="color:black;text-align:center;">
+                        <h4 style="text-transform: uppercase;font-size:18px;">Bangladesh Development Bank Limited</h4>
+                        <h4 style="text-transform: uppercase;font-size:18px;">Head Office, 8, Rajuk Avenue, Dhaka-1000.</h4>
+                        <h4 style="text-transform: uppercase;font-size:18px;"><u>Human Resource Management Department</u></h4>
+                        <h5 style="font-size:18px;"><u>Corporate Soical Responsibility (CSR) performance reporting on gender equity issues</u></h5>
+                        @*<h5 style="font-size:18px;"><u>For the Period: </u></h5>*@
+
+                        <br />
+
+
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+
+        <div class="container-fluid" style="color:black;">
+
+            <div class="row" style="padding: 0px 15px 0px 15px; width:100%;">
+                <table class="table table-bordered " style="width:100%;">
+                    <thead>
+                        <tr style="background-color:lightgray;">
+                            <th style="text-align:center;width:10%;border-bottom:1px solid black;">Sl. No.</th>
+
+                            <th style="text-align:center;width:25%;border-bottom:1px solid black !important;">Issue</th>
+
+                            <th style="text-align:center;border-bottom:1px solid black !important;">Yes/No(if applicable)</th>
+                            <th style="text-align:center;border-bottom:1px solid black !important;">Data</th>
+
+
+                        </tr>
+                       
+                    </thead>
+                    <tbody>
+
+
+
+                        <tr>
+                            <td style="">1.</td>
+                            <td>Gender diversity<br /> among board members</td>
+                            <td>N/A</td>
+                            <td class="p-0">
+                                <table class="table m-0 p-0">
+                                    <tr>
+
+                                        <td style="border:none;">i. No. of male members</td>
+                                    </tr>
+                                    <tr style="border-top:1px solid black">
+
+                                        <td style="border:none;">ii. No. of female members</td>
+                                    </tr>
+                                </table>
+
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="">2.</td>
+                            <td style="">Gender diversity among<br /> permanent employees</td>
+                            <td style="">Yes</td>
+                            <td class="p-0" @*style="border: none;"*@>
+                                <table class="table m-0">
+                                    <tr >
+
+                                        <td style="border:none;">i.Entry level</td>
+                                        <td class="p-0" style="border-top:none;" >
+                                            <table class="table m-0 p-0">
+                                                <tr >
+                                                    <td style="border:none;">No. of male employess</td>
+                                                    <td style="border:none;">@Model.roleWiseAge?.entryMale</td>
+                                                </tr>
+                                                <tr style="border-top:1px solid black">
+                                                    <td style="border:none;">No. of female employess</td>
+                                                    <td style="border:none;">@Model.roleWiseAge?.entryFemale</td>
+                                                </tr>
+
+                                            </table>
+                                        </td>
+
+                                        
+                                    </tr>
+                                    <tr style="border-top:1px solid black ">
+
+                                        <td style="border:none;">ii.Mid level</td>
+                                        <td class="p-0">
+                                            <table class="table m-0 p-0">
+                                                <tr>
+                                                    <td style="border:none;">No. of male employess</td>
+                                                    <td style="border:none;">@Model.roleWiseAge?.midMale</td>
+                                                </tr>
+                                                <tr style="border-top:1px solid">
+                                                    <td style="border:none;">No. of female employess</td>
+                                                    <td style="border:none;">@Model.roleWiseAge?.midFemale</td>
+                                                </tr>
+
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr style="border-top:1px solid black">
+                                        <td style="border:none;">iii.Senior<br /> Management</td>
+                                        <td class="p-0" style="border-bottom: none;">
+                                            <table class="table m-0 p-0">
+                                                <tr>
+                                                    <td style="border:none;">No. of male employess</td>
+                                                    <td style="border:none;">@Model.roleWiseAge?.seniorMale</td>
+                                                </tr>
+                                                <tr style="border-top:1px solid black">
+                                                    <td style="border:none;">No. of female employess</td>
+                                                    <td style="border:none;">@Model.roleWiseAge?.seniorFemale</td>
+                                                </tr>
+
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+
+
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td style="">3.</td>
+                            <td style="">Gender breakdown by age<br /> group for permanent employees</td>
+                            <td style="">Yes</td>
+                            <td class="p-0" @*style="border: none;" *@>
+                                <table class="table m-0">
+                                    <tr>
+
+                                        <td style="border:none;">i.< 30 years</td>
+                                        <td class="p-0" style="border-top:none;">
+                                            <table class="table m-0 p-0">
+                                                <tr>
+                                                    <td style="border:none;">No. of male employess</td>
+                                                    <td style="border:none;">@Model.roleWiseAge?.less30Male</td>
+                                                </tr>
+                                                <tr style="border-top:1px solid black">
+                                                    <td style="border:none;">No. of female employess</td>
+                                                    <td style="border:none;">@Model.roleWiseAge?.less30Female</td>
+                                                </tr>
+
+                                            </table>
+                                        </td>
+
+                                      
+                                    </tr>
+                                    <tr style="border-top:1px solid black ">
+
+                                        <td style="border:none;">ii.30-50 years</td>
+                                        <td class="p-0">
+                                            <table class="table m-0 p-0">
+                                                <tr>
+                                                    <td style="border:none;">No. of male employess</td>
+                                                    <td style="border:none;">@Model.roleWiseAge?.thirtyTofiftyMale</td>
+                                                </tr>
+                                                <tr style="border-top:1px solid">
+                                                    <td style="border:none;">No. of female employess</td>
+                                                    <td style="border:none;">@Model.roleWiseAge?.thirtyTofiftyFemale</td>
+                                                </tr>
+
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr style="border-top:1px solid black">
+                                        <td style="border:none;">iii.> 50 years</td>
+                                        <td class="p-0" style="border-bottom: none;">
+                                            <table class="table m-0 p-0">
+                                                <tr>
+                                                    <td style="border:none;">No. of male employess</td>
+                                                    <td style="border:none;">@Model.roleWiseAge?.upto50Male</td>
+                                                </tr>
+                                                <tr style="border-top:1px solid black">
+                                                    <td style="border:none;">No. of female employess</td>
+                                                    <td style="border:none;">@Model.roleWiseAge?.upto50Female</td>
+                                                </tr>
+
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+
+
+                            </td>
+
+
+                        </tr>
+
+                        @*<td style="text-align:center;">Gender breakdown by age group for permanent employees</td>*@
+
+                        @*<tr>
+
+                                <td>@Model.roleWiseAge?.entryMale</td>
+
+
+                                <td style="text-align:center;"></td>
+                                <td style="text-align:center;"></td>
+                            </tr>*@
+
+
+
+
+
+
+
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+}
+
+
+

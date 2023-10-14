@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewData["Title"] = "ReportCenter";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4 bg-light">
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="m-0 font-weight-bold text-primary">Pf Report</h5>
+                    <hr />
+
+                    <div class="form-group row">
+
+                        <label for="yearSelect" class="col-sm-2">Report Type</label>
+                        <select class="form-control col-sm-4" id="reportTypeId">
+                            <option value="0">Select Report</option>
+                            <option value="1">Indiviual PF Report</option>
+                            <option value="2">PF summary Report</option>
+                      </select>
+
+
+                    </div>
+
+                    <div class="form-group row">
+
+                        <label for="yearSelect" class="col-sm-2">Employee</label>
+                        <input type="text" data-parsley-trigger="keyup" class="form-control membersName col-sm-4" placeholder="Employee Id">
+                            <input type="hidden" name="" id="employeeId" value="0">
+                            <input type="hidden" id="employeeInfoId" name="employeeInfoId" value="" />
+
+                     
+                    
+                    </div>
+                    <div class="form-group row">
+                       
+                            <label for="yearSelect" class="col-sm-2">Select a Year:</label>
+                        <select id="yearSelect" class=" form-control membersName col-sm-4"></select>
+
+                      
+
+                    </div> 
+                    <div class="form-group row">
+                        <div class="col-sm-5">
+
+                        </div>
+                        <div class="col-sm-2">
+                            <button onclick="PfReport()" type="button" class="btn btn-sm btn-primary" style="background-color:darkcyan; color:white" id="addcoa" value="View PF Statement">PF-Report</button>
+                        </div>
+                          
+                    </div>
+                </div>
+            </div>
+          
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        Common.Ajax('GET', '/global/api/GetApprovePFMemberInfo', [], 'json', ajaxFunctionAllApproveMembers, false);
+
+        var currentYear = new Date().getFullYear();
+
+        // Set the start and end years for the dropdown
+        var startYear = 2010;
+        var endYear = 2030;
+
+        // Populate the dropdown with years
+        for (var year = startYear; year <= endYear; year++) {
+            $('#yearSelect').append('<option value="' + year + '">' + year + '</option>');
+        }
+
+        // Set the default selected year (you can set it to the current year or any other default value)
+        $('#yearSelect').val(currentYear);
+    
+    })
+
+    function ajaxFunctionAllApproveMembers(response) {
+        console.log(response);
+        var GetMemberList = [];
+        $.each(response, function (id, option) {
+            var obj = new Object();
+            obj.key = option.Id;
+            obj.employeeInfoId = option.employeeInfoId;
+            obj.value = option.memberName + "(" + option.employeeCode + ")";
+            obj.employeeCode = option.employeeCode;
+            GetMemberList[GetMemberList.length] = obj;
+        });
+
+        $('.membersName').autocomplete({
+            source: GetMemberList,
+            select: function (event, ui) {
+                $("#membersName").val(ui.item.value);
+                $("#membersCode").val(ui.item.employeeCode);
+                $("#memberId").val(ui.item.key);
+                $("#employeeInfoId").val(ui.item.employeeInfoId);
+            }
+        });
+    }
+
+    function PfReport() {
+        var memId = $("#memberId").val();
+        var year = $("#yearSelect").val();
+        var reportTypeId = $("#reportTypeId").val();
+        var employeeInfoId = $("#employeeInfoId").val();
+        if (memId == 0 && reportTypeId==1) {
+            swal('Warning', 'please try again', 'warning');
+            return false;
+        }
+        else if (reportTypeId==1) {
+            window.open('/ProvidentFund/PFReport/PFReportByEmpId?empId=' + employeeInfoId + '&year=' + year, '_blank');
+        } 
+        else if (reportTypeId==2) 
+        {
+            window.open('/ProvidentFund/PFReport/PFsummarypdf', '_blank');
+        }
+        else
+        {
+            swal('Warning', 'please try again', 'warning');
+            return false;
+        }
+
+    }
+</script>
+

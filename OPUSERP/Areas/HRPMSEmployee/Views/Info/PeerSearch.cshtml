@@ -1,0 +1,192 @@
+﻿@model EmployeeInfoViewModel
+
+@{
+    ViewData["Title"] = "Peer Search";
+    Layout = "~/Areas/HRPMSEmployee/Views/Shared/_EmployeeForm.cshtml";
+}
+
+@section StyleEmp{
+    <style>
+        .redStar {
+            color: red;
+        }
+    </style>
+}
+
+    <div class="card" style="width: 100%;">
+        @*<div class="card-header py-3 d-flex flex-row align-items-center">
+            <h4 class="m-0 font-weight-bold text-primary">Peer Search</h4>
+            <a class='btn btn-info mr-1' style=" margin-left:82%;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=202'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+        </div>*@
+        <div class="card-header py-3 d-flex flex-row align-items-center">
+
+            <h5 class="m-0 font-weight-bold text-primary">Peer Search</h5>
+            <a class='btn btn-info mr-1' style=" margin-left:79%;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=202'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+        </div>
+        <div class="card-body">
+            <div class="row">
+                @*<div class="col-8">
+                    <h5 class="card-title" style="color: black">Peer Search</h5>
+                    <a class='btn btn-info mr-4 float-right' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=202'><i class="fas fa-backward"></i></a>
+
+                </div>*@
+    </div>
+
+            <div class="container">
+                <div class="form-group row">
+                    <div class="col-md-10">
+                        <input type="text" class="form-control input-sm" id="txtSearch" placeholder="Search......................Employee Name/Department/Blood Group/Marital Status/Gender/Office Mobile" />
+                    </div>
+                    <div class="col-md-2">
+                        <span class="input-group-btn">
+                            <button type="button" id="btnSearch" onclick="LoadEmployeeInfo()" class="btn btn-info btn-sm"><i class="fas fa-search"> Search</i></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="employeeIfoTable">
+                    <thead>
+                        <tr>
+                            <th style="width:5%">Image</th>
+                            <th style="width:30%">Employee Name</th>
+                            <th style="width:20%">Designation</th>
+                            <th style="width:13%">Present Posting</th>
+                            <th style="width:20%">Email</th>
+                            <th style="width:12%">Mobile Number(Office)</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ScriptsEmp{
+    <script>
+        function LoadEmployeeInfo() {
+            if ($("#txtSearch").val() == '' || $("#txtSearch").val() == null || $("#txtSearch").val() == '0') {
+                alert("Attention.!! Please enter employee search entity");
+                return false;
+            }
+
+            Common.Ajax('GET', '/global/api/GetEmployeeInfoBySearch/' + $("#txtSearch").val(), [], 'json', ajaxGetEmployeeInfoBySearch);
+        }
+        function ajaxGetEmployeeInfoBySearch(response) {
+                
+           $("#employeeIfoTable").DataTable().destroy();
+            var dtTable = $("#employeeIfoTable");
+            var tableBody = dtTable.find('tbody');
+            $("#employeeIfoTable tbody tr").remove();
+            var index = 1;
+            $.each(response, function (id, option) {
+                console.log(option)
+                var empImage = '';
+                var nameEnglish = '';
+                var designation = '';
+                var presentposting = '';
+                var emailAddress = '';
+                var mobileNumberOffice = '';
+               
+                if (option.url == null) {
+                    empImage = '/images/defaultperson.png';
+                }
+                else {
+                    empImage = '/'+ option.url;
+                }
+                if (option.nameEnglish == null) {
+                    nameEnglish = '';
+                }
+                else {
+                    nameEnglish = option.nameEnglish;
+                }
+                if (option.designation == null) {
+                    designation = '';
+                }
+                else {
+                    designation = option.designation;
+                }
+                if (option.presentPosting == null) {
+                    presentposting = '';
+                }
+                else {
+                    presentposting = option.presentPosting;
+                }
+                if (option.emailAddress == null) {
+                    emailAddress = '';
+                }
+                else {
+                    emailAddress = option.emailAddress;
+                }
+                if (option.mobileNumberOffice == null) {
+                    mobileNumberOffice = '';
+                }
+                else {
+                    mobileNumberOffice = option.mobileNumberOffice;
+                }
+                tableBody.append('<tr id=' + index + '>' +
+                    '<td><img src="' + empImage +'" height="50" width="50"/></td>' +
+                    '<td>' + nameEnglish + '</td>' +
+                    '<td>' + designation + '</td>' +
+                    '<td>' + presentposting + '</td>' +
+                    '<td>' + emailAddress + '</td>' +
+                    '<td style="text-align:left;">' + mobileNumberOffice + '</td>' +
+                    '</tr>');
+                index = index + 1;
+            });
+            var orgFullTitle = "Employee Information";
+             $('#employeeIfoTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        },
+                        title: orgFullTitle,
+                        messageTop: 'List Of Employee Information',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        },
+                        title: orgFullTitle,
+                        messageTop: 'List Of Employee Information'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: orgFullTitle,
+                        messageTop: 'List Of Employee Information',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3 ,4]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+        }
+       
+    </script>
+}

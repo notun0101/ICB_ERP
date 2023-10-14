@@ -1,0 +1,190 @@
+﻿@model FixationIntegrationViewModel
+
+@{
+    ViewData["Title"] = "FixationIntegrationList";
+    Layout = "~/Areas/Payroll/Views/Shared/_SalaryMasterForm.cshtml";
+
+}
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Fixation Integration List</h6>
+                <a class='btn btn-info mr-4' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1013&perentId=5926'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+            </div>
+            <div class="card-body">
+                <form asp-action="FinallyPromotion" method="post">
+                    <table class="table table-striped table-bordered" id="FixationIntegrationtbl">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" id="selectAll" style="width:20px;height:20px" />
+                                </th>
+                                <th>Employee Code</th>
+                                <th>Employee Name</th>
+                                <th>Posting Place</th>
+                                <th>Current Scale</th>
+                                <th>Designation</th>
+                                <th>New Basic</th>
+                                <th>Type</th>
+                                <th>Effective Date</th>
+                                <th>
+                                    <input type="submit" value="Approve" class="btn btn-success" />
+                                </th>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.fixationIntegrationList.Where(x => x.fixationType == "Promotion" && x.status == 1))
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" value="@item.Id" style="width:20px;height:20px" id="chk_@item.Id" class="js-switch" />
+                                    </td>
+                                    <td>@item.employee?.employeeCode</td>
+                                    <td>@item.employee?.nameEnglish</td>
+                                    <td>@item.employee?.placeOfPosting</td>
+                                    <td>@item.employee?.currentBasic</td>
+                                    <td>@item.lastDesignation?.designationName</td>
+                                    <td>@item.amount</td>
+                                    <td>@item.fixationType</td>
+                                    <td>@item.effectiveDate?.ToString("dd MMM yyyy")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Latest compiled and minified JavaScript-->
+<script src="https://unpkg.com/multiple-select@1.3.1/dist/multiple-select.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#selectAll').on('change', function () {
+            if ($(this).prop('checked') == true) {
+                $('.js-switch').prop('checked', true);
+                $('.js-switch').attr('name', 'chkFixId');
+            }
+            else {
+                $('.js-switch').prop('checked', false);
+                $('.js-switch').removeAttr('name', 'chkFixId');
+            }
+        })
+
+        $('.js-switch').on('change', function () {
+            if ($(this).prop('checked') == true) {
+                $(this).attr('name', 'chkFixId');
+            }
+            else {
+                $(this).removeAttr('name', 'chkFixId');
+            }
+        })
+
+
+        var orgFullTitle = "FixationIntegrationtbl";
+        $('#FixationIntegrationtbl').DataTable({
+            stateSave: false,
+            dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                "<'row'<'col-sm-12't>>" +
+                "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fa fa-file-excel"></i> Excel',
+                    titleAttr: 'Excel',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                    },
+                    title: orgFullTitle,
+                    messageTop: 'List Of Fixation Integration',
+                    class: 'btn btn-info'
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: '<i class="fa fa-file-excel"></i> CSV',
+                    titleAttr: 'CSV',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                    },
+                    title: orgFullTitle,
+                    messageTop: 'List Of Fixation Integration'
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i> Print',
+                    titleAttr: 'Print',
+                    title: orgFullTitle,
+                    messageTop: 'List Of Fixation Integration',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                    },
+                    customize: function (doc) {
+                        $(doc.document.body).find('h1').css('font-size', '20pt');
+                        $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                        $(doc.document.body).find('h1').css('text-align', 'center');
+                    }
+                }
+            ]
+        });
+    });
+
+
+    function formatingDate(date) {
+        var monthName = "";
+        date = new Date(date);
+        var year = date.getFullYear(),
+            month = date.getMonth() + 1, // months are zero indexed
+            day = date.getDate(),
+            hour = date.getHours(),
+            minute = date.getMinutes(),
+            second = date.getSeconds(),
+            hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+            minuteFormatted = minute < 10 ? "0" + minute : minute,
+            morning = hour < 12 ? "am" : "pm";
+        if (month == 1) {
+            monthName = 'Jan';
+        }
+        else if (month == 2) {
+            monthName = 'Feb';
+        }
+        else if (month == 3) {
+            monthName = 'Mar';
+        }
+        else if (month == 4) {
+            monthName = 'Apr';
+        }
+        else if (month == 5) {
+            monthName = 'May';
+        }
+        else if (month == 6) {
+            monthName = 'Jun';
+        }
+        else if (month == 7) {
+            monthName = 'Jul';
+        }
+        else if (month == 8) {
+            monthName = 'Aug';
+        }
+        else if (month == 9) {
+            monthName = 'Sep';
+        }
+        else if (month == 10) {
+            monthName = 'Oct';
+        }
+        else if (month == 11) {
+            monthName = 'Nov';
+        }
+        else {
+            monthName = 'Dec';
+        };
+
+        return day + "-" + monthName + "-" + year;
+    }
+
+</script>
+
+

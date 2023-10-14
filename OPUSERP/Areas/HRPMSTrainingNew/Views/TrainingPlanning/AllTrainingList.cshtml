@@ -1,0 +1,535 @@
+﻿@model TrainingPlanningViewModel
+@{
+    ViewData["Title"] = "All Trainings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<style>
+    .redStar {
+        color: red;
+    }
+</style>
+<br />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">All Trainings</h6>
+                <a class='btn btn-info mr-3 mt-1 float-right' data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1019&perentId=6300'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="trainingPlaneTable">
+                    <thead>
+						<tr>
+							<th style="text-align:center;">SL</th>
+							<th>@Model.fLang.course</th>
+							<th>Start Date</th>
+							<th>End Date</th>
+							<th>@Model.fLang.participant</th>
+							<th>Training Type</th>
+							<th>@Model.fLang.budget</th>
+							<th>@Model.fLang.action</th>
+</thead>
+					<tbody>
+						@{ 
+							int? index = 0;
+						}
+						@foreach (var data in Model.trainingInfoNews)
+						{
+							index++;
+							var trainetype = "";
+							if (data.trainingType == 1)
+							{
+								trainetype = "Local (In House)";
+							}
+							else if (data.trainingType == 2)
+							{
+								trainetype = "Foreign";
+							}
+							else if (data.trainingType == 3)
+							{
+								trainetype = "Local (Outside)";
+							}
+							<tr>
+								<td>@index</td>
+								<td>@data.course</td>
+								<td>@data.startDate?.ToString("dd-MMM-yy")</td>
+								<td>@data.endDate?.ToString("dd-MMM-yy")</td>
+								<td>@data.noOfParticipants</td>
+								<td>@trainetype </td>
+								<td>@data.sourceOfFund?.nameEN</td>
+								<td>
+								
+									<a class="btn btn-info" href="/HRPMSTrainingNew/TrainingPlanning/UpdateTraining/@data.Id" target="_blank"> <i class="fa fa-edit"></i></a>
+									@*<a class="btn btn-success" onclick="Edit(@data.Id, '@data.course', '@data.courseTypeId','@data.amount','@data.countryId', '@data.startDate?.ToString(" MM/dd/yy")', '@data.endDate?.ToString("MM/dd/yy")', '@data.year', '@data.noOfParticipants','@data.trainerId', '@data.subjectId','@data.employeeTypes', '@data.sourceOfFundId', '@data.location','@data.trainingInstituteId','@data.remarks', '@data.employeeInfoId')" href="#"><i class="fa fa-edit"></i></a>*@
+									<a class="btn btn-danger" onclick="Delete(@data.Id)" href="#"><i class="fa fa-trash-alt"></i></a>
+									<a class="btn btn-info" onclick="IsComplete(@data.Id)" href="#">IsComplete</a>
+								</td>
+							</tr>
+						}
+					</tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="popupModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center;">
+                    <h5 class="card-title" style="color: black; margin: 8px; text-transform: uppercase;">Modify Training</h5>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <br />
+            </div>
+            <div class="card-body">
+                <div class="container">
+					<form asp-area="HRPMSTrainingNew" asp-controller="TrainingPlanning" asp-action="Index" id="FormId" method="post" data-parsley-validate="parsley">
+						<div asp-validation-summary="All" class="text-danger"></div>
+
+						<div class="form-group row">
+							<label for="course" class="col-sm-2 col-form-label">@Model.fLang.course </label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="course" id="course" />
+								@*<select type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="course" id="course">
+					<option value="">Select One</option>
+					@foreach (var data in Model.courseTitles)
+					{
+						<option value="@data.nameEN">@data.nameEN</option>
+					}
+				</select>*@
+								<input type="hidden" name="planningId" id="planningId">
+								<input type="hidden" name="trainingType" id="trainingType" value="2">
+							</div>
+							<label for="courseTypeId" class="col-sm-2 col-form-label">Course Type</label>
+							<div class="col-sm-4">
+								<select type="text" class="form-control" name="courseTypeId" id="courseTypeId">
+									<option value="">Select One</option>
+									@foreach (var data in Model.courseTypeList)
+									{
+										<option value="@data.Id">@data.typeNameEN</option>
+									}
+								</select>
+							</div>
+
+						</div>
+						<div class="form-group row">
+							@*<label for="amount" class="col-sm-2 col-form-label">@Model.fLang.amount </label>
+			<div class="col-sm-4">
+				<input type="text" data-parsley-type="number" class="form-control" name="amount" id="amount">
+			</div>*@
+						</div>
+						<div class="form-group row">
+							<label for="planeStartDate" class="col-sm-2 col-form-label">@Model.fLang.planeStartDate </label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="planeStartDate" id="planeStartDate" readonly>
+							</div>
+							<label for="type" class="col-sm-2 col-form-label">@Model.fLang.planeEndDate </label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="planeEndDate" id="planeEndDate" readonly>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="year" class="col-sm-2 col-form-label">@Model.fLang.year </label>
+							<div class="col-sm-4">
+								<select type="text" class="form-control" name="year" id="year">
+									<option value="">Select One</option>
+									@foreach (var data in Model.years)
+									{
+										<option value="@data.year">@data.year</option>
+									}
+								</select>
+							</div>
+
+							<label for="participant" class="col-sm-2 col-form-label">No of perticipants</label>
+							<div class="col-sm-4">
+								<input type="number" min="1" class="form-control" name="participant" id="participant">
+							</div>
+
+						</div>
+
+						<div class="form-group row">
+							@*<label for="trainerId" class="col-sm-2 col-form-label">Trainer </label>
+			<div class="col-sm-4">
+				<select type="text" class="form-control" name="trainerId" id="trainerId" value="@Model.trainerId">
+					<option value="">Select One</option>
+					@foreach (var data in Model.resourcePeople)
+					{
+						<option value="@data.Id">@data.name</option>
+					}
+				</select>
+			</div>*@
+
+							<label for="year" class="col-sm-2 col-form-label">Subject </label>
+							<div class="col-sm-4">
+								<select type="text" class="form-control" name="subjectId" id="trainingSubjects">
+									<option value="">Select One</option>
+									@foreach (var data in Model.trainingSubjects)
+									{
+										<option value="@data.Id">@data.name</option>
+									}
+								</select>
+							</div>
+							<label for="country" class="col-sm-2 col-form-label">@Model.fLang.country </label>
+							<div class="col-sm-4">
+								<select class="form-control" name="country" id="country">
+									<option value="">Select One</option>
+									@foreach (var data in Model.countries)
+									{
+										<option value="@data.Id">@data.countryName</option>
+									}
+								</select>
+							</div>
+
+						</div>
+						<div class="form-group row">
+							<label for="sourceOfFundId" class="col-sm-2 col-form-label">@Model.fLang.budget </label>
+							<div class="col-sm-4">
+								<select class="form-control" name="sourceOfFundId" id="sourceOfFundId">
+									<option value="">Select</option>
+									@*<option value="Government">Government</option>
+					<option value="DevelopmentPartner">Development Partner</option>*@
+									@foreach (var data in Model.sourceOfFundList)
+									{
+										<option value="@data.Id">@data.nameEN</option>
+									}
+								</select>
+							</div>
+							<label for="employeeType" class="col-sm-2 col-form-label" multiple="multiple">@Model.fLang.employeeType </label>
+							<div class="col-sm-4">
+								<select type="text" class="form-control" name="employeeTypeMultiple" id="employeeType" data-parsley-required="false">
+
+									<option value="">Select One</option>
+									@foreach (var data in Model.employeeTypes)
+									{
+										<option value="@data.Id">@data.empType</option>
+									}
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="location" class="col-sm-2 col-form-label">@Model.fLang.location </label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="location" id="location">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="employeeType" class="col-sm-2 col-form-label">Institute @*<span style="float:right;" class="redStar">*</span>*@</label>
+							<div class="col-sm-4">
+								<select type="text" data-parsley-required="false" data-parsley-trigger="keyup" class="form-control" name="trainingInstituteId" id="trainingInstituteId">
+									<option value="">Select One</option>
+									@foreach (var data in Model.trainingInstitutes)
+									{
+										<option value="@data.Id">@data.trainingInstituteName</option>
+									}
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="employeeInfoId" class="col-sm-2 col-form-label">Course Coordinator </label>
+							<div class="col-sm-4">
+								<select type="text" class="form-control" name="employeeInfoId" id="employeeInfoId" data-parsley-required="true">
+									<option value="">Select One</option>
+									@foreach (var data in Model.employeeInfoList)
+									{
+										<option value="@data.Id">@data.nameEnglish (@data.employeeCode)</option>
+									}
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="remark" class="col-sm-2 col-form-label">Remarks </label>
+							<div class="col-sm-4">
+								<textarea type="text" data-parsley-required="false" data-parsley-trigger="keyup" class="form-control" name="remark" id="remark"></textarea>
+							</div>
+						</div>
+						<hr>
+
+
+
+						<div class="form-group row">
+							<label for="trainerId" class="col-sm-2 col-form-label">  Trainer </label>
+							<input id="resourcePersonIdList" name="resourcePersonIdList" style="display:none;" />
+							<div class="col-sm-4">
+								<select type="text" class="form-control" name="trainerId" id="resourcePeople2">
+									<option value="">Select One</option>
+									@foreach (var data in Model.resourcePeople)
+									{
+										<option value="@data.Id">@data.name</option>
+									}
+								</select>
+							</div>
+							<div class="col-sm-2">
+								<button type="button" id="add" value="add" class="btn btn-info btn-sm" style="float:left; margin-top:5px;"> add Trainer</button>
+							</div>
+						</div>
+						<table class="" id="tblPerson" style="width:60%;text-align:center; border-collapse:collapse;" border="1"></table>
+
+
+
+						<hr />
+						<button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+					</form>
+                </div>
+            </div>
+            <br />
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts{
+    <!--Latest compiled and minified JavaScript-->
+    <script src="https://unpkg.com/multiple-select@1.3.1/dist/multiple-select.min.js"></script>
+
+    <script>
+	
+		$("#tblPerson").on("click", ".deleteitem", function () {
+			$(this).closest("tr").remove();
+			collectPersonId();
+		});
+
+		$("#trainingType").change(function () {
+			var type = $("#trainingType :selected").val();
+			if (type == 1 || type == 3 || type == "") {
+				$("#country").val(1);
+			} else {
+				$("#country").val('');
+			}
+		});
+
+		function IsComplete(TrainigId) {
+
+				swal({
+				title: 'Are you sure?', text: 'Do you want to Complete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+			}).then(function () {
+				$.ajax({
+					url: '@Url.Action("SaveIsCompleteTraining", "TrainingPlanning")',
+					type: 'POST',
+					data: { id: TrainigId }
+				}).done(function (data) {
+					swal('success', 'Operation Successfully!', 'success').then(function () {
+						location.reload();
+					});
+
+				}).fail(function () {
+
+				});
+			});
+			
+		}
+
+		$("#add").click(function () {
+			var id = $("#resourcePeople2 option:selected").val();
+			var name = $("#resourcePeople2 option:selected").text();
+			console.log(id);
+			if ($('table#tblPerson').find('#rowID' + id).length > 0) {
+				swal('', 'already exists this Person!', 'error');
+			}
+			else if (id > 0) {
+				var item = '<tr id="rowID' + id + '">' +
+					'<td style="display:none;">' + id + '</td>' +
+					'<td>' + name + '</td> ' +
+					'<td>' +
+					'<button type = "button" id = "remove" value = "X" class="btn btn-danger btn-sm deleteitem"  title = "click to delete" > <i class="fa fa-trash-alt"></i></button> ' +
+					'</td> ' +
+					'</tr>';
+				$("#tblPerson").append(item);
+				$("#resourcePeople2").val("");
+				collectPersonId();
+			} else {
+				swal('', 'Select Person!', 'error').then(function () { });
+			}
+		});
+
+		function collectPersonId() {
+			var Item = '';
+			$('#tblPerson tr').each(function () {
+				Item += $(this).closest("tr").children("td").eq(0).text() + ',';
+			});
+			Item = Item.slice(0, -1);
+			$("#resourcePersonIdList").val(Item);
+		};
+			function GetTrainingResourcePersonById(Id) {
+				$.ajax({
+					url: '@Url.Action("GetTrainingResourcePersonById", "TrainingPlanning")',
+					type: 'POST',
+					data: { id: Id }
+				}).done(function (data) {
+					var item = '';
+					for (var i = 0; i < data.length; i++) {
+						item += '<tr id="rowID' + data[i].Id + '">' +
+							'<td style="display:none;">' + data[i].Id + '</td>' +
+							'<td>' + data[i].name + '</td> ' +
+							'<td>' +
+							'<button type = "button" id = "remove" value = "X" class="btn btn-danger btn-sm deleteitem"  title = "click to delete" > <i class="fa fa-trash-alt"></i></button> ' +
+							'</td> ' +
+							'</tr>';
+					}
+					$("#tblPerson").html(item);
+
+				}).fail(function () {
+
+				});
+		};
+
+
+		$('#submit').click(function () {
+			//collectPersonId();
+			console.log($('#FormId').serializeArray());
+			var data = $('#FormId').serializeArray();
+			console.log(data[0].value)
+			swal({
+				title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+			}).then(function () {
+				$.ajax({
+					url: '@Url.Action("Index", "TrainingPlanning")',
+					type: 'POST',
+					data: data
+				}).done(function () {
+					if (data[0].value == 0) {
+						swal('success', 'Saved Successfully!', 'success').then(function () {
+							location.reload();
+						});
+					}
+					else {
+						swal('success', 'Updated Successfully!', 'success').then(function () {
+							location.reload();
+						});;
+					}
+				}).fail(function () {
+					swal('warning', 'Failed!', 'warning');
+				})
+			});
+		});
+
+	
+
+        $(document).ready(function () {
+            var orgFullTitle = "TRAINING PLANNING (FOREIGN)";
+            //$("#award").addClass("active");
+            $('#trainingPlaneTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        title: orgFullTitle,
+                        messageTop: 'List Of Foreign Training',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        title: orgFullTitle,
+                        messageTop: 'List Of Employee Training'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: orgFullTitle,
+                        messageTop: 'List Of Foreign Training',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+            $('#planeStartDate').datepicker({ uiLibrary: 'bootstrap4' });
+            $('#planeEndDate').datepicker({ uiLibrary: 'bootstrap4' });
+            $('#employeeType').multipleSelect();
+        });
+
+		function Edit(Id, course, courseTypeId, amount, countryId, startDate, endDate, year, noOfParticipants, trainerId, subjectId, employeeTypeId, sourceOfFundId, location, trainingInstituteId, remark, employeeInfoId) {
+
+            $("#popupModal").modal('show');
+            $("#planningId").val(Id);
+            $("#course").val(course);
+			$("#courseTypeId").val(courseTypeId);
+            //$("#amount").val(amount);
+            $("#country").val(countryId);
+            $("#planeStartDate").val(startDate);
+            $("#planeEndDate").val(endDate);
+            $("#year").val(year);
+            $("#participant").val(noOfParticipants);
+            $("#trainerId").val(trainerId);
+            $("#trainingSubjects").val(subjectId);
+			$("#employeeInfoId").val(employeeInfoId);
+			
+         
+            $("#employeeType").multipleSelect('setSelects', employeeTypeId.split(","));
+			$("#sourceOfFundId").val(sourceOfFundId);
+           
+           
+            $("#location").val(location);
+            $("#trainingInstituteId").val(trainingInstituteId);
+			$("#remark").val(remark);
+			GetTrainingResourcePersonById(Id);
+        }
+        @*function Delete(Id) {
+	        swal({
+		        title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+	        }).then(function () {
+		        $.ajax({
+			        url: '@Url.Action("Delete1", "TrainingPlanning")',
+			        data: { Id: Id },
+			        type: 'GET',
+		        })
+		        .done(function () {
+                    swal('', 'Deleted Successfully!', 'success').then(function () {
+                        window.location.reload();
+                    });
+		        })
+		        .fail(function () {
+			        swal('', 'Unable to Delete!', 'warning');
+		        });
+	        });
+
+           // calendar.render();
+        }*@
+
+        function Delete(Id) {
+	        swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+
+                $.ajax({
+                    url: '@Url.Action("Delete1", "TrainingPlanning")',
+                    data: { Id: Id },
+                    type: 'POST',
+                })
+                    .done(function () {
+                        swal('', 'Deleted Successfully!', 'success');
+                        window.location.href = "/HRPMSTrainingNew/TrainingPlanning/AllTrainingList";
+                    })
+                    .fail(function () {
+                        swal('Cancelled', 'It will not be deleted. Please try again later !!!', 'error');
+                    });
+            });
+        }
+    </script>
+}

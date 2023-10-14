@@ -1,0 +1,185 @@
+﻿@model PayrollReportViewModel
+@{
+    ViewData["Title"] = "SpecialReport";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+
+<style>
+
+    .print-card-body {
+        width: 100%;
+        padding-bottom: 10px;
+    }
+
+    .vartical-table th {
+        width: 25%;
+    }
+
+    .vartical-table td {
+        width: 25%;
+    }
+
+    .table td, .table th {
+        padding: .3rem;
+        font-size: 14px;
+        border: 1px solid black !important;
+    }
+
+    table {
+        page-break-inside: auto;
+        border-collapse: collapse;
+        border: 1px solid black !important;
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+        border: 1px solid black !important;
+    }
+
+    thead {
+        display: table-header-group;
+        border: 1px solid black !important;
+    }
+
+    tfoot {
+        display: table-footer-group;
+        border: 1px solid black !important;
+    }
+
+    h6 {
+        font-size: 14px;
+        background-color: gray;
+        color: white !important;
+        padding: 3px;
+    }
+</style>
+
+
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+
+        <div class="container-fluid">
+          
+            <div class="row" style="padding-top:0px;">
+                <div class="col-2">
+                    <img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="BDBL Logo" style="height:80px;" />
+                </div>
+                <div class="col-8">
+                    <div style="color:black;text-align:center;">
+                        <h3 style="font-size:20px;">@Model.companies.FirstOrDefault()?.companyName</h3>
+                        <h3 style="font-size:18px;"> Central Accounts Department</h3>
+                        <h3 style="font-size:17px;"> Expenditure of BDBL Securities Ltd for the month of @Model.specialReportVms.FirstOrDefault().MonthName , @Model.specialReportVms.FirstOrDefault().Year </h3>
+                        <br />
+                    </div>
+                </div>
+                <div class="col-2">
+
+                </div>
+            </div>
+
+            <div class="row" style="padding-top:0px; color: black;">
+                <div class="col-6">
+                </div>
+                <div class="col-6 text-right">
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid ">
+            <div class="col-12">
+                <h3 style="font-size:18px;color:black"> </h3>
+            </div>
+        </div>
+        <br />
+        <div class="container-fluid" style="color:black;">
+            <h5></h5>
+            <table class="table table-bordered">
+                <thead>
+                    <tr style="text-align: center;">
+                        <th>ID No</th>
+                        <th>Name of Officer/Staff</th>
+                        <th>Basic Pay</th>
+                        <th>Total Salary</th>
+                        <th>Pension Fund/Gratuity fund</th>
+                        <th>PF Fund Contribution</th>
+                        <th>Mobile Allowance</th>
+                        <th>Fes/In,<br />Bonus</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 1;
+                    }
+                    @foreach (var data in Model.specialReportVms)
+                    {
+
+                        <tr>
+                            <td>@data.EmpCode</td>
+                            <td>@data.EmpName</td>
+                            <td style="text-align: center;">@data.BasicPay?.ToString("N2")</td>
+                            <td style="text-align: center;">@data.NetPay?.ToString("N2")</td>
+                            <td style="text-align: right;">@((data.Gratuity + data.Pension)?.ToString("N2"))</td>
+                            <td style="text-align: right; width: 15%;">@data.PFBank?.ToString("N2")</td>
+                            <td style="text-align: right; width: 15%;">@data.mobileAllowance?.ToString("N2")</td>
+                            <td style="text-align: right; width: 15%;">@data.Bonus?.ToString("N2")</td>
+                        </tr>
+                        i++;
+                    }
+                    <tr>
+                        <th></th>
+                        <th>Total</th>
+                        <th style="text-align: right;">@(Model.specialReportVms.Sum(x => x.BasicPay)?.ToString("N2"))</th>
+                        <th style="text-align: right;">@(Model.specialReportVms.Sum(x => x.NetPay)?.ToString("N2"))</th>
+                        <th style="text-align: right;">@((Model.specialReportVms.Sum(x => x.Pension) + Model.specialReportVms.Sum(x => x.Gratuity))?.ToString("N2"))</th>
+                        <th style="text-align: right;">@(Model.specialReportVms.Sum(x => x.PFBank)?.ToString("N2"))</th>
+                        <th style="text-align: right;">@(Model.specialReportVms.Sum(x => x.mobileAllowance)?.ToString("N2"))</th>
+                        <th style="text-align: right;">@(Model.specialReportVms.Sum(x => x.Bonus)?.ToString("N2"))</th>
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+            <div class="col-6"></div>
+            <div class="col-6">
+                <table style="text-align: center;width:800px" class="table table-bordered">
+
+                    <tbody>
+                        <tr>
+                            <td>639/640 = 53100-31</td>
+                            <td>@(Model.specialReportVms.Sum(x => x.NetPay)?.ToString("N2"))</td>
+                        </tr>
+                        <tr>
+                            <td>639/669 = 53100-28</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>639/671 = 53100-25</td>
+                            <td>@(Model.specialReportVms.Sum(x => x.Pension)?.ToString("N2"))</td>
+                        </tr>
+                        <tr>
+                            <td>639/671-A 53100-36</td>
+                            <td>@(Model.specialReportVms.Sum(x => x.Gratuity)?.ToString("N2"))</td>
+                        </tr>
+                        <tr>
+                            <td>639/671-A 53100-06</td>
+                            <td>@(Model.specialReportVms.Sum(x => x.PFBank)?.ToString("N2"))</td>
+                        </tr>
+                        <tr>
+                            <td>639/643 53100-21</td>
+                            <td>@(Model.specialReportVms.Sum(x => x.Bonus)?.ToString("N2"))</td>
+                        </tr>
+                        <tr>
+                            <td>54700-01</td>
+                            <td>@(Model.specialReportVms.Sum(x => x.mobileAllowance)?.ToString("N2"))</td>
+                        </tr>
+                        <tr>
+                            <td>Total</td>
+                            <td>@((Model.specialReportVms.Sum(x => x.Pension) + Model.specialReportVms.Sum(x => x.Gratuity) + Model.specialReportVms.Sum(x => x.PFBank) + Model.specialReportVms.Sum(x => x.mobileAllowance) + Model.specialReportVms.Sum(x => x.Bonus) + Model.specialReportVms.Sum(x => x.NetPay))?.ToString("N2"))</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,186 @@
+﻿@model LeaveWithoutPayViewModel
+@{
+    ViewData["Title"] = "LeaveWithoutPay";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Style{
+    <style>
+        ul.ui-autocomplete {
+            z-index: 99999999;
+        }
+        .redstar{
+            color:red;
+            float:right;
+        }
+    </style>
+}
+
+    <div class="card" style="width: 100%;">
+        <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+            <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+
+                <h5 class="card-title" style="color: black; margin: 8px;">Leave Without Pay</h5>
+
+            </div>
+            <div class="col-md-8">
+
+                <div style="float: right; margin: 16px;">
+
+
+                    <a class='btn btn-info mr-4' style="margin-right:6px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=10&perentId=6006'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+           
+            <div class="container">
+                <form asp-area="Payroll" asp-controller="Adjustment" asp-action="LeaveWithoutPay" id="FormId" method="post" data-parsley-validate="parsley">
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="row">
+                        <input type="hidden" id="leaveWithoutPayId" name="leaveWithoutPayId" value=0>
+                        <input type="hidden" id="employeeInfoId" name="employeeInfoId">
+                        <div class="col-sm-6">
+
+                            <div class="form-group row">
+                                <label for="employeeInfoId" class="col-sm-3 col-form-label"> Name <span class="redstar">*</span></label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="employeeName" name="employeeName" data-parsley-required="true" data-parsley-trigger="keyup" autocomplete="off">
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <label for="Designation" class="col-sm-3 col-form-label">Designation </label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="Designation" name="Designation" readonly="readonly">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="department" class="col-sm-3 col-form-label">Department</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="department" value="" name="department" readonly>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <label for="salaryPeriodId" class="col-sm-3 col-form-label">Salary Period <span class="redstar">*</span></label>
+                                <div class="col-sm-9">
+                                    <select name="salaryPeriodId" id="salaryPeriodId" class="form-control" data-parsley-required="true">
+                                        <option value="">Select Salary Period</option>
+                                        @foreach (var data in Model.salaryPeriods)
+                                        {
+                                            <option value="@data.Id">@data.periodName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="noOfDays" class="col-sm-3 col-form-label">No. of Days <span class="redstar">*</span></label>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" id="noOfDays" name="noOfDays" data-parsley-required="true">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <hr>
+                    <button type="button" id="submit" value="Submit" title="Save" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+@section Scripts{
+    <script>
+         $('#submit').click(function () {
+		console.log($('#FormId').serializeArray());
+		var data = $('#FormId').serializeArray();
+
+		console.log(data[0].value)
+		swal({
+			title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+		}).then(function () {
+			$.ajax({
+				url: '@Url.Action("LeaveWithoutPay", "Adjustment")',
+				type: 'POST',
+				data: data
+			}).done(function () {
+                if (data[0].value == 0) {
+                    swal('success', 'Saved Successfully!', 'success').then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    swal('success', 'Updated Successfully!', 'success').then(function () {
+                        location.reload();
+                    });;
+                }
+			}).fail(function () {
+				swal('warning', 'Failed!', 'warning');
+			})
+		});
+	})
+        $(document).ready(function () {
+
+            $('#leaveTable').DataTable();
+            Common.Ajax('GET', '/global/api/GetAllEmployess', [], 'json', ajaxGetEmployees);
+
+        });
+
+        function ajaxGetEmployees(response) {
+            var GeEmployeesList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+                obj.lastDesignation = option.lastDesignation ?.designationName;
+                obj.department = option.department?.deptName;
+                obj.employeeCode = option.employeeCode;
+                GeEmployeesList[GeEmployeesList.length] = obj;
+            });
+            $('#employeeName').autocomplete({
+                source: GeEmployeesList,
+                select: function (event, ui) {
+                    $("#employeeName").val(ui.item.value);
+                    $("#Designation").val(ui.item.lastDesignation);
+                    $("#department").val(ui.item.department);
+                    $("#employeeInfoId").val(ui.item.key);
+                }
+            });
+        }
+
+        function Edit(Id, employeeInfoId, nameEnglish, employeeCode, designation, salaryPeriodId, noOfDays) {
+            $('#leaveWithoutPayId').val(Id);
+            $('#employeeInfoId').val(employeeInfoId);
+            $('#employeeName').val(nameEnglish + '(' + (employeeCode) + ')');
+            $('#Designation').val(designation);
+            $('#salaryPeriodId').val(salaryPeriodId);
+            $('#noOfDays').val(noOfDays);
+        }
+
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

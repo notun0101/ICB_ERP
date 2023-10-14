@@ -1,0 +1,90 @@
+﻿@model TrainingEnrollViewModel
+
+@{
+    ViewData["Title"] = "MyTrainigList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+
+
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+                <div class="col-md-6" style="display: flex; justify-content: flex-start; align-items: center;">
+                    <h5 class="card-title" style="color: black; margin: 8px; text-transform: uppercase;">My Training Information</h5>
+                </div>
+                <div class="col-md-6">
+
+                    <div style="float: right; margin: 16px;">
+                        <a class='btn btn-info mr-3' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1019&perentId=1239'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="trainingPlaneTable">
+                    <thead>
+                        <tr>
+                            @*<th>@Model.fLang.year</th>*@
+                            <th>@Model.fLang.course</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+
+                    </thead>
+                    <tbody>
+                        @*@foreach (var data in Model.myTraining)
+                        {
+                        <tr>
+                            <td>@data.trainingInfoNew?.year</td>
+                            <td>@data.trainingInfoNew?.course</td>
+                            <td>@data.trainingInfoNew?.startDate?.ToString("MM/dd/yy")</td>
+                            <td>@data.trainingInfoNew?.endDate?.ToString("MM/dd/yy")</td>
+                        </tr>
+                        }*@
+                         @foreach (var data in Model.indTrainingReportSPs)
+                        {
+                        <tr>
+                            @*<td>@data.year</td>*@
+                            <td>@data.course</td>
+                            <td>@data.startDate?.ToString("MM/dd/yy")</td>
+                            <td>@data.endDate?.ToString("MM/dd/yy")</td>
+                        </tr>
+                        }
+
+
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+
+
+        $(document).ready(function () {
+            $("#enroll").addClass("active");
+            $('#trainingPlaneTable').DataTable({
+
+            });
+
+
+        });
+
+
+
+
+
+    </script>
+}

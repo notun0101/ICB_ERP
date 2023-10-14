@@ -1,0 +1,614 @@
+﻿@model MonthWiseViewModel
+@{
+    ViewData["Title"] = "Attendence Report";
+}
+
+<style>
+    .btnCheck{
+        color: forestgreen;
+        opacity: 1;
+    }
+    .btnAttendance {
+        background-color: white !important;
+        border: 1px solid gray;
+        color: black;
+        width: 190px !important;
+        margin: auto 2px;
+        box-shadow: none !important;
+        outline: none;
+        font-size: 20px;
+        font-weight: bold;
+        
+    }
+    .btnAttendance:hover {
+        background-color: lightgray !important;
+        color: black !important;
+    }
+    .btnAttendance.active {
+        background-color: lightgray !important;
+        color: black !important;
+    }
+    #attendenceTable tbody tr td:nth-child(2){
+        text-align:left !important;
+    }  
+   #attendenceTable thead tr th:nth-child(2){
+        text-align:left !important;
+    }  
+   
+</style>
+
+<div id="fullDiv">
+    <div class="card" style="width: 100%;">
+        <div class="card-header row" style="background-color:#EAF6FA;">
+            <div class="col-10">
+                <h5 class="card-title" style="color: black">Attendance Report</h5>
+            </div>
+            <div class="col-2" style="text-align: right;" >
+                <a class='btn btn-info' id="PrintPdf" data-toggle='tooltip' href='javascript:void(0)' onclick="PrintPdf()"><i style=" font-size: 16px;" class="fas fa-print"></i></a>
+                <a class='btn btn-info' style="display: none;" id="PrintPdf1" data-toggle='tooltip' href='javascript:void(0)' onclick="PrintPdf1()"><i style=" font-size: 16px;" class="fas fa-print"></i></a>
+                <a class='btn btn-info' data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=1240'><i style=" font-size: 16px;" class="fas fa-backward"></i></a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-12 row">
+                    @*<div class="col-3" style="color: black; font-size: 17px; padding-top: 24px;">
+                        <table style="border:none;">
+                            <tr>
+                                <td id="ChangeYear"> <span style="font-weight:bold;">Select Year  </span></td>
+                                <td>
+                                    <select id="dropDownYear1" class="form-control">
+                                        <option value="-1">Year</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <a class='btn btn-info' href='javascript:void(0)' onclick="ShowData()">Submit</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="ChangeYear"> <span style="font-weight:bold;">Select Month  </span></td>
+                                <td>
+                                    <select id="dropDownYearMonth" class="form-control" style="padding-right: 10px;">
+                                        <option value="-1">Month</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>*@
+                    
+                    <div class="col-12 row">
+                        <div class="col-12" style="display: flex; justify-content: space-between; height: 37px; margin-top: 20px;padding-left:40px;">
+                            <a href="javascript:void(0)" onclick="DateInterval(1)" class="btn btn-secondary btnAttendance">Today</a>
+                            <a href="javascript:void(0)" onclick="DateInterval(2)" class="btn btn-secondary btnAttendance">Yesterday</a>
+                            <a href="javascript:void(0)" onclick="DateInterval(3)" class="btn btn-secondary btnAttendance">Last Week</a>
+                            <a href="javascript:void(0)" onclick="DateInterval(4)" class="btn btn-secondary btnAttendance">This Month</a>
+                            <a href="javascript:void(0)" onclick="DateInterval(5)" class="btn btn-secondary btnAttendance">Last Month</a>
+                            <a href="javascript:void(0)" onclick="DateInterval(6)" class="btn btn-secondary btnAttendance">Custom...</a>
+                        </div>
+                        <div class="col-5" id="startBox" style="color: black; font-size: 17px; padding-top: 24px; padding-left:40px;">
+                            <div class="form-group row cmn" style="display: none;">
+                                <label for="StartDate" class="col-6 col-form-label">Start Date</label>
+                                <div class="col-6">
+                                    <input type="text" class="form-control dateWise datepicker" id="StartDate" value="" name="StartDate" readonly>
+                                </div>
+                            </div>
+                            @*<div class="form-group row">
+                                <label for="Days" class="col-sm-4 col-form-label">Select Days</label>
+                                <div class="col-sm-8">
+                                    <select type="text" class="form-control dateWise dateInterval" id="Days" name="Days">
+                                        <option value="0">Choose Days</option>
+                                        <option value="1">Last 7 Days</option>
+                                        <option value="2">Last 15 Days</option>
+                                        <option value="3">Last 3 Months</option>
+                                    </select>
+                                </div>
+                            </div>*@
+                        </div>
+                        <div class="col-5" id="endBox" style="color: black; font-size: 17px; padding-top: 24px;">
+                            <div class="form-group row cmn" style="display: none;">
+                                <label for="EndDate" class="col-6 col-form-label">End Date</label>
+                                <div class="col-6">
+                                    <input type="text" class="form-control dateWise datepicker" id="EndDate" value="" name="EndDate" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2" id="endBox" style="color: black; font-size: 10px;padding-top:23px;width:30px;">
+                            <div class="form-group row cmn" style="display: none;">
+                                <div class="col-12">
+                                    <button type="button" onclick="ShowDataDateFilter()" id="submit" value="Submit" class="btn btn-success" style="float:right;"><i class="fa fa-paper-plane"></i> Find</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <hr />
+    <div id="loader-container" style="display: flex; justify-content: center; display: none;">
+        <img src="~/images/loader.gif" alt="Loading..." />
+    </div>
+    <div id="table-container" class="row clearfix" style="display: none;">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table  table-striped table-responsive table-bordered nowrap text-center" id="attendenceTable" style="max-height: 500px; overflow: scroll;">
+                        <thead>
+                            <tr>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/Assets/paginathing.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".datepicker").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2080" }).datepicker("setDate", new Date());
+
+            // $('#loaderDiv').hide();
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+
+            var currentYear = new Date().getFullYear();
+            var currentMonth = new Date().getMonth();
+            var cascadedDropDownMonthId = "#dropDownYearMonth";
+            for (var i = currentYear; i > currentYear - 10; i--) {
+                $("#dropDownYear1").append('<option value="' + i.toString() + '">' + i.toString() + '</option>');
+            }
+
+            $(cascadedDropDownMonthId).prop("disabled", true);
+
+            $("#dropDownYear1").change(function () {
+                $('#PrintPdf1').hide();
+                $('#PrintPdf').show();
+                var currentSelectedValue = $(this).val();
+
+                if (currentSelectedValue == "-1") {
+                    $(cascadedDropDownMonthId).prop("disabled", true);
+                }
+                else {
+                    $(cascadedDropDownMonthId).prop("disabled", false);
+                    var currentSelectedYear = parseInt($(this).val());
+                    var totalMonths = 11;
+                    if (currentSelectedYear == currentYear) {
+                        totalMonths = currentMonth;
+                    }
+                    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    $(cascadedDropDownMonthId).empty();
+
+                    $(cascadedDropDownMonthId).append('<option value="-1">Month</option>');
+
+                    for (var month = 0; month <= totalMonths; month++) {
+                        $(cascadedDropDownMonthId).append('<option value="' + (month + 1) + '">' + monthNames[month] + '</option>');
+                    }
+                }
+
+                $('#attendenceTable tbody').empty();
+            });
+
+            $('.btnAttendance').on('click', function () {
+                var html = $(this).html();
+                $(this).parent().find('.btnAttendance i').remove();
+                $('.btnAttendance').removeClass('active');
+                $(this).html('<i class="fas fa-check btnCheck"></i> ' + html);
+                $(this).addClass('active');
+                $('#PrintPdf1').show();
+                $('#PrintPdf').hide();
+            })
+
+            $('#dropDownYearMonth').change(function () {
+                $('#PrintPdf1').hide();
+                $('#PrintPdf').show();
+            })
+
+            $('.dateWise').change(function () {
+                $('#PrintPdf1').show();
+                $('#PrintPdf').hide();
+            })
+
+            $('.dateInterval').change(function () {
+                var interval = $(this).val();
+                var date = new Date();
+                var days7 = new Date(date.getTime() - (7 * 24 * 60 * 60 * 1000));
+                var days15 = new Date(date.getTime() - (15 * 24 * 60 * 60 * 1000));
+                var days90 = new Date(date.getTime() - (90 * 24 * 60 * 60 * 1000));
+                if (interval == 1) {
+                    $('#StartDate').val(formatDate1(days7));
+                    $('#EndDate').val(formatDate1(date));
+                }
+                else if (interval == 2) {
+                    $('#StartDate').val(formatDate1(days15));
+                    $('#EndDate').val(formatDate1(date));
+                }
+                else {
+                    $('#StartDate').val(formatDate1(days90));
+                    $('#EndDate').val(formatDate1(date));
+                }
+            })
+
+
+
+        });
+        function DateInterval(id) {
+            var date = new Date();
+            var yesterday = new Date(date.getTime() - (1 * 24 * 60 * 60 * 1000));
+            var days7 = new Date(date.getTime() - (7 * 24 * 60 * 60 * 1000));
+            var days15 = new Date(date.getTime() - (15 * 24 * 60 * 60 * 1000));
+            var days90 = new Date(date.getTime() - (90 * 24 * 60 * 60 * 1000));
+
+            var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+            var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+            var firstDayL = new Date(date.getFullYear(), date.getMonth()-1, 1);
+            var lastDayL = new Date(date.getFullYear(), date.getMonth(), 0);
+
+            if (id == 1) {
+                $('#StartDate').val(formatDate1(date));
+                $('#EndDate').val(formatDate1(date));
+                $('.cmn').hide();
+                ShowDataDateFilter();
+            }
+            else if (id == 2) {
+                $('#StartDate').val(formatDate1(yesterday));
+                $('#EndDate').val(formatDate1(yesterday));
+                $('.cmn').hide();
+                ShowDataDateFilter();
+            }
+            else if (id == 3) {
+                $('#StartDate').val(formatDate1(days7));
+                $('#EndDate').val(formatDate1(yesterday));
+                $('.cmn').hide();
+                ShowDataDateFilter();
+            }
+            else if (id == 4) {
+                $('#StartDate').val(formatDate1(firstDay));
+                $('#EndDate').val(formatDate1(lastDay));
+                $('.cmn').hide();
+                ShowDataDateFilter();
+            }
+            else if (id == 5) {
+                $('#StartDate').val(formatDate1(firstDayL));
+                $('#EndDate').val(formatDate1(lastDayL));
+                $('.cmn').hide();
+                ShowDataDateFilter();
+            }
+            else {
+                $('.cmn').show();
+            }
+        }
+
+        function formatDate1(date) {
+            var monthName = "";
+            date = new Date(date);
+            var year = date.getFullYear(),
+                month = date.getMonth() + 1, // months are zero indexed
+                day = date.getDate(),
+                hour = date.getHours(),
+                minute = date.getMinutes(),
+                second = date.getSeconds(),
+                hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+                minuteFormatted = minute < 10 ? "0" + minute : minute,
+                morning = hour < 12 ? "am" : "pm";
+            if (month == 1) {
+                monthName = "Jan";
+            }
+            else if (month == 2) {
+                monthName = "Feb";
+            }
+            else if (month == 3) {
+                monthName = "Mar";
+            }
+            else if (month == 4) {
+                monthName = "Apr";
+            }
+            else if (month == 5) {
+                monthName = "May";
+            }
+            else if (month == 6) {
+                monthName = "Jun";
+            }
+            else if (month == 7) {
+                monthName = "Jul";
+            }
+            else if (month == 8) {
+                monthName = "Aug";
+            }
+            else if (month == 9) {
+                monthName = "Sep";
+            }
+            else if (month == 10) {
+                monthName = "Oct";
+            }
+            else if (month == 11) {
+                monthName = "Nov";
+            }
+            else {
+                monthName = "Dec";
+            }
+            return day + "-" + monthName + "-" + year;
+        }
+
+        function ShowData() {
+            $('#loader-container').show().addClass('d-flex');
+            $('#table-container').hide();
+
+            var year = $('#dropDownYear1').val();
+            var month = $('#dropDownYearMonth').val();
+            Common.Ajax('GET', '/HRPMSAttendence/EmployeePunchCardInfo/MonthWiseEmployeeAttendance?year=' + year + '&month=' + month, [], 'json', ajaxFunctionCommon, true);
+        }
+
+        function ShowDataDateFilter() {
+            $('#loader-container').show().addClass('d-flex');
+            $('#table-container').hide();
+
+            var startDate = $('#StartDate').val();
+            var endDate = $('#EndDate').val();
+            Common.Ajax('GET', '/HRPMSAttendence/EmployeePunchCardInfo/DateWiseEmployeeAttendance?startDate=' + startDate + '&endDate=' + endDate, [], 'json', ajaxFunctionDateFilter, true);
+        }
+
+
+
+        function PrintPdf() {
+            var year = $('#dropDownYear1').val();
+            var month = $('#dropDownYearMonth').val();
+            window.open('/HRPMSAttendence/EmployeePunchCardInfo/MonthWiseEmployeeAttendancePdf?year=' + year + '&month=' + month, '_blank');
+        }
+        function PrintPdf1() {
+            var startDate = $('#StartDate').val();
+            var endDate = $('#EndDate').val();
+            window.open('/HRPMSAttendence/EmployeePunchCardInfo/MonthWiseEmployeeAttendancePdf1?startDate=' + startDate + '&endDate=' + endDate);
+        }
+
+
+        function ajaxFunctionCommon(response) {
+            //console.log(response);
+            var option = "";
+            var option1 = '';
+            //console.log(response.length)
+            if (response.length == 0) {
+                $('#attendenceTable tbody').empty();
+
+                $('#fullDiv').show();
+            }
+            else {
+
+                $.each(response, function (i, item) {
+                    //console.log(item)
+                    var average = 0.00;
+                    if (item.average != 0) {
+                        average = average;
+                    }
+                    var rating = item.ratings;
+                    if (item.average > 90) {
+                        rating = "EXCELLENT";
+                    }
+                    else if (item.average > 80) {
+                        rating = "GOOD";
+                    }
+                    else {
+                        rating = "NORMAL";
+                    }
+                    option += `<tr>
+                                        <td>${i+1}</td>
+                                        <td>${item.employee ?.employeeCode}</td>
+                                        <td>${item.employee ?.nameEnglish}</td>
+                                        <td>${item.employee ?.nameEnglish}</td>
+                                        <td>${item.totalPresent}</td>
+                                        <td>${item.totalAbsent}</td>
+                                        <td>${item.totalOnLeave}</td>
+                                        <td>${item.totalHolidays}</td>
+                                        <td>${item.actuallyDays}</td>
+                                        <td>${item.totalWorkingDays}</td>
+                                        <td>${rating}</td>
+                                        <td>${item.average} %</td>
+                                    </tr>`
+                });
+
+                option1 += `<th>SL</th>
+                                <th>Employee Id</th>
+                                <th>Name</th>
+                                <th>Branch</th>
+                                <th>Total Present</th>
+                                <th>Total Absent</th>
+                                <th>Total On Leave</th>
+                                <th>Total Holidays</th>
+                                <th>Actual Days</th>
+                                <th>Total Working Days</th>
+                                <th>Ratings</th>
+                                <th>Average</th>`;
+
+                $('#attendenceTable thead tr').empty();
+                $('#attendenceTable tbody').empty();
+                //$('#attendenceTable').DataTable().destroy();
+
+                $('#attendenceTable thead tr').append(option1);
+                $('#attendenceTable tbody').append(option);
+
+                $('#fullDiv').show();
+
+                //$('#attendenceTable').DataTable().destroy();
+                $('#attendenceTable').DataTable({
+                    stateSave: false,
+                    dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                        "<'row'<'col-sm-12't>>" +
+                        "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                    "pageLength": 10,
+                    retrieve: true,
+                    buttons: [
+                        {
+                            extend: 'excelHtml5',
+                            text: '<i class="fa fa-file-excel"></i> Excel',
+                            titleAttr: 'Excel',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                            },
+                            title: "Attendance Report",
+                            messageTop: 'Attendance Report',
+                            class: 'btn btn-info'
+                        },
+                        {
+                            extend: 'csvHtml5',
+                            text: '<i class="fa fa-file-excel"></i> CSV',
+                            titleAttr: 'CSV',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                            },
+                            title: "Attendance Report",
+                            messageTop: 'Attendance Report',
+                        },
+                        {
+                            extend: 'print',
+                            text: '<i class="fa fa-print"></i> Print',
+                            titleAttr: 'Print',
+                            title: "Attendance Report",
+                            messageTop: 'Attendance Report',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                            },
+                            customize: function (doc) {
+                                $(doc.document.body).find('h1').css('font-size', '20pt');
+                                $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                                $(doc.document.body).find('h1').css('text-align', 'center');
+                            }
+                        }
+                    ]
+                });
+
+                $('#loader-container').removeClass('d-flex').hide();
+                $('#table-container').show();
+
+            }
+
+        }
+
+        function ajaxFunctionDateFilter(response) {
+            console.log(response);
+            var option = "";
+            var option1 = '';
+            if (response.length == 0) {
+                $('#fullDiv').show();
+            }
+            else {
+                $.each(response, function (i, item) {
+                    var average = 0.00;
+                    var branch = "";
+                    if (item.average != 0) {
+                        average = average;
+                    }
+                    var rating = item.ratings;
+                    if (item.average > 90) {
+                        rating = "EXCELLENT";
+                    }
+                    else if (item.average > 80) {
+                        rating = "GOOD";
+                    }
+                    else {
+                        rating = "NORMAL";
+                    }
+                    if(item.employee ?.branch!=null&&item.employee ?.branch!='') {
+                        branch = item.employee ?.branch;
+                    }
+                    option += `<tr>
+                                    <td>${i+1}</td>
+                                    <td>${item.employee ?.employeeCode}</td>
+                                    <td>${item.employee ?.nameEnglish}</td>
+                                    <td>${branch}</td>
+                                    <td>${item.totalPresent}</td>
+                                    <td>${item.totalAbsent}</td>
+                                    <td>${item.totalOnLeave}</td>
+                                    <td>${item.totalHolidays}</td>
+                                    <td>${item.actuallyDays}</td>
+                                    <td>${item.totalWorkingDays}</td>
+                                    <td>${rating}</td>
+                                    <td>${item.average} %</td>
+                                </tr>`
+                });
+
+                option1 += `<th>SL</th>
+                            <th>Employee Id</th>
+                            <th>Name</th>
+                            <th>Branch</th>
+                            <th>Total Present</th>
+                            <th>Total Absent</th>
+                            <th>Total On Leave</th>
+                            <th>Total Holidays</th>
+                            <th>Actual Days</th>
+                            <th>Total Working Days</th>
+                            <th>Ratings</th>
+                            <th>Average</th>`;
+
+                $('#attendenceTable thead tr').empty();
+                $('#attendenceTable tbody').empty();
+
+                $('#attendenceTable thead tr').append(option1);
+                $('#attendenceTable tbody').append(option);
+
+                $('#fullDiv').show();
+
+                $('#attendenceTable').DataTable({
+                    stateSave: true,
+                    dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                        "<'row'<'col-sm-12't>>" +
+                        "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                    "pageLength": 10,
+                    retrieve: true,
+                    buttons: [
+                        {
+                            extend: 'excelHtml5',
+                            text: '<i class="fa fa-file-excel"></i> Excel',
+                            titleAttr: 'Excel',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                            },
+                            title: "Attendance Report",
+                            messageTop: 'Attendance Report',
+                            class: 'btn btn-info'
+                        },
+                        {
+                            extend: 'csvHtml5',
+                            text: '<i class="fa fa-file-excel"></i> CSV',
+                            titleAttr: 'CSV',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                            },
+                            title: "Attendance Report",
+                            messageTop: 'Attendance Report',
+                        },
+                        {
+                            extend: 'print',
+                            text: '<i class="fa fa-print"></i> Print',
+                            titleAttr: 'Print',
+                            title: "Attendance Report",
+                            messageTop: 'Attendance Report',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                            },
+                            customize: function (doc) {
+                                $(doc.document.body).find('h1').css('font-size', '20pt');
+                                $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                                $(doc.document.body).find('h1').css('text-align', 'center');
+                            }
+                        }
+                    ]
+                });
+
+                $('#loader-container').removeClass('d-flex').hide();
+                $('#table-container').show();
+
+            }
+        }
+
+    </script>
+}

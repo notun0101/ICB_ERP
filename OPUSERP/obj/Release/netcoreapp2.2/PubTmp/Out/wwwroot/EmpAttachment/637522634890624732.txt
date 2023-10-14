@@ -1,0 +1,64 @@
+
+-------------service------------------------
+public async Task<bool> DeleteLeaveRegisterById(int id)
+        {
+            _context.leaveRegisters.Remove(_context.leaveRegisters.Find(id));
+            return 1 == await _context.SaveChangesAsync();
+        }
+------------------------------------------------
+
+public async Task<int> DeleteLeaveStatusByRegId(int id)
+        {
+			var data = _context.leaveStatusLogs.Where(x => x.leaveRegisterId == id).FirstOrDefault();
+			_context.leaveStatusLogs.Remove(data);
+			return await _context.SaveChangesAsync();
+        }
+-------------------------------------------------------------
+		public async Task<int> DeleteLeaveRouteByRegId(int id)
+        {
+			var data = _context.leaveRoutes.Where(x => x.leaveRegisterId == id).FirstOrDefault();
+			_context.leaveRoutes.Remove(data);
+			return await _context.SaveChangesAsync();
+        }
+--------------------------controller-------------------------------
+
+public async Task<IActionResult> CancelLeaveByRegisterId(int id)
+		{
+			//string userName = HttpContext.User.Identity.Name;
+			//var user = await _userManager.FindByNameAsync(userName);
+			var leaveReg = await leaveRegisterService.GetLeaveRegisterById(id);
+			if (leaveReg.leaveStatus != 3)
+			{
+				await leaveRegisterService.DeleteLeaveStatusByRegId(id);
+				await leaveRegisterService.DeleteLeaveRouteByRegId(id);
+				await leaveRegisterService.DeleteLeaveRegisterById(id);
+				return Json("cancelled");
+			}
+			else
+			{
+				return Json("approved");
+			}
+		}
+---------------------view------------------------
+<a class="btn btn-danger" href="javascript:void(0)" onclick="DeleteMaster(@data.Id)"><i class="fa fa-trash-alt"></i></a>
+
+-----------------------script-----------------------------
+function DeleteMaster(Id) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+
+                $.ajax({
+                    url: '@Url.Action("Action", "Controller")',
+                    data: { Id: Id },
+                    type: 'POST',
+                })
+                    .done(function () {
+                        swal('', 'Deleted Successfully!', 'success');
+                        window.location.href = "/Area/Controller/View";
+                    })
+                    .fail(function () {
+                        swal('Cancelled', 'It will not be deleted. Please try again later !!!', 'error');
+                    });
+            });
+        }

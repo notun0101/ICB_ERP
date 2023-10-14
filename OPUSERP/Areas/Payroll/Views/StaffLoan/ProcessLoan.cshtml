@@ -1,0 +1,169 @@
+﻿@model StaffLoanVm
+@{
+	ViewData["Title"] = "ProcessLoan";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Style{
+	<style>
+		ul.ui-autocomplete {
+			z-index: 99999999;
+		}
+	</style>
+}
+
+<div class="card" style="width: 100%;">
+	<div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+		<div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+
+			<h5 class="card-title" style="color: black; margin: 8px;">Process Staff Loan (Installment Adjustment)</h5>
+
+		</div>
+		<div class="col-md-8">
+			<div style="float: right; margin: 16px;">
+				<a class='btn btn-info mr-4' style="margin-right:6px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1017&perentId=6229'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="card-body">
+        <div class="container">
+
+            <div class="row">
+                <label class="control-label input-sm col-md-3"></label>
+                <div class="col-md-9" id="progress" style="display:none; align-content:center;">
+                    <span class="text-success"> <b>Please wait while salary is processing ...</b></span>  <img src="~/Assets/spinner.gif" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Employee</label>
+                        <div class="col-sm-3">
+                            <input type="hidden" name="empCode" id="empCode" value="" />
+                            <input class="form-control" type="text" name="employeeName" id="employeeName" value="" />
+                        </div>
+
+                        <label class="col-sm-3 form-control-label">Salary Period</label>
+                        <div class="col-sm-3">
+                            <select class="form-control" id="salaryPeriodId" name="salaryPeriodId">
+                                <option value="0">Choose Period</option>
+                                @foreach (var item in Model.salaryPeriods.Where(x => x.lockLabel == 6))
+                                {
+                                    <option value="@item.Id">@item.periodName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-sm-3 form-control-label">Loan Type</label>
+                        <div class="col-sm-3">
+                            <select class="form-control" id="loanType" name="loanType">
+                                <option value="0">Choose Type</option>
+                                <option value="MCA">MCA</option>
+                                <option value="MCAR">MCAR</option>
+                                <option value="CL">CL</option>
+                                <option value="HBA">HBA</option>
+                                <option value="BCA">Bicyle Loan</option>
+                            </select>
+                        </div>
+                    </div>
+                    <a href="javascript:void(0)" onclick="ProcessLoan()" class="btn btn-success fa-pull-right">Process</a>
+                </div>
+            </div>
+
+        </div>
+	</div>
+</div>
+<br />
+
+@section Scripts{
+	<script>
+		$(document).ready(function () {
+			$(".datePicker").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+
+			Common.Ajax('GET', '/global/api/GetAllEmployeeInfos', [], 'json', ajaxGetEmployees, false);
+
+		});
+
+		function ajaxGetEmployees(response) {
+			var GeEmployeesList = [];
+
+			$.each(response, function (id, option) {
+				console.log(option)
+				var obj = new Object();
+				obj.key = option.employeeId;
+				obj.value = option.empName + "(" + option.employeeCode + ")";
+				obj.lastDesignation = option.designation;
+				obj.employeeCode = option.employeeCode;
+				obj.gradeName = option.currentGradeId;
+				obj.currentBasic = option.currentBasic;
+				GeEmployeesList[GeEmployeesList.length] = obj;
+			});
+			$('#employeeName').autocomplete({
+				source: GeEmployeesList,
+				select: function (event, ui) {
+					$('#employeeName').val(ui.item.value)
+					$('#employeeCode').val(ui.item.employeeCode)
+					$('#empCode').val(ui.item.employeeCode)
+					$('#hrBranchId').val('');
+					$('#zoneId').val('');
+					Common.Ajax('GET', '/Payroll/PayrollReport/GetLoansByEmployeeCode?empCode=' + ui.item.employeeCode, [], 'json', ajaxGetLoansByEmployeeId);
+				}
+			});
+		}
+		function ajaxGetLoansByEmployeeId(response) {
+			console.log(response);
+			$('#loanType').empty();
+			$('#loanType').append(`<option value='0'>Choose Type</option>`)
+            $.each(response, function (i, item) {
+				var status = '';
+                if (item.status == 'Inactive') {
+					status = ' (Inactive)';
+				}
+				else {
+					status = '';
+				}
+				$('#loanType').append(`<option value='${item.loanName}'>${item.loanName} ${status}</option>`)
+			})
+		}
+		function ProcessLoan() {
+			var loanType = $('#loanType').val();
+			var salaryPeriodId = $('#salaryPeriodId').val();
+			var empCode = $('#empCode').val();
+
+            //$('#progress').show();   
+            Common.Ajax('GET', '/Payroll/StaffLoan/ProcessLoanApi?loanType=' + loanType + '&salaryPeriodId=' + salaryPeriodId + '&empCode=' + empCode, [], 'json', ajaxProcessLoan, false);
+            //$('#progress').hide();   
+
+		}
+
+		function ajaxProcessLoan(response) {
+            if (response > 0) {
+                swal('success', 'Processed Successfully', 'success');
+            }
+            else {
+                swal('warning', 'Failed to Process', 'warning');
+            }
+
+		}
+
+		function formatDate(date) {
+			date = new Date(date);
+			var year = date.getFullYear(),
+				month = date.getMonth() + 1, // months are zero indexed
+				day = date.getDate(),
+				hour = date.getHours(),
+				minute = date.getMinutes(),
+				second = date.getSeconds(),
+				hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+				minuteFormatted = minute < 10 ? "0" + minute : minute,
+				morning = hour < 12 ? "am" : "pm";
+
+			return day + "/" + + month + "/" + year;
+		}
+	</script>
+}

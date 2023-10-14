@@ -1,0 +1,121 @@
+﻿@model TrainingEnrollViewModel
+@{
+    ViewData["Title"] = "Speaker Evaluation Report";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<style>
+    body {
+        color: black !important;
+		font-family:'Times New Roman';
+    }
+
+ 
+
+    #footertbl tr td p {
+        margin: 0;
+    }
+</style>
+<div class="text-center p-1">
+	<h5 style="font-weight: 900">Bangladesh Development Bank Limited</h5>
+	<h6 style="text-decoration: underline">BDBL Bhaban-2 (Level-16), 12, Karwan Bazar, Dhaka-1215</h6>
+	<h6 style="text-decoration: underline">Training Institute</h6>
+	<br />
+	
+	<h6 style="">@Model.trainingInfoNews.ToList()[0].courseType.typeNameEN</h6>
+	@*<h6 style="">Training Course/Workshop on</h6>*@
+	<h6 style="">
+		"@Model.trainingInfoNews.ToList()[0].course"
+	</h6>
+	@{
+		TimeSpan? Difference = @Model.trainingInfoNews.ToList()[0].endDate - @Model.trainingInfoNews.ToList()[0].startDate;
+	}
+	<h6 style="text-decoration: underline">
+		@if (@Difference.Value.Days > 0)
+		{
+			<span>Duration:</span> @(Difference.Value.Days + 1) <span> Working Days; Date: @Model.trainingInfoNews.ToList()[0].startDate?.ToString("dd MMMM, yyyy") to @Model.trainingInfoNews.ToList()[0].endDate?.ToString("dd MMMM, yyyy")</span>
+		}
+	</h6>
+	<h6 style="text-decoration: underline">
+		Speaker Evaluation
+	</h6>
+
+</div>
+
+
+    <h4><u></u></h4>
+    <table class="report-table-1" border="1" cellpadding="3"cellspacing="0" id="participantTable" style="font-size: 16px !important;">
+        <thead>
+            <tr>
+                <th rowspan="2">SL No.</th>
+                <th rowspan="2">Name & Designation</th>
+                <th colspan="5">Your Assessment</th>
+                <th rowspan="2">
+                    Reasons for your assessment
+                </th>
+               
+            </tr>
+            <tr>
+                
+                <th>
+                    Excellent
+                    Point-8
+                </th>
+                <th>
+                    Very good
+                    Point-7
+                </th>
+                <th>
+                    Good
+                    Point-6
+                </th>
+                <th>
+                    Fair
+                    Point-5
+                </th>
+                <th>
+                    Not up-to
+                    the mark
+                    Point-4
+                </th>
+                
+               
+            </tr>
+            <tr>
+                <th>0</th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+				int i = 1;
+            }
+            @foreach (var item in Model.trainingResourcePersons.Where(x => x.resourcePerson.designation != "MANAGING DIRECTOR" || x.resourcePerson.designation != "Deputy Managing Director"))
+            {
+            <tr>
+                <td style="text-align:center;width:5%">@i</td>
+                <td style="width:30%;">
+                    @item.resourcePerson?.name<br />
+                    <span>@item.resourcePerson?.designation</span>
+                </td>
+                <td style="width:10%;"></td>
+                <td style="width:10%;"></td>
+                <td style="width:10%;"></td>
+                <td style="width:10%;"></td>
+                <td style="width:10%;"></td>
+                <td style="width:10%;"></td>
+            </tr>
+                i++;
+            }
+
+        </tbody>
+    </table>
+    <br />
+
+

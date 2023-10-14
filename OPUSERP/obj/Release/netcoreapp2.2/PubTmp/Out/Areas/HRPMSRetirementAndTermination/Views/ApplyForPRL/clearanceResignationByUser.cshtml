@@ -1,0 +1,524 @@
+﻿@model PRLApplicationViewModel
+
+@{
+    ViewData["Title"] = "Clearance Resignation";
+}
+
+
+<style>
+
+
+    .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    #user_img1:hover {
+        border-radius: 5px;
+        cursor: zoom-in;
+        transition: 0.3s !important;
+        opacity: 0.5;
+        box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    }
+
+    .page-link {
+        color: black !important;
+        font-size: 15px !important;
+        padding: 8px !important;
+        line-height: 20px !important;
+    }
+
+    .fas {
+        margin-top: 10px;
+        font-size: 25px;
+    }
+
+    .active {
+        color: darkcyan;
+    }
+
+    .c {
+        min-height: 300px;
+        background-color: #FDF2E9;
+    }
+
+        .c .card-footer {
+            height: 50px;
+            background-color: #E9F7EF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /*.cb {
+        height: 464px;
+    }*/
+
+        .c .cb {
+            transition: .3s all;
+            /*cursor: pointer;*/
+        }
+
+        .c:hover {
+            background-color: #D6DBE9;
+        }
+
+    #myInput1 {
+        width: 41%;
+        /*position: absolute;*/
+        right: 18px;
+        box-shadow: none;
+        margin-left: 25%;
+    }
+
+    .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+    }
+
+    a i {
+        font-size: 15px !important;
+        margin: 0 !important;
+    }
+
+    .pagination > li > a,
+    .pagination > li > span {
+        position: relative;
+        float: left;
+        padding: 6px 12px;
+        margin-left: -1px;
+        line-height: 1.42857143;
+        color: #337ab7;
+        text-decoration: none;
+        background-color: #fff;
+        border: 1px solid #ddd;
+    }
+
+    .pagination > .active > a,
+    .pagination > .active > a:focus,
+    .pagination > .active > a:hover,
+    .pagination > .active > span,
+    .pagination > .active > span:focus,
+    .pagination > .active > span:hover {
+        z-index: 3;
+        color: #fff;
+        cursor: default;
+        background-color: #337ab7;
+        border-color: #337ab7;
+    }
+
+    .pagination-container {
+        margin: 20px 0;
+        display: flex;
+        justify-content: flex-end;
+    }
+</style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+@*<i class="fas fa-th text-left mx-2"></i>
+    <i class="fas fa-list-alt text-left mx-2"></i>*@
+<div class="row">
+    <div class="col-11">
+        <i class="fas fa-th text-left mx-2" style="font-size: 24px; margin: 5px; background-color: lightgray; padding: 5px; cursor: pointer !important;"></i>
+        <i class="fas fa-list-alt text-left mx-2" style="font-size: 24px; margin: 5px; background-color: lightgray; padding: 5px; cursor: pointer !important;"></i>
+    </div>
+    <div class="col-1">
+        <a class='btn btn-info' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=5753'><i class="fas fa-backward"></i></a>
+
+    </div>
+</div>
+
+<div class="row clearfix" id="listView" style="display: none;">
+    <div class="col-12">
+        <div class="card mb-4">
+            <br />
+            <div class="row">
+                <div class="col-md-10">
+                    <h6 class="m-0 font-weight-bold text-primary">Approve Resignation List</h6>
+                </div>
+                <div class="col-md-2">
+                    @*<button type="button" class="btn btn-default btn-sm" style="width:100px;background-color:#024972;color:white;float:right;" onclick="location.href='@Url.Action("CreatePO", "PurchaseOrder")'">Create PO</button>*@
+                </div>
+            </div>
+            <hr />
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="requisitionListTable">
+                    <thead>
+                        <tr>
+                            <th>Resignation Date</th>
+                            <th>Last Working Date</th>
+                            <th>Reason og Resign</th>
+                            <th>Clearance Date</th>
+                            <th>Status</th>
+                            <th>Clearance File</th>
+                            <th>Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.resignInformation)
+                        {
+                        <tr>
+                            <td>@data.resignDate?.ToString("dd/MM/yyyy")</td>
+                            <td>@data.lastWorkingDate?.ToString("dd/MM/yyyy")</td>
+                            <td>@data.resignReason</td>
+                            <td>@data.clearanceDate?.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                @if (data.status == 3)
+                                {
+                                    <span class="badge badge-success">cleared</span>
+                                }
+
+                            </td>
+                            <td>
+                                <a href="~/EmpAttachment/@data.clearanceFile" target="_blank"><i class="fas fa-link"><u>Click Here</u></i></a>
+                            
+                            </td>
+                            <td>
+                                @*<a class="btn btn-secondary mr-4" style="float:right;" href='/HRPMSRetirementAndTermination/ApplyForPRL/ReleaseLetter/@data.Id'><i class="fa fa-download" aria-hidden="true"></i>Download</a>*@
+
+                                @if ((@data.bodyText == null || @data.bodyText == "") || (@data.letterNo == null || @data.letterNo == ""))
+                                {
+                                    <input type="button" class="btn btn-info btn-sm" onclick="AddPDF( @data.Id,@data.employeeId, '@data.employee?.nameEnglish', '@data.bodyText', '@data.letterNo')" id="btnAdd" name="btnAdd" value="Clearance">
+
+                                }
+                                else
+                                {
+                                    <a class='btn btn-info' data-toggle='tooltip' title='Release letter' target='_blank' href='/HRPMSRetirementAndTermination/ApplyForPRL/ReleaseLetter/@data.Id'>Release letter</a>
+
+                                }
+                            </td>
+
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row clearfix" id="gridView">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">Approve Resignation List</h6>
+
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="row" id="cards">
+                    @foreach (var data in Model.resignInformation)
+                    {
+                        <div class="col-md-3 mb-1 searchdiv">
+                            <a href="javascript:void(0)" style="text-decoration: none; color: black; cursor: default;">
+
+                                <div class="card c " style="font-size: 16px;">
+
+
+                                    <div class="card-body cb text-center">
+
+                                        <strong>Resignation Date</strong><br />
+                                        @data.resignDate?.ToString("dd/MM/yyyy")<br /><br />
+
+                                        <strong>Last Working Date</strong><br />
+                                        @data.lastWorkingDate?.ToString("dd/MM/yyyy")<br /><br />
+
+                                        <strong>Reason og Resign</strong><br />
+                                        @data.resignReason<br /><br />
+
+                                        <strong>Clearance Date</strong><br />
+                                        @data.clearanceDate?.ToString("dd/MM/yyyy")<br /><br />
+
+
+
+                                        <strong>Status:</strong><br />
+                                        @if (data.status == 3)
+                                        {
+                                            <span class="badge badge-success">Approve</span>
+                                        }
+                                        <br /><br />
+                                        <strong>Clearance File:</strong><br />
+                                        <a href="~/EmpAttachment/@data.clearanceFile" target="_blank"><i class="fas fa-link"><u>Click Here</u></i></a>
+
+                                        <br />
+                                    </div>
+                                    <div class="card-footer text-center">
+                                        @if ((@data.bodyText == null || @data.bodyText == "") || (@data.letterNo == null || @data.letterNo == ""))
+                                        {
+                                            <input type="button" class="btn btn-info btn-sm" onclick="AddPDF( @data.Id,@data.employeeId, '@data.employee?.nameEnglish', '@data.bodyText', '@data.letterNo')" id="btnAdd" name="btnAdd" value="Clearance">
+
+                                        }
+                                        else
+                                        {
+                                            <a class='btn btn-info' data-toggle='tooltip' title='Release letter' target='_blank' href='/HRPMSRetirementAndTermination/ApplyForPRL/ReleaseLetter/@data.Id'>Release letter</a>
+
+                                        }
+
+
+
+                                    </div>
+
+                                </div>
+                            </a> <br />
+
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="exampleModalPDF" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" style="height: 100%;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Generate </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-area="HRPMSRetirementAndTermination" asp-controller="ApplyForPRL" asp-action="ResignClearancePdfGenerate" id="FormId" method="post" data-parsley-validate="parsley" enctype="multipart/form-data">
+
+                    <div class="form-group row">
+                        <input type="hidden" name="resignId" id="resignId" value="" />
+                        <input type="hidden" name="employeeId" id="employeeId" value="" />
+                        <label for="nameEnglish" class="col-form-label col-md-2">Employee Name</label>
+                        <div class="col-md-4">
+                            <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" readonly class="form-control" name="nameEnglish" id="nameEnglish">
+                        </div>
+                        <label for="occupationName" class="col-form-label col-md-2">Letter No</label>
+                        <div class="col-md-4">
+                            <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="letterNo" id="letterNo">
+                        </div>
+
+
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <textarea type="text" id="termsAndConditions" name="Bodytext" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" value="Submit" id="PDFAddBtn" class="btn btn-success">Add</button>
+                    </div>
+                    @*<button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+@*<input type="hidden" id="nextApprover" value="@Model.resignInformations.nextApprover" />*@
+
+@*<p style="font-size:20px">
+    প্রিয় মহোদয়,
+    <br /><span style="margin-left: 64px;"> উপর্যুক্ত বিষয়ে আপনাদের @Model.resignInformations.resignDate?.ToString("dd/MM/yyyy")ইং তারিখের @Model.resignInformations?.letterNo নং পত্রের প্রতি সদয় দৃষ্টি আকর্ষণ করছি।</span>
+    উক্ত পত্রে বর্ণিত জনাব  @Model.resignInformations?.employee?.nameEnglish ,@Model.resignInformations?.employee?.lastDesignation?.designationName  -এর নামে ব্যাংকের এই ব্রাঞ্চে কোনো রূপ পাওনা (স্টাফ লোন ,পার্সোনাল লোন ,কনজ্যুমার লোন ইত্যাদি )নেই এবং তার বিরুদ্ধে কোনো অডিট আপত্তিও নেই।
+    <br /><span style="margin-left: 64px;">ধন্যবাদান্তে,</span>
+
+</p>
+
+<div class="" style="text-align:right;font-size:20px;">
+
+    <p>আপনার বিশ্বস্ত</p>
+    <p>স্বা/------------------------------------</p>
+    <p>(কবির আহমেদ)</p>
+    <p>ডেপুটি জেনারেল ম্যানেজার</p>
+
+    আপনার বিশ্বস্ত<br />(<span id="nameEnglish">@Model.employeeInfo?.nameEnglish</span>)<br /><span id="designationName">@Model.employeeInfo?.lastDesignation?.designationName</span>
+
+</div>*@
+
+@section Scripts{
+    <script src="~/Assets/paginathing.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+
+
+
+
+        $(document).ready(function () {
+            var orgFullTitle = "Approve Resignation List";
+            //$('#requisitionListTable').DataTable();
+            $('#requisitionListTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
+                        },
+                        title: orgFullTitle,
+                        messageTop: 'Approve Resignation List',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
+                        },
+                        title: orgFullTitle,
+                        messageTop: 'Approve Resignation List'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: orgFullTitle,
+                        messageTop: 'Approve Resignation List',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+            $("#education").addClass("active");
+
+
+            $('#gridView').show();
+            $('#listView').hide();
+
+            $('.fas').removeClass('active');
+            $('.fa-th').addClass('active');
+
+
+            if ($("#cards").length != null) {
+
+                $('#cards').paginathing({
+
+                    // Limites your pagination number
+                    // false or number
+                    // limitPagination: limit,
+                    // limitPagination: false,
+
+                    // Pagination controls
+                    perPage: 8,
+                    prevNext: true,
+                    firstLast: true,
+                    prevText: '&laquo;',
+                    nextText: '&raquo;',
+                    firstText: 'First',
+                    lastText: 'Last',
+                    containerClass: 'pagination-container',
+                    ulClass: 'pagination',
+                    liClass: 'page',
+                    activeClass: 'active',
+                    disabledClass: 'disabled',
+                    pageNumbers: true,
+                    insertAfter: '#cards'
+                })
+            }
+
+            $('#termsAndConditions').summernote({
+                tabsize: 2,
+                height: 300
+            });
+
+            var body = ` 
+    
+    <p style="font-size:20px">
+    প্রিয় মহোদয়,
+    <br /><span style="margin-left: 64px;"> উপর্যুক্ত বিষয়ে আপনাদের @Model.resignInformations?.resignDate?.ToString("dd/MM/yyyy")ইং তারিখের @Model.resignInformations?.letterNo নং পত্রের প্রতি সদয় দৃষ্টি আকর্ষণ করছি।</span>
+    উক্ত পত্রে বর্ণিত জনাব  @Model.resignInformations?.employee?.nameEnglish ,@Model.resignInformations?.employee?.lastDesignation?.designationName  -এর নামে ব্যাংকের এই ব্রাঞ্চে কোনো রূপ পাওনা (স্টাফ লোন ,পার্সোনাল লোন ,কনজ্যুমার লোন ইত্যাদি )নেই এবং তার বিরুদ্ধে কোনো অডিট আপত্তিও নেই।
+    <br /><span style="margin-left: 64px;">ধন্যবাদান্তে,</span>
+
+</p>
+
+<div class="" style="text-align:right;font-size:20px;">
+
+    <p>আপনার বিশ্বস্ত</p>
+    <p>স্বা/------------------------------------</p>
+    <p>(কবির আহমেদ)</p>
+    <p>ডেপুটি জেনারেল ম্যানেজার</p>
+
+   
+
+</div>
+    
+    
+    `
+            $('#termsAndConditions').summernote('code', body);
+
+        });
+
+        function AddPDF(Id, employeeId, Name, Bodytext, letterNo) {
+            $('#exampleModalPDF').modal('show');
+            $('#resignId').val(Id);
+            $('#nameEnglish').val(Name);
+            $('#termsAndConditions').val(Bodytext);
+            $('#letterNo').val(letterNo);
+            $('#employeeId').val(employeeId);
+
+        }
+        //function AddPDF(Id, employeeId, Name, clearanceDate, clearanceFile) {
+        //    $('#exampleModalPDF').modal('show');
+        //    $('#resignId').val(Id);
+        //    $('#nameEnglish').val(Name);
+        //    $('#clearanceDate').val(clearanceDate);
+        //    $('#type').val(clearanceFile);
+        //    $('#employeeId').val(employeeId);
+
+       // }
+
+        $('.fa-list-alt').click(function () {
+            $('#listView').show();
+            $('#gridView').hide();
+
+            $('.fas').removeClass('active');
+            $('.fa-list-alt').addClass('active');
+        })
+        $('.fa-th').click(function () {
+            $('#listView').hide();
+            $('#gridView').show();
+
+            $('.fas').removeClass('active');
+            $('.fa-th').addClass('active');
+        })
+
+
+
+
+    </script>
+}

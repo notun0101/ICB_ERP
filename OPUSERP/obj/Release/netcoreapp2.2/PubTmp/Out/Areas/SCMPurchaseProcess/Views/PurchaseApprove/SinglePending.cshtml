@@ -1,0 +1,478 @@
+﻿@model CSRequisitionList
+@{
+	ViewData["Title"] = "Pending";
+}
+
+<h1>Single Pending</h1>
+
+
+<style>
+	.fas {
+		margin-top: 10px;
+		font-size: 25px;
+	}
+
+	.fa-print, .fa-file {
+		color: white;
+	}
+
+	.active {
+		color: darkcyan;
+	}
+
+	.c {
+		min-height: 570px;
+		background-color: #FDF2E9;
+	}
+
+		.c .card-footer {
+			height: 65px;
+			background-color: #E9F7EF;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+	.cb {
+		height: 194px;
+	}
+
+	.c .cb {
+		transition: .3s all;
+		cursor: default;
+	}
+
+	.cf {
+		transition: .3s all;
+		cursor: pointer;
+	}
+
+	.c:hover .cb {
+		background-color: #D6DBE9;
+	}
+
+	#myInput1 {
+		width: 50%;
+		position: absolute;
+		right: 18px;
+		box-shadow: none;
+	}
+
+
+	.pagination > li > a,
+	.pagination > li > span {
+		position: relative;
+		float: left;
+		padding: 6px 12px;
+		margin-left: -1px;
+		line-height: 1.42857143;
+		color: #337ab7;
+		text-decoration: none;
+		background-color: #fff;
+		border: 1px solid #ddd;
+	}
+
+	.pagination > .active > a,
+	.pagination > .active > a:focus,
+	.pagination > .active > a:hover,
+	.pagination > .active > span,
+	.pagination > .active > span:focus,
+	.pagination > .active > span:hover {
+		z-index: 3;
+		color: #fff;
+		cursor: default;
+		background-color: #337ab7;
+		border-color: #337ab7;
+	}
+
+	.pagination-container {
+		margin: 20px 0;
+		display: flex;
+		justify-content: flex-end;
+	}
+</style>
+
+
+<div class="row">
+	<div class="col-11">
+		<i class="fas fa-th text-left mx-2"></i>
+		<i class="fas fa-list-alt text-left mx-2"></i>
+	</div>
+	<div class="col-1">
+		<a class='btn btn-info' style="padding: 5px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1&perentId=1295'><i style="margin: 4px; font-size: 20px;" class="fas fa-backward"></i></a>
+
+	</div>
+</div>
+
+<div class="row" style="margin-top: 10px;">
+	<div class="col-1" style="padding: 0 0 0 15px;">
+		<span>From Date</span>
+	</div>
+	<div class="col-3">
+		<input type="text" class="form-control" id="fromDate" name="fromDate" placeholder="From Date" value="@DateTime.Now.ToString("dd-MMM-yyyy")" />
+	</div>
+	<div class="col-1" style="padding: 0 0 0 15px;">
+		<span>To Date</span>
+	</div>
+	<div class="col-3">
+		<input type="text" class="form-control" id="toDate" name="toDate" placeholder="To Date" value="@DateTime.Now.ToString("dd-MMM-yyyy")" />
+	</div>
+	@*<div class="col-1" style="padding:0;">
+			<span>Search Type</span>
+		</div>
+		<div class="col-2">
+			<select class="form-control" id="searchType" name="searchType">
+				<option value="PR">PR</option>
+				<option value="CS">CS</option>
+			</select>
+		</div>*@
+	<div class="col-1">
+		<input type="button" class="btn btn-info btn-sm" value="Search" onclick="return LoadPR()" />
+	</div>
+</div>
+
+<div class="row clearfix" id="listView" style=" display:none;">
+	<div class="col-12">
+		<div class="card mb-4">
+			<!-- Card Header - Dropdown -->
+			<div class="card-header py-3 d-flex flex-row align-items-center">
+				<h6 class="m-0 font-weight-bold text-primary">Requisition Status</h6>
+			</div>
+			<!-- Card Body -->
+			<div class="card-body">
+				<table class="table table-striped table-bordered" id="historyTbl" style="width:100%;">
+					<thead>
+						<tr>
+							<th>Requisition No.</th>
+							<th>Requisition Date</th>
+							<th>Procurement Person</th>
+							<th>CS No</th>
+							<th>CS Creation Date</th>
+							@*<th>Final Approver</th>*@
+							<th>Status</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						@*@foreach (var data in Model.cSMasters.OrderByDescending(x => x.csDate).Where(x => x.csStatus == 3))
+							{
+								<tr>
+									<td>@data.requisition.reqNo</td>
+									<td>@data.requisition.reqDate?.ToString("dd-MMM-yyyy")</td>
+									<td>@data.procurementPerson</td>
+									<td>@data.csNo</td>
+									<td>@data.csDate?.ToString("dd-MMM-yyyy")</td>
+									<td>@data.csStatus</td>
+									<td>
+										<a class="btn btn-success btn-sm" href="/SCMPurchaseProcess/PurchaseProcess/CSReportPdf?csId=@data.Id">Print CS</a>
+									</td>
+								</tr>
+							}*@
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row clearfix" id="gridView">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">Requisition Status</h6>
+                @*<input type="text" class="form-control" placeholder="Search here..." id="myInput1" />*@
+            </div>
+            <!--Card Body -->
+            <div class="card-body">
+                <div class="row" id="cards">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="StatusListModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content" style="width:1040px;">
+			<div class="modal-header">
+				<label class="modal-title pull-left" id="myModalLabel" style="color:rgb(9, 7, 161);font-size:1em;">
+					Details List For Requisition Status
+				</label>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<br />
+			</div>
+			<div class="modal-body">
+				<table class="table table-striped table-bordered" id="statusListTable" style="width:100%;">
+					<thead>
+						<tr>
+							<th>SL.</th>
+							<th>User Name</th>
+							<th>Status</th>
+							<th>Date Time</th>
+							<th>Next Process By</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-arrow-left"></i> Back</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+@section Scripts{
+	<script src="~/Assets/paginathing.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<script type="text/javascript">
+		var statusPreviewTable;
+		var statusListTable;
+		$(document).ready(function () {
+			$("#myInput1").on("keyup", function () {
+				var value = $(this).val().toLowerCase();
+				$(".searchdiv").filter(function () {
+					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+				});
+			});
+
+			$('.fas').removeClass('active');
+			$('.fa-th').addClass('active');
+
+			$('#fromDate').flatpickr({ dateFormat: "d-M-Y" });
+			$('#toDate').flatpickr({ dateFormat: "d-M-Y" });
+			//$('#requisitionListTable').DataTable();
+
+			var fromDate = $('#fromDate').val();
+			var toDate = $('#toDate').val();
+			//var searchType = $('#searchType').val();
+			console.log(fromDate)
+			console.log(toDate)
+			//console.log(searchType)
+			Common.Ajax('GET', '/SCMPurchaseProcess/PurchaseApprove/SingleHistoryApi?start=7/4/2000&end=7/4/2050', [], 'json', ajaxFunction1, false);
+
+		});
+
+		function LoadPR() {
+			var fromDate = $('#fromDate').val();
+			var toDate = $('#toDate').val();
+			//var searchType = $('#searchType').val();
+			//statusPreviewTable.clear().draw();
+
+			$('.pagination-container').empty();
+            Common.Ajax('GET', '/SCMPurchaseProcess/PurchaseApprove/SingleHistoryApi?start=' + fromDate + '&end=' + toDate, [], 'json', ajaxFunction1, false);
+
+		}
+		function ajaxFunction1(response) {
+			//console.log(response)
+			var option = "";
+			var option1 = "";
+			var count = 0;
+			$.each(response.cSMasters, function (i, item) {
+				if (item.procurementValueId == 3 && item.csStatus != 3 && item.csStatus != 4 && item.csStatus != 5
+					&& item.csStatus != 2) {
+					console.log(item);
+                    var status = '';
+                    var className = '';
+					if (item.csStatus == 3) {
+						status = 'Approved'
+					}
+					else if (item.csStatus == 4) {
+						status = 'Return'
+					}
+					else if (item.csStatus == 2) {
+						status = 'Drafted'
+					}
+					else if (item.csStatus == 5) {
+						status = 'Reject'
+					}
+					else {
+                        status = 'Pending'
+                        className = 'badge badge-danger'
+					}
+					var date = formatDate(item.requisition.reqDate)
+					var date1 = formatDate(item.csDate)
+					option += `<tr>
+									<td>${item.requisition.reqNo}</td>
+									<td>${date}</td>
+									<td>${item.procurementPerson}</td>
+									<td>${item.csNo}</td>
+									<td>${date1}</td>
+									<td>
+									 <span class="${className}">${status}</span>
+								   </td>
+									<td>
+										<a class="btn btn-success btn-sm" href="/SCMPurchaseProcess/PurchaseProcess/CSReportPdf?csId=${item.Id}">Print CS</a>
+									</td>
+								</tr>`
+                    option1 += `<div class="col-md-3 mb-1 searchdiv">
+                            <div class="card c" style="font-size: 16px;">
+                                    <div class="card-body cb text-center">
+                                        <strong>Requisition No:</strong> <br />
+                                        ${item.requisition.reqNo} <br /><br />
+                                        <strong>Req Date:</strong> <br />
+                                        ${date} <br /><br />
+
+                                        <strong>Procurement Person:</strong> <br />
+                                        ${item.procurementPerson} <br /><br />
+                                        
+                                        <strong>CS No:</strong> <br />
+                                        ${item.csNo} <br /><br />
+
+                                        <strong> CS Date:</strong> <br />
+                                        ${date1} <br /><br />
+                                       <strong>Status:</strong> <br />
+                                        <span class="${className}">${status}</span> <br />
+                                    </div>
+                                    <div class="card-footer cf text-center font-weight-bold">
+    										<a class="btn btn-success btn-sm" href="/SCMPurchaseProcess/PurchaseProcess/CSReportPdf?csId=${item.Id}">Print CS</a>
+
+                                      
+                                    </div>
+                                </div><br />
+
+                        </div><br />`
+                    count++;
+				}
+			});
+			$('#historyTbl tbody').empty();
+            $('#historyTbl tbody').append(option);
+            $('#cards').empty();
+            $('#cards').append(option1);
+
+			$('#historyTbl').show();
+			$('#historyTbl').DataTable();
+
+			$('#cards').paginathing({
+
+				// Limites your pagination number
+				// false or number
+				limitPagination: 6,
+				// limitPagination: false,
+
+				// Pagination controls
+				perPage: 8,
+				prevNext: true,
+				firstLast: true,
+				prevText: '&laquo;',
+				nextText: '&raquo;',
+				firstText: 'First',
+				lastText: 'Last',
+				containerClass: 'pagination-container',
+				ulClass: 'pagination',
+				liClass: 'page',
+				activeClass: 'active',
+				disabledClass: 'disabled',
+				pageNumbers: true,
+				insertAfter: '#cards'
+			})
+		}
+
+		function LoadPRStatusById(reqId) {
+			statusListTable.clear().draw();
+			statusListTable.ajax.url("/global/api/getStatusLogListByReqId/" + reqId).load();
+			$('#StatusListModal').modal('show');
+		}
+
+		function PRReportView(reqId) {
+			window.open('/SCMReport/ReportMaster/PurchaseRequisitionPdf?reqId=' + reqId, '_blank');
+		}
+
+
+
+		$('.fa-list-alt').click(function () {
+			$('#listView').show();
+			$('#gridView').hide();
+
+			$('.fas').removeClass('active');
+			$('.fa-list-alt').addClass('active');
+		})
+		$('.fa-th').click(function () {
+			$('#listView').hide();
+			$('#gridView').show();
+
+			$('.fas').removeClass('active');
+			$('.fa-th').addClass('active');
+
+			var fromDate = $('#fromDate').val();
+			var toDate = $('#toDate').val();
+			var searchType = $('#searchType').val();
+
+			//Common.Ajax('GET', '/global/api/getAllRequisitionMasterListForViewStatus/' + fromDate + '/' + toDate + '/' + searchType, [], 'json', ajaxFunction, false);
+        })
+       
+
+        $('.fa-list-alt').click(function () {
+            $('#listView').show();
+            $('#gridView').hide();
+
+            $('.fas').removeClass('active');
+            $('.fa-list-alt').addClass('active');
+            var fromDate = $('#fromDate').val();
+            var toDate = $('#toDate').val();
+            Common.Ajax('GET', '/SCMPurchaseProcess/PurchaseApprove/SingleHistoryApi?start=7/4/2000&end=7/4/2050', [], 'json', ajaxFunction1, false);
+        })
+        $('.fa-th').click(function () {
+            $('#listView').hide();
+            $('#gridView').show();
+
+            $('.fas').removeClass('active');
+            $('.fa-th').addClass('active');
+
+            var fromDate = $('#fromDate').val();
+            var toDate = $('#toDate').val();
+
+            //var searchType = $('#searchType').val();
+            Common.Ajax('GET', '/SCMPurchaseProcess/PurchaseApprove/SingleHistoryApi?start=7/4/2000&end=7/4/2050', [], 'json', ajaxFunction1, false);
+            //Common.Ajax('GET', '/SCMPurchaseProcess/PurchaseApprove/CSHistoryApi?start=' + fromDate + '&end=' + toDate, [], 'json', ajaxFunction, false);
+
+            //Common.Ajax('GET', '/global/api/getAllRequisitionMasterListForViewStatus/' + fromDate + '/' + toDate + '/' + searchType, [], 'json', ajaxFunction1, false);
+            $('.pagination-container').remove();
+            $('#cards').paginathing({
+
+                // Limites your pagination number
+                // false or number
+                limitPagination: 6,
+                // limitPagination: false,
+
+                // Pagination controls
+                perPage: 8,
+                prevNext: true,
+                firstLast: true,
+                prevText: '&laquo;',
+                nextText: '&raquo;',
+                firstText: 'First',
+                lastText: 'Last',
+                containerClass: 'pagination-container',
+                ulClass: 'pagination',
+                liClass: 'page',
+                activeClass: 'active',
+                disabledClass: 'disabled',
+                pageNumbers: true,
+                insertAfter: '#cards'
+            })
+        })
+
+
+
+
+		function formatDate(date) {
+			date = new Date(date);
+			var year = date.getFullYear(),
+				month = date.getMonth() + 1, // months are zero indexed
+				day = date.getDate(),
+				hour = date.getHours(),
+				minute = date.getMinutes(),
+				second = date.getSeconds(),
+				hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+				minuteFormatted = minute < 10 ? "0" + minute : minute,
+				morning = hour < 12 ? "am" : "pm";
+
+			return day + "/" + + month + "/" + year;
+		}
+
+	</script>
+}
+

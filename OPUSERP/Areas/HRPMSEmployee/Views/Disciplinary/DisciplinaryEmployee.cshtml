@@ -1,0 +1,369 @@
+﻿@model DisciplinaryViewModel
+
+@{
+    ViewData["Title"] = Model.fLang.title;
+    Layout = "~/Areas/HRPMSEmployee/Views/Shared/_EmployeeForm.cshtml";
+}
+
+@section StyleEmp{
+    <style>
+        .redStar {
+            color: red;
+        }
+
+       
+    </style>
+}
+
+    <div class="card" style="width: 100%;">
+
+        @*<h5 class="card-header" style="color: black; margin: 0; text-transform: uppercase;">Disciplinary Action Log</h5>*@
+        <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+            <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+
+                <h5 class="card-title" style="color: black; margin: 8px;">Disciplinary Action Log</h5>
+
+            </div>
+            <div class="col-md-8">
+
+                <div style="float: right; margin: 16px;">
+
+
+                    <a class='btn btn-info mr-2' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=5947'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+
+            <div class="container">
+                <form asp-area="HRPMSEmployee" asp-controller="Disciplinary" asp-action="DisciplinaryEmployee" id="FormId" method="post" data-parsley-validate="parsley" enctype="multipart/form-data">
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    @*<div class="card" style="padding: 2%">*@
+                    <div class="form-group row">
+                        <label for="offenseId" class="col-sm-2 col-form-label">Employee <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="hidden" name="employeeId" id="employeeID" value="" />
+                            <input type="hidden" name="disciplinaryId" id="disciplinaryId" value="0" />
+                            <input type="text" class="form-control" id="employeeName" value=" " name="employeeName" data-parsley-required="true">
+
+                        </div>
+
+                        <label for="punishmentId" class="col-sm-2 col-form-label">Designation</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="designationId" value="" readonly name="">
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="offenseId" class="col-sm-2 col-form-label">@Model.fLang.offense <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+
+                            <select type="text" class="form-control" id="offenseId" value="" name="offenseId" data-parsley-required="true">
+                                <option value="">Select One</option>
+                                @foreach (var data in Model.offenses)
+                                {
+                                    <option value="@data.Id">@data.name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <label for="departmentId" class="col-sm-2 col-form-label">Department </label>
+
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="departmentId" value="" readonly name="">
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="punishmentDate" class="col-sm-2 col-form-label">@Model.fLang.punishmentDate <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="punishmentDate" value="" name="punishmentDate" data-parsley-required="true" readonly>
+                        </div>
+
+                        <label for="goNo" class="col-sm-2 col-form-label">@Model.fLang.goWithDate <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="goNo" value="" name="goNo" data-parsley-required="true">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="startFrom" class="col-sm-2 col-form-label">@Model.fLang.startFrom</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="startFrom" value="" name="startFrom" readonly>
+                        </div>
+
+                        <label for="endTo" class="col-sm-2 col-form-label">@Model.fLang.endTo</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="endTo" value="" name="endTo" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="goAttachment" class="col-sm-2 col-form-label">@Model.fLang.goAttachment</label>
+                        <div class="col-sm-4">
+							<input type="hidden" name="goAttachmentExist" id="goAttachmentExist" value="" />
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="goAttachment" id="goAttachment">
+                                <label class="custom-file-label" for="goAttachment">Choose file</label>
+                            </div>
+                        </div>
+                        <label for="punishmentId" class="col-sm-2 col-form-label">@Model.fLang.naturalPunishment<span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <select type="text" class="form-control" id="punishmentId" value="" name="punishmentId" data-parsley-required="true">
+                                <option value="">Select One</option>
+                                @foreach (var data in Model.punishments)
+                                {
+                                    <option value="@data.Id">@data.name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="remarks" class="col-sm-2 col-form-label">@Model.fLang.remarks</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="remarks" name="remarks" rows="4"></textarea>
+                        </div>
+                    </div>
+
+                    @*</div>*@
+
+                    <hr />
+                    @*<button data-toggle="tooltip" title="Save" type="submit" id="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+                    <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+                    <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+                </form>
+            </div>
+
+        </div>
+
+
+
+
+    </div>
+
+        <hr />
+        <div class="row clearfix">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold">@Model.fLang.title</h6>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <table class="table table-striped table-bordered" id="disciplinaryTable">
+                            <thead>
+                                <tr>
+                                    <th>@Model.fLang.employeeName</th>
+                                    <th>@Model.fLang.designation</th>
+                                    <th>Department</th>
+                                    <th>@Model.fLang.offense</th>
+                                    <th>@Model.fLang.naturalPunishment</th>
+                                    <th>@Model.fLang.goWithDate</th>
+                                    <th>@Model.fLang.punishmentDate</th>
+                                    <th>@Model.fLang.goAttachment</th>
+                                    <th>@Model.fLang.action</th>
+                            </thead>
+                            <tbody>
+                                @foreach (var data in Model.disciplinaries)
+                                {
+                                <tr>
+                                    <td>@data.employee.nameEnglish</td>
+                                    <td>@data.employee?.lastDesignation?.designationName</td>
+                                    <td>@data.employee?.department?.deptName</td>
+                                    <td>@data?.offense?.name</td>
+                                    <td>@data?.naturalPunishment?.name</td>
+                                    <td>@data?.goNumberWithDate</td>
+                                    <td>@data.punishmentDate?.ToString("dd-MMM-yyyy")</td>
+                                    @if (data.goFileURL == null)
+                                    {
+                                        <td></td>
+
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <a href="~/EmpImages/@data.goFileURL" target="_blank"><i class="fas fa-link"><u>Click Here</u></i></a>
+                                        </td>
+                                    }
+
+                                        <td>
+                                            <a class="btn btn-info" data-toggle="tooltip" title="Edit" onclick="Edit(@data.Id,@data.employeeId,@data.OffenseId,@data.naturalPunishmentId,'@data.goNumberWithDate','@data.punishmentDate?.ToString("dd-MMM-yyyy")','@data.startingDate?.ToString("dd-MMM-yyyy")','@data.endDate?.ToString("dd-MMM-yyyy")','@data.remarks','@data.employee?.lastDesignation?.designationName','@data.employee?.department?.deptName', '@data.employee?.nameEnglish', '@data.goFileURL')" href="#"><i class="fa fa-edit"></i></a>
+                                            <a class='btn btn-info' data-toggle='tooltip' target="_blank" title='Print'  href="/HRPMSEmployee/Disciplinary/DisciplinaryEmployeePDF?id=@data.employeeId"><i class='fa fa-print'></i></a>
+                                            <a class="btn btn-danger" onclick="Remove(@data.Id)" href="#"><i class="fa fa-trash-alt"></i></a>
+                                        </td>
+                                </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+
+  @section ScriptsEmp{
+    <script>
+       
+        $(document).ready(function () {
+            Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo', [], 'json', ajaxGetEmployees);
+            var pathname = window.location.pathname;
+            $('#queryString').val(pathname);
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+            });
+            $("#photo").addClass("active");
+            $("#imagePath").change(function () {
+                readURL(this);
+            });
+
+            $("#btngle").click(function () {
+                $("#myDIV").slideToggle("slow");
+            });
+
+
+            $("#disciplinary").addClass("active");
+            var orgFullTitle = "Disciplinary List";
+            $('#disciplinaryTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1,2,3,4,5,6]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'List Of Curricular Type',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'List Of Disciplinary'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "ERP-HRPMS",
+                        messageTop: 'List Of Disciplinary',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+   
+
+            $('#punishmentDate').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2030" });
+            $('#startFrom').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2030" });
+            $('#endTo').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2030" });
+
+            $('#goAttachment').on('change', function (e) {
+                var fileName = e.target.files[0].name;
+                $(this).next('.custom-file-label').html(fileName);
+            })
+        });
+
+        function ajaxGetEmployees(response) {
+            var GeEmployeesList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+                // obj.designation = option.designation;
+                obj.department = option.department?.deptName;
+                obj.employeeCode = option.employeeCode;
+                // obj.lastDesignation = option.lastDesignation ?.designationName;
+                obj.designation = option.lastDesignation ?.designationName;
+                GeEmployeesList[GeEmployeesList.length] = obj;
+            });
+            //console.log(GeEmployeesList);
+            $('#employeeName').autocomplete({
+                source: GeEmployeesList,
+                select: function (event, ui) {
+                    $("#employeeName").val(ui.item.value);
+                    $("#employeeID").val(ui.item.key);
+                    $("#designationId").val(ui.item.designation);
+                    $("#departmentId").val(ui.item.department);
+
+                }
+            });
+        }
+
+        function Edit(Id, employeeId, OffenseId, naturalPunishmentId, goNumberWithDate, punishmentDate, startingDate, endDate, remarks, departmentId, designatioId, name, url) {
+            $("#employeeName").prop("readonly", true);
+            $("#disciplinaryId").val(Id);
+            $("#offenseId").val(OffenseId);
+            $("#punishmentId").val(naturalPunishmentId);
+            $("#punishmentDate").val(punishmentDate);
+            $("#goNo").val(goNumberWithDate);
+            $("#startFrom").val(startingDate);
+            $("#endTo").val(endDate);
+            $("#remarks").val(remarks);
+            $("#designationId").val(designatioId);
+            $("#departmentId").val(departmentId);
+            $("#employeeName").val(name);
+			$("#employeeID").val(employeeId);
+            $(".custom-file-label").text(url);
+            $("#goAttachmentExist").val(url);
+
+        }
+
+        function Remove(Id) {
+            chk = confirm('Do you want to delete this?');
+            if (chk) {
+                //return true;
+                location.replace("/HRPMSEmployee/Disciplinary/DisciplinaryEmployeeDelete/" + Id );
+            } else {
+                return false;
+            }
+        }
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var filerdr = new FileReader();
+                filerdr.onload = function (e) {
+                    $('#user_img').attr('src', e.target.result);
+                    $('#user_img_current').attr('src', e.target.result);
+                }
+                filerdr.readAsDataURL(input.files[0]);
+            }
+        }
+        //$(document).ready(function () {
+        //    $("#photo").addClass("active");
+        //    $("#imagePath").change(function () {
+        //        readURL(this);
+        //    });
+
+        //});
+
+            </script>
+ }

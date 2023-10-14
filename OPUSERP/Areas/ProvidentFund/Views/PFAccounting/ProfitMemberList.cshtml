@@ -1,0 +1,131 @@
+﻿
+@{
+    ViewData["Title"] = "ProfitMemberList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            @*<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h2 class="m-0 font-weight-bold text-primary">Profit Member List</h2>
+                </div>*@
+
+            <div class="card mb-4">
+                <div class="card-body bg-white">
+                    <div class="col-sm-12">
+                        <div class="col-sm-6">
+                            <br />
+                            <table class="table invoice-table">
+                                <tbody>
+                                    <tr>
+                                        <th>Total Contribution & Distributed Profit</th>
+                                        <td> : 5,000,000.00</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Net Surplus for the period</th>
+                                        <td>: 460,000.00</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Surplus % per Contribution & Distributed Profit</th>
+                                        <td>: 0.09</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Distribution Date</th>
+                                        <td>: 16-06-2021</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-sm-6">
+
+                        </div>
+                        <div align="right">
+                            <a href="/ProvidentFund/PFAccounting/DistrbuteProcess" class="btn btn-sm btn-success"><i class="fa fa-plus text-white">&nbsp; Process Distribution</i></a>
+
+                        </div>
+                    </div>
+
+                    <br />
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body bg-white">
+                <h5 class="m-0 font-weight-bold text-primary">Profit Distribution - Members List</h5>
+                <hr />
+                <table class="table table-striped table-bordered table-hover" id="TblProfitMemberList">
+                    <thead>
+                        <tr>
+                            <th>Profit Distribution</th>
+                            <th>Date</th>
+                            <th>Member Name</th>
+                            <th>Contribution</th>
+                            <th>Accumulated Profit</th>
+                            <th>Total after profit distribution</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+
+                            <td>Perfect</td>
+                            <td>16-06-2021</td>
+                            <td>Kamal Hosen</td>
+                            <td>50,000</td>
+                            <td>10000</td>
+                            <td>60,000</td>
+                            <td>
+                                <a href="">
+                                    <i class="fa fa-eye" style="color:green"></i>
+                                </a>
+                                &nbsp;
+                                <button class="btn btn-danger" onclick="Remove()"><i class="fa fa-trash" style="border:none"></i></button>
+                            </td>
+                        
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#TblProfitMemberList').DataTable();
+    });
+
+    function Remove(Id) {
+
+        if (Id == "") {
+            swal('Warning', 'please try again', 'warning');
+            return false;
+        }
+        swal({
+            title: 'Are you sure?', text: 'Do you want to Delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, Delete it!'
+        }).then(function () {
+            $.get("/ProvidentFund/Member/DeleteMember?id=" + Id, function (data) {
+                if (data.Success) {
+                    swal('', data.Message, 'success').then(function () {
+                        location.reload();
+                    })
+                } else {
+                    swal('Warning', data.Message, 'warning');
+                }
+
+
+            });
+
+        })
+
+    }
+
+</script>

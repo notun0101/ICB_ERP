@@ -1,0 +1,391 @@
+﻿@model AllEmployeeLate
+
+  @{
+	ViewData["Title"] = "Absent Report";
+}
+
+
+<div class="card" style="width: 100%;">
+	<div class="card-header row" style="background-color:#EAF6FA;">
+		<div class="col-7">
+			<h5 class="card-title" style="color: black">Absent Report(All Employees)</h5>
+		</div>
+		<div class="col-5">
+			<a class='btn btn-info' style="margin-left: 76%;" data-toggle='tooltip' href='javascript:void(0)' onclick="PrintPdf()"><i style=" font-size: 16px;" class="fas fa-print"></i></a>
+			<a class='btn btn-info' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=1240'><i style=" font-size: 16px;" class="fas fa-backward"></i></a>
+		</div>
+	</div>
+	@*<img src="~/Assets/processing.gif" id="loader" style="display: none; width: 400px; margin: 0 auto;" />*@
+	<div class="card-body">
+		<div class="row">
+			<div class="col-sm-12 row">
+				<div class="col-7" style="color: black; font-size: 17px; padding-top: 24px;">
+					<table style="border:none;">
+						<tr>
+							<td id="ChangeYear"> <span style="font-weight:bold;">Select Month  </span></td>
+							<td>
+								<select id="dropDownYear1">
+									<option value="-1">Year</option>
+								</select>
+								<select id="dropDownYearMonth" style="padding-right: 10px;">
+									<option value="-1">Month</option>
+								</select>
+								<a href="javascript:void(0)" class="btn btn-success" onclick="ShowAll()">Show All</a>
+							</td>
+						</tr>
+						<tr>
+							<td><span style="font-weight:bold;">Department</span><span style="margin-left:3px;"></span> </td>
+							<td>
+								<select class="form-control dropChange" id="department" value="" name="">
+									<option value="">Select</option>
+									@foreach (var data in Model.department)
+									{
+										<option value="@data.Id">@data.deptName</option>
+									}
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td><span style="font-weight:bold;">Designation</span><span style="margin-left:5px;"></span></td>
+							<td>
+								<select class="form-control dropChange" id="designation" value="" name="">
+									<option value="">Select</option>
+									@foreach (var data in Model.designations)
+									{
+										<option value="@data.designationName">@data.designationName </option>
+									}
+								</select>
+							</td>
+						</tr>
+						@*<tr>
+							<td><span style="font-weight:bold;">Shift </span><span style="margin-left:13px;"></span></td>
+							<td>
+								<select class="form-control dropChange" id="shift" value="" name="">
+									<option value="">Select</option>
+									@foreach (var data in Model.shift)
+									{
+										<option value="@data.Id">@data.shiftName</option>
+									}
+								</select>
+							</td>
+						</tr>*@
+
+
+					</table>
+				</div>
+				<div class="col-5">
+
+					<div class="card-body">
+						<table class="table table-striped  table-bordered" id="particularTable">
+							<thead>
+								<tr style="background-color:#A8D1F7">
+									<th>Particular</th>
+									<th>Days</th>
+								</tr>
+							</thead>
+							<tbody>
+
+								<tr style="display: none;">
+									<td>Total Active Employees</td>
+									<td id="tActive"></td>
+								</tr>
+								<tr>
+									<td>Total Absent Employees</td>
+									<td id="tAbsent"></td>
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+</div>
+<hr />
+
+<div class="row clearfix">
+	<div class="col-12">
+		<div class="card">
+			@*<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style="background-color: #EAF6FA;">
+					<h6 class="m-0 font-weight-bold">Attendance List</h6>
+				</div>*@
+			<div class="card-body">
+				<table class="table  table-striped table-bordered nowrap" id="attendenceTable">
+					<thead>
+						<tr>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts{
+	<script src="~/Assets/paginathing.js"></script>
+	<script>
+		$(document).ready(function () {
+			//$('#attendenceTable').DataTable();
+            $('#attendenceTable').hide();
+            var currentYear = new Date().getFullYear();
+            var currentMonth = new Date().getMonth();
+            var cascadedDropDownMonthId = "#dropDownYearMonth";
+            for (var i = currentYear; i > currentYear - 10; i--) {
+                $("#dropDownYear1").append('<option value="' + i.toString() + '">' + i.toString() + '</option>');
+            }
+
+            $(cascadedDropDownMonthId).prop("disabled", true);
+
+            $("#dropDownYear1").change(function () {
+                var currentSelectedValue = $(this).val();
+
+                if (currentSelectedValue == "-1") {
+                    $(cascadedDropDownMonthId).prop("disabled", true);
+                }
+                else {
+                    $(cascadedDropDownMonthId).prop("disabled", false);
+                    var currentSelectedYear = parseInt($(this).val());
+                    var totalMonths = 11;
+                    if (currentSelectedYear == currentYear) {
+                        totalMonths = currentMonth;
+                    }
+                    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    $(cascadedDropDownMonthId).empty();
+
+                    $(cascadedDropDownMonthId).append('<option value="-1">Month</option>');
+
+                    for (var month = 0; month <= totalMonths; month++) {
+                        $(cascadedDropDownMonthId).append('<option value="' + (month + 1) + '">' + monthNames[month] + '</option>');
+                    }
+                }
+            });
+
+
+
+			$('#dropDownYearMonth').change(function () {
+				//$('.card-body').hide();
+				//$('#loader').show();
+				var year = $('#dropDownYear1').val();
+				var month = $('#dropDownYearMonth').val();
+				var depart = $('#department').val();
+				var desig = $('#designation').val();
+				var shift = $('#shift').val();
+				if (depart == '') {
+					depart = 0;
+				}
+				if (desig == "") {
+					desig = null;
+				}
+				if (shift == '') {
+					shift = 0;
+				}
+
+				var option = '';
+
+				//$('#attendenceTable thead tr').empty();
+				//$('#attendenceTable thead tr').append(option);
+                Common.Ajax('GET', '/HRPMSAttendence/EmployeePunchCardInfo/AllAbsentApi?year=' + year + '&month=' + month + '&department=' + depart + '&designation=' + desig + '&shift=' + shift, [], 'json', ajaxFunctionCommon1, true);
+                //Common.Ajax('GET', '/HRPMSAttendence/EmployeePunchCardInfo/AllAbsentApi?month=' + month + '&year=' + year, [], 'json', ajaxFunctionCommon, false);
+            })
+
+            $('.dropChange').change(function () {
+				//$('.card-body').hide();
+				//$('#loader').show();
+                var year = $('#dropDownYear1').val();
+                var month = $('#dropDownYearMonth').val();
+                var department = $('#department').val();
+                var designation= $('#designation').val();
+				var shift = $('#shift').val();
+
+				if (department == '') {
+                    department = 0;
+				}
+				else {
+                    department = $('#department').val();
+				}
+				if (designation == '') {
+                    designation = 0;
+				}
+				else {
+                    designation = $('#designation').val();
+				}
+				if (shift == '') {
+					shift = 0;
+				}
+				else {
+					shift = $('#shift').val();
+				}
+
+                var option = '';
+
+                $('#attendenceTable thead tr').empty();
+                $('#attendenceTable thead tr').append(option);
+
+                Common.Ajax('GET', '/HRPMSAttendence/EmployeePunchCardInfo/AllAbsentApi?year=' + year + '&month=' + month + '&department=' + department + '&designation=' + designation + '&shift=' + shift, [], 'json', ajaxFunctionCommon1, true);
+            })
+
+		});
+
+		function ShowAll() {
+			//$('.card-body').hide();
+			//$('#loader').show();
+
+			var year = $('#dropDownYear1').val();
+			var month = $('#dropDownYearMonth').val();
+
+			if (year != -1 && month != -1) {
+				$('#department').val('');
+				$('#designation').val('');
+				$('#shift').val('');
+
+                Common.Ajax('GET', '/HRPMSAttendence/EmployeePunchCardInfo/AllAbsentApi?year=' + year + '&month=' + month + '&department=' + department + '&designation=' + designation + '&shift=' + shift, [], 'json', ajaxFunctionCommon1, true);
+			}
+			else {
+				swal('warning', 'You must choose both year and month!', 'warning');
+			}
+		}
+        function PrintPdf() {
+            var year = $('#dropDownYear1').val();
+            var month = $('#dropDownYearMonth').val();
+            var department = $('#department').val();
+			var designation = $('#designation').val();
+			var shift = $('#shift').val();
+			if (department == '') {
+				department = 0;
+			}
+			if (designation == '') {
+				designation = 'null';
+			}
+			if (shift == '') {
+				shift = 0;
+			}
+            var shift = $('#shift').val();
+			window.open('/HRPMSAttendence/EmployeePunchCardInfo/AllAbsentPdf?year=' + year + '&month=' + month + '&department=' + department + '&designation=' + designation + '&shift=' + shift, '_blank');
+        }
+
+
+		function ajaxFunctionCommon1(response) {
+			console.log("okkkkk")
+			console.log(response)
+			var option = "";
+			var option1 = '';
+			$('#tActive').text(response.allActive);
+			$('#tAbsent').text(response.allAbsent);
+			if (response.employeeLates.length == 0) {
+				$('#attendenceTable tbody').empty();
+				$('#loader').hide();
+				$('.card-body').show();
+				$('#attendenceTable').show();
+			}
+			else {
+                var arrLength = response.employeeLates.length;
+                allActive = response.allActive;
+                allAbsent = response.allAbsent;
+				$('#tActive').text(allActive);
+                $('#tAbsent').text(allAbsent);
+	
+				$.each(response.employeeLates, function (i, item) {
+					console.log(item);
+					empName = item.employee.nameEnglish;
+					empId = item.employee.employeeCode;
+					designation = item.employee.designation;
+					var dept = item.employee.department.deptName;
+                    var totalWorks = item.totalPresent;
+					var totalAbsent = item.totalAbsent;
+					var op = '';
+					
+					if (allAbsent > 0) {
+						option += `<tr>
+									<th>${empName}</th>
+									
+									<td>${empId}</td>
+									<td>${totalWorks}</td>
+									<td>${totalAbsent}</td>
+									${op}
+								</tr>`
+					}
+				});
+
+				option1 += `<th>Employee Name</th>
+                       
+                        <th>Employee Id</th>
+						<th>Total Working Days</th>
+						<th>Total Absent Days</th>`;
+			
+				$('#attendenceTable thead tr').empty();
+				$('#attendenceTable tbody').empty();
+
+
+				$('#attendenceTable thead tr').append(option1);
+				$('#attendenceTable tbody').append(option);
+				
+				$('#attendenceTable').DataTable().destroy();
+				$('#attendenceTable').DataTable({
+					//dom: 'Bfrtip',
+					"pageLength": 10,
+					retrieve: true
+				});
+                $('#attendenceTable').DataTable().destroy();
+                $('#attendenceTable').DataTable({
+                    stateSave: false,
+                    dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                        "<'row'<'col-sm-12't>>" +
+                        "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                    "pageLength": 10,
+                    retrieve: true,
+                    buttons: [
+                        {
+                            extend: 'excelHtml5',
+                            text: '<i class="fa fa-file-excel"></i> Excel',
+                            titleAttr: 'Excel',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5]
+                            },
+                            title: "ERP-HRPMS",
+                            messageTop: 'CV Black List',
+                            class: 'btn btn-info'
+                        },
+                        {
+                            extend: 'csvHtml5',
+                            text: '<i class="fa fa-file-excel"></i> CSV',
+                            titleAttr: 'CSV',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5]
+                            },
+                            title: "ERP-HRPMS",
+                            messageTop: 'CV Black List'
+                        },
+                        {
+                            extend: 'print',
+                            text: '<i class="fa fa-print"></i> Print',
+                            titleAttr: 'Print',
+                            title: "ERP-HRPMS",
+                            messageTop: 'CV Black List',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5]
+                            },
+                            customize: function (doc) {
+                                $(doc.document.body).find('h1').css('font-size', '20pt');
+                                $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                                $(doc.document.body).find('h1').css('text-align', 'center');
+                            }
+                        }
+                    ]
+                });
+
+				//$('#loader').hide();
+				//$('.card-body').show();
+				$('#attendenceTable').show();
+			}
+
+		}
+
+       
+	</script>
+}

@@ -1,0 +1,191 @@
+﻿
+@{
+    ViewData["Title"] = "PreviewInvestment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            @*<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h2 class="m-0 font-weight-bold text-primary">Find Investment Summery</h2>
+        </div>*@
+
+            <div class="card-body">
+                <div class="">
+                    <h5 class="m-0 font-weight-bold text-primary">Find Investment Summery</h5>
+                </div>
+                <hr />
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <input type="hidden" id="id" name="id" />
+                        <select id="allDate" name="" formControlName="" class="form-control input-sm">
+                            <option value="">All Dates</option>
+                            <option value="Custom">Custom</option>
+                            <option value="Today">Today</option>
+                        </select>
+                        <br />
+                        <input type="hidden" name="" id="investmentId" value="0">
+                        <select class="form-control" name="" id="investmentId">
+                            <option>Select Investment</option>
+                            <option value="Bank">Bank</option>
+                            <option value="Cash">Cash</option>
+
+                        </select>
+                    </div>
+                    <div class="col-sm-4 input-group">
+                        <input name="fromDate" id="fromDate" class="form-control input-group-sm" placeholder="From Date" readonly />
+                        <div class="input-group-prepend">
+                            <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 input-group">
+                        <input name="toDate" id="toDate" class="form-control input-group-sm" placeholder="To Date" readonly />
+                        <div class="input-group-prepend">
+                            <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <button type="button" onclick="search()" class="btn btn-sm btn-primary" style="background-color:darkcyan; color:white" id="addcoa" value="View PF Statement">Run Report</button>
+
+            </div>
+
+        </div>
+
+
+        <div class="card mb-4"> 
+            <div class="card-body bg-white">
+                <div class="col-sm-12">
+                    <h4 class="text-success" align="center">Employees' Provident Fund Trust of BDBL Finance</h4>
+                    <p align="center">
+                        Address: Gulshan
+                        <br />
+                        Investment Ledger
+                    </p>
+                </div>
+                <div class="col-sm-12">
+                    <div class="col-sm-6">
+                        <table class="table invoice-table">
+                            <tbody>
+                                <tr>
+                                    <th>Investment Name</th>
+                                    <td> Bank</td>
+                                </tr>
+                                <tr>
+                                    <th>Investment Date</th>
+                                    <td>15-06-2021</td>
+                                </tr>
+                                <tr>
+                                    <th>Maturity Date</th>
+                                    <td>15-05-2021</td>
+                                </tr>
+                                <tr>
+                                    <th>Investment Rate</th>
+                                    <td>5%</td>
+                                </tr>
+                                <tr>
+                                    <th>Investment Amount</th>
+                                    <td>50000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div> 
+                    <div class="col-sm-6">
+
+                    </div>
+                </div>
+
+                
+                <br />
+                <br />
+                <table class="table table-striped table-bordered table-hover" id="">
+                    <thead>
+                        <tr>
+                            <th>Sl</th>
+                            <th>Particulars</th>
+                            <th>Debit</th>
+                            <th>Credit</th>
+                            <th>Balance</th>
+
+                    </thead>
+                    <tbody>
+                        <tr>
+                           <td>1</td>
+                           <td>	New Investment</td>
+                           <td align="right">200,000</td>
+                           <td align="right">0</td>
+                           <td align="right">200,000</td>
+                        </tr>
+
+                         <tr>
+                           <td>2</td>
+                           <td>	Interest Accrued</td>
+                           <td align="right">5,000</td>
+                           <td align="right">0</td>
+                           <td align="right">205,000</td>
+                        </tr>
+
+                         <tr>
+                           <td>3</td>
+                           <td>Interest Accrued</td>
+                           <td align="right">5,000	</td>
+                           <td align="right">0</td>
+                           <td align="right">210,000</td>
+                        </tr>
+
+                        <tr>
+                           <td>4</td>
+                           <td>	Encashment</td>
+                           <td align="right">0</td>
+                           <td align="right">210,000</td>
+                           <td align="right">0</td>
+                        </tr>
+                        <tr>
+                           
+                           <td colspan="2" align="right">Total amount</td>
+                           <td align="right">210,000</td>
+                           <td align="right">210000</td>
+                           <td align="right">0</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#fromDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker(new Date());
+        $("#toDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker(new Date());
+
+    });
+
+    function search() {
+        var Investment = $("#investmentId").val();
+        var AllDate = $("#allDate").val();
+        var FromDate = $("#fromDate").val();
+        var ToDate = $("#toDate").val();
+
+        if (Investment == "") {
+            swal('Warning', 'please try again', 'warning');
+            return false;
+        }
+        if (AllDate == "") {
+            swal('Warning', 'please try again', 'warning');
+            return false;
+        }
+
+        if (FromDate == "") {
+            swal('Warning', 'please try again', 'warning');
+            return false;
+        }
+        if (ToDate == "") {
+            swal('Warning', 'please try again', 'warning');
+            return false;
+        }
+    }
+
+</script>

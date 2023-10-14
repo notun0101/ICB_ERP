@@ -1,0 +1,155 @@
+﻿@model PayrollReportViewModel
+@{
+    ViewData["Title"] = "Individual";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Style{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link href="~/css/site.css" rel="stylesheet" />
+
+    <link href="~/lib/main.css" rel="stylesheet" />
+    <style>
+        #calendar a, #ui-datepicker-div a {
+            color: black !important;
+        }
+        /* Top Counter */
+        .leftImgBox {
+            width: 20%;
+            height: 100%;
+            float: left;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 13px;
+        }
+
+            .leftImgBox img {
+                width: 100%;
+            }
+
+            .leftImgBox i {
+                font-size: 42px !important;
+            }
+
+        .counterBox {
+            float: right;
+            text-align: center;
+            margin: 10px;
+        }
+
+        .counter {
+            font-size: 25px;
+            margin-bottom: 0;
+        }
+
+        .counterBox1 {
+            float: right;
+            text-align: right;
+            margin: 0;
+        }
+
+        .counter1 {
+            font-size: 20px !important;
+            margin-bottom: 0;
+        }
+
+        .counter p {
+            text-align: right;
+        }
+
+        .title {
+            font-size: 15px;
+        }
+
+        a {
+            color: white !important;
+        }
+
+            a:hover {
+                color: white;
+            }
+
+        .active5 {
+            color: darkgreen;
+        }
+
+        .redstar {
+            color: red;
+            float: right;
+        }
+    </style>
+}
+<div class="card" style="width: 100%;">
+    <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+        <h5 class="m-0 font-weight-bold text-primary">Individual Loan Report</h5>
+        <a class='btn btn-info mr-4' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1017&perentId=6229'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+    </div>
+    <div class="card-body">
+
+        <div class="container">
+            <form asp-area="Payroll" asp-controller="PayrollReport" asp-action="IndividualLoan" method="post" id="FormId">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="row">
+                    <input type="hidden" id="employeeId" name="employeeId">
+                    <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="empcode" class="col-sm-4 col-form-label">Employee Name</label>
+                            @if (User.IsInRole("UAT PIMS"))
+                            {
+                                <div class="col-sm-8">
+                                    <input type="hidden" class="form-control" id="empCode" name="empCode">
+                                    <input type="text" class="form-control" id="employeeName" autocomplete="off">
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-sm-8">
+                                    <input type="hidden" class="form-control" id="empCode" name="empCode" value="@ViewBag.empcode">
+                                    <input type="text" class="form-control" id="employeeName" autocomplete="off" readonly value="@ViewBag.employeename">
+                                </div>
+                            }
+
+                        </div>
+
+                    </div>
+                    <a id="submit" type="button" class="btn btn-success" style="float:right; " href='javascript:void(0)'><i class="fas fa-save"></i> Submit</a>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(document).ready(function () {
+        Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo', [], 'json', ajaxGetEmployees);
+
+    });
+    $('#submit').click(function () {
+		window.open("/Payroll/PayrollReport/IndividualLoanPDF?empId=" + $('#employeeId').val());
+    });
+
+
+    function ajaxGetEmployees(response) {
+        var GeEmployeesList = [];
+        console.log(response)
+        $.each(response, function (id, option) {
+            var obj = new Object();
+            obj.key = option.Id;
+            obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+            obj.employeeCode = option.employeeCode;
+            GeEmployeesList[GeEmployeesList.length] = obj;
+        });
+        $('#employeeName').autocomplete({
+            source: GeEmployeesList,
+            select: function (event, ui) {
+                //$("#employeeName").val(ui.item.value);
+                $("#employeeId").val(ui.item.key);
+                $("#empCode").val(ui.item.employeeCode);
+            }
+        });
+    }
+
+</script>

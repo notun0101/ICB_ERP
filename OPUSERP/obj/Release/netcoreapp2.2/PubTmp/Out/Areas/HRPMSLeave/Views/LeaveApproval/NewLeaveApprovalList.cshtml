@@ -1,0 +1,64 @@
+﻿@model ApprovalListViewModel
+@{
+    ViewData["Title"] = "CreateNewApprovalMatrix";
+}
+
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<style>
+	.aaa {
+		border-radius: 0 !important
+	}
+</style>
+<br />
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="float-left" style="display:inline">Approval List</h3>
+            <a class="btn btn-success float-right"><i class="fa fa-plus"></i></a>
+        </div>
+    </div>
+    <div class="card-header">
+        <div class="col-md-12">
+            <table class="table table-bordered" id="tblData" style="width:100%">
+                <thead>
+                    <tr>
+                        <th width="6%">Sl</th>
+                        <th width="28%">Employee Code</th>
+                        <th width="28%">Employee Name</th>
+                        <th width="28%">Approval Type</th>
+                        <th width="10%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ 
+                        var sl = 1;
+                        @foreach (var item in Model.approvalMasters)
+                        {
+                            <tr>
+                                <td>@sl</td>
+                                <td>@item.raiserName</td>
+                                <td>@item.raiserEmployeeCode</td>
+                                <td>@item.approverTypeName</td>
+                                <td>
+                                    <a class="btn btn-success" href="javascript:void(0)"><i class="fa fa-edit"></i></a>
+                                </td>
+                            </tr>
+                            sl++;
+                        }
+                    }
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+<script>
+    $(document).ready(function () {
+        $('#tblData').dataTable();
+    })
+</script>
+}

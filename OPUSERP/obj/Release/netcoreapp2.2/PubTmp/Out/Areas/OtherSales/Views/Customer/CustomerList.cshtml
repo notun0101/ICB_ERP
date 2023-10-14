@@ -1,0 +1,533 @@
+﻿@model CustomerViewModel
+@{
+    ViewData["TitleMD"] = "Customer List";
+    Layout = "~/Areas/MasterData/Views/Shared/_CustomerDataForm.cshtml";
+}
+@section StyleMD{
+    <style>
+        #educationalTable tbody tr {
+            cursor: pointer;
+        }
+        .fas {
+            margin-top: 10px;
+            font-size: 25px;
+        }
+
+        .active {
+            color: darkcyan;
+        }
+
+        .cb {
+            height: 345px;
+        }
+
+
+        .c .cb {
+            transition: .3s all;
+        }
+
+        .c:hover .cb {
+            background-color: #D6DBE9;
+        }
+
+        .c .card-footer {
+            height: 50px;
+            background-color: #E9F7EF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .pagination > li > a,
+        .pagination > li > span {
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #337ab7;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+
+        .pagination > .active > a,
+        .pagination > .active > a:focus,
+        .pagination > .active > a:hover,
+        .pagination > .active > span,
+        .pagination > .active > span:focus,
+        .pagination > .active > span:hover {
+            z-index: 3;
+            color: #fff;
+            cursor: default;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+
+        .pagination-container {
+            margin: 20px 0;
+            display: flex;
+            justify-content: flex-end;
+        }
+    </style>
+}
+
+@*<div class="row clearfix">
+        <div class="col-12">
+            <div class="card mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between"  style="display:none">
+                    <h6 class="m-0 font-weight-bold text-primary">Customer List</h6>
+
+                    <a href="/OtherSales/Customer/Index" class="btn btn-info btn-sm pull-right" style="background-color:#024972;">Add New</a>
+                </div>
+                <br/>
+                <div class="col-md-12" style="display:none">
+
+
+                    <div class="form-group row">
+                        <label for="customerId" class="col-sm-2 col-form-label">From Date</label>
+                        <div class="col-sm-4">
+
+                            <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="fromDate" id="fromDate" placeholder="" value="">
+
+                        </div>
+                        <label for="customerId" class="col-sm-2 col-form-label">To Date</label>
+                        <div class="col-sm-4">
+
+                            <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="toDate" id="toDate" placeholder="" value="">
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group row">
+                        <label class="col-sm-10"></label>
+                        <div class="col-sm-2">
+                            <br />
+                            <button type="button" onclick="Refresh()" title="Refresh" class="btn btn-danger btn-sm"><i class="fas fa-sync"></i></button>&nbsp;
+                            <button id="LoadButton" class="btn btn-success btn-sm" title="Load"><i class="fas fa-shower"></i></button>
+
+
+                        </div>
+                    </div>
+
+                </div>
+                <hr />
+                <!-- Card Body -->
+                <div class="card-body">
+                    <table class="table table-striped table-bordered table-responsive" id="educationalTable">
+                        <thead>
+                            <tr>
+                                <th>SL#</th>
+                                <th>Customer Name</th>
+                                <th>Address</th>
+                                <th>Customer Number</th>
+                                <th>Mobile</th>
+                               <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ int i = 1;
+                                @foreach (var data in Model.relSupplierCustomerResourses)
+                                {
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>@data.Leads?.leadName</td>
+                                        <td>@Model.GetAddresses?.Where(x => x.leadsId == data.LeadsId)?.FirstOrDefault()?.maillingAddress</td>
+
+                                        <td>@data?.Leads?.leadNumber</td>
+                                        <td>@Model.Resources.Where(x=>x.Id==data.resourceId).FirstOrDefault()?.mobile</td>
+                                        <td>
+
+                                            <a class="btn btn-success" title="Edit Data" href="/OtherSales/Customer/Index?id=@data.resourceId&actionType=defaultOpen"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;
+
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+
+<i class="fas fa-th text-left mx-2"></i>
+<i class="fas fa-list-alt text-left mx-2"></i>
+
+<div class="row clearfix" id="listView" style="display: none;">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center">
+
+                <div class="col-8">
+                    <h6 class="m-0 font-weight-bold text-primary">Customer List</h6>
+                </div>
+                <div class="col-4" style="margin-left: 25%;">
+                    <a href="/OtherSales/Customer/Index" class="btn btn-info btn-sm pull-right" style="background-color:#024972;">Add New</a>
+                  
+                </div>
+            </div>
+            @*<a href="/OtherSales/Customer/Index" class="btn btn-info btn-sm pull-right" style="background-color:#024972;">Add New</a>*@
+            <div class="col-md-12" style="display:none">
+                <div class="form-group row">
+                    <label for="customerId" class="col-sm-2 col-form-label">From Date</label>
+                    <div class="col-sm-4">
+
+                        <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="fromDate" id="fromDate" placeholder="" value="">
+
+                    </div>
+                    <label for="customerId" class="col-sm-2 col-form-label">To Date</label>
+                    <div class="col-sm-4">
+
+                        <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="toDate" id="toDate" placeholder="" value="">
+
+                    </div>
+                </div>
+
+
+
+                <div class="form-group row">
+                    <label class="col-sm-10"></label>
+                    <div class="col-sm-2">
+
+                        <button type="button" onclick="Refresh()" title="Refresh" class="btn btn-danger btn-sm"><i class="fas fa-sync"></i></button>&nbsp;
+                        <button id="LoadButton" class="btn btn-success btn-sm" title="Load"><i class="fas fa-shower"></i></button>
+                        <button id="SubmitButton" class="btn btn-success btn-sm" title="Preview"><i class="fas fa-print"></i></button>
+
+                    </div>
+                </div>
+
+            </div>
+       
+            <!-- Card Body -->
+            <div class="card-body">
+
+                <table class="table table-striped table-bordered" id="educationalTable">
+                    <thead>
+                        <tr>
+                            <th>SL#</th>
+                            <th>Customer Name</th>
+                            <th>Address</th>
+                            <th>Customer Number</th>
+                            <th>Mobile</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ int i = 1;
+                            @foreach (var data in Model.relSupplierCustomerResourses)
+                            {
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@data.Leads?.leadName</td>
+                                    <td>@Model.GetAddresses?.Where(x => x.leadsId == data.LeadsId)?.FirstOrDefault()?.maillingAddress</td>
+
+                                    <td>@data?.Leads?.leadNumber</td>
+                                    <td>@Model.Resources.Where(x => x.Id == data.resourceId).FirstOrDefault()?.mobile</td>
+                                    <td>
+
+                                        <a class="btn btn-success" title="Edit Data" href="/OtherSales/Customer/Index?id=@data.resourceId&actionType=defaultOpen"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;
+
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row clearfix" id="gridView">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center">
+
+                <div class="col-8">
+                    <h6 class="m-0 font-weight-bold text-primary">Customer List</h6>
+                </div>
+                <div class="col-4" style="margin-left: 25%;">
+                    <a href="/OtherSales/Customer/Index" class="btn btn-info btn-sm pull-right" style="background-color:#024972;">Add New</a>
+                  
+                </div>
+            </div>
+            <div class="col-md-12" style="display:none">
+
+
+
+                <div class="form-group row">
+                    <label for="customerId" class="col-sm-2 col-form-label">From Date</label>
+                    <div class="col-sm-4">
+
+                        <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="fromDate" id="fromDate" placeholder="" value="">
+
+                    </div>
+                    <label for="customerId" class="col-sm-2 col-form-label">To Date</label>
+                    <div class="col-sm-4">
+
+                        <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="toDate" id="toDate" placeholder="" value="">
+
+                    </div>
+                </div>
+
+
+
+                <div class="form-group row">
+                    <label class="col-sm-10"></label>
+                    <div class="col-sm-2">
+
+                        <button type="button" onclick="Refresh()" title="Refresh" class="btn btn-danger btn-sm"><i class="fas fa-sync"></i></button>&nbsp;
+                        <button id="LoadButton" class="btn btn-success btn-sm" title="Load"><i class="fas fa-shower"></i></button>
+                        <button id="SubmitButton" class="btn btn-success btn-sm" title="Preview"><i class="fas fa-print"></i></button>
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="row" >
+                    <div class="col-9"></div>
+                    <div class="col-3">
+                        <input type="text" class="form-control" placeholder="Search here..." id="myInput1" />
+                        @*<a href="/OtherSales/Customer/Index" class="btn btn-info btn-sm pull-right" style="background-color:#024972;">Add New</a>*@
+                    </div>
+                </div>
+
+                <div class="row" id="cards" style="margin-top: 1%;">
+
+                    @foreach (var data in Model.relSupplierCustomerResourses)
+                    {
+
+                        <div class="col-md-3 mb-1 searchdiv">
+
+                            <a href="@Url.Action("CustomerList", "Customer", new { id = @data.Leads?.Id })" style="text-decoration: none; color: black;">
+
+                                <div class="card c" style="font-size: 16px;">
+                                    <div class="card-body cb text-center">
+
+                                        <strong>Customer Name :</strong> <br />
+                                        @data.Leads?.leadName <br /> <br />
+
+                                        <strong>Address:</strong> <br />
+                                        @Model.GetAddresses?.Where(x => x.leadsId == data.LeadsId)?.FirstOrDefault()?.maillingAddress<br /><br />
+
+                                        <strong>Customer Number:</strong> <br />
+                                        @data?.Leads?.leadNumber<br /><br />
+
+
+
+                                        <strong>Mobile :</strong> <br />
+                                        @Model.Resources.Where(x => x.Id == data.resourceId).FirstOrDefault()?.mobile<br /> <br />
+
+
+                                    </div>
+                                    <div class="card-footer text-center font-weight-bold">
+
+                                        <a class="btn btn-success" title="Edit Data" href="/OtherSales/Customer/Index?id=@data.resourceId&actionType=defaultOpen"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;
+                                    </div>
+                                </div>
+                            </a>
+
+                        </div>
+
+                    }
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ScriptsMD{
+    <script src="~/Assets/paginathing.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#education").addClass("active");
+            $('#educationalTable').DataTable({
+                stateSave: true,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" + "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            stripHtml: false,
+                            columns: [1, 2, 3, 4]
+                        },
+                        title: 'Priyojon Healthcare Ltd',
+                        messageTop: 'List Of Customers',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        title: 'Priyojon Healthcare Ltd',
+                        titleAttr: 'Print',
+
+                        messageTop: 'List Of Customers',
+
+                        exportOptions: {
+                            stripHtml: false,
+                            columns: [0, 1, 2, 3, 4]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+
+            $('#gridView').show();
+            $('#listView').hide();
+
+            $('.fas').removeClass('active');
+            $('.fa-th').addClass('active');
+
+            $("#myInput1").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $(".searchdiv").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+
+
+            var localstorage = window.localStorage.getItem('modelId');
+            $("#fromDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+            $("#toDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+            // var table = $('#tblInvoiceList').DataTable();
+            var from = $("#fromDate").val();
+            var to = $("#toDate").val();
+
+            Common.Ajax('GET', '/global/api/customer/CustomerListdaterange/' + from + '/' + to + '/' + localstorage, [], 'json', ajaxgetdata);
+            $("#LoadButton").click(function () {
+                //var address = $("#address").val();
+                //if (address == "")
+                //{
+                //    address = "NoData";
+                //}
+                var from = $("#fromDate").val();
+                var to = $("#toDate").val();
+
+                Common.Ajax('GET', '/global/api/customer/CustomerListdaterange/' + from + '/' + to + '/' + localstorage, [], 'json', ajaxgetdata);
+            });
+        });
+        function ajaxgetdata(response) {
+            console.log(response);
+            $("#educationalTable").DataTable().destroy();
+            $("#educationalTable tbody>tr").remove();
+            var dtTable = $("#educationalTable");
+            var tableBody = dtTable.find('tbody');
+            if (response != null) {
+                var x = 0;
+                var index = 0;
+                $.each(response.relSupplierCustomerResourses, function (i, ite) {
+                    x++;
+                    var address = "";
+                    var mobile = "";
+                    $.each(response.GetAddresses, function (jj, ff) {
+                        if (ff.leadsId == ite.LeadsId) {
+                            address = ff.maillingAddress;
+                        }
+
+                    });
+                    $.each(response.Contacts, function (jjj, fff) {
+                        if (fff.leadsId == ite.LeadsId) {
+                            mobile = fff?.resource?.mobile;
+                        }
+
+                    });
+                    var trHtml = '<tr id=' + index + '>' +
+                        '<td>' + x + '</td>' +
+
+                        '<td>' + ite.Leads?.leadName + '</td>' +
+                        '<td>' + address + '</td>' +
+                        '<td>' + ite?.Leads?.leadNumber + '</td>' +
+                        '<td>' + mobile + '</td>' +
+
+
+
+
+                        '</tr>';
+                    tableBody.append(trHtml);
+                    index = index + 1;
+                    $("#rowCount").val(index);
+                })
+            }
+            $("#educationalTable").DataTable();
+
+        }
+
+        $('.fa-list-alt').click(function () {
+            $('#listView').show();
+            $('#gridView').hide();
+
+            $('.fas').removeClass('active');
+            $('.fa-list-alt').addClass('active');
+        })
+        $('.fa-th').click(function () {
+            $('#listView').hide();
+            $('#gridView').show();
+
+            $('.fas').removeClass('active');
+            $('.fa-th').addClass('active');
+        })
+
+
+        $('#cards').paginathing({
+
+            // Limites your pagination number
+            // false or number
+            limitPagination: 6,
+            // limitPagination: false,
+
+            // Pagination controls
+            perPage: 8,
+            prevNext: true,
+            firstLast: true,
+            prevText: '&laquo;',
+            nextText: '&raquo;',
+            firstText: 'First',
+            lastText: 'Last',
+            containerClass: 'pagination-container',
+            ulClass: 'pagination',
+            liClass: 'page',
+            activeClass: 'active',
+            disabledClass: 'disabled',
+            pageNumbers: true,
+            insertAfter: '#cards'
+        })
+
+
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

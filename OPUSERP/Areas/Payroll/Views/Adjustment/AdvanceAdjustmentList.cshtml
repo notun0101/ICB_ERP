@@ -1,0 +1,189 @@
+﻿@model AdvanceAdjustmentViewModel
+@{
+    ViewData["Title"] = "AdvanceAdjustmentList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Style{
+    <style>
+        ul.ui-autocomplete {
+            z-index: 99999999;
+        }
+    </style>
+}
+
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">List of Advance Adjustment</h6>
+                <a class="btn btn-info btn-sm fa-pull-right" style="margin-left: 68%;" data-toggle='tooltip' title='Create' href='/Payroll/Adjustment/AdvanceAdjustment'>Create</a>
+
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="leaveTable">
+                    <thead>
+                        <tr>
+                            <th width="5%">SL#</th>
+                            <th>@Model.visualEmpCodeName</th>
+                            <th>Employee Name</th>
+                            <th>Designation</th>
+                            <th>Starting Date</th>
+                            <th>Advance Amount</th>
+                            <th>Action</th>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 1;
+                            @foreach (var data in Model.advanceAdjustments)
+                            {
+                            <tr>
+                                <td width="5%">@i</td>
+                                <td>@data.employeeInfo.employeeCode</td>
+                                <td>@data.employeeInfo.nameEnglish</td>
+                                <td>@data.employeeInfo.designation</td>
+                                <td>@data.date?.ToString("dd-MMM-yyyy")</td>
+                                <td style="text-align:right;">@data.advanceAmount.ToString("0,0.00")</td>
+                                <td>
+                                    <a class="btn btn-success" title="Edit" href="~/Payroll/Adjustment/EditAdvanceAdjustment/@data.Id"><i class="fa fa-edit "></i></a>
+                                    <a class="btn btn-info" title="Edit" target="_blank" href="~/Payroll/Adjustment/ReportAdvanceAdjustmentPdf/@data.Id"><i class="fa fa-file-pdf "></i></a>
+                                    @*<a class="btn btn-success" onclick="Edit(@data.Id,@data.employeeInfoId,'@data.employeeInfo.nameEnglish','@data.employeeInfo.employeeCode','@data.employeeInfo.designation',@data.salaryPeriodId,@data.salaryHeadId,'@data.advanceAmount','@data.installmentAmount','@data.noOfInstallment','@data.purpose','@data.isContinue')" href="javascript:void(0)"><i class="fa fa-edit"></i></a>*@
+                                </td>
+                            </tr>
+                                i++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script>
+        $('#submit').click(function () {
+		console.log($('#FormId').serializeArray());
+		var data = $('#FormId').serializeArray();
+
+		console.log(data[0].value)
+		swal({
+			title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+		}).then(function () {
+			$.ajax({
+				url: '@Url.Action("AdvanceAdjustment", "Adjustment")',
+				type: 'POST',
+				data: data
+			}).done(function () {
+                if (data[0].value == 0) {
+                    swal('success', 'Saved Successfully!', 'success').then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    swal('success', 'Updated Successfully!', 'success').then(function () {
+                        location.reload();
+                    });;
+                }
+			}).fail(function () {
+				swal('warning', 'Failed!', 'warning');
+			})
+		});
+	})
+        $(document).ready(function () {
+
+            $('#leaveTable').DataTable();
+            Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo', [], 'json', ajaxGetEmployees);
+            $("#date").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+
+            $("#installmentAmount").keyup(function () {
+                GetInstallment();
+            });
+            $("#advanceAmount").keyup(function () {
+
+                GetInstallment();
+            });
+            $("#noOfInstallment").keyup(function () {
+                GetMonthly();
+            });
+
+        });
+
+        function ajaxGetEmployees(response) {
+            var GeEmployeesList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+                obj.designation = option.designation;
+                obj.employeeCode = option.employeeCode;
+                GeEmployeesList[GeEmployeesList.length] = obj;
+            });
+            $('#employeeName').autocomplete({
+                source: GeEmployeesList,
+                select: function (event, ui) {
+                    $("#employeeName").val(ui.item.value);
+                    $("#Designation").val(ui.item.designation);
+                    $("#employeeInfoId").val(ui.item.key);
+                }
+            });
+        }
+
+        function Edit(Id, employeeInfoId, nameEnglish, employeeCode, designation, salaryPeriodId, salaryHeadId, advanceAmount, installmentAmount, noOfInstallment, purpose, isContinue) {
+            $('#advanceAdjustmentId').val(Id);
+            $('#employeeInfoId').val(employeeInfoId);
+            $('#employeeName').val(nameEnglish + '(' + (employeeCode) + ')');
+            $('#Designation').val(designation);
+            $('#salaryPeriodId').val(salaryPeriodId);
+            $('#salaryHeadId').val(salaryHeadId);
+            $('#advanceAmount').val(advanceAmount);
+            $('#installmentAmount').val(installmentAmount);
+            $('#noOfInstallment').val(noOfInstallment);
+            $('#purpose').val(purpose);
+            $('#isContinue').val(isContinue);
+        }
+
+        function GetInstallment() {
+            var totalAmount = $("#advanceAmount").val();
+            var monthlyAmount = $("#installmentAmount").val();
+            if ($("#advanceAmount").val() == '' || $("#installmentAmount").val() == '') {
+                totalAmount = 0;
+                monthlyAmount = 0;
+            }
+            $("#noOfInstallment").val(parseFloat(totalAmount / monthlyAmount).toFixed(0));
+        }
+
+        function GetMonthly() {
+            var totalAmount = $("#advanceAmount").val();
+            var noOfInstal = $("#noOfInstallment").val();
+            if ($("#advanceAmount").val() == '' || $("#noOfInstallment").val() == '') {
+                totalAmount = 0;
+                noOfInstal = 0;
+            }
+            $("#installmentAmount").val(parseFloat(totalAmount / noOfInstal).toFixed(2));
+        }
+
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

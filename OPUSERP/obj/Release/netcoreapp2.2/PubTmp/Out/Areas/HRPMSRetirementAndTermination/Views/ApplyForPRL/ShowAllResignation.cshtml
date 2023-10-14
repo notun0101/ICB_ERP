@@ -1,0 +1,100 @@
+﻿@model ShowAllResignationViewModel
+@{
+    ViewData["Title"] = "ShowAllResignation";
+}
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+            <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+                <h5 class="card-title" style="color: black; margin: 8px; text-transform: uppercase;">Apply For Resign</h5>
+            </div>
+            <div class="col-md-8">
+                <div style="float: right; margin: 16px;">
+                    <a class='btn btn-info' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=5753'><i class="fas fa-backward"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body" style="background-color: white;">
+            <table class="table table-striped table-bordered" id="resignationListTable">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Employee Name</th>
+                        <th>Designation</th>
+                        <th>Resign Date</th>
+                        <th>Last Working Date</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Clearance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var data in Model.resignInformationList)
+                    {
+                        <tr>
+                            <td>@data.employee?.employeeCode</td>
+                            <td>@data.employee?.nameEnglish</td>
+                            <td>@data.employee?.lastDesignation?.designationName</td>
+                            <td>@data.resignDate?.ToString("dd-MMM-yyyy")</td>
+                            <td>@data.lastWorkingDate?.ToString("dd-MMM-yyyy")</td>
+                            <td>@data.resignReason</td>
+                            <td>@data.status</td>
+                            <td>@data.clearanceDate?.ToString("dd-MMM-yyyy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            var orgFullTitle = "Resign List";
+            $('#resignationListTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'Resign List',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'Resign List'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "ERP-HRPMS",
+                        messageTop: 'Resign List',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+}

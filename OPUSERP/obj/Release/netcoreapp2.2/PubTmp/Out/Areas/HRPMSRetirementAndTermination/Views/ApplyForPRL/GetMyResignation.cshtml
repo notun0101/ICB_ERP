@@ -1,0 +1,115 @@
+﻿@model PRLApplicationViewModel
+@{
+    ViewData["Title"] = "My Resignation";
+}
+<div class="card" style="width: 100%;margin-top:10px;">
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+            <h5 class="card-title" style="color: black; margin: 8px;">My Resignation</h5>
+        </div>
+        <div class="col-md-8">
+
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info mr-4' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=5753'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div>
+
+            <hr>
+            <div class="container">
+                <table class="table table-bordered table-striped" id="approvePRLApp">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Designation</th>
+                            <th>PRL Date</th>
+                            <th>Last Working Date</th>
+                            <th>Reason</th>
+                            <th>Attatchment</th>
+                            <th>Clearence Date</th>
+                            <th>Clearance File</th>
+                            @*<th>Status</th>*@
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.resignInformation)
+                        {
+                            <tr>
+                                <td>@data.employee?.nameEnglish</td>
+                                <td>@data.employee?.lastDesignation?.designationName</td>
+                                <td>@data.resignDate?.ToString("dd/MM/yyyy")</td>
+                                <td>@data.lastWorkingDate?.ToString("dd/MM/yyyy")</td>
+                                <td>@data.resignReason</td>
+                                <td>
+                                    @if (data.url != null)
+                                    {
+                                        <a href="~/EmpAttachment/@data.url" target="_blank">Click Here</a>
+                                    }
+                                </td>
+                                <td>@data.clearanceDate?.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    @if (data.clearanceFile != null)
+                                    {
+                                        <a href="~/EmpAttachment/@data.clearanceFile" target="_blank">Click Here</a>
+                                    }
+                                </td>
+                                @*<td>@data.status</td>*@
+                                <td>
+                                    @if (data.status == 1)
+                                    {
+                                        <span class="badge badge-primary">PRL Applied</span>
+                                    }
+                                    else if (data.status == 2)
+                                    {
+                                        <span class="badge badge-secondary">PRL Approved</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-info">Clearence Uploaded</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var fromDateValue = "";
+        function FromDateChange(e) {
+            var id = e.getAttribute("id");
+            var value = $("#" + id).val();
+            var res = id.split("_")[1];
+
+            $("#hdnfromDate_" + res).val(value);
+            fromDateValue = value;
+        }
+
+        function ToDateChange(e) {
+            var id = e.getAttribute("id");
+            var value = $("#" + id).val();
+            var res = id.split("_")[1];
+            $("#hdnToDate_" + res).val(value);
+            GetTenure(fromDateValue, value, res);
+
+        }
+
+        function GetTenure(fromDateValue, toDateValue, res) {
+            var Tenure = GetDayMonthYear(fromDateValue, toDateValue);
+            $('#num_' + res).val(Tenure.TDay);
+            $("#hdnNumber_" + res).val(Tenure.TDay);
+        }
+
+
+        $(document).ready(function () {
+
+        });
+    </script>
+}

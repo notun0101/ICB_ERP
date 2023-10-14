@@ -1,0 +1,61 @@
+﻿@model LoanApplicationViewModel
+@{
+    ViewData["Title"] = "Profit Distribution";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4 bg-light">
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group row ">
+                        <label for="settlemtntDate" class="col-sm-3 col-form-label">Process Date</label>
+                        <div class="col-sm-6 input-group">
+                            <input name="expectedDate" id="ProcessDate" class="form-control input-group-sm" readonly />
+                            <div class="input-group-prepend">
+                                <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <button onclick="process()" type="button" class="btn btn-sm btn-primary" style="background-color:darkcyan; color:white" id="addcoa" value="View PF Statement">Interest Process</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#ProcessDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+
+
+
+    });
+
+
+
+    function process() {
+        var ProcessDate = $('#ProcessDate').val();
+
+        Common.Ajax('GET', '/ProvidentFund/LoanManagement/ProcessAllPFInterest?ProcessDate=' + ProcessDate, [], 'json', ajaxFunctionProcess, false);
+    }
+    function ajaxFunctionProcess(response) {
+        console.log(response)
+        if (response.Id == 1) {
+            swal('success', 'Process Completed Successfully!', 'success').then(function () {
+                location.reload();
+            });
+        }
+        else {
+            swal('warning', 'Failed to process!', 'warning');
+        }
+
+    }
+
+
+</script>

@@ -1,0 +1,386 @@
+﻿@model LeaveRegisterViewModel
+
+@{
+    ViewData["Title"] = "Actual Leave List";
+    Layout = "~/Areas/HRPMSLeave/Views/Shared/_LeaveForm.cshtml";
+}
+
+@section StyleL{
+    <style>
+
+
+        .b {
+            font-size: 12px;
+            margin: 5px;
+        }
+
+        .active {
+            color: darkcyan;
+        }
+
+        .c {
+            min-height: 290px;
+            background-color: #FDF2E9;
+        }
+
+            .c .card-footer {
+                height: 50px;
+                background-color: #E9F7EF;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+        a i {
+            font-size: 15px !important;
+            margin: 0 !important;
+        }
+
+        .delete {
+            float: right;
+            border: none;
+            box-shadow: none;
+        }
+
+        #userRoles, #assignedPage {
+            height: 200px;
+            overflow: scroll;
+        }
+    </style>
+}
+
+
+
+<div class="row clearfix" style="">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">All Actual Leave List</h6>
+                @*<a class='btn btn-info' style="margin-left: 641px;" data-toggle='tooltip' href='javascript:void(0)' onclick="PrintPdf()"><i style=" " class="fas fa-print"></i> Print</a>*@
+                <a class='btn btn-info' style="margin-left: 641px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1018&perentId=6282'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+            </div>
+            <div class="card-body">
+              
+                <form asp-action="ApprovedActualRecreationByHead" method="post" id="allform">
+
+                    <div>
+                        <input type="submit" value="Approve" class="btn btn-success mb-8 fa-pull-right" />
+                        <button type="button" id="btnReject" onclick=" Rejectdata()" class="btn btn-danger btn-xs mr-2 mb-8 " style="float:right;">Reject</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                    </div>
+                    <div style="margin-top:4px!important">
+                        <table class="table table-striped table-bordered" id="requisitionListTable">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" id="selectAll" style="width:20px;height:20px" />
+                                    </th>
+                                    <th>Emp Id-Name</th>
+                                   
+                                    <th>Prposed From</th>
+                                    <th>Proposed To</th>
+                                    
+                                    <th>Actual From</th>
+                                    <th>Actual To</th>
+                                    @*<th>Leave Type</th>*@
+                                    <th>Leave Remarks</th>
+                                    <th>Days</th>
+                                    <th>Subs. Employee</th>
+                                    <th>Action</th>
+                            </thead>
+                            <tbody id="tbody">
+                                @foreach (var item in Model.ProleaveRegisters)
+                                {
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" value="@item.actuallists?.leaveId" style="width:20px;height:20px" id="chk_@item.actuallists?.leaveId" class="js-switch" />
+                                    </td>
+                                    <td><span>@item.actuallists?.employeeCode</span>-<span>@item.actuallists?.nameEnglish</span></td>
+                                    
+                                    <td>@item.actuallists?.leaveFrom?.ToString("dd MMM yyyy")</td>
+
+                                    <td>@item.actuallists?.leaveTo?.ToString("dd MMM yyyy")</td>
+                                    <td>@item.actuallists?.ActualLeaveFrom?.ToString("dd MMM yyyy")</td>
+
+                                    <td>@item.actuallists?.ActualLeaveTo?.ToString("dd MMM yyyy")</td>
+
+
+                                    @*<td> @item.actuallists?.nameEn</td>*@
+
+                                    <td>
+                                        @if (item.actuallists?.purposeOfLeave == null || item.actuallists?.purposeOfLeave == "")
+                                        {
+                                            <span></span>
+                                        }
+                                        else
+                                        {
+                                            @item.actuallists?.purposeOfLeave
+                                        }
+
+                                    </td>
+                                    <td>@item.actuallists?.daysLeave</td>
+                                    <td>
+                                        <span>@item.actuallists?.subEmpCode</span>-<span>@item.actuallists?.subsEmpName</span>
+                                        @*<input type="text" class="form-control" value="" name="substitutionEmpCode" id="substitutionEmpCode" placeholder="Search by Emp name or Id" >
+        <input type="hidden" id="substitutionUserId" name="subsId" />*@
+                                    </td>
+                                    <td style="width:15%">
+                                        <a href="javascript:void(0)" class="btn btn-success btn-sm" onclick="AddSubsEmp(@item.actuallists?.leaveId)">Add Subs. Emp</a>
+
+                                        <a class="btn btn-info btn-sm" target="_blank" data-toggle='tooltip' title='Print' href='/HRPMSLeave/LeaveRegister/ActualLeaveIndividualPDF?id=@item.actuallists?.leaveId'><i class="fa fa-print"></i></a>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add Subs. Employee</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <label class="col-md-4">Employee Name</label>
+                    <div class="col-md-8">
+                        <input type="hidden" name="" class="leaveRegiId" id="leaveRegiId" value="" />
+                        <input type="hidden" id="substitutionUserId" name="subsId" />
+                        <input type="text" class="form-control" name="" id="substitutionEmpCode" value="" placeholder="Type Employee Name or Id " />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-4">Phone</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" name="" id="subEmpPhone" value="" placeholder="" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-4">Designation</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" name="" id="subEmpDesignation" value="" placeholder="" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success btn-sm" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-info btn-sm" onclick="SaveSubsEmp()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ScriptsL{
+    <script src="~/Assets/paginathing.js"></script>
+    <script>
+        var orgFromDate = '';
+        var orgToDate = '';
+
+        $(document).ready(function () {
+            $('#selectAll').on('change', function () {
+                if ($(this).prop('checked') == true) {
+                    $('.js-switch').prop('checked', true);
+                    $('.js-switch').attr('name', 'registerids');
+                }
+                else {
+                    $('.js-switch').prop('checked', false);
+                    $('.js-switch').removeAttr('name', 'registerids');
+                }
+            })
+
+            $('.js-switch').on('change', function () {
+                if ($(this).prop('checked') == true) {
+                    $(this).attr('name', 'registerids');
+                }
+                else {
+                    $(this).removeAttr('name', 'registerids');
+                }
+            })
+
+            $('#btnReject').click(function () {
+                Rejectdata();
+            });
+
+       
+
+          
+            $("#education").addClass("active");
+            $('#requisitionListTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" + "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        },
+                        title: 'ERP',
+                        messageTop: 'Re-creation Leave List',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        },
+                        title: 'ERP',
+                        messageTop: 'Re-creation Leave List'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: 'ERP',
+                        messageTop: 'Re-creation Leave List',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+        });
+
+        function AddSubsEmp(id) {
+            $('#leaveRegiId').val(id);
+            Common.Ajax('GET', '/global/api/GetAllEmployeeInfo/', [], 'json', ajaxEmployeeList);
+            $('#exampleModalCenter').modal('show');
+
+        }
+        function ajaxEmployeeList(response) {
+            //console.log(response);
+            var GetEmployeeList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.employeeCode + ' - ' + option.nameEnglish;
+                obj.name = option.nameEnglish;
+                obj.designation = option.lastDesignation ?.designationName;
+                obj.phone = option.mobileNumberOffice;
+                GetEmployeeList[GetEmployeeList.length] = obj;
+            });
+            $('#substitutionEmpCode').autocomplete({
+                source: GetEmployeeList,
+                select: function (event, ui) {
+                    console.log(ui)
+                    $("#substitutionUserId").val(ui.item.key);
+                                   
+                    $('#subEmpPhone').val(ui.item.phone);
+                    $('#subEmpDesignation').val(ui.item.designation);
+                }
+            });
+        }
+
+        function SaveSubsEmp() {
+            var leaveRegId = $('#leaveRegiId').val();
+            var substiEmpId = $('#substitutionUserId').val();
+         
+            Common.Ajax('GET', '/HRPMSLeave/LeaveRegister/UpdateSubsEmployee?leaveRegId=' + leaveRegId + '&substiEmpId=' + substiEmpId, [], 'json', ajaxUpdateSubsEmployee, false);
+        }
+        function ajaxUpdateSubsEmployee(res) {
+            if (res == 'saved') {
+                swal('Success', 'Subs. Employee Add Successfully', 'success').then(function () {
+                    window.location.reload();
+                })
+            }
+            else {
+                swal('Warning', 'Subs. Employee Add Failed', 'warning');
+            }
+        }
+
+         function Rejectdata() {
+             var isChecked = $('.js-switch:checkbox:checked').length;
+            if (isChecked == 0) {
+                swal('Attention!', 'Please select minimum 1 !!!', 'warning');
+                return false;
+			}
+
+             var form = $("#allform");
+
+           
+
+			swal({
+				title: 'Are you sure?', text: 'Do you want to reject this!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, reject it!'
+			}).then(function () {
+				$.ajax({
+					url: '@Url.Action("RejectActualLeaveByHead", "LeaveRegister")',
+                    data: form.serialize(),
+                    type: 'POST',
+				})
+				.done(function () {
+					swal({
+						title: '', text: 'Reject Successfully!', type: 'success', showCancelButton: false, confirmButtonColor: '#3085d6', confirmButtonText: 'Ok!',
+					}).then(function () {
+						location.reload();
+					});
+				})
+				.fail(function () {
+					location.reload();
+				});
+			});
+        }
+
+
+
+        function ajaxRejectLeave(res) {
+            if (res == 'rejected') {
+                swal('success', 'Rejected Success', 'success').then(function () {
+                    location.reload();
+                });
+            }
+            else {
+                swal('warning', 'Rejected Failed', 'warning');
+            }
+        }
+       
+        function formatingDate1(date) {
+            date = new Date(date);
+            var year = date.getFullYear(),
+                month = date.getMonth() + 1, // months are zero indexed
+                day = date.getDate(),
+                hour = date.getHours(),
+                minute = date.getMinutes(),
+                second = date.getSeconds(),
+                hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+                minuteFormatted = minute < 10 ? "0" + minute : minute,
+                morning = hour < 12 ? "am" : "pm";
+
+            return month + "/" + + day + "/" + year;
+        }
+
+
+        
+      
+
+      
+
+
+    </script>
+}
+
+

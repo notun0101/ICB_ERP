@@ -1,0 +1,973 @@
+﻿@model EmployeesSalaryStructureViewModel
+@{
+    ViewData["Title"] = "Employees Salary Structure";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Style{
+    <style>
+        ul.ui-autocomplete {
+            z-index: 99999999;
+        }
+    </style>
+}
+<div class="card" style="width: 100%;">
+    <div class="card-body">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h5 class="card-title" style="color: black">Employees Salary Structure</h5>
+
+        </div>
+        <div style="float: right; margin: 16px;">
+            <a class='btn btn-outline-info' style="margin-top: -126px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=10&perentId=5962'><i class="fas fa-backward"></i></a>
+
+        </div>
+        <hr>
+        <div class="container">
+            <form asp-area="Payroll" asp-controller="SalaryStructure" asp-action="SalStructure" id="FormId" method="post" data-parsley-validate="parsley">
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="row" style="background-color:#f6f3d0a8;height: 90px;border-radius: 6px;">
+                    <input type="hidden" id="editId" name="editId" value=0>
+                    <input type="hidden" id="employeeInfoId" name="employeeInfoId">
+                    <div class="col-sm-4" style="padding-top: 28px;">
+                        <div class="form-group row">
+                            <label for="employeeInfoId" class="col-sm-4 col-form-label">Emp Name <span style="color:red;">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="employeeName" name="employeeName" placeholder="Employee Name" data-parsley-required="true" @*data-parsley-trigger="keyup" *@>
+                            </div>
+                        </div>
+                        @*<div class="form-group row">
+                                <label for="Designation" class="col-sm-4 col-form-label">Designation </label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="Designation" name="Designation" placeholder="Designation" readonly="readonly">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="department" class="col-sm-4 col-form-label">Department</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="department" name="department" placeholder="Department" readonly>
+                                </div>
+                            </div>*@
+                    </div>
+                    <div class="col-sm-4" style="padding-top: 28px;">
+
+
+                        <div class="form-group row">
+                            <label for="Designation" class="col-sm-4 col-form-label">Designation </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="Designation" name="Designation" placeholder="Designation" readonly="readonly">
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-sm-4" style="padding-top: 28px;">
+
+                        <div class="form-group row">
+                            <label for="department" class="col-sm-4 col-form-label">Department</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="department" name="department" placeholder="Department" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                    @*<div class="col-sm-8">
+                            <div class="form-group row" style="margin-top: 13px; background-color:#dafee4cc; border-radius: 20px; height: 149px; margin-right: 5px;">
+                                <div class="col-sm-6" style="padding-top: 15px;">
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 col-form-label" style="padding-left: 9px;">Salary Grade</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="salaryGradeIdT" autocomplete="off" placeholder="Salary Grade" readonly="readonly">
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="type" class="col-sm-4 col-form-label">Type</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="typeT" autocomplete="off" placeholder="Salary Type" readonly="readonly">
+
+
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 col-form-label">Salary Slab</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="salarySlabT" autocomplete="off" placeholder="Salary Slab" readonly="readonly">
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-6" style="padding-top: 15px;">
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 col-form-label" style=" padding: 0;"> Amount</label>
+                                        <div class="col-sm-8">
+                                            <input type="number" class="form-control" id="amountT" value="" placeholder="Gross Amount" readonly="readonly">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-4 col-form-label" style="padding-left: 1px;">Effective Date </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="effectiveDateT" placeholder="Effective Date" readonly="readonly">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>*@
+
+                </div>
+                <hr>
+                <h6 class="text-primary" @*style="padding-bottom: 13px;" *@>Salary Structure</h6>
+
+                <div class="row" style="background-color: #f6f3d0a8; height: 126px;  margin-left: -10px;border-radius: 6px;">
+
+                    <input type="hidden" id="editId" name="editId" value=0>
+                    <input type="hidden" id="employeeInfoId" name="employeeInfoId">
+                    <div class="col-sm-6" style="padding-top: 24px;">
+
+                        <div class="form-group row">
+                            <label for="salaryGradeId" class="col-sm-3 col-form-label">Salary Grade <span style="color:red;">*</span></label>
+                            <div class="col-sm-9">
+                                @*<input type="text" class="form-control" id="salaryGradeId" value="" name="salaryGradeId" data-parsley-required="true" readonly>*@
+                                <select name="salaryGradeId" id="salaryGradeId" class="form-control" data-parsley-required="true" readonly="readonly" disabled>
+                                    <option value="">Select Grade</option>
+                                </select>
+                                @*<select name="salaryGradeId" id="salaryGradeId" class="form-control" data-parsley-required="true" readonly="readonly">
+                                        <option value="">Select Salary Grade</option>
+                                        @foreach (var data in Model.salaryGradesList)
+                                        {
+                                            <option Gradetype="@data.type" value="@data.Id">@data.gradeName</option>
+                                        }
+                                    </select>*@
+                            </div>
+                        </div>
+                        <div class="form-group row" style="display:none">
+                            <label for="Gtype" class="col-sm-3 col-form-label">Type</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="Gtype" placeholder="Salary Type" readonly="readonly" disabled>
+
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+                            <label for="salarySlab" class="col-sm-3 col-form-label">Salary Slab<span style="color:red;">*</span></label>
+                            <div class="col-sm-9">
+                                <input type="hidden" id="salarySlab" value="" name="salarySlab">
+                                <input type="text" class="form-control" id="salarySlabName" value="" placeholder="Salary Slab" data-parsley-required="true" readonly>
+
+                                @*<select name="salarySlab" id="salarySlab" class="form-control" data-parsley-required="true" readonly="readonly" disabled>
+                                        <option value="">Select Slab</option>
+                                    </select>*@
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-sm-6" style="padding-top: 24px;">
+
+
+                        <div class="form-group row">
+                            <label for="amount" class="col-sm-3 col-form-label">Amount@*<span style="color:red;">*</span>*@</label>
+                            <div class="col-sm-9">
+                                <input type="number" class="form-control" id="amount" value="" name="amount" placeholder="Amount" data-parsley-required="false" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="effectiveDate" class="col-sm-3 col-form-label">Effective Date<span style="color:red;">*</span> </label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="effectiveDate" name="effectiveDate" placeholder="Effective Date" autocomplete="off" readonly="readonly">
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <hr>
+                <button type="button" id="submit" value="Submit" title="Calculate" class="btn btn-outline-success btn-lg" style="float:right; margin-top:5px; "><i class="fas fa-save"></i></button>
+
+                <button type="button" value="View" title="View Structure" id="BtnProcess" class="btn btn-outline-info btn-lg" style="float:right; margin-top:5px; margin-right: 13px;"><i class="fas fa-street-view"></i></button>
+                @*<a title="Tax Calculate" class="btn btn-outline-secondary" onclick="opentaxdetails()" style="float:left; margin-top:5px;color:black">Tax Calculation</a>*@
+            </form>
+        </div>
+    </div>
+</div>
+
+<br />
+<hr />
+<div class="row clearfix" id="ProcessAftereSave">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h5 class="m-0 font-weight-bold text-primary" style="padding-bottom: 13px;">Employees Salary Structure List</h5>
+            </div>
+
+            <!-- Card Body -->
+            <div class="card-body" style="background-color:#f6f3d0a8;">
+                <div class="row col-md-12">
+                    <div class="col-6">
+                        <h6 class="m-0 font-weight-bold text-primary" style="padding-bottom: 13px;">Addition</h6>
+                        <table class="table table-striped table-bordered" id="salaryStructureAdditionTable" style="background-color: #dafee4cc;">
+                            <thead>
+                                <tr>
+                                    <th>SL</th>
+                                    <th>Head Name</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" style="text-align:right">Total</td>
+                                    @*<td style="text-align:right" id="totalAddition">@Model.employeesSalaryStructuresList.Where(x => x.salaryHead.salaryHeadType == "Addition").Sum(x => x.amount)</td>*@
+                                    <td style="text-align:right" id="totalAddition"></td>
+                                    <td colspan="2"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="col-6">
+                        <h6 class="m-0 font-weight-bold text-primary" style="padding-bottom: 13px;">Deduction</h6>
+                        <table class="table table-striped table-bordered" id="salaryStructureDeductionTable" style="background-color: #dafee4cc;">
+                            <thead>
+                                <tr>
+                                    <th>SL</th>
+                                    <th>Head Name</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" style="text-align:right">Total</td>
+                                    @*<td style="text-align:right" id="totalDeduction" >@Model.employeesSalaryStructuresList.Where(x => x.salaryHead.salaryHeadType == "Deduction").Sum(x => x.amount)</td>*@
+                                    <td style="text-align:right" id="totalDeduction"></td>
+                                    <td colspan="2"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <label for="grossamount" class="col-sm-5 col-form-label">Gross Amount</label>
+
+                        <div class="col-sm-7">
+                            @{
+                                decimal gross = 0;
+                                decimal additions = Model.employeesSalaryStructuresList.Where(x => x.salaryHead.salaryHeadType == "Addition" && x.isActive == "Active").Sum(x => x.amount);
+                                decimal deductions = Model.employeesSalaryStructuresList.Where(x => x.salaryHead.salaryHeadType == "Deduction" && x.isActive == "Active").Sum(x => x.amount);
+                                gross = additions - deductions;
+                                decimal PrevAmount = additions + deductions;
+                                // decimal gross = Model.employeesSalaryStructuresList;
+                            }
+                            <input type="number" class="form-control" id="grossamount" style="text-align:right" value="@gross" name="grossamount" data-parsley-required="true" readonly>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- View Service Reminders Modal-->
+<div class="modal fade" id="viewEmpSalaryStructureModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Salary Structure</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="frmEditSalaryStructure" autocomplete="off">
+                            <div class="form-group row">
+                                <input type="hidden" id="editsalarystructureId" name="editsalarystructureId" />
+                                <label for="headName" class="col-sm-3 col-form-label">Head Name</label>
+                                <input type="hidden" value="0" id="rownumber" />
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="headName" value="" name="headName" data-parsley-required="true" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="headamount" class="col-sm-3 col-form-label">Amount <span style="color:red;">*</span></label>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" id="headamount" value="" name="headamount" data-parsley-required="true">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="salarystructureStatus" class="col-sm-3 col-form-label">Status<span style="color:red;">*</span></label>
+                                <div class="col-sm-9">
+                                    <select name="salarystructureStatus" id="salarystructureStatus" class="form-control" data-parsley-required="true">
+                                        <option value="Active">Active</option>
+                                        <option value="InActive">InActive</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0)" style="color:deepskyblue" data-dismiss="modal">Close</a>&nbsp;
+                <a href="javascript:void(0)" id="postBtn" onclick="saveSalary()" style="background-color:#024972;" class="btn-primary btn-sm pull-right; display: none;">Save</a>
+                @*<a href="javascript:void(0)" id="preBtn" onclick="savesalarystructure()" style="background-color:#024972;" class="btn-primary btn-sm pull-right; display: none;">Save</a>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="viewEmpSalaryStructureModalDeduction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Salary Structure</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="frmEditSalaryStructureDeduction" autocomplete="off">
+                            <div class="form-group row">
+                                <input type="hidden" id="editsalarystructureDedId" name="editsalarystructureDedId" />
+                                <label for="DeducHeadName" class="col-sm-3 col-form-label">Head Name</label>
+                                <input type="hidden" value="0" id="rownumberDeduction" />
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="DeducHeadName" value="" name="DeducHeadName" data-parsley-required="true" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="headamountDed" class="col-sm-3 col-form-label">Amount <span style="color:red;">*</span></label>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" id="headamountDed" value="" name="headamountDed" data-parsley-required="true">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="salarystructureStatusDed" class="col-sm-3 col-form-label">Status<span style="color:red;">*</span></label>
+                                <div class="col-sm-9">
+                                    <select name="salarystructureStatus" id="salarystructureStatusDed" class="form-control" data-parsley-required="true">
+                                        <option value="Active">Active</option>
+                                        <option value="InActive">InActive</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="javascript:void(0)" style="color:deepskyblue" data-dismiss="modal">Close</a>&nbsp;
+                <a href="javascript:void(0)" id="postBtn" onclick="saveSalaryDeduction()" style="background-color:#024972;" class="btn-primary btn-sm pull-right; display: none;">Save</a>
+                @*<a href="javascript:void(0)" id="preBtn" onclick="savesalarystructure()" style="background-color:#024972;" class="btn-primary btn-sm pull-right; display: none;">Save</a>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+
+            Common.Ajax('GET', '/Payroll/SalaryStructure/GetsalaryGrade', [], 'json', ajaxGetsalaryGrade);
+
+            $("#effectiveDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2050" }).datepicker();
+            $("#salaryGradeId").change(function () {
+                $("#Gtype").val("");
+                var gradetype = $("#salaryGradeId option:selected").attr("Gradetype");
+                if (typeof (gradetype) != "undefined") {
+                    $("#Gtype").val(gradetype);
+                    Common.Ajax('GET', '/Payroll/SalaryStructure/GetSalarySlabBysalaryGradeId/?salaryGradeId=' + $("#salaryGradeId").val(), [], 'json', GetSalarySlab);
+
+                }
+
+            });
+
+
+            //$("#salaryGradeId").change(function () {
+            //    Common.Ajax('GET', '/Payroll/SalaryStructure/GetSalarySlabBysalaryGradeId/?salaryGradeId=' + $("#salaryGradeId").val(), [], 'json', GetSalarySlab);
+            //});
+            $("#salaryGradeIdT").change(function () {
+                Common.Ajax('GET', '/Payroll/SalaryStructure/GetSalarySlabBysalaryGradeId/?salaryGradeId=' + $("#salaryGradeId").val(), [], 'json', GetSalarySlab);
+            });
+
+            $("#salarySlab").change(function () {
+                Common.Ajax('GET', '/Payroll/SalaryStructure/GetSalarySlabById/?Id=' + $("#salarySlab").val(), [], 'json', GetSalarySlabAmount);
+            });
+            $("#salarySlabT").change(function () {
+                Common.Ajax('GET', '/Payroll/SalaryStructure/GetSalarySlabById/?Id=' + $("#salarySlab").val(), [], 'json', GetSalarySlabAmount);
+            });
+
+			Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo1', [], 'json', ajaxGetEmployees);
+
+            let employeeInfoId = parseInt(@ViewBag.employeeInfoId) ? parseInt(@ViewBag.employeeInfoId) : 0;
+
+            if (employeeInfoId == null || employeeInfoId == 0 || employeeInfoId == '') {
+
+            }
+            else {
+                Common.Ajax('GET', '/Payroll/SalaryStructure/GetEmployeesSalaryStructureAdditionByEmpId/?employeeInfoId=' + employeeInfoId, [], 'json', ajaxVieWEmpSalaryStructureAddition);
+                Common.Ajax('GET', '/Payroll/SalaryStructure/GetEmployeesSalaryStructureDeductionByEmpId/?employeeInfoId=' + employeeInfoId, [], 'json', ajaxVieWEmpSalaryStructureDeduction);
+                Common.Ajax('GET', '/Payroll/SalaryStructure/GetEmployeesGrossAmountByEmpId/?employeeInfoId=' + employeeInfoId, [], 'json', ajaxGetEmployeesGrossAmount);
+                Common.Ajax('GET', '/Payroll/SalaryStructure/GetEmpStructureByEmpId/?employeeInfoId=' + employeeInfoId, [], 'json', ajaxGetEmpStructureByEmpIdWithName);
+            }
+
+        });
+
+
+        function opentaxdetails()
+        {
+            var emplyeeId = $("#employeeInfoId").val();
+            if (emplyeeId == "" || emplyeeId == "0")
+            {
+                alert("Please enter employee name.");
+                return;
+            }
+            window.location.href = "/Payroll/PayrollReport/TaxCalculationReport?employeeInfoId=" + emplyeeId+"&&taxYearId="+@Model.salaryPeriod.taxYearId+"&&periodId="+@Model.salaryPeriod.Id;
+
+        }
+        function GetSalarySlab(response) {
+          //  $('#salarySlab').empty();
+           // $('#salarySlab').append('<option value="">Select Slab</option');
+            $('#salarySlabT').empty();
+            $('#salarySlabT').append('<option value="">Select Slab</option');
+            $.each(response, function (id, option) {
+              //  $('#salarySlab').append('<option value="' + option.Id + '">' + option.slabName + '</option');
+                $('#salarySlabT').append('<option value="' + option.Id + '">' + option.slabName + '</option');
+            });
+        }
+
+        function ajaxGetsalaryGrade(response) {
+            $('#salaryGradeId').empty();
+            $('#salaryGradeId').append('<option value="">Select Grade</option');
+
+            $.each(response, function (id, option) {
+                $('#salaryGradeId').append('<option Gradetype="' + option.type +'" value="' + option.Id + '">' + option.gradeName + '</option');
+
+            });
+        }
+        function GetSalarySlabAmount(response) {
+            $('#amount').empty();
+            $('#amount').val(response.slabAmount);
+        }
+
+
+        function ajaxGetEmployees(response) {
+            var GeEmployeesList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+                obj.designation = option.lastDesignation?.designationName;
+                obj.department = option.department?.deptName;
+                obj.employeeCode = option.employeeCode;
+              //  obj.gradeName = option.currentGrade ?.gradeName;
+                obj.gradeName = option.currentGradeId;
+                obj.currentBasic = option.currentBasic;
+                GeEmployeesList[GeEmployeesList.length] = obj;
+            });
+            //console.log(GeEmployeesList);
+            $('#employeeName').autocomplete({
+                source: GeEmployeesList,
+                select: function (event, ui) {
+                    $("#employeeName").val(ui.item.value);
+                    $("#Designation").val(ui.item.designation);
+                    $("#department").val(ui.item.department);
+                    $("#employeeInfoId").val(ui.item.key);
+                    $("#salaryGradeId").val(ui.item.gradeName);
+                    $("#amount").val(ui.item.currentBasic);
+                    GetSalaryStructure();
+                }
+            });
+          //  var employeeInfoId = response.Id;
+          //  alert(employeeInfoId);
+          //  Common.Ajax('GET', '/Payroll/SalaryStructure/GetSalaryslabByEmpId/?employeeInfoId=' + employeeInfoId, [], 'json', ajaxGetSalaryslabByEmpId);
+
+        }
+
+        function ajaxGetSalaryslabByEmpId(response) {
+
+            console.log(response)
+
+            $('#salarySlab').val(response.Id);
+            $('#salarySlabName').val(response.slabName);
+          //  $('#effectiveDate').val(formatDate(response.effectiveDate));
+          //  $("#joiningDateGovtService").val(formatDate(ui.item.joiningDate));
+
+
+        }
+
+        function formatDate(date) {
+            var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            date = new Date(date);
+            var year = date.getFullYear(),
+                month = monthNames[date.getMonth()], // months are zero indexed
+                day = date.getDate(),
+                hour = date.getHours(),
+                minute = date.getMinutes(),
+                second = date.getSeconds(),
+                hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+                minuteFormatted = minute < 10 ? "0" + minute : minute,
+                morning = hour < 12 ? "am" : "pm";
+
+            return day + "-" + month + "-" + year;
+        }
+
+        function GetSalaryStructure() {
+
+            var id = $("#employeeInfoId").val();
+
+            Common.Ajax('GET', '/Payroll/SalaryStructure/GetEmployeesSalaryStructureAdditionByEmpId/?employeeInfoId=' + $("#employeeInfoId").val(), [], 'json', ajaxVieWEmpSalaryStructureAddition, false);
+            Common.Ajax('GET', '/Payroll/SalaryStructure/GetEmployeesSalaryStructureDeductionByEmpId/?employeeInfoId=' + $("#employeeInfoId").val(), [], 'json', ajaxVieWEmpSalaryStructureDeduction, false);
+            Common.Ajax('GET', '/Payroll/SalaryStructure/GetEmployeesGrossAmountByEmpId/?employeeInfoId=' + $("#employeeInfoId").val(), [], 'json', ajaxGetEmployeesGrossAmount, false);
+            Common.Ajax('GET', '/Payroll/SalaryStructure/GetEmpStructureByEmpId/?employeeInfoId=' + $("#employeeInfoId").val(), [], 'json', ajaxGetEmpStructureByEmpId, false);
+            Common.Ajax('GET', '/Payroll/SalaryStructure/GetSalarySlabByAmount/?amount=' + $("#amount").val(), [], 'json', ajaxGetSalaryslabByEmpId, false);
+
+        }
+
+
+
+
+        function ajaxGetEmployeesGrossAmount(response) {
+            if (response != null) {
+                $('#grossamount').val(response.GrossAmount);
+                $('#amountT').val(response.summation);
+
+            }
+        }
+
+        function ajaxGetEmpStructureByEmpId(response) {
+            $('#effectiveDate').val('');
+           // $('#amount').empty();
+            $('#salaryGradeIdT').val('');
+            $('#typeT').val('');
+
+            if (response != null) {
+                $('#effectiveDate').val(formatDate(response.effectiveDate));
+                $('#amountN').val(response.salarySlab.slabAmount);
+                $('#salaryGradeIdT').val(response.salarySlab.salaryGrade.gradeName);
+                $('#typeT').val(response.salarySlab.salaryGrade.type);
+                Common.Ajax('GET', '/Payroll/SalaryStructure/GetSalarySlabBysalaryGradeId/?salaryGradeId=' + response.salarySlab.salaryGradeId, [], 'json', GetSalarySlab, false);
+                // $('#salarySlab').val(response.salarySlabId);
+                $('#salarySlabT').val(response.salarySlab.slabName);
+                // Common.Ajax('GET', '/Payroll/SalaryStructure/GetSalarySlabById/?Id=' + response.salarySlabId, [], 'json', GetSalarySlabAmount);
+                if (response.effectiveDate == null) {
+                    // $('#effectiveDate').val('');
+                    $('#effectiveDateT').val('');
+                }
+                else {
+                    // $('#effectiveDate').val(getPurchaseDate(response.effectiveDate));
+                    $('#effectiveDateT').val(getPurchaseDate(response.effectiveDate));
+                }
+            }
+
+        }
+
+        function ajaxGetEmpStructureByEmpIdWithName(response) {
+            $("#employeeName").val(response.employeeInfo?.nameEnglish + "(" + response.employeeInfo?.employeeCode + ")");
+            $("#Designation").val(response.employeeInfo?.designation);
+            $("#employeeInfoId").val(response?.employeeInfoId);
+            $("#department").val(response.employeeInfo?.department?.deptName);
+
+            $('#salaryGradeId').val(response.salarySlab?.salaryGradeId);
+            $('#salaryGradeIdT').val(response.salarySlab?.salaryGradeId);
+            Common.Ajax('GET', '/Payroll/SalaryStructure/GetSalarySlabBysalaryGradeId/?salaryGradeId=' + response.salarySlab.salaryGradeId, [], 'json', GetSalarySlab, false);
+            $('#salarySlab').val(response.salarySlabId);
+            $('#salarySlabT').val(response.salarySlabId);
+            Common.Ajax('GET', '/Payroll/SalaryStructure/GetSalarySlabById/?Id=' + response.salarySlabId, [], 'json', GetSalarySlabAmount);
+            if (response.effectiveDate == null) {
+                $('#effectiveDate').val('');
+                $('#effectiveDateT').val('');
+            }
+            else {
+                $('#effectiveDate').val(getPurchaseDate(response.effectiveDate));
+                $('#effectiveDateT').val(getPurchaseDate(response.effectiveDate));
+            }
+
+        }
+
+        function ajaxVieWEmpSalaryStructureAddition(response) {
+            $("#salaryStructureAdditionTable tbody>tr").remove();
+            //$('#salaryStructureAdditionTable').DataTable().empty();
+            var dtTableA = $("#salaryStructureAdditionTable");
+            var tableBodyA = dtTableA.find('tbody');
+            var tablefootA = dtTableA.find('tfoot');
+            tableBodyA.empty();
+            tablefootA.empty();
+            var i = 1;
+            var Total = "Total";
+            var TotalAdd = 0;
+            $.each(response, function (key, value) {
+                var trHtml = '<tr id="cust_' + i + '"><td class="rowId">' + i + ' </td><td class="salaryheadName"><input type="hidden" name="headName" class="headname" value="' + value.salaryHead.Id+'"/>' + value.salaryHead.salaryHeadName + '</td><td style="text-align:right;" class="amnt">' + value.amount.toFixed(2) + '</td><td class="sts">' + value.isActive + '</td><td class="attribute"><a onclick="EditTblStructure(' + i + ", '" + value.salaryHead.salaryHeadName + "', '" + value.isActive + "'," + value.amount + ',' + value.Id + ')" href="javascript:void(0)" title="Edit" class="btn btn-success btn-xs" data-toggle="modal" data-target="#viewEmpSalaryStructureModal" > <i class="fa fa-edit"></i></a ></td></tr>';
+                tableBodyA.append(trHtml);
+                i++;
+                TotalAdd = TotalAdd + value.amount;
+            });
+            var trHtmlfoot = '<tr><td colspan="2"  style="text-align:right;">' + Total + '</td><td style="text-align:right;" id="totalAddition">' + TotalAdd.toFixed(2) + '</td> <td><td/></tr>';
+            tablefootA.append(trHtmlfoot);
+            $('#salaryStructureAdditionTable').DataTable();
+        }
+        function ajaxVieWEmpSalaryStructureDeduction(response) {
+            $("#salaryStructureDeductionTable tbody>tr").remove();
+            //$('#salaryStructureDeductionTable').DataTable().empty();
+            var dtTableA = $("#salaryStructureDeductionTable");
+            var tableBodyA = dtTableA.find('tbody');
+            var tablefootA = dtTableA.find('tfoot');
+            tableBodyA.empty();
+            tablefootA.empty();
+            var i = 1;
+            var Total = "Total";
+            var TotalAdd = 0;
+            $.each(response, function (key, value) {
+                var trHtml = '<tr id="Deduct_' + i + '"><td class="rowId">' + i + ' </td><td class="salaryheadName"><input type="hidden" name="headname" class="headname" value="' + value.salaryHead.Id + '"/>' + value.salaryHead.salaryHeadName + '</td><td style="text-align:right;" class="amntN">' + value.amount.toFixed(2) + '</td><td class="stsN">' + value.isActive + '</td><td class="attribute"><a onclick="EditDeductTblStructure(' + i + ", '" + value.salaryHead.salaryHeadName + "', '" + value.isActive + "'," + value.amount + ',' + value.Id + ')" href="javascript:void(0)" title="Edit" class="btn btn-success btn-xs" data-toggle="modal" data-target="#viewEmpSalaryStructureModalDeduction" > <i class="fa fa-edit"></i></a ></td></tr>';
+
+                tableBodyA.append(trHtml);
+                i++;
+                TotalAdd = TotalAdd + value.amount;
+            });
+            var trHtmlfoot = '<tr><td colspan="2"  style="text-align:right;">' + Total + '</td><td style="text-align:right;" id="totalDeduction">' + TotalAdd.toFixed(2) + '</td> <td><td/></tr>';
+            tablefootA.append(trHtmlfoot);
+            $('#salaryStructureDeductionTable').DataTable();
+        }
+
+
+        function EditTblStructure(i, salaryHeadName, isActive, amount, Id) {
+            var _amount =  $('#cust_' + i).find('.amnt').text();
+            var _status =  $('#cust_' + i).find('.sts').text();
+            var _salaryheadName = $('#cust_' + i).find('.salaryheadName').text();
+            var _salaryheadId = $('#cust_' + i).find('.headname').val();
+
+            $('#editsalarystructureId').val(Id);
+            $('#headName').val(salaryHeadName);
+            $('#salarystructureStatus').val(_status);
+            $('#headamount').val(_amount);
+            $('#rownumber').val(i);
+        }
+
+        function EditDeductTblStructure(i, salaryHeadName, isActive, amount, Id) {
+            var _amount = $('#Deduct_' + i).find('.amntN').text();
+            var _status = $('#Deduct_' + i).find('.stsN').text();
+            var _salaryheadName = $('#Deduct_' + i).find('.salaryheadName').text();
+            var _salaryheadId = $('#Deduct_' + i).find('.headname').val();
+
+
+            $('#editsalarystructureDedId').val(Id);
+            $('#DeducHeadName').val(salaryHeadName);
+            $('#salarystructureStatusDed').val(_status);
+            $('#headamountDed').val(_amount);
+            $('#rownumberDeduction').val(i);
+        }
+
+        @*function Savesalarystructure() {
+
+            let empId = parseInt(@ViewBag.employeeInfoId) ? parseInt(@ViewBag.employeeInfoId) : 0;
+            if (empId == 0 || empId == '' || empId == null) {
+                empId = $("#employeeInfoId").val();
+            }
+            //else {
+            //    empId = $("#employeeInfoId").val();
+            //}
+
+            var form = $("#frmEditSalaryStructure");
+                $.ajax({
+                    url: '@Url.Action("Editsalarystructure", "SalaryStructure")',
+                    data: form.serialize(),
+                    type: 'POST',
+                    success: function (records) {
+                        alert("Save Successfully!");
+                        $('#viewEmpSalaryStructureModal').modal('hide');
+                        Common.Ajax('GET', '/Payroll/SalaryStructure/GetEmployeesSalaryStructureAdditionByEmpId/?employeeInfoId=' + empId, [], 'json', ajaxVieWEmpSalaryStructureAddition);
+                        Common.Ajax('GET', '/Payroll/SalaryStructure/GetEmployeesSalaryStructureDeductionByEmpId/?employeeInfoId=' + empId, [], 'json', ajaxVieWEmpSalaryStructureDeduction);
+                        Common.Ajax('GET', '/Payroll/SalaryStructure/GetEmployeesGrossAmountByEmpId/?employeeInfoId=' + empId, [], 'json', ajaxGetEmployeesGrossAmount);
+                    }
+                });
+        }*@
+
+        function getPurchaseDate(pdate) {
+            var formattedDate = new Date(pdate);
+            var d = formattedDate.getDate();
+            var m = formattedDate.getMonth();
+            var y = formattedDate.getFullYear();
+            var monthNames = [
+                "Jan", "Feb", "Mar",
+                "Apr", "May", "Jun", "Jul",
+                "Aug", "Sep", "Oct",
+                "Nov", "Dec"
+            ];
+            var fullDate = d + "-" + monthNames[m] + "-" + y;
+            return fullDate;
+		}
+
+
+
+        $('#submit').click(function () {
+
+            if ($('#employeeInfoId').val() == "") {
+                swal("Please Select Employee Name");
+                return false;
+            }
+            if ($('#salaryGradeId').val() == "") {
+                swal("Please Select salary Grade");
+                return false;
+            }
+            if ($('#salarySlab').val() == "") {
+                swal("Please Select salary Slab");
+                return false;
+            }
+            if ($('#effectiveDate').val() == "") {
+                swal("Please Effective Date");
+                return false;
+            }
+
+		    var data = $('#FormId').serializeArray();
+            var salaryHeads = getSalaryHeads();
+
+            if (salaryHeads.length < 1) {
+                swal("Employees Salary Structure Not Found!");
+                return false;
+            }
+            //console.log(data[0].value)
+
+            var model = new Object();
+            model.employeeInfoId = $('#employeeInfoId').val();
+            model.salaryGradeId = $('#salaryGradeId').val();
+            model.salarySlab = $('#salarySlab').val();
+            model.amount = $('#amount').val();
+            model.effectiveDate = $('#effectiveDate').val();
+            model.salaryStrustureList = getSalaryHeads();
+
+		swal({
+			title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+		}).then(function () {
+			$.ajax({
+				url: '@Url.Action("Index", "SalaryStructure")',
+				type: 'POST',
+                data: model
+			}).done(function () {
+                if (data[0].value == 0) {
+                    swal('success', 'Saved Successfully!', 'success').then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    swal('success', 'Updated Successfully!', 'success').then(function () {
+                        location.reload();
+                    });;
+                }
+			}).fail(function () {
+				swal('warning', 'Failed!', 'warning');
+			})
+		});
+        })
+
+
+        $('#BtnProcess').click(function () {
+            if ($('#employeeInfoId').val() == "") {
+                swal("Please Select Employee Name");
+                return false;
+            }
+            if ($('#salaryGradeId').val() == "") {
+                swal("Please Select salary Grade");
+                return false;
+            }
+            if ($('#salarySlab').val() == "") {
+                swal("Please Select salary Slab");
+                return false;
+            }
+
+            if ($('#amount').val() == "") {
+                swal("Please insert Amount");
+                return false;
+            }
+		    var data = $('#FormId').serializeArray();
+		    $.ajax({
+				    url: '@Url.Action("GetEmployeesSalaryStructureBeforeProces", "SalaryStructure")',
+				    type: 'GET',
+				    data: data
+			    }).done(function (res) {
+                    if (res) {
+                        //ajaxVieWEmpSalaryStructureAdditionProcess(res.AdditonList);
+                        //ajaxVieWEmpSalaryStructureDeductionProcess(res.DeductionList);
+                        ajaxVieWEmpSalaryStructureAddition(res.AdditonList);
+                        ajaxVieWEmpSalaryStructureDeduction(res.DeductionList);
+                       // $("#grossTotal").val(res.GrossAmount);
+                        $("#grossamount").val(res.GrossAmount);
+                    }
+                    else {
+                        //swal('success', 'Updated Successfully!', 'success').then(function () {
+                        //    location.reload();
+                        //});;
+                    }
+			    }).fail(function () {
+				    //swal('warning', 'Failed!', 'warning');
+			    })
+        })
+
+
+
+        function saveSalary() {
+            var amount = $('#headamount').val();
+            var status = $('#salarystructureStatus').val();
+            var row = $('#rownumber').val();
+
+            if (amount == "") amount = "0.00";
+            $('#cust_' + row).find('.amnt').text(amount);
+            $('#cust_' + row).find('.sts').text(status);
+            // $('#cust_N' + row).find('.amntN').text(amount);
+            //  $('#cust_N' + row).find('.stsN').text(status);
+
+            //$('#viewEmpSalaryStructureModal').modal('hide');
+            $('#viewEmpSalaryStructureModal').modal('toggle');
+            getSummationFromSalaryStructureTable();
+        };
+
+        function saveSalaryDeduction() {
+            var amount = $('#headamountDed').val();
+            var deducHeadName = $('#DeducHeadName').val();
+            var status = $('#salarystructureStatusDed').val();
+            var row = $('#rownumberDeduction').val();
+
+            console.log(amount)
+            console.log(status)
+            //$('#cust_' + row).find('.amnt').text(amount);
+           // $('#cust_' + row).find('.sts').text(status);
+            $('#Deduct_' + row).find('.amntN').text(amount);
+            $('#Deduct_' + row).find('.stsN').text(status);
+
+            $('#viewEmpSalaryStructureModalDeduction').modal('toggle');
+            getSummationFromSalaryStructureTable();
+        };
+
+
+
+
+        function getSummationFromSalaryStructureTable() {
+            var addtotalAmount = 0;
+            var deductiontotalAmount = 0;
+
+            $('#salaryStructureAdditionTable  tbody > tr').each(function (res) {
+                var amnt = parseFloat($(this).find(".amnt").text());
+                var sts = $(this).find(".sts").text();
+                if (amnt != "") {
+                    addtotalAmount += amnt;
+                }
+
+            });
+
+            $('#salaryStructureDeductionTable  tbody > tr').each(function (res) {
+                var amnt = parseFloat($(this).find(".amntN").text());
+                var sts = $(this).find(".stsN").text();
+                if (amnt != "") {
+                    deductiontotalAmount += amnt;
+                }
+            });
+            $("#totalAddition").text('');
+            $("#totalDeduction").text('');
+            $("#totalAddition").text(addtotalAmount);
+            $("#totalDeduction").text(deductiontotalAmount);
+            var grossamount = addtotalAmount - deductiontotalAmount
+            $('#grossamount').val(grossamount);
+        }
+
+
+
+        function getSalaryHeads() {
+            var salaryHead = [];
+            $('#salaryStructureAdditionTable  tbody > tr').each(function (res) {
+                //var data = $(this).html();
+                var rowId = $(this).find(".rowId").text();
+                var headName = $(this).find(".headname").text();
+                var headId = $(this).find(".headname").val();
+                var amnt = parseFloat($(this).find(".amnt").text());
+                var sts = $(this).find(".sts").text();
+                salaryHead.push({
+                    headId: headId,
+                    headName: headName,
+                    amount: amnt,
+                    status: sts,
+                })
+            });
+
+            $('#salaryStructureDeductionTable  tbody > tr').each(function (res) {
+                var data = $(this).html();
+                var rowId = $(this).find(".rowId").text();
+                var headName = $(this).find(".headname").text();
+                var headId = $(this).find(".headname").val();
+                var amnt = parseFloat($(this).find(".amntN").text());
+                var sts = $(this).find(".stsN").text();
+                salaryHead.push({
+                    headId: headId,
+                    headName: headName,
+                    amount: amnt,
+                    status: sts,
+                })
+            });
+            return salaryHead;
+        }
+
+        //function ajaxVieWEmpSalaryStructureAdditionProcess(response) {
+        //    $("#salaryStructureAdditionTableProcess tbody>tr").remove();
+        //    var dtTableA = $("#salaryStructureAdditionTableProcess");
+        //    var tableBodyA = dtTableA.find('tbody');
+        //    var tablefootA = dtTableA.find('tfoot');
+        //    tableBodyA.empty();
+        //    tablefootA.empty();
+        //    var i = 1;
+        //    var Total = "Total";
+        //    var TotalAdd = 0;
+        //    $.each(response, function (key, value) {
+        //        var trHtml = '<tr><td>' + i + '</td><td>' + value.salaryHead.salaryHeadName + '</td><td style="text-align:right;">' + value.amount.toFixed(2) + '</td><td>' + value.isActive + '</td><td ></td ></tr > ';
+        //        tableBodyA.append(trHtml);
+        //        i++;
+        //        TotalAdd = TotalAdd + value.amount;
+        //    });
+        //    var trHtmlfoot = '<tr><td colspan="2"  style="text-align:right;">' + Total + '</td><td style="text-align:right;">' + TotalAdd.toFixed(2) + '</td> <td><td/></tr>';
+        //    tablefootA.append(trHtmlfoot);
+        //    $('#salaryStructureAdditionTableProcess').DataTable();
+        //}
+        //function ajaxVieWEmpSalaryStructureDeductionProcess(response) {
+        //    $("#salaryStructureDeductionTableProcess tbody>tr").remove();
+        //    var dtTableA = $("#salaryStructureDeductionTableProcess");
+        //    var tableBodyA = dtTableA.find('tbody');
+        //    var tablefootA = dtTableA.find('tfoot');
+        //    tableBodyA.empty();
+        //    tablefootA.empty();
+        //    var i = 1;
+        //    var Total = "Total";
+        //    var TotalAdd = 0;
+        //    $.each(response, function (key, value) {
+        //        var trHtml = '<tr><td>' + i + '</td><td>' + value.salaryHead.salaryHeadName + '</td><td style="text-align:right;">' + value.amount.toFixed(2) + '</td><td>' + value.isActive + '</td><td></td></tr>';
+        //        tableBodyA.append(trHtml);
+        //        i++;
+        //        TotalAdd = TotalAdd + value.amount;
+        //    });
+        //    var trHtmlfoot = '<tr><td colspan="2"  style="text-align:right;">' + Total + '</td><td style="text-align:right;">' + TotalAdd.toFixed(2) + '</td> <td><td/></tr>';
+        //    tablefootA.append(trHtmlfoot);
+        //    $('#salaryStructureDeductionTableProcess').DataTable();
+        //}
+    </script>
+}

@@ -1,0 +1,259 @@
+﻿@model LeavePolicyViewModel
+@{
+    ViewData["Title"] = "Leave Policy";
+}
+<style>
+    .redstar{
+        color:red;
+        float:right;
+    }
+</style>
+<div class="card" style="width: 100%;">
+    <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+        <h5 class="m-0 font-weight-bold text-primary">Leave Policies</h5>
+        <a class='btn btn-info mr-4' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1018&perentId=6283'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+    </div>
+    <div class="card-body">
+        @*<h5 class="card-title" style="color: black">Leave Policies</h5>*@
+        
+        <div class="container">
+            <form asp-area="HRPMSLeave" asp-controller="LeavePolicy" asp-action="Index" method="post" data-parsley-validate="parsley">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="row">
+                    <div class="col-sm-6">
+
+                        <div class="form-group row">
+                            <label for="leaveTypeId" class="col-sm-5 col-form-label">LeaveType<span class="redstar">*</span></label>
+                            <div class="col-sm-7">
+                                <select type="text" class="form-control" id="leaveTypeId" value="" name="leaveTypeId" data-parsley-required="true">
+                                    <option value="">Select One</option>
+                                    @foreach (var data in Model.leaveTypelist)
+                                    {
+                                        <option value="@data.Id">@data.nameEn</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="maxCarry" class="col-sm-5 col-form-label">Maximum Carry <span class="redstar">*</span></label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="maxCarry" id="maxCarry" required>
+                                <input type="hidden" class="form-control" name="id" id="id" value="0">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="maxBridgeLimit" class="col-sm-5 col-form-label">Max. Bridge Limit</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="maxBridgeLimit" id="maxBridgeLimit">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="govtHolidayBridge" class="col-sm-5 col-form-label">Govt. Holiday Bridge</label>
+                            <div class="col-sm-7">
+                                <select type="number" class="form-control" name="govtHolidayBridge" id="govtHolidayBridge">
+                                    <option value="">Select One</option>
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="paymentType" class="col-sm-5 col-form-label">Payment Type </label>
+                            <div class="col-sm-7">
+                                <select type="text" class="form-control" name="paymentType" id="paymentType" value="">
+                                    <option value="">Select One</option>
+                                    <option value="WithPay">With Pay</option>
+                                    <option value="WithOutPay">WithOut Pay</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+
+                        <div class="form-group row">
+                            <label for="year" class="col-sm-5 col-form-label">Year<span class="redstar">*</span></label>
+                            <div class="col-sm-7">
+                                <select type="text" class="form-control" id="year" value="" name="year" data-parsley-required="true">
+                                    <option value="">Select One</option>
+                                    @foreach (var data in Model.years)
+                                    {
+                                        <option value="@data.Id">@data.year</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="maxYearlyLeave" class="col-sm-5 col-form-label">Maximum Leave @*<span style="color:red">*</span>*@</label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control" name="maxYearlyLeave" id="maxYearlyLeave">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="highestCarryForward" class="col-sm-5 col-form-label">Highest Carry Forward </label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control" name="highestCarryForward" id="highestCarryForward">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="weeklyBridge" class="col-sm-5 col-form-label">Weekly Off Bridge </label>
+                            <div class="col-sm-7">
+                                <select type="number" class="form-control" name="weeklyBridge" id="weeklyBridge">
+                                    <option value="">Select One</option>
+                                    <option value="1">No</option>
+                                    <option value="0">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="remarks" class="col-sm-5 col-form-label">Remarks</label>
+                            <div class="col-sm-7">
+                                <textarea class="form-control" rows="3" name="remarks" id="remarks"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <button type="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+            </form>
+        </div>
+    </div>
+</div>
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Leave Policies List</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="leaveApplyTable">
+                    <thead>
+                        <tr>
+                            <th>LeaveType</th>
+                            <th>Yearly Maximum Carry</th>
+                            <th>Yearly Maximum Leave </th>
+                            <th>Year</th>
+                            <th>Action</th>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var data in Model.leavePolicies)
+                        {
+                            <tr>
+                                <td>@data.leaveType.nameEn</td>
+                                <td>@data.yearlyMaxCarry</td>
+                                <td>@data.yearlyMaxLeave</td>
+                                <td>@data.year.year</td>
+                                <td>
+                                    <a class="btn btn-success" onclick="Edit(@data.Id,'@data.leaveTypeId','@data.yearId','@data.yearlyMaxLeave','@data.yearlyMaxCarry','@data.weeklyOffBridge','@data.govtHolidayBridge','@data.remarks','@data.paymentType','@data.maxBridgeLimit','@data.highestCarryForward')" data-toggle="tooltip" title="Edit" href="#"><i class="fa fa-edit"></i></a>
+                                    @*<a class="btn btn-danger" data-toggle="tooltip" title="Remove" href="#"><i class="fa fa-trash-alt"></i></a>*@
+                                    <a class="btn btn-danger" href="javascript:void(0)" onclick="DeleteLeave(@data.Id)"><i class="fa fa-trash-alt"></i></a>
+                                    <a class="btn btn-info" data-toggle="tooltip" onclick="return confirm('Are you sure you want to process?')" title="Opening Balance Process" href="/HRPMSLeave/LeavePolicy/OpeningBalanceProcess/@data.Id"><i class="fa fa-cogs"></i></a>
+
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+           
+            var orgFullTitle = "Leave Policies List";
+            $('#leaveApplyTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1,2,3]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'Leave Policies List',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1,2,3]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'Leave Policies List'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "ERP-HRPMS",
+                        messageTop: 'Leave Policies List',
+                        exportOptions: {
+                            columns: [0, 1,2,3]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+        });
+
+        function Edit(Id, leaveId, yearId, yearlyMaxLeave, yearlyMaxCarry, weeklyOffBridge, govtHolidayBridge, remarks, paymentType, maxBridgeLimit, highestCarryForward) {
+            $("#id").val(Id);
+            $("#leaveTypeId").val(leaveId);
+            $("#year").val(yearId);
+            $("#maxYearlyLeave").val(yearlyMaxLeave);
+            $("#maxCarry").val(yearlyMaxCarry);
+            $("#weeklyBridge").val(weeklyOffBridge);
+            $("#govtHolidayBridge").val(govtHolidayBridge);
+            $("#remarks").val(remarks);
+            $("#paymentType").val(paymentType);
+            $("#maxBridgeLimit").val(maxBridgeLimit);
+            $("#highestCarryForward").val(highestCarryForward);
+        }
+
+
+        function DeleteLeave(Id) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+
+                $.ajax({
+                    url: '@Url.Action("DeleteLeaveDayById", "LeavePolicy")',
+                    data: { Id: Id },
+                    type: 'POST',
+                })
+                    .done(function () {
+                        swal('', 'Deleted Successfully!', 'success');
+                        window.location.href = "/HRPMSLeave/LeavePolicy/Index";
+                    })
+                    .fail(function () {
+                        swal('Cancelled', 'It is related with another info, can not deleted', 'error');
+                    });
+            });
+        }
+    </script>
+}
+
+

@@ -1,0 +1,518 @@
+﻿@model OPUSERP.Areas.HRPMSACR.Models.ACRAssessmentVM
+@{
+    ViewBag.Title = "Authority";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div id="tabs" class="project-tab col-sm-12">
+        <div class="row">
+            <nav style="padding-left:100px;font-weight:bold;font-size:20px;">
+                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                    <a class="nav-link active" id="nav-4thPart-tab" data-toggle="tab" href="#nav-4thPart" role="tab" aria-controls="nav-4thPart" aria-selected="true">প্রতিবেদনাধীন</a>
+                    @*<a class="nav-link" id="nav-1stPart-tab" data-toggle="tab" href="#nav-1stPart" role="tab" aria-controls="nav-1stPart" aria-selected="true">প্রতিবেদনকারী</a>
+                        <a class="nav-link" id="nav-2ndPart-tab" data-toggle="tab" href="#nav-2ndPart" role="tab" aria-controls="nav-2ndPart" aria-selected="false">প্রতিস্বাক্ষরকারী</a>
+                        <a class="nav-link" id="nav-4thPart-tab" data-toggle="tab" href="#nav-4thPart" role="tab" aria-controls="nav-4thPart" aria-selected="false">চূড়ান্ত প্রতিস্বাক্ষরকারী</a>
+                        <a class="nav-link" id="nav-3rdPart-tab" data-toggle="tab" href="#nav-3rdPart" role="tab" aria-controls="nav-3rdPart" aria-selected="false">সম্পন্ন তালিকা</a>*@
+                </div>
+            </nav>
+        </div>
+        <div class="row" style="height:10px;"></div>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-4thPart" role="tabpanel" aria-labelledby="nav-4thPart-tab">
+
+                <div class="row col-sm-12">
+                    <div class="card" style="width: 100%;">
+
+                        <h5 style="color:black;text-align:center;">Update User Profile</h5>
+
+                        <div class="card-body">
+
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-2">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group row">
+                                            <label class="col-md-4 control-label">ACR for Year</label>
+                                            <div class="col-md-6">
+                                                <input type="hidden" id="acr_year" name="acrYear" value="" />
+                                                <select id="acrYear" class="form-control">
+                                                    <option value="">--Select ACR Year--</option>
+                                                    @*<option value="2019">2019</option>*@
+                                                    @*<option value="2021">2021</option>*@
+                                                    <option value="2022">2022</option>
+                                                    <option selected="selected" value="2023">2023</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group row">
+                                            <label class="col-md-4 control-label">ACR Type</label>
+                                            <div class="col-md-6">
+                                                <select id="acrType" name="acrType" class="form-control" onchange="chkDuplicateACR()">
+                                                    <option value="" selected="selected">--Select ACR Type--</option>
+                                                    @*<option value="Quaterly">Quaterly</option>*@
+                                                    <option value="HalfYearly">Half-Yearly</option>
+                                                    @*<option value="Yearly">Yearly</option>
+                                <option value="Special">Special</option>*@
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-2">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group row">
+                                            <label class="col-md-4 control-label">From Date</label>
+                                            <div class="col-md-6">
+                                                <input type="text" id="acrfromDate" name="" class="form-control datePicker" autocomplete="off" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group row">
+                                            <label class="col-md-4 control-label">To Date</label>
+                                            <div class="col-md-6">
+                                                <input type="text" id="acrtoDate" name="" class="form-control datePicker" autocomplete="off" onchange="chkDuplicateACR()" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <input type="button" value="Show" id="btnShow" class="btn btn-success btn-sm" style="width:80px;" />
+                                     
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group row">
+                                            <label class="col-md-4 control-label">Personnel No</label>
+                                            <div class="col-md-8">
+                                                <input type="text" name="empCode" id="empCode" class="form-control" readonly />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-md-4 control-label">Designation</label>
+                                            <div class="col-md-8">
+                                                <input type="text" name="designation" id="designation" class="form-control" readonly />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-4 control-label">User Name</label>
+                                            <div class="col-md-8">
+                                                <input type="text" name="userName" id="userName" class="form-control" readonly />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-4 control-label">Job Duration</label>
+                                            <div class="col-md-8">
+                                                <input type="text" name="JobDuration" id="JobDuration" class="form-control" readonly />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-4 control-label">Job Duration as Branch Manager</label>
+
+                                            <div class="col-md-8">
+                                                <input type="text" name="JobDurationAsBranchManger" id="JobDurationAsBranchManger" class="form-control" />
+                                                <span> (If no data then type N/A)</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-4 control-label">Others Job Duration<span style="color:red;">*</span></label>
+                                            <div class="col-md-8">
+                                                <input type="text" id="JobDurationAsOthers" class="form-control" />
+                                                <span> (If no data then type N/A)</span>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" id="hiddenimage" />
+                                        @*<div class="form-group row">
+                        <label class="col-md-4 control-label">Photo <span style="color:red;">*</span></label>
+                        <div class="col-md-8">
+                            <img id="user_img" height="150" width="140" class="img-circle" /><br />
+                            <input type="hidden" id="hiddenimage" />
+                            <input type="file" title="search image" id="imagePath" name="imagePath" class="btn btn-default btn-sm pull-right" />
+                            <label for="imagePath" class="custom-file-upload">
+                                Choose Photo
+                            </label>
+                        </div>
+                    </div>*@
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group row">
+                                            <label class="col-md-4 control-label">Employee Name</label>
+                                            <div class="col-md-8">
+                                                <input type="text" name="empName" id="empName" class="form-control" readonly />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-4 control-label">Posting Place</label>
+                                            <div class="col-md-8">
+                                                <input type="text" name="branchName" id="branchName" class="form-control" readonly />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" style="display:none;">
+                                            <label class="col-md-4 control-label">Division Name</label>
+                                            <div class="col-md-8">
+                                                <input type="text" name="userType" id="userType" class="form-control" readonly />
+                                            </div>
+                                        </div>
+
+                                        @{
+                                            var totaldaysInBranch = Model.empPostings?.Sum(x => x.totalDaysInBranch);
+                                            int year = Convert.ToInt32(totaldaysInBranch) / 365;
+                                            int month = (Convert.ToInt32(totaldaysInBranch) - (year * 365)) / 30;
+                                        }
+                                        <div class="form-group row">
+                                            <label class="col-md-4 control-label">Job Duration in Branch</label>
+                                            <div class="col-md-8">
+                                                <input type="text" name="JobDurationAsOthers" id="DurationBranch" value="@year years @month months" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-4 control-label">Job Duration as Zonal Head <span style="color:red;">*</span></label>
+                                            <div class="col-md-8">
+                                                <input type="text" name="JobDurationAsZonalHead" id="JobDurationAsZonalHead" class="form-control" />
+                                                <span> (If no data then type N/A)</span>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" id="hiddensignature" />
+                                        @*<div class="form-group row">
+                        <label class="col-md-4 control-label">Signature <span style="color:red;">*</span></label>
+                        <div class="col-md-8">
+                            <img id="user_signature" height="80" width="300" class="img-circle" />
+                            <input type="hidden" id="hiddensignature" />
+                            <label for="signaturePath" class="custom-file-upload">
+                                Choose Signature
+                            </label>
+                            <input type="file" title="search signature" id="signaturePath" name="signaturePath" class="btn btn-default btn-sm pull-right" />
+                        </div>
+                    </div>*@
+                                        <br />
+                                        <div class="form-group row">
+                                            <label class="col-md-4 control-label"></label>
+                                            <div class="col-md-8">
+                                                <input type="button" value="Save" id="btn2ndSave" class="btn btn-success btn-sm" style="width:80px;" />
+                                                @*&nbsp;
+                            <input type="button" value="Next" id="btnNext" class="btn btn-success btn-sm" style="width:80px;" />*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <div class="container">
+
+            <div class="card">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <input type="hidden" id="EmpCode" name="EmpCode" />
+            <table class="table table-bordered table-hover table-striped" id="Assesstable" ">
+                <thead>
+                    <tr>
+                        <th>Assessment Year </th>
+                        <th>Assessment Date</th>
+                        <th>Assessment No</th>
+                        <th>From Date</th>
+                        <th>To Date</th>
+                       
+                    </tr>
+                </thead>
+                <tbody>
+            @foreach (var data in Model?.AddAssessments)
+            {
+                        <tr>
+
+                            <td>@data?.assessmentYear</td>
+                             <td>@data?.assessmentDate?.ToString("dd MMM yyyy")</td>
+                            <td>@data?.assessmentNo</td>
+                             <td>@data?.fromDate?.ToString("dd MMM yyyy")</td>
+                             <td>@data?.toDate?.ToString("dd MMM yyyy")</td>
+
+                            
+                        </tr>
+            }
+                </tbody>
+               </table>
+             </div>
+         </div>
+    </div>
+  </div>
+ </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //Asad Added On 07.09.2023
+            //Common.Ajax('GET', '@Url.Action("GetUsersProfile", "AssessmentInfo")', [], 'json', GetUsersProfile, false);
+          
+            $("#acrType").change(function () {
+                if ($("#acrType").val() == "Yearly") {
+                    var years = $("#acrYear").val();
+                    $('#acrfromDate').val("01-Jan-" + years);
+                    $('#acrtoDate').val("31-Dec-" + years);
+
+                }
+                else {
+                    $('#acrfromDate').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100" });
+                    $('#acrtoDate').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100" });
+
+                }
+            });
+
+            //Asad Added On 07.09.2023
+            $("#btnShow").click(function () {
+                //New By Asad
+                //alert(hi);
+                var acrYear = $('#acrYear').val();
+                var acrType = $('#acrType option:selected').val();
+                var fromDate = $('#acrfromDate').val();
+                var toDate = $('#acrtoDate').val();
+
+                var url = '/HRPMSACR/AssessmentInfo/ValidAcrDate?acrYear=' + acrYear + '&acrType=' + acrType + '&fromDate=' + fromDate + '&toDate=' + toDate;
+                
+                //Common.Ajax('GET', url, [], 'json', GetUsersProfile, false);
+                var isValid = false;
+                $.ajax({
+                    url: url,
+                    data: {},
+                    type: 'GET',
+                    success: function (data) {
+                 //console.log(data)
+                        if (data.Status == "OK") {                            
+                            var url = '/HRPMSACR/AssessmentInfo/GetUsersProfile?toDate=' + toDate;
+                            Common.Ajax('GET', url, [], 'json', GetUsersProfile, false);
+                        }
+                        else{
+                            alert(data.Message);
+                        }
+                    }
+                });
+
+
+
+                //Old: Commented By Asad
+                //Common.Ajax('GET', '@Url.Action("GetUsersProfile", "AssessmentInfo")', [], 'json', GetUsersProfile, false);
+            });
+
+            $("#btn2ndSave").click(function () {
+                //$("#btn2ndSave").prop("disabled", true);
+                
+                //New By Asad
+                var acrYear = $('#acrYear').val();
+                var acrType = $('#acrType option:selected').val();
+                var fromDate=new Date($('#acrfromDate').val());
+                var toDate=new Date($('#acrtoDate').val());
+
+                if(acrYear == '' || acrYear == null || acrYear == 'undefined'){
+                    alert('Select ACR Year');
+                    return;
+                }
+                if(acrType == '' || acrType == null || acrType == 'undefined'){
+                    alert('Select ACR Type');
+                    return;
+                }
+                if(fromDate == '' || fromDate == null || fromDate == 'undefined'){
+                    alert('Select From Date');
+                    return;
+                }
+                if(toDate == '' || toDate == null || toDate == 'undefined'){
+                     alert('Select To Date');
+                    return;
+                }
+                                
+                
+                if(fromDate<toDate){
+                    ProcessAllBranchXml();
+                }
+                else{
+                    swal({
+                        title: 'Wrong Date', text: 'From date must be before to date', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Ok'
+                    })
+                }
+
+            });
+        });
+        function GetUsersProfile(response) {
+            console.log(response)
+            $('#empCode').val(response[0].EmpCode);
+            $('#empName').val(response[0].EmpName);
+            $('#designation').val(response[0].DesignationName);
+            $('#branchName').val(response[0].BranchName);
+            $('#userName').val(response[0].UserName);
+            $('#userType').val(response[0].DivisionName);
+            if (response[0].JobDuration == '') {
+                $('#JobDuration').val(response[0].JobDuration);
+            }
+            else {
+                $('#JobDuration').val(response[0].JobDuration);
+            }
+            if (response[0].JobDurationAsBranchManger == '') {
+                $('#JobDurationAsBranchManger').val(response[0].JobDurationAsBranchManger);
+            }
+            else {
+                $('#JobDurationAsBranchManger').val(response[0].JobDurationAsBranchManger);
+            }
+            if (response[0].JobDurationAsZonalHead == '') {
+                $('#JobDurationAsZonalHead').val(response[0].JobDurationAsZonalHead);
+            }
+            else {
+                $('#JobDurationAsZonalHead').val(response[0].JobDurationAsZonalHead);
+            }
+            if (response[0].JobDurationAsOthers == '') {
+                $('#JobDurationAsOthers').val('');
+            }
+            else {
+                $('#JobDurationAsOthers').val(response[0].JobDurationAsOthers);
+                $('#JobDuration').val(response[0].JobDuration);
+            }
+
+            $('#user_signature').prop('src', '/' + response[0].signaturePath);
+            $('#user_img').prop('src', '/' + response[0].picturePath);
+
+            $('#hiddensignature').val(response[0].signaturePath);
+            $('#hiddenimage').val(response[0].picturePath);
+
+        }
+
+        function ProcessAllBranchXml() {
+            $('#btn2ndSave').prop('disabled', true);
+			var signaturePath = $('#hiddensignature').val();
+			var imagePath = $('#hiddenimage').val();
+
+            var empcode = $('#empCode').val();
+			var jbDura = $('#JobDuration').val();
+            var jbBranch = $('#JobDurationAsBranchManger').val();
+            var jbZonal = $('#JobDurationAsZonalHead').val();
+            var jbOthers = $('#JobDurationAsOthers').val();
+            var type = $('#acrType').val();
+            var fromDate = $('#acrfromDate').val();
+            var toDate = $('#acrtoDate').val();
+            var year = $('#acrYear').val();
+
+            var txtAppType = "Do you want to save this record!";
+            var conAppType = "Yes, save it!";
+            swal({
+                title: 'Are you sure?', text: txtAppType, type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: conAppType
+            }).then(function () {
+
+                $.ajax({
+                    url: '@Url.Action("UpdateUsersProfile", "AssessmentInfo")',
+                    data: { signaturePath: signaturePath, imagePath: imagePath, empcode: empcode, jbDura: jbDura, jbBranch: jbBranch, jbZonal: jbZonal, jbOthers: jbOthers, type: type, fromDate: fromDate, toDate: toDate, year: year },
+                    type: 'GET',
+                    success: function (records) {
+                        console.log(records);
+                        swal('Success!!', 'Save Successfully!!!', 'success').then(function () {
+                            $('#btn2ndSave').prop('disabled', false);
+                        });
+                        if (records.empType == 'Top') {
+                            window.location.href = '@Url.Action("Index", "ExecutiveOfficer")?id=' + records.assessmentId + '&empCode=' + records.empCode + '';
+                        }
+                        else if (records.empType == 'Officer') {
+                            window.location.href = '@Url.Action("Index", "Officer")?id=' + records.assessmentId + '&empCode=' + records.empCode + '';
+                        } else if (records.empType == 'Clerk') {
+                            window.location.href = '@Url.Action("Index", "Clerical")?id=' + records.assessmentId + '&empCode=' + records.empCode + '';
+                        } else if (records.empType == 'NonClerk') {
+                            window.location.href = '@Url.Action("Index", "NonClerical")?id=' + records.assessmentId + '&empCode=' + records.empCode + '';
+                        }
+
+                    },
+                    error: function () {
+                        alert("Fail to save");
+                        $('#btn2ndSave').prop('disabled', false);
+                    }
+                });
+            }, function () { $('#btn2ndSave').prop('disabled', false); });
+
+
+        }
+        function chkDuplicateACR() {
+            //alert(121);
+            var ecode = $('#empCode').val();
+
+            var atype = $('#acrType').val();
+            var afromDate = $('#acrfromDate').val();
+            var atoDate = $('#acrtoDate').val();
+            var ayear = $('#acrYear').val();
+            if (atype == "Yearly") {
+                Common.Ajax('GET', '/HRPMSACR/AssessmentInfo/GetAcrEmployeeDate?ecode=' + ecode + '&atype=' + atype + '&ayear=' + ayear, [], 'json', ajaxFunctionCheck, false);
+
+            }
+            else {
+                Common.Ajax('GET', '/HRPMSACR/AssessmentInfo/GetAcrEmployeeDate?ecode=' + ecode + '&atype=' + atype + '&afromDate=' + afromDate + '&atoDate=' + atoDate + '&ayear=' + ayear, [], 'json', ajaxFunctionCheck, false);
+
+            }
+
+
+        }
+
+        function ajaxFunctionCheck(res) {
+            if (res != null) {
+                
+                if (res.statusInfoId != 8) {
+                    if (res.newSignatory == 1) {
+                        swal('Warning', 'ACR  already exists!', 'warning');
+                        if (res.acrType == "Yearly") {
+
+                            $("#acrType").change(function () {
+                                $('#acrfromDate').val('');
+                                $('#acrtoDate').val('');
+                                $('#btn2ndSave').prop('disabled', true);
+                            });
+                            $('#btn2ndSave').prop('disabled', true);
+                        }
+                        else {
+                            $("#acrfromDate").val('');
+                            $("#acrtoDate").val('');
+                            $('#btn2ndSave').prop('disabled', true);
+                        }
+                        return false;
+                    }
+                    else{
+                        $('#btn2ndSave').prop('disabled', false);
+                    }
+                }
+                else{
+                    $('#btn2ndSave').prop('disabled', false);
+                }
+            }
+            else{
+                $('#btn2ndSave').prop('disabled', false);
+            }
+        }
+
+    </script>
+}
+
+
+    <style>
+        input[type='file'] {
+            display: none;
+        }
+
+        .custom-file-upload {
+            border: 1px solid #ccc;
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+            width: 200px;
+            background-color: rgb(26,187,156);
+            color: white;
+        }
+    </style>
+

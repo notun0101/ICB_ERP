@@ -1,0 +1,218 @@
+﻿@model SignatoryViewModel
+@{
+    ViewData["Title"] = "Create Signatory";
+    Layout = "~/Areas/Payroll/Views/Shared/_SalaryMasterForm.cshtml";
+
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+        <h5 class="m-0 font-weight-bold text-primary">Create Signatory</h5>
+        <a class='btn btn-info mr-4' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1013&perentId=5926'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+    </div>
+    <div class="card-body">
+
+        <div class="container">
+            <form id="frmDraft" method="post" data-parsley-validate="parsley">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                                
+                <input type="hidden" id="Id" name="Id">
+                <input type="hidden" id="EmployeeId" name="EmployeeId">
+                
+                @*<input type="hidden" id="SignatoryId" name="SignatoryId">*@
+                @*<input type="hidden" id="EmployeeCode" name="EmployeeCode">*@
+
+                <div class="form-group row">
+                    <label for="DesignationId" class="col-sm-3 col-form-label">Designation </label>
+                    <div class="col-sm-9">
+                        <select type="text" class="form-control" name="DesignationId" id="DesignationId">
+                            <option value="">Select</option>
+                            @foreach (var item in Model.Designations)
+                            {
+                                <option value="@item.Id">@item.designationName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="empName" class="col-sm-3 col-form-label">Signatory</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="empName" id="empName">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="SignatoryName" class="col-sm-3 col-form-label">Signatory Name</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="SignatoryName" id="SignatoryName" readonly>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="SignatoryDesignation" class="col-sm-3 col-form-label">Signatory Designation</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="SignatoryDesignation" id="SignatoryDesignation" readonly>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="SignatoryPhone" class="col-sm-3 col-form-label">Signatory Phone</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="SignatoryPhone" id="SignatoryPhone" readonly>
+                    </div>
+                </div>
+
+                <hr>
+                @*<button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>*@
+                <button type="button" id="saveSignatory" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+            </form>
+
+            <br /><br /><br />
+
+
+            <div class="row clearfix">
+                <div class="col-12">
+                    <div class="card mb-4">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">List of Signatory</h6>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-striped table-bordered" id="signatoryTable">
+                                <thead>
+                                    <tr>
+                                        <th width="5%">SL#</th>
+                                        <th>Designation</th>
+                                        <th>Signatory Name</th>
+                                        <th>Signatory Designation</th>
+                                        <th>Signatory Phone</th>
+                                        <th>Action</th>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int i = 0;
+                                    }
+                                    @foreach (var item in Model.SignatoryList)
+                                    {
+                                        i++;
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>@item.Designation?.designationName</td>
+                                            <td>@item?.EmployeeInfo?.nameBangla</td>
+                                            <td>@item?.Designation?.designationNameBN</td>
+                                            <td>@item?.EmployeeInfo?.telephoneOfficeBn</td>
+                                            <td>
+                                                <a href="#" class="btn btn-success" onclick="Edit(@item?.Id, @item?.Designation?.Id, @item?.EmployeeInfo?.Id, '@item?.EmployeeInfo?.nameEnglish', '@item?.EmployeeInfo?.nameBangla', '@item?.Designation?.designationNameBN', '@item?.EmployeeInfo?.telephoneOfficeBn')"><i class="fas fa-pen"></i></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#submit").click(function () {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+            }).then(function () {
+                $("#submitbtn").click();
+            });
+        });
+        Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo', [], 'json', ajaxGetEmployees);
+
+
+        $('#saveSignatory').click(function(){
+            swal({
+                title: 'Are you sure?', text: 'Do you want to update this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, update it!'
+            }).then(function () {
+                var form = $("#frmDraft");
+                $.ajax({
+                    url: '@Url.Action("CreateSignatory", "Signatory")',
+                    data: form.serialize(),
+                    type: 'POST',
+                    success: function (response) {
+                        //$('#modalFinal').modal('hide');
+                        
+                        if (response.Status == "NOK"){
+                            swal({
+                                title: '', text: response.Message, type: 'success', showCancelButton: false, confirmButtonColor: '#3085d6', confirmButtonText: 'Ok!',
+                            });
+                        }
+                        else
+                        {
+                            swal({
+                                title: '', text: response.Message, type: 'success', showCancelButton: false, confirmButtonColor: '#3085d6', confirmButtonText: 'Ok!',
+                            });
+                            window.location.href = "/Payroll/Signatory/CreateSignatory";
+                        }
+                        //swal({
+                        //    title: '', text: 'Saved Successfully!', type: 'success', showCancelButton: false, confirmButtonColor: '#3085d6', confirmButtonText: 'Ok!',
+                        //});
+                    }
+                });
+            });
+        });
+    });
+    function ajaxGetEmployees(response) {
+        var GeEmployeesList = [];
+
+        $.each(response, function (id, option) {
+            var obj = new Object();
+            obj.key = option.Id;
+            obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+            obj.employeeCode = option.employeeCode;
+            obj.EmployeeName = option.nameEnglish;
+            obj.EmployeeNameBangla = option.nameBangla;
+            obj.designation = option.lastDesignation?.designationName;
+            obj.designationBangla = option.lastDesignation?.designationNameBN;
+            obj.telephoneOfficeBangla = option.telephoneOfficeBn;
+            
+            obj.joiningDate = option.joiningDateGovtService;
+            obj.dateOfBirth = option.dateOfBirth;
+            obj.postingPlace = option.presentPosting;
+            obj.currentGrade = option.currentGrade?.gradeName;
+            obj.branchName = option.hrBranch?.branchName;
+            obj.currentBasic = option.currentBasic;
+            obj.fileNo = option.fileNo;
+            GeEmployeesList[GeEmployeesList.length] = obj;
+        });
+        $('#empName').autocomplete({
+            
+            source: GeEmployeesList,
+            select: function (event, ui) {
+                                
+                $("#EmployeeId").val(ui.item.key);
+                $("#EmployeeCode").val(ui.item.employeeCode);
+                $("#SignatoryName").val(ui.item.EmployeeNameBangla);
+                $('#SignatoryDesignation').val(ui.item.designationBangla);
+                $('#SignatoryPhone').val(ui.item.telephoneOfficeBangla);
+                
+            }
+        });
+    }
+        function ajaxSetDesignation(res) {
+        $('#SignatoryDesignation').val(res.lastDesignation.designationNameBN)
+        }
+
+    function Edit(id, designationId, employeeId, signatoryNameEnglish, signatoryNameBangla, signatoryDesignation, signatoryPhone) {
+
+        $("#Id").val(id);
+        $('#DesignationId').val(designationId);
+        $('#EmployeeId').val(employeeId);
+        $('#empName').val(signatoryNameEnglish);
+        
+        $('#SignatoryName').val(signatoryNameBangla);
+        $('#SignatoryDesignation').val(signatoryDesignation);
+        $('#SignatoryPhone').val(signatoryPhone);
+
+
+    }
+
+
+</script>

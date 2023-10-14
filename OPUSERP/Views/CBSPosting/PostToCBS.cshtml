@@ -1,0 +1,923 @@
+﻿@model CBSProcessViewModel
+@{
+	ViewData["TitleMD"] = "CBS Post";
+	Layout = "~/Areas/HRPMSMasterData/Views/Shared/_MasterDataForm.cshtml";
+}
+
+@section StyleMD{
+	<style>
+		.redStar {
+			color: red;
+		}
+	</style>
+}
+
+<div class="card" style="width: 100%;">
+	<div class="card-header  d-flex flex-row align-items-center justify-content-between">
+		<h5 class="m-0 font-weight-bold text-primary">CBS Post</h5>
+		<a class='btn btn-info mr-4' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=10&perentId=6254'>@*<i class="fas fa-backward fa-2x "></i>*@<i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+	</div>
+	<div class="card-body">
+		@if (User.IsInRole("CBS"))
+		{
+			<div class="container">
+				<form id="FormId" method="post">
+					<input type="hidden" id="searchType" value="" />
+					<div class="form-group row">
+						<input type="hidden" name="branchType" id="branchType" value="branch" />
+						<label for="periodId" class="col-sm-2 col-form-label">Salary Period</label>
+						<div class="col-sm-10">
+							<select class="form-control" name="periodId" id="periodId">
+								<option value="">select</option>
+								@foreach (var data in Model.salaryPeriods)
+								{
+									<option value="@data.Id">@data.periodName</option>
+								}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row d-none">
+						<label for="sbu" class="col-sm-2 col-form-label">SBU</label>
+						<div class="col-sm-10">
+							<select class="form-control" name="sbu" id="sbu">
+								<option value="0">select</option>
+								@foreach (var data in Model.sbus)
+								{
+									<option value="@data.branchUnitName">@data.branchUnitName</option>
+								}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label for="hrBranchId" class="col-sm-2 col-form-label">Branch</label>
+						<div class="col-sm-10">
+							<select class="form-control" name="hrBranchId" id="hrBranchId">
+								<option value="0">select</option>
+								<option value="1000">All</option>
+								@*<option value="1001">BDBL Securities Ltd. Ctg</option>*@
+								@foreach (var data in Model.hrBranches.OrderBy(x => x.branchName))
+								{
+									<option value="@data.Id">@data.branchName</option>
+								}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row d-none">
+						<label for="zoneId" class="col-sm-2 col-form-label">Zone</label>
+						<div class="col-sm-10">
+							<select class="form-control" name="zoneId" id="zoneId">
+								<option value="0">select</option>
+								@foreach (var data in Model.zones.OrderBy(x => x.branchUnitName))
+								{
+									<option value="@data.Id">@data.branchUnitName</option>
+								}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row d-none">
+						<label for="empCode" class="col-sm-2 col-form-label">Employee Id</label>
+						<div class="col-sm-10">
+							<input type="text" value="0" class="form-control" name="empCode" id="empCode">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label for="Type" class="col-sm-2 col-form-label">Type</label>
+						<div class="col-sm-10">
+							<select class="form-control" name="Type" id="Type">
+								<option value="Select" selected>Select</option>
+								<option value="Voucher">Voucher</option>
+								<option value="Salary">Salary</option>
+								<option value="UnionSubs">UnionSubs</option>
+								<option value="PayOrder">Pay Order</option>
+								@*<option value="VSU">V+S+U</option>*@
+								@*<option value="Loan">Loan</option>
+								<option value="TogetherSV">Salary+Voucher</option>*@
+							</select>
+						</div>
+					</div>
+
+					<button type="button" id="searchBtn" value="Find" class="btn btn-secondary" style="float:right; margin-top:5px;"><i class="fas fa-search"></i> Find</button>
+					<button type="button" id="submit" value="Post" class="btn btn-success" style="float:right; margin-top:5px; margin-right:5px;"><i class="fas fa-save"></i> Post</button>
+				</form>
+			</div>
+		}
+	</div>
+</div>
+
+<div class="card">
+	<div class="card-header">
+		<span id="logHead"></span>
+	</div>
+	<div class="card-body">
+		<table class="table table-bordered" id="PostedVoucherTbl">
+			<thead>
+				<tr>
+					<th class="text-center">Branch Code</th>
+					<th class="text-center">Branch Name</th>
+					<th class="text-center">Posting Date</th>
+					<th class="text-center">Status</th>
+					<th class="text-center">Ref Code</th>
+					<th class="text-center">Message</th>
+					<th class="text-center">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div id="loader" style="position: absolute; background-color: rgba(226, 226, 225, .9); left: 100px; right: 0; top: 40px; bottom: 0; width: 100%; display: flex; justify-content: center; align-items: center; display: none; ">
+	<img style="width: 50%; margin-left: 25%; opacity: .2" src="~/Loader/7bcba55187df137b234567a0337e27df.gif" alt="Loading" />
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalVoucher" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="vouchermodalhead"></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<table class="table table-bordered" id="voucherLogTbl">
+					<thead>
+						<tr>
+							<th>Code</th>
+							<th>Name</th>
+							<th>TRX</th>
+							<th>Message</th>
+							<th>Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section ScriptsMD{
+	<script>
+		$(document).ready(function () {
+			
+			$('#Type').on('change', function () {
+				var val = $(this).val();
+				if (val == 'Voucher') {
+					$('#searchType').val('voucher');
+				}
+				else if (val == 'Salary') {
+					$('#searchType').val('salary');
+				}
+				else if (val == 'UnionSubs') {
+					$('#searchType').val('union');
+				}
+				else {
+
+				}
+
+			})
+
+			//$('#periodId').on('change', function () {
+			//	var val = $(this).val();
+			//	$.ajax({
+			//		url: '/CBSPosting/GetTypeByPeriodId',
+			//		data: { Id: val },
+   //                 type: 'GET',
+   //             })
+   //             .done(function (res) {
+			//		if (res == 2) {
+			//			$('#Type option:nth-child(3)').hide();
+			//		}
+			//		else {
+			//			$('#Type option:nth-child(3)').show();
+			//		}
+   //             })
+			//})
+
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+				}).then(function () {
+					var formData = $('#FormId').serialize();
+					var urlstr = $('#Type').val();
+                    var hrBranchId = $('#hrBranchId').val();
+                    var branchType = $('#branchType').val();
+
+					if (urlstr == 'Salary') {
+						if (hrBranchId == 1000) {
+							PostAllSalaryToCBS(branchType);
+                        }
+                        //else if (hrBranchId == 500) {
+                        //    PostIndSalaryToCBS(branchType);
+                        //}
+						else {
+							PostSalaryToCBS(branchType);
+						}
+					}
+                    if (urlstr == 'Voucher') {
+                        if (hrBranchId == 1000) {
+							PostAllVoucherToCBS(branchType);
+                        }
+                        //else if (hrBranchId == 500) {
+                        //    PostIndVoucherToCBS(branchType);
+                        //}
+                        else {
+							PostVoucherToCBS(branchType);
+                        }
+					}
+					if (urlstr == 'UnionSubs') {
+						if (hrBranchId == 1000) {
+							PostAllUnionToCBS(branchType);
+						}
+						else {
+							PostUnionToCBS(branchType);
+						}
+					}
+					if (urlstr == 'PayOrder') {
+						PostPayOrderToCBS();
+					}
+					if (urlstr == 'VSU') {
+						PostAllToCBSInd();
+					}
+					if (urlstr == 'Loan') {
+						$.ajax({
+							url: '/CBSPosting/PostLoanToCBS',
+							type: 'Post',
+							data: formData
+						}).done(function (data) {
+							if (data == true) {
+								swal('success', 'Successfully Posted', 'success').then(function () {
+									location.reload();
+								})
+							}
+							else {
+								swal('warning', 'Posted Failed!', 'warning');
+							}
+						})
+						.fail(function (err) {
+							swal('warning', 'Posted Failed!', 'warning');
+						});
+					}
+					if (urlstr == 'TogetherSV') {
+						$.ajax({
+							url: '/CBSPosting/PostSalaryAndVoucherToCBS',
+							type: 'Post',
+							data: formData
+						}).done(function (data) {
+							if (data == true) {
+								swal('success', 'Successfully Posted', 'success').then(function () {
+									location.reload();
+								})
+							}
+							else {
+								swal('warning', '@ViewBag.error', 'warning');
+							}
+						})
+						.fail(function (err) {
+							swal('warning', 'Posted Failed!', 'warning');
+						});
+					}
+                });
+			});
+
+
+			$('#searchBtn').click(function () {
+				var periodId = $('#periodId').val();
+				var Type = $('#Type').val();
+				if (Type == 'Voucher') {
+					Common.Ajax('GET', '/CBSPosting/GetAllPostedVoucherApi?periodId=' + periodId, [], 'json', ajaxGetAllPostedVoucherApi, false);
+				}
+				if (Type == 'Salary') {
+					Common.Ajax('GET', '/CBSPosting/GetAllPostedSalaryApi?periodId=' + periodId, [], 'json', ajaxGetAllPostedVoucherApi, false);
+				}
+				if (Type == 'UnionSubs') {
+					Common.Ajax('GET', '/CBSPosting/GetAllPostedUnionApi?periodId=' + periodId, [], 'json', ajaxGetAllPostedVoucherApi, false);
+				}
+				if (Type == 'PayOrder') {
+					Common.Ajax('GET', '/CBSPosting/GetAllPostedPayOrderApi?periodId=' + periodId, [], 'json', ajaxGetAllPostedPayOrderApi, false);
+				}
+			})
+        });
+
+        function PostVoucherToCBS(branchType) {
+            var formData = $('#FormId').serialize();
+            var periodId = $('#periodId').val();
+
+			if (branchType == 'branch') {
+				$.ajax({
+					url: '/CBSPosting/PostVoucherToCBS',
+					type: 'Post',
+					data: formData
+				}).done(function (data) {
+					console.log(data)
+					if (data == 'Already Posted') {
+						swal('Warning!', 'Already Posted', 'warning');
+					}
+					else if (data == 'Success') {
+						swal('Success!', 'Successfully Posted', 'success').then(function () {
+							Common.Ajax('GET', '/CBSPosting/GetAllPostedVoucherApi?periodId=' + periodId, [], 'json', ajaxGetAllPostedVoucherApi, false);
+						})
+					}
+					else if (data.toString().split('-')[0] == 'Failed') {
+						swal('Warning!', data.split('-')[1], 'warning');
+					}
+					else if (data == 'Process Not Done') {
+						swal('Warning!', 'Process Not Done', 'warning');
+					}
+					else if (data.toString().split('-')[0] == 'Something Wrong') {
+						swal('Warning!', data.split('-')[1], 'warning');
+					}
+					else {
+						swal('Warning!', 'Something Went Wrong!', 'warning');
+					}
+				})
+				.fail(function (err) {
+					swal('Warning!', 'Something Went Wrong!', 'warning');
+				});
+			}
+			if (branchType == 'zone') {
+
+			}
+            
+		}
+
+
+		function PostAllVoucherToCBS(branchType) {
+			var formData = $('#FormId').serialize();
+			var periodId = $('#periodId').val();
+			$('#loader').show();
+
+			if (branchType == 'branch') {
+				$.ajax({
+					url: '/CBSPosting/PostAllVoucherToCBS',
+					type: 'Post',
+					data: formData
+				}).done(function (data) {
+					swal('Success!', 'Successfully Posted', 'success').then(function () {
+                        console.log(data)
+                        $('#loader').hide();
+						var table = $('#voucherLogTbl').DataTable();
+						table.destroy();
+
+						var option = '';
+						$.each(data, function (i, item) {
+							var status = 'Failed';
+							var classname = 'danger';
+							if (item.status == 1) {
+								status = 'Success';
+								classname = 'success';
+							}
+							var trxcode = item.trxcode;
+							if (item.trxcode == null) {
+								status = '';
+							}
+							option += `<tr>
+									<td class="text-center">${item.branchCode}</td>
+									<td>${item.branchName}</td>
+									<td class="text-center">${trxcode}</td>
+									<td>${item.message}</td>
+									<td class="text-center"><span class="badge badge-${classname}">${status}</span></td>
+								</tr>`
+						})
+						$('#voucherLogTbl tbody').empty();
+						$('#voucherLogTbl tbody').append(option);
+						$('#voucherLogTbl').DataTable({});
+
+						$('#vouchermodalhead').text('Posting Logs');
+						$('#exampleModalVoucher').modal('show');
+					})
+				})
+				.fail(function (err) {
+					swal('Warning!', 'Something Went Wrong!', 'warning');
+				});
+			}
+			if (branchType == 'zone') {
+
+			}
+			
+		}
+
+        function PostIndVoucherToCBS(branchType) {
+			var formData = $('#FormId').serialize();
+			var periodId = $('#periodId').val();
+
+			if (branchType == 'branch') {
+				$.ajax({
+                    url: '/CBSPosting/PostIndVoucherToCBS',
+					type: 'Post',
+					data: formData
+				}).done(function (data) {
+					swal('Success!', 'Successfully Posted', 'success').then(function () {
+						console.log(data)
+						var table = $('#voucherLogTbl').DataTable();
+						table.destroy();
+
+						var option = '';
+						$.each(data, function (i, item) {
+							var status = 'Failed';
+							var classname = 'danger';
+							if (item.status == 1) {
+								status = 'Success';
+								classname = 'success';
+							}
+							var trxcode = item.trxcode;
+							if (item.trxcode == null) {
+								status = '';
+							}
+							option += `<tr>
+									<td class="text-center">${item.branchCode}</td>
+									<td>${item.branchName}</td>
+									<td class="text-center">${trxcode}</td>
+									<td>${item.message}</td>
+									<td class="text-center"><span class="badge badge-${classname}">${status}</span></td>
+								</tr>`
+						})
+						$('#voucherLogTbl tbody').empty();
+						$('#voucherLogTbl tbody').append(option);
+						$('#voucherLogTbl').DataTable({});
+
+						$('#vouchermodalhead').text('Posting Logs');
+						$('#exampleModalVoucher').modal('show');
+					})
+				})
+				.fail(function (err) {
+					swal('Warning!', 'Something Went Wrong!', 'warning');
+				});
+			}
+			if (branchType == 'zone') {
+
+			}
+			
+		}
+
+
+		function PostSalaryToCBS(branchType) {
+			var formData = $('#FormId').serialize();
+			var periodId = $('#periodId').val();
+
+			if (branchType == 'branch') {
+				$.ajax({
+					url: '/CBSPosting/PostSalaryToCBS',
+					type: 'Post',
+					data: formData
+				}).done(function (data) {
+					console.log(data)
+					if (data == 'Already Posted') {
+						swal('Warning!', 'Already Posted', 'warning');
+					}
+					else if (data == 'Success') {
+						swal('Success!', 'Successfully Posted', 'success').then(function () {
+							Common.Ajax('GET', '/CBSPosting/GetAllPostedSalaryApi?periodId=' + periodId, [], 'json', ajaxGetAllPostedSalaryApi, false);
+						})
+					}
+					else if (data.toString().split('-')[0] == 'Failed') {
+						swal('Warning!', data.split('-')[1], 'warning');
+					}
+					else if (data == 'Process Not Done') {
+						swal('Warning!', 'Process Not Done', 'warning');
+					}
+					else if (data.toString().split('-')[0] == 'Something Wrong') {
+						swal('Warning!', data.split('-')[1], 'warning');
+					}
+					else {
+						swal('Warning!', 'Something Went Wrong!', 'warning');
+					}
+				})
+				.fail(function (err) {
+					swal('Warning!', 'Something Went Wrong!', 'warning');
+				});
+			}
+			if (branchType == 'zone') {
+
+			}
+
+		}
+
+		function PostAllSalaryToCBS(branchType) {
+			var formData = $('#FormId').serialize();
+            $('#loader').show();
+			console.log(branchType);
+			$.ajax({
+				url: '/CBSPosting/PostAllSalaryToCBS',
+				type: 'Post',
+				data: formData
+			}).done(function (data) {
+                console.log(data);
+                swal('success', 'Successfully Posted', 'success').then(function () {
+                    $('#loader').hide();
+                })
+			}).fail(function (err) {
+				console.log(err);
+			})
+		}
+        function PostIndSalaryToCBS(branchType) {
+			var formData = $('#FormId').serialize();
+
+			console.log(branchType);
+			$.ajax({
+                url: '/CBSPosting/PostIndSalaryToCBS',
+				type: 'Post',
+				data: formData
+			}).done(function (data) {
+				console.log(data);
+			}).fail(function (err) {
+				console.log(err);
+			})
+		}
+
+		function PostUnionToCBS(branchType) {
+			var formData = $('#FormId').serialize();
+			var periodId = $('#periodId').val();
+
+			if (branchType == 'branch') {
+				$.ajax({
+					url: '/CBSPosting/PostOfficerUninonVoucherToCBS',
+					type: 'Post',
+					data: formData
+				}).done(function (data) {
+					console.log(data)
+					if (data == 'Already Posted') {
+						swal('Warning!', 'Already Posted', 'warning');
+					}
+					else if (data == 'Success') {
+						swal('Success!', 'Successfully Posted', 'success').then(function () {
+							Common.Ajax('GET', '/CBSPosting/GetAllPostedUnionApi?periodId=' + periodId, [], 'json', ajaxGetAllPostedVoucherApi, false);
+						})
+					}
+					else if (data.toString().split('-')[0] == 'Failed') {
+						swal('Warning!', data.split('-')[1], 'warning');
+					}
+					else if (data == 'Process Not Done') {
+						swal('Warning!', 'Process Not Done', 'warning');
+					}
+					else if (data.toString().split('-')[0] == 'Something Wrong') {
+						swal('Warning!', data.split('-')[1], 'warning');
+					}
+					else {
+						swal('Warning!', 'Something Went Wrong!', 'warning');
+					}
+				})
+					.fail(function (err) {
+						swal('Warning!', 'Something Went Wrong!', 'warning');
+					});
+			}
+			if (branchType == 'zone') {
+
+			}
+
+		}
+
+        function PostPayOrderToCBS() {
+			var formData = $('#FormId').serialize();
+            $('#loader').show();
+
+            $.ajax({
+				url: '/CBSPosting/PostPayOrderToCBS',
+				type: 'Post',
+				data: formData
+			}).done(function (data) {
+				console.log(data);
+				swal('Success!', 'Successfully Posted', 'success').then(function () {
+                    console.log(data)
+                    $('#loader').hide();
+					var table = $('#voucherLogTbl').DataTable();
+					table.destroy();
+
+					var option = '';
+					$.each(data, function (i, item) {
+						var status = 'Failed';
+						var classname = 'danger';
+						if (item.status == 1) {
+							status = 'Success';
+							classname = 'success';
+						}
+						var trxcode = item.trxcode;
+						if (item.trxcode == null) {
+							status = '';
+						}
+						option += `<tr>
+									<td class="text-center">${item.branchCode}</td>
+									<td>${item.branchName}</td>
+									<td class="text-center">${trxcode}</td>
+									<td>${item.message}</td>
+									<td class="text-center"><span class="badge badge-${classname}">${status}</span></td>
+								</tr>`
+					})
+					$('#voucherLogTbl tbody').empty();
+					$('#voucherLogTbl tbody').append(option);
+					$('#voucherLogTbl').DataTable({});
+
+					$('#vouchermodalhead').text('Posting Logs');
+					$('#exampleModalVoucher').modal('show');
+				})
+			}).fail(function () {
+				swal('Warning!', 'Something Went Wrong!', 'warning');
+			})
+		}
+		function PostAllToCBSInd() {
+            var formData = $('#FormId').serialize();
+            $('#loader').show();
+			$.ajax({
+				url: '/CBSPosting/PostAllToCBSInd',
+				type: 'Post',
+				data: formData
+			}).done(function (data) {
+				console.log(data);
+				swal('Success!', 'Successfully Posted', 'success').then(function () {
+                    console.log(data)
+                    $('#loader').hide();
+					var table = $('#voucherLogTbl').DataTable();
+					table.destroy();
+
+					var option = '';
+					$.each(data, function (i, item) {
+						var status = 'Failed';
+						var classname = 'danger';
+						if (item.status == 1) {
+							status = 'Success';
+							classname = 'success';
+						}
+						var trxcode = item.trxcode;
+						if (item.trxcode == null) {
+							status = '';
+						}
+						option += `<tr>
+									<td class="text-center">${item.branchCode}</td>
+									<td>${item.branchName}</td>
+									<td class="text-center">${trxcode}</td>
+									<td>${item.message}</td>
+									<td class="text-center"><span class="badge badge-${classname}">${status}</span></td>
+								</tr>`
+					})
+					$('#voucherLogTbl tbody').empty();
+					$('#voucherLogTbl tbody').append(option);
+					$('#voucherLogTbl').DataTable({});
+
+					$('#vouchermodalhead').text('Posting Logs');
+					$('#exampleModalVoucher').modal('show');
+				})
+			}).fail(function () {
+				swal('Warning!', 'Something Went Wrong!', 'warning');
+			})
+		}
+
+		function PostAllUnionToCBS(branchType) {
+			var formData = $('#FormId').serialize();
+			var periodId = $('#periodId').val();
+            $('#loader').show();
+
+			if (branchType == 'branch') {
+				$.ajax({
+					url: '/CBSPosting/PostAllUnionToCBS',
+					type: 'Post',
+					data: formData
+				}).done(function (data) {
+					swal('Success!', 'Successfully Posted', 'success').then(function () {
+                        console.log(data)
+                        $('#loader').hide();
+
+						var table = $('#voucherLogTbl').DataTable();
+						table.destroy();
+
+						var option = '';
+						$.each(data, function (i, item) {
+							var status = 'Failed';
+							var classname = 'danger';
+							if (item.status == 1) {
+								status = 'Success';
+								classname = 'success';
+							}
+							var trxcode = item.trxcode;
+							if (item.trxcode == null) {
+								status = '';
+							}
+							option += `<tr>
+									<td class="text-center">${item.branchCode}</td>
+									<td>${item.branchName}</td>
+									<td class="text-center">${trxcode}</td>
+									<td>${item.message}</td>
+									<td class="text-center"><span class="badge badge-${classname}">${status}</span></td>
+								</tr>`
+						})
+						$('#voucherLogTbl tbody').empty();
+						$('#voucherLogTbl tbody').append(option);
+						$('#voucherLogTbl').DataTable({});
+
+						$('#vouchermodalhead').text('Posting Logs');
+						$('#exampleModalVoucher').modal('show');
+					})
+				})
+					.fail(function (err) {
+						swal('Warning!', 'Something Went Wrong!', 'warning');
+					});
+			}
+			if (branchType == 'zone') {
+
+			}
+
+		}
+
+
+        function ajaxGetAllPostedVoucherApi(response) {
+			console.log(response);
+			//var table = $('#PostedVoucherTbl').DataTable();
+			//table.destroy();
+
+            var option = '';
+			$.each(response, function (i, item) {
+				var status = 'Failed';
+				var className = 'danger';
+				if (item.status == 'Y') {
+					status = 'Posted';
+					className = 'success';
+				}
+
+				var refCode = item.refCode;
+				if (item.refCode == null) {
+					refCode = '';
+				}
+				if (item.status == 'Y') {
+					option += `<tr>
+								<td class="text-center">${item.branchCode}</td>
+								<td>${item.branchName}</td>
+								<td class="text-center">${formatDate1(item.postingDate)}</td>
+								<td class="text-center"><span class="badge badge-${className}">${status}</span></td>
+								<td class="text-center">${refCode}</td>
+								<td>${item.message}</td>
+								<td></td>
+							</tr>`;
+				}
+				else {
+					option += `<tr>
+								<td class="text-center">${item.branchCode}</td>
+								<td>${item.branchName}</td>
+								<td class="text-center">${formatDate1(item.postingDate)}</td>
+								<td class="text-center"><span class="badge badge-${className}">${status}</span></td>
+								<td class="text-center">${refCode}</td>
+								<td>${item.message}</td>
+								<td><a href="javascript:void(0)" class="btn btn-success" onclick="PostSingleVoucherById('${item.uniqueKey}')">Re-Try</a></td>
+							</tr>`;
+				}
+                
+            })
+			$('#PostedVoucherTbl tbody').empty();
+			$('#PostedVoucherTbl tbody').append(option);
+			$('#logHead').text('Posted Voucher Logs');
+			//$('#PostedVoucherTbl').DataTable({});
+		}
+		function ajaxGetAllPostedPayOrderApi(response) {
+			console.log(response);
+			var table = $('#PostedVoucherTbl').DataTable();
+			table.destroy();
+
+            var option = '';
+			$.each(response, function (i, item) {
+				var status = 'Failed';
+				var className = 'danger';
+				if (item.status == 'Y') {
+					status = 'Posted';
+					className = 'success';
+				}
+
+				var refCode = item.refCode;
+				if (item.refCode == null) {
+					refCode = '';
+				}
+
+                option += `<tr>
+								<td class="text-center">${item.branchCode}</td>
+								<td>${item.branchName}</td>
+								<td class="text-center">${formatDate1(item.postingDate)}</td>
+								<td class="text-center"><span class="badge badge-${className}">${status}</span></td>
+								<td class="text-center">${refCode}</td>
+								<td>${item.message}</td>
+							</tr>`;
+            })
+			$('#PostedVoucherTbl tbody').empty();
+			$('#PostedVoucherTbl tbody').append(option);
+			$('#logHead').text('Posted Voucher Logs');
+			$('#PostedVoucherTbl').DataTable({});
+		}
+		
+		function PostSingleVoucherById(unique) {
+			console.log(unique);
+			var periodId = $('#periodId').val();
+			Common.Ajax('GET', '/CBSPosting/PostSingleVoucherByLogIdAPI?unique=' + unique + '&type=' + $('#searchType').val() + '&periodId=' + periodId, [], 'json', ajaxPostSingleVoucherByLogId, false);
+		}
+		function ajaxPostSingleVoucherByLogId(res) {
+			if (res == 'ok') {
+				swal('Success', 'Posted Successfully', 'success').then(function () {
+					location.reload();
+				});
+			}
+		}
+
+		function ajaxGetAllPostedSalaryApi(response) {
+			console.log(response);
+			var table = $('#PostedVoucherTbl').DataTable();
+			table.destroy();
+
+			var option = '';
+			$.each(response, function (i, item) {
+				var status = 'Failed';
+				var className = 'danger';
+				if (item.status == 'Y') {
+					status = 'Posted';
+					className = 'success';
+				}
+
+				var refCode = item.refCode;
+				if (item.refCode == null) {
+					refCode = '';
+				}
+
+				option += `<tr>
+								<td class="text-center">${item.branchCode}</td>
+								<td>${item.branchName}</td>
+								<td class="text-center">${formatDate1(item.postingDate)}</td>
+								<td class="text-center"><span class="badge badge-${className}">${status}</span></td>
+								<td class="text-center">${refCode}</td>
+								<td>${item.message}</td>
+							</tr>`;
+			})
+			$('#PostedVoucherTbl tbody').empty();
+			$('#PostedVoucherTbl tbody').append(option);
+			$('#logHead').text('Posted Salary Logs');
+			$('#PostedVoucherTbl').DataTable({});
+		}
+
+		function GetAllPostedUnionApi(response) {
+			console.log(response);
+			var table = $('#PostedVoucherTbl').DataTable();
+			table.destroy();
+
+			var option = '';
+			$.each(response, function (i, item) {
+				var status = 'Failed';
+				var className = 'danger';
+				if (item.status == 'Y') {
+					status = 'Posted';
+					className = 'success';
+				}
+
+				var refCode = item.refCode;
+				if (item.refCode == null) {
+					refCode = '';
+				}
+
+				option += `<tr>
+								<td class="text-center">${item.branchCode}</td>
+								<td>${item.branchName}</td>
+								<td class="text-center">${formatDate1(item.postingDate)}</td>
+								<td class="text-center"><span class="badge badge-${className}">${status}</span></td>
+								<td class="text-center">${refCode}</td>
+								<td>${item.message}</td>
+							</tr>`;
+			})
+			$('#PostedVoucherTbl tbody').empty();
+			$('#PostedVoucherTbl tbody').append(option);
+			$('#logHead').text('Posted Union Sub. Logs');
+			$('#PostedVoucherTbl').DataTable({});
+		}
+		function formatDate1(date) {
+			date = new Date(date);
+			var year = date.getFullYear(),
+				month = date.getMonth() + 1, // months are zero indexed
+				day = date.getDate(),
+				hour = date.getHours(),
+				minute = date.getMinutes(),
+				second = date.getSeconds(),
+				hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+				minuteFormatted = minute < 10 ? "0" + minute : minute,
+				morning = hour < 12 ? "AM" : "PM";
+
+			return month + "/" + day + "/" + year;
+		}
+
+	</script>
+}

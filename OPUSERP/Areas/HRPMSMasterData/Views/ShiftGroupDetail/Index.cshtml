@@ -1,0 +1,399 @@
+﻿@model ShiftGroupDetailViewModel
+@{
+    ViewData["TitleMD"] = Model.fLang.title;
+    Layout = "~/Areas/HRPMSMasterData/Views/Shared/_MasterDataForm.cshtml";
+}
+
+@section StyleMD{
+    <style>
+        .redStar {
+            color: red;
+        }
+		.input{
+			margin-left: 5px;
+		}
+    </style>
+}
+
+
+
+@*<br />
+<hr />*@
+@*<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">@Model.fLang.title</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="resultTable">
+                    <thead>
+                        <tr>
+                            <th>@Model.fLang.shiftGroupMaster</th>
+                            <th>@Model.fLang.weekDay</th>
+                            <th>@Model.fLang.startTime</th>
+                            <th>@Model.fLang.endTime</th>
+                            <th>@Model.fLang.isHoliday</th>
+                            <th>@Model.fLang.action</th>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.shiftGroupDetailslist) 
+                        {
+                            <tr>
+                                <td>@data.shiftGroupMaster.shiftName</td>
+                                <td>@data.weekDay</td>
+                                <td>@data.startTime</td>
+                                <td>@data.endTime</td>
+                                <td>@data.holiday</td>
+                                <td>
+                                    <a class="btn btn-success" onclick="Edit(@data.Id,'@data.shiftGroupMasterId','@data.weekDay', '@data.startTime', '@data.endTime', '@data.holiday')" href="#"><i class="fa fa-edit"></i></a>
+                                    <a class="btn btn-danger" href="#"><i class="fa fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>*@
+    @*<div class="card" style="width: 100%;">
+        <div class="card-body">
+            <h5 class="card-title" style="color: black">Add New Shift</h5>
+            <hr>
+            @*<div class="container">
+                <form asp-area="HRPMSMasterData" asp-controller="ShiftGroupDetail" asp-action="Index" method="post" data-parsley-validate="parsley">
+
+                   <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="form-group row">
+                        <input type="hidden" name="shiftMasterId" id="shiftMasterId" value="0" />
+
+                        <label for="shiftGroupMasterId" class="col-sm-2 col-form-label">@Model.fLang.shiftGroupMaster <span style="float:right;" class="redStar">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="hidden" id="editId" name="editId" value=0 />
+                            <select name="shiftGroupMasterId" id="shiftGroupMasterId" class="form-control" data-parsley-required="true">
+                                <option value="">Select</option>
+                                @foreach (var data in Model.shiftGroupMasterslist)
+                                {
+                                    <option value="@data.Id">@data.shiftName</option>
+                                }
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="weekDay" class="col-sm-2 col-form-label">@Model.fLang.weekDay <span style="float:right;" class="redStar">*</span></label>
+                        <div class="col-sm-10">
+                            <select name="weekDay" id="weekDay" class="form-control" data-parsley-required="true">
+                                <option value="">Select Day</option>
+                                <option value="Saturday">Saturday</option>
+                                <option value="Sunday">Sunday</option>
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="startTime" class="col-sm-2 col-form-label">@Model.fLang.startTime <span style="float:right;" class="redStar">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="time" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="startTime" id="startTime">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="endTime" class="col-sm-2 col-form-label">@Model.fLang.endTime <span style="float:right;" class="redStar">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="time" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="endTime" id="endTime">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="holiday" class="col-sm-2 col-form-label">@Model.fLang.isHoliday</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" name="holiday" id="holiday">
+                                <option value="False">False</option>
+                                <option value="True">True</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr />
+                    <button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>
+
+                </form>
+            </div>
+        </div>
+    </div>*@
+
+    <div>
+        <div class="card-header" style="display: flex;background-color: #A9CCE3;justify-content: space-between; align-items: center;">
+            <h3 style=" width: 100%; margin: 10px; border-radius: 4px; text-align:center;">
+                @Model.fLang.title
+            </h3>
+
+            <a class='btn btn-info' style="float: right;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=1240'><i class="fas fa-backward"></i></a>
+
+        </div>
+        @*<h3 style="background-color: #A9CCE3; width: 100%; margin: 10px; border-radius: 4px; text-align:center;">
+            @Model.fLang.title
+        </h3>*@
+        <div style="height: 550px; overflow-y: scroll;">
+            @foreach (var data in Model.shiftGroupWithDetails)
+            {
+                <div style="background-color: #A9CCE3; width: 100%; margin: 10px; padding: 1px; border-radius: 10px;">
+                    <div class="row">
+                        <div class="col-md-2" style="display: flex;align-items: center;">
+                            <div class="card" style="background-color: #A9CCE3;width: 100%;border: transparent;">
+                                <div class="card-body text-center">
+                                    <input type="hidden" value="@data?.shiftGroupMaster?.Id" class="shiftGroupMasterId" />
+                                    <p><strong style="font-size:20px;">Shift</strong></p>
+                                    <p>@data?.shiftGroupMaster?.shiftName</p>
+                                    <a href="#" class="btn btn-info btn-sm" onclick="AddDay(@data.shiftGroupMaster?.Id)" style="border-radius: 30px;">Add</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-10 row p-1" style="background-color: #A3E4D7;">
+                            @foreach (var item in data.shiftGroupDetail)
+                            {
+                                <div class="col-md-12 row text-center mb-1">
+                                    <div class="input" style="width:10%;">
+                                        <input class="form-control" type="text" value="Week Day :" readonly />
+                                    </div>
+                                    <div class="input" style="width:13%;">
+                                        <input class="form-control bg-light" readonly type="text" name="weekDay" value="@item.weekDay" />
+                                    </div>
+                                    <div class="input ml-3" style="width:10%;">
+                                        <input class="form-control" type="text" value="Start Time :" readonly />
+                                    </div>
+                                    <div class="input" style="width:10%;">
+                                        <input class="form-control bg-light" readonly type="text" name="startTime" value="@item.startTime" />
+                                    </div>
+                                    <div class="input ml-3" style="width:10%;">
+                                        <input class="form-control" type="text" value="End Time :" readonly />
+                                    </div>
+                                    <div class="input" style="width:7%;">
+                                        <input class="form-control bg-light" readonly type="text" name="endTime" value="@item.endTime" />
+                                    </div>
+                                    <div class="input ml-3" style="width:10%;">
+                                        <input class="form-control" type="text" value="Holi Day :" readonly />
+                                    </div>
+                                    <div class="input" style="width:7%;">
+                                        @if (item.holiday)
+                                        {
+                                            <input class="form-control bg-light" readonly type="text" id="holiday" name="holiday" value="Yes" />
+                                        }
+                                        else
+                                        {
+                                            <input class="form-control bg-light" readonly type="text" id="holiday" name="holiday" value="No" />
+                                        }
+
+                                    </div>
+
+                                    <div class="input-group-append input" style="height: 33px;">
+                                        <button class="btn btn-success btn-sm ml-1" type="button" onclick="Edit(@item.Id,'@data.shiftGroupMaster.Id','@item.weekDay','@item.holidayType', '@item.startTime', '@item.endTime','@item.holiday')"><i class="fas fa-pen"></i></button>
+                                        <a class="btn btn-danger btn-sm ml-1" href="javascript:void(0)" onclick="DeleteMaster(@item.Id)"><i class="fa fa-trash-alt"></i></a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="exampleModalLongTitle">@Model.fLang.title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="container">
+				<form asp-area="HRPMSMasterData" asp-controller="ShiftGroupDetail" asp-action="Index" method="post" data-parsley-validate="parsley">
+
+					@*<div asp-validation-summary="All" class="text-danger"></div>*@
+
+					<div class="form-group row">
+						@*<input type="hidden" name="shiftMasterId" id="shiftMasterId" value="0" />*@
+
+						<label for="shiftGroupMasterId" class="col-sm-3 col-form-label">@Model.fLang.shiftGroupMaster <span style="float:right;" class="redStar">*</span></label>
+						<div class="col-sm-9">
+							<input type="hidden" id="editId" name="shiftMasterId" value=0 />
+							<select name="shiftGroupMasterId" id="shiftGroupMasterId" class="form-control" data-parsley-required="true">
+								<option value="">Select</option>
+								@foreach (var data in Model.shiftGroupMasterslist)
+								{
+									<option value="@data.Id">@data.shiftName</option>
+								}
+
+							</select>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="weekDay" class="col-sm-3 col-form-label">@Model.fLang.weekDay <span style="float:right;" class="redStar">*</span></label>
+						<div class="col-sm-9">
+							<select name="weekDay" id="weekDay" class="form-control" data-parsley-required="true">
+								<option value="">Select Day</option>
+								<option value="Saturday">Saturday</option>
+								<option value="Sunday">Sunday</option>
+								<option value="Monday">Monday</option>
+								<option value="Tuesday">Tuesday</option>
+								<option value="Wednesday">Wednesday</option>
+								<option value="Thursday">Thursday</option>
+								<option value="Friday">Friday</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label for="holiday" class="col-sm-3 col-form-label">@Model.fLang.isHoliday</label>
+						<div class="col-sm-9">
+							<select class="form-control holiday" name="holiday" id="holiday">
+								<option value="False">No</option>
+								<option value="True">Yes</option>
+							</select>
+						</div>
+					</div>
+					<div class="boxx">
+						<div class="form-group row">
+							<label for="holidayType" class="col-sm-3 col-form-label">Holiday Type <span style="float:right;" class="redStar">*</span></label>
+							<div class="col-sm-9">
+								<select class="form-control" name="holidayType" id="holidayType" required>
+									<option value="">Select Type</option>
+									<option value="Full">Full</option>
+									<option value="Half">Half</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group row">
+                            <label for="startTime" class="col-sm-3 col-form-label">@Model.fLang.startTime <span style="float:right;" class="redStar">*</span></label>
+							<div class="col-sm-9">
+								<input type="time" class="form-control" name="startTime" id="startTime" required>
+							</div>
+						</div>
+						<div class="form-group row">
+                            <label for="endTime" class="col-sm-3 col-form-label">@Model.fLang.endTime <span style="float:right;" class="redStar">*</span></label>
+							<div class="col-sm-9">
+								<input type="time" class="form-control" name="endTime" id="endTime" required>
+							</div>
+						</div>
+					</div>
+					<hr />
+					<button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>
+                    <br />
+				</form>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+@section ScriptsMD{
+    <script>
+       
+
+        
+        $(document).ready(function () {
+            $("#shiftgroupdetails").addClass("active");
+            $('#resultTable').DataTable();
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+			});
+
+			$('.holiday').change(function () {
+				if ($(this).val() == 'True') {
+					$('.boxx').hide();
+					$('.boxx #holidayType').attr('required', false);
+					$('.boxx #startTime').attr('required', false);
+					$('.boxx #endTime').attr('required', false);
+				}
+				else {
+					$('.boxx').show();
+					$('.boxx #holidayType').attr('required', true);
+					$('.boxx #startTime').attr('required', true);
+					$('.boxx #endTime').attr('required', true);
+				}
+			})
+  
+        });
+       
+
+        function Edit(Id, shiftGroupMasterId, weekDay, holidayType, startTime, endTime, holiday) {
+            $('#editId').val(Id);      
+            $("#shiftGroupMasterId").val(shiftGroupMasterId);
+            $('#shiftGroupMasterId').attr('readonly', true);
+            $('#shiftGroupMasterId').click(false);
+
+            $('#shiftGroupMasterId').on('mousedown', function (e) {
+                e.preventDefault();
+                this.blur();
+                window.focus();
+            });
+
+            $("#holidayType").val(holidayType);
+
+            $("#weekDay").val(weekDay);
+            $("#startTime").val(startTime);
+            $("#endTime").val(endTime);
+            $("#holiday").val(holiday);        
+            $('#exampleModalCenter').modal('show');
+        }
+        function AddDay(Id) {
+           // $("#shiftMasterId").val('');
+            $("#shiftGroupMasterId").val(Id);
+            $('#shiftGroupMasterId').attr('readonly', true);
+            $('#shiftGroupMasterId').click(false);
+
+
+            $("#weekDay").val('');
+            $("#holidayType").val('');
+            $("#startTime").val('');
+            $("#endTime").val('');
+            $("#holiday").val('False');
+            $('#exampleModalCenter').modal('show');
+        }
+
+		
+
+      
+
+       
+
+     
+        function DeleteMaster(id) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+
+                $.ajax({
+                    url: '@Url.Action("DeleteShiftById", "ShiftGroupDetail")',
+                    data: { Id: id },
+                    type: 'POST',
+                })
+                    .done(function () {
+                        swal('', 'Deleted Successfully!', 'success');
+                        window.location.href = "/HRPMSMasterData/ShiftGroupDetail/Index";
+                    })
+                    .fail(function () {
+                        swal('Cancelled', 'It will not be deleted. Please try again later !!!', 'error');
+                    });
+            });
+        }
+    </script>
+}
+
+

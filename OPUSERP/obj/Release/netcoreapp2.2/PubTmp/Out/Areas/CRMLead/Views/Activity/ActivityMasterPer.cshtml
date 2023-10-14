@@ -1,0 +1,152 @@
+﻿@model ActivityMasterViewModel
+@{
+    ViewData["Title"] = "Activities";
+    //Layout = "~/Areas/CRMLead/Views/Shared/_LeadForm.cshtml";
+}
+
+@section Style{
+    <link href="~/Calender/main.css" rel="stylesheet" />
+    <style>
+
+        body {
+            margin: 40px 10px;
+            padding: 0;
+            font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+            font-size: 14px;
+        }
+
+        #calendar {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+    </style>
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-header row">
+        @if (ViewBag.inClient == 1)
+        {
+            <div class="col-9">
+                <h5 class="card-title" style="color: black">Client Information</h5>
+            </div>
+            <div class="col-3">
+                <a href='/CRMClient/Client/ClientsPersonalById?id=@ViewBag.leadId' style="text-decoration:none;"><h6 class="identity-box">@ViewBag.leadName</h6></a>
+
+            </div>
+        }
+        else
+        {
+            <div class="col-9">
+                <h5 class="card-title" style="color: black">Lead Information</h5>
+            </div>
+            <div class="col-3">
+                <a href='/CRMLead/LeadManagement/LeadsPersonalById?id=@ViewBag.leadId' style="text-decoration:none;"><h6 class="identity-box">@ViewBag.leadName</h6></a>
+
+            </div>
+        }
+    </div>
+    <div class="card-body">
+        <div style="text-align:right;margin:-10px">
+            <a value="Show All" style="background-color:#024972;" class="btn btn-info btn-sm fa-pull-left" href="~/CRMLead/Activity/ActivityMasterViewAll/@ViewBag.leadId" style="float:left; ">Show All</a>
+            <a href="/CRMLead/Activity/ActivityMasterPersonal?id=@ViewBag.leadId&leadName=@ViewBag.leadName" style="background-color:#024972;" class="btn btn-info btn-sm pull-right">Add New</a>
+        </div>
+    </div>
+</div>
+<div id='calendar'></div>
+@section Scripts{
+    <script src="~/Calender/main.js"></script>
+    <script src="~/Calender/theme-chooser.js"></script>
+    <script>
+        $(document).ready(function () {
+            
+        });
+
+        function ajaxActivityDataForCalender(data) {            
+            $.each(data.activityMasterCViewModels, function (i, item) {
+                calenderData.push({
+                    title: item.activityMasters.activityCategory.activityCategoryName,
+                    start: formatDate(item.activityMasters.createdAt)
+                })
+            })            
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: ''
+                },
+                initialDate: Date.now(),
+                navLinks: true, // can click day/week names to navigate views
+                selectable: true,
+                selectMirror: true,
+                //select: function (arg) {
+                //    var title = prompt('Event Title:');
+                //    if (title) {
+                //        calendar.addEvent({
+                //            title: title,
+                //            start: arg.start,
+                //            end: arg.end,
+                //            allDay: arg.allDay
+                //        })
+                //    }
+                //    calendar.unselect()
+                //},
+                //eventClick: function (arg) {
+                //    alert(arg.title)
+                //},
+                editable: true,
+                dayMaxEvents: true, // allow "more" link when too many events
+                events: function (info, successCallback, failureCallback) {
+                    var calenderData = [];
+                    jQuery.get('/CRMLead/Activity/ActivityForCalender?id=@ViewBag.leadId', function (data) {
+
+                        $.each(data.activityMasterCViewModels, function (i, item) {
+                            calenderData.push({
+                                title: item.activityMasters.activityCategory.activityCategoryName,
+                                start: formatDate(item.activityMasters.createdAt),
+                                url: '/CRMLead/Activity/ActivityMasterView/' + item.activityMasters.Id
+                            })
+                            console.log(item)
+                        }) 
+                        successCallback(calenderData);
+                    });                    
+                }
+            });
+
+            calendar.render();
+        });
+
+
+        function formatDate(date) {
+            date = new Date(date);
+            var year = date.getFullYear(),
+                month = date.getMonth() + 1, // months are zero indexed
+                day = date.getDate()
+            //hour = date.getHours(),
+            //minute = date.getMinutes(),
+            //second = date.getSeconds(),
+            //hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+            //minuteFormatted = minute < 10 ? "0" + minute : minute,
+            //morning = hour < 12 ? "am" : "pm";
+            if (month < 10) {
+                month = '0' + month
+            }
+            if (day < 10) {
+                day = '0' + day
+            }
+            return year + "-" + month + "-" + day;
+        }
+
+    </script>
+}
+
+
+
+
+
+
+

@@ -1,0 +1,37 @@
+Salary Voucher API
+------------------
+http://10.100.1.35/api/bdbl/SalaryVoucher/{year}/{month}/{sbu}/{type}
+http://10.100.1.35/api/bdbl/SalaryVoucher/2022/January/BDBL/headoffice
+
+
+Salary Sheet API (HeadWise)
+---------------------------
+http://10.100.1.35/api/bdbl/SalarySheetByYearMonthAndSBU/{year}/{month}/{sbu}/{empId}
+http://10.100.1.35/api/bdbl/SalarySheetByYearMonthAndSBU/2022/January/0/0
+
+http://10.100.1.35/api/bdbl/SalarySheetByYearMonthAndSBU/2022/January/BDBL/0
+
+http://10.100.1.35/api/bdbl/SalarySheetByYearMonthAndSBU/2022/January/0/2321
+
+http://10.100.1.35/api/bdbl/SalarySheetByYearMonthAndSBU/2022/January/BDBL/2321
+
+
+Net Pay API
+-----------
+http://10.100.1.35/api/bdbl/NetPayByYearMonthAndSBU/{year}/{month}/{sbu}/{empId}
+http://10.100.1.35/api/bdbl/NetPayByYearMonthAndSBU/2022/January/0/0
+
+
+Voucher Post
+------------
+http://10.100.1.35/api/bdbl/PostSalaryVoucher/{salaryPeriodId}/{branchId}
+http://10.100.1.35/api/bdbl/PostSalaryVoucher/53/156
+
+Voucher Posted Data
+-------------------
+http://10.100.1.35/api/bdbl/GetPostedVoucher/{periodId}/{branchId}
+http://10.100.1.35/api/bdbl/GetPostedVoucher/53/156
+
+
+
+

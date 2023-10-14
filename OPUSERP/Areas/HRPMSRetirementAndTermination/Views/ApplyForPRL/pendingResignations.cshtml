@@ -1,0 +1,349 @@
+﻿@model PRLApplicationViewModel
+@{
+    ViewData["Title"] = "pendingResignations";
+}
+
+<style>
+    .page-link {
+        color: black !important;
+        font-size: 15px !important;
+        padding: 8px !important;
+        line-height: 20px !important;
+    }
+
+    .fas {
+        margin-top: 10px;
+        font-size: 25px;
+    }
+
+    .active {
+        color: darkcyan;
+    }
+
+    .c {
+        min-height: 300px;
+        background-color: #FDF2E9;
+    }
+
+        .c .card-footer {
+            height: 50px;
+            background-color: #E9F7EF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+    /*.cb {
+        height: 464px;
+    }*/
+
+    .c .cb {
+        transition: .3s all;
+        /*cursor: pointer;*/
+    }
+
+    .c:hover {
+        background-color: #D6DBE9;
+    }
+
+    #myInput1 {
+        width: 41%;
+        /*position: absolute;*/
+        right: 18px;
+        box-shadow: none;
+        margin-left: 25%;
+    }
+
+    .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+    }
+
+    a i {
+        font-size: 15px !important;
+        margin: 0 !important;
+    }
+
+    .pagination > li > a,
+    .pagination > li > span {
+        position: relative;
+        float: left;
+        padding: 6px 12px;
+        margin-left: -1px;
+        line-height: 1.42857143;
+        color: #337ab7;
+        text-decoration: none;
+        background-color: #fff;
+        border: 1px solid #ddd;
+    }
+
+    .pagination > .active > a,
+    .pagination > .active > a:focus,
+    .pagination > .active > a:hover,
+    .pagination > .active > span,
+    .pagination > .active > span:focus,
+    .pagination > .active > span:hover {
+        z-index: 3;
+        color: #fff;
+        cursor: default;
+        background-color: #337ab7;
+        border-color: #337ab7;
+    }
+
+    .pagination-container {
+        margin: 20px 0;
+        display: flex;
+        justify-content: flex-end;
+    }
+</style>
+<div class="row">
+    <div class="col-10">
+        <i class="fas fa-th text-left mx-2" style="font-size: 24px; margin: 5px; background-color: lightgray; padding: 5px; cursor: pointer !important;"></i>
+        <i class="fas fa-list-alt text-left mx-2" style="font-size: 24px; margin: 5px; background-color: lightgray; padding: 5px; cursor: pointer !important;"></i>
+    </div>
+    <div class="col-2">
+        @*<a class='btn btn-info ' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1&perentId=1295'><i style="margin: 4px; " class="fas fa-backward"></i></a>*@
+        <a class='btn btn-info mr-4 float-right' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=5753'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+    </div>
+</div>
+<div class="row clearfix" id="listView" style="display: none;">
+    <div class="col-12">
+        <div class="card mb-4">
+            <br />
+            <div class="row">
+                <div class="col-md-10">
+                    <h6 class="m-0 font-weight-bold text-primary">Ongoing resignations</h6>
+                </div>
+                <div class="col-md-2">
+                    @*<button type="button" class="btn btn-default btn-sm" style="width:100px;background-color:#024972;color:white;float:right;" onclick="location.href='@Url.Action("CreatePO", "PurchaseOrder")'">Create PO</button>*@
+                </div>
+            </div>
+            <hr />
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="requisitionListTable">
+                    <thead>
+                        <tr>
+                            <th>Resignation Date</th> 
+                            <th>Last Working Date</th>
+                            <th>Reason for Resignation</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.resignInformation)
+                        {
+                        <tr>
+                            <td>@data.resignDate?.ToString("dd-MMM-yyyy")</td>
+                            <td>@data.lastWorkingDate?.ToString("dd-MMM-yyyy")</td>
+                            <td>@data.resignReason</td>
+                            <td>
+                                @if (data.status == 1)
+                                {
+                                    <span class="badge badge-secondary">Ongoing</span>
+                                }
+
+                            </td>
+                            <td>
+                               
+                                @if (@data.status != 2)
+                                {
+                                    <a class="btn btn-success" href="javascript:void(0)" onclick="SatusUpdate(@data.Id,2)">Approve</a>
+                                }
+                                @*@if (@data.status != 3)
+                                {
+                                    <a class="btn btn-danger" href="javascript:void(0)" onclick="SatusUpdate(@data.Id,3)">Reject</a>
+
+                                }*@
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row clearfix" id="gridView">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">Ongoing resignations</h6>
+
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="row" id="cards">
+                    @foreach (var data in Model.resignInformation)
+                    {
+                        <div class="col-md-3 mb-1 searchdiv">
+                            <a href="javascript:void(0)" style="text-decoration: none; color: black; cursor: default;">
+
+                                <div class="card c " style="font-size: 16px;">
+
+
+                                    <div class="card-body cb text-center">
+
+                                        <strong>Resignation Date</strong><br />
+                                        @data.resignDate?.ToString("dd-MMM-yyyy")<br /><br />
+
+                                        <strong>Last Working Date</strong><br />
+                                        @data.lastWorkingDate?.ToString("dd-MMM-yyyy")<br /><br />
+
+                                        <strong>Reason for Resignation</strong><br />
+                                        @data.resignReason<br /><br />
+
+
+
+                                        <strong>Status:</strong><br />
+                                        @if (data.status == 1)
+                                        {
+                                            <span class="badge badge-secondary">Ongoing</span>
+                                        }
+
+                                        <br />
+                                    </div>
+                                    <div class="card-footer text-center">
+                                        @if (@data.status != 2)
+                                        {
+                                            <a class="btn btn-success" href="javascript:void(0)" onclick="SatusUpdate(@data.Id,2)">Approve</a>
+                                        }
+                                    </div>
+
+                                </div>
+                            </a> <br />
+
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/Assets/paginathing.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var orgFullTitle = "Pending Resignation List";
+            //$('#requisitionListTable').DataTable();
+            $('#requisitionListTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        title: orgFullTitle,
+                        messageTop: 'Pending Resignation List',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        title: orgFullTitle,
+                        messageTop: 'Pending Resignation List'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: orgFullTitle,
+                        messageTop: 'Pending Resignation List',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+            $("#education").addClass("active");
+            $('#gridView').show();
+            $('#listView').hide();
+            $('.fas').removeClass('active');
+            $('.fa-th').addClass('active');
+            if ($("#cards").length != null) {
+                $('#cards').paginathing({
+                    perPage: 8,
+                    prevNext: true,
+                    firstLast: true,
+                    prevText: '&laquo;',
+                    nextText: '&raquo;',
+                    firstText: 'First',
+                    lastText: 'Last',
+                    containerClass: 'pagination-container',
+                    ulClass: 'pagination',
+                    liClass: 'page',
+                    activeClass: 'active',
+                    disabledClass: 'disabled',
+                    pageNumbers: true,
+                    insertAfter: '#cards'
+                })
+            }
+        });
+        $('.fa-list-alt').click(function () {
+            $('#listView').show();
+            $('#gridView').hide();
+            $('.fas').removeClass('active');
+            $('.fa-list-alt').addClass('active');
+        })
+        $('.fa-th').click(function () {
+            $('#listView').hide();
+            $('#gridView').show();
+            $('.fas').removeClass('active');
+            $('.fa-th').addClass('active');
+        })
+         function SatusUpdate(Id, status) {
+            var message = "";
+            if (status == 2) {
+                message = "Approve"
+            } else if (status == 3) {
+                message = "Reject"
+            }
+            swal({
+                title: 'Are you sure?', text: 'Do you want to ' + message+'  this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes!'
+            }).then(function () {
+                $.ajax({
+                    url: '@Url.Action("ApproveResignations", "ApplyForPRL")',
+                    data: { Id: Id, status: status },
+                    type: 'POST',
+                })
+                    .done(function (res) {
+                        console.log(res);
+                        swal('', message + ' Successfully!', 'success').then(function () {
+                            location.reload();
+                        })
+                       // swal('', , 'success');
+                        //window.location.href = "/HRPMSRecruitment/ValidApplicants/Index";
+                    })
+                    .fail(function (res) {
+                        console.log(res);
+                        swal('Cancelled', 'Please try again later !!!', 'error');
+                    });
+            });
+        }
+
+
+    </script>
+}

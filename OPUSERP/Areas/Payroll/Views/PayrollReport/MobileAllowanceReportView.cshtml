@@ -1,0 +1,154 @@
+﻿@model PayrollReportViewModel
+@{
+	ViewData["Title"] = "Mobile Allowance Report View";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<style>
+
+	.print-card-body {
+		width: 100%;
+		padding-bottom: 10px;
+	}
+
+	.vartical-table th {
+		width: 25%;
+	}
+
+	.vartical-table td {
+		width: 25%;
+	}
+
+	.table td, .table th {
+		padding: .3rem;
+		font-size: 14px;
+		border: 1px solid black !important;
+	}
+
+	table {
+		page-break-inside: auto;
+		border-collapse: collapse;
+		border: 1px solid black !important;
+	}
+
+	tr {
+		page-break-inside: avoid;
+		page-break-after: auto;
+		border: 1px solid black !important;
+	}
+
+	thead {
+		display: table-header-group;
+		border: 1px solid black !important;
+	}
+
+	tfoot {
+		display: table-footer-group;
+		border: 1px solid black !important;
+	}
+
+	h6 {
+		font-size: 14px;
+		background-color: gray;
+		color: white !important;
+		padding: 3px;
+	}
+</style>
+<div class="print-card" style="width: 100%;">
+	<div class="print-card-body">
+
+		<div class="container-fluid">
+			<div class="row" style="padding-top:0px;">
+				<div class="col-2">
+					<img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="BDBL Logo" style="height:80px;" />
+				</div>
+				<div class="col-8">
+					<div style="color:black;text-align:center;">
+						<h3 style="font-size:20px;">@Model.companies.FirstOrDefault()?.companyName</h3>
+						<h4 style="font-size:18px;"> Mobile Allowances for the month of @Model.mobileOrCarAllowanceVms?.FirstOrDefault()?.periodName.Split("-")[1], @Model.mobileOrCarAllowanceVms?.FirstOrDefault()?.periodName.Split("-")[2] </h4>
+						<br />
+					</div>
+				</div>
+				<div class="col-2">
+
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid ">
+			<div class="col-12">
+				<h3 style="font-size:18px;color:black"> </h3>
+			</div>
+		</div>
+		<br />
+		<div class="container-fluid" style="color:black;">
+			@foreach (var item in Model.mobileOrCarAllowanceVms?.Select(x => x.designationName).Distinct())
+			{
+				<p style="font-weight: bold">@item</p>
+				<table class="table table border" style="border:1px solid black !important">
+					<thead>
+						<tr>
+							<th style="width:3%; text-align: center;">SL</th>
+							<th style="width:5%; text-align: center;">Emp Id </th>
+							<th style="width:25%; text-align: center;">Emp Name </th>
+							<th style="width:15%; text-align: center;">Amount </th>
+							<th style="width:15%; text-align: center;">Revenue </th>
+							<th style="width:15%; text-align: center;">Net Pay </th>
+							<th style="width:15%; text-align: center;">Account No</th>
+						</tr>
+					</thead>
+					<tbody>
+						@{
+							int i = 0;
+						}
+						@foreach (var data in Model.mobileOrCarAllowanceVms?.Where(x => x.designationName == item))
+						{
+							i++;
+							<tr>
+								<td style="text-align: center;">@i</td>
+								<td style="text-align: center;">@data.empCode</td>
+								<td>@data.empName</td>
+								<td style="text-align: right;">@data.amount?.ToString("N2")</td>
+								<td style="text-align: right;">@data.Revenue?.ToString("N2")</td>
+								<td style="text-align: right;">@data.NetPay?.ToString("N2")</td>
+								<td style="text-align: center;">@data.sbAccount</td>
+							</tr>
+						}
+						<tr>
+							<td style="text-align: center;" colspan="2">Total Emp: @i</td>
+							<td colspan="1" style="text-align: right;">Total</td>
+							<td style="text-align: right;">@Model.mobileOrCarAllowanceVms?.Where(x => x.designationName == item).Select(x => x.amount).Sum()?.ToString("N2")</td>
+							<td style="text-align: right;">@Model.mobileOrCarAllowanceVms?.Where(x => x.designationName == item).Select(x => x.Revenue).Sum()?.ToString("N2")</td>
+							<td style="text-align: right;">@Model.mobileOrCarAllowanceVms?.Where(x => x.designationName == item).Select(x => x.NetPay).Sum()?.ToString("N2")</td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			}
+			<table class="table table border" style="border:1px solid black !important">
+					<thead>
+						<tr>
+							<th style="width:8%; text-align: center;">Total: @Model.mobileOrCarAllowanceVms?.Select(x => x.empCode).Count()</th>
+							<th style="width:25%; text-align: right;">Grand Total </th>
+							<th style="width:15%; text-align: right;">@Model.mobileOrCarAllowanceVms?.Select(x => x.amount).Sum()?.ToString("N2") </th>
+							<th style="width:15%; text-align: right;">@Model.mobileOrCarAllowanceVms?.Select(x => x.Revenue).Sum()?.ToString("N2") </th>
+							<th style="width:15%; text-align: right;">@Model.mobileOrCarAllowanceVms?.Select(x => x.NetPay).Sum()?.ToString("N2") </th>
+							<th style="width:15%; text-align: center;"></th>
+						</tr>
+					</thead>
+			</table>
+		</div>
+		<br /><br /><br /><br />
+		<div class="row text-center" style="color: black;">
+			<div class="col-4">
+				<p style="border-top: 1px solid;">Prepared By</p>
+			</div>
+			<div class="col-4">
+				<p style="border-top: 1px solid;">Checked By</p>
+			</div>
+			<div class="col-4">
+				<p style="border-top: 1px solid;">Approved By</p>
+			</div>
+		</div>
+
+	</div>
+</div>

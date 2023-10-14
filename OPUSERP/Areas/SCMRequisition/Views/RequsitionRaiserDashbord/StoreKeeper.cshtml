@@ -1,0 +1,382 @@
+﻿@model RequisitionRaiserDashViewModel
+@{
+	ViewData["Title"] = "Dashboard";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+
+	.module {
+		width: 100px;
+		margin: 0 0 1em 0;
+		overflow: hidden;
+	}
+
+	.line-clamp {
+		display: -webkit-box;
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;
+	}
+
+	div.card {
+		width: 250px;
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+		text-align: center;
+	}
+
+	div.header {
+		background-color: #4CAF50;
+		color: white;
+		padding: 10px;
+		font-size: 40px;
+	}
+
+	div.container {
+		padding: 10px;
+	}
+
+	.aaa {
+		width: 19.5%;
+		margin-right: 5px;
+	}
+
+		.aaa button {
+			height: 120px !important;
+		}
+
+	.btn {
+		border-radius: 0 !important
+	}
+
+	.a_color {
+		background-color: #ddd;
+		color: #134684 !important;
+	}
+
+	.bbb {
+		width: 32%;
+	}
+
+
+	#raiserDashboard ul {
+		overflow: hidden !important;
+	}
+
+		#raiserDashboard ul li {
+			list-style: none;
+			padding: 0 !important;
+			overflow: hidden;
+		}
+
+	.list-group-item {
+		border-radius: 0 !important;
+	}
+
+	.hover01 figure {
+		-webkit-transform: scale(1);
+		transform: scale(1);
+		-webkit-transition: .3s ease-in-out;
+		transition: .3s ease-in-out;
+	}
+
+		.hover01 figure:hover {
+			-webkit-transform: scale(1.3);
+			transform: scale(1.3);
+		}
+
+	a {
+		text-decoration: none !important;
+	}
+
+	#AllItemLists {
+		width: 100%;
+		height: 722px;
+		overflow: scroll;
+	}
+</style>
+
+<div class="container-fluid mt-4" id="raiserDashboard">
+	<div class="col-md-12">
+		<h3 class="pt-3 pb-2">Approved Requisition</h3>
+		<div class="input-group mb-3">
+			<input type="text" name="name" class="custom-select" id="inputGroupSelect02" placeholder="Search..." value="" />
+			<div class="input-group-append">
+				<label class="input-group-text badge-danger" for="inputGroupSelect02">Search</label>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="col-md-12 row" id="AllItemLists">
+
+</div>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+	<div class="modal-dialog modal-lg">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Details</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<div id="description" style="text-align: center">
+					@*<table>
+							<tr>
+								<td>req</td>
+								<td>date</td>
+								<td>subject</td>
+								<td>type</td>
+							</tr>
+						</table>*@
+				</div>
+				<table class="table table-warning table-hover" id="previewData">
+					<thead>
+						<tr>
+							<td>Sl</td>
+							<td>Photo</td>
+							<td>Name</td>
+							<td>Quantity</td>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+@section Scripts{
+
+	window.onload = function () {
+
+	var options = {
+	animationEnabled: true,
+	title: {
+	text: "ACME Corporation Apparel Sales"
+	},
+	data: [{
+	type: "doughnut",
+	innerRadius: "40%",
+	showInLegend: true,
+	legendText: "{label}",
+	indexLabel: "{label}: #percent%",
+	dataPoints: [
+	{ label: "Department Stores", y: 6492917 },
+	{ label: "Discount Stores", y: 7380554 },
+	{ label: "Stores for Men / Women", y: 1610846 },
+	{ label: "Teenage Specialty Stores", y: 950875 },
+	{ label: "All other outlets", y: 900000 }
+	]
+	}]
+	};
+	$("#doughnut-chart").CanvasJSChart(options);
+
+	}
+
+
+	<script>
+		$(document).ready(function () {
+			myReqisition('Approval process');
+		})
+
+        function formatDate(date) {
+            date = new Date(date);
+            var year = date.getFullYear(),
+                month = date.getMonth() + 1, // months are zero indexed
+                day = date.getDate(),
+                hour = date.getHours(),
+                minute = date.getMinutes(),
+                second = date.getSeconds(),
+                hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+                minuteFormatted = minute < 10 ? "0" + minute : minute,
+                morning = hour < 12 ? "am" : "pm";
+
+            return day + "/" + + month + "/" + year;
+        }
+
+
+
+
+        function myReqisition(status) {
+            Common.Ajax('GET', '/api/SCMRequisition/RequsitionRaiserDashbord/RequisitionList/' + status, [], 'json', ajaxREquisition2, false);
+        }
+
+        function ajaxREquisition2(response) {
+		console.log(response);
+            var option = "";
+            $.each(response, function (i, item) {
+				//href="/SCMRequisition/RequisitionNew/ApproveRequisitionNew?id=${item.Id}"
+                option +=
+					`<a href="/SCMRequisition/RequisitionNew/ApproveRequisitionNew?id=${item.Id}" class="col-md-2 mt-4">
+                                <div class="card  bg-light mb-3 m-0" style="max-width: 10.5rem;height:250px!important">
+                                    <figure>
+                                        <div class="card-body  mr-0" style="height:150px; text-align:center">
+                                            <img src="/../../${item.isPostPR}" alt="PRP" height="50" width="50" class="rounded-circle" />
+                                            <p class="pt-3 module line-clamp">${item.reqNo}</p>
+                                             <p class="pt-1">${formatDate(item.reqDate)}</p>
+                                        </div>
+                                    </figure>
+                                </div>
+                                </a>`
+                //option += '<div class="col-3"><div class="card" onclick="clickNow(event,${item.itemSpecificationId},'${item.specImageUrl }')"> <img class="card-img-top" src="drink-water.png" alt="Card image"><div class="card-body text-center px-0 pt-0" style="font-size: 14px;">Mineral Water-500 ml</div></div></div>'
+            });
+
+            $('#AllItemLists').empty();
+            $('#AllItemLists').append(option);
+        }
+
+		function showDetails(id) {
+		Common.Ajax('GET', '/api/SCMRequisition/RequisitionNew/RequisitionInfoForStockOut/' + id, [], 'json', ajaxREquisition, false);
+		$('#myModal').modal('show');
+		}
+
+		function ajaxREquisition(response) {
+		console.log(response)
+			var option = "";
+			$.each(response, function (i, item) {
+				console.log(item);
+				//$("#description").append('<table class="table table-light"><tr><td><strong>Requisition no.: </strong>' + req + '</td><td><strong>Date: </strong>' + date + '</td></tr><tr><td><strong>Subject: </strong>' + subject + '</td><td><strong>Type: </strong>' + type + '</td></tr></table>');
+				//option += '<div class="col-3"><div class="card" onclick="clickNow(event,${item.itemSpecificationId},'${item.specImageUrl }')"> <img class="card-img-top" src="drink-water.png" alt="Card image"><div class="card-body text-center px-0 pt-0" style="font-size: 14px;">Mineral Water-500 ml</div></div></div>'
+			});
+
+			$('#AllItemLists').empty();
+			$('#AllItemLists').append(option);
+		}
+
+        function formatDate(date) {
+            date = new Date(date);
+            var year = date.getFullYear(),
+                month = date.getMonth() + 1, // months are zero indexed
+                day = date.getDate(),
+                hour = date.getHours(),
+                minute = date.getMinutes(),
+                second = date.getSeconds(),
+                hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+                minuteFormatted = minute < 10 ? "0" + minute : minute,
+                morning = hour < 12 ? "am" : "pm";
+
+            return day + "/" + + month + "/" + year;
+        }
+
+
+
+
+        //function loadRecent() {
+        //    Common.Ajax('GET', '/SCMRequisition/RequisitionNew/GetRecentItems', [], 'json', ajaxRecent, false);
+        //}
+
+        //function ajaxRecent(response) {
+        //    console.log(response);
+        //    var option = "";
+        //    $.each(response, function (i, item) {
+        //        option += `<div class="col-md-2 mt-4">
+        //                                            <div class="card hover01 bg-light mb-3 m-0" style="max-width: 10rem;height:200px!important">
+        //                                                <figure>
+        //                                                    <div class="card-body  mr-0" style="height:150px; text-align:center">
+        //                                                        <a class="text-center"><img style="max-width:100%; max-height:100px;" class="img-fluid" src="../../SKUImages/${item.specImageUrl}" /> </a>
+        //                                                        <p class="pt-3 module line-clamp">${item.specificationName}</p>
+        //                                                    </div>
+        //                                                </figure>
+
+        //                                            </div>
+
+        //                                        </div>
+        //                                    `
+        //        //option += '<div class="col-3"><div class="card" onclick="clickNow(event,${item.itemSpecificationId},'${item.specImageUrl }')"> <img class="card-img-top" src="drink-water.png" alt="Card image"><div class="card-body text-center px-0 pt-0" style="font-size: 14px;">Mineral Water-500 ml</div></div></div>'
+        //    });
+
+        //    $('#AllItemLists').empty();
+        //    $('#AllItemLists').append(option);
+
+
+        //}
+
+        //function loadTop10() {
+        //    Common.Ajax('GET', '/SCMRequisition/RequisitionNew/GetTopTen', [], 'json', ajaxTopTen, false);
+        //}
+
+        //function ajaxTopTen(response) {
+        //    console.log(response);
+        //    var option = "";
+        //    $.each(response, function (i, item) {
+        //        option += `<div class="col-md-2 mt-4">
+
+        //                                            <div class="card hover01 bg-light mb-3 m-0" style="max-width: 10rem;height:200px!important">
+        //                                                <figure>
+        //                                                    <div class="card-body  mr-0" style="height:150px; text-align:center">
+        //                                                        <a class="text-center"><img style="max-width:100%; max-height:100px;" class="img-fluid" src="../../SKUImages/${item.specImageUrl}" /> </a>
+        //                                                        <p class="pt-3 module line-clamp">${item.specificationName}</p>
+        //                                                    </div>
+        //                                                </figure>
+
+        //                                            </div>
+
+        //                                        </div>`
+        //        //option += '<div class="col-3"><div class="card" onclick="clickNow(event,${item.itemSpecificationId},'${item.specImageUrl }')"> <img class="card-img-top" src="drink-water.png" alt="Card image"><div class="card-body text-center px-0 pt-0" style="font-size: 14px;">Mineral Water-500 ml</div></div></div>'
+        //    });
+
+        //    $('#AllItemLists').empty();
+        //    $('#AllItemLists').append(option);
+
+
+        //}
+
+        //function loadFeatured() {
+        //    Common.Ajax('GET', '/SCMRequisition/RequisitionNew/GetFeatured', [], 'json', ajaxFeatured, false);
+        //}
+
+        //function ajaxFeatured(response) {
+        //    console.log(response);
+        //    var option = "";
+        //    $.each(response, function (i, item) {
+        //        option += ` <div class="col-md-2 mt-4">
+
+        //                                <div class="card hover01 bg-light mb-3 m-0" style="max-width: 10rem;height:200px!important">
+        //                                    <figure>
+        //                                        <div class="card-body  mr-0" style="height:150px; text-align:center">
+        //                                            <a class="text-center"><img style="max-width:100%; max-height:100px;" class="img-fluid" src="../../SKUImages/${item.specImageUrl}" /> </a>
+        //                                            <p class="pt-3 module line-clamp">${item.specificationName}</p>
+        //                                        </div>
+        //                                    </figure>
+
+        //                                </div>
+
+        //                                        </div>`
+        //        //option += '<div class="col-3"><div class="card" onclick="clickNow(event,${item.itemSpecificationId},'${item.specImageUrl }')"> <img class="card-img-top" src="drink-water.png" alt="Card image"><div class="card-body text-center px-0 pt-0" style="font-size: 14px;">Mineral Water-500 ml</div></div></div>'
+        //    });
+
+        //    $('#AllItemLists').empty();
+        //    $('#AllItemLists').append(option);
+
+
+        //}
+
+
+        function mySearchFunction() {
+            var input, filter, div, card, a, i, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            div = document.getElementById("AllItemLists");
+            card = div.getElementsByClassName("card");
+            for (i = 0; i < card.length; i++) {
+                a = card[i].getElementsByClassName("card-body")[0];
+                txtValue = a.textContent || a.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    card[i].style.display = "block";
+                } else {
+                    card[i].style.display = "none";
+                }
+            }
+        }
+
+
+	</script>
+}

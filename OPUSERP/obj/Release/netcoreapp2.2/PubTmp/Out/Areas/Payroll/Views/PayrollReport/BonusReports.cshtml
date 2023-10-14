@@ -1,0 +1,245 @@
+﻿@model PayrollReportViewModel
+@{
+	ViewData["Title"] = "Bonus Reports";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Style{
+	<style>
+		ul.ui-autocomplete {
+			z-index: 99999999;
+		}
+
+		.right {
+			text-align: right;
+		}
+
+		.active {
+			color: darkcyan;
+		}
+
+		.c {
+			/*min-height: 300px;*/
+			height: 100px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			color: black;
+		}
+
+			.c a {
+				color: black;
+				outline: none;
+				box-shadow: none !important;
+				border: none;
+			}
+
+			.c .card-footer {
+				height: 50px;
+				background-color: #E9F7EF;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+
+			.c:hover {
+				background-color: lightblue;
+				border: 1px solid black !important;
+			}
+
+		.name:hover {
+			cursor: pointer;
+			color: black;
+		}
+
+		a i {
+			font-size: 20px !important;
+			/*margin: 0 !important;*/
+		}
+
+		.redstar {
+			color: red;
+			float: right
+		}
+	</style>
+}
+
+<div class="card-header  d-flex flex-row align-items-center justify-content-between">
+	<h5 class="m-0 font-weight-bold text-primary">Bonus Reports</h5>
+	<a class='btn btn-info btn-sm' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=10&perentId=3322'>@*<i class="fas fa-backward fa-2x "></i>*@<i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+</div>
+
+<div class="card">
+	<div class="card-body">
+		<div class="container">
+			<div asp-validation-summary="All" class="text-danger"></div>
+			<div class="row">
+				<div class="col-lg-2"></div>
+				<div class="col-lg-8">
+					<input type="hidden" id="employeeInfoId" name="employeeInfoId">
+					<div class="form-group row" id="forReportType">
+						<label for="reportTypeId" class="col-sm-3 col-form-label">Report Type <span class="redstar">*</span></label>
+						<div class="col-sm-9">
+                            <select class="form-control" name="reportTypeId" id="reportTypeId">
+                                @*<option class="form-control" value="1">Voucher Report</option>*@
+                                <option class="form-control" value="">Select</option>
+                                <option class="form-control" value="2">Bonus Sheet</option>
+                                <option class="form-control" value="3">Summary Sheet</option>
+                                <option class="form-control" value="4">Branch Wise Summary Sheet</option>
+								<option class="form-control" value="5">Zone Wise Summary Sheet</option>
+                                <option class="form-control" value="6">Headoffice Wise Summary Sheet</option>
+                                <option class="form-control" value="7">Sundry Report</option>
+                            </select>
+						</div>
+					</div>
+
+					<div class="form-group row" id="forPeriod">
+						<label for="salaryPeriodId" class="col-sm-3 col-form-label">Period Name <span class="redstar">*</span></label>
+						<input type="hidden" name="pns" id="pns" value="0" />
+						<div class="col-sm-9">
+							<select name="salaryPeriodId" id="salaryPeriodId" class="form-control">
+								<option value="">Select Salary Period</option>
+								@foreach (var data in Model.salaryPeriods.Where(x => x.salaryTypeId == 2))
+								{
+									<option value="@data.Id">@data.periodName</option>
+								}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row" id="forBranch">
+						<label for="hrBranchId" class="col-sm-3 col-form-label">Branch Name </label>
+						<div class="col-sm-9">
+							<select name="hrBranchId" id="hrBranchId" class="form-control chooseOpt">
+								<option value="0">Choose Branch</option>
+								<option value="AllBranch">All Branch</option>
+								@foreach (var data in Model.hrBranches.OrderBy(x => Convert.ToInt32(x.branchCode)))
+								{
+									<option value="@data.Id">@data.branchName.ToUpper()</option>
+								}
+							</select>
+						</div>
+					</div>
+
+
+					<div class="form-group row" id="forZone">
+						<label for="locationId" class="col-sm-3 col-form-label">Zone Name </label>
+						<div class="col-sm-9">
+							<select name="locationId" id="locationId" class="form-control chooseOpt">
+								<option value="0">Choose Zone</option>
+								<option value="AllZone">All Zone</option>
+								@foreach (var data in Model.locations.OrderBy(x => x.branchUnitName))
+								{
+									<option value="@data.Id">@data.branchUnitName.ToUpper()</option>
+								}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row" id="forButton">
+						<label class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input type="button" value="Generate" id="btnPrint" class="btn btn-success btn-sm" style="width:110px;" />
+                            &nbsp;&nbsp;&nbsp;
+                            <input type="button" value="Voucher" id="btnVoucher" class="btn btn-info btn-sm" style="width:110px;" />
+                            &nbsp;&nbsp;&nbsp;
+
+                        </div>
+					</div>
+				</div>
+				<div class="col-lg-2"></div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
+
+@section Scripts{
+	<script>
+		$(document).ready(function () {
+			$('#hrBranchId').on('change', function () {
+				if ($(this).val() != '0') {
+					$('#locationId').val(0);
+				}
+			})
+
+			$('#locationId').on('change', function () {
+				if ($(this).val() != '0') {
+					$('#hrBranchId').val(0);
+				}
+			})
+
+
+			$('#btnPrint').click(function () {
+				var reportTypeId = $('#reportTypeId').val()
+				var salaryPeriodId = $('#salaryPeriodId').val()
+				var hrBranchId = $('#hrBranchId').val()
+				var locationId = $('#locationId').val()
+
+				//if (reportTypeId == 1) {
+				//	window.open("/Payroll/PayrollReport/BonusVoucherPDF?salaryPeriodId=" + salaryPeriodId + "&hrBranchId=" + hrBranchId + "&zoneId=" + locationId);
+				//}
+    //            else
+                if (reportTypeId == 2)
+				{
+					var type = '';
+					if (hrBranchId == 'AllBranch' || locationId == 'AllZone') {
+						if (hrBranchId == 'AllBranch') {
+							type = 'branch';
+						}
+						if (locationId == 'AllZone') {
+							type = 'zone';
+						}
+						window.open("/Payroll/PayrollReport/BonusReportAllPdf?periodId=" + salaryPeriodId + "&type=" + type);
+					}
+					else {
+						window.open("/Payroll/PayrollReport/BonusReportPdf?periodId=" + salaryPeriodId + "&hrBranchId=" + hrBranchId + "&zoneId=" + locationId);
+					}
+				}
+				else if (reportTypeId == 3) {
+					window.open("/Payroll/PayrollReport/BonusSummaryReportPdf?periodId=" + salaryPeriodId + "&hrBranchId=" + hrBranchId + "&zoneId=" + locationId);
+				}
+				else if (reportTypeId == 4) {
+					window.open("/Payroll/PayrollReport/BonusSummarySheetBranchOrZoneWisePdf?periodId=" + salaryPeriodId + "&type=hrBranch");
+				}
+				else if (reportTypeId == 5) {
+					window.open("/Payroll/PayrollReport/BonusSummarySheetBranchOrZoneWisePdf?periodId=" + salaryPeriodId + "&type=zone");
+                }
+                else if (reportTypeId == 6) {
+                    window.open("/Payroll/PayrollReport/HeadOfficeWiseBonusSummarySheetPdf?periodId=" + salaryPeriodId + "&type=headOffice");
+                }
+                else if (reportTypeId == 7) {
+                    window.open("/Payroll/PayrollReport/BonusReportSundryPdf?periodId=" + salaryPeriodId + "&hrBranchId=" + hrBranchId + "&zoneId=" + locationId);
+                }
+
+
+				else {
+
+				}
+
+            })
+
+            $('#btnVoucher').click(function () {
+                var salaryPeriodId = $('#salaryPeriodId').val()
+                var hrBranchId = $('#hrBranchId').val()
+				var locationId = $('#locationId').val()
+
+				if (hrBranchId == 'AllBranch' || locationId == 'AllZone') {
+					var type = ''
+					if (hrBranchId == 'AllBranch') {
+						type = 'AllBranch'
+					}
+					if (locationId == 'AllZone') {
+						type = 'AllZone'
+					}
+					window.open("/Payroll/PayrollReport/BonusVoucherPDFByType?salaryPeriodId=" + salaryPeriodId + "&type=" + type);
+				}
+				else {
+					window.open("/Payroll/PayrollReport/BonusVoucherPDF?salaryPeriodId=" + salaryPeriodId + "&hrBranchId=" + hrBranchId + "&zoneId=" + locationId);
+				}
+            })
+
+		})
+	</script>
+}

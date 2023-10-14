@@ -1,0 +1,480 @@
+﻿@model LeaveCommitteeViewModel
+
+@{
+    ViewData["Title"] = "Leave Committee Assign";
+    Layout = "~/Areas/HRPMSLeave/Views/Shared/_LeaveForm.cshtml";
+}
+
+@section StyleL{
+    <style>
+
+
+        .b {
+            font-size: 12px;
+            margin: 5px;
+        }
+
+        .active {
+            color: darkcyan;
+        }
+
+        .c {
+            min-height: 290px;
+            background-color: #FDF2E9;
+        }
+
+            .c .card-footer {
+                height: 50px;
+                background-color: #E9F7EF;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+        a i {
+            font-size: 15px !important;
+            margin: 0 !important;
+        }
+
+        .delete {
+            float: right;
+            border: none;
+            box-shadow: none;
+        }
+
+        #userRoles, #assignedPage {
+            height: 200px;
+            overflow: scroll;
+        }
+    </style>
+}
+
+
+
+<div class="row clearfix" style="">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Leave Committee Assign</h6>
+                <a class='btn btn-info' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1018&perentId=6282'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+            </div>
+            <div class="card-body">
+                
+             
+                <form asp-area="HRPMSLeave" asp-controller="LeaveRegister" asp-action="SaveLeaveCommitteeAssign" id="frmApproval" method="post" data-parsley-validate="parsley">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="form-group row" style="padding-bottom: 38px;">
+                        <div class="col-sm-1">
+                        </div>
+                        <label class="col-sm-3 col-form-label" style="padding-left:0px;">Select Year For committee assign<span style="float:right;color:red" class="redStar">*</span></label>
+                        <div class="col-sm-3">
+                            <select id="Year1" class="form-control" name="">
+                                <option value="">Year</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="form-group row">
+                        <div class="col-sm-1">
+                        </div>
+
+                        <label for="" class="col-sm-3 col-form-label">  Committee Member <span style="float:right;color:red" class="redStar">*</span></label>
+
+                        <div class="col-sm-3">
+
+
+
+                            <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="" id="memberName" placeholder="Type Employee Name">
+                            <input type="hidden" name="" id="memberIds" value="0" />
+                            <input type="hidden" name="" id="memberNameEng" value="" />
+                            <input type="hidden" name="" id="memberNameBn" value="" />
+
+
+                            <input type="hidden" name="" id="memberDepartment" value="" />
+                            <input type="hidden" name="" id="memDepartmentBn" value="" />
+
+                            <input type="hidden" name="" id="memberDesignation" value="" />
+                            <input type="hidden" name="" id="memDesignationBn" value="" />
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="form-group row">
+
+                        <div class="col-sm-1">
+                        </div>
+                        <label class="col-sm-3 col-form-label" style="padding-left:0px;">Select Member Role<span style="float:right;color:red" class="redStar">*</span></label>
+                        <div class="col-sm-3">
+                            <select id="memberRole" class="form-control" name="">
+                                <option value="">Select Role</option>
+                                <option value="1">সভাপতি</option>
+                                <option value="2">সদস্য</option>
+                                <option value="3">সদস্য সচিব</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="button" onclick="AdditemDetails()" value="Add" title="Add" class="btn btn-success" style="float:right;"><i class="fas fa-plus fa-w-1"></i>Add Member</button>
+
+                        </div>
+                    </div>
+
+                    @*<div class="form-group row">
+                        <div class="col-sm-6">
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="button" onclick="AdditemDetails()" value="Add" title="Add" class="btn btn-success" style="float:right;"><i class="fas fa-plus fa-w-1"></i>Add Member</button>
+
+                        </div>
+
+                        
+                    </div>*@
+
+                    <div class="row">
+                        <input type="hidden" id="detailsId" name="detailsId" value="0" />
+                        <input type="hidden" id="IsEdit" name="IsEdit" value="0" />
+                        <div class="col-12">
+                            <table class="table table-bordered table-striped" id="tblitemDetails" data-parsley-required="true">
+                                <thead style="width:100%;background-color:lightgray;">
+                                    <tr>
+                                        <th style="width:20%"> Member Name</th>
+                                        <th style="width:20%"> Member Role</th>
+                                        <th style="width:20%">Department</th>
+                                        <th style="width:20%">Designation</th>
+                                        <th style="width:10%">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <hr />
+                    <input type="submit" id="btnSave" value="Save" class="btn btn-success btn-sm fa-pull-right" style="width:90px;" />
+
+                </form>
+               
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row clearfix" style="">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Leave Committee List</h6>
+
+            </div>
+            <div class="card-body">
+
+
+
+
+                <div style="margin-top:4px!important" class="intTbl">
+                    <table class="table table-striped table-bordered" id="requisitionListTable">
+                        <thead>
+                            <tr>
+
+                                <th>Year</th>
+                                <th>Employee Id</th>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Designation</th>
+                                <th>Department</th>
+                                <th>Action</th>
+
+                        </thead>
+                        <tbody id="tbody">
+                            @foreach (var item in Model.leaveCommitteeList)
+                            {
+                            <tr>
+
+                                <td>@item.CoYear</td>
+                                <td>@item.employee?.employeeCode</td>
+                                <td>@item.empNameEng</td>
+                                <td>
+                                    @if (item.memberRoleId == 1)
+                                    {
+                                        <span>সভাপতি</span>
+                                    }
+                                    else if (item.memberRoleId == 2)
+                                    {
+                                        <span>সদস্য</span>
+                                    }
+                                    else if (item.memberRoleId == 3)
+                                    {
+                                        <span>সদস্য সচিব</span>
+                                    }
+                                </td>
+                                <td>@item.designationEn</td>
+
+                                <td>@item.departmentEn</td>
+                                
+                                <td><a href="javascript:void(0)" style="background-color:red;border-color:red" data-toggle="tooltip" title="Delete" class="btn btn-danger btn-xs" onclick="DeleteMember(@item.Id)"><i class="fa fa-trash"></i></a>
+
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section ScriptsL{
+    <script src="~/Assets/paginathing.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            var currentYear = new Date().getFullYear();
+            for (var i = currentYear; i > currentYear - 10; i--) {
+                $("#Year1").append('<option value="' + i.toString() + '">' + i.toString() + '</option>');
+            }
+
+            Common.Ajax('GET', '/global/api/GetAllUserEmployeeInfo', [], 'json', ajaxGetAllEmployee);
+            ////Common.Ajax('GET', '/HRPMSLeave/LeaveRegister/GetAllUserEmployeeInfo', [], 'json', ajaxGetAllEmployee);
+
+            $("#btnSave").click(function (e) {
+                let rowCount = $("#tblitemDetails tbody>tr").length;
+                if ($("#Year1").val() == null || $("#Year1").val()=="") {
+                    alert("Please select year for Committee assign!!!");
+                    return false;
+                }
+
+                if ($("#memberRole").val() == null || $("#memberRole").val()=="") {
+                    alert("Please select  member role!!!");
+                    return false;
+                }
+
+
+                if (rowCount < 1) {
+                    alert("Please Add Member from Member Details!!!");
+                    return false;
+                }
+                e.preventDefault();
+
+                var form = $("#frmApproval");
+                $.ajax({
+                    url: '/HRPMSLeave/LeaveRegister/SaveLeaveCommitteeAssign',
+                    data: form.serialize(),
+                    type: 'POST',
+                    success: function (records) {
+                        console.log("records")
+                        console.log(records)
+                        swal({
+                            title: '', text: 'Save Successfully!', type: 'success', showCancelButton: false, confirmButtonColor: '#3085d6', confirmButtonText: 'Ok!',
+                        }).then(function () {
+                            location.reload();
+                        });
+                    }
+                });
+            });
+        });
+
+
+
+
+        function ajaxGetAllEmployee(response) {
+            var GetEmployeeList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.nameEnglish + ' (' + option.employeeCode + ')';
+                obj.nameEng = option.nameEnglish;
+                obj.nameBn = option.nameBangla;
+
+                obj.department = option.department ?.deptName;
+                obj.departmentBn = option.department ?.deptNameBn;
+                obj.designation = option.lastDesignation ?.designationName;
+                obj.designationBn = option.lastDesignation ?.designationNameBN;
+                GetEmployeeList[GetEmployeeList.length] = obj;
+            });
+            $('#memberName').autocomplete({
+                source: GetEmployeeList,
+                select: function (event, ui) {
+                    $("#memberIds").val(ui.item.key);
+                }
+            });
+            $('#memberName').autocomplete({
+                source: GetEmployeeList,
+                select: function (event, ui) {
+                    $("#memberIds").val(ui.item.key);
+
+                    $("#memberNameEng").val(ui.item.nameEng)
+                    $("#memberNameBn").val(ui.item.nameBn)
+
+
+                     $("#memberDepartment").val(ui.item.department)
+                    $("#memberDesignation").val(ui.item.designation)
+
+                    $("#memDepartmentBn").val(ui.item.departmentBn)
+                    $("#memDesignationBn").val(ui.item.designationBn)
+
+                }
+            });
+        }
+
+
+        function ajaxDeleteApprovalTable(res) {
+            if (res == 1) {
+                swal('Success', 'Deleted Successfully', 'success').then(function () {
+                    location.reload();
+                });
+            }
+        }
+        function AdditemDetails() {
+			var approverId = $('#memberIds').val();
+
+            var ifExistIndex = window.localStorage.getItem("holdIndex1");
+
+            var index = "0";
+            if (ifExistIndex == "null" || ifExistIndex == null) {
+                index = $("#tblitemDetails tbody>tr").length;
+            }
+            else {
+                index = ifExistIndex;
+                tdRID = $("#tblitemDetails tbody >tr:eq(" + ifExistIndex + ") td:eq(0) .clsId").val();
+            }
+
+           
+            if ($("#memberIds").val() == "" || $("#memberIds").val() == "0") {
+                alert("Please Enter member Name.");
+                return false
+            }
+           
+            
+            let id = parseInt($("#detailsId").val()) ? parseInt($("#detailsId").val()) : 0;
+            var memberName = $("#memberName").val();
+            var memNameEng = $("#memberNameEng").val();
+            var memNameBn = $("#memberNameBn").val();
+
+             var deparmentName = $("#memberDepartment").val();
+            var designationName = $("#memberDesignation").val();
+
+            var memberRoleId = $("#memberRole").val();
+            var role = "";
+            if (memberRoleId == 1)
+               {
+                role = "সভাপতি";
+               }
+              else if (memberRoleId == 2)
+               {
+                role = "সদস্য";
+               }
+                else
+                 {
+                role ="সদস্য সচিব";
+                  }
+
+
+
+            var depNameBn = $("#memDepartmentBn").val();
+            var desigNameBn = $("#memDesignationBn").val();
+
+            var memberId = $("#memberIds").val();
+            var years = $("#Year1").val();
+         
+         
+		
+			//alert(canFinalApprover);
+            var RowCount = $("#tblitemDetails tbody>tr").length;
+            var editOption = parseInt($('#IsEdit').val()) ? parseInt($('#IsEdit').val()) : 0;
+
+			
+
+            for (i = 0; i < RowCount; i++) {
+                var _memberId = $("#memberIds" + i).val();
+
+                if (_memberId == memberId && editOption == 0) {
+                    alert('You have already added this Member!');
+                    return false
+                }
+			}
+
+			$.ajax({
+				url: '@Url.Action("GetDesDeptOfApprover", "Approval")',
+				data: { id: approverId },
+				type: 'GET',
+			})
+			.done(function (res) { 
+				var dtTable = $("#tblitemDetails");
+				var tableBody = dtTable.find('tbody');
+				var trHtml = '<tr id=' + index + '>' +
+                    '<td>' + memberName + '<input type="hidden" name="id"class="clsId" value="' + id + '"><input type="hidden" id="memberId' + index + '" name="employeeId" class="clsapproverId" value="' + memberId + '"/></td>' +
+                    '<td>' + role + '<input type="hidden" name="memberRoleId"class="clsmemberRoleId" value="' + memberRoleId + '"></td>' +
+                    '<td>' + deparmentName + '<input type="hidden" name="departmentEn"class="clsdepartmentEn" value="' + deparmentName + '"> <input type="hidden" name="departmentBn"class="clsdepartmentBn" value="' + depNameBn + '">  <input type="hidden" name="CoYear" class="clsCoYear" value="' + years + '"/> </td>' +
+                    '<td>' + designationName + '<input type="hidden" name="designationEn"class="clsdesignationEn" value="' + designationName + '">  <input type="hidden" name="designationBn" class="clsdesignationBn" value="' + desigNameBn + '"/>           <input type="hidden" name="empNameBn"class="clsempNameBn" value="' + memNameBn + '">  <input type="hidden" name="empNameEng" class="clsempNameEng" value="' + memNameEng + '"/></td>' +
+
+					'<td><a href="javascript:void(0)"style="background-color:red;border-color:red" data-toggle="tooltip" title="Delete" class="btn btn-danger btn-xs" onclick="Delete(' + index + ')"><i class="fa fa-trash"></i></a>&nbsp;&nbsp;' +
+
+
+					'</tr>';
+
+				if (ifExistIndex == null || ifExistIndex == "null") {
+					tableBody.append(trHtml);
+				}
+				else {
+					var rowUpdate = $("#tblitemDetails tbody >tr:eq(" + ifExistIndex + ")");
+					rowUpdate.replaceWith(trHtml);
+					window.localStorage.setItem("holdIndex", null);
+					ifExistIndex = null;
+				}
+
+				Refresh();
+			})
+			.fail(function () {
+				//swal('', 'Unable to Delete!', 'warning');
+			});
+        }
+
+        function Refresh() {
+            $('#detailsId').val('');
+            $("#IsEdit").val(0);
+
+            $('#memberIds').val(0);
+            $('#memberName').val('');
+  
+
+            window.localStorage.setItem("holdIndex1", null);
+            ifExistIndex = null;
+        }
+     
+        function Delete(index) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+                $("#tblitemDetails #" + index).remove();
+                swal('', 'Deleted Successfully!', 'success');
+            });
+
+        }
+       
+        function DeleteMember(Id) {
+
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+                location.replace("/HRPMSLeave/LeaveRegister/DeleteMember/" + Id);
+                swal('', 'Deleted Successfully!', 'success');
+            });
+
+
+        }
+
+    </script>
+}
+
+

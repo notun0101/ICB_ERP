@@ -1,0 +1,441 @@
+﻿@model FixationViewModel
+@{
+    ViewData["Title"] = "FixationPRF";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+
+
+}
+
+@using OPUSERP.Helpers;
+@using System;
+@using OPUSERP.Payroll.Services.Fixation.Interfaces;
+@inject IFixationService fixationService;
+@{
+    var topDate = new DateTime(DateTime.Now.Year, 7, 5);
+    var bnEmpCode = EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.fixationIntegration?.empCode);
+    var banglaLetterDate = EnglishToBanglaNumber.ConvertEnglishToBanglaDate(topDate);
+    var bnLetterDate = EnglishToBanglaNumber.ConvertToBnEnDate(topDate);
+    var bnEffectiveDate = EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.fixationDetails?.effectiveDate?.ToString("dd/MM/yyyy"));
+    var bnEffectiveDatePrev = EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.fixationDetails?.effectiveDate?.AddDays(-1).ToString("dd/MM/yyyy"));
+    var gender = Model.fixationIntegration.employee?.gender;
+}
+<style>
+
+    .print-card-body {
+        padding-bottom: 10px;
+        background-color: white;
+    }
+
+    .header {
+        text-align: center;
+        margin: 30px
+    }
+
+    .box {
+        margin-top: 100px;
+        margin-left: 85px;
+        color: black;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+
+    .f {
+        font-size: 20px;
+    }
+
+    div.a {
+        text-indent: 20px;
+    }
+
+    .status {
+        position: absolute;
+        font-size: 20px;
+        right: 50px;
+        top: 40px;
+        transform: rotate( 314deg );
+        font-family: cursive;
+        padding: 10px 20px;
+        font-weight: bold;
+        background: lightgrey;
+    }
+</style>
+
+<div style="page-break-after: always;"></div>
+<div class="print-card">
+    <div class="print-card-body">
+        <div class="container-fluid">
+            <div class="fa-pull-right">
+            </div>
+            <div class="row" style="padding-top:0px;font-size:22px;">
+                <div class="col-2">
+                </div>
+                <div class="col-8">
+                    <div style="color:black;text-align:center;">
+                        <h3>বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড</h3>
+                        <h3>হেড অফিস, ঢাকা ।</h3>
+                        <h4><u>হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্ট</u></h4>
+                    </div>
+                </div>
+                <div class="col-2"></div>
+            </div>
+            <div class="row" style="color:black">
+                <div class="col-4" style="margin-top: 44px;">
+                    <p>
+                        <span style="color:black;font-size:22px">
+                            <span> নং - ০৬.১/১.</span>@bnEmpCode<Span>/</Span>
+                        </span>
+                    </p>
+                </div>
+                <div class="col-1"></div>
+                <div class="col-3"></div>
+                <div class="col-4 row text-center">
+                    <table class="table mt-2" style="border:none; width: 85%;">
+                        <tr>
+                            <td style="font-size:22px;border:none;text-align:right;">
+                                <p style="margin: 0">@banglaLetterDate</p>
+                                <p style="margin: 0">@bnLetterDate</p>
+                            </td>
+                        </tr>
+                        <tr style="border:1px;font-size:15px;color:black;text-align:center;">
+                            <td style="padding: 0; border-top: 1px solid black;">
+                                "দুটি সন্তানের বেশি নয় একটি হলে ভালো হয়"
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+
+
+            <div class="col-12" style="float:left;">
+                <p style="color:black;font-size:20px; margin: 0;">
+                    @if (gender == "Male")
+                    {
+                        <span>জনাব </span>
+                    }
+                    @Model.fixationIntegration?.employee?.nameBangla
+                </p>
+            </div>
+
+            <div class="col-12" style="float:left;">
+                <p style="color:black;font-size:20px; margin: 0;">
+                    @if (Model.fixationIntegration?.employee?.lastDesignationId == 271)
+                    {
+                        <span>অফিসার</span>
+                    }
+                    else if (Model.fixationIntegration?.employee?.lastDesignationId == 274)
+                    {
+                        <span>অফিসার (ক্যাশ)</span>
+                    }
+                    else
+                    {
+                        <span>@Model.fixationIntegration?.employee?.lastDesignation?.designationNameBN</span>
+                    }
+                </p>
+
+                @if (Model.fixationIntegration?.employee?.functionInfoId == 12)
+                {
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        @Model.fixationIntegration?.employee?.functionInfo?.branchCode
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        বিডিবিএল ভবন
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        ১২, কারওয়ানবাজার
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        <u>ঢাকা।</u>
+                    </p>
+                }
+                else if (Model.fixationIntegration?.employee?.functionInfoId == 11)
+                {
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        @Model.fixationIntegration?.employee?.functionInfo?.branchCode
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        <u>চট্টগ্রাম।</u>
+                    </p>
+                }
+                else if (Model.fixationIntegration?.employee?.functionInfoId == 17)
+                {
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        @Model.fixationIntegration?.employee?.functionInfo?.branchCode
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        বিডিবিএল ভবন
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        ৮, রাজউক এভিনিউ
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        <u>ঢাকা।</u>
+                    </p>
+                }
+                else if (Model.fixationIntegration?.employee?.locationId == 10)
+                {
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        জোনাল অফিস
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        <u>সিলেট।</u>
+                    </p>
+                }
+                else if (Model.fixationIntegration?.employee?.locationId == 8)
+                {
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        জোনাল অফিস
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        <u>খুলনা।</u>
+                    </p>
+                }
+                else if (Model.fixationIntegration?.employee?.locationId == 5)
+                {
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        জোনাল অফিস
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        <u>চট্টগ্রাম।</u>
+                    </p>
+                }
+                else if (Model.fixationIntegration?.employee?.locationId == 9)
+                {
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        জোনাল অফিস
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        <u>রাজশাহী।</u>
+                    </p>
+                }
+                else if (Model.fixationIntegration?.employee?.locationId == 6)
+                {
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        জোনাল অফিস ঢাকা উত্তর
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        বিডিবিএল ভবন
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        ১২, কারওয়ানবাজার
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        <u>ঢাকা।</u>
+                    </p>
+                }
+                else if (Model.fixationIntegration?.employee?.locationId == 7)
+                {
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        জোনাল অফিস ঢাকা দক্ষিণ
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        বিডিবিএল ভবন
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        ৮, রাজউক এভিনিউ
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        <u>ঢাকা।</u>
+                    </p>
+                }
+                else if (Model.fixationIntegration?.employee?.departmentId > 0)
+                {
+                    if (Model.fixationIntegration?.employee?.departmentId == 120)
+                    {
+                        <p style="color:black;font-size:20px; margin: 0;">
+                            @Model.fixationIntegration?.employee?.department?.deptNameBn
+                        </p>
+                        <p style="color:black;font-size:20px; margin: 0;">
+                            বিডিবিএল ভবন
+                        </p>
+                        <p style="color:black;font-size:20px; margin: 0;">
+                            ১২, কারওয়ানবাজার
+                        </p>
+                        <p style="color:black;font-size:20px; margin: 0;">
+                            <u>ঢাকা।</u>
+                        </p>
+                    }
+                    else
+                    {
+                        <p style="color:black;font-size:20px; margin: 0;">
+                            @Model.fixationIntegration?.employee?.department?.deptNameBn
+                        </p>
+                        <p style="color:black;font-size:20px; margin: 0;">
+                            বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                        </p>
+                        <p style="color:black;font-size:20px; margin: 0;">
+                            হেড অফিস<br />
+                            <u>ঢাকা ।</u>
+                        </p>
+                    }
+                }
+                else if (Model.fixationIntegration?.employee?.hrDivisionId > 0)
+                {
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        @Model.fixationIntegration?.employee?.hrDivision?.divNameBn
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        হেড অফিস<br />
+                        <u>ঢাকা ।</u>
+                    </p>
+                }
+                else if (Model.fixationIntegration?.employee?.hrUnitId > 0)
+                {
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        @Model.fixationIntegration?.employee?.hrUnit?.unitNameBn
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                    </p>
+                    <p style="color:black;font-size:20px; margin: 0;">
+                        হেড অফিস<br />
+                        <u>ঢাকা ।</u>
+                    </p>
+                }
+                else
+                {
+                    @if (Model.fixationIntegration?.employee?.functionInfo?.branchCode != null)
+                    {
+                        <p style="color:black;font-size:20px; margin: 0;">
+                            @Model.fixationIntegration?.employee?.functionInfo?.branchCode
+                        </p>
+                        <p style="color:black;font-size:20px; margin: 0;">
+                            বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                        </p>
+                    }
+                    @if (ViewBag.branchName != null && ViewBag.branchName != "Head Office")
+                    {
+                        <p style="color:black;font-size:20px; margin: 0;">
+                            বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                        </p>
+                        <p style="color:black;font-size:20px; margin: 0;">
+                            @Model.fixationIntegration?.employee?.hrBranch?.branchNameBn
+                        </p>
+                        <p style="color:black;font-size:20px; margin: 0; text-decoration: underline;">
+                            @Model.fixationIntegration?.employee?.hrBranch?.address।
+                        </p>
+                    }
+                    else
+                    {
+                        <p style="color:black;font-size:20px; margin: 0;">
+                            হেড অফিস<br />
+                            <u>ঢাকা ।</u>
+                        </p>
+                    }
+                }
+            </div>
+            <div style="text-align:center">
+                <div>
+                    <b style="font-size:20px;color:black">বিষয়: <u>বার্ষিক বেতন ধাপ প্রদান ।</u></b>
+                </div>
+            </div>
+            <div class="row p-2 m-2">
+
+                @{
+                    var slabN = "";
+                    var strings = new List<string>();
+                    foreach (var item in Model.AllSlab)
+                    {
+                        if (!strings.Contains(item.slabName))
+                        {
+                            strings.Add(item.slabName);
+                        }
+
+                    }
+                    slabN = string.Join(" - ", strings);
+                }
+                <div style=" padding-right:0px; padding-left:0px; color:black;font-size:22px">
+                    <p>প্রিয় মহোদয়,</p>
+
+                    <p style="text-align: justify;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; আনন্দের সাথে জানানো যাচ্ছে যে, যথাযথ কর্তৃপক্ষের অনুমোদনক্রমে জাতীয় বেতন স্কেল, ২০১৫ অনুযায়ী টাকা  @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(slabN) বেতন স্কেলে
+                        বর্তমানে প্রাপ্য মূল বেতন
+                        @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.fixationIntegration?.employee?.currentBasic?.ToString("N0"))/-
+                        <span>
+                            টাকা হতে পরবর্তী বার্ষিক বেতন ধাপ মঞ্জুর করে আপনার মূল বেতন
+                        </span> @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.fixationIntegration?.effectiveDate?.ToString("dd-MM-yyyy"))   <span>তারিখে</span>  @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.newbasicAmount)/-(@AmountInWordBn.ConvertToWordsBn(Model.newbasicAmount))  <span>টাকায় উন্নীত করা হলো ।</span>
+                    </p>
+                    <p>
+                        ০২। &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; উপরোক্ত বেতন বৃদ্ধি আপনার কর্মস্পৃহা ও দক্ষতা উন্নতীকরণে সহায়ক হবে বলে কর্তৃপক্ষ আশা করে।
+                    </p>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <div class="row" style="color:black">
+                    <div class="col-3">
+                        <p>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; <span style="color:black;font-size:20px">
+                                ধন্যবাদান্তে ,<br />
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-3"></div>
+                    <div class="col-2"></div>
+                    <div class="col-4 text-center">
+                        <h3 style="font-size:20px;color:black">
+                            <br />আপনার বিশ্বস্ত ,<br />
+
+                        </h3><br /><br /><br />
+                        @if (Convert.ToInt32(Model.fixationIntegration.employee?.lastDesignation?.designationCode) <= 4)
+                        {
+                            <h3 style="font-size:20px;color:black">( কবির আহমদ )</h3>
+                            <h3 style="font-size:20px;color:black">ডেপুটি জেনারেল ম্যানেজার</h3>
+                            <h3 style="font-size:20px;color:black">ফোনঃ ০২২২৩৩৮৬৭৫০  </h3>
+                        }
+                        else
+                        {
+                            <h3 style="font-size:20px;color:black">(মোঃ বিল্লাল হোসেন )</h3>
+                            <h3 style="font-size:20px;color:black"> এসিসট্যান্ট জেনারেল ম্যানেজার</h3>
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+
+            <br /><br /><br />
+
+            <div class="container-fluid">
+                <div class="col-12 d-none">
+                    <h3 style="color:black; font-size: 18.66px;"><u>অনুলিপি:</u></h3>
+                    <h3 style="font-size:20px;color:black;">
+                        ০১।  ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট, বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,
+                        হেড অফিস, ঢাকা।
+                    </h3>
+                    <h3 style="font-size:20px;color:black;">
+                        ০২।  অফিস কপি।
+                    </h3>
+                    <h3 style="font-size:20px;color:black;">
+                        ০৩।  মাস্টার কপি।
+                    </h3>
+                </div>
+            </div>
+            <br /><br />
+            <br />
+        </div>
+    </div>
+</div>

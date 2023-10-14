@@ -1,0 +1,413 @@
+﻿@model SalaryHeadViewModel
+@{
+    ViewData["Title"] = "SalaryHead";
+    Layout = "~/Areas/Payroll/Views/Shared/_SalaryMasterForm.cshtml";
+}
+
+
+@section StyleMD{
+<style>
+    #myDIV {
+        background-color: white;
+        padding: 20px;
+        box-shadow: 3px 3px 3px 3px lightgray;
+        max-height: 415px;
+        overflow-y: scroll;
+        padding-top: 5px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+        background-color: white;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #F3F3F3;
+    }
+
+    .g {
+        text-decoration: none;
+        color: #1492a5;
+    }
+
+        .g:hover {
+            text-decoration: none;
+            color: #070a67;
+        }
+
+        .g span {
+            font-family: serif;
+        }
+
+    .small-box {
+        text-align: center;
+        border-radius: 10px;
+        padding: 10px;
+        transition: transform .5s;
+    }
+
+        .small-box:hover {
+            background-color: #e8f0fe;
+            transform: scale(.95);
+        }
+
+        .small-box i {
+            font-size: 35px;
+            margin: 10px;
+        }
+</style>
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+        <h5 class="m-0 font-weight-bold text-primary">Salary Head</h5>
+        <a class='btn btn-info' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=10&perentId=5962'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+        <a id="btngle" href="javascript:void(0)" class="btn btn-outline-success mr-4"
+           style="position: absolute; right: 82px;  box-shadow: none; font-size: 17px;"><i class="fas fa-th"></i></a>
+    </div>
+    <div class="card-body">
+        @*<h5 class="card-title" style="color: black">Salary Head</h5>*@
+        @*<div style="float: right; margin: 16px;">
+            <a class='btn btn-info' style="margin-top: -96px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=10&perentId=5962'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            <a class='btn btn-info' style="" data-toggle='tooltip' title='Print' target='_blank' href='/HRPMSEmployee/InfoView/pdspdf/@Model.employeeInfo?.Id'><i class='fa fa-print'></i></a>
+            <a id="btngle" href="javascript:void(0)" class="btn btn-outline-success mr-5"
+               style="position: absolute; right: 82px; top: 17px; box-shadow: none; font-size: 17px;"><i class="fas fa-th"></i></a>
+
+        </div>*@
+       
+        <div class="container">
+            <form asp-area="Payroll" id="FormId" asp-controller="SalaryMaster" asp-action="SalaryHead" method="post" data-parsley-validate="parsley">
+
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="row">
+
+                    <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="salaryHeadName" class="col-sm-3 col-form-label">Head Name <span style="color:red;">*</span></label>
+                            <div class="col-sm-9">
+                                <input type="hidden" id="editId" name="editId" value=0>
+                                <input type="text" class="form-control" id="salaryHeadName" value="" name="salaryHeadName" data-parsley-required="true">
+                                <input type="hidden" id="headShortName" name="headShortName">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="salaryHeadCode" class="col-sm-3 col-form-label">Head Code</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="salaryHeadCode" value="" name="salaryHeadCode">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="salaryHeadType" class="col-sm-3 col-form-label">Head Type <span style="color:red;">*</span></label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="salaryHeadType" name="salaryHeadType" data-parsley-required="true">
+                                    <option value="">Select</option>
+                                    <option value="Addition">Addition</option>
+                                    <option value="Deduction">Deduction</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="isArrear" class="col-sm-3 col-form-label">Is Arrear? <span style="color:red;">*</span></label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="isArrear" name="isArrear" data-parsley-required="true">
+                                    <option value="">Select</option>
+                                    <option value="No">No</option>
+                                    <option value="Yes">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="isBonus" class="col-sm-3 col-form-label">Is Bonus?</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="isBonus" name="isBonus">
+                                    <option value="">Select</option>
+                                    <option value="No">No</option>
+                                    <option value="Yes">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="isLoan" class="col-sm-3 col-form-label">Is Loan?</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="isLoan" name="isLoan">
+                                    <option value="">Select</option>
+                                    <option value="No">No</option>
+                                    <option value="Yes">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="sortOrder" class="col-sm-5 col-form-label">Sort Order </label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control" id="sortOrder" name="sortOrder">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="isIncomeTax" class="col-sm-5 col-form-label">Is Income Tax? <span style="color:red;">*</span></label>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="isIncomeTax" name="isIncomeTax" data-parsley-required="true">
+                                    <option value="">Select</option>
+                                    <option value="No">No</option>
+                                    <option value="Yes">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="isInvestments" class="col-sm-5 col-form-label">Is Investments? <span style="color:red;">*</span></label>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="isInvestments" name="isInvestments" data-parsley-required="true">
+                                    <option value="">Select</option>
+                                    <option value="No">No</option>
+                                    <option value="Yes">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="isAdvance" class="col-sm-5 col-form-label">Is Advance? <span style="color:red;">*</span></label>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="isAdvance" name="isAdvance" data-parsley-required="true">
+                                    <option value="">Select</option>
+                                    <option value="No">No</option>
+                                    <option value="Yes">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="isAdvance" class="col-sm-5 col-form-label">Is Monthly Allowance? <span style="color:red;">*</span></label>
+                            <div class="col-sm-7">
+                                <select class="form-control" id="isMonthlyAllowance" name="isMonthlyAllowance" data-parsley-required="true">
+                                    <option value="">Select</option>
+                                    <option value="No">No</option>
+                                    <option value="Yes">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="sortOrder" class="col-sm-5 col-form-label">Account No</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="accountNo" name="accountNo">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <hr>
+                <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<br />
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Salary Head List</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered text-center" id="salaryheadtbl">
+                    <thead>
+                        <tr>
+                            <th style="text-align:left">Head Name</th>
+                            <th>Head Code</th>
+                            <th>Head Type</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.salaryHeadsList)
+                        {
+                            <tr>
+                                <td style="text-align:left">@data.salaryHeadName</td>
+                                <td>@data.salaryHeadCode</td>
+                                <td>@data.salaryHeadType</td>
+                                <td>
+                                    <a class="btn btn-success" onclick="Edit(@data.Id,'@data.salaryHeadName','@data.salaryHeadCode','@data.salaryHeadType','@data.sortOrder','@data.isIncomeTax','@data.isInvestments','@data.isAdvance','@data.isArrear','@data.isBonus','@data.isMonthlyAllowance','@data.headShortName','@data.isLoan','@data.accountNo')" href="javascript:void(0)"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;
+                                    <a class="btn btn-danger" href="javascript:void(0)" onclick="DeleteMaster(@data.Id)"><i class="fa fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myDIV" style="display: none; width: 311px; position: absolute; right: 50px; top: 167px;">
+    <div class="row">
+        @*<a href="/Payroll/SalaryMaster/SalaryHead" class="col-md-4 small-box g">
+            <i class="fa fa-horse-head"></i><span>Salary Head</span>
+        </a>*@
+
+        <a href="/Payroll/SalaryMaster/SalaryGrade" class="col-md-4 small-box g">
+            <i class="fa fa-th"></i><span>Salary Grade</span>
+        </a>
+        <a href="/Payroll/SalaryMaster/SalaryYear" class="col-md-4 small-box g">
+            <i class="fa fa-calendar-alt"></i><span>Year</span>
+        </a>
+        <a href="/Payroll/SalaryMaster/SalarySlab" class="col-md-4 small-box g">
+                <i class="fa fa-universal-access"></i><span>Salary Slab</span>
+            </a>
+        <a href="/Payroll/SalaryMaster/SalaryType" class="col-md-4 small-box g">
+            <i class="fa fa-tree"></i><span>SalaryType</span>
+        </a>
+        <a href="/Payroll/SalaryMaster/SalaryCalulationType" class="col-md-4 small-box g">
+            <i class="fa fa-calculator"></i><span>CalulationType</span>
+        </a>
+        <a href="/Payroll/SalaryMaster/SalaryGradePercent" class="col-md-4 small-box g">
+            <i class="fa fa-percent"></i><span>SalaryGrd.Percent</span>
+        </a>
+        <a href="/Payroll/SalaryStructure" class="col-md-4 small-box g">
+            <i class="fa fa-star-of-life "></i><span>SalaryStructure</span>
+        </a>
+        <a href="/Payroll/SalaryStructure/CashSetup" class="col-md-4 small-box g">
+            <i class="fas fa-wallet"></i><span>Salary Distribute</span>
+        </a>
+       
+    </div>
+</div>
+
+@section ScriptsMD{
+    <script>
+        $('#submit').click(function () {
+		console.log($('#FormId').serializeArray());
+		var data = $('#FormId').serializeArray();
+
+		console.log(data[0].value)
+		swal({
+			title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+		}).then(function () {
+			$.ajax({
+				url: '@Url.Action("Index", "SalaryMaster")',
+				type: 'POST',
+				data: data
+			}).done(function () {
+                if (data[0].value == 0) {
+                    swal('success', 'Saved Successfully!', 'success').then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    swal('success', 'Updated Successfully!', 'success').then(function () {
+                        location.reload();
+                    });;
+                }
+			}).fail(function () {
+				swal('warning', 'Failed!', 'warning');
+			})
+		});
+	})
+
+        $(document).ready(function () {
+            $('#startDate').datepicker({ uiLibrary: 'bootstrap4' });
+            $('#endDate').datepicker({ uiLibrary: 'bootstrap4' });
+            $("#salaryHead").addClass("active");
+            $('#educationalTable').DataTable();
+
+            $("#btngle").click(function () {
+                $("#myDIV").slideToggle("slow");
+            });
+            $('#salaryheadtbl').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2]
+                        },
+                        title: "Special Branch Unit",
+                        messageTop: 'List Of Special Branch Unit',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2]
+                        },
+                        title: "Special Branch Unit",
+                        messageTop: 'List Of Special Branch Unit'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "Special Branch Unit",
+                        messageTop: 'List Of Special Branch Unit',
+                        exportOptions: {
+                            columns: [0, 1, 2]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+        });
+
+
+        function Edit(Id, salaryHeadName, salaryHeadCode, salaryHeadType, sortOrder, isIncomeTax, isInvestments, isAdvance, isArrear, isBonus, isMonthlyAllowance, headShortName, isLoan, accountNo) {
+            $('#editId').val(Id);
+            $('#salaryHeadName').val(salaryHeadName);
+            $('#salaryHeadCode').val(salaryHeadCode);
+            $('#salaryHeadType').val(salaryHeadType);
+            $('#sortOrder').val(sortOrder);
+            $('#isIncomeTax').val(isIncomeTax);
+            $('#isInvestments').val(isInvestments);
+            $('#isAdvance').val(isAdvance);
+            $('#isArrear').val(isArrear);
+            $('#isBonus').val(isBonus);
+            $('#isMonthlyAllowance').val(isMonthlyAllowance);
+            $('#headShortName').val(headShortName);
+            $('#isLoan').val(isLoan);
+            $('#accountNo').val(accountNo);
+        }
+
+         function DeleteMaster(Id) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+
+                $.ajax({
+                    url: '@Url.Action("DeleteSalaryHeadById", "SalaryMaster")',
+                    data: { Id: Id },
+                    type: 'POST',
+                })
+                    .done(function () {
+                        swal('', 'Deleted Successfully!', 'success');
+                        window.location.href = "/Payroll/SalaryMaster/SalaryHead";
+                    })
+                    .fail(function () {
+                        swal('Cancelled', 'It will not be deleted. Please try again later !!!', 'error');
+                    });
+            });
+        }
+
+    </script>
+}
+
+
+
+
+
+
+

@@ -1,0 +1,244 @@
+﻿@model SpecViewModel
+@{
+    ViewData["Title"] = "Specification List";
+    Layout = "~/Areas/Auth/Views/Shared/_MasterLayout.cshtml";
+}
+
+<style>
+    .fas {
+        margin-top: 10px;
+        font-size: 25px;
+    }
+
+    .active {
+        color: darkcyan;
+    }
+
+    .c {
+        min-height: 500px;
+        background-color: #FDF2E9;
+    }
+
+        .c .card-footer {
+            height: 140px;
+            background-color: #E9F7EF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+    .cb {
+        height: 194px;
+    }
+
+    .c .cb {
+        transition: .3s all;
+        cursor: pointer;
+    }
+
+    .c:hover .cb {
+        background-color: #D6DBE9;
+    }
+
+    #myInput1 {
+        width: 50%;
+        position: absolute;
+        right: 18px;
+        box-shadow: none;
+    }
+
+
+    .pagination > li > a,
+    .pagination > li > span {
+        position: relative;
+        float: left;
+        padding: 6px 12px;
+        margin-left: -1px;
+        line-height: 1.42857143;
+        color: #337ab7;
+        text-decoration: none;
+        background-color: #fff;
+        border: 1px solid #ddd;
+    }
+
+    .pagination > .active > a,
+    .pagination > .active > a:focus,
+    .pagination > .active > a:hover,
+    .pagination > .active > span,
+    .pagination > .active > span:focus,
+    .pagination > .active > span:hover {
+        z-index: 3;
+        color: #fff;
+        cursor: default;
+        background-color: #337ab7;
+        border-color: #337ab7;
+    }
+
+    .pagination-container {
+        margin: 20px 0;
+        display: flex;
+        justify-content: flex-end;
+    }
+</style>
+<i class="fas fa-th text-left mx-2"></i>
+<i class="fas fa-list-alt text-left mx-2"></i>
+
+<div class="row clearfix" id="listView" style="display: none;">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">Specification Item List</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="itemTable">
+                    <thead>
+                        <tr>
+                            <th>Sl No#</th>                         
+                            <th>Item Code</th>
+                            <th>Item Name</th>
+                            <th>Specification Name</th>
+                            <th>SKU Number</th>
+                            <th>Action</th>
+                           
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int slno = 0;
+                            
+                                
+                           
+
+                            @foreach (var item in Model.itemWithSpecViewModels)
+                            {
+                                slno = slno + 1;
+                        <tr>
+                            <td>@slno</td>
+                            <td>@item.itemCode</td>
+                            <td>@item.itemName</td>
+                            <td>@item.specificationName</td>
+                            <td>@item.SKUNumber</td>
+                            
+                            <td>
+                                <a class="btn btn-success" href="@Url.Action("NewSpecList", "Item", new { id = item.itemCode })"><i class="fa fa-edit"></i></a>
+                            </td>
+                        </tr>
+                            }
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row clearfix" id="gridView">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">Item Specification List</h6>
+                <input type="text" class="form-control" placeholder="Search here..." id="myInput1" />
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="row" id="cards">
+                    @foreach (var item in Model.itemWithSpecViewModels)
+                    {
+                        <div class="col-md-3 mb-1 searchdiv">
+                            <a href="@Url.Action("NewSpecList", "Item", new { id = item.itemCode})" style="text-decoration: none; color: black;">
+
+                                <div class="card c" style="font-size: 16px;">
+                                    <div class="card-body cb text-center">
+                                        <strong>Item Code:</strong> <br />
+                                        @item.itemCode <br /> <br />
+                                        <strong>Item Name:</strong> <br />
+                                        @item.itemName <br /><br />
+                                         <strong>Specification Name:</strong> <br />
+                                        @item.specificationName <br /><br />
+                                        <strong>SKU Number:</strong> <br />
+                                        @item.SKUNumber
+                                    </div>
+                                    <div class="card-footer text-center font-weight-bold">
+                                        @item.specificationName
+                                    </div>
+                                </div>
+                            </a>
+
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/Assets/paginathing.js"></script>
+
+    <script>
+
+
+		$(document).ready(function () {
+			$("#education").addClass("active");
+            $('#itemTable').DataTable();
+
+			$('#gridView').show();
+			$('#listView').hide();
+
+			$('.fas').removeClass('active');
+			$('.fa-th').addClass('active');
+
+			$("#myInput1").on("keyup", function () {
+				var value = $(this).val().toLowerCase();
+				$(".searchdiv").filter(function () {
+					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+				});
+			});
+		});
+
+		$('.fa-list-alt').click(function () {
+			$('#listView').show();
+			$('#gridView').hide();
+
+			$('.fas').removeClass('active');
+			$('.fa-list-alt').addClass('active');
+		})
+		$('.fa-th').click(function () {
+			$('#listView').hide();
+			$('#gridView').show();
+
+			$('.fas').removeClass('active');
+			$('.fa-th').addClass('active');
+		})
+
+
+		$('#cards').paginathing({
+
+			// Limites your pagination number
+			// false or number
+			limitPagination: 6,
+			// limitPagination: false,
+
+			// Pagination controls
+			perPage: 8,
+			prevNext: true,
+			firstLast: true,
+			prevText: '&laquo;',
+			nextText: '&raquo;',
+			firstText: 'First',
+			lastText: 'Last',
+			containerClass: 'pagination-container',
+			ulClass: 'pagination',
+			liClass: 'page',
+			activeClass: 'active',
+			disabledClass: 'disabled',
+			pageNumbers: true,
+			insertAfter: '#cards'
+		})
+    </script>
+}

@@ -1,0 +1,91 @@
+﻿@model TrainingWithAttendanceDetails
+@{
+    ViewData["Title"] = "TrainingEvaluationReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+            @*<h4>Training Register Report</h4>*@
+            <h5 class="card-title" style="color: black; margin: 8px; text-transform: uppercase;">Training Evaluation Report</h5>
+
+        </div>
+        <div class="col-md-8">
+
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1019&perentId=1239'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <label class="col-form-label col-md-2">From Date</label>
+            <div class="col-md-4">
+                <input type="text" id="from" readonly value="@DateTime.Now.ToString("dd-MMM-yyyy")" class="form-control datePicker" />
+            </div>
+
+            <label class="col-form-label col-md-2">To Date</label>
+            <div class="col-md-4">
+                <input type="text" id="to" readonly value="@DateTime.Now.ToString("dd-MMM-yyyy")" class="form-control datePicker" />
+            </div>
+
+            <label class="col-form-label col-md-2">Trainer</label>
+            <div class="col-md-4">
+                <select class="form-control" id="trainerId">
+                    <option value="0">Select</option>
+                    @foreach (var item in Model.trainers)
+                    {
+                        <option value="@item.Id">@item.name</option>
+                    }
+                </select>
+            </div>
+            <label class="col-form-label col-md-2">Course Name</label>
+            <div class="col-md-4">
+                <select class="form-control" id="trainingInfoId">
+                    <option value="0">Select</option>
+                    @foreach (var item in Model.trainingInfoNews)
+                    {
+                        <option value="@item.Id">@item.course</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <input type="button" value="Report" id="button" class="btn btn-info btn-sm right" />
+        <a class='btn btn-success btn-sm' style="" data-toggle='tooltip' title='Report' href='/hrpmstrainingnew/TrainingPlanning/GetTrainingREvaluationPdf?start=04-Jul-1900&end=30-Jun-3000&trainerId=0'>Get All Report</a>
+        <input type="button" value="Reset" id="Reset" class="btn btn-secondary btn-sm right" />
+    </div>
+    <input type="hidden" id="hidden" value="@DateTime.Now.ToString("dd-MMM-yyyy")" />
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('.datePicker').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100" });
+
+
+            $('#button').click(function () {
+                var from = $('#from').val();
+                var to = $('#to').val();
+                var trainerId = $('#trainerId').val();
+                var TrainingId = $('#trainingInfoId').val();
+
+                window.open('/HRPMSTrainingNew/TrainingPlanning/GetTrainingREvaluationPdf?start=' + from + '&end=' + to + '&trainerId=' + trainerId + '&TrainingId=' + TrainingId);
+            })
+
+            $('#Reset').click(function () {
+                var date = $('#hidden').val();
+                $('#from').val(date);
+                $('#to').val(date);
+                $('#trainerId').val(0);
+                $('#trainingInfoId').val(0);
+
+            })
+
+        })
+    </script>
+}
+

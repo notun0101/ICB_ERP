@@ -1,0 +1,202 @@
+﻿@model AllHrReportViewModel
+@{
+    ViewData["Title"] = "Branch Wise Working Exprecience  Report";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+@using OPUSERP.Helpers;
+@using System;
+@section Style{
+    <style>
+      
+        .print-card-body {
+            width: 100%;
+            padding-bottom: 10px;
+        }
+       
+        table td, .table th {
+            /*padding: .3rem;*/
+            font-size: 20px;
+        }
+
+       
+
+        thead {
+            display: table-header-group;
+        }
+
+        tfoot {
+            display: table-footer-group;
+        }
+
+       
+    </style>
+}
+
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+
+        <div class="container-fluid" >
+            <div class="fa-pull-right">
+                <p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+            </div>
+            <div class="row" style="padding-top:0px;font-size:25px;">
+                <div class="col-2">
+                    <img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="OPUS ERP" style="height:80px;" />
+                </div>
+                <div class="col-8">
+                    <div style="color:black;text-align:center;">
+                        <h2 >বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড</h2>
+                        <h2 >হেড অফিস, ঢাকা ।</h2>
+                        <h3 ><u>হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্ট</u></h3>
+                        <h3><u>কর্মকর্তাদের ব্রাঞ্চে কাজের বিবরণী  (@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(ViewBag.postingdate?.ToString("dd/MM/yyyy")) পর্যন্ত)</u></h3>
+
+                        <br />
+                     
+                    </div>
+                </div>
+                <div class="col-2"></div>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="container-fluid" style="color:black;font-size:25px;">
+            @*@foreach (var item1 in Model.allDivisionEmpViewModels)
+            {
+                @if (item1.hrBranch?.branchName != null || item1.divEmpListVM != null)
+                {*@
+                    @*<div class="row" style="padding: 0px 15px 0px 15px;color:black;text-align:left;">
+                    <h5>Branch Name:&nbsp;<span style="font-weight:600">@item1.hrBranch?.branchName</span></h5>
+
+                </div>*@
+            <div class="row" style="padding: 0px 15px 0px 15px;">
+
+                <table class="table-bordered">
+                    <thead>
+                        <tr style="background-color:lightgray;">
+                            <th style="text-align:center;" rowspan="2">ক্র.নং #</th>
+                            <th style="text-align:center;" rowspan="2">কর্মকর্তা/কর্মচারীর নাম</th>
+                            <th style="text-align:center;" rowspan="2">বর্তমান পদবী</th>
+                            <th style="text-align:center;width:103px !important;" rowspan="2">ব্রাঞ্চ</th>
+                            <th colspan="2" style="text-align:center;border-bottom:1px solid black !important;width:351px !important;">সময়কাল</th>
+                            <th style="text-align:center;" rowspan="2">ব্রাঞ্চে কাজের অভিজ্ঞতা</th>
+
+                        </tr>
+                        <tr style="background-color:lightgray;">
+
+                            <th style="text-align:center; width:90px;">হইতে</th>
+                            <th style="text-align:center;">পর্যন্ত</th>
+
+
+                        </tr>
+
+                    </thead>
+                    @foreach (var item1 in Model.allDivisionEmpViewModels)
+                    {
+                        @if (item1.hrBranch?.branchName != null || item1.divEmpListVM != null)
+                        {
+
+                            <tbody>
+                                @{
+                                    int i = 1;
+                                    @foreach (var data in item1.divEmpListVM)
+                                    {
+                                        int total = 0;
+                                        <tr>
+											<td style="text-align:center;">@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(i.ToString()) |</td>
+                                            <td>@data.employee?.nameBangla</td>
+                                            <td>@data?.designation</td>
+                                            <td colspan="4" style="padding: 0;">
+                                                <table style="width:100%;" class="table-borderless"  >
+                                                    @foreach (var item in data.postings)
+                                                    {
+                                                        <tr>
+                                                            <td style="width:102px !important;">@item.posting?.placeNameBn</td>
+                                                            <td style="width:90px !important;">
+                                                                @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(item.posting?.startDate?.ToString("dd/MM/yyyy"))
+                                                            </td>
+                                                            <td style="width:100px !important; ">
+                                                                @if (item.posting?.endDate != null)
+                                                                {
+                                                                    <span>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(item.posting?.endDate?.ToString("dd/MM/yyyy"))</span>
+                                                                    total += (Convert.ToDateTime(item.posting?.endDate) - Convert.ToDateTime(item.posting?.startDate)).Days;
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(ViewBag.postingdate?.ToString("dd/MM/yyyy"))</span>
+                                                                    total += (Convert.ToDateTime(ViewBag.postingdate) - Convert.ToDateTime(item.posting?.startDate)).Days;
+                                                                }
+                                                            </td>
+                                                            <td>
+                                                                @item.duration
+                                                            </td>
+
+
+                                                        </tr>
+
+                                                    }
+                                                </table>
+                                            </td>
+
+
+                                        </tr>
+
+                                        <tr>
+                                            <td></td>
+                                            <td>মোট =</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>
+                                                @EnglishToBanglaNumber.DaysToBanglaYears(total);
+                                            </td>
+                                        </tr>
+
+                                        i++;
+                                    }
+                                }
+
+
+                            </tbody>
+                                        }
+                                    }
+                        </table>
+                <br />
+                <br />
+            </div>
+                    
+                @*}
+
+
+
+
+            }*@
+
+        </div>
+
+
+
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function convertEnToBnNum(num) {
+            var en = "0123456789";
+            var bn = "০১২৩৪৫৬৭৮৯";
+            var result = "";
+            for (var i = 0; i < num.length; i++) {
+                var index = en.indexOf(num[i]);
+                var bnNum = bn[index];
+                result += bnNum;
+            }
+            return result;
+        }
+    </script>
+
+
+}

@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewData["Title"] = "ProcessInterest";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            @*<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h2 class="m-0 font-weight-bold text-primary">Investment Interest</h2>
+                </div>*@
+
+
+            <div class="card-body bg-white">
+                <div class="">
+                    <h4 class="text-secondary">New Interest</h4>
+                </div>
+                <hr />
+                <form>
+                    <div class="row col-sm-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-5 col-form-label">Transaction Date</label>
+                            <div class="col-sm-6 input-group">
+                                <input name="" id="" class="form-control input-group-sm Date" value="" />
+
+                                <div class="input-group-prepend">
+                                    <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table class="table table-striped table-bordered table-hover bg-white" id="TblProcessInterestList">
+                        <thead>
+                            <tr>
+                                <th>Manage</th>
+                                <th>Investment Name	</th>
+                                <th>Investment Date</th>
+                                <th>Maturity Date</th>
+                                <th>Investment Rate	</th>
+                                <th>Period</th>
+                                <th>Investment Amount</th>
+                                <th>Last Process Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="checkbox" name="" id="" />
+                                </td>
+                                <td> New Investment</td>
+                                <td>12/4/2021</td>
+                                <td>2/4/2021</td>
+                                <td>5%</td>
+                                <td>Monthly	</td>
+                                <td>52,025</td>
+                                <td>30/4/2021</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                    <br />
+                    <br />
+
+                    <button type="submit" class="btn btn-success">Process</button> &nbsp;
+                    <button type="reset" class="btn btn-outline-info">Reset</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#TblProcessInterestList').DataTable();
+        $(".Date").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+
+
+    });
+</script>
+

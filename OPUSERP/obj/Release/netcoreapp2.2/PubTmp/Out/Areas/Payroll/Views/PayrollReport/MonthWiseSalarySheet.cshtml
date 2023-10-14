@@ -1,0 +1,690 @@
+﻿@model PayrollReportViewModel
+@{
+	ViewData["Title"] = "SalarySheet";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Style{
+	<style>
+		ul.ui-autocomplete {
+			z-index: 99999999;
+		}
+
+		.right {
+			text-align: right;
+		}
+
+		.active {
+			color: darkcyan;
+		}
+
+		.c {
+			/*min-height: 300px;*/
+			height: 100px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			color: black;
+		}
+
+			.c a {
+				color: black;
+				outline: none;
+				box-shadow: none !important;
+				border: none;
+			}
+
+			.c .card-footer {
+				height: 50px;
+				background-color: #E9F7EF;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+
+			.c:hover {
+				background-color: lightblue;
+				border: 1px solid black !important;
+			}
+
+		.name:hover {
+			cursor: pointer;
+			color: black;
+		}
+
+		a i {
+			font-size: 20px !important;
+			/*margin: 0 !important;*/
+		}
+
+		.redstar {
+			color: red;
+			float: right
+		}
+	</style>
+}
+
+<div class="card-header  d-flex flex-row align-items-center justify-content-between">
+	<h5 class="m-0 font-weight-bold text-primary">Month wise SalarySheet Report</h5>
+	<a class='btn btn-info btn-sm' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=10&perentId=3322'>@*<i class="fas fa-backward fa-2x "></i>*@<i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+
+</div>
+
+<div class="card">
+	<div class="card-body">
+		<div class="container">
+			<div asp-validation-summary="All" class="text-danger"></div>
+			<div class="row">
+				<div class="col-lg-2"></div>
+				<div class="col-lg-8">
+					<input type="hidden" id="employeeInfoId" name="employeeInfoId">
+					<div class="form-group row" id="forReportType">
+						<label for="reportTypeId" class="col-sm-3 col-form-label">Report Type <span class="redstar">*</span></label>
+						<div class="col-sm-9">
+							<select class="form-control" name="reportTypeId" id="reportTypeId">
+								<option class="form-control" value="MWSS">Month Wise Salary Sheet</option>
+                                <option class="form-control" value="BWSS">Branch Wise Salary Summary Sheet</option>
+                                <option class="form-control" value="HOSS">Head Office Wise Salary Summary Sheet</option>
+                                <option class="form-control" value="ZWSS">Zone Wise Salary Summary Sheet</option>
+                                <option class="form-control" value="TBSS">Salary Summary Sheet</option>
+                                <option class="form-control" value="YSS">Yearly Salary Summary Sheet</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row" id="forPeriod">
+						<label for="salaryPeriodId" class="col-sm-3 col-form-label">Period Name <span class="redstar">*</span></label>
+						<input type="hidden" name="pns" id="pns" value="0" />
+						<div class="col-sm-9">
+							<select name="salaryPeriodId" id="salaryPeriodId" class="form-control">
+								<option value="">Select Salary Period</option>
+								@foreach (var data in Model.salaryPeriods.Where(x => x.salaryTypeId == 1))
+								{
+									<option value="@data.Id">@data.periodName</option>
+								}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row" id="forYear" style="display: none;">
+						<label for="fromDate" class="col-sm-3 col-form-label">From Date <span class="redstar">*</span></label>
+						<div class="col-sm-3">
+							<input type="text" readonly id="fromDate" name="fromDate" class="form-control datepicker" />
+						</div>
+
+						<label for="toDate" class="col-sm-3 col-form-label">To Date <span class="redstar">*</span></label>
+						<div class="col-sm-3">
+							<input type="text" readonly id="toDate" name="fromDate" class="form-control datepicker" />
+						</div>
+					</div>
+
+					<div class="form-group row" id="forSbu">
+						<label for="sbu" class="col-sm-3 col-form-label">SBU Name </label>
+						<div class="col-sm-9">
+							<select name="sbu" id="sbu" class="form-control chooseOpt">
+								<option value="sbu">Select SBU</option>
+								<option value="">All SBU</option>
+								@foreach (var data in Model.specialBranchUnits.OrderBy(x => x.branchUnitName))
+								{
+									<option value="@data.Id">@data.branchUnitName.ToUpper()</option>
+								}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row" id="forBranch">
+						<label for="hrBranchId" class="col-sm-3 col-form-label">Branch Name </label>
+						<div class="col-sm-9">
+							<select name="hrBranchId" id="hrBranchId" class="form-control chooseOpt">
+								<option value="hrBranch">Select Branch</option>
+								<option value="">All Branch</option>
+								@foreach (var data in Model.hrBranches.OrderBy(x => x.branchName))
+								{
+									<option value="@data.Id">@data.branchName.ToUpper()</option>
+								}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row" id="forOffice">
+						<label for="officeId" class="col-sm-3 col-form-label">Office Name </label>
+						<div class="col-sm-9">
+							<select name="officeId" id="officeId" class="form-control chooseOpt">
+								<option value="office">Select Office</option>
+								<option value="">All Office</option>
+								@foreach (var data in Model.functionInfos.OrderBy(x => x.branchUnitName))
+								{
+									<option value="@data.Id">@data.branchUnitName.ToUpper()</option>
+								}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row" id="forUnit">
+						<label for="hrUnitId" class="col-sm-3 col-form-label">Unit Name </label>
+						<div class="col-sm-9">
+							<select name="hrUnitId" id="hrUnitId" class="form-control chooseOpt">
+								<option value="hrUnit">Select Unit</option>
+								<option value="">All Unit</option>
+								@foreach (var data in Model.hrUnits.OrderBy(x => x.unitName))
+								{
+									<option value="@data.Id">@data.unitName.ToUpper()</option>
+								}
+							</select>
+						</div>
+					</div>
+
+
+					<div class="form-group row" id="forZone">
+						<label for="locationId" class="col-sm-3 col-form-label">Zone Name </label>
+						<div class="col-sm-9">
+							<select name="locationId" id="locationId" class="form-control chooseOpt">
+								<option value="locationId">Select Zone</option>
+								<option value="">All Zone</option>
+								@foreach (var data in Model.locations.OrderBy(x => x.branchUnitName))
+								{
+									<option value="@data.Id">@data.branchUnitName.ToUpper()</option>
+								}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row" id="forDepartment">
+						<label for="departmentId" class="col-sm-3 col-form-label">Department Name </label>
+						<div class="col-sm-9">
+							<select name="departmentId" id="departmentId" class="form-control chooseOpt">
+								<option value="department">Select Department</option>
+								<option value="">All Department</option>
+								@foreach (var data in Model.departments.OrderBy(x => x.deptName))
+								{
+									<option value="@data.Id">@data.deptName.ToUpper()</option>
+								}
+							</select>
+						</div>
+					</div>
+					<div class="form-group row" id="forButton">
+						<label class="col-sm-3 col-form-label"></label>
+						<div class="col-sm-9">
+							<input type="button" value="Generate" id="btnPrint" class="btn btn-facebook btn-sm" style="width:110px;" />
+							&nbsp;&nbsp;&nbsp;
+							<input type="button" value="Voucher" id="btnVoucher" class="btn btn-info btn-sm" style="width:110px;" />
+							&nbsp;&nbsp;&nbsp;
+							@*<input type="button" value="Voucher" id="btnSalaryPdf" class="btn btn-success btn-sm" style="width:110px;" />
+							&nbsp;&nbsp;&nbsp;*@
+
+							@*<input type="button" value="Load" id="btnExcel" class="btn btn-warning btn-sm" style="width:120px;display:none" />*@
+							<button id="btnExcel" class="btn btn-facebook btn-sm" title="Excel" style="width:120px;display:none">Load</button>
+							&nbsp;&nbsp;&nbsp;
+							<input type="button" id="btnRefresh" value="Refresh" class="btn btn-info btn-sm" style="width:80px;" />
+							<input type="hidden" id="hidden" value="@DateTime.Now.ToString("dd-MMM-yyyy")" />
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-2"></div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
+
+@section Scripts{
+	<script>
+		function ajaxGetEmployees(response) {
+			var GeEmployeesList = [];
+			$.each(response, function (id, option) {
+				var obj = new Object();
+				obj.key = option.Id;
+				obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+				GeEmployeesList[GeEmployeesList.length] = obj;
+			});
+			$('#employeeName').autocomplete({
+				source: GeEmployeesList,
+				select: function (event, ui) {
+					$("#employeeName").val(ui.item.value);
+					$("#employeeInfoId").val(ui.item.key);
+				}
+			});
+		}
+
+		var type = '';
+		var id = 0;
+
+
+		$(document).ready(function(){
+			Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo', [], 'json', ajaxGetEmployees, false);
+			
+
+        $('.datepicker').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100" });
+
+
+
+			$('#forYear').hide();
+
+			$('#btnRefresh').click(function () {
+				var date = $('#hidden').val();
+				$('#reportTypeId').val('MWSS');
+				@* $('#to').val(date); *@
+				$('#salaryPeriodId').val('');
+				$('#sbu').val('');
+				//$('#employeeName').val("");
+				//$('#employeeInfoId').val('');
+
+			})
+
+			$('#reportTypeId').on('change', function () {
+				if ($(this).val() == 'MWSS') {
+					$('#salaryPeriodId').show();
+					$('#sbu').show();
+					$('#hrBranchId').show();
+					$('#officeId').show();
+					$('#hrUnitId').show();
+					$('#locationId').show();
+					$('#departmentId').show();
+					$('#forSbu').show();
+					$('#forBranch').show();
+					$('#forOffice').show();
+					$('#forUnit').show();
+					$('#forZone').show();
+					$('#forYear').hide();
+					$('#forDepartment').show();
+				}
+				else if ($(this).val() == 'YSS') {
+					$('#salaryPeriodId').hide();
+					$('#forPeriod').hide();
+					$('#sbu').hide();
+					$('#hrBranchId').hide();
+					$('#officeId').hide();
+					$('#hrUnitId').hide();
+					$('#locationId').hide();
+					$('#departmentId').hide();
+					$('#forSbu').hide();
+					$('#forBranch').hide();
+					$('#forOffice').hide();
+					$('#forUnit').hide();
+					$('#forZone').hide();
+					$('#forYear').show();
+					$('#forDepartment').hide();
+				}
+				else {
+					$('#salaryPeriodId').show();
+					$('#sbu').hide();
+					$('#hrBranchId').hide();
+					$('#officeId').hide();
+					$('#hrUnitId').hide();
+					$('#locationId').hide();
+					$('#departmentId').hide();
+					$('#forSbu').hide();
+					$('#forBranch').hide();
+					$('#forOffice').hide();
+					$('#forUnit').hide();
+					$('#forZone').hide();
+					$('#forYear').hide();
+					$('#forDepartment').hide();
+				}
+			})
+
+			$('#departmentId').on('change', function () {
+				$('#sbu').val('sbu');
+				$('#hrBranchId').val('hrBranch');
+				$('#officeId').val('office');
+				$('#hrUnitId').val('hrUnit');
+				$('#locationId').val('locationId');
+
+				type = 'department';
+				id = $(this).val();
+			})
+			$('#hrBranchId').on('change', function () {
+				$('#sbu').val('sbu');
+				$('#officeId').val('office');
+				$('#hrUnitId').val('hrUnit');
+				$('#locationId').val('locationId');
+				$('#departmentId').val('department');
+				if ($(this).val() == 205) {
+					type = 'headoffice';
+					id = 205;
+
+				}
+				else {
+					type = 'branch';
+					id = $(this).val();
+				}
+
+				if ($(this).val() == '' && $(this).val() != 205) {
+					type = 'AllBranch';
+				}
+			})
+			$('#sbu').on('change', function () {
+				$('#hrBranchId').val('hrBranch');
+				$('#officeId').val('office');
+				$('#hrUnitId').val('hrUnit');
+				$('#locationId').val('locationId');
+				$('#departmentId').val('department');
+
+				type = 'sbu';
+				id = $(this).val();
+			})
+			$('#officeId').on('change', function () {
+				$('#sbu').val('sbu');
+				$('#hrBranchId').val('hrBranch');
+				$('#hrUnitId').val('hrUnit');
+				$('#locationId').val('locationId');
+				$('#departmentId').val('department');
+
+				type = 'office';
+				id = $(this).val();
+			})
+			$('#hrUnitId').on('change', function () {
+				$('#sbu').val('sbu');
+				$('#hrBranchId').val('hrBranch');
+				$('#officeId').val('office');
+				$('#locationId').val('locationId');
+				$('#departmentId').val('department');
+
+				type = 'unit';
+				id = $(this).val();
+			})
+			$('#locationId').on('change', function () {
+				$('#sbu').val('sbu');
+				$('#hrBranchId').val('hrBranch');
+				$('#officeId').val('office');
+				$('#hrUnitId').val('hrUnit');
+				$('#departmentId').val('department');
+
+				type = 'zone';
+				id = $(this).val();
+
+				if ($(this).val() == '') {
+					type = 'AllZone';
+				}
+			})
+
+			$('#btnVoucher').click(function () {
+				var salaryPeriodId = $('#salaryPeriodId').val();
+
+				if (type == 'AllBranch') {
+					window.open('/Payroll/PayrollReport/SalaryVoucherAllPDF?salaryPeriodId=' + salaryPeriodId + '&type=' + type, '_blank');
+				}
+				else if (type == 'AllZone') {
+					window.open('/Payroll/PayrollReport/SalaryVoucherAllPDF?salaryPeriodId=' + salaryPeriodId + '&type=' + type, '_blank');
+				}
+				else {
+					window.open('/Payroll/PayrollReport/SalaryVouchertPDF?salaryPeriodId=' + salaryPeriodId + '&id=' + id + '&type=' + type, '_blank');
+				}
+
+                //var hrBranchId = $('#hrBranchId').val();
+                //if (hrBranchId != 'hrBranch' || hrBranchId != '' || hrBranchId != null) {
+                //    window.open('/Payroll/PayrollReport/SalaryVouchertPDF?salaryPeriodId=' + salaryPeriodId + '&hrBranchId=' + hrBranchId, '_blank');
+                //}
+            })
+
+            $('#btnSalaryPdf').click(function () {
+                var salaryPeriodId = $('#salaryPeriodId').val();
+                var hrBranchId = $('#hrBranchId').val();
+                window.open('/Payroll/PayrollReport/SalaryAdditionDiductionPDF?salaryPeriodId=' + salaryPeriodId + '&branchId=' + hrBranchId, '_blank');
+            })
+
+			$("#btnPrint").click(function (e) {
+				let rptType = $('#reportTypeId').val();
+				let employeeInfoId = $('#employeeInfoId').val();
+				let salaryPeriodId = $('#salaryPeriodId').val();
+				let taxYearId = $('#taxYearId').val();
+				let sbuId = $('#sbu').val();
+				let hrBranchId = $('#hrBranchId').val();
+				let officeId = $('#officeId').val();
+				let hrUnitId = $('#hrUnitId').val();
+				let locationId = $('#locationId').val();
+				let departmentId = $('#departmentId').val();
+				let pnsId = $('#pns').val();
+				if (rptType == "") {
+					swal('Warning', 'Select Report Type', 'warning');
+					return false;
+				}
+				if (rptType == 'PSLIP') {
+					if (employeeInfoId == 0) {
+						swal('Warning', 'Select Employee', 'warning');
+						return false;
+					}
+					if (salaryPeriodId == 0) {
+						swal('Warning', 'Select Salary Period', 'warning');
+						return false;
+					}
+					window.open('/Payroll/PayrollReport/SalaryReport?rptType=' + rptType + '&employeeInfoId=' + employeeInfoId + '&salaryPeriodId=' + salaryPeriodId, '_blank');
+				}
+				if (rptType == 'MWSS' || rptType == 'MWSSBWC' || rptType == 'MWBS') {
+					if (salaryPeriodId == 0) {
+						swal('Warning', 'Select Salary Period', 'warning');
+						return false;
+					}
+					if (sbuId == 0) {
+						sbuId = 0;
+					}
+					if (hrBranchId == 0) {
+						hrBranchId = 0;
+					}
+					if (officeId == 0) {
+						officeId = 0;
+					}
+					if (hrUnitId == 0) {
+						hrUnitId = 0;
+					}
+					if (locationId == 0) {
+						locationId = 0;
+					}
+					if (departmentId == 0) {
+						departmentId = 0;
+					}
+					if (pnsId == 0) {
+						pnsId = 0;
+					}
+					//if (sbuId == 6) {
+					//    window.open('/Payroll/PayrollReport/SubMonthlySalaryReportPdf?rptType=' + 'MWSS789' + '&sbuId=' + sbuId + '&pnsId=' + pnsId + '&salaryPeriodId=' + salaryPeriodId, '_blank');
+
+					//}
+					//else {
+					//window.open('/Payroll/PayrollReport/MonthlySalaryReport?rptType=' + rptType + '&sbuId=' + sbuId + '&pnsId=' + pnsId + '&salaryPeriodId=' + salaryPeriodId, '_blank');
+					//}
+					//alert($('#departmentId').val())
+					if ($('#departmentId').val() != 'department') {
+						//window.open('/Payroll/PayrollReport/MonthlySalaryReportByDepartment?rptType=MWSSD&departmentId=' + departmentId + '&pnsId=' + pnsId + '&salaryPeriodId=' + salaryPeriodId, '_blank');
+						window.open('/Payroll/PayrollReport/MonthlySalaryReportByDpt?rptType=MWSSDNew&departmentId=' + departmentId + '&pnsId=' + pnsId + '&salaryPeriodId=' + salaryPeriodId, '_blank');
+					}
+					if ($('#hrBranchId').val() != 'hrBranch') {
+						if ($('#hrBranchId').val() != '') {
+							window.open('/Payroll/PayrollReport/MonthlySalaryReportByHrBranch?rptType=MWSSBNew&hrbranchId=' + hrBranchId + '&pnsId=' + pnsId + '&salaryPeriodId=' + salaryPeriodId, '_blank');
+						}
+						else {
+							window.open('/Payroll/PayrollReport/MonthlySalaryReportPdf_AllInd?salaryPeriodId=' + salaryPeriodId + '&type=AllBranch', '_blank');
+						}
+					}
+					if ($('#officeId').val() != 'office') {
+						window.open('/Payroll/PayrollReport/MonthlySalaryReportByHrBranch?rptType=MWSSONew&hrBranchId=' + officeId + '&pnsId=' + pnsId + '&salaryPeriodId=' + salaryPeriodId, '_blank');
+					}
+					if ($('#hrUnitId').val() != 'hrUnit') {
+						window.open('/Payroll/PayrollReport/MonthlySalaryReportByHrBranch?rptType=MWSSUNew&hrBranchId=' + hrUnitId + '&pnsId=' + pnsId + '&salaryPeriodId=' + salaryPeriodId, '_blank');
+					}
+					if ($('#locationId').val() != 'locationId') {
+						if ($('#locationId').val() != '') {
+							window.open('/Payroll/PayrollReport/MonthlySalaryReportByHrBranch?rptType=MWSSZNew&hrBranchId=' + locationId + '&pnsId=' + pnsId + '&salaryPeriodId=' + salaryPeriodId, '_blank');
+						}
+						else {
+							window.open('/Payroll/PayrollReport/MonthlySalaryReportPdf_AllInd?salaryPeriodId=' + salaryPeriodId + '&type=AllZone', '_blank');
+						}
+					}
+					if ($('#sbu').val() != 'sbu') {
+						window.open('/Payroll/PayrollReport/MonthlySalaryReport?rptType=MWSS&sbuId=' + sbuId + '&pnsId=' + pnsId + '&salaryPeriodId=' + salaryPeriodId, '_blank');
+					}
+
+				}
+				if (rptType == 'BNKSTMNT' || rptType == 'WALLSTMNT' || rptType == 'CASHSTMNT') {
+					if (salaryPeriodId == 0) {
+						swal('Warning', 'Select Salary Period', 'warning');
+						return false;
+					}
+					if (sbuId == 0) {
+						sbuId = 0;
+					}
+					if (pnsId == 0) {
+						pnsId = 0;
+					}
+					window.open('/Payroll/PayrollReport/BankStatementReport?rptType=' + rptType + '&sbuId=' + sbuId + '&pnsId=' + pnsId + '&salaryPeriodId=' + salaryPeriodId, '_blank');
+				}
+				if (rptType == 'BNKSTMNTWTHOUTPAD' || rptType == 'BNKAPP') {
+					if (salaryPeriodId == 0) {
+						swal('Warning', 'Select Salary Period', 'warning');
+						return false;
+					}
+					if (sbuId == 0) {
+						sbuId = 0;
+					}
+					if (pnsId == 0) {
+						pnsId = 0;
+					}
+					window.open('/Payroll/PayrollReport/BankStatementReport_PAD?rptType=' + rptType + '&sbuId=' + sbuId + '&pnsId=' + pnsId + '&salaryPeriodId=' + salaryPeriodId, '_blank');
+				}
+
+				if (rptType == 'FTAXCERT') {
+					if (employeeInfoId == 0) {
+						swal('Warning', 'Select Employee', 'warning');
+						return false;
+					}
+					if (taxYearId == 0) {
+						swal('Warning', 'Select Tax Year', 'warning');
+						return false;
+					}
+					window.open('/Payroll/PayrollReport/FinalTaxCertificateReportPdfAction?rptType=' + rptType + '&employeeInfoId=' + employeeInfoId + '&taxYearId=' + taxYearId, '_blank');
+				}
+				if (rptType == 'TAXCAL') {
+					if (employeeInfoId == 0) {
+						swal('Warning', 'Select Employee', 'warning');
+						return false;
+					}
+					if (taxYearId == 0) {
+						swal('Warning', 'Select Tax Year', 'warning');
+						return false;
+					}
+					window.open('/Payroll/PayrollReport/FinalTaxCertificateReportPdfAction?rptType=' + rptType + '&employeeInfoId=' + employeeInfoId + '&taxYearId=' + taxYearId, '_blank');
+                }
+
+                if (rptType == 'BWSS' || rptType == 'TBSS') {
+                    if (salaryPeriodId == 0) {
+                        swal('Warning', 'Select Salary Period', 'warning');
+                        return false;
+                    }
+                    if (sbuId == 0) {
+                        sbuId = 0;
+                    }
+                    if (hrBranchId == 0) {
+                        hrBranchId = 0;
+                    }
+                    if (officeId == 0) {
+                        officeId = 0;
+                    }
+                    if (hrUnitId == 0) {
+                        hrUnitId = 0;
+                    }
+                    if (locationId == 0) {
+                        locationId = 0;
+                    }
+                    if (departmentId == 0) {
+                        departmentId = 0;
+                    }
+                    if (pnsId == 0) {
+                        pnsId = 0;
+                    }
+                    window.open('/Payroll/PayrollReport/BranchWiseSalarySummaryReport?rptType=' + rptType + '&salaryPeriodId=' + salaryPeriodId, '_blank');
+                }
+                 if (rptType == 'ZWSS') {
+                    if (salaryPeriodId == 0) {
+                        swal('Warning', 'Select Salary Period', 'warning');
+                        return false;
+                    }
+                    if (sbuId == 0) {
+                        sbuId = 0;
+                    }
+                    if (hrBranchId == 0) {
+                        hrBranchId = 0;
+                    }
+                    if (officeId == 0) {
+                        officeId = 0;
+                    }
+                    if (hrUnitId == 0) {
+                        hrUnitId = 0;
+                    }
+                    if (locationId == 0) {
+                        locationId = 0;
+                    }
+                    if (departmentId == 0) {
+                        departmentId = 0;
+                    }
+                    if (pnsId == 0) {
+                        pnsId = 0;
+                    }
+                     window.open('/Payroll/PayrollReport/ZoneWiseSalarySummaryReport?rptType=' + rptType + '&salaryPeriodId=' + salaryPeriodId, '_blank');
+                }
+
+                if (rptType == 'HOSS') {
+                    if (salaryPeriodId == 0) {
+                        swal('Warning', 'Select Salary Period', 'warning');
+                        return false;
+                    }
+                    if (sbuId == 0) {
+                        sbuId = 0;
+                    }
+                    if (hrBranchId == 0) {
+                        hrBranchId = 0;
+                    }
+                    if (officeId == 0) {
+                        officeId = 0;
+                    }
+                    if (hrUnitId == 0) {
+                        hrUnitId = 0;
+                    }
+                    if (locationId == 0) {
+                        locationId = 0;
+                    }
+                    if (departmentId == 0) {
+                        departmentId = 0;
+                    }
+                    if (pnsId == 0) {
+                        pnsId = 0;
+                    }
+                    window.open('/Payroll/PayrollReport/SalarySummarySheetHeadOfficePdf?salaryPeriodId=' + salaryPeriodId, '_blank');
+                }
+
+
+				if (rptType == 'YSS') {
+					if (sbuId == 0) {
+						sbuId = 0;
+					}
+					if (hrBranchId == 0) {
+						hrBranchId = 0;
+					}
+					if (officeId == 0) {
+						officeId = 0;
+					}
+					if (hrUnitId == 0) {
+						hrUnitId = 0;
+					}
+					if (locationId == 0) {
+						locationId = 0;
+					}
+					if (departmentId == 0) {
+						departmentId = 0;
+					}
+					if (pnsId == 0) {
+						pnsId = 0;
+					}
+
+					var fromDate = $('#fromDate').val();
+					var toDate = $('#toDate').val();
+
+					window.open('/Payroll/PayrollReport/SalaryYearlySummarySheetHeadOfficePdf?fromDate=' + fromDate + '&toDate=' + toDate, '_blank');
+				}
+
+
+			});
+		})
+	</script>
+}

@@ -1,0 +1,825 @@
+﻿@model ApprovalViewModel
+@{
+    ViewData["TitleMD"] = "Approval";
+    Layout = "~/Areas/HRPMSMasterData/Views/Shared/_MasterDataForm.cshtml";
+}
+
+@section StyleMD{
+<style>
+    .redStar {
+        color: red;
+    }
+
+    #myDIV {
+        background-color: white;
+        padding: 20px;
+        box-shadow: 3px 3px 3px 3px lightgray;
+        max-height: 415px;
+        overflow-y: scroll;
+        padding-top: 5px;
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+        background-color: white;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #F3F3F3;
+    }
+
+    .g {
+        text-decoration: none;
+        color: #1492a5;
+    }
+
+        .g:hover {
+            text-decoration: none;
+            color: #070a67;
+        }
+
+        .g span {
+            font-family: serif;
+        }
+
+    .small-box {
+        text-align: center;
+        border-radius: 10px;
+        padding: 10px;
+        transition: transform .5s;
+    }
+
+        .small-box:hover {
+            background-color: #e8f0fe;
+            transform: scale(.95);
+        }
+
+        .small-box i {
+            font-size: 35px;
+            margin: 10px;
+        }
+</style>
+}
+
+
+    <div class="card" style="width: 100%;">
+        <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+            <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; border-right: 1px solid #D9D8DB">
+
+
+                <h5 class="card-title" style="color: black; margin: 0;">Approval Information</h5>
+            </div>
+            <div class="col-md-8">
+                @if (User.IsInRole("HRAdmin") || User.IsInRole("admin"))
+                {
+                    <div style="float: left;">
+
+                        @if (Model.photograph?.url == null || Model.photograph?.url == "")
+                        {
+                            <img src="~/images/user-icon-png.png" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                        }
+                        else
+                        {
+                            <img src="~/@Model.photograph?.url" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                        }
+                        @*<img src="~/@Model.photograph?.url" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />*@
+                        <input type="hidden" id="hiddenFile" />
+                    </div>
+                }
+                else
+                {
+                    <div style="float: left;">
+
+                        @if (Model.photograph?.url == null || Model.photograph?.url == "")
+                        {
+                            <img src="~/images/user-icon-png.png" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                        }
+                        else
+                        {
+                            <img src="~/@Model.photograph?.url" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                        }
+                        @*<img src="~/@Model.photograph?.url" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />*@
+                        <input type="hidden" id="hiddenFile" />
+                    </div>
+                }
+                <div style="float: left;">
+                    <div style="padding: 5px;text-align: center;">
+                        <p style="margin: 0; text-transform: uppercase;">@Model.employeeInfo?.nameEnglish</p>
+                        <p style="margin: 0">@Model.employeeInfo?.lastDesignation?.designationName</p>
+                    </div>
+                </div>
+
+                <div style="float: right; margin: 16px;">
+                    <a class='btn btn-info mr-2' style="" data-toggle='tooltip' title='Go Back' href='/HRPMSEmployee/Photograph/EditGrid/@Model.employeeInfo?.Id'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+                    <a id="btngle" href="javascript:void(0)" class="btn btn-outline-success mr-5"
+                       style="position: absolute; right: 82px; top: 17px; box-shadow: none; font-size: 17px;"><i class="fas fa-th"></i></a>
+
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <form id="frmApproval" aria- data-parsley-validate="parsley" autocomplete="off">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6 p-0">
+                            <div class="form-group row">
+                                <input type="hidden" name="approvalMasterId" id="approvalMasterId" value="0" />
+
+                                <label for="approvalTypeId" class="col-sm-4 col-form-label">Approval Type <span style="float:right;" class="redStar">*</span></label>
+                                <div class="col-sm-8">
+                                    <select data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="approvalTypeId" id="approvalTypeId">
+                                        <option value="0">Select</option>
+                                        @foreach (var item in Model.approvalTypes)
+                                        {
+                                            <option value="@item.Id">@item.approvalTypeName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="employeeName" class="col-sm-4 col-form-label">Employee Name<span style="float:right;color:red;">*</span></label>
+                                <div class="col-sm-8">
+                                    <input type="text" readonly data-parsley-required="true" value="@Model.employeeInfo?.nameEnglish- @Model.employeeInfo?.employeeCode" data-parsley-trigger="keyup" class="form-control" name="employeeName" id="employeeName">
+                                    <input type="hidden" name="employeeInfoId" id="employeeInfoId" value="@Model.employeeInfo?.Id" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="statuses" class="col-sm-4 col-form-label">Status</label>
+                                <div class="col-sm-8">
+                                    <select name="statuses" id="statuses" class="form-control input-group-sm input-group-text bg-white">
+                                        <option value="Active">Active</option>
+                                        <option value="InActive">InActive</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <label for="sortOrders" class="col-sm-4 col-form-label">Sort Order<span style="float:right;color:red;">*</span></label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" name="sortOrders" id="sortOrders" min="0">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="approverName" class="col-sm-4 col-form-label">Approver Name<span style="float:right;color:red;">*</span></label>
+                                <div class="col-sm-8">
+                                    <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="approverName" id="approverName" placeholder="Type Employee Name">
+                                    <input type="hidden" name="approverIds" id="approverIds" value="0" />
+                                    <input type="hidden" id="approverDepartment" value="" />
+                                    <input type="hidden" id="approverDesignation" value="" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="canFinalApprover" class="col-sm-4 col-form-label">Is Final Approver? </label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="canFinalApprover" name="canFinalApproverss" data-parsley-required="true">
+                                        <option value="0">No</option>
+                                        <option value="1">Yes</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <button type="button" onclick="AdditemDetails()" value="Add" title="Add" class="btn btn-success" style="float:right;"><i class="fas fa-plus fa-w-1"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <input type="hidden" id="detailsId" name="detailsId" value="0" />
+                        <input type="hidden" id="IsEdit" name="IsEdit" value="0" />
+                        <div class="col-12">
+                            <table class="table table-bordered table-striped" id="tblitemDetails" data-parsley-required="true">
+                                <thead style="width:100%;background-color:lightgray;">
+                                    <tr>
+                                        <th style="width:20%">Approver Name</th>
+                                        <th style="width:20%">Department</th>
+                                        <th style="width:20%">Designation</th>
+                                        <th style="width:10%">Status</th>
+                                        <th style="width:10%;text-align:right;">Sort Order</th>
+                                        <th style="width:10%;text-align:right;">Is Final Approvar</th>
+                                        <th style="width:10%">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-9">
+                    </div>
+                    <div class="col-md-3" style="text-align:right">
+                        <input type="button" onclick="RefreshAll()" id="btnRefesh" value="Refresh" class="btn btn-outline-secondary btn-sm" style="width:90px;" />&nbsp;&nbsp;
+                        <input type="submit" id="btnSave" value="Save" class="btn btn-success btn-sm" style="width:90px;" />
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Approval List</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="ApprovalTable">
+                    <thead>
+                        <tr>
+                            <th>Employee Id</th>
+                            <th>Employee Name</th>
+                            <th>Approval Type Name</th>
+                            @*<th>Approvar Type</th>*@
+                            <th>Action</th>
+					</thead>
+                    <tbody>
+                        @foreach (var data in Model.approvalMasters)
+                        {
+                            <tr>
+                                <td>@data.employeeInfo?.employeeCode</td>
+                                <td>@data.employeeInfo?.nameEnglish</td>
+                                <td>@data.approvalType?.approvalTypeName</td>
+                                @*<td>
+									if (data.isDelete == 1)
+									{
+									<span>Next</span>
+									}
+									else
+									{
+									<span>Final</span>
+									}
+								</td>*@
+                                <td>
+                                    <a class="btn btn-success" onclick="EditApprovalTable(@data.Id, @data.approvalTypeId,@data.employeeInfoId, '@data.employeeInfo?.nameEnglish', '@data.employeeInfo?.lastDesignation?.designationName', '@data.employeeInfo?.department?.deptName')" href="javascript:void(0)"><i class="fa fa-edit"></i></a>
+                                    <a class="btn btn-danger" onclick="DeleteApprovalTable(@data.Id)" href="javascript:void(0)"><i class="fa fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myDIV" style="display: none; width: 311px; position: absolute; right: 50px; top: 167px;">
+    <div class="row">
+        <a href="/HRPMSEmployee/Info/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-tie"></i><span>Basic</span>
+        </a>
+
+        @*<a href="/HRPMSEmployee/Address/Index/@Model.employeeID" class="col-md-4 small-box g">
+                <i class="fa fa-map-marker-alt"></i><span>Address</span>
+            </a>*@
+        <a href="/HRPMSEmployee/Spouse/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-female"></i><span>Spouse</span>
+        </a>
+        <a href="/HRPMSEmployee/Children/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-child"></i><span>Children</span>
+        </a>
+        <a href="/HRPMSEmployee/EmergencyContact/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-blender-phone"></i><span>Emergency Contact</span>
+        </a>
+        <a href="/HRPMSEmployee/Nominee/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-sitemap"></i><span>Nominee</span>
+        </a>
+        <a href="/HRPMSEmployee/Nominee/EmployeeInsurance/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-university"></i><span>Insurance</span>
+        </a>
+        <a href="/HRPMSEmployee/EducationalQualification/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-graduation-cap"></i><span>Education</span>
+        </a>
+        <a href="/HRPMSEmployee/ProfessionalQualifications/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-chalkboard-teacher"></i><span>Qualification</span>
+        </a>
+        <a href="/HRPMSEmployee/OtherQualifications/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-book-reader"></i><span>Other Qualification</span>
+        </a>
+        <a href="/HRPMSEmployee/Training/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-clipboard-list"></i><span>Training History</span>
+        </a>
+        <a href="/HRPMSEmployee/TransferLog/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-stream"></i><span>Service</span>
+        </a>
+        <a href="/HRPMSEmployee/PromotionLog/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-chart-line"></i><span>Promotion</span>
+        </a>
+        <a href="/HRPMSEmployee/ACRLog/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-clipboard-check"></i><span>History</span>
+        </a>
+        <a href="/HRPMSEmployee/Disciplinary/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-times"></i><span>Disciplinary Action</span>
+        </a>
+        <a href="/HRPMSEmployee/Supervisor/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-shield"></i><span>Supervisor</span>
+        </a>
+        <a href="/HRPMSEmployee/License/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-id-badge"></i><span>Driving License</span>
+        </a>
+        <a href="/HRPMSEmployee/Passport/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-passport "></i><span>Passport</span>
+        </a>
+        <a href="/HRPMSEmployee/Travel/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-suitcase-rolling"></i><span>Travel</span>
+        </a>
+        <a href="/HRPMSEmployee/Membership/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-tag"></i><span>Membership</span>
+        </a>
+        <a href="/HRPMSEmployee/Award/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-medal"></i><span>Award</span>
+        </a>
+        <a href="/HRPMSEmployee/Publication/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-atlas"></i><span>Publication</span>
+        </a>
+        <a href="/HRPMSEmployee/Language/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-language"></i><span>Language</span>
+        </a>
+
+        <a href="/HRPMSEmployee/OtherActivities/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-skating"></i><span>Other Activities</span>
+        </a>
+        <a href="/HRPMSEmployee/BankInfo/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-university"></i><span>Bank Acounts</span>
+        </a>
+        <a href="/HRPMSEmployee/Belongings/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-bold"></i><span>Belongings</span>
+        </a>
+        <a href="/HRPMSEmployee/PreviousEmployment/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-th-list"></i><span>Prev.Employment</span>
+        </a>
+        <a href="/HRPMSEmployee/FreedomFighter/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-check"></i><span>Freedom Fighter</span>
+        </a>
+
+
+        <a href="/HRPMSEmployee/Reference/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-clock"></i><span>Reference</span>
+        </a>
+        <a href="/HRPMSEmployee/OfficeAssign/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-map-marker-alt"></i><span>Office Assign</span>
+        </a>
+        <a href="/HRPMSEmployee/Photograph/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-circle"></i><span>Picture</span>
+        </a>
+        <a href="/HRPMSEmployee/Photograph/Signature/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-user-circle"></i><span>Signature</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeContractInfo/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-file-signature"></i><span>Contract</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fa fa-sitemap"></i><span>Project Activity</span>
+        </a>
+        <a href="/HRPMSEmployee/FinanceCode/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fas fa-code-branch"></i><span>Financial Code</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeAttachment/Index/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fas fa-file"></i><span>Attachment</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/ProjectAssign/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fas fa-air-freshener"></i><span>Project Assign</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/EmployeeOtherInfo/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fas fa-info-circle"></i><span>Other Info</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/EmployeeCostCentre/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fas fa-dollar-sign"></i><span>Cost Centre</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/EmployeeGrade/@Model.employeeID" class="col-md-4 small-box g">
+            <i class="fab fa-glide-g"></i><span>Employee Grade</span>
+        </a>
+
+    </div>
+</div>
+<div class="modal fade" id="updateEmpPhotoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                @*<img src="~/images/Aloha New Logo.png" style="height:50px;" />*@
+                <h5 class="modal-title" id="exampleModalLabel">Update Photo</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-area="HRPMSEmployee" asp-controller="Photograph" asp-action="Index" method="post" enctype="multipart/form-data" data-parsley-validate="parsley">
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="form-group row">
+                        @*<div class="col-5">
+            <img id="user_img_current" style="width:200px;height:200px" src="~/@Model.photograph.url" alt="" class="img-thumbnail float-left">
+            <input type="hidden" id="hiddenFile" />
+        </div>*@
+                        <div class="col-7">
+                            <input type="hidden" name="queryString" id="queryString" value="" />
+                            @if (Model.photograph?.url != null || Model.photograph?.url != "")
+                            {
+                                <img id="user_img" style="width:200px;height:200px;cursor:pointer;" src="~/@Model.photograph?.url" alt="" class="img-thumbnail float-left">
+                            }
+                            else
+                            {
+                                <img id="user_img" style="width:200px;height:200px;cursor:pointer;" src="/images/user-icon-png.png" alt="" class="img-thumbnail float-left">
+                            }
+                            <input type="hidden" name="employeeID" value="@Model.employeeInfo.Id" />
+                            <input type="hidden" name="photographID" value="@Model.photograph?.Id" />
+                            <input type="file" title="Photo Upload" id="imagePath" data-parsley-required="true" name="empPhoto" class="btn btn-default btn-sm pull-right" />
+                            <span style="float:left;color:red;" class="redStar">*</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <button type="submit" id="submitbtn" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+                    @*<button type="button" id="submit1" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section ScriptsMD{
+    <script>
+        $(document).ready(function () {
+            var pathname = window.location.pathname;
+            $('#queryString').val(pathname);
+
+            $("#photo").addClass("active");
+            $("#imagePath").change(function () {
+                
+                readURL(this);
+            });
+
+            var orgFullTitle = "Approval Information";
+            $('#ApprovalTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        title: orgFullTitle,
+                        messageTop: 'List Of Foreign Training',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        title: orgFullTitle,
+                        messageTop: 'List Of Employee Training'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: orgFullTitle,
+                        messageTop: 'List Of Foreign Training',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+
+            Common.Ajax('GET', '/global/api/GetAllUserEmployeeInfo', [], 'json', ajaxGetAllEmployee);
+            $("#btnSave").click(function (e) {
+                let rowCount = $("#tblitemDetails tbody>tr").length;
+                if ($("#employeeInfoId").val() == "0") {
+                    alert("Please Enter Employee Name.!!!");
+                    return false;
+                }
+                if ($("#approvalTypeId").val() == "0") {
+                    alert("Please Select Approval Type.!!!");
+                    return false;
+                }
+
+                if (rowCount < 1) {
+                    alert("Please Add Approver from Approver Details!!!");
+                    return false;
+                }
+                e.preventDefault();
+
+                var form = $("#frmApproval");
+                $.ajax({
+                    url: '/HRPMSMasterData/Approval/Index',
+                    data: form.serialize(),
+                    type: 'POST',
+					success: function (records) {
+						console.log(records)
+                        swal({
+                            title: '', text: 'Save Successfully!', type: 'success', showCancelButton: false, confirmButtonColor: '#3085d6', confirmButtonText: 'Ok!',
+                        }).then(function () {
+                            //window.location.href = "/HRPMSMasterData/Approval/Index";
+							location.reload();
+                        });
+                    }
+                });
+            });
+            $("#btngle").click(function () {
+                $("#myDIV").slideToggle("slow");
+            });
+        });
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var filerdr = new FileReader();
+                filerdr.onload = function (e) {
+               
+                    $('#user_img').attr('src', e.target.result);
+                    $('#user_img_current').attr('src', e.target.result);
+                }
+                filerdr.readAsDataURL(input.files[0]);
+            }
+        }
+        function EditApprovalTable(Id, approvalTypeId, employeeInfoId, nameEnglish) {
+            $("#approvalMasterId").val(Id);
+            $("#approvalTypeId").val(approvalTypeId);
+            $("#employeeInfoId").val(employeeInfoId);
+            $("#employeeName").val(nameEnglish);
+           
+            
+            Common.Ajax('GET', '/HRPMSMasterData/Approval/GetApprovalDetailByApprovalMasterId?ApprovalMasterId=' + Id, [], 'json', ajaxGetApprovalDetailByApprovalMasterId);
+
+		}
+
+		function DeleteApprovalTable(Id) {
+			swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+				Common.Ajax('GET', '/HRPMSMasterData/Approval/DeleteApprovalById?Id=' + Id, [], 'json', ajaxDeleteApprovalTable, false);
+            });
+		}
+        function ajaxGetAllEmployee(response) {
+            var GetEmployeeList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.nameEnglish + ' (' + option.employeeCode + ')';
+                obj.department = option.department ?.deptName;
+                obj.designation = option.lastDesignation ?.designationName;
+                GetEmployeeList[GetEmployeeList.length] = obj;
+            });
+            $('#employeeName').autocomplete({
+                source: GetEmployeeList,
+                select: function (event, ui) {
+                    $("#employeeInfoId").val(ui.item.key);
+                }
+            });
+            $('#approverName').autocomplete({
+                source: GetEmployeeList,
+                select: function (event, ui) {
+                    $("#approverIds").val(ui.item.key);
+                    $("#approverDepartment").val(ui.item.department)
+                    $("#approverDesignation").val(ui.item.designation)
+
+                }
+            });
+        }
+
+		function ajaxDeleteApprovalTable(res) {
+			if (res == 1) {
+				swal('Success', 'Deleted Successfully', 'success').then(function () {
+					location.reload();
+				});
+			}
+		}
+        function RefreshAll() {
+            window.location.href = "/HRPMSMasterData/Approval/Index";
+
+        }
+       
+		function AdditemDetails() {
+			var approverId = $('#approverIds').val();
+
+            var ifExistIndex = window.localStorage.getItem("holdIndex1");
+
+            var index = "0";
+            if (ifExistIndex == "null" || ifExistIndex == null) {
+                index = $("#tblitemDetails tbody>tr").length;
+            }
+            else {
+                index = ifExistIndex;
+                tdRID = $("#tblitemDetails tbody >tr:eq(" + ifExistIndex + ") td:eq(0) .clsId").val();
+            }
+
+            if ($("#approverName").val() == "") {
+                alert("Please Enter Approver Name.");
+                return false
+            }
+           
+            if ($("#approverIds").val() == "" || $("#approverIds").val() == "0") {
+                alert("Please Enter Approver Name.");
+                return false
+            }
+            if ($("#sortOrders").val() == "" || $("#sortOrders").val() == "0") {
+                alert("Please Enter Sort Order.");
+                return false
+            }
+            
+            let id = parseInt($("#detailsId").val()) ? parseInt($("#detailsId").val()) : 0;
+            var approverName = $("#approverName").val();
+            var deparmentName = $("#approverDepartment").val();
+            var designationName = $("#approverDesignation").val();
+			var canFinalApprover = $("#canFinalApprover").val();
+            var approverId = $("#approverIds").val();
+            var sortOrder = $("#sortOrders").val();
+			var status = $("#statuses").val();
+			var stat = "";
+			//alert(canFinalApprover);
+            var RowCount = $("#tblitemDetails tbody>tr").length;
+            var editOption = parseInt($('#IsEdit').val()) ? parseInt($('#IsEdit').val()) : 0;
+
+			if (canFinalApprover == 1) {
+				stat = "Final"
+			}
+			else {
+				stat = "Next"
+			}
+
+            for (i = 0; i < RowCount; i++) {
+                var _approverId = $("#approverId" + i).val();
+
+                if (_approverId == approverId && editOption == 0) {
+                    alert('You have already added this Approver!');
+                    return false
+                }
+			}
+
+			$.ajax({
+				url: '@Url.Action("GetDesDeptOfApprover", "Approval")',
+				data: { id: approverId },
+				type: 'GET',
+			})
+			.done(function (res) {
+				var dtTable = $("#tblitemDetails");
+				var tableBody = dtTable.find('tbody');
+				var trHtml = '<tr id=' + index + '>' +
+					'<td>' + approverName + '<input type="hidden" name="id"class="clsId" value="' + id + '"><input type="hidden" id="approverId' + index + '" name="approverId" class="clsapproverId" value="' + approverId + '"/></td>' +
+                    '<td>' + deparmentName + '</td>' +
+					'<td>' + designationName + '</td>' +
+					'<td>' + status + '<input type="hidden" id="status' + index + '" name="status" class="clsstatus" value="' + status + '"/></td>' +
+					'<td style="text-align:right;">' + sortOrder + '<input type="hidden" id="sortOrder' + index + '" name="sortOrder" class="clssortOrder" value="' + sortOrder + '"/></td>' +
+					'<td style="text-align:right;">' + stat + '<input type="hidden" id="canFinalApprover' + index + '" name="canFinalApprover" class="clssortOrder" value="' + canFinalApprover + '"/></td>' +
+
+					'<td><a href="javascript:void(0)"style="background-color:red;border-color:red" data-toggle="tooltip" title="Delete" class="btn btn-danger btn-xs" onclick="Delete(' + index + ')"><i class="fa fa-trash"></i></a>&nbsp;&nbsp;' +
+                    '<a onclick="EditTbl(' + index + "," + approverId + ", " + sortOrder + ", `" + approverName + "`,  `" + status + "`,  " + id + ", `" + deparmentName + "`,  `" + designationName + "`" + ')" href="javascript:void(0)" title="Edit" class="btn btn-success btn-xs" > <i class="fa fa-edit"></i></a >' +
+
+
+					'</tr>';
+
+				if (ifExistIndex == null || ifExistIndex == "null") {
+					tableBody.append(trHtml);
+				}
+				else {
+					var rowUpdate = $("#tblitemDetails tbody >tr:eq(" + ifExistIndex + ")");
+					rowUpdate.replaceWith(trHtml);
+					window.localStorage.setItem("holdIndex", null);
+					ifExistIndex = null;
+				}
+
+				Refresh();
+			})
+			.fail(function () {
+				//swal('', 'Unable to Delete!', 'warning');
+			});
+        }
+
+
+
+        function EditTbl(index, approverId, sortOrder, approverName, status, Id, isDelete, department, designation) {
+            var rightIndex = index;
+            $("#IsEdit").val(1);
+            $('#detailsId').val(Id);
+            $('#approverIds').val(approverId);
+            $('#sortOrders').val(sortOrder);
+            $('#approverName').val(approverName);
+            $('#statuses').val(status);
+            $('#approverDepartment').val(department);
+            $('#approverDesignation').val(designation);
+            
+			$('#canFinalApprover').val(isDelete);
+
+            window.localStorage.setItem('holdIndex1', null);
+            if (rightIndex != null) {
+                window.localStorage.setItem('holdIndex1', rightIndex);
+            }
+        }
+
+        function Refresh() {
+            $('#detailsId').val('');
+            $("#IsEdit").val(0);
+
+            $('#approverIds').val(0);
+            $('#sortOrders').val('');
+            $('#approverName').val('');
+            $('#statuses').val("Active");
+
+            window.localStorage.setItem("holdIndex1", null);
+            ifExistIndex = null;
+        }
+
+        function Delete(index) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+                $("#tblitemDetails #" + index).remove();
+                swal('', 'Deleted Successfully!', 'success');
+            });
+
+        }
+        
+		function ajaxGetApprovalDetailByApprovalMasterId(response) {
+			
+            var ifExistIndex = window.localStorage.getItem("holdIndex1");
+			var index = "0";
+			var status = "";
+            if (ifExistIndex == "null" || ifExistIndex == null) {
+                index = $("#tblitemDetails tbody>tr").length;
+            }
+            else {
+                index = ifExistIndex;
+                tdRID = $("#tblitemDetails tbody >tr:eq(" + ifExistIndex + ") td:eq(0) .clsId").val();
+            }
+            $("#tblitemDetails tbody>tr").empty();
+            $.each(response, function (key, value) {
+				console.log("ok")
+				console.log(value)
+				if (value.isDelete == 0) {
+					status = "Next";
+				}
+				else {
+					status = "Final"
+                }
+                var deptName = '';
+                if (value.approver.department != null) {
+                    deptName = value.approver.department ?.deptName;
+                }
+               
+                index = $("#tblitemDetails tbody>tr").length;
+                var dtTable = $("#tblitemDetails");
+                var tableBody = dtTable.find('tbody');
+                var trHtml = '<tr id=' + index + '>' +
+                    '<td>' + value.approver.nameEnglish + '<input type="hidden" name="id"class="clsId" value="' + value.Id + '"><input type="hidden" id="approverId' + index + '" name="approverId" class="clsapproverId" value="' + value.approverId + '"/></td>' +
+                    '<td>' + deptName + '</td>' +
+					'<td>' + value.approver.lastDesignation?.designationName + '</td>' +
+                    '<td>' + value.status + '<input type="hidden" id="status' + index + '" name="status" class="clsstatus" value="' + value.status + '"/></td>' +
+                    '<td style="text-align:right;">' + value.sortOrder + '<input type="hidden" id="sortOrder' + index + '" name="sortOrder" class="clssortOrder" value="' + value.sortOrder + '"/></td>' +
+					'<td style="text-align:right;">' + status + '<input type="hidden" id="isDelete' + index + '" name="canFinalApprover" class="clsstatus" value="' + value.isDelete + '"/></td>' +
+                    
+                    '<td><a href="javascript:void(0)"style="background-color:red;border-color:red" data-toggle="tooltip" title="Delete" class="btn btn-danger btn-xs" onclick="Delete(' + index + ')"><i class="fa fa-trash"></i></a>&nbsp;&nbsp;' +
+                    '<a onclick="EditTbl(' + index + "," + value.approverId + ", " + value.sortOrder + ", `" + value.approver.nameEnglish + "`,  `" + value.status + "`, " + value.Id + ',' + value.isDelete + ', `' + deptName + '`,`' + value.approver.lastDesignation.designationName +'`' +')" href="javascript:void(0)" title="Edit" class="btn btn-success btn-xs" > <i class="fa fa-edit"></i></a >' +
+
+
+                    '</tr>';
+
+                if (ifExistIndex == null || ifExistIndex == "null") {
+
+                    tableBody.append(trHtml);
+                }
+                else {
+                    var rowUpdate = $("#tblitemDetails tbody >tr:eq(" + ifExistIndex + ")");
+                    rowUpdate.replaceWith(trHtml);
+                    window.localStorage.setItem("holdIndex1", null);
+                    ifExistIndex = null;
+                }
+            })
+
+            index = index + 1;
+            
+        }
+    </script>
+}
+
+
+
+
+

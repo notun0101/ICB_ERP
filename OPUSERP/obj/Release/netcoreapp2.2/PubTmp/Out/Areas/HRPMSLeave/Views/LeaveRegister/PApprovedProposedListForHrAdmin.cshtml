@@ -1,0 +1,188 @@
+﻿@model LeaveRegisterViewModel
+
+@{
+    ViewData["Title"] = "Approved Proposed Leave List";
+    Layout = "~/Areas/HRPMSLeave/Views/Shared/_LeaveForm.cshtml";
+}
+
+@section StyleL{
+    <style>
+
+
+        .b {
+            font-size: 12px;
+            margin: 5px;
+        }
+
+        .active {
+            color: darkcyan;
+        }
+
+        .c {
+            min-height: 290px;
+            background-color: #FDF2E9;
+        }
+
+            .c .card-footer {
+                height: 50px;
+                background-color: #E9F7EF;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+        a i {
+            font-size: 15px !important;
+            margin: 0 !important;
+        }
+
+        .delete {
+            float: right;
+            border: none;
+            box-shadow: none;
+        }
+
+        #userRoles, #assignedPage {
+            height: 200px;
+            overflow: scroll;
+        }
+    </style>
+}
+
+
+
+<div class="row clearfix" style="">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">All Approved Proposed Leave List</h6>
+                <a class='btn btn-info' style="margin-left: 641px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1018&perentId=6282'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+            </div>
+            <div class="card-body">
+             
+                <form asp-action="ApprovedProposedByHrAdmin" method="post" id="allform">
+
+                   
+                    <div style="margin-top:4px!important">
+                        <table class="table table-striped table-bordered" id="requisitionListTable">
+                            <thead>
+                                <tr>
+                                    @*<th>
+                                        <input type="checkbox" id="selectAll" style="width:20px;height:20px" />
+                                    </th>*@
+                                    <th>Employee Id</th>
+                                    <th>Name</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Leave Type</th>
+                                    <th>Leave Remarks</th>
+                                    <th>Days</th>
+                                    <th>Action</th>
+                            </thead>
+                            <tbody id="tbody">
+                                @foreach (var item in Model.ProleaveRegisters)
+                                {
+                                    <tr>
+                                       
+                                        <td>@item.leaveRegisterslists?.employee?.employeeCode</td>
+                                        <td>@item.leaveRegisterslists?.employee?.nameEnglish</td>
+                                        <td>@item.leaveRegisterslists?.leaveFrom?.ToString("dd MMM yyyy")</td>
+
+                                        <td>@item.leaveRegisterslists?.leaveTo?.ToString("dd MMM yyyy")</td>
+                                        <td> @item.leaveRegisterslists?.leaveType?.nameEn</td>
+                                        <td>
+                                            @if (item.leaveRegisterslists?.purposeOfLeave == null || item.leaveRegisterslists?.purposeOfLeave == "")
+                                            {
+                                                <span></span>
+                                            }
+                                            else
+                                            {
+                                                @item.leaveRegisterslists?.purposeOfLeave
+                                            }
+
+                                        </td>
+                                        <td>@item.leaveRegisterslists?.daysLeave</td>
+                                        <td>
+                                            <a class="btn btn-info btn-sm" target="_blank" data-toggle='tooltip' title='Print' href='/HRPMSLeave/LeaveRegister/ProposedLeaveIndividualPDF?id=@item.leaveRegisterslists?.Id'><i class="fa fa-print"></i></a>
+                                            @*<a class="btn btn-success btn-sm" style="margin-left:1px;margin-bottom:2px ;background-color:#6ab56a" data-toggle="modal" data-target="#ValidatModal" title="View for Action" onclick="AddValue(@item.Id,@item.employeeId,@item.leaveTypeId,'@item.whenLeave','@item.leaveType?.nameEn','@item.leaveFrom?.ToString("dd-MMM-yyyy")','@item.leaveTo?.ToString("dd-MMM-yyyy")',@item.daysLeave,'@item.purposeOfLeave', '@item.employee?.nameEnglish', '@item.comment')"><i class="fa fa-Edit"> Edit</i></a>*@
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section ScriptsL{
+    <script src="~/Assets/paginathing.js"></script>
+    <script>
+        var orgFromDate = '';
+        var orgToDate = '';
+
+        $(document).ready(function () {
+          
+
+            $("#education").addClass("active");
+            $('#requisitionListTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" + "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        },
+                        title: 'ERP',
+                        messageTop: 'Re-creation Leave List',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        },
+                        title: 'ERP',
+                        messageTop: 'Re-creation Leave List'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: 'ERP',
+                        messageTop: 'Re-creation Leave List',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+        });
+
+      
+
+
+    </script>
+}
+
+

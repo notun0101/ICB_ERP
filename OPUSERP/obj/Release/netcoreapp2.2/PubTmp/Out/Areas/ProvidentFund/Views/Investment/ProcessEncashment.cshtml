@@ -1,0 +1,159 @@
+﻿@model EncashmentViewModel
+@{
+    ViewData["Title"] = "ProcessEncashment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            @*<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h2 class="m-0 font-weight-bold text-primary">Process Encashment</h2>
+        </div>*@
+            <div class="card-body">
+                <div class="">
+                    <h5 class="m-0 font-weight-bold text-primary">New Encashment</h5>
+                    <hr />
+                    <form asp-area="ProvidentFund" asp-controller="Investment" asp-action="ProcessEncashment" id="FormId" method="post">
+
+                        <div class="row col-sm-12">
+                            <div class="col-sm-6">
+
+                                <div class="form-group row">
+                                    <label for="" class="col-sm-5 col-form-label">Encashment Date</label>
+                                    <div class="col-sm-6 input-group">
+                                        <input name="encashDate" id="encashDate" class="form-control input-group-sm Date" value="" />
+                                        <div class="input-group-prepend">
+                                            <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="" class="col-sm-5 col-form-label">Encashment Amount</label>
+                                    <div class="col-sm-6 ">
+                                        <input type="text" class="form-control" name="encashAmount" id="encashAmount">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="" class="col-sm-5 col-form-label">Adjustment Amount</label>
+                                    <div class="col-sm-6 ">
+                                        <input type="text" class="form-control" name="adjustAmount" id="adjustAmount">
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row">
+                                    <label for="" class="col-sm-5 col-form-label">Encashment Account</label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" name="encashAccount" id="encashAccount">
+                                            <option>Select</option>
+                                            <option value="FDR in BRAC Bank">FDR in BRAC Bank</option>
+                                            <option value="Prizebond">Prizebond </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="" class="col-sm-5 col-form-label">Adjustment Account</label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" name="adjustAccount" id="adjustAccount">
+                                            <option>Select</option>
+                                            <option value="FDR in BRAC Bank">FDR in BRAC Bank</option>
+                                            <option value="Prizebond">Prizebond </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+
+                                <table class="table invoice-table">
+                                    <tbody>
+                                        <tr>
+                                            <th>Investment Name</th>
+                                            <td> Bank</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Investment Date</th>
+                                            <td>15-06-2021</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Maturity Date</th>
+                                            <td>15-05-2021</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Investment Rate</th>
+                                            <td>5%</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Investment Amount</th>
+                                            <td>50000</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Interest Amount</th>
+                                            <td>20000</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <div style="padding-left:5px;">
+                                <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>&nbsp;&nbsp;&nbsp;
+                                <button type="button" id="reset" class="btn btn-danger " style="float:right; margin-top:5px;margin-right:5px;"><i class="fas fa-sync"></i></button>
+
+
+                            </div>
+                        </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $(".Date").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+        //$(".Date").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" });
+        $("#reset").on("click", function (event) {
+            $('#encashDate').val('');
+            $('#encashAmount').val('');
+            $('#adjustAmount').val('');
+            $('#encashAccount').val('');
+            $('#adjustAccount').val('');
+        });
+
+    });
+
+    $('#submit').click(function () {
+        console.log($('#FormId').serializeArray());
+        var data = $('#FormId').serializeArray();
+
+        console.log(data[0].value)
+        swal({
+            title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+        }).then(function () {
+            $.ajax({
+                url: '/ProvidentFund/Member/MemberApplication',
+                type: 'POST',
+                data: data
+            }).done(function () {
+                if (data[0].value == 0) {
+                    swal('success', 'Saved Successfully!', 'success').then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    swal('success', 'Updated Successfully!', 'success').then(function () {
+                        location.reload();
+                    });;
+                }
+            }).fail(function () {
+                swal('warning', 'Failed!', 'warning');
+            })
+        });
+    })
+
+</script>

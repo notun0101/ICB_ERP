@@ -1,0 +1,2197 @@
+﻿@model FixationViewModel
+@{
+    ViewData["Title"] = "PromotionPRF";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+
+
+}
+
+@using OPUSERP.Helpers;
+@using System;
+@using OPUSERP.Payroll.Services.Fixation.Interfaces;
+@inject IFixationService fixationService;
+<style>
+
+    .print-card-body {
+        /*width: 100%;*/
+        padding-bottom: 10px;
+        background-color: white;
+    }
+
+    .header {
+        text-align: center;
+        margin: 30px
+    }
+
+    .box {
+        margin-top: 100px;
+        margin-left: 85px;
+        color: black;
+    }
+
+    table, th, td {
+        border: 1px solid black;
+    }
+
+    .f {
+        font-size: 22px;
+    }
+
+    div.a {
+        text-indent: 22px;
+    }
+
+    .status {
+        position: absolute;
+        font-size: 22px;
+        right: 50px;
+        top: 40px;
+        transform: rotate( 314deg );
+        font-family: cursive;
+        padding: 10px 22px;
+        font-weight: bold;
+        background: lightgrey;
+    }
+
+    .pagebreak {
+        clear: both;
+        page-break-after: always;
+    }
+
+    .branchName {
+    }
+</style>
+
+@{
+    var bnEmpCode = EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.fixationDetails?.empCode);
+    var banglaLetterDate = EnglishToBanglaNumber.ConvertEnglishToBanglaDate(Convert.ToDateTime(Model.fixationDetails?.letterDate));
+    var bnLetterDate = EnglishToBanglaNumber.ConvertToBnEnDate(Convert.ToDateTime(Model.fixationDetails?.letterDate));
+    var bnEffectiveDate = EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.fixationDetails?.effectiveDate?.ToString("dd/MM/yyyy"));
+    var bnEffectiveDatePrev = EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.fixationDetails?.effectiveDate?.AddDays(-1).ToString("dd/MM/yyyy"));
+    var bnRefNo = EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.fixationDetails.refNo);
+    var allSlabBn = EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.fixationDetails.AllSlab);
+    var bnAmount = EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Convert.ToInt32(Model.fixationDetails.amount).ToString());
+    var banglaAmount = AmountInWordBn.ConvertToWordsBangla(Model.fixationDetails.amount.ToString());
+
+    var manager = await fixationService.GetBranchManagerByBranchId(156);
+}
+
+
+
+<div class="print-card">
+    <div class="print-card-body">
+        <div class="container-fluid">
+            @*<div class="fa-pull-right">
+                <p style="font-size:12px;color:gray;">Print at: @DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")</p>
+            </div>*@
+            <div class="row" style="padding-top:0px;font-size:22px;">
+                <div class="col-2">                                            </div>
+                <div class="col-8">
+                    <div style="color:black;text-align:center;">
+
+                        <h3> বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড</h3>
+                        <h4><u>হেড অফিস, ঢাকা ।</u></h4>
+                        <h4><u>হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্ট</u></h4>
+                    </div>
+                </div>
+                <div class="col-2"></div>
+            </div>
+            <div class="row" style="color:black">
+                <div class="col-4" style="margin-top: 44px;">
+                    <p>
+                        <span style="color:black;font-size:22px">
+                            <span> নং - ০৬.১/১.</span> @bnEmpCode <Span>/</Span>
+                        </span>
+                    </p>
+                </div>
+                <div class="col-1"></div>
+                <div class="col-2"></div>
+                <div class="col-5 row text-center">
+                    <table class="table mt-2" style="border:none">
+                        <tr style="border:1px;font-size:15px;color:black;text-align:center;">
+                            <td style="padding: 0; border-top: 1px solid black;">
+                                "দুটি সন্তানের বেশি নয় একটি হলে ভালো হয়"
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:22px;border:none;text-align:right;">
+
+                                <p style="margin: 0">@banglaLetterDate</p>
+                                <p style="margin: 0">@bnLetterDate</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="col-12" style="float:left; margin-bottom: -1px;">
+                @if (Model.fixationDetails?.gender == "Male")
+                {
+                    <p style="color:black;font-size:22px; margin: 0;">
+                        জনাব @Model.fixationDetails?.nameBangla
+                    </p>
+                }
+                else
+                {
+                    <p style="color:black;font-size:22px; margin: 0;">
+                        @Model.fixationDetails?.nameBangla
+                    </p>
+                }
+            </div>
+
+            <div class="col-12" style="float:left; line-height: 1.3">
+                <p style="color:black;font-size:22px; margin: 0; margin: 0;">
+                    @Model.fixationDetails?.designationNameBN
+                </p>
+
+                @if (Model.empPostingPlace.FirstOrDefault()?.hrBranchId == 205)
+                {
+                    if (Model.empPostingPlace.Count() > 0)
+                    {
+                        if (Model.empPostingPlace.FirstOrDefault()?.departmentId > 0 && Model.empPostingPlace.FirstOrDefault().hrUnitId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.unitNameBn (@Model.empPostingPlace.FirstOrDefault()?.deptNameBn)
+                            </p>
+                        }
+                        else if (Model.empPostingPlace.FirstOrDefault()?.departmentId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.deptNameBn
+                            </p>
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                            </p>
+
+                            <p style="color:black;font-size:22px">
+                                হেড অফিস<br />
+                                <u>ঢাকা ।</u>
+                            </p>
+                        }
+                        else if (Model.empPostingPlace.FirstOrDefault()?.hrDivisionId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.divNameBn
+                            </p>
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                            </p>
+
+                            <p style="color:black;font-size:22px">
+                                হেড অফিস<br />
+                                <u>ঢাকা ।</u>
+                            </p>
+                        }
+                        else if (Model.empPostingPlace.FirstOrDefault()?.officeId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.officeNameBn
+                            </p>
+                            @if (Model.empPostingPlace.FirstOrDefault()?.officeId == 11)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    @Model.empPostingPlace.FirstOrDefault()?.officeAddress
+                                </p>
+                            }
+                            else
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    @Model.empPostingPlace.FirstOrDefault()?.officeAddress
+                                </p>
+                            }
+                            @if (Model.empPostingPlace?.FirstOrDefault()?.officeId == 17)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    বিডিবিএল ভবন
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    ৮ রাজউক এভিনিউ
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    ঢাকা।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace?.FirstOrDefault()?.officeId == 11)
+                            {
+
+                            }
+                            else
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                                </p>
+
+                                <p style="color:black;font-size:22px">
+                                    হেড অফিস<br />
+                                    <u>ঢাকা ।</u>
+                                </p>
+                            }
+                        }
+                        else
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.branchNameBn
+                            </p>
+                        }
+                    }
+                    else if (Model.empPostingPlace.FirstOrDefault()?.officeId == null)
+                    {
+                        <p style="color:black;font-size:22px; margin: 0;">
+                            বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                        </p>
+                        <p style="color:black;font-size:22px">
+                            হেড অফিস<br />
+                            <u>ঢাকা ।</u>
+                        </p>
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else if (Model.empPostingPlace.FirstOrDefault()?.hrUnitId != null)
+                {
+                    <p style="color:black;font-size:22px; margin: 0;">
+                        @Model.empPostingPlace.FirstOrDefault()?.unitNameBn
+                    </p>
+                    <p style="color:black;font-size:22px; margin: 0;">
+                        বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                    </p>
+
+                    <p style="color:black;font-size:22px">
+                        হেড অফিস<br />
+                        <u>ঢাকা ।</u>
+                    </p>
+                }
+                else
+                {
+                    <p style="color:black;font-size:22px; margin: 0;">
+                        বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                    </p>
+
+                    if (Model.empPostingPlace.Count() > 0 && Model.empPostingPlace.FirstOrDefault()?.hrBranchId != null)
+                    {
+                        <p style="color:black;font-size:22px; margin: 0;" class="branchName">
+                            @Model.empPostingPlace.FirstOrDefault()?.branchNameBn
+                        </p>
+                        <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                            @Model.empPostingPlace.FirstOrDefault()?.branchAddress ।
+                        </p>
+                    }
+                    else
+                    {
+                        if (Model.empPostingPlace.FirstOrDefault()?.hrDivisionId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.divNameBn
+                            </p>
+                        }
+                        else if (Model.empPostingPlace.FirstOrDefault()?.officeId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.officeNameBn
+                            </p>
+                        }
+                        else if (Model.empPostingPlace.FirstOrDefault()?.zoneId > 0)
+                        {
+                            @*<p style="color:black;font-size:22px; margin: 0;">
+                        @Model.empPostingPlace.FirstOrDefault()?.zoneNameBn
+                    </p>*@
+                            if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 5)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস চট্টগ্রাম
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    চট্টগ্রাম।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 6)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস ঢাকা উত্তর
+                                </p>
+
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    ঢাকা।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 7)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস ঢাকা দক্ষিণ
+                                </p>
+
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    ঢাকা।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 8)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস খুলনা
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    খুলনা।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 9)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস রাজশাহী
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    রাজশাহী।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 10)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস সিলেট
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    সিলেট।
+                                </p>
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        else
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.branchNameBn
+                            </p>
+                        }
+                    }
+                }
+
+            </div>
+
+            <div style="text-align:center">
+                <div style="margin-top: 170px;">
+                    @*@if (Model.fixationDetails.lastDesignationId == 317 && ((Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.joiningDate).Date).TotalDays < (365 * 10) || (Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.lastPromotionDate).Date).TotalDays < (365 * 10)))
+                    {
+                        <b style="font-size:22px;color:black">বিষয়ঃ <u> @Model.fixationDetails?.designationNameBN পদে পদোন্নতির ফলে বেতন নির্ধারণ।</u></b>
+                    }
+                    else if (Model.fixationDetails.lastDesignationId == 317 && ((Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.joiningDate).Date).TotalDays > (365 * 10) || (Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.lastPromotionDate).Date).TotalDays > (365 * 5)))
+                    {
+                        <b style="font-size:22px;color:black">বিষয়ঃ <u> ৯ম বা তদুর্ধ্ব গ্রেডে ১০(দশ) বছর চাকুরী সম্পন্ন হওয়ায় ৫ম গ্রেডে বেতন পুনঃনির্ধারণ।</u></b>
+                    }
+                    else
+                    {
+                        <b style="font-size:22px;color:black">বিষয়ঃ <u> @Model.fixationDetails?.designationNameBN পদে পদোন্নতির ফলে বেতন নির্ধারণ।</u></b>
+                    }*@
+
+
+                    <b style="font-size:22px;color:black">বিষয়ঃ <u> @Model.fixationDetails?.designationNameBN পদে পদোন্নতির ফলে বেতন নির্ধারণ।</u></b>
+
+
+                </div>
+            </div>
+
+            <div class="row p-2 m-2">
+
+                @*@if (Model.fixationDetails.lastDesignationId == 322 && ((Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.joiningDate).Date).TotalDays < (365 * 5) || (Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.lastPromotionDate).Date).TotalDays < (365 * 5)))
+                {
+                    <div style=" padding-right:0px; padding-left:0px; color:black;font-size:22px; text-align: justify;">
+                        <article>
+                            প্রিয় মহোদয়,<br />
+
+                            <span style="padding-left: 75px;"></span>ব্যাংকের হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্টের @bnEffectiveDate
+                            তারিখের @bnRefNo নং কর্মী প্রজ্ঞাপনের মাধ্যমে আপনাকে ৩৫৫০০ - ৩৭২৮০ - ৩৯১৫০ - ৪১১১০ - ৪৩১৭০ - ৪৫৩৩০ - ৪৭৬০০ - ৪৯৯৮০ - ৫২৪৮০ - ৫৫১১০ - ৫৭৮৭০ - ৬০৭৭০ - ৬৩৮১০ - ৬৭০১০
+                            টাকা জাতীয় বেতন স্কেলে @Model.fixationDetails?.designationNameBN পদে পদোন্নতি প্রদান করা হয়।
+                        </article>
+                        <p></p>
+                        <p>
+                            ২। <span style="padding-left: 50px;"></span>জাতীয় বেতন স্কেল, ২০১৫ এবং অর্থ মন্ত্রণালয়ের ২৩/০১/২০১৯ তারিখের ০৭.০০.০০০০.১৬৫.৫৩.০১০.১৩-০৮ নং পত্রের প্রেক্ষিতে ব্যাংকের পরিচালনা পর্ষদের ৩১/১০/২০১৯ তারিখের ২৩৯তম সভার সিদ্ধান্ত মোতাবেক আপনার চাকুরির মেয়াদ @bnEffectiveDate তারিখে ৯ম বা তদুর্ধ্ব গ্রেডে ৫(পাঁচ) বছর পূর্ণ না হওয়া পর্যন্ত বর্তমানে প্রাপ্ত বেতন স্কেল @allSlabBn/- অনুযায়ী আপনি বেতন ভাতাদি ও প্রযোজ্য ক্ষেত্রে বার্ষিক বেতন বৃদ্ধি পেতে থাকবেন। এ প্রেক্ষিতে, বর্তমানে প্রাপ্ত মূল বেতন অনুযায়ী @bnEffectiveDate তারিখে আপনার মূল বেতন @bnAmount/- (@banglaAmount) টাকা নির্ধারণ করা হ'ল।
+                        </p>
+                        <p></p>
+                        <p>
+                            ৩। <span style="padding-left: 50px;"></span>উল্লেখ্য, উপরোক্ত বেতন নির্ধারণী ভুল/বাদপড়া ইত্যাদি জনিত কারণে বা পরবর্তীতে এ বিষয়ে অর্থ মন্ত্রণালয় হতে
+                            ভিন্নতর ব্যাখ্যা পাওয়া গেলে সে অনুযায়ী প্রয়োজন বোধে বেতন পুনঃনির্ধারণ/সংশোধনযোগ্য।
+                        </p>
+                    </div>
+                }
+                else if (Model.fixationDetails.lastDesignationId == 317 && ((Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.joiningDate).Date).TotalDays < (365 * 10) || (Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.lastPromotionDate).Date).TotalDays < (365 * 10)))
+                {
+                    <div style=" padding-right:0px; padding-left:0px; color:black;font-size:22px; text-align: justify;">
+                        <article>
+                            প্রিয় মহোদয়,<br />
+
+                            <span style="padding-left: 75px;"></span>ব্যাংকের হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্টের @bnEffectiveDate
+                            তারিখের @bnRefNo নং কর্মী প্রজ্ঞাপনের মাধ্যমে আপনাকে ৪৩০০০ - ৪৪৯৪০ - ৪৬৯৭০ - ৪৯০৯০ - ৫১৩০০ - ৫৩৬১০ - ৫৬০৩০ - ৫৮৫৬০ - ৬১২০০ - ৬৩৯৬০ - ৬৬৮৪০ - ৬৯৮৫০
+                            টাকা জাতীয় বেতন স্কেলে @Model.fixationDetails?.designationNameBN পদে পদোন্নতি প্রদান করা হয়।
+                        </article>
+                        <p></p>
+                        <p>
+                            ২। <span style="padding-left: 50px;"></span>জাতীয় বেতন স্কেল, ২০১৫ এবং অর্থ মন্ত্রণালয়ের ২৩/০১/২০১৯ তারিখের ০৭.০০.০০০০.১৬৫.৫৩.০১০.১৩-০৮ নং পত্রের প্রেক্ষিতে ব্যাংকের পরিচালনা পর্ষদের ৩১/১০/২০১৯ তারিখের ২৩৯তম সভার সিদ্ধান্ত মোতাবেক আপনার চাকুরির মেয়াদ @bnEffectiveDate তারিখে ৯ম বা তদুর্ধ্ব গ্রেডে ১০(দশ) বছর পূর্ণ না হওয়া পর্যন্ত বর্তমানে প্রাপ্ত বেতন স্কেল @allSlabBn/- অনুযায়ী আপনি বেতন ভাতাদি ও প্রযোজ্য ক্ষেত্রে বার্ষিক বেতন বৃদ্ধি পেতে থাকবেন। এ প্রেক্ষিতে, বর্তমানে প্রাপ্ত মূল বেতন অনুযায়ী @bnEffectiveDate তারিখে আপনার মূল বেতন @bnAmount/- (@banglaAmount) টাকা নির্ধারণ করা হ'ল।
+                        </p>
+                        <p></p>
+                        <p>
+                            ৩। <span style="padding-left: 50px;"></span>উল্লেখ্য, উপরোক্ত বেতন নির্ধারণী ভুল/বাদপড়া ইত্যাদি জনিত কারণে বা পরবর্তীতে এ বিষয়ে অর্থ মন্ত্রণালয় হতে
+                            ভিন্নতর ব্যাখ্যা পাওয়া গেলে সে অনুযায়ী প্রয়োজন বোধে বেতন পুনঃনির্ধারণ/সংশোধনযোগ্য।
+                        </p>
+                    </div>
+                }
+                else if (Model.fixationDetails.lastDesignationId == 317 && ((Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.joiningDate).Date).TotalDays > (365 * 10) || (Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.lastPromotionDate).Date).TotalDays > (365 * 5)))
+                {
+                    <div style=" padding-right:0px; padding-left:0px; color:black;font-size:22px; text-align: justify;">
+                        <article>
+                            প্রিয় মহোদয়,<br />
+
+                            <span style="padding-left: 75px;"></span>ব্যাংকের হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্টের ০১/১০/২০১৯
+                            তারিখে জারীকৃত @bnRefNo নং কর্মী প্রজ্ঞাপনের মাধ্যমে আপনাকে @allSlabBn
+                            টাকা জাতীয় বেতন স্কেলে @Model.fixationDetails?.designationNameBN পদে ৩০/০৯/২০১৯ তারিখে পদোন্নতি প্রদান করা হয়।
+                        </article>
+                        <p></p>
+                        <p>
+                            ২। <span style="padding-left: 50px;"></span>জাতীয় বেতন স্কেল, ২০১৫ এবং অর্থ মন্ত্রণালয়ের ২৩/০১/২০১৯ তারিখের ০৭.০০.০০০০.১৬৫.৫৩.০১০.১৩-০৮ নং পত্রের প্রেক্ষিতে ব্যাংকের পরিচালনা পর্ষদের ৩১/১০/২০১৯ তারিখের ২৩৯তম সভার সিদ্ধান্ত মোতাবেক আপনার চাকুরির মেয়াদ ৯ম বা তদুর্ধ্ব গ্রেডে @bnEffectiveDatePrev তারিখে ১০(দশ) বছর পূর্ণ হওয়ায় @bnEffectiveDate তারিখ হতে @allSlabBn/- টাকা বেতন স্কেলে আপনার মূল বেতন @bnAmount/- (@banglaAmount) টাকা নির্ধারণ করা হ'ল।
+                        </p>
+                        <p></p>
+                        <p>
+                            ৩। <span style="padding-left: 50px;"></span>উল্লেখ্য, উপরোক্ত বেতন নির্ধারণী ভুল/বাদপড়া ইত্যাদি জনিত কারণে বা পরবর্তীতে এ বিষয়ে অর্থ মন্ত্রণালয় হতে
+                            ভিন্নতর ব্যাখ্যা পাওয়া গেলে সে অনুযায়ী প্রয়োজন বোধে বেতন পুনঃনির্ধারণ/সংশোধনযোগ্য।
+                        </p>
+                    </div>
+                }
+                else if (Model.fixationDetails.lastDesignationId == 317 && (Convert.ToDateTime(Model.fixationDetails.createdAt).Date - Convert.ToDateTime(Model.fixationIntegration?.joiningDate).Date).TotalDays < (365 * 10))
+                {
+                    <p>Less than 10 years</p>
+                }
+                else
+                {*@
+                    <div style=" padding-right:0px; padding-left:0px; color:black;font-size:22px; text-align: justify;">
+                        <article>
+                            প্রিয় মহোদয়,<br />
+
+                            <span style="padding-left: 75px;"></span>ব্যাংকের হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্টের @bnEffectiveDate
+                            তারিখে জারিকৃত @bnRefNo নং কর্মী
+                            প্রজ্ঞাপনের মাধ্যমে আপনাকে  @allSlabBn
+                            টাকা জাতীয় বেতন স্কেলে
+                            @Model.fixationDetails?.designationNameBN পদে পদোন্নতি প্রদানের ফলে @bnEffectiveDate
+                            তারিখ হতে আপনার মূল বেতন  @bnAmount/- (@banglaAmount) টাকা নির্ধারণ করা হ'ল।
+                        </article>
+                        <br />
+                        <p>
+                            ০২। <span style="padding-left: 50px;"></span>উল্লেখ্য, উপরোক্ত বেতন নির্ধারণী ভুল/বাদপড়া ইত্যাদি জনিত কারণে বা পরবর্তীতে এ বিষয়ে অর্থ মন্ত্রণালয় হতে
+                            ভিন্নতর ব্যাখ্যা পাওয়া গেলে সে অনুযায়ী প্রয়োজন বোধে বেতন পুনঃনির্ধারণ/সংশোধনযোগ্য।
+                        </p>
+                    </div>
+                @*}*@
+            </div>
+
+
+            <div class="container-fluid">
+                <div class="row" style="color:black">
+                    <div class="col-3">
+                        <p>
+                            <span style="color:black;font-size:22px; padding-left: 75px;">
+                                অনুমোদনক্রমে,
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-3"></div>
+                    <div class="col-2"></div>
+                    <div class="col-4 text-center" style="margin-top: 30px;">
+                        @if (Model.fixationDetails.lastDesignationId == 322 && ((Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.joiningDate).Date).TotalDays < (365 * 5) || (Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.lastPromotionDate).Date).TotalDays < (365 * 5)))
+                        {
+                            <h3 style="font-size:22px;color:black">
+                                আপনার বিশ্বস্ত ,<br /><br />
+                            </h3>
+                        }
+                        else if (Model.fixationDetails.lastDesignationId == 317 && ((Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.joiningDate).Date).TotalDays < (365 * 10) || (Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.lastPromotionDate).Date).TotalDays < (365 * 10)))
+                        {
+                            <h3 style="font-size:22px;color:black">
+                                আপনার বিশ্বস্ত ,<br /><br />
+                            </h3>
+                        }
+                        else
+                        {
+                            <h3 style="font-size:22px;color:black">
+                                আপনার বিশ্বস্ত ,<br /><br />
+                            </h3>
+                        }
+
+                        @if (Model.fixationDetails?.newSignatory != null)
+                        {
+                            <h3 style="font-size:22px;color:black; margin: 0;line-height: 1.3;">(@Model.fixationDetails?.newSignatoryName)</h3>
+                            <h3 style="font-size:22px;color:black; margin: 0;line-height: 0.9;">@Model.fixationDetails?.newSignatoryDesig</h3>
+                            @if (@Model.fixationDetails?.newSignatoryPhone != null)
+                            {
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 0.9;">ফোনঃ @Model.fixationDetails?.newSignatoryPhone</h3>
+                            }
+                        }
+                        else
+                        {
+                            @if (Model.fixationDetails?.lastDesignationId == 275 || Model.fixationDetails?.lastDesignationId == 270 || Model.fixationDetails?.lastDesignationId == 262 || Model.fixationDetails?.lastDesignationId == 285 || Model.fixationDetails?.lastDesignationId == 305)
+                            {
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 1.3;">(কবির আহমদ)</h3>
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 0.9;">ডেপুটি জেনারেল ম্যানেজার</h3>
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 0.9;">ফোনঃ ০২২২৩৩৮৬৭৫০</h3>
+                            }
+                            else
+                            {
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 1.1;">(মোঃ বিল্লাল হোসেন)</h3>
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 0.8;">এসিসট্যান্ট জেনারেল ম্যানেজার</h3>
+                            }
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="pagebreak"> </div>
+
+
+<div class="print-card">
+    <div class="print-card-body">
+        <div class="container-fluid">
+            @*<div class="fa-pull-right">
+                <p style="font-size:12px;color:gray;">Print at: @DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")</p>
+            </div>*@
+            <div class="row" style="padding-top:0px;font-size:22px;">
+                <div class="col-2">
+                </div>
+                <div class="col-8">
+                    <div style="color:black;text-align:center;">
+                        <h3 style="margin: 0;">বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড</h3>
+                        <h4><u>হেড অফিস, ঢাকা ।</u></h4>
+                        <h4><u>হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্ট</u></h4>
+                    </div>
+                </div>
+                <div class="col-2"></div>
+            </div>
+            <div class="row" style="color:black; line-height: 1 !important">
+                <div class="col-4" style="margin-top: 44px;">
+                    <p>
+                        <span style="color:black;font-size:22px">
+                            <span> নং - ০৬.১/১.</span> @bnEmpCode <Span>/</Span>
+                        </span>
+                    </p>
+                </div>
+                <div class="col-1"></div>
+                <div class="col-2"></div>
+                <div class="col-5 row text-center">
+                    <table class="table mt-2" style="border:none">
+                        <tr style="border:1px;font-size:15px;color:black;text-align:center;">
+                            <td style="padding: 0; border-top: 1px solid black;">
+                                "দুটি সন্তানের বেশি নয় একটি হলে ভালো হয়"
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:22px;border:none;text-align:right;">
+                                @*<p style="margin: 0">অগ্রহায়ন ০১, ১৪২৮</p>*@
+                                <p style="margin: 0">@banglaLetterDate</p>
+                                <p style="margin: 0">@bnLetterDate</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="col-12" style="float:left; margin-bottom: -1px;">
+                @if (Model.fixationDetails?.gender == "Male")
+                {
+                    <p style="color:black;font-size:22px; margin: 0;">
+                        জনাব @Model.fixationDetails?.nameBangla
+                    </p>
+                }
+                else
+                {
+                    <p style="color:black;font-size:22px; margin: 0;">
+                        @Model.fixationDetails?.nameBangla
+                    </p>
+                }
+            </div>
+
+            <div class="col-12" style="float:left; line-height: 1.3">
+                <p style="color:black;font-size:22px; margin: 0; margin: 0;">
+                    @Model.fixationDetails?.designationNameBN
+                </p>
+
+                @if (Model.empPostingPlace.FirstOrDefault()?.hrBranchId == 205)
+                {
+                    if (Model.empPostingPlace.Count() > 0)
+                    {
+                        if (Model.empPostingPlace.FirstOrDefault()?.departmentId > 0 && Model.empPostingPlace.FirstOrDefault().hrUnitId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.unitNameBn (@Model.empPostingPlace.FirstOrDefault()?.deptNameBn)
+                            </p>
+                        }
+                        else if (Model.empPostingPlace.FirstOrDefault()?.departmentId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.deptNameBn
+                            </p>
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                            </p>
+
+                            <p style="color:black;font-size:22px">
+                                হেড অফিস<br />
+                                <u>ঢাকা ।</u>
+                            </p>
+                        }
+                        else if (Model.empPostingPlace.FirstOrDefault()?.hrDivisionId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.divNameBn
+                            </p>
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                            </p>
+
+                            <p style="color:black;font-size:22px">
+                                হেড অফিস<br />
+                                <u>ঢাকা ।</u>
+                            </p>
+                        }
+                        else if (Model.empPostingPlace.FirstOrDefault()?.officeId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.officeNameBn
+                            </p>
+                            @if (Model.empPostingPlace.FirstOrDefault()?.officeId == 11)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    @Model.empPostingPlace.FirstOrDefault()?.officeAddress
+                                </p>
+                            }
+                            else
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    @Model.empPostingPlace.FirstOrDefault()?.officeAddress
+                                </p>
+                            }
+                            @if (Model.empPostingPlace?.FirstOrDefault()?.officeId == 17)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    বিডিবিএল ভবন
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    ৮ রাজউক এভিনিউ
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    ঢাকা।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace?.FirstOrDefault()?.officeId == 11)
+                            {
+
+                            }
+                            else
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                                </p>
+
+                                <p style="color:black;font-size:22px">
+                                    হেড অফিস<br />
+                                    <u>ঢাকা ।</u>
+                                </p>
+                            }
+                        }
+                        else
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.branchNameBn
+                            </p>
+                        }
+
+                    }
+                    else if (Model.empPostingPlace.FirstOrDefault()?.officeId == null)
+                    {
+                        <p style="color:black;font-size:22px; margin: 0;">
+                            বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                        </p>
+
+                        <p style="color:black;font-size:22px">
+                            হেড অফিস<br />
+                            <u>ঢাকা ।</u>
+                        </p>
+                    }
+                    else
+                    {
+
+                    }
+                }
+
+                else if (Model.empPostingPlace.FirstOrDefault()?.hrUnitId != null)
+                {
+                    <p style="color:black;font-size:22px; margin: 0;">
+                        @Model.empPostingPlace.FirstOrDefault()?.unitNameBn
+                    </p>
+                    <p style="color:black;font-size:22px; margin: 0;">
+                        বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                    </p>
+
+                    <p style="color:black;font-size:22px">
+                        হেড অফিস<br />
+                        <u>ঢাকা ।</u>
+                    </p>
+                }
+                else
+                {
+                    <p style="color:black;font-size:22px; margin: 0;">
+                        বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                    </p>
+
+                    if (Model.empPostingPlace.Count() > 0 && Model.empPostingPlace.FirstOrDefault()?.hrBranchId != null)
+                    {
+                        <p style="color:black;font-size:22px; margin: 0;" class="branchName">
+                            @Model.empPostingPlace.FirstOrDefault()?.branchNameBn
+                        </p>
+                        <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                            @Model.empPostingPlace.FirstOrDefault()?.branchAddress ।
+                        </p>
+                    }
+                    else
+                    {
+                        if (Model.empPostingPlace.FirstOrDefault()?.hrDivisionId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.divNameBn
+                            </p>
+                        }
+                        else if (Model.empPostingPlace.FirstOrDefault()?.officeId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.officeNameBn
+                            </p>
+                        }
+                        else if (Model.empPostingPlace.FirstOrDefault()?.zoneId > 0)
+                        {
+                            @*<p style="color:black;font-size:22px; margin: 0;">
+                        @Model.empPostingPlace.FirstOrDefault()?.zoneNameBn
+                    </p>*@
+                            if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 5)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস চট্টগ্রাম
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    চট্টগ্রাম।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 6)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস ঢাকা উত্তর
+                                </p>
+
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    ঢাকা।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 7)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস ঢাকা দক্ষিণ
+                                </p>
+
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    ঢাকা।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 8)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস খুলনা
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    খুলনা।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 9)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস রাজশাহী
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    রাজশাহী।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 10)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস সিলেট
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    সিলেট।
+                                </p>
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        else
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.branchNameBn
+                            </p>
+                        }
+                    }
+                }
+
+            </div>
+
+            <div style="text-align:center">
+                <div style="margin-top: 170px;">
+                  
+                        <b style="font-size:22px;color:black">বিষয়ঃ <u> @Model.fixationDetails?.designationNameBN পদে পদোন্নতির ফলে বেতন নির্ধারণ।</u></b>
+                   
+                </div>
+            </div>
+
+            <div class="row p-2 m-2">
+               
+                    <div style=" padding-right:0px; padding-left:0px; color:black;font-size:22px; text-align: justify;">
+                        <article>
+                            প্রিয় মহোদয়,<br />
+
+                            <span style="padding-left: 75px;"></span>ব্যাংকের হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্টের @bnEffectiveDate
+                            তারিখে জারিকৃত @bnRefNo নং কর্মী
+                            প্রজ্ঞাপনের মাধ্যমে আপনাকে  @allSlabBn
+                            টাকা জাতীয় বেতন স্কেলে
+                            @Model.fixationDetails?.designationNameBN পদে পদোন্নতি প্রদানের ফলে @bnEffectiveDate
+                            তারিখ হতে আপনার মূল বেতন  @bnAmount/- (@banglaAmount) টাকা নির্ধারণ করা হ'ল।
+                        </article>
+                        <br />
+                        <p>
+                            ০২। <span style="padding-left: 50px;"></span>উল্লেখ্য, উপরোক্ত বেতন নির্ধারণী ভুল/বাদপড়া ইত্যাদি জনিত কারণে বা পরবর্তীতে এ বিষয়ে অর্থ মন্ত্রণালয় হতে
+                            ভিন্নতর ব্যাখ্যা পাওয়া গেলে সে অনুযায়ী প্রয়োজন বোধে বেতন পুনঃনির্ধারণ/সংশোধনযোগ্য।
+                        </p>
+                    </div>
+                
+            </div>
+
+
+            <div class="container-fluid">
+                <div class="row" style="color:black">
+                    <div class="col-3">
+                        <p>
+                            <span style="color:black;font-size:22px; padding-left: 75px;">
+                                অনুমোদনক্রমে,
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-3"></div>
+                    <div class="col-2"></div>
+                    <div class="col-4 text-center" style="margin-top: 20px;">
+                        @if (Model.fixationDetails.lastDesignationId == 322 && ((Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.joiningDate).Date).TotalDays < (365 * 5) || (Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.lastPromotionDate).Date).TotalDays < (365 * 5)))
+                        {
+                            <h3 style="font-size:22px;color:black">
+                                আপনার বিশ্বস্ত ,<br /><br />
+                                স্বাঃ/-
+                            </h3>
+                        }
+                        else if (Model.fixationDetails.lastDesignationId == 317 && ((Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.joiningDate).Date).TotalDays < (365 * 10) || (Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.lastPromotionDate).Date).TotalDays < (365 * 10)))
+                        {
+                            <h3 style="font-size:22px;color:black">
+                                আপনার বিশ্বস্ত ,<br /><br />
+                            </h3>
+                        }
+                        else
+                        {
+                            <h3 style="font-size:22px;color:black">
+                                আপনার বিশ্বস্ত ,<br /><br /><br />
+                                স্বাঃ/-
+                            </h3>
+                        }
+
+                        @if (Model.fixationDetails?.newSignatory != null)
+                        {
+                            <h3 style="font-size:22px;color:black; margin: 0;line-height: 1.3;">(@Model.fixationDetails?.newSignatoryName)</h3>
+                            <h3 style="font-size:22px;color:black; margin: 0;line-height: 0.9;">@Model.fixationDetails?.newSignatoryDesig</h3>
+                            @if (@Model.fixationDetails?.newSignatoryPhone != null)
+                            {
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 0.9;">ফোনঃ @Model.fixationDetails?.newSignatoryPhone</h3>
+                            }
+                        }
+                        else
+                        {
+                            @if (Model.fixationDetails?.lastDesignationId == 275 || Model.fixationDetails?.lastDesignationId == 270 || Model.fixationDetails?.lastDesignationId == 262 || Model.fixationDetails?.lastDesignationId == 285 || Model.fixationDetails?.lastDesignationId == 305)
+                            {
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 1.3;">(কবির আহমদ)</h3>
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 0.9;">ডেপুটি জেনারেল ম্যানেজার</h3>
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 0.9;">ফোনঃ ০২২২৩৩৮৬৭৫০</h3>
+                            }
+                            else
+                            {
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 1.1;">(মোঃ বিল্লাল হোসেন)</h3>
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 0.8;">এসিসট্যান্ট জেনারেল ম্যানেজার</h3>
+                            }
+                        }
+                    </div>
+
+                </div>
+            </div>
+
+            @{
+                string margin1 = "0px";
+                string margin2 = "40px";
+                if (Model.fixationDetails?.lastDesignationId == 275 || Model.fixationDetails?.lastDesignationId == 270 || Model.fixationDetails?.lastDesignationId == 262 || Model.fixationDetails?.lastDesignationId == 285 || Model.fixationDetails?.lastDesignationId == 305)
+                {
+                    margin1 = "20px";
+                }
+                if (Model.fixationDetails.lastDesignationId == 322 && ((Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.joiningDate).Date).TotalDays < (365 * 5) || (Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.lastPromotionDate).Date).TotalDays < (365 * 5)))
+                {
+                    margin2 = "5px";
+                }
+            }
+
+
+            <div class="">
+                <div class="col-12" style="margin-top: @margin1;">
+                    <h4 style="color:black;"><u>সদয় অবগতি ও প্রয়োজনীয় ব্যবস্থা গ্রহনের জন্য অনুলিপিঃ</u></h4>
+                    <h3 style="font-size:22px;color:black; margin: 0;">
+                        @if (Model.empPostingPlace?.FirstOrDefault()?.hrBranchId != null && Model.empPostingPlace?.FirstOrDefault()?.hrBranchId == 205)
+                        {
+                            if (Model.empPostingPlace?.FirstOrDefault()?.officeId == 11)
+                            {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ম্যানেজার (@manager.designationBn), বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড, আগ্রাবাদ  ব্রাঞ্চ, আগ্রাবাদ।*@
+                        </span>
+                            }
+                            else
+                            {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,
+                            বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড,*@
+                        </span>
+                            }
+                        }
+                        else if (Model.empPostingPlace?.FirstOrDefault()?.zoneId != null)
+                        {
+                            if (Model.empPostingPlace?.FirstOrDefault()?.zoneId == 5)
+                            {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ম্যানেজার (@Model.empPostingPlace?.FirstOrDefault()?.managerDesignation), বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড, আগ্রাবাদ  ব্রাঞ্চ, চট্টগ্রাম।*@
+                        </span>
+                            }
+                            else if (Model.empPostingPlace?.FirstOrDefault()?.zoneId == 6 || Model.empPostingPlace?.FirstOrDefault()?.zoneId == 7 || Model.empPostingPlace?.FirstOrDefault()?.zoneId == 13)
+                            {
+                        <span>
+                            ১।ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,
+                            বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড,*@
+                        </span>
+                            }
+                            else if (Model.empPostingPlace?.FirstOrDefault()?.zoneId == 8)
+                            {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ম্যানেজার (@Model.empPostingPlace?.FirstOrDefault()?.managerDesignation), বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড, খুলনা ব্রাঞ্চ, খুলনা।*@
+                        </span>
+                            }
+                            else if (Model.empPostingPlace?.FirstOrDefault()?.zoneId == 9)
+                            {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ম্যানেজার (@Model.empPostingPlace?.FirstOrDefault()?.managerDesignation), বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড, রাজশাহী ব্রাঞ্চ, রাজশাহী।*@
+                        </span>
+                            }
+                            else if (Model.empPostingPlace?.FirstOrDefault()?.zoneId == 10)
+                            {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ম্যানেজার (@Model.empPostingPlace?.FirstOrDefault()?.managerDesignation), বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড, সিলেট ব্রাঞ্চ, সিলেট।*@
+                        </span>
+                            }
+                            else
+                            {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ম্যানেজার (@Model.empPostingPlace?.FirstOrDefault()?.managerDesignation), বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড, @Model.empPostingPlace?.FirstOrDefault().branchNameBn, @Model.empPostingPlace?.FirstOrDefault().branchAddress।*@
+                        </span>
+                            }
+                        }
+                        else if (Model.empPostingPlace?.FirstOrDefault()?.hrBranchId != null && Model.empPostingPlace?.FirstOrDefault()?.hrBranchId != 205)
+                        {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ম্যানেজার (@Model.empPostingPlace?.FirstOrDefault()?.managerDesignation), বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড, @Model.empPostingPlace?.FirstOrDefault().branchNameBn, @Model.empPostingPlace?.FirstOrDefault().branchAddress।*@
+                        </span>
+                        }
+                        else if (Model.empPostingPlace?.FirstOrDefault()?.hrUnitId != null)
+                        {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,
+                            বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড,*@
+                        </span>
+                            @*<br />
+                            <span>
+                                হেড অফিস,
+                                ঢাকা ।
+                            </span>*@
+                        }
+                        else
+                        {
+                            <span>
+
+                            </span>
+                        }
+                        @*@if (Model.empPostingPlace?.FirstOrDefault()?.hrBranchId != null && Model.empPostingPlace?.FirstOrDefault()?.hrBranchId == 205 && Model.empPostingPlace?.FirstOrDefault()?.officeId != 11)
+                        {
+                            <br />
+                            <span>
+                                হেড অফিস,
+                                ঢাকা ।
+                            </span>
+                        }
+                        else
+                        {
+
+                        }*@
+                        <br />
+                        <span>২। অফিস কপি।</span><br />
+                        <span>৩। মাস্টার ফাইল।</span>
+                    </h3>
+                </div>
+
+            </div>
+            <div class="container-fluid">
+                <div class="col-md-12" style="text-align:right; margin-top: @margin2; margin-left: 20px;">
+                    @if (Model.fixationDetails?.newSignatory != null)
+                    {
+                        <h3 style="font-size:22px;color:black; margin-right: 25px">@Model.fixationDetails?.newSignatoryDesig</h3>
+                    }
+                    else
+                    {
+                        @if (Model.fixationDetails?.lastDesignationId == 285)
+                        {
+                            <h3 style="font-size:22px;color:black; margin-right: 25px">ডেপুটি জেনারেল ম্যানেজার</h3>
+                        }
+                        else if (Model.fixationDetails?.lastDesignationId == 305 || Model.fixationDetails?.lastDesignationId == 316)
+                        {
+                            <h3 style="font-size:22px;color:black; margin-right: 25px">ডেপুটি জেনারেল ম্যানেজার</h3>
+                        }
+                        else
+                        {
+                            <h3 style="font-size:22px;color:black; margin-right: 25px;">এসিসট্যান্ট জেনারেল ম্যানেজার</h3>
+                        }
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="pagebreak"> </div>
+
+
+
+<div class="print-card">
+    <div class="print-card-body">
+        <div class="container-fluid">
+            @*<div class="fa-pull-right">
+                <p style="font-size:12px;color:gray;">Print at: @DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")</p>
+            </div>*@
+            <div class="row" style="padding-top:0px;font-size:22px;">
+                <div class="col-2">
+                </div>
+                <div class="col-8">
+                    <div style="color:black;text-align:center;">
+                        <h3 style="margin: 0;">বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড</h3>
+                        <h4><u>হেড অফিস, ঢাকা ।</u></h4>
+                        <h4><u>হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্ট</u></h4>
+                    </div>
+                </div>
+                <div class="col-2"></div>
+            </div>
+            <div class="row" style="color:black; line-height: 1 !important">
+                <div class="col-4" style="margin-top: 44px;">
+                    <p>
+                        <span style="color:black;font-size:22px">
+                            <span> নং - ০৬.১/১.</span> @bnEmpCode <Span>/</Span>
+                        </span>
+                    </p>
+                </div>
+                <div class="col-1"></div>
+                <div class="col-2"></div>
+                <div class="col-5 row text-center">
+                    <table class="table mt-2" style="border:none">
+                        <tr style="border:1px;font-size:15px;color:black;text-align:center;">
+                            <td style="padding: 0; border-top: 1px solid black;">
+                                "দুটি সন্তানের বেশি নয় একটি হলে ভালো হয়"
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:22px;border:none;text-align:right;">
+                                @*<p style="margin: 0">অগ্রহায়ন ০১, ১৪২৮</p>*@
+                                <p style="margin: 0">@banglaLetterDate</p>
+                                <p style="margin: 0">@bnLetterDate</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="col-12" style="float:left; margin-bottom: -1px;">
+                @if (Model.fixationDetails?.gender == "Male")
+                {
+                    <p style="color:black;font-size:22px; margin: 0;">
+                        জনাব @Model.fixationDetails?.nameBangla
+                    </p>
+                }
+                else
+                {
+                    <p style="color:black;font-size:22px; margin: 0;">
+                        @Model.fixationDetails?.nameBangla
+                    </p>
+                }
+            </div>
+
+            <div class="col-12" style="float:left; line-height: 1.3">
+                <p style="color:black;font-size:22px; margin: 0; margin: 0;">
+                    @Model.fixationDetails?.designationNameBN
+                </p>
+
+                @if (Model.empPostingPlace.FirstOrDefault()?.hrBranchId == 205)
+                {
+                    if (Model.empPostingPlace.Count() > 0)
+                    {
+                        if (Model.empPostingPlace.FirstOrDefault()?.departmentId > 0 && Model.empPostingPlace.FirstOrDefault().hrUnitId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.unitNameBn (@Model.empPostingPlace.FirstOrDefault()?.deptNameBn)
+                            </p>
+                        }
+                        else if (Model.empPostingPlace.FirstOrDefault()?.departmentId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.deptNameBn
+                            </p>
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                            </p>
+
+                            <p style="color:black;font-size:22px">
+                                হেড অফিস<br />
+                                <u>ঢাকা ।</u>
+                            </p>
+                        }
+                        else if (Model.empPostingPlace.FirstOrDefault()?.hrDivisionId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.divNameBn
+                            </p>
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                            </p>
+
+                            <p style="color:black;font-size:22px">
+                                হেড অফিস<br />
+                                <u>ঢাকা ।</u>
+                            </p>
+                        }
+                        else if (Model.empPostingPlace.FirstOrDefault()?.officeId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.officeNameBn
+                            </p>
+                            @if (Model.empPostingPlace.FirstOrDefault()?.officeId == 11)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    @Model.empPostingPlace.FirstOrDefault()?.officeAddress
+                                </p>
+                            }
+                            else
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    @Model.empPostingPlace.FirstOrDefault()?.officeAddress
+                                </p>
+                            }
+                            @if (Model.empPostingPlace?.FirstOrDefault()?.officeId == 17)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    বিডিবিএল ভবন
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    ৮ রাজউক এভিনিউ
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    ঢাকা।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace?.FirstOrDefault()?.officeId == 11)
+                            {
+
+                            }
+                            else
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                                </p>
+
+                                <p style="color:black;font-size:22px">
+                                    হেড অফিস<br />
+                                    <u>ঢাকা ।</u>
+                                </p>
+                            }
+                        }
+                        else
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.branchNameBn
+                            </p>
+                        }
+
+                    }
+                    else if (Model.empPostingPlace.FirstOrDefault()?.officeId == null)
+                    {
+                        <p style="color:black;font-size:22px; margin: 0;">
+                            বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                        </p>
+
+                        <p style="color:black;font-size:22px">
+                            হেড অফিস<br />
+                            <u>ঢাকা ।</u>
+                        </p>
+                    }
+                    else
+                    {
+
+                    }
+                }
+
+                else if (Model.empPostingPlace.FirstOrDefault()?.hrUnitId != null)
+                {
+                    <p style="color:black;font-size:22px; margin: 0;">
+                        @Model.empPostingPlace.FirstOrDefault()?.unitNameBn
+                    </p>
+                    <p style="color:black;font-size:22px; margin: 0;">
+                        বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                    </p>
+
+                    <p style="color:black;font-size:22px">
+                        হেড অফিস<br />
+                        <u>ঢাকা ।</u>
+                    </p>
+                }
+                else
+                {
+                    <p style="color:black;font-size:22px; margin: 0;">
+                        বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                    </p>
+
+                    if (Model.empPostingPlace.Count() > 0 && Model.empPostingPlace.FirstOrDefault()?.hrBranchId != null)
+                    {
+                        <p style="color:black;font-size:22px; margin: 0;" class="branchName">
+                            @Model.empPostingPlace.FirstOrDefault()?.branchNameBn
+                        </p>
+                        <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                            @Model.empPostingPlace.FirstOrDefault()?.branchAddress ।
+                        </p>
+                    }
+                    else
+                    {
+                        if (Model.empPostingPlace.FirstOrDefault()?.hrDivisionId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.divNameBn
+                            </p>
+                        }
+                        else if (Model.empPostingPlace.FirstOrDefault()?.officeId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.officeNameBn
+                            </p>
+                        }
+                        else if (Model.empPostingPlace.FirstOrDefault()?.zoneId > 0)
+                        {
+                            @*<p style="color:black;font-size:22px; margin: 0;">
+                        @Model.empPostingPlace.FirstOrDefault()?.zoneNameBn
+                    </p>*@
+                            if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 5)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস চট্টগ্রাম
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    চট্টগ্রাম।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 6)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস ঢাকা উত্তর
+                                </p>
+
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    ঢাকা।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 7)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস ঢাকা দক্ষিণ
+                                </p>
+
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    ঢাকা।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 8)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস খুলনা
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    খুলনা।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 9)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস রাজশাহী
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    রাজশাহী।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 10)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস সিলেট
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    সিলেট।
+                                </p>
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        else
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.branchNameBn
+                            </p>
+                        }
+                    }
+                }
+
+            </div>
+
+            <div style="text-align:center">
+                <div style="margin-top: 170px;">
+                    
+                        <b style="font-size:22px;color:black">বিষয়ঃ <u> @Model.fixationDetails?.designationNameBN পদে পদোন্নতির ফলে বেতন নির্ধারণ।</u></b>
+                  
+                </div>
+            </div>
+
+            <div class="row p-2 m-2">
+                
+                    <div style=" padding-right:0px; padding-left:0px; color:black;font-size:22px; text-align: justify;">
+                        <article>
+                            প্রিয় মহোদয়,<br />
+
+                            <span style="padding-left: 75px;"></span>ব্যাংকের হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্টের @bnEffectiveDate
+                            তারিখে জারিকৃত @bnRefNo নং কর্মী
+                            প্রজ্ঞাপনের মাধ্যমে আপনাকে  @allSlabBn
+                            টাকা জাতীয় বেতন স্কেলে
+                            @Model.fixationDetails?.designationNameBN পদে পদোন্নতি প্রদানের ফলে @bnEffectiveDate
+                            তারিখ হতে আপনার মূল বেতন  @bnAmount/- (@banglaAmount) টাকা নির্ধারণ করা হ'ল।
+                        </article>
+                        <br />
+                        <p>
+                            ০২। <span style="padding-left: 50px;"></span>উল্লেখ্য, উপরোক্ত বেতন নির্ধারণী ভুল/বাদপড়া ইত্যাদি জনিত কারণে বা পরবর্তীতে এ বিষয়ে অর্থ মন্ত্রণালয় হতে
+                            ভিন্নতর ব্যাখ্যা পাওয়া গেলে সে অনুযায়ী প্রয়োজন বোধে বেতন পুনঃনির্ধারণ/সংশোধনযোগ্য।
+                        </p>
+                    </div>
+                
+            </div>
+
+
+            <div class="container-fluid">
+                <div class="row" style="color:black">
+                    <div class="col-3">
+                        <p>
+                            <span style="color:black;font-size:22px; padding-left: 75px;">
+                                অনুমোদনক্রমে,
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-3"></div>
+                    <div class="col-2"></div>
+                    <div class="col-4 text-center" style="margin-top: 20px;">
+                        @if (Model.fixationDetails.lastDesignationId == 322 && ((Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.joiningDate).Date).TotalDays < (365 * 5) || (Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.lastPromotionDate).Date).TotalDays < (365 * 5)))
+                        {
+                            <h3 style="font-size:22px;color:black">
+                                আপনার বিশ্বস্ত ,<br /><br />
+                                স্বাঃ/-
+                            </h3>
+                        }
+                        else if (Model.fixationDetails.lastDesignationId == 317 && ((Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.joiningDate).Date).TotalDays < (365 * 10) || (Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.lastPromotionDate).Date).TotalDays < (365 * 10)))
+                        {
+                            <h3 style="font-size:22px;color:black">
+                                আপনার বিশ্বস্ত ,<br /><br />
+                            </h3>
+                        }
+                        else
+                        {
+                            <h3 style="font-size:22px;color:black">
+                                আপনার বিশ্বস্ত ,<br /><br /><br />
+                                স্বাঃ/-
+                            </h3>
+                        }
+
+                        @if (Model.fixationDetails?.newSignatory != null)
+                        {
+                            <h3 style="font-size:22px;color:black; margin: 0;line-height: 1.3;">(@Model.fixationDetails?.newSignatoryName)</h3>
+                            <h3 style="font-size:22px;color:black; margin: 0;line-height: 0.9;">@Model.fixationDetails?.newSignatoryDesig</h3>
+                            @if (@Model.fixationDetails?.newSignatoryPhone != null)
+                            {
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 0.9;">ফোনঃ @Model.fixationDetails?.newSignatoryPhone</h3>
+                            }
+                        }
+                        else
+                        {
+                            @if (Model.fixationDetails?.lastDesignationId == 275 || Model.fixationDetails?.lastDesignationId == 270 || Model.fixationDetails?.lastDesignationId == 262 || Model.fixationDetails?.lastDesignationId == 285 || Model.fixationDetails?.lastDesignationId == 305)
+                            {
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 1.3;">(কবির আহমদ)</h3>
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 0.9;">ডেপুটি জেনারেল ম্যানেজার</h3>
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 0.9;">ফোনঃ ০২২২৩৩৮৬৭৫০</h3>
+                            }
+                            else
+                            {
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 1.1;">(মোঃ বিল্লাল হোসেন)</h3>
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 0.8;">এসিসট্যান্ট জেনারেল ম্যানেজার</h3>
+                            }
+                        }
+                    </div>
+
+                </div>
+            </div>
+
+
+           <div class="">
+                <div class="col-12" style="margin-top: @margin1;">
+                    <h4 style="color:black;"><u>সদয় অবগতি ও প্রয়োজনীয় ব্যবস্থা গ্রহনের জন্য অনুলিপিঃ</u></h4>
+                    <h3 style="font-size:22px;color:black; margin: 0;">
+                        @if (Model.empPostingPlace?.FirstOrDefault()?.hrBranchId != null && Model.empPostingPlace?.FirstOrDefault()?.hrBranchId == 205)
+                        {
+                            if (Model.empPostingPlace?.FirstOrDefault()?.officeId == 11)
+                            {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ম্যানেজার (@manager.designationBn), বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড, আগ্রাবাদ  ব্রাঞ্চ, আগ্রাবাদ।*@
+                        </span>
+                            }
+                            else
+                            {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,
+                            বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড,*@
+                        </span>
+                            }
+                        }
+                        else if (Model.empPostingPlace?.FirstOrDefault()?.zoneId != null)
+                        {
+                            if (Model.empPostingPlace?.FirstOrDefault()?.zoneId == 5)
+                            {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ম্যানেজার (@Model.empPostingPlace?.FirstOrDefault()?.managerDesignation), বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড, আগ্রাবাদ  ব্রাঞ্চ, চট্টগ্রাম।*@
+                        </span>
+                            }
+                            else if (Model.empPostingPlace?.FirstOrDefault()?.zoneId == 6 || Model.empPostingPlace?.FirstOrDefault()?.zoneId == 7 || Model.empPostingPlace?.FirstOrDefault()?.zoneId == 13)
+                            {
+                        <span>
+                            ১।ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,
+                            বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড,*@
+                        </span>
+                            }
+                            else if (Model.empPostingPlace?.FirstOrDefault()?.zoneId == 8)
+                            {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ম্যানেজার (@Model.empPostingPlace?.FirstOrDefault()?.managerDesignation), বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড, খুলনা ব্রাঞ্চ, খুলনা।*@
+                        </span>
+                            }
+                            else if (Model.empPostingPlace?.FirstOrDefault()?.zoneId == 9)
+                            {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ম্যানেজার (@Model.empPostingPlace?.FirstOrDefault()?.managerDesignation), বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড, রাজশাহী ব্রাঞ্চ, রাজশাহী।*@
+                        </span>
+                            }
+                            else if (Model.empPostingPlace?.FirstOrDefault()?.zoneId == 10)
+                            {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ম্যানেজার (@Model.empPostingPlace?.FirstOrDefault()?.managerDesignation), বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড, সিলেট ব্রাঞ্চ, সিলেট।*@
+                        </span>
+                            }
+                            else
+                            {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ম্যানেজার (@Model.empPostingPlace?.FirstOrDefault()?.managerDesignation), বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড, @Model.empPostingPlace?.FirstOrDefault().branchNameBn, @Model.empPostingPlace?.FirstOrDefault().branchAddress।*@
+                        </span>
+                            }
+                        }
+                        else if (Model.empPostingPlace?.FirstOrDefault()?.hrBranchId != null && Model.empPostingPlace?.FirstOrDefault()?.hrBranchId != 205)
+                        {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ম্যানেজার (@Model.empPostingPlace?.FirstOrDefault()?.managerDesignation), বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড, @Model.empPostingPlace?.FirstOrDefault().branchNameBn, @Model.empPostingPlace?.FirstOrDefault().branchAddress।*@
+                        </span>
+                        }
+                        else if (Model.empPostingPlace?.FirstOrDefault()?.hrUnitId != null)
+                        {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,
+                            বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড,*@
+                        </span>
+                            @*<br />
+                            <span>
+                                হেড অফিস,
+                                ঢাকা ।
+                            </span>*@
+                        }
+                        else
+                        {
+                            <span>
+
+                            </span>
+                        }
+                        @*@if (Model.empPostingPlace?.FirstOrDefault()?.hrBranchId != null && Model.empPostingPlace?.FirstOrDefault()?.hrBranchId == 205 && Model.empPostingPlace?.FirstOrDefault()?.officeId != 11)
+                        {
+                            <br />
+                            <span>
+                                হেড অফিস,
+                                ঢাকা ।
+                            </span>
+                        }
+                        else
+                        {
+
+                        }*@
+                        <br />
+                        <span>২। অফিস কপি।</span><br />
+                        <span>৩। মাস্টার ফাইল।</span>
+                    </h3>
+                </div>
+
+            </div>
+            <div class="container-fluid">
+                <div class="col-md-12" style="text-align:right; margin-top: @margin2; margin-left: 20px;">
+                    @if (Model.fixationDetails?.newSignatory != null)
+                    {
+                        <h3 style="font-size:22px;color:black; margin-right: 25px">@Model.fixationDetails?.newSignatoryDesig</h3>
+                    }
+                    else
+                    {
+                        @if (Model.fixationDetails?.lastDesignationId == 285)
+                        {
+                            <h3 style="font-size:22px;color:black; margin-right: 25px">ডেপুটি জেনারেল ম্যানেজার</h3>
+                        }
+                        else if (Model.fixationDetails?.lastDesignationId == 305 || Model.fixationDetails?.lastDesignationId == 316)
+                        {
+                            <h3 style="font-size:22px;color:black; margin-right: 25px">ডেপুটি জেনারেল ম্যানেজার</h3>
+                        }
+                        else
+                        {
+                            <h3 style="font-size:22px;color:black; margin-right: 25px;">এসিসট্যান্ট জেনারেল ম্যানেজার</h3>
+                        }
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="pagebreak"> </div>
+
+
+
+
+
+<div class="print-card">
+    <div class="print-card-body">
+        <div class="container-fluid">
+            @*<div class="fa-pull-right">
+                <p style="font-size:12px;color:gray;">Print at: @DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")</p>
+            </div>*@
+            <div class="row" style="padding-top:0px;font-size:22px;">
+                <div class="col-2">
+                </div>
+                <div class="col-8">
+                    <div style="color:black;text-align:center;">
+                        <h3 style="margin: 0;">বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড</h3>
+                        <h4><u>হেড অফিস, ঢাকা ।</u></h4>
+                        <h4><u>হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্ট</u></h4>
+                    </div>
+                </div>
+                <div class="col-2"></div>
+            </div>
+            <div class="row" style="color:black; line-height: 1 !important">
+                <div class="col-4" style="margin-top: 44px;">
+                    <p>
+                        <span style="color:black;font-size:22px">
+                            <span> নং - ০৬.১/১.</span> @bnEmpCode <Span>/</Span>
+                        </span>
+                    </p>
+                </div>
+                <div class="col-1"></div>
+                <div class="col-2"></div>
+                <div class="col-5 row text-center">
+                    <table class="table mt-2" style="border:none">
+                        <tr style="border:1px;font-size:15px;color:black;text-align:center;">
+                            <td style="padding: 0; border-top: 1px solid black;">
+                                "দুটি সন্তানের বেশি নয় একটি হলে ভালো হয়"
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:22px;border:none;text-align:right;">
+                                @*<p style="margin: 0">অগ্রহায়ন ০১, ১৪২৮</p>*@
+                                <p style="margin: 0">@banglaLetterDate</p>
+                                <p style="margin: 0">@bnLetterDate</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="col-12" style="float:left; margin-bottom: -1px;">
+                @if (Model.fixationDetails?.gender == "Male")
+                {
+                    <p style="color:black;font-size:22px; margin: 0;">
+                        জনাব @Model.fixationDetails?.nameBangla
+                    </p>
+                }
+                else
+                {
+                    <p style="color:black;font-size:22px; margin: 0;">
+                        @Model.fixationDetails?.nameBangla
+                    </p>
+                }
+            </div>
+
+            <div class="col-12" style="float:left; line-height: 1.3">
+                <p style="color:black;font-size:22px; margin: 0; margin: 0;">
+                    @Model.fixationDetails?.designationNameBN
+                </p>
+
+                @if (Model.empPostingPlace.FirstOrDefault()?.hrBranchId == 205)
+                {
+                    if (Model.empPostingPlace.Count() > 0)
+                    {
+                        if (Model.empPostingPlace.FirstOrDefault()?.departmentId > 0 && Model.empPostingPlace.FirstOrDefault().hrUnitId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.unitNameBn (@Model.empPostingPlace.FirstOrDefault()?.deptNameBn)
+                            </p>
+                        }
+                        else if (Model.empPostingPlace.FirstOrDefault()?.departmentId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.deptNameBn
+                            </p>
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                            </p>
+
+                            <p style="color:black;font-size:22px">
+                                হেড অফিস<br />
+                                <u>ঢাকা ।</u>
+                            </p>
+                        }
+                        else if (Model.empPostingPlace.FirstOrDefault()?.hrDivisionId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.divNameBn
+                            </p>
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                            </p>
+
+                            <p style="color:black;font-size:22px">
+                                হেড অফিস<br />
+                                <u>ঢাকা ।</u>
+                            </p>
+                        }
+                        else if (Model.empPostingPlace.FirstOrDefault()?.officeId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.officeNameBn
+                            </p>
+                            @if (Model.empPostingPlace.FirstOrDefault()?.officeId == 11)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    @Model.empPostingPlace.FirstOrDefault()?.officeAddress
+                                </p>
+                            }
+                            else
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    @Model.empPostingPlace.FirstOrDefault()?.officeAddress
+                                </p>
+                            }
+                            @if (Model.empPostingPlace?.FirstOrDefault()?.officeId == 17)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    বিডিবিএল ভবন
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    ৮ রাজউক এভিনিউ
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    ঢাকা।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace?.FirstOrDefault()?.officeId == 11)
+                            {
+
+                            }
+                            else
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                                </p>
+
+                                <p style="color:black;font-size:22px">
+                                    হেড অফিস<br />
+                                    <u>ঢাকা ।</u>
+                                </p>
+                            }
+                        }
+                        else
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.branchNameBn
+                            </p>
+                        }
+
+                    }
+                    else if (Model.empPostingPlace.FirstOrDefault()?.officeId == null)
+                    {
+                        <p style="color:black;font-size:22px; margin: 0;">
+                            বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                        </p>
+
+                        <p style="color:black;font-size:22px">
+                            হেড অফিস<br />
+                            <u>ঢাকা ।</u>
+                        </p>
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else if (Model.empPostingPlace.FirstOrDefault()?.hrUnitId != null)
+                {
+                    <p style="color:black;font-size:22px; margin: 0;">
+                        @Model.empPostingPlace.FirstOrDefault()?.unitNameBn
+                    </p>
+                    <p style="color:black;font-size:22px; margin: 0;">
+                        বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                    </p>
+
+                    <p style="color:black;font-size:22px">
+                        হেড অফিস<br />
+                        <u>ঢাকা ।</u>
+                    </p>
+                }
+                else
+                {
+                    <p style="color:black;font-size:22px; margin: 0;">
+                        বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+                    </p>
+
+                    if (Model.empPostingPlace.Count() > 0 && Model.empPostingPlace.FirstOrDefault()?.hrBranchId != null)
+                    {
+                        <p style="color:black;font-size:22px; margin: 0;" class="branchName">
+                            @Model.empPostingPlace.FirstOrDefault()?.branchNameBn
+                        </p>
+                        <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                            @Model.empPostingPlace.FirstOrDefault()?.branchAddress ।
+                        </p>
+                    }
+                    else
+                    {
+                        if (Model.empPostingPlace.FirstOrDefault()?.hrDivisionId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.divNameBn
+                            </p>
+                        }
+                        else if (Model.empPostingPlace.FirstOrDefault()?.officeId > 0)
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.officeNameBn
+                            </p>
+                        }
+                        else if (Model.empPostingPlace.FirstOrDefault()?.zoneId > 0)
+                        {
+                            @*<p style="color:black;font-size:22px; margin: 0;">
+                        @Model.empPostingPlace.FirstOrDefault()?.zoneNameBn
+                    </p>*@
+                            if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 5)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস চট্টগ্রাম
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    চট্টগ্রাম।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 6)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস ঢাকা উত্তর
+                                </p>
+
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    ঢাকা।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 7)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস ঢাকা দক্ষিণ
+                                </p>
+
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    ঢাকা।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 8)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস খুলনা
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    খুলনা।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 9)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস রাজশাহী
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    রাজশাহী।
+                                </p>
+                            }
+                            else if (Model.empPostingPlace.FirstOrDefault()?.zoneId == 10)
+                            {
+                                <p style="color:black;font-size:22px; margin: 0;">
+                                    জোনাল অফিস সিলেট
+                                </p>
+                                <p style="color:black;font-size:22px; margin: 0; text-decoration: underline;">
+                                    সিলেট।
+                                </p>
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        else
+                        {
+                            <p style="color:black;font-size:22px; margin: 0;">
+                                @Model.empPostingPlace.FirstOrDefault()?.branchNameBn
+                            </p>
+                        }
+                    }
+                }
+
+            </div>
+
+            <div style="text-align:center">
+                <div style="margin-top: 170px;">
+                   
+                        <b style="font-size:22px;color:black">বিষয়ঃ <u> @Model.fixationDetails?.designationNameBN পদে পদোন্নতির ফলে বেতন নির্ধারণ।</u></b>
+                    
+                </div>
+            </div>
+
+            <div class="row p-2 m-2">
+                 <div style=" padding-right:0px; padding-left:0px; color:black;font-size:22px; text-align: justify;">
+                        <article>
+                            প্রিয় মহোদয়,<br />
+
+                            <span style="padding-left: 75px;"></span>ব্যাংকের হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্টের @bnEffectiveDate
+                            তারিখে জারিকৃত @bnRefNo নং কর্মী
+                            প্রজ্ঞাপনের মাধ্যমে আপনাকে  @allSlabBn
+                            টাকা জাতীয় বেতন স্কেলে
+                            @Model.fixationDetails?.designationNameBN পদে পদোন্নতি প্রদানের ফলে @bnEffectiveDate
+                            তারিখ হতে আপনার মূল বেতন  @bnAmount/- (@banglaAmount) টাকা নির্ধারণ করা হ'ল।
+                        </article>
+                        <br />
+                        <p>
+                            ০২। <span style="padding-left: 50px;"></span>উল্লেখ্য, উপরোক্ত বেতন নির্ধারণী ভুল/বাদপড়া ইত্যাদি জনিত কারণে বা পরবর্তীতে এ বিষয়ে অর্থ মন্ত্রণালয় হতে
+                            ভিন্নতর ব্যাখ্যা পাওয়া গেলে সে অনুযায়ী প্রয়োজন বোধে বেতন পুনঃনির্ধারণ/সংশোধনযোগ্য।
+                        </p>
+                    </div>
+               
+            </div>
+
+
+            <div class="container-fluid">
+                <div class="row" style="color:black">
+                    <div class="col-3">
+                        <p>
+                            <span style="color:black;font-size:22px; padding-left: 75px;">
+                                অনুমোদনক্রমে,
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-3"></div>
+                    <div class="col-2"></div>
+                    <div class="col-4 text-center" style="margin-top: 20px;">
+                        @if (Model.fixationDetails.lastDesignationId == 322 && ((Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.joiningDate).Date).TotalDays < (365 * 5) || (Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.lastPromotionDate).Date).TotalDays < (365 * 5)))
+                        {
+                            <h3 style="font-size:22px;color:black">
+                                আপনার বিশ্বস্ত ,<br /><br />
+                                স্বাঃ/-
+                            </h3>
+                        }
+                        else if (Model.fixationDetails.lastDesignationId == 317 && ((Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.joiningDate).Date).TotalDays < (365 * 10) || (Convert.ToDateTime(Model.fixationDetails.effectiveDate).Date - Convert.ToDateTime(Model.fixationDetails.lastPromotionDate).Date).TotalDays < (365 * 10)))
+                        {
+                            <h3 style="font-size:22px;color:black">
+                                আপনার বিশ্বস্ত ,<br /><br />
+                            </h3>
+                        }
+                        else
+                        {
+                            <h3 style="font-size:22px;color:black">
+                                আপনার বিশ্বস্ত ,<br /><br /><br />
+                                স্বাঃ/-
+                            </h3>
+                        }
+
+                        @if (Model.fixationDetails?.newSignatory != null)
+                        {
+                            <h3 style="font-size:22px;color:black; margin: 0;line-height: 1.3;">(@Model.fixationDetails?.newSignatoryName)</h3>
+                            <h3 style="font-size:22px;color:black; margin: 0;line-height: 0.9;">@Model.fixationDetails?.newSignatoryDesig</h3>
+                            @if (@Model.fixationDetails?.newSignatoryPhone != null)
+                            {
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 0.9;">ফোনঃ @Model.fixationDetails?.newSignatoryPhone</h3>
+                            }
+                        }
+                        else
+                        {
+                            @if (Model.fixationDetails?.lastDesignationId == 275 || Model.fixationDetails?.lastDesignationId == 270 || Model.fixationDetails?.lastDesignationId == 262 || Model.fixationDetails?.lastDesignationId == 285 || Model.fixationDetails?.lastDesignationId == 305)
+                            {
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 1.3;">(কবির আহমদ)</h3>
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 0.9;">ডেপুটি জেনারেল ম্যানেজার</h3>
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 0.9;">ফোনঃ ০২২২৩৩৮৬৭৫০</h3>
+                            }
+                            else
+                            {
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 1.1;">(মোঃ বিল্লাল হোসেন)</h3>
+                                <h3 style="font-size:22px;color:black; margin: 0;line-height: 0.8;">এসিসট্যান্ট জেনারেল ম্যানেজার</h3>
+                            }
+                        }
+                    </div>
+
+                </div>
+            </div>
+
+
+       <div class="">
+                <div class="col-12" style="margin-top: @margin1;">
+                    <h4 style="color:black;"><u>সদয় অবগতি ও প্রয়োজনীয় ব্যবস্থা গ্রহনের জন্য অনুলিপিঃ</u></h4>
+                    <h3 style="font-size:22px;color:black; margin: 0;">
+                        @if (Model.empPostingPlace?.FirstOrDefault()?.hrBranchId != null && Model.empPostingPlace?.FirstOrDefault()?.hrBranchId == 205)
+                        {
+                            if (Model.empPostingPlace?.FirstOrDefault()?.officeId == 11)
+                            {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ম্যানেজার (@manager.designationBn), বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড, আগ্রাবাদ  ব্রাঞ্চ, আগ্রাবাদ।*@
+                        </span>
+                            }
+                            else
+                            {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,
+                            বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড,*@
+                        </span>
+                            }
+                        }
+                        else if (Model.empPostingPlace?.FirstOrDefault()?.zoneId != null)
+                        {
+                            if (Model.empPostingPlace?.FirstOrDefault()?.zoneId == 5)
+                            {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ম্যানেজার (@Model.empPostingPlace?.FirstOrDefault()?.managerDesignation), বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড, আগ্রাবাদ  ব্রাঞ্চ, চট্টগ্রাম।*@
+                        </span>
+                            }
+                            else if (Model.empPostingPlace?.FirstOrDefault()?.zoneId == 6 || Model.empPostingPlace?.FirstOrDefault()?.zoneId == 7 || Model.empPostingPlace?.FirstOrDefault()?.zoneId == 13)
+                            {
+                        <span>
+                            ১।ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,
+                            বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড,*@
+                        </span>
+                            }
+                            else if (Model.empPostingPlace?.FirstOrDefault()?.zoneId == 8)
+                            {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ম্যানেজার (@Model.empPostingPlace?.FirstOrDefault()?.managerDesignation), বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড, খুলনা ব্রাঞ্চ, খুলনা।*@
+                        </span>
+                            }
+                            else if (Model.empPostingPlace?.FirstOrDefault()?.zoneId == 9)
+                            {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ম্যানেজার (@Model.empPostingPlace?.FirstOrDefault()?.managerDesignation), বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড, রাজশাহী ব্রাঞ্চ, রাজশাহী।*@
+                        </span>
+                            }
+                            else if (Model.empPostingPlace?.FirstOrDefault()?.zoneId == 10)
+                            {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ম্যানেজার (@Model.empPostingPlace?.FirstOrDefault()?.managerDesignation), বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড, সিলেট ব্রাঞ্চ, সিলেট।*@
+                        </span>
+                            }
+                            else
+                            {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ম্যানেজার (@Model.empPostingPlace?.FirstOrDefault()?.managerDesignation), বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড, @Model.empPostingPlace?.FirstOrDefault().branchNameBn, @Model.empPostingPlace?.FirstOrDefault().branchAddress।*@
+                        </span>
+                            }
+                        }
+                        else if (Model.empPostingPlace?.FirstOrDefault()?.hrBranchId != null && Model.empPostingPlace?.FirstOrDefault()?.hrBranchId != 205)
+                        {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ম্যানেজার (@Model.empPostingPlace?.FirstOrDefault()?.managerDesignation), বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড, @Model.empPostingPlace?.FirstOrDefault().branchNameBn, @Model.empPostingPlace?.FirstOrDefault().branchAddress।*@
+                        </span>
+                        }
+                        else if (Model.empPostingPlace?.FirstOrDefault()?.hrUnitId != null)
+                        {
+                        <span>
+                            ১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিঃ,হেড অফিস, ঢাকা ।
+
+                            @*১। ডেপুটি জেনারেল ম্যানেজার, সেন্ট্রাল একাউন্টস ডিপার্টমেন্ট,
+                            বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড,*@
+                        </span>
+                            @*<br />
+                            <span>
+                                হেড অফিস,
+                                ঢাকা ।
+                            </span>*@
+                        }
+                        else
+                        {
+                            <span>
+
+                            </span>
+                        }
+                        @*@if (Model.empPostingPlace?.FirstOrDefault()?.hrBranchId != null && Model.empPostingPlace?.FirstOrDefault()?.hrBranchId == 205 && Model.empPostingPlace?.FirstOrDefault()?.officeId != 11)
+                        {
+                            <br />
+                            <span>
+                                হেড অফিস,
+                                ঢাকা ।
+                            </span>
+                        }
+                        else
+                        {
+
+                        }*@
+                        <br />
+                        <span>২। অফিস কপি।</span><br />
+                        <span>৩। মাস্টার ফাইল।</span>
+                    </h3>
+                </div>
+
+            </div>
+            <div class="container-fluid">
+                <div class="col-md-12" style="text-align:right; margin-top: @margin2; margin-left: 20px;">
+                    @if (Model.fixationDetails?.newSignatory != null)
+                    {
+                        <h3 style="font-size:22px;color:black; margin-right: 25px">@Model.fixationDetails?.newSignatoryDesig</h3>
+                    }
+                    else
+                    {
+                        @if (Model.fixationDetails?.lastDesignationId == 285)
+                        {
+                            <h3 style="font-size:22px;color:black; margin-right: 25px">ডেপুটি জেনারেল ম্যানেজার</h3>
+                        }
+                        else if (Model.fixationDetails?.lastDesignationId == 305 || Model.fixationDetails?.lastDesignationId == 316)
+                        {
+                            <h3 style="font-size:22px;color:black; margin-right: 25px">ডেপুটি জেনারেল ম্যানেজার</h3>
+                        }
+                        else
+                        {
+                            <h3 style="font-size:22px;color:black; margin-right: 25px;">এসিসট্যান্ট জেনারেল ম্যানেজার</h3>
+                        }
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

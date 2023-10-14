@@ -1,0 +1,98 @@
+﻿@model PRLApplicationViewModel
+@using OPUSERP.Helpers;
+
+@{
+    ViewData["Title"] = "ResigntionLetter";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+
+
+
+<style>
+    .container {
+        font-size: 15px;
+    }
+</style>
+
+<br /><br /><br />
+<div class="container" style="color:black;">
+
+    <h2 style="text-align:center;">বাংলাদেশ   ডেভেলপমেন্ট ব্যাংক লিমিটেড </h2>
+    <h2 style="text-align:center;">Bangladesh Development Bank Limited</h2>
+    <h5 style="text-align:center;">(a state owned commercial bank)</h5>
+    <h5 style="text-align:center;"> @Model.resignInformations?.employee?.branch?.branchUnitNameBN </h5>
+
+    <h5 style="text-align:right">তারিখ : @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.Now.ToString("dd/MM/yyyy"))</h5>
+    <h5 style="text-align:left">
+        @if (Model.resignInformations?.letterNo != null)
+        {
+        <span>নং / -@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.resignInformations?.letterNo)</span>
+        }
+        else
+        {
+        <span> নং / -</span>
+        }
+    </h5><br /><br />
+    <div class="" style="text-align:left;font-size:20px;">
+        <input type="hidden" id="nextApprover" value="@Model.resignInformations.nextApprover" />
+
+        ডেপুটি জেনারেল ম্যানেজার <br />হিউমান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্ট<br />বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড <br />
+        হেড অফিস,ঢাকা।
+    </div>
+    <br />
+    <div>
+        <p style="font-size:20px; margin-left: 142px;">
+            বিষয়: &nbsp;  চাকুরী হতে ইস্তফা কার্যকর করার লক্ষ্যে দায় -দেনার হিসাব প্রেরণ প্রসংগে।
+        </p>
+        <p style="font-size:20px; margin-left: 142px;">হিসাব - জনাব @Model.resignInformations?.employee?.nameBangla ,@Model.resignInformations?.employee?.lastDesignation?.designationNameBN ,@Model.resignInformations?.employee?.branch?.branchUnitNameBN</p>
+        <br />
+        @Html.Raw(Model.resignInformations?.bodyText)
+        @*<p style="font-size:20px">
+                প্রিয় মহোদয়,
+                <br /><span style="margin-left: 64px;"> উপর্যুক্ত বিষয়ে আপনাদের @Model.resignInformations.resignDate?.ToString("dd/MM/yyyy")ইং তারিখের ১৮.১০/ নং পত্রের প্রতি সদয় দৃষ্টি আকর্ষণ করছি।</span>
+               উক্ত পত্রে বর্ণিত জনাব  @Model.resignInformations?.employee?.nameEnglish ,@Model.resignInformations?.employee?.lastDesignation?.designationName  -এর নামে ব্যাংকের এই ব্রাঞ্চে কোনো রূপ পাওনা (স্টাফ লোন ,পার্সোনাল লোন ,কনজ্যুমার লোন ইত্যাদি )নেই এবং তার বিরুদ্ধে কোনো অডিট আপত্তিও নেই।
+                  <br /><span style="margin-left: 64px;">ধন্যবাদান্তে,</span>
+
+            </p>*@
+        
+    </div>
+
+
+    
+    @*<div class="" style="text-align:right;font-size:20px;">
+
+            <p>আপনার বিশ্বস্ত</p>
+            <p>স্বা/-------------------------------------</p>
+            <p>(কবির আহমেদ)</p>
+            <p>ডেপুটি জেনারেল ম্যানেজার</p>
+
+            আপনার বিশ্বস্ত<br />(<span id="nameEnglish"></span>)<br /><span id="designationName"></span>
+
+        </div>*@
+    
+    <br />   <br />   <br />   <br />   <br />   <br />   <br />
+</div>
+@section Scripts{
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            var nextApprover = $('#nextApprover').val();
+            alert(nextApprover);
+            Common.Ajax('GET', '/HRPMSRetirementAndTermination/ApplyForPRL/GetEmpIdByUserId?id=' + nextApprover, [], 'json', ajaxFunctionNext, false);
+
+        });
+
+        function ajaxFunctionNext(response) {
+            alert(response.nameEnglish)
+            $('#designationName').val(response.lastDesignation ?.designationName);
+            $('#nameEnglish').val(response.nameEnglish);
+        }
+    </script>
+
+}
+
+
+
+

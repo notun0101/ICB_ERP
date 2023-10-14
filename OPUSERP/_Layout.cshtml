@@ -1,0 +1,1064 @@
+﻿@using OPUSERP.ERPServices.MasterData.Interfaces
+@using OPUSERP.ERPService.AuthService.Interfaces
+@using System
+@inject IERPCompanyService eRPCompanyService
+@inject IUserInfoes userInfo
+@{
+	var companies = await eRPCompanyService.GetAllCompany();
+	var company = companies.FirstOrDefault()?.filePath;
+	var companyName = companies.FirstOrDefault()?.companyName;
+	//var userInfos = await userInfo.GetUserInfoByUserName(@User.Identity.Name);
+	//var EmpInfoImage = userInfos.Where(x => x.UserName == @User.Identity.Name).FirstOrDefault();
+	//var EmpInfoImage = await userInfo.GetUserInfoByUserNameNew(@User.Identity.Name);
+	var EmpInfoImage = await userInfo.GetUserInfoByUserNameSp(@User.Identity.Name);
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>@ViewData["Title"] - BDBL</title>
+
+    <link href="~/CustomSelectOption/select2.min.css" rel="stylesheet" />
+    <link href="~/SweetAlert/sweetalert2.css" rel="stylesheet" />
+    <!-- Custom fonts for this template-->
+    <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    @*<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">*@
+    <link href="~/Assets/googleapis.css" rel="stylesheet">
+    <!-- Custom Date Picker-->
+    @*<link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />*@
+    <link href="~/Assets/gijgo.min.css" rel="stylesheet" type="text/css" />
+    <!-- Custom styles for this page -->
+
+    <link href="~/Assets/cdns/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
+
+
+    <script src="~/Assets/cdns/jquery-3.5.1.js"></script>
+    <script src="~/Assets/cdns/jquery.dataTables.min.js"></script>
+    <script src="~/Assets/cdns/dataTables.bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="~/Assets/cdns/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="~/Assets/cdns/jquery-ui.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Assets/cdns/flatpickr.min.css">
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/hover.css" rel="stylesheet" />
+
+    <style>
+        body {
+            font-size: 11pt !important;
+            color: black !important;
+        }
+
+        table .btn {
+            font-size: 8pt !important;
+            padding: 3px 5px 3px 5px !important;
+        }
+
+        table th, table td {
+            /*padding: 2px 2px 2px 2px !important;*/
+            color: black !important;
+            font-weight: normal !important;
+        }
+
+        .col-form-label {
+            color: #606066 !important;
+            font-weight: normal !important;
+            padding: 0 0 0 0;
+        }
+
+        .form-control {
+            color: #606066 !important;
+            font-size: 10pt !important;
+            padding: 1px 20px 1px 8px;
+            border: 1px solid #606066;
+            height: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 6px !important;
+        }
+        /*Parsly  Section*/
+        input.parsley-success,
+        select.parsley-success,
+        textarea.parsley-success {
+            color: #468847;
+            background-color: #DFF0D8;
+            border: 1px solid #D6E9C6;
+        }
+
+        input.parsley-error,
+        select.parsley-error,
+        textarea.parsley-error {
+            color: #B94A48;
+            background-color: #F2DEDE;
+            border: 1px solid #EED3D7;
+        }
+
+        .parsley-errors-list {
+            margin: 2px 0 3px;
+            padding: 0;
+            list-style-type: none;
+            font-size: 0.9em;
+            line-height: 0.9em;
+            opacity: 0;
+            transition: all .3s ease-in;
+            -o-transition: all .3s ease-in;
+            -moz-transition: all .3s ease-in;
+            -webkit-transition: all .3s ease-in;
+        }
+
+            .parsley-errors-list.filled {
+                opacity: 1;
+            }
+
+        .parsley-type, .parsley-required, .parsley-equalto {
+            color: #ff0000;
+        }
+        /*Parsly  Section*/
+        .btnCustom {
+            background-color: #004474;
+        }
+
+        .ui-autocomplete {
+            cursor: pointer;
+            height: 400px;
+            width: 300px;
+            overflow-y: scroll;
+            z-index: 1050;
+        }
+
+        .buttons-excel {
+            font-weight: 400;
+            text-align: center;
+            user-select: none;
+            border: 1px solid transparent;
+            padding: .25rem .5rem;
+            font-size: .875rem;
+            line-height: 1.5;
+            border-radius: .2rem;
+            color: #fff;
+            background-color: #36b9cc;
+            border-color: #36b9cc;
+        }
+
+        .buttons-print {
+            font-weight: 400;
+            text-align: center;
+            user-select: none;
+            border: 1px solid transparent;
+            padding: .25rem .5rem;
+            font-size: .875rem;
+            line-height: 1.5;
+            border-radius: .2rem;
+            color: #fff;
+            background-color: #1cc88a;
+            border-color: #1cc88a;
+        }
+
+        .buttons-csv {
+            font-weight: 400;
+            text-align: center;
+            user-select: none;
+            border: 1px solid transparent;
+            padding: .25rem .5rem;
+            font-size: .875rem;
+            line-height: 1.5;
+            border-radius: .2rem;
+            color: white !important;
+            background-color: green !important;
+            border: 1px solid green !important;
+        }
+
+        .identity-box {
+            color: black;
+            font-weight: bolder;
+            text-align: right;
+            background: #d4d6d8;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .identity-box-center {
+            color: black;
+            font-weight: bolder;
+            text-align: center;
+            background: #eff2f4;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        /*////////////////////////////////*/
+
+        .userimg {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid gray;
+            box-shadow: 1px 1px gray;
+        }
+
+        .dropdown-item {
+            color: sienna;
+            background: #ADD8E6 !important;
+            font-size: 13px;
+            width: 175px !important;
+            margin: 0 auto;
+            border-radius: 30px;
+            margin-bottom: 5px;
+        }
+
+            .dropdown-item .fas {
+                margin-top: 0;
+                font-size: 13px;
+            }
+
+            .dropdown-item:hover {
+                background: linear-gradient(90deg, gray 35%, #E5EEEF 100%, #364E6F 50%, #FFF29D 50%) !important;
+            }
+
+        .btncamera {
+            cursor: pointer;
+        }
+
+        input, select {
+            box-shadow: none !important;
+        }
+
+
+        /*Edit Employee Heading CSS*/
+        /*.outerr-box {
+            background: #E0E0E0;
+            padding: 5px 10px;
+            width: fit-content;
+            color: black;
+            font-weight: 700;
+            margin-left: 5px;
+            text-align: center;
+            border-left: 2px solid;
+        }
+
+            .outerr-box p {
+                margin: 0;
+            }*/
+        .outBox p:first-child {
+            font-size: 22px;
+        }
+
+        .outBox img {
+            height: 70px !important;
+            width: 70px !important;
+        }
+
+        .form-group label {
+            color: black !important;
+        }
+
+        #menu .navbar-nav {
+            max-height: 500px;
+            overflow: scroll;
+        }
+
+            #menu .navbar-nav::-webkit-scrollbar {
+                width: 0; /* Remove scrollbar space */
+                background: transparent; /* Optional: just make scrollbar invisible */
+            }
+
+
+
+
+        .outBox img {
+            border: 1px solid;
+            padding: 3px;
+        }
+        /*Notification*/
+        .notification a {
+            text-decoration: none;
+            color: black;
+        }
+
+            .notification a:hover {
+                text-decoration: none;
+            }
+
+            .notification a:visited {
+                color: black;
+            }
+
+        .notification .box::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            background-color: #F5F5F5;
+            border-radius: 5px
+        }
+
+        .notification .box::-webkit-scrollbar {
+            width: 10px;
+            background-color: #F5F5F5;
+            border-radius: 5px
+        }
+
+        .notification .box::-webkit-scrollbar-thumb {
+            background-color: black;
+            border: 2px solid black;
+            border-radius: 5px
+        }
+
+        .notification header {
+            -moz-box-shadow: 10px 10px 23px 0px rgba(0,0,0,0.1);
+            box-shadow: 10px 10px 23px 0px rgba(0,0,0,0.1);
+            height: 110px;
+            vertical-align: middle;
+        }
+
+        .notification h1 {
+            float: left;
+            padding: 10px 30px
+        }
+
+        /*body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Raleway', sans-serif;
+        }*/
+
+        .notification .icons {
+            display: inline;
+            float: right
+        }
+
+        .notification {
+            padding-top: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+            .notification .number1 {
+                height: 22px;
+                width: 22px;
+                background-color: #d63031;
+                border-radius: 20px;
+                color: white;
+                text-align: center;
+                position: absolute;
+                top: 15px;
+                left: 60px;
+                border-style: solid;
+                border-width: 2px;
+            }
+
+                .notification .number1:empty {
+                    display: none;
+                }
+
+            .notification .notBtn {
+                transition: 0.5s;
+                cursor: pointer
+            }
+
+            .notification .fas {
+                font-size: 25pt;
+                padding-bottom: 10px;
+                color: dodgerblue;
+                margin-right: 40px;
+                margin-left: 40px;
+                /*animation: color .5s ease-in-out infinite;*/
+            }
+
+
+            .notification .box {
+                width: 400px;
+                height: 0px;
+                border-radius: 10px;
+                transition: 0.5s;
+                position: absolute;
+                overflow-y: scroll;
+                padding: 0px;
+                left: -300px;
+                margin-top: 5px;
+                background-color: #F4F4F4;
+                -webkit-box-shadow: 10px 10px 23px 0px rgba(0,0,0,0.2);
+                -moz-box-shadow: 10px 10px 23px 0px rgba(0,0,0,0.1);
+                box-shadow: 10px 10px 23px 0px rgba(0,0,0,0.1);
+                cursor: context-menu;
+            }
+
+            .notification .fas:hover {
+                color: #d63031;
+            }
+
+            .notification .notBtn:hover > .box {
+                height: 60vh
+            }
+
+            .notification .content {
+                padding: 20px;
+                color: black;
+                vertical-align: middle;
+                text-align: left;
+            }
+
+            .notification .gry {
+                background-color: #F4F4F4;
+            }
+
+            .notification .top {
+                color: black;
+                padding: 10px
+            }
+
+            .notification .display {
+                position: relative;
+            }
+
+            .notification .cont {
+                position: absolute;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: #F4F4F4;
+            }
+
+                .notification .cont:empty {
+                    display: none;
+                }
+
+            .notification .stick {
+                text-align: center;
+                display: block;
+                font-size: 50pt;
+                padding-top: 70px;
+                padding-left: 80px
+            }
+
+                .notification .stick:hover {
+                    color: black;
+                }
+
+            .notification .cent {
+                text-align: center;
+                display: block;
+            }
+
+            .notification .sec {
+                padding: 25px 10px;
+                background-color: #F4F4F4;
+                transition: 0.5s;
+            }
+
+            .notification .secRead {
+                padding: 25px 10px;
+                background-color: #D6DBE9;
+                transition: 0.5s;
+            }
+
+            .notification .profCont {
+                padding-left: 15px;
+            }
+
+            .notification .profile {
+                -webkit-clip-path: circle(50% at 50% 50%);
+                clip-path: circle(50% at 50% 50%);
+                width: 75px;
+                float: left;
+            }
+
+            .notification .txt {
+                vertical-align: top;
+                font-size: 1.25rem;
+                padding: 5px;
+            }
+
+            .notification .sub {
+                font-size: 1rem;
+                color: grey;
+            }
+
+            .notification .new {
+                border-style: none none solid none;
+                border-color: #293955;
+            }
+
+            .notification .sec:hover {
+                background-color: #D6DBE9;
+            }
+            .paginate_button {
+                font-family: Calibri !important;
+            }
+
+    </style>
+
+    @RenderSection("Style", required: false)
+</head>
+<body>
+
+    <!-- Topbar -->
+    <nav class="navbar navbar-expand navbar-light bg-white topbar static-top shadow fixed-top">
+        <img src="/EmpImages/@company" style="height: 66px;" alt="OPUS ERP" />
+        <span style="font-weight: bolder; color: black; font-size: 18pt;  width: 100%;">HR & Payroll Management System.</span>
+        <!-- Sidebar Toggle (Topbar) -->
+        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+        </button>
+        <ul class="navbar-nav ml-auto">
+            <li>
+                <p id="passAlert" style="font-size: 13px; margin: 5px; color: darkred; font-weight: bold;"></p>
+            </li>
+            <li>
+                <span class="mr-2 d-lg-inline-flex text-gray-600" style="padding-top: 13px; height: 57px;">@EmpInfoImage?.EmpName</span>
+            </li>
+
+            <!-- Nav Item - User Information -->
+            <li class="nav-item dropdown no-arrow d-inline-flex">
+                <div class="notification">
+                    <a href="#">
+                        <div class="notBtn" href="#">
+                            <!--Number supports double digets and automaticly hides itself when there is nothing between divs -->
+                            <i class="fas fa-bell" style="font-size: 25pt !important; margin: 0"></i>
+                            <span id="notifyCount" style="position: absolute; background-color: red; width: 20px; height: 20px; border-radius: 50%; text-align: center; font-weight: bold; top: 15px; left: 15px;">0</span>
+                            <div class="box">
+                                <div class="display">
+                                    <div class="nothing">
+                                        <i class="fas fa-child stick"></i>
+                                        <div class="cent">Looks Like your all caught up!</div>
+                                    </div>
+                                    <div class="cont" id="notifyBox">
+                                    </div>
+                                    <div style="display: flex; justify-content: center; background-color: lightgoldenrodyellow; text-decoration: none !important; align-items: center;"><a href="/SCMRequisition/RequisitionMaster/GetNotifications" style="padding: 5px;">View All</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @if (EmpInfoImage?.photoUrl == null)
+                    {
+                        <img class="img-profile rounded-circle" src="/images/user.png">
+                    }
+                    else
+                    {
+                        <img class="img-profile rounded-circle" src="~/@EmpInfoImage?.photoUrl" height="32" width="32">
+                    }
+                </a>
+                <!-- Dropdown - User Information -->
+                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown" style="width:300px; padding: 0;">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card" style="margin: 0 6px; padding: 0; border-left: 0;border-right: 0; margin-top: 0;margin: 2px 0;">
+                                <div class="card-body row">
+                                    <div class="col-12 ">
+                                        <div class="form-group row" style="display: flex;justify-content: center; align-items: center;">
+                                            @if (EmpInfoImage?.photoUrl != null)
+                                            {
+                                                <img class="img-profile rounded-circle userimg" src="~/@EmpInfoImage?.photoUrl" height="80" width="80" style="border-radius: 50%;" />
+                                            }
+                                            else
+                                            {
+                                                <img class="img-profile rounded-circle" src="/images/user.png" height="80" width="80" style="border-radius: 50%;">
+                                            }
+
+
+                                            <i class="fa fa-camera btncamera d-none" data-toggle="modal" id="phtChange" data-target="#updatePhotoModal" style="margin: 0% 1% -18% -5%;"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 username" style="text-align: center; font-size:18px;font-family:'Times New Roman', Times, serif;">
+                                        <label><b><a href="/HRPMSEmployee/Photograph/EditGrid/@EmpInfoImage?.EmployeeId">@EmpInfoImage?.EmpName</a></b></label><br />
+                                        <label>@EmpInfoImage?.DesignationName</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <br /><br /><br />
+                        <div class="col-12 flex-column" style="color:darkslateblue;">
+                            <div class="card" style="margin: 0 6px; padding: 0; border-left: 0;border-right: 0;margin: 2px 0;">
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <div class="col-5" style="text-align:right;    margin-left: 7px;">
+                                            <span>Department :</span><br />
+
+                                        </div>
+                                        <div class="col-7" style="text-align: justify;margin: 0px -7px 0px 0px;">
+                                            <span>@EmpInfoImage?.departmentName</span><br />
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-5" style="text-align:right;    margin-left: 7px;">
+
+                                            <span>Mobile     :</span><br />
+                                            <span>Email      :</span><br />
+                                        </div>
+                                        <div class="col-7" style="text-align: justify;margin: 0px -7px 0px 0px;">
+
+                                            <span>@EmpInfoImage?.mobileNo</span><br />
+                                            <span style="margin-right:10px">@EmpInfoImage?.Email</span><br />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-5" style="margin-left:7px;text-align:right;">
+                                            <span>Joining Date :</span><br />
+                                            <span>Job Nature :</span><br />
+                                            <span>Job Status :</span><br />
+                                        </div>
+                                        <div class="col-7" style="margin: 0px -7px 0px 0px;text-align: justify;">
+                                            <span>@EmpInfoImage?.joiningDate?.ToString("dd-MMM-yyyy")</span><br />
+                                            <span>@EmpInfoImage?.empType</span><br />
+                                            <span>@(EmpInfoImage?.status == 1 ? "Active" : "Inactive")</span><br />
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="card" style="margin: 0 6px; padding: 0; border-left: 0;border-right: 0;margin: 2px 0; margin-bottom: 0;">
+                                <div class="card-body">
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#changePasswordModal" style="color:sienna;font-size:13px; text-align: center;">
+                                        <i class="fas fa-user-cog fa-sm fa-fw mr-2 "></i>
+                                        Change Password
+                                    </a>
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal" style="color:sienna;font-size:13px; text-align: center;">
+                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 "></i>
+                                        Logout
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    <br /><br /><br /><br />
+    <!-- End of Topbar -->
+    <div id="page-top">
+        <!-- Page Wrapper -->
+        <div id="wrapper">
+            <!-- Sidebar -->
+            <div id="menu" style="position: fixed; overflow: hidden; height: 100%; width: 238px; top: 0; left: 0; z-index: 1; padding-top: 65px;">
+
+            </div>
+            <!-- End of Sidebar -->
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="d-flex flex-column" style="margin-left: 230px;">
+                <!-- Main Content -->
+                <div id="content" style="background-color:#e5eeef;">
+                    <!-- Begin Page Content -->
+                    <div class="container-fluid" style="padding: 0 8px;">
+                        @RenderBody()
+                    </div>
+                    <!-- /.container-fluid -->
+                </div>
+                <!-- End of Main Content -->
+                <!-- Footer -->
+                <!-- End of Footer -->
+            </div>
+            <!-- End of Content Wrapper -->
+        </div>
+        <!-- End of Page Wrapper -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                </div>
+            </div>
+        </footer>
+    </div>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="height: 55px !important;">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <form asp- method="post" asp-area="Auth" asp-controller="Account" asp-action="Logout" id="logoutForm" class="navbar-right">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <button type="submit" onclick="ClearLocalStorage()" class="btn btn-success">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Change Password Modal-->
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Change Password </h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form role="form" id="changePassForm" data-parsley-validate="parsley">
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 col-sm-12" style="color:black;" for="OldPassword">Current Password<span style="float:right;">:</span></label>
+                            <div class="col-md-8 col-lg-8 col-sm-12">
+                                <input type="password" class="form-control" id="OldPassword" name="OldPassword" autocomplete="off" data-parsley-required="true" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 col-sm-12" style="color:black;" for="Password">New Password<span style="float:right;">:</span></label>
+                            <div class="col-md-8 col-lg-8 col-sm-12">
+                                <input type="password" class="form-control" id="Password" name="Password" autocomplete="off" data-parsley-required="true" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 col-sm-12" style="color:black;" for="ConfirmPassword">Confirm Password<span style="float:right;">:</span></label>
+                            <div class="col-md-8 col-lg-8 col-sm-12">
+                                <input type="password" class="form-control" id="ConfirmPassword" name="ConfirmPassword" autocomplete="off" data-parsley-required="true" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12 col-lg-12 col-sm-12">
+                                <button type="button" id="changePassBtn" style="float:right;" class="btn btn-success">Submit</button>
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="updatePhotoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update Photo</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formPhoto">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="form-group row">
+                            <div class="col-7">
+                                @if (EmpInfoImage?.DivisionName != null)
+                                {
+                                    <img id="user_img" name="empPhoto" style="width:200px;height:200px" src="~/@EmpInfoImage?.DivisionName" alt="" class="img-thumbnail float-left">
+                                }
+                                else
+                                {
+                                    <img id="user_img" name="empPhoto" style="width:200px;height:200px" src="/images/user-icon-png.png" alt="" class="img-thumbnail float-left">
+                                }
+                                <input type="hidden" name="employeeID" id="employeeID" value="@EmpInfoImage?.EmployeeId" />
+                                <input type="hidden" name="photographID" id="photographID" value="@EmpInfoImage?.photoId" />
+                                <input type="file" title="Photo Upload" id="imagePath" data-parsley-required="true" name="empPhoto" class="btn btn-default btn-sm pull-right" onchange="show(this)" />
+                                <span style="float:left;color:red;" class="redStar">*</span>
+                            </div>
+                        </div>
+                        <hr>
+                        @*<button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+                        <button type="button" value="Submit" onclick="uploadPhoto()" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/CustomSelectOption/select2.min.js"></script>
+    <!-- Page level plugins -->
+    <script src="~/Assets/cdns/jquery.dataTables.min.js"></script>
+    <!-- Page level custom scripts -->
+    <script src="~/Assets/cdns/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Assets/cdns/dataTables.buttons.min.js"></script>
+    <script src="~/Assets/cdns/jszip.min.js"></script>
+    <script src="~/Assets/cdns/pdfmake.min.js"></script>
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>*@
+    <script src="~/Assets/vfs_fonts.js"></script>
+    <script src="~/Assets/cdns/buttons.html5.min.js"></script>
+    <script src="~/Assets/cdns/buttons.print.min.js"></script>
+    <!-- Custom Date Picker-->
+    @*<script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>*@
+    <script src="~/Assets/gijgo.min.js" type="text/javascript"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="~/js/sb-admin-2.min.js"></script>
+    <!-- parsly Validation -->
+    <script src="~/js/parsly.js"></script>
+    <script src="~/Assets/cdns/jspdf.min.js"></script>
+    <script src="~/SweetAlert/sweetalert2.common.js"></script>
+    <script src="~/SweetAlert/sweetalert2.js"></script>
+    <script src="~/js/jquery.autocomplete.js" type="text/javascript"></script>
+    <script type="text/javascript" src="~/js/canvas/jquery.canvasjs.min.js"></script>
+    <script type="text/javascript" src="~/qrcode/jquery-qrcode-0.17.0.js"></script>
+    <script type="text/javascript" src="~/qrcode/jquery-qrcode-0.17.0.min.js"></script>
+    <script type="text/javascript" src="~/qrcode/scripts.js"></script>
+    <!-- Comon Ajax Lib -->
+    <script type="text/javascript" src="~/js/common.js"></script>
+    <script type="text/javascript" src="~/js/jquery.number.js"></script>
+    <script type="text/javascript" src="~/js/jquery.number.min.js"></script>
+    <script src="~/Assets/cdns/flatpickr.js"></script>
+    <script src="~/js/site.js"></script>
+
+
+    <script type="text/javascript">
+        function setCookie(cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            var expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+            location.reload(true);
+        }
+        function ajaxFunctionCheckUserLogin(response) {
+            if (response.isPassChange == 0 || response.isPassChange == null) {
+                $('#OldPassword').val('123456').attr('readonly', true);
+                $('#changePasswordModal').modal('show');
+                //$('#passAlert').text("You haven't change your password");
+            }
+            else {
+                var date2 = new Date();
+                var date1 = new Date(response.passChangeDate);
+                var Difference_In_Time = date2.getTime() - date1.getTime();
+                var days = Difference_In_Time / (1000 * 3600 * 24);
+
+                //$('#passAlert').text("You have changed your password " + days.toString().split('.')[0] + " days ago.");
+            }
+        }
+        $(document).ready(function () {
+            Common.Ajax('GET', '/Auth/Account/GetLastPassChange', [], 'json', ajaxFunctionCheckUserLogin, false);
+
+            $('#changePassBtn').click(function () {
+                var formData = $('#changePassForm').serialize();
+                $.ajax({
+                    url: '/Auth/Account/ChangePasswordNew',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: 'GET',
+                    success: function (data) {
+                        if (data == 'ok') {
+                            swal('success', 'Password changed successfully!', 'success').then(function() {
+                                window.location.href = '/Auth/Account/Loginnew';
+                            });
+                        }
+                        else {
+                            swal('warning', 'Can not change the password. Please try again!', 'warning');
+                        }
+                    }
+                });
+            })
+            $('[data-toggle="tooltip"]').tooltip();
+
+            //$('#phtChange').click(function () {
+            //    $('#user_img').attr('src', '');
+            //})
+
+            //window.onbeforeunload = function () { return "Your work will be lost."; };
+           // $('#lanENG').show();
+           // $('#lanBAN').hide();
+            //setCookie('lang', 'en', 30);
+            $('#lanBAN').click(function ()
+            {
+                setCookie('lang', 'bn', 30);
+                //$('#lanBAN').hide();
+                //$('#lanENG').show();
+            });
+            $('#lanENG').click(function ()
+            {
+                setCookie('lang', 'en', 30);
+                //$('#lanBAN').show();
+                //$('#lanENG').hide();
+            });
+            //$('#menu').load('@Url.Action("Navigation", "Home")');
+            $('#menu').load('@Url.Action("AssignPage", "Home")');
+            $('.customSelect').select2();
+            $(".select2").css("width", "100%");
+            $(".select2-selection--single").css("height", "33px");
+            $(".select2-selection--single").css("border", "1px solid #d1d3e2");
+			$(".select2-selection__rendered").css("line-height", "32px");
+
+			$('.fa-bell').hover(function () {
+				Common.Ajax('GET', '/SCMRequisition/RequisitionMaster/GetNotificationsApi', [], 'json', ajaxFunctionNotify, false);
+			})
+			Common.Ajax('GET', '/SCMRequisition/RequisitionMaster/UnreadNotificationCount', [], 'json', ajaxFunctionUreadNotify, false);
+
+
+
+
+
+
+
+			//console.clear();
+			//document.addEventListener	('contextmenu', event => event.preventDefault());
+
+			//document.onkeydown = function (e) {
+			//	if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+			//		return false;
+			//	}
+			//};
+		});
+		function ajaxFunctionNotify(response) {
+			var option = '';
+			$.each(response, function (i, item) {
+				var date = formatDate(item.date);
+
+				if (item.isRead == 1) {
+					option += `<div class="secRead new notify_${item.Id}" id="notify_${item.type}_${item.Id}">
+								<a href="javascript:void(0)">
+									<div class="txt">
+										<span style="font-weight: bold;">${item.title}</span> </br>
+										<small>${item.description}</small>
+									</div>
+									<div class="txt sub">${date} <span class="badge badge-primary" style="font-size: 16px;">${item.type}</span></div>
+								</a>
+							</div>`
+				}
+				else {
+					option += `<div class="sec new notify_${item.Id}" onclick="MarkAsRead(${item.Id})" id="notify_${item.type}_${item.Id}">
+								<a href="${item.url}">
+									<div class="txt">
+										<span style="font-weight: bold;">${item.title}</span> </br>
+										<small>${item.description}</small>
+									</div>
+									<div class="txt sub">${date} <span class="badge badge-primary" style="font-size: 16px;">${item.type}</span></div>
+								</a>
+							</div>`
+				}
+
+
+			});
+
+			$('#notifyBox').empty();
+			$('#notifyBox').append(option);
+			$('#notifyBox').append(`<div style="display: flex; justify-content: center; background-color: lightgoldenrodyellow; text-decoration: none !important; align-items: center;"><a href="/SCMRequisition/RequisitionMaster/GetNotifications" style="padding: 5px;">View All</a></div>`);
+		}
+
+		function ajaxFunctionUreadNotify(response) {
+			if (response == 0) {
+				$('#notifyCount').text(0);
+			}
+			else {
+				$('#notifyCount').text(response);
+			}
+
+			$('#notifyBox').empty();
+			$('#notifyBox').append(response);
+		}
+
+		function MarkAsRead(id) {
+			Common.Ajax('GET', '/SCMRequisition/RequisitionMaster/ReadNotification?id=' + id, [], 'json', ajaxFunctionRead, false);
+		}
+		function ajaxFunctionRead(response) {
+		}
+
+		function formatDate(date) {
+			date = new Date(date);
+			var year = date.getFullYear(),
+				month = date.getMonth() + 1, // months are zero indexed
+				day = date.getDate(),
+				hour = date.getHours(),
+				minute = date.getMinutes(),
+				second = date.getSeconds(),
+				hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+				minuteFormatted = minute < 10 ? "0" + minute : minute,
+				morning = hour < 12 ? "am" : "pm";
+
+			return day + "/" + + month + "/" + year;
+		}
+
+        function ClearLocalStorage() {
+            window.localStorage.clear();
+        }
+        var BaseUrl = location.host;
+    </script>
+
+    <script>
+		$(".arlo_tm_resize").click(function () {
+			var existBtnClass = $(this).attr('class');
+			var existDrawerClass = $('.arlo_tm_leftpart_wrap').attr('class');
+			if (existBtnClass == 'arlo_tm_resize' && existDrawerClass == 'arlo_tm_leftpart_wrap') {
+				$(".arlo_tm_resize").addClass('opened');
+				$(".arlo_tm_leftpart_wrap").addClass('opened');
+			}
+			else {
+				$(".arlo_tm_resize").removeClass('opened');
+				$(".arlo_tm_leftpart_wrap").removeClass('opened');
+			}
+        })
+
+        function show(input) {
+            if (input.files && input.files[0]) {
+                var filerdr = new FileReader();
+                filerdr.onload = function (e) {
+                    console.log(input.value)
+                    $('#imagePath').text(input.value);
+                    $('#user_img').attr('src', e.target.result);
+                    imgfile.src = event.target.result;
+                }
+                filerdr.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function uploadPhoto() {
+            var imgfile = document.getElementById('imagePath');
+            var formData = new FormData();
+            formData.append('employeeID', $("#employeeID").val());
+            formData.append('photographID', $("#photographID").val());
+            formData.append('empPhoto', $('input[type=file]')[0].files[0]);
+            console.log(formData)
+            console.log($("#employeeID").val())
+            console.log($("#photographID").val())
+            swal({
+                title: 'Are you sure?',
+                text: 'Do you want to update this photo!',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Update it!'
+            }).then(function () {
+                $.ajax({
+                    url: '@Url.Action("ProfilePictureSave", "Photograph", new { area= "HRPMSEmployee" })',
+                    data: formData,
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                }).done(function (response) {
+                        if (response == "success") {
+                            swal('', 'Update Successfully!', 'success').
+                                then(function () {
+                                    location.reload();
+                                })
+                        }
+                        else {
+                            swal('', 'Unable to Update! Something went wrong.', 'warning');
+                        }
+                    })
+                    .fail(function () {
+                        swal('', 'Unable to Update! Please choose photo.', 'warning');
+                    });
+			});
+        }
+    </script>
+
+    <script src="~/Assets/cdns/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="~/Assets/cdns/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="~/Assets/cdns/jquery-ui.js" type="text/javascript"></script>
+    <script src="~/Assets/cdns/jquery-migrate-3.0.0.min.js" type="text/javascript"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

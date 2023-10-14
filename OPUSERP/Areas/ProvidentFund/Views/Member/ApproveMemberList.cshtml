@@ -1,0 +1,107 @@
+﻿@model PFMemberInfoViewModel
+@{
+    ViewData["Title"] = "ApproveMemberList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card  mb-4 bg-light">
+          
+            <div class="row clearfix">
+                <div class="col-12">
+                    <div class="card mb-4">
+                        <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+                            <h5 class="m-0 font-weight-bold text-primary">Approve Member List</h5>
+                            <a class='btn btn-info mr-4' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1014&perentId=6014'>@*<i class="fas fa-backward fa-2x "></i>*@<i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+                        </div>
+                        
+                        <div class="card-body">
+                            
+                            <table class="table table-bordered table-striped" id="tblMemberList" data-parsley-required="true">
+                                <thead style="width:100%;background-color:lightgray">
+                                    <tr>
+                                        <th>
+                                            Member ID
+                                        </th>
+                                        <th>
+                                            Member Name
+                                        </th>
+                                        <th>
+                                            Total Contribution
+                                        </th>
+                                        <th>
+                                            Total Profit
+                                        </th>
+                                        <th>
+                                            Member Status
+                                        </th>
+                                        <th>
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var data in Model.pFMemberInfos)
+                                {
+                                    <tr>
+
+                                        <td>@data.memberCode</td>
+                                        <td>@data.memberName</td>
+                                        <td></td>
+                                        <td></td>
+                                        @if (data.approveStatus == 1)
+                                        {
+                                        <td>Reject</td>
+                                        }
+                                        else if (data.approveStatus == 2)
+                                        {
+                                        <td>Approved</td>
+                                        }
+                                        else if (data.approveStatus == 0)
+                                        {
+                                        <td>Pendding</td>
+                                        }
+                                        else
+                                        {
+                                        <td></td>
+                                        }
+
+                                        @*<td>@data.approveStatus</td>*@
+                                        <td></td>
+
+                                        @*<td><a href="/ProvidentFund/Member/MemberPFStatement"><i class="fas fa-eye" style="color:green"></i></a></td>*@
+
+                                    </tr>
+                                }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+</div>
+
+
+
+
+
+
+
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+
+            $('#tblMemberList').DataTable();
+
+        });
+    </script>
+}
+

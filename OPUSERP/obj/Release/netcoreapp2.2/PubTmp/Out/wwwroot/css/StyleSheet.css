@@ -1,0 +1,32 @@
+﻿@keyframes sidemenu {
+	0% {
+		background-color: #0177BD;
+	}
+
+	50% {
+		background-color: #90D9F9;
+	}
+
+	100% {
+		background-color: #00A85B;
+	}
+}
+
+#sideMenu::-webkit-scrollbar {
+	width: 10px;
+	height: 20px
+}
+
+#sideMenu::-webkit-scrollbar-button {
+	background: transparent;
+}
+
+#sideMenu::-webkit-scrollbar-track-piece {
+	background: gray;
+}
+
+#sideMenu::-webkit-scrollbar-thumb {
+	background: green;
+}
+
+​

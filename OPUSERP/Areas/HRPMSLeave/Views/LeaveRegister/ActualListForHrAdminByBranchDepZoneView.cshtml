@@ -1,0 +1,130 @@
+﻿@*@{
+		ViewData["Title"] = "ManualRecreationBranchReport";
+	}
+	<h1>ManualRecreationBranchReport</h1>*@
+
+@model ManualRecreationReportVM
+@{
+	ViewData["Title"] = "Actual Recreation Hr Admin Report";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+@using OPUSERP.Helpers;
+@using System;
+<style>
+	body {
+		color: black !important;
+	}
+
+	table {
+		font-size: 14px !important;
+	}
+
+		table thead tr th {
+			text-align: center;
+		}
+</style>
+<div class="text-center p-4">
+	<h6 style="font-size:25px">বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড।</h6>
+	<p style="font-size:25px"> <u>হেড অফিস, ঢাকা।</u></p>
+	<p style="font-size:25px"> <u>হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্ট</u></p>
+	<p style="font-size:25px"> <u>বিষয়ঃ বাধ্যতামূলক শ্রান্তি বিনোদন ছুটি (ভাতাসহ) পরিকল্পনায় অন্তর্ভুক্ত কর্মকর্তা/কর্মচারীদের নামের তালিকা(হেড অফিস)</u></p>
+</div>
+<div class="card-body">
+	
+		@{
+			int i = 1;
+		}
+		@foreach (var item in Model.actualReportHRViewModel.Select(x => x.postingBn).Distinct())
+		{
+			<p style="font-size: 20px;"><u>@item</u></p>
+            <br />
+			<table class="table table-striped table-bordered" id="participantTable">
+				<thead style="font-size:25px">
+					<tr>
+						<th style="border: 1px solid !important;">ক্রঃ নং</th>
+						<th style="border: 1px solid !important;">আইডি নং</th>
+						<th style="border: 1px solid !important;">আবেদোনকারীর নাম ও পদবী</th>
+						<th style="border: 1px solid !important;">অফিস/ডিভিশন/ডিপার্টমেন্ট</th>
+						<th style="border: 1px solid !important;">ছুটির জন্য প্রস্তাবিত সময়কাল</th>
+                        <th style="border: 1px solid !important;">শ্রান্তি বিনোদন ছুটি ভোগের সময়কাল</th>
+						<th style="border: 1px solid !important;">সর্বশেষ শ্রান্তি বিনোদন ছুটি ভোগের তারিখ</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var data in Model?.actualReportHRViewModel.Where(x => x.postingBn == item))
+					{
+                    <tr>
+                        <td style="font-size: 20px; text-align: center;">@OPUSERP.Helpers.EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(i.ToString())</td>
+                        <td style="font-size: 20px; text-align: center;">@OPUSERP.Helpers.EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(data?.employeeCode)</td>
+                        <td style="font-size: 20px">@data?.nameBangla <br /> @data?.designationNameBN</td>
+                        <td style="font-size: 20px; text-align: center;">@data?.postingBn</td>
+                        @if (data.leaveFrom != null)
+                        {
+                            <td style="font-size: 20px; text-align: center;">@OPUSERP.Helpers.EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(data?.leaveFrom?.ToString("dd-MM-yyyy")) থেকে @OPUSERP.Helpers.EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(data?.leaveTo?.ToString("dd-MM-yyyy"))</td>
+                        }
+                        else
+                        {
+                            <td style="font-size: 20px;"></td>
+                        }
+                        @if (data.ActualLeaveFrom != null)
+                        {
+                            <td style="font-size: 20px; text-align: center;">@OPUSERP.Helpers.EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(data?.ActualLeaveFrom?.ToString("dd-MM-yyyy")) থেকে @OPUSERP.Helpers.EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(data?.ActualLeaveTo?.ToString("dd-MM-yyyy"))</td>
+                        }
+                        else
+                        {
+                            <td style="font-size: 20px;"></td>
+                        }
+
+                        @if (data.lastLeaveFrom != null)
+                        {
+                            <td style="font-size: 20px; text-align: center;">@OPUSERP.Helpers.EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(data?.lastLeaveFrom?.ToString("dd-MM-yyyy")) থেকে @OPUSERP.Helpers.EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(data?.lastLeaveTo?.ToString("dd-MM-yyyy"))</td>
+                        }
+                        else
+                        {
+                            <td style="font-size: 20px;"></td>
+                        }
+                    </tr>
+						i++;
+					}
+				</tbody>
+			</table>
+			<br />
+			<br />
+			
+		}
+    
+
+		<div class="col-md-12" style="font-size:25px">
+			<br /><br /><br /><br />
+			<table style="width:100%; margin-left:50px">
+				<tr>
+					@*<th style="width:20%;font-size:20px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</th>
+					<th style="width:20%;font-size:20px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</th>
+					<th style="width:20%;font-size:20px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</th>
+					<th style="width:20%;font-size:20px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</th>
+					<th style="width:20%;font-size:20px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</th>*@
+				</tr>
+                <tr>
+                    @foreach (var item in Model.LeaveCommitteList)
+                    {
+                        <th style="width:20%;font-size:20px"><span>@item.empNameBn</span><br />
+                         <span>@item.designationBn</span><br /> 
+                          <span>সদস্য-সচিব, যাচাই-বাছাই কমিটি</span> </th>
+                       
+                    }
+
+                    @*<th style="width:20%;font-size:20px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;সিনিওর অফিসার <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ও <br /> &nbsp;&nbsp;<br />সদস্য, যাচাই-বাছাই কমিটি</th>
+                    <th style="width:20%;font-size:20px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;সিনিওর অফিসার <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ও <br /> সদস্য-সচিব, যাচাই-বাছাই কমিটি</th>
+                    <th style="width:20%;font-size:20px"> এসিসট্যান্ট জেনারেল ম্যানেজার <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ও <br /> &nbsp;&nbsp;সদস্য, যাচাই-বাছাই কমিটি</th>
+                    <th style="width:20%;font-size:20px"> এসিসট্যান্ট জেনারেল ম্যানেজার <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ও <br /> &nbsp;&nbsp;সদস্য, যাচাই-বাছাই কমিটি</th>
+                    <th style="width:20%;font-size:20px"> &nbsp;&nbsp;ডেপুটি জেনারেল ম্যানেজার <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ও <br /> &nbsp;&nbsp;সভাপতি, যাচাই-বাছাই কমিটি</th>*@
+
+                </tr>
+			</table>
+		</div>
+	
+</div>
+
+<br />
+
+

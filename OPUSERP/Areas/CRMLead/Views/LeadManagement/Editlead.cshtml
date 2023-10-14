@@ -1,0 +1,117 @@
+﻿@model LeadViewModel
+@{
+    ViewData["Title"] = "Edit Lead";
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-header row" style="background-color:#EAF6FA;">
+        <div class="col-8">
+            <h5 class="card-title" style="color: black">Edit Lead</h5>
+        </div>
+        <div class="col-4">
+            @*<h6 class="identity-box">@Model.employeeNameCode</h6>*@
+        </div>
+    </div>
+
+    <div class="card-body row">
+        <div class="col-2">
+            <img id="user_img_current" style="width: 180px;height: 165px;border-radius: 120px;" src="" alt="" class="img-thumbnail float-left">
+            <i class="fa fa-camera" data-toggle="modal" data-target="" style="position:relative;margin-top:120px;margin-left:-22px;cursor:pointer;"></i>
+            <input type="hidden" id="hiddenFile" />
+        </div>
+        <div class="col-9" style="color: black; font-size: 15px; padding-top: 24px;">
+            <span style="font-weight:bold;"></span><br />
+            <span style="font-weight:bold;"></span><br />
+            <span style="font-weight:bold;"></span><br />
+            <span style="font-weight:bold;"></span><br />
+            <span style="font-weight:bold;"></span><br />
+        </div>
+        <div class="col-1">
+            <a class='btn btn-info' style="float:right;" data-toggle='tooltip' title='Print' target='_blank' href='/HRPMSEmployee/InfoView/pdspdf/'><i class='fa fa-print'></i></a>
+        </div>
+    </div>
+
+    <div class="card-body row" style="padding-top: 0;">
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="" style="text-decoration:none;">
+                    <i class="fa fa-user-tie fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Basic</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="" style="text-decoration:none;">
+                    <i class="fa fa-map-marker-alt fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Address</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="" style="text-decoration:none;">
+                    <i class="fa fa-female fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Contact</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="" style="text-decoration:none;">
+                    <i class="fa fa-child fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Activities</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="" style="text-decoration:none;">
+                    <i class="fa fa-chalkboard-teacher fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Files</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="" style="text-decoration:none;">
+                    <i class="fa fa-book-reader fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Proposal</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="" style="text-decoration:none;">
+                    <i class="fa fa-clipboard-list fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Agreemant</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="" style="text-decoration:none;">
+                    <i class="fa fa-stream fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">History</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group text-center card" style="background-color:#efecee;border-color:lightgray;">
+                <a class="text-center btn btn-default" href="" style="text-decoration:none;">
+                    <i class="fa fa-chart-line fa-3x "></i>
+                    <br /><span style="color: black; font-size: 10pt; font-weight: 400;">Notes</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+
+
+    </script>
+}
+
+

@@ -1,0 +1,211 @@
+﻿@model PayrollReportViewModel
+@{
+    ViewData["Title"] = "SalaryVoucherAll";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+<style>
+
+    .print-card-body {
+        width: 100%;
+        padding-bottom: 10px;
+    }
+
+    .vartical-table th {
+        width: 25%;
+    }
+
+    .vartical-table td {
+        width: 25%;
+    }
+
+    .table td, .table th {
+        padding: .3rem;
+        font-size: 14px;
+        border: 1px solid black !important;
+    }
+
+    table {
+        page-break-inside: auto;
+        border-collapse: collapse;
+        border: 1px solid black !important;
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+        border: 1px solid black !important;
+    }
+
+    thead {
+        display: table-header-group;
+        border: 1px solid black !important;
+    }
+
+    tfoot {
+        display: table-footer-group;
+        border: 1px solid black !important;
+    }
+
+    h6 {
+        font-size: 14px;
+        background-color: gray;
+        color: white !important;
+        padding: 3px;
+    }
+
+    .pageBreak {
+        page-break-after: always;
+    }
+</style>
+
+@foreach (var data in Model.slaryVoucherAllVm.Select(x => x.branchName).Distinct())
+{
+    <div class="print-card" style="width: 100%;">
+        <div class="print-card-body">
+            <div class="container-fluid">
+                <div class="row" style="padding-top:0px;">
+                    <div class="col-2">
+                        <img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="BDBL Logo" style="height:80px;" />
+                    </div>
+                    <div class="col-8">
+                        <div style="color:black;text-align:center;">
+                            <h3 style="font-size:20px;">@Model.companies.FirstOrDefault()?.companyName</h3>
+                            <h3 style="font-size:20px;">
+                                <u>
+                                    @data
+                                    @if (Model.slaryVoucherAllVm.Where(x => x.branchName == data).Select(x => x.branchCode).FirstOrDefault() != null)
+                                    {
+                                        <span>(@Model.slaryVoucherAllVm.Where(x => x.branchName == data).Select(x => x.branchCode).FirstOrDefault())</span>
+                                    }
+                                </u>
+                            </h3>
+                            <h4 style="font-size:18px;"> @ViewBag.salaryPeriod</h4>
+                            <br />
+                        </div>
+                    </div>
+                    <div class="col-2">
+
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid ">
+                <div class="col-12">
+                    <h3 style="font-size:18px;color:black"> </h3>
+                </div>
+            </div>
+            <br />
+            <div class="container-fluid" style="color:black;">
+                <table class="table table border" style="border:1px solid black !important">
+                    <thead>
+                        <tr>
+                            <th style="width:3%">SL</th>
+                            <th style="width:80%">Particulars </th>
+                            <th style="width:2%">Account Code</th>
+                            <th style="width:15%">Amount</th>
+                        </tr>
+                        <tr>
+                            <th style="width:83%" colspan="2">DEBIT</th>
+                            <th style="width:2%"></th>
+                            <th style="width:15%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 1;
+                            decimal debit = 0;
+                        }
+                        @foreach (var item in Model.slaryVoucherAllVm.Where(x => x.type == "DEBIT" && x.branchName == data))
+                        {
+                            <tr>
+                                <td style="width:3%">@i</td>
+                                <td style="width:80%">
+                                    @item.heading
+                                </td>
+                                <td style="width:2%">
+                                    @item.accountCode
+                                </td>
+                                <td style="width:15%; text-align: right;">@Convert.ToDecimal(item.amount).ToString("#,##0.00")</td>
+                            </tr>
+                            i++;
+                            debit += Convert.ToDecimal(item.amount);
+                        }
+                        <tr>
+                            <th style="width:85%" colspan="2"></th>
+                            <th style="width:15%; text-align: right;"></th>
+                            <th style="width:15%">@debit.ToString("#,##0.00")</th>
+                        </tr>
+                        <tr>
+                            <th style="width:100%" colspan="5">@OPUSERP.Helpers.AmountInWord.ConvertToWords(debit.ToString())</th>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table border" style="border:1px solid black !important">
+                    <thead>
+                        <tr>
+                            <th style="width:3%">SL</th>
+                            <th style="width:80%">Particulars </th>
+                            <th style="width:2%">Account Code</th>
+                            <th style="width:15%">Amount</th>
+                        </tr>
+                        <tr>
+                            <th style="width:83%" colspan="2">CREDIT</th>
+                            <th style="width:2%"></th>
+                            <th style="width:15%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int j = 1;
+                            decimal credit = 0;
+                        }
+                        @foreach (var item in Model.slaryVoucherAllVm.Where(x => x.type == "CREDIT" && x.branchName == data))
+                        {
+                            @if (item.amount > 0)
+                            {
+                                <tr>
+                                    <td style="width:3%">@j</td>
+                                    <td style="width:80%">@item.heading</td>
+                                    <td style="width:2%">@item.accountCode</td>
+                                    <td style="width:15%; text-align: right;">@Convert.ToDecimal(item.amount).ToString("#,##0.00")</td>
+                                </tr>
+                                j++;
+                                credit += Convert.ToDecimal(item.amount);
+                            }
+                        }
+                        <tr>
+                            <th style="width:85%" colspan="2"></th>
+                            <th style="width:15%; text-align: right;"></th>
+                            <th style="width:15%">@credit.ToString("#,##0.00")</th>
+                        </tr>
+                        <tr>
+                            <th style="width:100%" colspan="5">@OPUSERP.Helpers.AmountInWord.ConvertToWords(credit.ToString())</th>
+                        </tr>
+                        <tr style="font-size: 12px;">
+                            <td colspan="5">Transfer Scroll No: </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br /><br /><br /><br />
+            <div class="row text-center" style="color: black;">
+                <div class="col-4">
+                    <p style="border-top: 1px solid;">Prepared By</p>
+                </div>
+                <div class="col-4">
+
+                </div>
+                <div class="col-4">
+                    <p style="border-top: 1px solid;">Checked By</p>
+                </div>
+                @*<div class="col-4">
+                        <p style="border-top: 1px solid;">Approved By</p>
+                    </div>*@
+            </div>
+
+
+
+        </div>
+    </div>
+
+    <div class="pageBreak"></div>
+}

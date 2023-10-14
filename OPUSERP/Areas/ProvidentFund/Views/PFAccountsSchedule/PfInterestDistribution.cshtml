@@ -1,0 +1,117 @@
+﻿@model PFTransactionViewModel
+@{
+    ViewData["Title"] = "PfInterestDistribution";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4 bg-light">
+            <div class="card" style="width: 100%;">
+                <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+                    <h5 class="m-0 font-weight-bold text-primary">Pf Interest Distribution Process</h5>
+                    <a class='btn btn-info mr-4' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1014&perentId=6015'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+                </div>
+                <div class="card-body">
+
+                    <div class="">
+                        <form id="FormId">
+                            <div class="row col-sm-12">
+
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-4 col-form-label">Select Salary period</label>
+                                        <div class="col-sm-6">
+                                            <select name="periodId" id="periodId" class="form-control" data-parsley-required="true">
+                                                <option value="">Select Salary Period</option>
+                                                @foreach (var data in Model.salaryPeriods.Where(x => x.isPfProcessed != 1 ))
+                                                {
+                                                    <option value="@data.Id">@data.periodName</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-4 col-form-label">Distribution Interest </label>
+                                        <div class="col-sm-6">
+                                            <input type="number" class="form-control text-right" id="interest" name="" placeholder="">
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-6 col-form-label">Total Amount(contribution + Interest) </label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control text-right" id="TotalContribution" name="" placeholder="" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row" style="float:right">
+                                        <button type="button" id="process" onclick="Process()" class="btn btn-success " style="float:right; margin-top:10px;margin-right:10px"><i class="fas fa-spinner"></i>&nbsp; Process</button>
+                                        <button type="reset" id="reset" class="btn btn-info" style="float:right; margin-top:10px;margin-right:5px;"><i class="fas fa-sync"></i>&nbsp; Refresh</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="padding-right:235px">
+                              
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".Date").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+
+        $("#reset").on("click", function (event) {
+            $('#member').val('');
+            $('#year').val('');
+
+        });
+        Common.Ajax('GET', '/ProvidentFund/Contribution/GetTotalContribution', [], 'json', ajaxFunctionContribution, false);
+
+    });
+
+   
+
+    function Process() {
+        var interest = $('#interest').val();
+        var periodId = $('#periodId').val();
+        //Common.Ajax('GET', '/ProvidentFund/PFAccountsSchedule/CalculateInterest?year=' + year + '&interest=' + interest, [], 'json', ajaxFunctionProcess, false);
+        Common.Ajax('GET', '/ProvidentFund/Contribution/PfInterestDistribution?periodId=' + periodId + '&interest=' + interest, [], 'json', ajaxFunctionProcess, false);
+    }
+    function ajaxFunctionProcess(response) {
+        if (response == "ok") {
+            swal('success', 'Process Completed Successfully!', 'success').then(function () {
+                location.reload();
+            });
+        }
+        else {
+            swal('warning', 'Failed to process!', 'warning');
+        }
+        
+    }
+    function interestProcess() {
+        var year = $('#year').val();
+        Common.Ajax('GET', '/ProvidentFund/PFAccountsSchedule/TotalInterest?year=' + year, [], 'json', ajaxFunctionInterest, false);
+
+    }
+    function ajaxFunctionInterest(response) {
+        console.log(response);
+        $("#interest").val(response);
+    }
+    
+    function ajaxFunctionContribution(response) {
+        console.log(response);
+        $("#TotalContribution").val(response.toLocaleString());
+    }
+
+</script>

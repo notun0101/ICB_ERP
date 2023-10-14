@@ -1,0 +1,93 @@
+﻿
+@{
+    ViewData["Title"] = "InvestmentInterest";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            @*<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h2 class="m-0 font-weight-bold text-primary">Investment Interest</h2>
+        </div>*@
+
+           
+
+            <div class="card-body bg-white">
+                <div class="bg-white">
+                   
+                    <div class="row col-sm-12" >
+                        <div class="col-sm-9" style="text-align:left">
+                            <h5 class="m-0 font-weight-bold text-primary">Interest List</h5>
+                        </div> 
+                        <div class="col-sm-3 text-right">
+                            <a class="btn btn-success" href="/ProvidentFund/Investment/ProcessInterest"><i class="fa fa-spinner">&nbsp; Interest Process</i></a>
+
+                        </div>
+                    </div>
+                    <br />
+                    <table class="table table-striped table-bordered table-hover bg-white" id="TblOverView">
+                        <thead>
+                            <tr>
+
+                                <th>Transaction Date</th>
+                                <th>Transaction No</th>
+                                <th>Investment Name</th>
+                                <th>Interest rate</th>
+                                <th>Interest amount</th>
+                                <th>Manage</th>
+
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>15-06-2021</td>
+                                <td>TRNS4532</td>
+                                <td>	Banking</td>
+                                <td>5%</td>
+                                <td>20,000</td>
+                                <td>
+                                    <button class="btn btn-danger" onclick="Remove()"><i class="fa fa-trash" style="border:none"></i></button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#TblOverView').DataTable();
+    });
+
+    function Remove(Id) {
+
+        if (Id == "") {
+            swal('Warning', 'please try again', 'warning');
+            return false;
+        }
+        swal({
+            title: 'Are you sure?', text: 'Do you want to Delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, Delete it!'
+        }).then(function () {
+            $.get("/ProvidentFund/Member/DeleteMember?id=" + Id, function (data) {
+                if (data.Success) {
+                    swal('', data.Message, 'success').then(function () {
+                        location.reload();
+                    })
+                } else {
+                    swal('Warning', data.Message, 'warning');
+                }
+
+
+            });
+
+        })
+
+    }
+
+</script>
+

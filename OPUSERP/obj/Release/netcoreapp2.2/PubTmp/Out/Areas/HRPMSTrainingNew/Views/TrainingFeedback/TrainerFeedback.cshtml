@@ -1,0 +1,138 @@
+﻿@model TrainingFeedbackViewModel
+@{
+    ViewData["Title"] = "TrainerFeedback";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Style{
+}
+
+<br />
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+                <div class="col-md-6" style="display: flex; justify-content: flex-start; align-items: center;">
+                    <h5 class="card-title" style="color: black; margin: 8px; text-transform: uppercase;">Trainer FeedBack</h5>
+                </div>
+                <div class="col-md-6">
+
+					<div style="float: right; margin: 16px;">
+						<a class='btn btn-info mr-4' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1019&perentId=6300'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+					</div>
+                </div>
+            </div>
+
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="TrainerFeedbackTable">
+                    <thead>
+                        <tr>
+                            <th>Training Name</th>
+                            <th>FeedBack Type</th>
+                            <th>FeedBack</th>
+                            <th>Action</th>
+
+
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.trainingFeedbackList.Where(x => x.type == "Trainer"))
+                        {
+                        <tr>
+                            <td>@data.training?.course</td>
+                            <td>@data.type</td>
+                            <td>@data.feedback</td>
+                            
+                            <td>
+                                <a class="btn btn-danger" onclick="Remove(@data.Id)" href="#"><i class="fa fa-trash-alt"></i></a>
+
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <!--Latest compiled and minified JavaScript-->
+    <script src="https://unpkg.com/multiple-select@1.3.1/dist/multiple-select.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var orgFullTitle = "TRAINING PLANNING (FOREIGN)";
+            //$("#award").addClass("active");
+            $('#TrainerFeedbackTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        title: orgFullTitle,
+                        messageTop: 'List Of Foreign Training',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        title: orgFullTitle,
+                        messageTop: 'List Of Employee Training'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: orgFullTitle,
+                        messageTop: 'List Of Foreign Training',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+
+        });
+                
+        
+                function Remove(Id) {
+                    swal({
+                        title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+                    }).then(function () {
+                        $.ajax({
+                            url: '@Url.Action("Delete", "TrainingFeedback")',
+                            data: { Id: Id },
+                            type: 'GET',
+                        })
+                        .done(function () {
+                            swal('', 'Deleted Successfully!', 'success').then(function () {
+                                window.location.reload();
+                            });
+                        })
+                        .fail(function () {
+                            swal('', 'Unable to Delete!', 'warning');
+                        });
+                    });
+
+                }
+    </script>
+}

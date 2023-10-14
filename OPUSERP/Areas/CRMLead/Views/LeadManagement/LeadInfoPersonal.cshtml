@@ -1,0 +1,488 @@
+﻿@model LeadViewModel
+@{
+    ViewData["Title"] = "Lead";
+    //Layout = "~/Areas/CRMLead/Views/Shared/_LeadFormPersonal.cshtml";
+}
+
+@section Style{
+    <style>
+        .redStar {
+            color: red;
+        }
+    </style>
+}
+
+    <div class="card" style="width: 100%;">
+        <div class="card-header row">
+            <div class="col-9">
+                <h5 class="card-title" style="color: black">Lead Information</h5>
+            </div>
+            <div class="col-3">
+                <a href='/CRMLead/LeadManagement/AllLeadList' style="text-decoration:none;"><h6 class="identity-box">Back To The List</h6></a>
+
+            </div>
+        </div>
+        <div class="card-body">
+            @*<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h4 class="m-0 font-weight-bold text-primary">Contacts</h4>
+                <a href="/CRMLead/LeadManagement/AllLeadList" style="background-color:#024972;" class="btn btn-info btn-sm pull-right">Back to List</a>
+            </div>*@
+            @*<h5 class="card-title" style="color: black;float:left;">Contacts</h5>*@
+
+            <hr>
+            <div class="container">
+                <form asp-area="CRMLead" asp-controller="LeadManagement" asp-action="LeadInfoPersonal" method="post" id="infoCreateForm" data-parsley-validate="parsley" enctype="multipart/form-data">
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <input type="hidden" id="id" name="id" value="0">
+                                    <div class="form-group row">
+                                        <div class="col-sm-9">
+                                            <input type="hidden" id="leadId" name="leadId" value="0">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="contactName" class="col-sm-3 col-form-label">Contact Name<span class="redStar">*</span></label>
+                                        <div class="col-sm-9">
+                                            <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" id="contactName" value="" name="contactName">
+                                            <input type="hidden" id="contactId" name="contactId" value="0">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="department" class="col-sm-3 col-form-label">Department</label>
+                                        <div class="col-sm-8">
+                                            <select data-parsley-trigger="keyup" class="form-control" id="DepartmentId" name="DepartmentId">
+                                                
+                                                <option value="" selected>Select Department Name</option>
+                                                @*@{
+                                                    foreach (var data in Model.departments)
+                                                    {
+                                                        <option value="@data.Id">@data.deptName</option>
+                                                    }
+                                                }*@
+                                            </select>
+                                        </div>
+                                        <a href="javascript:void(0)" type="button" onclick="AddNewDepartmentModal()" id="AddNewGroupModal"><i class="fa fa-plus-circle fa-2x col-1" aria-hidden="true" style="padding-left: 0;"></i></a>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="DesignationId" class="col-sm-3 col-form-label">Designation</label>
+                                        <div class="col-sm-8">
+                                            <select data-parsley-trigger="keyup" class="form-control" id="DesignationId" name="DesignationId">
+                                                <option value="" selected>Select Designation Name</option>
+                                                @*<option value="">Select-</option>
+                                                @{
+                                                    foreach (var data in Model.designations)
+                                                    {
+                                                        <option value="@data.Id">@data.designationName</option>
+                                                    }
+                                                }*@
+                                            </select>
+                                        </div>
+                                        <a href="javascript:void(0)" type="button" onclick="AddNewDesignationModal()" id="AddNewGroupModal"><i class="fa fa-plus-circle fa-2x col-1" aria-hidden="true" style="padding-left: 0;"></i></a>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="skypeId" class="col-sm-3 col-form-label">Skype Id</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="skypeId" value="" name="skypeId">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="linkedInId" class="col-sm-3 col-form-label">LinkedIn Id</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="linkedInId" value="" name="linkedInId">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="companyName" class="col-sm-3 col-form-label">Company Name</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="companyName" value="" name="companyName">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="age" class="col-sm-3 col-form-label">Age</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="age" value="" name="age">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="gender" class="col-sm-3 col-form-label">Gender</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" id="gender" value="" name="gender">
+                                                <option value="">Select One</option>
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                                <option value="Others">Others</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="imagePath" class="col-sm-3 col-form-label">Image</label>
+                                        <div class="col-sm-9">
+                                            <img id="user_img" style="width:200px;height:200px" src="~/images/user.png" alt="" class="img-thumbnail float-left">
+                                            <input type="hidden" id="leadID" name="leadID" value="0">
+                                            <input type="file" title="Photo Upload" id="imagePath" name="imagePath" class="img-thumbnail float-left" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <label for="phone" class="col-sm-3 col-form-label">Phone</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="phone" value="" name="phone">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="mobile" class="col-sm-3 col-form-label">Mobile</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="mobile" value="" name="mobile">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="email" class="col-sm-3 col-form-label">Email</label>
+                                        <div class="col-sm-9">
+                                            <input type="email" class="form-control" id="email" value="" name="email">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="fax" class="col-sm-3 col-form-label">Fax</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="fax" value="" name="fax">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="imagePath_Vcard_Font" class="col-sm-4 col-form-label">Visiting Card Upload</label>
+                                        <label class="col-sm-8 col-form-label"></label>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="sourceDescription" class="col-sm-4 col-form-label">Source Description</label>
+                                        <div class="col-sm-8">
+                                            <textarea type="text" class="form-control" id="sourceDescription" name="sourceDescription"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="imagePath_Vcard_Font" class="col-sm-6 col-form-label" style="padding-left: 80px;">Font Site</label>
+                                        <label for="imagePath_Vcard_Back" class="col-sm-6 col-form-label" style="padding-left: 70px;">Back Site</label>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6">
+                                            <img id="user_img_Vcard_Font" style="width:250px;height:100px" src="~/images/visitingCardFront.png" alt="" class="img-thumbnail float-left">
+                                            <input type="file" title="Visiting Card Font site Upload" id="imagePath_Vcard_Font" name="imagePath_Vcard_Font" class="img-thumbnail float-left" />
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <img id="user_img_Vcard_Back" style="width:250px;height:100px" src="~/images/visitingCardFront.png" alt="" class="img-thumbnail float-left">
+                                            <input type="file" title="Visiting Card Back site Upload" id="imagePath_Vcard_Back" name="imagePath_Vcard_Back" class="img-thumbnail float-left" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="modal fade" id="exampleModalDesignation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add New Designation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/" method="post" id="DesignationAddForm">
+
+
+                        <div class="form-group row">
+                            <input type="hidden" name="DesignationId" id="DesignationId" value="0" />
+                            @*<label for="designationCode" class="col-form-label col-md-4">Designation Code</label>
+                            <div class="col-md-8">
+                                <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="designationCode" id="designationCode">
+                            </div>*@
+                        </div>
+						<div class="form-group row">
+                            <label for="deptName" class="col-form-label col-md-4">Designation Name</label>
+                            <div class="col-md-8">
+                                <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="DesignationName" id="DesignationName">
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" value="Submit" id="DesignationAddBtn" class="btn btn-success">Add</button>
+                        </div>
+                        @*<button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="exampleModalDepartment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add New Department</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/" method="post" id="DepAddForm">
+
+
+                        <div class="form-group row">
+                            <input type="hidden" name="Id" id="Id" value="0" />
+                            <label for="DepartmentName" class="col-form-label col-md-4">Department Name</label>
+                            <div class="col-md-8">
+                                <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="DepartmentName" id="DepartmentName">
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" value="Submit" id="DepAddBtn" class="btn btn-success">Add</button>
+                        </div>
+                        @*<button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            $("#personal").addClass("active");
+            $("#imagePath").change(function () {
+
+               // alert(this);
+                readURL(this);
+            });
+            $("#imagePath_Vcard_Font").change(function () {
+                readURLVcard_Font(this);
+            });
+            $("#imagePath_Vcard_Back").change(function () {
+                readURLVcard_Back(this);
+            });
+
+            if ('@ViewBag.leadId'!= null || '@ViewBag.leadId'!=0) {
+            $('#leadId').val(@ViewBag.leadId);
+            $('#id').val(@Model?.contact?.Id);
+            $('#companyName').val('@ViewBag.companyName');
+            $('#contactName').val('@Model?.contact?.resource?.resourceName');
+            $('#contactId').val(@Model?.contact?.resourceId);
+            $('#designation').val(@Model?.contact?.resource?.crmdesignationsId);
+            $('#age').val(@Model?.contact?.resource?.age);
+            $('#gender').val('@Model?.contact?.resource?.gender');
+            $('#imagePath').val();
+            $('#phone').val('@Model?.contact?.resource?.phone');
+            $('#mobile').val('@Model?.contact?.resource?.mobile');
+            $('#email').val('@Model?.contact?.resource?.email');
+            $('#sourceDescription').val('@ViewBag.sourceDescription');
+            $('#fax').val('@Model?.contact?.resource?.fax');
+            $('#department').val('@Model?.contact?.resource?.crmdepartmentsId');
+            $('#skypeId').val('@Model?.contact?.resource?.skypeId');
+            $('#linkedInId').val('@Model?.contact?.resource?.linkedInId');
+            //$('#user_img').attr('src', '@ViewBag.photo');
+
+            Common.Ajax('GET', '/CRMLead/LeadManagement/GetContactphotoByContactId/?Id=' + '@Model?.contact?.Id', [], 'json', ajaxGetContactphotoByContactId);
+            Common.Ajax('GET', '/CRMLead/LeadManagement/GetContactVcard_FontByContactId/?Id=' + '@Model?.contact?.Id', [], 'json', ajaxGetContactVcard_FontByContactId);
+            Common.Ajax('GET', '/CRMLead/LeadManagement/GetContactVcard_BackByContactId/?Id=' + '@Model?.contact?.Id', [], 'json', ajaxGetContactVcard_BackByContactId);
+            }
+
+            Common.Ajax('GET', '/CRMLead/LeadManagement/GetAllDepartments', [], 'json', ajaxFunctionDepartment, false);
+            Common.Ajax('GET', '/CRMLead/LeadManagement/GetAllDesignations', [], 'json', ajaxFunctionDesignation, false);
+
+
+        });
+        function ajaxFunctionDepartment(response) {
+			console.log(response);
+			var option = "";
+            $('#DepartmentId').empty();
+            $('#DepartmentId').append(`<option value="">Choose Department</option>`);
+			$.each(response, function (i, item) {
+                option += `<option value="${item.Id}">${item.deptName}</option>`
+			});
+			
+            $('#DepartmentId').append(option);
+        }
+
+        function ajaxFunctionDesignation(response) {
+            console.log(response);
+            var option = "";
+            $('#DesignationId').empty();
+            $('#DesignationId').append(`<option value="">Choose Designation</option>`);
+            $.each(response, function (i, item) {
+                option += `<option value="${item.Id}">${item.designationName}</option>`
+            });
+
+            $('#DesignationId').append(option);
+        }
+
+        
+        $('#DepAddBtn').click(function () {
+            var form = $('#DepAddForm');
+			 swal({
+			 title: 'Are you sure?', text: 'Do you want to add this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#007ACC', cancelButtonColor: '#d33', confirmButtonText: 'Yes, Add it!'
+			  }).then(function () {
+				$.ajax({
+					url: '@Url.Action("LeadDepartment", "LeadManagement")',
+					type: 'Post',
+					data: form.serialize()
+				})
+				.done(function () {
+					swal('Success', 'Saved Successfully!', 'success').then(function () {
+                                   
+                        Common.Ajax('GET', '/CRMLead/LeadManagement/GetAllDepartments', [], 'json', ajaxFunctionDepartment, false);
+                        $('#exampleModalDepartment').modal('hide');
+									
+					});
+				})
+				.fail(function () {
+					alert("Unable to Save. Please Try Again");
+				});
+			 });
+		})
+        
+
+        $('#DesignationAddBtn').click(function () {
+            var form = $('#DesignationAddForm');
+			 swal({
+			 title: 'Are you sure?', text: 'Do you want to add this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#007ACC', cancelButtonColor: '#d33', confirmButtonText: 'Yes, Add it!'
+			  }).then(function () {
+				$.ajax({
+					url: '@Url.Action("LeadDesignation", "LeadManagement")',
+					type: 'Post',
+					data: form.serialize()
+				})
+				.done(function () {
+					swal('Success', 'Saved Successfully!', 'success').then(function () {
+                                   
+                        Common.Ajax('GET', '/CRMLead/LeadManagement/GetAllDesignations', [], 'json', ajaxFunctionDesignation, false);
+						$('#exampleModalDesignation').modal('hide');
+									
+					});
+				})
+				.fail(function () {
+					alert("Unable to Save. Please Try Again");
+				});
+			 });
+		})
+
+
+
+        function AddNewDesignationModal() {
+            $('#exampleModalDesignation').modal('show');
+        }
+
+        function AddNewDepartmentModal() {
+            $('#exampleModalDepartment').modal('show');
+        }
+
+        function readURL(input) {
+            //alert(input)
+            //alert(input.files);
+            if (input.files && input.files[0]) {
+                var filerdr = new FileReader();
+                filerdr.onload = function (e) {
+                    $('#user_img').attr('src', e.target.result);
+                }
+                filerdr.readAsDataURL(input.files[0]);
+            }
+    }
+
+    function readURLVcard_Font(input) {
+        if (input.files && input.files[0]) {
+            var filerdr = new FileReader();
+            filerdr.onload = function (e) {
+                $('#user_img_Vcard_Font').attr('src', e.target.result);
+            }
+            filerdr.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function readURLVcard_Back(input) {
+        if (input.files && input.files[0]) {
+            var filerdr = new FileReader();
+            filerdr.onload = function (e) {
+                $('#user_img_Vcard_Back').attr('src', e.target.result);
+            }
+            filerdr.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function Edit(id, contactowner, resourceid, leadid, phone, mobile, email, departmentid, desigid, fax, skypeId, linkedInId) {
+            $('#id').val(id);
+            $('#leadId').val(leadid);
+            $('#contactName').val(contactowner);
+            $('#contactId').val(resourceid);
+            $('#designation').val(desigid);
+            $('#imagePath').val();
+            $('#phone').val(phone);
+            $('#mobile').val(mobile);
+            $('#email').val(email);
+            $('#fax').val(fax);
+            $('#department').val(departmentid);
+        $('#skypeId').val(skypeId);
+        $('#linkedInId').val(linkedInId);
+
+            Common.Ajax('GET', '/CRMLead/LeadManagement/GetContactphotoByContactId/?Id=' + id, [], 'json', ajaxGetContactphotoByContactId);
+            Common.Ajax('GET', '/CRMLead/LeadManagement/GetContactVcard_FontByContactId/?Id=' + id, [], 'json', ajaxGetContactVcard_FontByContactId);
+            Common.Ajax('GET', '/CRMLead/LeadManagement/GetContactVcard_BackByContactId/?Id=' + id, [], 'json', ajaxGetContactVcard_BackByContactId);
+
+    }
+
+        function ajaxGetContactphotoByContactId(response) {
+            if (response != null) {
+                var baseUrl = 'http://' + location.host + '/Upload/Photo/' + response.fileName.toString();
+                var image = document.getElementById('user_img');
+                image.setAttribute('src', baseUrl);
+            }
+    }
+
+        function ajaxGetContactVcard_FontByContactId(response) {
+            if (response != null) {
+                var baseUrl = 'http://' + location.host + '/Upload/Photo/' + response.fileName.toString();
+                var image = document.getElementById('user_img_Vcard_Font');
+                image.setAttribute('src', baseUrl);
+            }
+    }
+        function ajaxGetContactVcard_BackByContactId(response) {
+            if (response != null) {
+                var baseUrl = 'http://' + location.host + '/Upload/Photo/' + response.fileName.toString();
+                var image = document.getElementById('user_img_Vcard_Back');
+                image.setAttribute('src', baseUrl);
+            }
+    }
+
+    </script>
+}
+

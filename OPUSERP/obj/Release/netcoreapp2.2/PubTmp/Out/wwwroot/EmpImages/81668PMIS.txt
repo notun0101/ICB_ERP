@@ -1,0 +1,8 @@
+25. Employee Hobby [Delete Button Needed]
+26. Reference [Email DataType Validation Needed]
+23. Attachment[Delete Button Not Working]
+21. Passport Information[Image file not show by click on Edit Button]
+
+Training Module
+............................
+Add Partcipent: [No Need] Actual Expenditure (BDT)

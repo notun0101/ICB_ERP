@@ -1,0 +1,226 @@
+﻿@model MonlyAttendanceReportVm
+@{
+	ViewData["Title"] = "Monthly Attendance Report";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+<div class="print-card" style="width: 100%;">
+	<div class="print-card-body">
+		<div class="container-fluid">
+			<div style="width:100%;overflow:hidden;">
+
+				<div style="width:10%;float:left;">
+					<img src="/Assets/bdbl.png" alt="" style="height:100px;">
+				</div>
+				<div style="width:80%;float:left;">
+					<h3 style="text-align:center;color:black;"><b>@Model.companies.FirstOrDefault().companyName</b></h3>
+					<h4 style="text-align:center;color:black;">@Model.attendance?.FirstOrDefault()?.branchName</h4>
+					<h4 style="text-align:center;color:black;">Monthly Attendance Report for the month of @ViewBag.Month</h4>
+				</div>
+			</div>
+		</div>
+		<br />
+		<div class="container-fluid" style="color:black;">
+			<div class="row" style="padding: 0px 15px 0px 15px;">
+				<table class="table table-bordered vartical-table" style="width: 100%; background-color: white !important;">
+					<thead>
+						<tr>
+							<th style="width: 5%; text-align: center;">Emp Code</th>
+							<th style="width: 15%;">Emp Name</th>
+							<th style="width: 5%; text-align: center;">Designation</th>
+							<th style="width: 2.5%; text-align: center;">01</th>
+							<th style="width: 2.5%; text-align: center;">02</th>
+							<th style="width: 2.5%; text-align: center;">03</th>
+							<th style="width: 2.5%; text-align: center;">04</th>
+							<th style="width: 2.5%; text-align: center;">05</th>
+							<th style="width: 2.5%; text-align: center;">06</th>
+							<th style="width: 2.5%; text-align: center;">07</th>
+							<th style="width: 2.5%; text-align: center;">08</th>
+							<th style="width: 2.5%; text-align: center;">09</th>
+							<th style="width: 2.5%; text-align: center;">10</th>
+							<th style="width: 2.5%; text-align: center;">11</th>
+							<th style="width: 2.5%; text-align: center;">12</th>
+							<th style="width: 2.5%; text-align: center;">13</th>
+							<th style="width: 2.5%; text-align: center;">14</th>
+							<th style="width: 2.5%; text-align: center;">15</th>
+							<th style="width: 2.5%; text-align: center;">16</th>
+							<th style="width: 2.5%; text-align: center;">17</th>
+							<th style="width: 2.5%; text-align: center;">18</th>
+							<th style="width: 2.5%; text-align: center;">19</th>
+							<th style="width: 2.5%; text-align: center;">20</th>
+							<th style="width: 2.5%; text-align: center;">21</th>
+							<th style="width: 2.5%; text-align: center;">22</th>
+							<th style="width: 2.5%; text-align: center;">23</th>
+							<th style="width: 2.5%; text-align: center;">24</th>
+							<th style="width: 2.5%; text-align: center;">25</th>
+							<th style="width: 2.5%; text-align: center;">26</th>
+							<th style="width: 2.5%; text-align: center;">27</th>
+							<th style="width: 2.5%; text-align: center;">28</th>
+							@if (ViewBag.DaysInMonth == 29)
+							{
+								<th style="width: 2.5%; text-align: center;">29</th>
+								@*<th style="width: 2.5%; text-align: center;">Total-P</th>*@
+							}
+							else if (ViewBag.DaysInMonth == 30)
+							{
+								<th style="width: 2.5%; text-align: center;">29</th>
+								<th style="width: 2.5%; text-align: center;">30</th>
+								@*<th style="width: 2.5%; text-align: center;">Total-P</th>*@
+
+							}
+							else if (ViewBag.DaysInMonth == 31)
+							{
+								<th style="width: 2.5%; text-align: center;">29</th>
+								<th style="width: 2.5%; text-align: center;">30</th>
+								<th style="width: 2.5%; text-align: center;">31</th>
+								@*<th style="width: 2.5%; text-align: center;">Total-P</th>*@
+
+							}
+							else
+							{
+
+							}
+							<th style="width: 2.5%; text-align: center; word-wrap: break-word;">Total Present</th>
+						</tr>
+					</thead>
+					<tbody>
+						@{
+							//int? totalP28 = 0;
+							//int? totalP29 = 0;
+							//int? totalP30 = 0;
+							//int? totalP31 = 0;
+							@foreach (var item in Model.attendance)
+							{
+								int totalPresent = 0;
+						<tr>
+							<td style="width: 5%; text-align: center;">@item.employeeCode</td>
+							<td style="width: 15%;">@item.empName</td>
+							<td style="width: 5%; text-align: center;">@item.designationName</td>
+							<td style="width: 2.5%; text-align: center;">@item.D1 @if (item.D1.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D2 @if (item.D2.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D3 @if (item.D3.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D4 @if (item.D4.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D5 @if (item.D5.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D6 @if (item.D6.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D7 @if (item.D7.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D8 @if (item.D8.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D9 @if (item.D9.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D10 @if (item.D10.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D11 @if (item.D11.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D12 @if (item.D12.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D13 @if (item.D13.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D14 @if (item.D14.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D15 @if (item.D15.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D16 @if (item.D16.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D17 @if (item.D17.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D18 @if (item.D18.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D19 @if (item.D19.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D20 @if (item.D20.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D21 @if (item.D21.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D22 @if (item.D22.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D23 @if (item.D23.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D24 @if (item.D24.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D25 @if (item.D25.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D26 @if (item.D26.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D27 @if (item.D27.Contains("M")) { totalPresent++; }</td>
+							<td style="width: 2.5%; text-align: center;">@item.D28 @if (item.D28.Contains("M")) { totalPresent++; }</td>
+							@if (ViewBag.DaysInMonth == 29)
+							{
+								<td style="width: 2.5%; text-align: center;">@item.D29 @if (item.D29.Contains("M")) { totalPresent++; }</td>
+
+							}
+							else if (ViewBag.DaysInMonth == 30)
+							{
+								<td style="width: 2.5%; text-align: center;">@item.D29 @if (item.D29.Contains("M")) { totalPresent++; }</td>
+								<td style="width: 2.5%; text-align: center;">@item.D30 @if (item.D30.Contains("M")) { totalPresent++; }</td>
+							}
+							else if (ViewBag.DaysInMonth == 31)
+							{
+								<td style="width: 2.5%; text-align: center;">@item.D29 @if (item.D29.Contains("M")) { totalPresent++; }</td>
+								<td style="width: 2.5%; text-align: center;">@item.D30 @if (item.D30.Contains("M")) { totalPresent++; }</td>
+								<td style="width: 2.5%; text-align: center;">@item.D31 @if (item.D31.Contains("M")) { totalPresent++; }</td>
+							}
+							else
+							{
+
+							}
+							<td style="width: 2.5%; text-align: center;">
+								@totalPresent
+							</td>
+						</tr>
+
+							}
+						}
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="container-fluid" style="color:black;">
+			<div class="row" style="padding: 0px 15px 0px 15px;">
+				<p><b>A = Absent, P = Present, L = Leave, H = Holiday</b></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts{
+
+}
+<style>
+	.divstyle {
+		color: black;
+	}
+
+	.divstyleee {
+		text-align: center;
+		vertical-align: middle;
+		padding-top: 70px;
+	}
+
+	.spanStyle {
+		color: black;
+		font-size: small;
+		text-align: center;
+	}
+
+	.boldspanStyle {
+		color: black;
+		font-weight: bolder;
+		text-align: center;
+	}
+
+	.print-card-body {
+		width: 100%;
+		padding-bottom: 10px;
+	}
+
+	.vartical-table th {
+		width: 25%;
+		text-align: center;
+		vertical-align: top;
+	}
+
+	.table td, .table th {
+		padding: .3rem;
+		font-size: 10px;
+	}
+
+	table {
+		page-break-inside: auto
+	}
+
+	tr {
+		page-break-inside: avoid;
+		page-break-after: auto;
+	}
+
+	thead {
+		display: table-header-group;
+	}
+
+	tfoot {
+		display: table-footer-group;
+	}
+</style>

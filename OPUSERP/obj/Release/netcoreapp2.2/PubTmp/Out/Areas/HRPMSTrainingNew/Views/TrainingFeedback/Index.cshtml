@@ -1,0 +1,254 @@
+﻿@model TrainingFeedbackViewModel
+@{
+	//ViewData["Title"] = Model.fLang.titleF;
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Style{
+	<!-- Latest compiled and minified CSS -->
+	@*<link rel="stylesheet" href="https://unpkg.com/multiple-select@1.3.1/dist/multiple-select.min.css">*@
+
+	<style>
+		.redStar {
+			color: red;
+		}
+	</style>
+}
+
+<div class="card" style="width: 100%;">
+	<div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+		<div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center;">
+			<h5 class="card-title" style="color: black; margin: 8px;">Training Feedback</h5>
+		</div>
+		<div class="col-md-8">
+
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info mr-4' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1019&perentId=6300'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+		</div>
+	</div>
+	<div class="card-body">
+
+		<div class="container">
+            <form asp-area="HRPMSTrainingNew" asp-controller="TrainingFeedBack" asp-action="Index" id="FormId" method="post" data-parsley-validate="parsley">
+
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="form-group row">
+                    <label for="training" class="col-sm-4 col-form-label"> Training Name<span class="redStar">*</span></label>
+                    <div class="col-sm-8">
+                        <input type="hidden" name="trainingfeedbackId" id="trainingfeedbackId" value="0" data-parsley-required="true" />
+                        <select type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="trainingId" id="trainingId" required>
+                            <option value="">Select</option>
+                            @foreach (var data in Model.trainingInfoNewList)
+                            {
+                                <option value="@data.Id">@data.course</option>
+                            }
+
+                        </select>
+
+
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="type" class="col-sm-4 col-form-label"> Feedback Type<span class="redStar">*</span></label>
+                    <div class="col-sm-8">
+                        <select id="traineetype" name="type" class="form-control" value="type" data-parsley-required="true" data-parsley-trigger="keyup" type="text">
+                            @*<option value="">Select</option>*@
+                            @*<option value="Trainer">Trainer</option>*@
+                            <option value="Trainee">Trainee</option>
+                        </select>
+
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="result" class="col-sm-4 col-form-label">Feedback</label>
+                    <div class="col-sm-8">
+                        <textarea type="text" data-parsley-required="false" data-parsley-trigger="keyup" class="form-control" name="feedback" value="feedback" id="feedback"></textarea>
+                    </div>
+                </div>
+
+
+                <hr />
+                <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+                <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+
+
+                @*<button type="button" id="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+            </form>
+		</div>
+	</div>
+</div>
+<br />
+<div class="row clearfix">
+	<div class="col-12">
+		<div class="card mb-4">
+			<!-- Card Header - Dropdown -->
+			<div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+				<div class="col-md-6" style="display: flex; justify-content: flex-start; align-items: center;">
+					<h5 class="card-title" style="color: black; margin: 8px;"> Feedbacks</h5>
+				</div>
+
+			</div>
+
+			<!-- Card Body -->
+			<div class="card-body">
+				<table class="table table-striped table-bordered" id="FeedbackTable">
+					<thead>
+						<tr>
+							<th>Training Name</th>
+							<th>Feedback Type</th>
+							<th>Feedback</th>
+							<th>Action</th>
+					</thead>
+					<tbody>
+						@foreach (var data in Model.trainingFeedbackList)
+						{
+							<tr>
+								<td>@data.training?.course</td>
+								<td>@data.type</td>
+								<td>@data.feedback</td>
+								<td>
+									<a class="btn btn-success" onclick="Edit(@data.Id,'@data.trainingId','@data.type','@data.feedback')" href="#"><i class="fa fa-edit"></i></a>
+									<a class="btn btn-danger" onclick="Remove(@data.Id)" href="#"><i class="fa fa-trash-alt"></i></a>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+@section Scripts{
+	<!--Latest compiled and minified JavaScript-->
+	<script src="https://unpkg.com/multiple-select@1.3.1/dist/multiple-select.min.js"></script>
+
+	<script>
+        $(document).ready(function () {
+            var orgFullTitle = "Trainee FeedBack";
+            $('#FeedbackTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'Trainee FeedBack',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'Trainee FeedBack'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "ERP-HRPMS",
+                        messageTop: 'Trainee FeedBack',
+                        exportOptions: {
+                            columns: [0, 1, 2]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+            });
+
+        });
+        @*$('#submit').click(function () {
+			console.log($('#FormId').serializeArray());
+			var data = $('#FormId').serializeArray();
+
+			console.log(data[0].value)
+			swal({
+				title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+			}).then(function () {
+				$.ajax({
+					url: '@Url.Action("Index", "TrainingFeedback")',
+					type: 'POST',
+					data: data
+				}).done(function () {
+					if (data[0].value == 0) {
+						swal('success', 'Saved Successfully!', 'success').then(function () {
+
+							window.location.reload();
+						});
+					}
+					else {
+						swal('success', 'Updated Successfully!', 'success').then(function () {
+							;
+							window.location.reload();
+
+							//window.location.href = "http://localhost:61246/HRPMSTrainingNew/TrainingPlanning/AlltrainingList#";
+						});;
+					}
+				}).fail(function () {
+					swal('warning', 'Failed!', 'warning');
+				})
+			});
+
+        })*@
+
+		//function ajaxFuncTrainingFeedback(response) {
+		//	console.log(response);
+		//}
+
+        function Edit(trainingfeedbackId,trainingId ,type, feedback) {
+
+            $("#trainingfeedbackId").val(trainingfeedbackId);
+            $("#trainingId").val(trainingId);
+            $("#traineetype").val(type);
+            $("#feedback").val(feedback);
+
+        }
+        function Remove(Id) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+                $.ajax({
+                    url: '@Url.Action("Delete", "TrainingFeedback")',
+                    data: { Id: Id },
+                    type: 'GET',
+                })
+                .done(function () {
+                    swal('', 'Deleted Successfully!', 'success').then(function () {
+                        window.location.reload();
+                    });
+                })
+                .fail(function () {
+                    swal('', 'Unable to Delete!', 'warning');
+                });
+            });
+
+        }
+	</script>
+}

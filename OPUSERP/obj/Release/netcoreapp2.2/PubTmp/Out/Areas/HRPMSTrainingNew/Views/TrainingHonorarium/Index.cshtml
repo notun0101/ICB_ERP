@@ -1,0 +1,354 @@
+﻿@model TrainingPlanningViewModel
+@{
+	ViewData["Title"] = "Training Honorarium";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Style{
+	<style>
+		.redStar {
+			color: red;
+		}
+	</style>
+}
+<div class="card" style="width: 100%;">
+	<div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+		<div class="col-md-6" style="display: flex; justify-content: flex-start; align-items: center;">
+			<h5 class="card-title" style="color: black; margin: 8px;">Training Honorarium</h5>
+		</div>
+		<div class="col-md-6">
+			<div style="float: right; margin: 16px;">
+				<a class='btn btn-info mr-3' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1019&perentId=6300'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="card-body">
+		<hr>
+		<div class="container">
+			<form asp-area="HRPMSTrainingNew" id="FormId" asp-controller="TrainingHonorarium" asp-action="Index" method="post" data-parsley-validate="parsley">
+				<div asp-validation-summary="All" class="text-danger"></div>
+				<div class="form-group row">
+					<label for="trainingId" class="col-sm-2 col-form-label">Training Name<span style="float:right;" class="redStar">*</span> </label>
+					<input type="text" style="display:none" class="form-control" name="Id" id="Id">
+					<div class="col-sm-4">
+						<select class="form-control" name="trainingId" id="trainingId" data-parsley-required="true">
+							<option value="">Select One</option>
+							@foreach (var data in Model.trainingInfoNews)
+							{
+								<option value="@data.Id">@data.course ( @data.startDate?.ToString("dd-MMM-yy") - @data.endDate?.ToString("dd-MMM-yy"))</option>
+							}
+						</select>
+					</div>
+					<label for="trainerId" class="col-sm-2 col-form-label">Trainer Name<span style="float:right;" class="redStar">*</span> </label>
+					<input style="display:none;" type="text"   name="CoOrdinatorId" id="CoOrdinatorId" readonly>
+					<div class="col-sm-4">
+						<select class="form-control" name="trainerId" id="trainerId" data-parsley-required="true"></select>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="receivedMoney" class="col-sm-2 col-form-label">Receive Amount </label>
+					<div class="col-sm-4">
+						<input type="number" step="0.01"  placeholder="0.00"  data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="receivedMoney" id="receivedMoney">
+					</div>
+					<label for="taxPercentage" class="col-sm-2 col-form-label">Tax Percentage </label>
+					<div class="col-sm-4">
+						<input type="number" step="0.01" placeholder="0.00" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="taxPercentage" id="taxPercentage">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="taxAmount" class="col-sm-2 col-form-label">Tax Amount </label>
+					<div class="col-sm-4">
+						<input type="number" step="0.01"  placeholder="0.00" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="taxAmount" id="taxAmount">
+					</div>
+					<label for="session" class="col-sm-2 col-form-label">Session </label>
+					<div class="col-sm-4">
+						@*<input type="text" data-parsley-trigger="keyup" class="form-control" name="session" id="session">*@
+
+						<select type="text" class="form-control" id="session" name="session">
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group row">
+
+					<label for="effectiveDate" class="col-sm-2 col-form-label">Effective Date</label>
+					<div class="col-sm-4">
+						<input type="text" data-parsley-trigger="keyup" readonly class="form-control" name="effectiveDate" id="effectiveDate">
+					</div>
+				</div>
+				<hr>
+				<button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+				<button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+			</form>
+		</div>
+	</div>
+</div>
+<br />
+<hr />
+<div class="row clearfix">
+	<div class="col-12">
+		<div class="card mb-4">
+			<!-- Card Header - Dropdown -->
+			<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+				<h6 class="m-0 font-weight-bold text-primary">Honorarium</h6>
+			</div>
+			<!-- Card Body -->
+			<div class="card-body">
+				<table class="table table-striped table-bordered" id="trainingPlaneTable">
+					<thead>
+						<tr>
+							<th>SL</th>
+							<th>Training</th>
+							<th>Receive Person</th>
+							<th>Receive Amount</th>
+							<th>Tax Percentage</th>
+							<th>Tax</th>
+							<th>Session</th>
+							<th>Date</th>
+							@*<th>Status</th>
+								<th>IsPaid</th>*@
+							<th>Action</th>
+					</thead>
+					<tbody>
+						@{
+							int? index = 0;
+						}
+						@foreach (var data in Model.trainingHonorariumsList)
+						{
+							index++;
+							<tr>
+								<td>@index</td>
+								<td>@data.trainngName</td>
+								<td>@data.trainerName</td>
+								<td>@data.receivedMoney</td>
+								<td>@data.taxPercentage</td>
+								<td>@data.taxAmount</td>
+								<td>@data.session</td>
+								<td>@data.effectiveDate?.ToString("dd-MMM-yy")</td>
+								@*<td>@data.status</td>
+									<td>@data.isPaid</td>*@
+								<td style="min-width:90px;">
+									<a class="btn btn-success" onclick="Edit(@data.Id, '@data.trainingId', '@data.trainerId', '@data.receivedMoney', '@data.taxPercentage', '@data.taxAmount', '@data.session', '@data.effectiveDate?.ToString("dd-MMM-yy")', '@data.status', '@data.isPaid','@data.coOrdinatorPayment', '@data.CoOrdinatorId')" href="#"><i class="fa fa-edit"></i></a>
+									<a class="btn btn-danger" onclick="Remove(@data.Id)" href="#"><i class="fa fa-trash-alt"></i></a>
+									<a class="btn btn-info" onclick="Report(@data.Id)" href="#" title="Print Report"><i class="fa fa-print"></i></a>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+@section Scripts{
+	<script src="~/lib/jquery/dist/notify.js"></script>
+	<script>
+        var isEdit = false;
+        var _trainerId = 0;
+        var _CoOrdinatorId = 0;
+		$('#effectiveDate').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2030" });
+
+		$("#receivedMoney, #taxPercentage, #session").change(function () {
+			var receivemoney = $("#receivedMoney").val();
+			var taxPercentage = $("#taxPercentage").val();
+			var session = $("#session").val();
+			if (receivemoney.length > 0 && taxPercentage.length > 0) {
+				var taxPercentage = (((receivemoney * session) * taxPercentage) / 100);
+				$("#taxAmount").val(taxPercentage.toFixed(2));
+				$("#receivedMoney").val(receivemoney * session);
+			}
+		});
+
+        $(document).ready(function () {
+            var year = new Date().getFullYear();  // returns the current year: 2021
+            var startyear = (year - 20);
+            var endyear = (year + 10);
+            var option = '<option value="">Select</option>';
+            for (var i = startyear; i < endyear + 1; i++) {
+                option += '<option value="' + i + '">' + i + '</option>';
+            }
+            $(".year").html(option);
+            $(".year").val(year);
+
+
+			$('#trainingPlaneTable').DataTable({
+				stateSave: false,
+				dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+					"<'row'<'col-sm-12't>>" +
+					"<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+				buttons: [
+					{
+						extend: 'excelHtml5',
+						text: '<i class="fa fa-file-excel"></i> Excel',
+						titleAttr: 'Excel',
+						exportOptions: {
+							columns: [0, 1, 2, 3, 4, 5, 6]
+						},
+						title: 'Department of Disaster Management',
+						messageTop: 'List Of Trainer',
+						class: 'btn btn-info'
+					},
+					{
+						extend: 'print',
+						text: '<i class="fa fa-print"></i> Print',
+						titleAttr: 'Print',
+						title: 'Department of Disaster Management',
+						messageTop: 'List Of Trainer',
+						exportOptions: {
+							columns: [0, 1, 2, 3, 4, 5, 6]
+						},
+						customize: function (doc) {
+							$(doc.document.body).find('h1').css('font-size', '20pt');
+							$(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+							$(doc.document.body).find('h1').css('text-align', 'center');
+						}
+					}
+				]
+			});
+		});
+
+		function isValidForm() {
+			var isValid = false;
+			if ($("#trainingId :selected").val() == '') {
+				$.notify("error: Please select training first!", "error");
+			} else if ($("#trainerId :selected").val() == '') {
+				$.notify("error: Trainer  Required", "error");
+			}
+			else if (parseFloat($("#receivedMoney").val()) <0.1 ) {
+				$.notify("error: Please Add receive amount!", "error");
+			}
+			else if ($("#effectiveDate").val() == '') {
+				$.notify("error: Please Add Effective Date!", "error");
+			}
+			else {
+				isValid = true;
+			}
+			return isValid;
+		};
+
+		$("#submit").click(function () {
+			if (isValidForm()) {
+				$("#submitbtn").click();
+			}
+			console.log($('#FormId').serializeArray());
+			//swal({
+			//	title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+			//}).then(function () {
+			//	$("#submitbtn").click();
+			//});
+		});
+
+		function Report(id) {
+			window.open('/HRPMSTrainingNew/TrainingImplementation/MoneyReceptReportPdf?Id=' + id, '_blank');
+		}
+
+		function Edit(Id, trainingId, trainerId, receivedMoney, taxPercentage, taxAmount, session, effectiveDate, status, isPaid, coOrdinatorPayment, CoOrdinatorId) {
+			isEdit = true; _trainerId = trainerId;
+			_CoOrdinatorId = CoOrdinatorId;
+			$("#Id").val(Id);
+			$("#trainingId").val(trainingId).trigger('change');
+			$("#receivedMoney").val(receivedMoney);
+			$("#taxPercentage").val(taxPercentage);
+			$("#taxAmount").val(taxAmount);
+			$("#session").val(session);
+			$("#effectiveDate").val(effectiveDate);
+			$("#status").val(status);
+			$("#isPaid").val(isPaid);
+			$("#coOrdinatorPayment").val(coOrdinatorPayment);
+		};
+
+		$("#trainingId").change(function () {
+			var trainingId = $("#trainingId :selected").val();
+            GetTrainingResourcePersonById(trainingId);
+            GetTrainingCoOrdinatorById(trainingId)
+		})
+		function GetTrainingResourcePersonById(Id) {
+			$.ajax({
+				url: '/HRPMSTrainingNew/TrainingHonorarium/GetTrainingResourcePersonById',
+				type: 'POST',
+				data: { id: Id }
+			}).done(function (data) {
+				var item = '<option value="">Select One</option>';
+				for (var i = 0; i < data.length; i++) {
+					var designation = '';
+					if (data[i].designation != null) {
+						designation = ' (' + data[i].designation + ' )';
+					}
+					item += '<option isCooOrdinator="NO" value="' + data[i].Id + '">' + data[i].name + '' + designation + ' </option>';
+				}
+				$("#trainerId").html(item);
+
+				//if (isEdit) {
+				//	$("#trainerId").val(_trainerId);
+				//	if (_CoOrdinatorId > 0) {
+				//		$("#CoOrdinatorId").val(_CoOrdinatorId);
+				//	}
+				//	_CoOrdinatorId = 0;
+				//	_trainerId = 0;
+				//	//isEdit = false;
+				//}
+			}).then(function () {
+				GetTrainingCoOrdinatorById(trainingId);
+			}).fail(function () {
+			});
+        };
+        function GetTrainingCoOrdinatorById(Id) {
+			$.ajax({
+				url: '/HRPMSTrainingNew/TrainingHonorarium/GetTrainingCoOrdinatorById',
+				type: 'POST',
+				data: { id: Id }
+			}).done(function (data) {
+				var item = '<option  isCooOrdinator="YES"  value="' + data.employeeInfoId + '">' + data.employeeInfo?.nameEnglish + '(Co-Ordinator) </option>';
+				$("#trainerId").append(item);
+				//console.log(data);
+				if (isEdit) {
+					$("#trainerId").val(_trainerId);
+					if (_CoOrdinatorId > 0) {
+						$("#CoOrdinatorId").val(_CoOrdinatorId);
+						$("#trainerId").val(_CoOrdinatorId);
+					}
+					_CoOrdinatorId = 0;
+					_trainerId = 0;
+					isEdit = false;
+				}
+			});
+		};
+
+	
+		$("#trainerId").change(function () {
+			var result = $("#trainerId :selected").attr("isCooOrdinator");
+			if (result == "YES") {
+				$("#CoOrdinatorId").val($("#trainerId :selected").val());
+			} else {
+				$("#CoOrdinatorId").val("");
+			}
+			
+		})
+
+
+
+		   function Remove(Id) {
+	        swal({
+		        title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+	        }).then(function () {
+		        $.ajax({
+			        url: '@Url.Action("Delete", "TrainingHonorarium")',
+			        data: { Id: Id },
+			        type: 'GET',
+		        })
+		        .done(function () {
+                    swal('', 'Deleted Successfully!', 'success').then(function () {
+                        window.location.reload();
+                    });
+		        })
+		        .fail(function () {
+			        swal('', 'Unable to Delete!', 'warning');
+		        });
+	        });
+            //calendar.render();
+        }
+	</script>
+}

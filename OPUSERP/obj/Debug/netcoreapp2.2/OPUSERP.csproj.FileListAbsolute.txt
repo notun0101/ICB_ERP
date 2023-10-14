@@ -1,0 +1,20 @@
+D:\Git Projects\BDBL_ERP\OPUSERP\bin\Debug\netcoreapp2.2\web.config
+D:\Git Projects\BDBL_ERP\OPUSERP\bin\Debug\netcoreapp2.2\appsettings.Development.json
+D:\Git Projects\BDBL_ERP\OPUSERP\bin\Debug\netcoreapp2.2\Areas\Grettings\Views\appsettings.Development.json
+D:\Git Projects\BDBL_ERP\OPUSERP\bin\Debug\netcoreapp2.2\Areas\Grettings\Views\appsettings.json
+D:\Git Projects\BDBL_ERP\OPUSERP\bin\Debug\netcoreapp2.2\Connected Services\ServiceReference1\ConnectedService.json
+D:\Git Projects\BDBL_ERP\OPUSERP\bin\Debug\netcoreapp2.2\libman.json
+D:\Git Projects\BDBL_ERP\OPUSERP\bin\Debug\netcoreapp2.2\appsettings.json
+D:\Git Projects\BDBL_ERP\OPUSERP\bin\Debug\netcoreapp2.2\OPUSERP.deps.json
+D:\Git Projects\BDBL_ERP\OPUSERP\bin\Debug\netcoreapp2.2\OPUSERP.runtimeconfig.json
+D:\Git Projects\BDBL_ERP\OPUSERP\bin\Debug\netcoreapp2.2\OPUSERP.runtimeconfig.dev.json
+D:\Git Projects\BDBL_ERP\OPUSERP\bin\Debug\netcoreapp2.2\OPUSERP.dll
+D:\Git Projects\BDBL_ERP\OPUSERP\bin\Debug\netcoreapp2.2\OPUSERP.pdb
+D:\Git Projects\BDBL_ERP\OPUSERP\obj\Debug\netcoreapp2.2\OPUSERP.csproj.AssemblyReference.cache
+D:\Git Projects\BDBL_ERP\OPUSERP\obj\Debug\netcoreapp2.2\OPUSERP.GeneratedMSBuildEditorConfig.editorconfig
+D:\Git Projects\BDBL_ERP\OPUSERP\obj\Debug\netcoreapp2.2\OPUSERP.AssemblyInfoInputs.cache
+D:\Git Projects\BDBL_ERP\OPUSERP\obj\Debug\netcoreapp2.2\OPUSERP.AssemblyInfo.cs
+D:\Git Projects\BDBL_ERP\OPUSERP\obj\Debug\netcoreapp2.2\OPUSERP.csproj.CoreCompileInputs.cache
+D:\Git Projects\BDBL_ERP\OPUSERP\obj\Debug\netcoreapp2.2\OPUSERP.dll
+D:\Git Projects\BDBL_ERP\OPUSERP\obj\Debug\netcoreapp2.2\OPUSERP.pdb
+D:\Git Projects\BDBL_ERP\OPUSERP\obj\Debug\netcoreapp2.2\OPUSERP.genruntimeconfig.cache

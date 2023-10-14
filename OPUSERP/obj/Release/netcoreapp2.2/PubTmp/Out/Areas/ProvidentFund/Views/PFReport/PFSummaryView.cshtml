@@ -1,0 +1,208 @@
+﻿@model OPUSERP.ProvidentFund.VMS.PFReportViewModel
+@{
+    ViewData["Title"] = "PFsummaryView";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+<style>
+    .divstyle {
+        color: black;
+    }
+
+    .divstyleee {
+        text-align: center;
+        vertical-align: middle;
+        padding-top: 70px;
+    }
+
+    .spanStyle {
+        color: black;
+        font-size: small;
+        text-align: center;
+    }
+
+    .boldspanStyle {
+        color: black;
+        font-weight: bolder;
+        text-align: center;
+    }
+
+    .print-card-body {
+        width: 100%;
+        padding-bottom: 10px;
+    }
+
+    .vartical-table th {
+        width: 25%;
+        text-align: center;
+        vertical-align: top;
+    }
+
+    .table td, .table th {
+        padding: .3rem;
+        font-size: 16px;
+    }
+
+    table {
+        page-break-inside: auto
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+
+
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+        <div class="container-fluid">
+            <div class="row" style="padding-top:0px;">
+                <div class="col-2">
+                    <img src="~/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="OPUS ERP" style="height:50px;" />
+                </div>
+                <div class="col-8" style="color:black;text-align:center">
+                    <h3>@Model.companies.FirstOrDefault().companyName</h3>
+                    <h5>@Model.companies.FirstOrDefault().addressLine</h5>
+                    <br />
+                    <h3 style="text-align:center;">PF Summary Report</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid" style="color:black;">
+            <hr style="border:1px solid grey;">
+           
+            <div class="row" style="padding: 0px 15px 0px 15px;">
+
+                <table class="table table-bordered">
+                    <thead>
+
+                        <tr class="align-text-top">
+                            <th class="align-text-top">Member Code</th>
+                            <th class="align-text-top">Member Name</th>
+                            <th class="align-text-top">Designation</th>
+                            <th class="align-text-top">Department</th>
+                            <th class="align-text-top">Own Contribution</th>
+                            <th class="align-text-top">company Contribution</th>
+                            <th class="align-text-top">Distributed Interest</th>
+                            <th class="align-text-top">Loan</th>
+                            <th class="align-text-top">Interest Charge</th>
+                            <th class="align-text-top">Loan Repay</th>
+                            <th class="align-text-top">Loan Balance</th>
+                            <th class="align-text-top">Total Net Balance</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model.pfreport)
+                        {
+
+
+                            <tr>
+                                <td>@item.memberCode</td>
+                                <td>@item.nameEnglish</td>
+                                <td>@item.designationName</td>
+                                <td>@item.deptName</td>
+                                <td class="text-right">@item.own?.ToString("N2")</td>
+                                <td class="text-right">@item.company?.ToString("N2")</td>
+                                <td class="text-right">@item.distributedInterest?.ToString("N2")</td>
+                                <td class="text-right">@item.loan?.ToString("N2")</td>
+                                <td class="text-right">@item.interestCharge?.ToString("N2")</td>
+                                <td class="text-right">@item.loanRepay?.ToString("N2")</td>
+                                <td class="text-right">@item.loanBalance?.ToString("N2")</td>
+                                <td class="text-right">@item.totalNetBalance?.ToString("N2")</td>
+                            </tr>
+
+
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+       <div class="row" style="color:black">
+    <div class="col-12">
+                <div class="col-2">
+                    <img src="~/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="OPUS ERP" style="height:100px;width:120px;padding-right:0px;text-align:center" />
+                </div>
+        <div class="col-10">
+            <div style="color:black;padding-top:0px">
+                
+                        <h3 style="text-align:center;font-size:22px;color:black">UTTARA BANK PLC.</h3>
+                        <h3 style="text-align:center;font-size:20px;color:black">HEAD OFFICE,DHAKA</h3>
+                        <h3 style="text-align:center;font-size:20px;color:black"><u>CAD: ACCOUNTS DEPARTMENT</u></h3>
+            </div>
+
+            <div>
+            <h3 class="text-center">PF Summary Report</h3>
+            </div>
+     <br />
+     <br />
+
+   <table class="table table-bordered">
+                          <thead>
+                              
+                              <tr class="align-text-top">
+                                    <th class="align-text-top">Member Code</th>
+                                    <th class="align-text-top">Member Name</th>
+                                    <th class="align-text-top">Designation</th>
+                                    <th class="align-text-top">Department</th>
+                                    <th class="align-text-top">Own Contribution</th>
+                                    <th class="align-text-top">company Contribution</th>
+                                    <th class="align-text-top">Distributed Interest</th>
+                                    <th class="align-text-top">Loan</th>
+                                    <th class="align-text-top">Interest Charge</th>
+                                    <th class="align-text-top">Loan Repay</th>
+                                    <th class="align-text-top">Loan Balance</th>
+                                    <th class="align-text-top">Total Net Balance</th>
+                              </tr>
+                          </thead>
+
+                          <tbody>
+                             
+                              @foreach (var item in Model.pfreport)
+                                {
+
+                                  
+                                    <tr>
+                                        <td>@item.memberCode</td>
+                                        <td>@item.nameEnglish</td>
+                                        <td>@item.designationName</td>
+                                        <td>@item.deptName</td>
+                                        <td class="text-right">@item.own?.ToString("N2")</td>
+                                        <td class="text-right">@item.company?.ToString("N2")</td>
+                                        <td class="text-right">@item.distributedInterest?.ToString("N2")</td>
+                                        <td class="text-right">@item.loan?.ToString("N2")</td>
+                                        <td class="text-right">@item.interestCharge?.ToString("N2")</td>
+                                        <td class="text-right">@item.loanRepay?.ToString("N2")</td>
+                                        <td class="text-right">@item.loanBalance?.ToString("N2")</td>
+                                        <td class="text-right">@item.totalNetBalance?.ToString("N2")</td>
+                                    </tr>
+
+                                  
+
+                                                    }
+                          </tbody>
+                      </table>
+    </div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+

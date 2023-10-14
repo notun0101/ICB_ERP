@@ -1,0 +1,585 @@
+﻿@model ArrearViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<style>
+    .redStar {
+        color: red;
+        float: right;
+    }
+</style>
+<div class="card" style="width: 100%;">
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+            <h5 class="card-title" style="color: black; margin: 8px;">Employee's Arrear Calculation</h5>
+        </div>
+        <div class="col-md-8">
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info mr-4' style="margin-right:6px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=10&perentId=1268'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="container">
+            <form asp-area="Payroll" asp-controller="Arrear" asp-action="Index" method="post" id="FormId">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="row">
+                    <input type="hidden" id="ArrearinfoId" name="ArrearinfoId" value="0">
+                    <input type="hidden" id="employeeId" name="employeeId">
+                    <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="empcode" class="col-sm-4 col-form-label">Employee No<span class="redStar">*</span></label>
+                            <div class="col-sm-8">
+                                @*<input type="hidden" class="form-control" id="empCode" value="@Model.employee?.employeeCode" readonly name="empCode">*@
+                                <input type="text" class="form-control" id="employeeName" autocomplete="off" value="@Model.employee?.nameEnglish" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="designation" class="col-sm-4 col-form-label">Designation</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="designation" autocomplete="off" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="department" class="col-sm-4 col-form-label">Department</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="department" autocomplete="off" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="currentBasic" class="col-sm-4 col-form-label">Current Basic<span class="redStar">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="hidden" id="salarySlab" value="" name="salarySlab">
+                                <input type="text" class="form-control" name="currentBasic" id="currentBasic" required readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="oldBasic" class="col-sm-4 col-form-label">Old Basic</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="oldBasic" id="oldBasic">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="periodId" class="col-sm-4 col-form-label">Period Name<span class="redStar">*</span></label>
+                            <div class="col-sm-8">
+                                <select type="text" class="form-control" name="periodId" id="periodId" required>
+                                    <option value="">Select</option>
+                                    @foreach (var data in Model.salaryPeriods)
+                                    {
+                                        <option value="@data.Id">@data.periodName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="otherAddition" class="col-sm-4 col-form-label">Other Addition</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="otherAddition" id="otherAddition">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="otherDeduction" class="col-sm-4 col-form-label">Other Deduction</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="otherDeduction" id="otherDeduction">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="fromDate" class="col-sm-4 col-form-label">From Date <span class="redStar">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="fromDate" id="fromDate" readonly required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="toDate" class="col-sm-4 col-form-label">To Date <span class="redStar">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="toDate" id="toDate" readonly required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="btn-group" style="float:right">
+                    <button type="button" id="Refresh" value="Refresh" class="btn btn-secondary mr-2 d-none" style="float:right; margin-top:5px">Inactive</button>
+                    <button type="button" id="Inactive" value="Inactive" class="btn btn-info mr-2 d-none" style="float:right;margin-top:5px ">Refresh</button>
+                    @*<button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>*@
+                    <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+                    <button type="button" value="View" title="View Structure" id="BtnProcess" class="btn btn-outline-info btn-lg d-none" style="float:right; margin-top:5px; margin-right: 13px;"><i class="fas fa-street-view"></i></button>
+
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+</div>
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Arrear List</h6>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="Arreartbl">
+                    <thead>
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Current Basic</th>
+                            <th>old Basic</th>
+                            <th>Period Name</th>
+                            <th>Other Addition</th>
+                            <th>Other Deduction</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Action</th>
+
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.employeeArrearList)
+                        {
+                            <tr>
+                                <td>@data.employee?.employeeCode - @data.employee?.nameEnglish</td>
+                                <td>@data.currentBasic</td>
+                                <td>@data.oldBasic</td>
+                                <td>@data.period?.periodName</td>
+                                <td>@data.otherAddition</td>
+                                <td>@data.otherDeduction</td>
+                                <td>@data.fromDate?.ToString("dd/MM/yyyy")</td>
+                                <td>@data.toDate?.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    <a class="btn btn-success" onclick="Edit(@data.Id, '@data.employeeId','@data.currentBasic', '@data.oldBasic', '@data.periodId', '@data.otherAddition','@data.otherDeduction','@data.fromDate?.ToString("dd/MM/yyyy")','@data.toDate?.ToString("dd/MM/yyyy")')" href="#"><i class="fa fa-edit"></i></a>
+                                    <a class="btn btn-danger" href="javascript:void(0)" onclick="DeleteMaster(@data.Id)"><i class="fa fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row clearfix d-none" id="ProcessAftereSave">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h5 class="m-0 font-weight-bold text-primary" style="padding-bottom: 13px;">Employees Salary Structure List</h5>
+            </div>
+
+            <!-- Card Body -->
+            <div class="card-body" style="background-color:#f6f3d0a8;">
+                <div class="row col-md-12">
+                    <div class="col-6">
+                        <h6 class="m-0 font-weight-bold text-primary" style="padding-bottom: 13px;">Addition</h6>
+                        <table class="table table-striped table-bordered" id="salaryStructureAdditionTable" style="background-color: #dafee4cc;">
+                            <thead>
+                                <tr>
+                                    <th>SL</th>
+                                    <th>Head Name</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" style="text-align:right">Total</td>
+                                    @*<td style="text-align:right" id="totalAddition">@Model.employeesSalaryStructuresList.Where(x => x.salaryHead.salaryHeadType == "Addition").Sum(x => x.amount)</td>*@
+                                    <td style="text-align:right" id="totalAddition"></td>
+                                    <td colspan="2"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="col-6">
+                        <h6 class="m-0 font-weight-bold text-primary" style="padding-bottom: 13px;">Deduction</h6>
+                        <table class="table table-striped table-bordered" id="salaryStructureDeductionTable" style="background-color: #dafee4cc;">
+                            <thead>
+                                <tr>
+                                    <th>SL</th>
+                                    <th>Head Name</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" style="text-align:right">Total</td>
+                                    @*<td style="text-align:right" id="totalDeduction" >@Model.employeesSalaryStructuresList.Where(x => x.salaryHead.salaryHeadType == "Deduction").Sum(x => x.amount)</td>*@
+                                    <td style="text-align:right" id="totalDeduction"></td>
+                                    <td colspan="2"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <label for="grossamount" class="col-sm-5 col-form-label">Gross Amount</label>
+
+                        <div class="col-sm-7">
+                            @{
+                                decimal gross = 0;
+                                decimal additions = Model.employeesSalaryStructuresList.Where(x => x.salaryHead.salaryHeadType == "Addition" && x.isActive == "Active").Sum(x => x.amount);
+                                decimal deductions = Model.employeesSalaryStructuresList.Where(x => x.salaryHead.salaryHeadType == "Deduction" && x.isActive == "Active").Sum(x => x.amount);
+                                gross = additions - deductions;
+                                decimal PrevAmount = additions + deductions;
+                                // decimal gross = Model.employeesSalaryStructuresList;
+                            }
+                            <input type="number" class="form-control" id="grossamount" style="text-align:right" value="@gross" name="grossamount" data-parsley-required="true" readonly>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+
+
+        var orgFullTitle = "Arreartbl";
+        $('#Arreartbl').DataTable({
+            stateSave: false,
+            dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                "<'row'<'col-sm-12't>>" +
+                "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="fa fa-file-excel"></i> Excel',
+                    titleAttr: 'Excel',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                    },
+                    title: orgFullTitle,
+                    messageTop: 'List Of Fixation Integration',
+                    class: 'btn btn-info'
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: '<i class="fa fa-file-excel"></i> CSV',
+                    titleAttr: 'CSV',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                    },
+                    title: orgFullTitle,
+                    messageTop: 'List Of Fixation Integration'
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-print"></i> Print',
+                    titleAttr: 'Print',
+                    title: orgFullTitle,
+                    messageTop: 'List Of Fixation Integration',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                    },
+                    customize: function (doc) {
+                        $(doc.document.body).find('h1').css('font-size', '20pt');
+                        $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                        $(doc.document.body).find('h1').css('text-align', 'center');
+                    }
+                }
+            ]
+        });
+        $("#currentBasic").change(function () {
+            Common.Ajax('GET', '/Payroll/SalaryStructure/GetSalarySlabByAmount/?amount=' + $("#currentBasic").val(), [], 'json', ajaxGetSalaryslabByEmpId, false);
+
+        });
+
+
+        $("#submit").click(function () {
+
+            var model = new Object();
+            model.employeeId = $('#employeeId').val();
+          //  model.ArrearinfoId = $('#ArrearinfoId').val();
+            //model.salaryGradeId = $('#salaryGradeId').val();
+            //model.salarySlab = $('#salarySlab').val();
+            model.currentBasic = $('#currentBasic').val();
+            model.oldBasic = $('#oldBasic').val();
+            model.fromDate = $('#fromDate').val();
+            model.toDate = $('#toDate').val();
+            model.periodId = $('#periodId').val();
+            model.otherAddition = $('#otherAddition').val();
+            model.otherDeduction = $('#otherDeduction').val();
+            model.salarySlab = $('#salarySlab').val();
+            model.salaryStrustureList = getSalaryHeads();
+
+            swal({
+                title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+            }).then(function () {
+
+                var salaryHeads = getSalaryHeads();
+                if (salaryHeads.length < 1) {
+                    swal("Employees Salary Structure Not Found!");
+                    return false;
+                }
+                
+
+                $.ajax({
+				        url: '@Url.Action("Index", "Arrear")',
+				        type: 'POST',
+                        data: model
+			        }).done(function (res) {
+                        if (res == 'ok') {
+                            swal('success', 'Saved Successfully!', 'success').then(function () {
+                                location.reload();
+                            });
+                        }
+                        //else {
+                        //    swal('success', 'Updated Successfully!', 'success').then(function () {
+                        //        location.reload();
+                        //    });;
+                        //}
+			        }).fail(function () {
+				        swal('warning', 'Failed!', 'warning');
+			        })
+            });
+        });
+
+
+        Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo', [], 'json', ajaxGetEmployees);
+
+        $("#fromDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+        $("#toDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+
+
+
+    });
+
+     @*$('#submit').click(function () {
+         Common.Ajax('GET', '/Payroll/SalaryStructure/GetSalarySlabByAmount/?amount=' + $("#currentBasic").val(), [], 'json', ajaxGetSalaryslabByEmpId, false);
+         var data = $('#FormId').serializeArray();
+         var salaryHeads = getSalaryHeads();
+         if (salaryHeads.length < 1) {
+             swal("Employees Salary Structure Not Found!");
+             return false;
+         }
+         var model = new Object();
+         model.salaryStrustureList = getSalaryHeads();
+         $("#BtnProcess").click();
+
+		swal({
+			title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+		}).then(function () {
+			$.ajax({
+				url: '@Url.Action("Index", "Arrear")',
+				type: 'POST',
+                data: model
+			}).done(function () {
+                if (data[0].value == 0) {
+                    swal('success', 'Saved Successfully!', 'success').then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    swal('success', 'Updated Successfully!', 'success').then(function () {
+                        location.reload();
+                    });;
+                }
+			}).fail(function () {
+				swal('warning', 'Failed!', 'warning');
+			})
+		});
+        })*@
+
+
+
+
+    function ajaxGetSalaryslabByEmpId(response) {
+
+        console.log(response)
+
+        $('#salarySlab').val(response.Id);
+       // $('#salarySlabName').val(response.slabName);
+
+
+    }
+
+    function ajaxVieWEmpSalaryStructureAddition(response) {
+        $("#salaryStructureAdditionTable tbody>tr").remove();
+        //$('#salaryStructureAdditionTable').DataTable().empty();
+        var dtTableA = $("#salaryStructureAdditionTable");
+        var tableBodyA = dtTableA.find('tbody');
+        var tablefootA = dtTableA.find('tfoot');
+        tableBodyA.empty();
+        tablefootA.empty();
+        var i = 1;
+        var Total = "Total";
+        var TotalAdd = 0;
+        $.each(response, function (key, value) {
+            var trHtml = '<tr id="cust_' + i + '"><td class="rowId">' + i + ' </td><td class="salaryheadName"><input type="hidden" name="headName" class="headname" value="' + value.salaryHead.Id + '"/>' + value.salaryHead.salaryHeadName + '</td><td style="text-align:right;" class="amnt">' + value.amount.toFixed(2) + '</td><td class="sts">' + value.isActive + '</td><td class="attribute"><a onclick="EditTblStructure(' + i + ", '" + value.salaryHead.salaryHeadName + "', '" + value.isActive + "'," + value.amount + ',' + value.Id + ')" href="javascript:void(0)" title="Edit" class="btn btn-success btn-xs" data-toggle="modal" data-target="#viewEmpSalaryStructureModal" > <i class="fa fa-edit"></i></a ></td></tr>';
+            tableBodyA.append(trHtml);
+            i++;
+            TotalAdd = TotalAdd + value.amount;
+        });
+        var trHtmlfoot = '<tr><td colspan="2"  style="text-align:right;">' + Total + '</td><td style="text-align:right;" id="totalAddition">' + TotalAdd.toFixed(2) + '</td> <td><td/></tr>';
+        tablefootA.append(trHtmlfoot);
+        $('#salaryStructureAdditionTable').DataTable();
+    }
+    function ajaxVieWEmpSalaryStructureDeduction(response) {
+        $("#salaryStructureDeductionTable tbody>tr").remove();
+        //$('#salaryStructureDeductionTable').DataTable().empty();
+        var dtTableA = $("#salaryStructureDeductionTable");
+        var tableBodyA = dtTableA.find('tbody');
+        var tablefootA = dtTableA.find('tfoot');
+        tableBodyA.empty();
+        tablefootA.empty();
+        var i = 1;
+        var Total = "Total";
+        var TotalAdd = 0;
+        $.each(response, function (key, value) {
+            var trHtml = '<tr id="Deduct_' + i + '"><td class="rowId">' + i + ' </td><td class="salaryheadName"><input type="hidden" name="headname" class="headname" value="' + value.salaryHead.Id + '"/>' + value.salaryHead.salaryHeadName + '</td><td style="text-align:right;" class="amntN">' + value.amount.toFixed(2) + '</td><td class="stsN">' + value.isActive + '</td><td class="attribute"><a onclick="EditDeductTblStructure(' + i + ", '" + value.salaryHead.salaryHeadName + "', '" + value.isActive + "'," + value.amount + ',' + value.Id + ')" href="javascript:void(0)" title="Edit" class="btn btn-success btn-xs" data-toggle="modal" data-target="#viewEmpSalaryStructureModalDeduction" > <i class="fa fa-edit"></i></a ></td></tr>';
+
+            tableBodyA.append(trHtml);
+            i++;
+            TotalAdd = TotalAdd + value.amount;
+        });
+        var trHtmlfoot = '<tr><td colspan="2"  style="text-align:right;">' + Total + '</td><td style="text-align:right;" id="totalDeduction">' + TotalAdd.toFixed(2) + '</td> <td><td/></tr>';
+        tablefootA.append(trHtmlfoot);
+        $('#salaryStructureDeductionTable').DataTable();
+    }
+    function Edit(Id, employeeId,currentBasic,oldBasic, periodId, otherAddition, otherDeduction, fromDate, toDate) {
+        $("#ArrearinfoId").val(Id);
+        $("#employeeName").val(employeeId);
+        $("#currentBasic").val(currentBasic);
+        $("#oldBasic").val(oldBasic);
+        $("#periodId").val(periodId);
+        $("#otherAddition").val(otherAddition);
+        $("#otherDeduction").val(otherDeduction);
+        $("#fromDate").val(fromDate);
+        $("#toDate").val(toDate);
+        }
+
+    function DeleteMaster(Id) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+
+                $.ajax({
+                    url: '@Url.Action("DeleteArrearinfoById", "Arrear")',
+                    data: { Id: Id },
+                    type: 'POST',
+                })
+                    .done(function () {
+                        swal('', 'Deleted Successfully!', 'success');
+                        window.location.href = "/Payroll/Arrear/Index";
+                    })
+                    .fail(function () {
+                        swal('Cancelled', 'it is related with another info, can not deleted', 'error');
+                    });
+            });
+    }
+    function ajaxGetEmployees(response) {
+        var GeEmployeesList = [];
+        console.log(response.Id)
+        $.each(response, function (id, option) {
+            var obj = new Object();
+            obj.key = option.Id;
+            obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+            obj.employeeCode = option.employeeCode;
+            obj.designation = option.lastDesignation ?.designationName;
+            obj.department = option.department ?.deptName;
+            obj.currentBasic = option.currentBasic;
+            GeEmployeesList[GeEmployeesList.length] = obj;
+        });
+        $('#employeeName').autocomplete({
+            source: GeEmployeesList,
+            select: function (event, ui) {
+                $("#employeeName").val(ui.item.value);
+                $("#employeeId").val(ui.item.key);
+                $("#empCode").val(ui.item.employeeCode);
+                $("#designation").val(ui.item.designation);
+                $("#department").val(ui.item.department);
+                $("#currentBasic").val(ui.item.currentBasic);
+                $('#BtnProcess').click();
+                Common.Ajax('GET', '/Payroll/SalaryStructure/GetSalarySlabByAmount/?amount=' + ui.item.currentBasic, [], 'json', ajaxGetSalaryslabByEmpId, false);
+
+            }
+        });
+
+        var employeeInfoId = response.Id;
+
+        Common.Ajax('GET', '/Payroll/SalaryStructure/GetEmployeesSalaryStructureAdditionByEmpId/?employeeInfoId=' + employeeInfoId, [], 'json', ajaxVieWEmpSalaryStructureAddition);
+        Common.Ajax('GET', '/Payroll/SalaryStructure/GetEmployeesSalaryStructureDeductionByEmpId/?employeeInfoId=' + employeeInfoId, [], 'json', ajaxVieWEmpSalaryStructureDeduction);
+
+    }
+
+    function getSalaryHeads() {
+        var salaryHead = [];
+        $('#salaryStructureAdditionTable  tbody > tr').each(function (res) {
+            //var data = $(this).html();
+            var rowId = $(this).find(".rowId").text();
+            var headName = $(this).find(".headname").text();
+            var headId = $(this).find(".headname").val();
+            var amnt = parseFloat($(this).find(".amnt").text());
+            var sts = $(this).find(".sts").text();
+            salaryHead.push({
+                headId: headId,
+                headName: headName,
+                amount: amnt,
+                status: sts,
+            })
+        });
+
+        $('#salaryStructureDeductionTable  tbody > tr').each(function (res) {
+            var data = $(this).html();
+            var rowId = $(this).find(".rowId").text();
+            var headName = $(this).find(".headname").text();
+            var headId = $(this).find(".headname").val();
+            var amnt = parseFloat($(this).find(".amntN").text());
+            var sts = $(this).find(".stsN").text();
+            salaryHead.push({
+                headId: headId,
+                headName: headName,
+                amount: amnt,
+                status: sts,
+            })
+        });
+        console.log(salaryHead)
+        return salaryHead;
+    }
+
+      $('#BtnProcess').click(function () {
+
+		    var data = $('#FormId').serializeArray();
+		    $.ajax({
+				    url: '@Url.Action("GetEmployeesSalaryStructureBeforeProces", "SalaryStructure")',
+				    type: 'GET',
+				    data: data
+			    }).done(function (res) {
+                    if (res) {
+                        //ajaxVieWEmpSalaryStructureAdditionProcess(res.AdditonList);
+                        //ajaxVieWEmpSalaryStructureDeductionProcess(res.DeductionList);
+                        ajaxVieWEmpSalaryStructureAddition(res.AdditonList);
+                        ajaxVieWEmpSalaryStructureDeduction(res.DeductionList);
+                       // $("#grossTotal").val(res.GrossAmount);
+                        $("#grossamount").val(res.GrossAmount);
+                    }
+                    else {
+                        //swal('success', 'Updated Successfully!', 'success').then(function () {
+                        //    location.reload();
+                        //});;
+                    }
+			    }).fail(function () {
+				    //swal('warning', 'Failed!', 'warning');
+			    })
+        })
+
+
+
+</script>
+
+
+
+

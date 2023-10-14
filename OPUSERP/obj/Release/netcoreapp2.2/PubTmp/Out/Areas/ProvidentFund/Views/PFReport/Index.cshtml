@@ -1,0 +1,236 @@
+﻿@{
+    ViewData["Title"] = "ReportCenter";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-4 bg-light">
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="m-0 font-weight-bold text-primary">Pf Report</h5>
+                    <hr />
+
+                    <div class="form-group row">
+
+                        <label for="yearSelect" class="col-sm-2">Report Type</label>
+                        <div class="col-sm-4 input-group">
+                            <select class="form-control " id="reportTypeId">
+                                <option value="0">Select Report</option>
+                                <option value="1">Indiviual PF Report</option>
+                                <option value="2">PF summary Report</option>
+                                <option value="3">PF Statement Report</option>
+                                <option value="4">PF Daily Transaction Report</option>
+                                <option value="5">Loan Statement Report</option>
+                                <option value="6">Loan Daily Transaction Report</option>
+                                <option value="7">EMP Balance Confirmation Report</option>
+                            </select>
+
+
+                        </div>
+                       
+
+
+                    </div>
+
+                    <div class="form-group row EmployeeId">
+
+                        <label for="yearSelect" class="col-sm-2">Employee</label>
+
+                        <div class="col-sm-4 input-group">
+                            <input type="text" data-parsley-trigger="keyup" class="form-control membersName" placeholder="Employee Id">
+                            <input type="hidden" name="" id="employeeId" value="0">
+                            <input type="hidden" id="employeeInfoId" name="employeeInfoId" value="" />
+                        </div>
+
+
+
+
+                    </div>
+                    <div class="form-group row yearId">
+
+                        <label for="yearSelect" class="col-sm-2">Select a Year:</label>
+
+                        <div class="col-sm-4 input-group">
+                            <select id="yearSelect" class=" form-control"></select>
+                        </div>
+
+
+
+                    </div>
+                    <div class="form-group row fromdate">
+
+                        <label for="" class="col-sm-2">From Date</label>
+
+                        <div class="col-sm-4 input-group">
+                            <input name="" id="fromDate" class="form-control input-group-sm" placeholder="From Date" readonly />
+                            <div class="input-group-prepend">
+                                <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group row toDate">
+
+                        <label for="" class="col-sm-2">To Date</label>
+                        <div class="col-sm-4 input-group">
+                            <input name="toDate" id="toDate" class="form-control input-group-sm" placeholder="To Date" readonly />
+                            <div class="input-group-prepend">
+                                <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group row">
+                        <div class="col-sm-5">
+                        </div>
+                        <div class="col-sm-2">
+                            <button onclick="PfReport()" type="button" class="btn btn-sm btn-primary" style="background-color:darkcyan; color:white" id="addcoa" value="View PF Statement">PF-Report</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        // $("#fromDate").datepicker();
+
+        $("#fromDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker(new Date());
+        $("#toDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker(new Date());
+
+
+        Common.Ajax('GET', '/global/api/GetApprovePFMemberInfo', [], 'json', ajaxFunctionAllApproveMembers, false);
+
+        var currentYear = new Date().getFullYear();
+
+        // Set the start and end years for the dropdown
+        var startYear = 2010;
+        var endYear = 2030;
+
+        // Populate the dropdown with years
+        for (var year = startYear; year <= endYear; year++) {
+            $('#yearSelect').append('<option value="' + year + '">' + year + '</option>');
+        }
+
+        //Set the default selected year (you can set it to the current year or any other default value)
+        $('#yearSelect').val(currentYear);
+
+        $('.EmployeeId').hide();
+        $('.yearId').hide();
+        $('.fromdate').hide();
+        $('.toDate').hide();
+
+    })
+
+    function ajaxFunctionAllApproveMembers(response) {
+        console.log(response);
+        var GetMemberList = [];
+        $.each(response, function (id, option) {
+            var obj = new Object();
+            obj.key = option.Id;
+            obj.employeeInfoId = option.employeeInfoId;
+            obj.value = option.memberName + "(" + option.employeeCode + ")";
+            obj.employeeCode = option.employeeCode;
+            GetMemberList[GetMemberList.length] = obj;
+        });
+
+        $('.membersName').autocomplete({
+            source: GetMemberList,
+            select: function (event, ui) {
+                $("#membersName").val(ui.item.value);
+                $("#membersCode").val(ui.item.employeeCode);
+                $("#memberId").val(ui.item.key);
+                $("#employeeInfoId").val(ui.item.employeeInfoId);
+            }
+        });
+    }
+
+    function PfReport() {
+        var memId = $("#memberId").val();
+        var fromdate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+      
+        var year = $("#yearSelect").val();
+        var reportTypeId = $("#reportTypeId").val();
+        var employeeInfoId = $("#employeeInfoId").val();
+        if (memId == 0 && reportTypeId == 1) {
+            swal('Warning', 'please try again', 'warning');
+            return false;
+        }
+        else if (reportTypeId == 1) {
+            window.open('/ProvidentFund/PFReport/PFReportByEmpId?empId=' + employeeInfoId + '&year=' + year, '_blank');
+        }
+        else if (reportTypeId == 2) {
+            window.open('/ProvidentFund/PFReport/PFsummarypdf', '_blank');
+        }
+        else if (reportTypeId == 3) {
+            window.open('/ProvidentFund/PFReport/PFStatementByEmpIdAndDate?empId=' + employeeInfoId + '&fromdate=' + fromdate + '&toDate=' + toDate, '_blank');
+        }
+        else if (reportTypeId == 4) {
+            window.open('/ProvidentFund/PFReport/PFDailyTransactionReport?fromdate=' + fromdate + '&toDate=' + toDate, '_blank');
+        }
+        else if (reportTypeId == 5) {
+            window.open('/ProvidentFund/PFReport/LoanStatementByEmpIdAndDate?empId=' + employeeInfoId + '&fromdate=' + fromdate + '&toDate=' + toDate, '_blank');
+        }
+        else if (reportTypeId == 6) {
+            window.open('/ProvidentFund/PFReport/LoanDailyTransactionReport?fromdate=' + fromdate + '&toDate=' + toDate, '_blank');
+        }
+        else if (reportTypeId == 7) {
+            window.open('/ProvidentFund/PFReport/BalanceConfirmationReport?empId=' + employeeInfoId + '&fromdate=' + fromdate + '&toDate=' + toDate, '_blank');
+        }
+        else {
+            swal('Warning', 'please Select Report Type', 'warning');
+            return false;
+        }
+
+    }
+
+    $('#reportTypeId').change(function () {
+        // Get the selected value
+        var selectedValue = $(this).val();
+        // alert(selectedValue)
+
+        if (selectedValue == 1) {
+            $('.EmployeeId').show();
+            $('.yearId').show();
+            $('.fromdate').hide();
+            $('.toDate').hide();
+        }
+        else if (selectedValue == 2) {
+            $('.EmployeeId').hide();
+            $('.yearId').hide();
+            $('.fromdate').hide();
+            $('.toDate').hide();
+        }
+        else if (selectedValue == 3 || selectedValue == 5 || selectedValue == 7) {
+            $('.EmployeeId').show();
+            $('.yearId').hide();
+            $('.fromdate').show();
+            $('.toDate').show();
+        }
+        else if (selectedValue == 4 || selectedValue == 6) {
+            $('.EmployeeId').hide();
+            $('.yearId').hide();
+            $('.fromdate').show();
+            $('.toDate').show();
+        }
+        else {
+            $('.EmployeeId').hide();
+            $('.yearId').hide();
+            $('.fromdate').hide();
+            $('.toDate').hide();
+        }
+
+
+    });
+</script>
+

@@ -1,0 +1,214 @@
+﻿@model CompanyViewModel
+@{
+    ViewData["TitleMD"] = "Company";
+    Layout = "~/Areas/HRPMSMasterData/Views/Shared/_MasterDataForm.cshtml";
+}
+
+
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css" />
+<link href="~/lib/jquery.colorpicker.css" rel="stylesheet" />
+<div class="card" style="width: 100%;">
+    <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+        <h5 class="m-0 font-weight-bold text-primary">Bank Information</h5>
+        <a class='btn btn-info mr-4' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=5701'>@*<i class="fas fa-backward fa-2x "></i>*@<i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+    </div>
+    <div class="card-body">  
+        @*<h5 class="card-title" style="color: black">Company Information</h5>
+        <hr />*@
+        <div class="container">
+            <form asp-area="HRPMSMasterData" asp-controller="Company" asp-action="CompanyEdit" id="FormId" method="post" data-parsley-validate="parsley" enctype="multipart/form-data">
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+
+                <div class="card-body">
+
+
+                    <div class="form-group row">
+                        <input type="hidden" name="companyId" id="CompanyId" value="@Model.allCompany.Id" />
+
+                        <label for="companyName" class="col-sm-2 col-form-label">Bank Name </label>
+                        <div class="col-sm-10">
+                            <input type="text" data-parsley-trigger="keyup" class="form-control" value="@Model.allCompany.companyName" name="companyName" id="companyName">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="ownerName" class="col-sm-2 col-form-label">Bank Owner</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-parsley-trigger="keyup" class="form-control" name="ownerName" id="ownerName" value="@Model.allCompany.ownerName">
+                        </div>
+                    </div>
+
+                    @*<div class="form-group row">
+                        <label for="managerName" class="col-sm-2 col-form-label">Company Manager</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-parsley-trigger="keyup" class="form-control" name="managerName" id="managerName" value="@Model.allCompany.managerName">
+                        </div>
+                    </div>*@
+
+                    <div class="form-group row">
+                        <label for="companyEmail" class="col-sm-2 col-form-label">Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" data-parsley-trigger="keyup" class="form-control" name="companyEmail" id="companyEmail" value="@Model.allCompany.companyEmail">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="officeTelephone" class="col-sm-2 col-form-label">Office Telephone</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-parsley-trigger="keyup" class="form-control" name="officeTelephone" id="officeTelephone" value="@Model.allCompany.officeTelephone">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="addressLine" class="col-sm-2 col-form-label">Address</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-parsley-trigger="keyup" class="form-control" name="addressLine" id="addressLine" value="@Model.allCompany.addressLine">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="dateOfEstablishment" class="col-sm-2 col-form-label">Date Of Establishment</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-parsley-trigger="keyup" class="form-control" name="dateOfEstablishment" id="dateOfEstablishment" value="@Model.allCompany?.dateOfEstablishment?.ToString("dd-MMM-yyyy")" readonly>
+                        </div>
+                    </div>
+
+                    @*<div class="form-group row">
+                        <label for="height" class="col-sm-2 col-form-label">Height</label>
+                        <div class="col-sm-10">
+                            <input type="number" data-parsley-trigger="keyup" class="form-control" name="height" id="height" value="@Model.allCompany?.height">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="width" class="col-sm-2 col-form-label">Width</label>
+                        <div class="col-sm-10">
+                            <input type="number" data-parsley-trigger="keyup" class="form-control" name="width" id="width" value="@Model.allCompany?.width">
+                        </div>
+                    </div>*@
+                    @*<div class="form-group row">
+                            <label for="certificateOfInspir" class="col-sm-2 col-form-label">Certificate Of Incorporation</label>
+                            <div class="col-sm-10">
+                                <input type="text" data-parsley-trigger="keyup" class="form-control" name="certificateOfInspir" id="certificateOfInspir" value="@Model.allCompany?.certificateOfInspir">
+                            </div>
+                        </div>*@
+                    @*<div class="form-group row">
+                            <label for="permission" class="col-sm-2 col-form-label">Permission</label>
+                            <div class="col-sm-10">
+                                <input type="text" data-parsley-trigger="keyup" class="form-control" name="permission" id="permission" value="@Model.allCompany?.permission">
+                            </div>
+                        </div>*@
+                    <div class="form-group row">
+                        <label for="generation" class="col-sm-2 col-form-label">Generation</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-parsley-trigger="keyup" class="form-control" name="generation" id="generation" value="@Model.allCompany?.generation">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="vision" class="col-sm-2 col-form-label">Vision</label>
+                        <div class="col-sm-10">
+                            <textarea type="text" data-parsley-trigger="keyup" class="form-control" name="vision" id="vision" value="">@Model.allCompany?.vision</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="mission" class="col-sm-2 col-form-label">Mission</label>
+                        <div class="col-sm-10">
+                            <textarea type="text" data-parsley-trigger="keyup" class="form-control" name="mission" id="mission" value="">@Model.allCompany?.mission</textarea>
+                        </div>
+                    </div>
+                    @*<div class="form-group row">
+                            <label for="dateOfAgm" class="col-sm-2 col-form-label">Date of AGM</label>
+                            <div class="col-sm-10">
+                                <input type="text" data-parsley-trigger="keyup" class="form-control" name="dateOfAgm" id="dateOfAgm" value="@Model.allCompany?.dateOfAgm" readonly>
+                            </div>
+                        </div>*@
+                    <div class="form-group row">
+                        <label for="tinNo" class="col-sm-2 col-form-label">TIN No</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-parsley-trigger="keyup" class="form-control" name="tinNo" id="tinNo" value="@Model.allCompany?.tinNo">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="binNo" class="col-sm-2 col-form-label">BIN No</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-parsley-trigger="keyup" class="form-control" name="binNo" id="binNo" value="@Model.allCompany?.binNo">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="swiftCode" class="col-sm-2 col-form-label">SWIFT Code</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-parsley-trigger="keyup" class="form-control" name="swiftCode" id="swiftCode" value="@Model.allCompany?.swiftCode">
+                        </div>
+                    </div>
+
+                    @*<div class="form-group row">
+
+                        <label for="labelColor" class="col-sm-2 col-form-label">Label Color</label>
+                        <div class="col-sm-10">
+                            <input type="color" class="form-control" name="labelColor" value="@Model.allCompany?.labelColor">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="companyFilePath" class="col-sm-2 col-form-label">Logo</label>
+                        <div class="col-sm-10">
+                            @*<input type="text" data-parsley-trigger="keyup" class="form-control" name="companyFilePath" id="companyFilePath" value="@Model.companyFilePath">
+                            <img id="user_img" style="width:150px;height:150px;cursor:pointer;" src="/EmpImages/@Model.allCompany.filePath" alt="" class="img-thumbnail float-left">
+                            <input type="hidden" name="companyId" value="@Model.allCompany.Id" />
+                            <input type="hidden" name="companyFilePath" value="@Model.allCompany.filePath" />
+                            <input type="file" title="Photo Upload" id="imagePath" name="companyFilePath" class="btn btn-default btn-sm pull-right" />
+                        </div>
+                    </div>*@
+                </div>
+                <br />
+                <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+                <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+
+@section ScriptsMD{
+    <script src="~/lib/jquery.colorpicker.js"></script>
+    
+    <script>
+        $(document).ready(function () {
+
+
+            $("#my_color_picker").colorpicker();
+
+
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to Update this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+            });
+            $("#imagePath").change(function () {
+                readURL(this);
+            });
+            $('#dateOfEstablishment').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100" });
+            //$('#dateOfAgm').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100" });
+            //$('#permission').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100" });
+            //$('#certificateOfInspir').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100" });
+
+
+        });
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var filerdr = new FileReader();
+                filerdr.onload = function (e) {
+                    $('#user_img').attr('src', e.target.result);
+                    //$('#user_img_current').attr('src', e.target.result);
+                }
+                filerdr.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+    </script>
+}
+

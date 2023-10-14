@@ -1,0 +1,112 @@
+﻿@{
+    ViewData["Title"] = "Posting Log Report";
+
+}
+
+@section Style{
+    <style>
+        .redStar {
+            color: red;
+        }
+
+        ul.ui-autocomplete {
+            z-index: 99999999;
+        }
+    </style>
+}
+@*<link href="~/Assets/FontAwesomeNew/css/all.css" rel="stylesheet" />*@
+
+<div class="card" style="width: 100%;" id="div1">
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+            <h5 class="card-title" style="color: black; margin: 8px;">Posting Report</h5>
+        </div>
+        <div class="col-md-8">
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info mr-4' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=10&perentId=6254'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="card">
+			<div class="card-body">
+				@if (User.IsInRole("CBS"))
+				{
+					<div class="container" id="intimebox">
+						<form>
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="form-group row">
+										<label for="reportType" class="col-sm-4 col-form-label">Report Type</label>
+										<div class="col-sm-8">
+											<select class="form-control" id="reportType">
+												<option value="">Choose Report Type</option>
+												<option value="PostingLog" selected>Posting Log Report</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="salaryPeriodId" class="col-sm-4 col-form-label">Salary Period</label>
+										<div class="col-sm-8">
+											<select class="form-control" id="salaryPeriodId">
+												<option value="" selected>Choose Salary Period</option>
+												<option value="55">February-2022</option>
+												<option value="57">March-2022</option>
+												<option value="56">March-2022 (Noboborsho)</option>
+												<option value="58">March-2022 (Biju)</option>
+												<option value="59">April-2022</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="type" class="col-sm-4 col-form-label">Type</label>
+										<div class="col-sm-8">
+											<select class="form-control" id="type">
+												<option value="ALL" selected>ALL</option>
+												<option value="VOUCHER">VOUCHER</option>
+												<option value="SALARY">SALARY</option>
+												<option value="UNION">UNION-OFFICER Ass.</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group row">
+										<label for="status" class="col-sm-4 col-form-label">Status</label>
+										<div class="col-sm-8">
+											<select class="form-control" id="status">
+												<option value="ALL" selected>ALL</option>
+												<option value="Y">SUCCESS</option>
+												<option value="N">FAILED</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<hr>
+							<button type="button" id="submit" value="Submit" class="btn btn-success " style="float:right; margin-top:5px;" data-toggle='tooltip' title='Save'><i class="fas fa-save"></i> Submit</button>
+						</form>
+					</div>
+				}
+			</div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    @*<script src="~/Assets/FontAwesomeNew/js/all.js"></script>*@
+    <script>
+        $(document).ready(function () {
+            $('#submit').on('click', function () {
+                var rptType = $('#reportType').val();
+                var periodId = $('#salaryPeriodId').val();
+                var type = $('#type').val();
+                var status = $('#status').val();
+                if (rptType == 'PostingLog') {
+                    window.open('/CBSPosting/GetPostingLogsPdf?periodId=' + periodId + '&type=' + type + '&successStatus=' + status);
+                }
+            })
+        });
+
+    </script>
+}
+

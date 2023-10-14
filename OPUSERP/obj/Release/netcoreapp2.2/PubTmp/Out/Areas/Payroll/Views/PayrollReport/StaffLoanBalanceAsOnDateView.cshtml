@@ -1,0 +1,166 @@
+﻿@model PayrollReportViewModel
+@{
+	ViewData["Title"] = "StaffLoanBalanceAsOnDateView";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+
+<style>
+
+	.print-card-body {
+		width: 100%;
+		padding-bottom: 10px;
+	}
+
+	.vartical-table th {
+		width: 25%;
+	}
+
+	.vartical-table td {
+		width: 25%;
+	}
+
+	.table td, .table th {
+		padding: .3rem;
+		font-size: 14px;
+		border: 1px solid black !important;
+	}
+
+	table {
+		page-break-inside: auto;
+		border-collapse: collapse;
+		border: 1px solid black !important;
+	}
+
+	tr {
+		page-break-inside: avoid;
+		page-break-after: auto;
+		border: 1px solid black !important;
+	}
+
+	thead {
+		display: table-header-group;
+		border: 1px solid black !important;
+	}
+
+	tfoot {
+		display: table-footer-group;
+		border: 1px solid black !important;
+	}
+
+	h6 {
+		font-size: 14px;
+		background-color: gray;
+		color: white !important;
+		padding: 3px;
+	}
+</style>
+
+
+<div class="print-card" style="width: 100%;">
+	<div class="print-card-body">
+
+		<div class="container-fluid">
+			<div class="fa-pull-right">
+				<p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+			</div>
+			<div class="row" style="padding-top:0px;">
+				<div class="col-2">
+					<img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="BDBL Logo" style="height:80px;" />
+				</div>
+				<div class="col-8">
+					<div style="color:black;text-align:center;">
+						<h3 style="font-size:20px;">@Model.companies.FirstOrDefault()?.companyName</h3>
+						<h3 style="font-size:18px;">Central Accounts Department</h3>
+						<h3 style="font-size:18px;">@(Model.staffLoanAsOn.FirstOrDefault()?.branchName == null ? "All Branch & zone" : (Model.hrBranchinfo?.branchName==null?Model.hrBranchinfo?.location?.branchUnitName: Model.hrBranchinfo?.branchName))</h3>
+						<h3 style="font-size:18px;">Staff Loan Balance As On @Convert.ToDateTime(ViewBag.asonDate).ToString("dd MMM yyyy")</h3>
+						<br />
+					</div>
+				</div>
+				<div class="col-2">
+
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid ">
+			<div class="col-12">
+				<h3 style="font-size:18px;color:black"> </h3>
+			</div>
+		</div>
+		<br />
+		<div class="container-fluid" style="color:black;">
+			@{
+				decimal grandTotal = 0;
+			}
+			@foreach (var item in Model.designations)
+			{
+				if (Model.staffLoanAsOn.Where(x => x.designationName == item.designationName).Count() > 0)
+				{
+					<h5>@item.designationName</h5>
+					<table class="table table-bordered">
+						<thead>
+							<tr style="text-align: center;">
+								<th>E.Id</th>
+								<th>Name</th>
+								<th>A/C No.</th>
+								<th>Loan Type</th>
+								<th>Int. Rate</th>
+								<th>Principal</th>
+								<th>Interest</th>
+								<th>Charge</th>
+								<th>Total</th>
+							</tr>
+						</thead>
+						<tbody>
+							@{
+								int count = 0;
+								decimal totalPrincipal = 0;
+								decimal totalInterest = 0;
+								decimal totalCharge = 0;
+								decimal totalTotal = 0;
+
+							}
+							@foreach (var data in Model.staffLoanAsOn.Where(x => x.designationName == item.designationName))
+							{
+								<tr>
+									<td>@data.empCode</td>
+									<td>@data.employeeName</td>
+									<td style="text-align: center;">@data.accountNo</td>
+									<td style="text-align: center;">@data.loanType</td>
+									<td style="text-align: center;">
+										@data.interestRate?.ToString("N0")
+									</td>
+									<td style="text-align: right;">@data.Principal?.ToString("N2")</td>
+									<td style="text-align: right;">@data.Interest?.ToString("N2")</td>
+									<td style="text-align: right;">@data.Charge?.ToString("N2")</td>
+									<td style="text-align: right; width: 15%;">@data.Total?.ToString("N2")</td>
+								</tr>
+								count++;
+								totalPrincipal += Convert.ToDecimal(data.Principal);
+								totalInterest += Convert.ToDecimal(data.Interest);
+								totalCharge += Convert.ToDecimal(data.Charge);
+								totalTotal += Convert.ToDecimal(data.Total);
+							}
+							<tr>
+								<td style="text-align: right;" colspan="5">Total</td>
+								<td style="text-align: right;">@totalPrincipal.ToString("N2")</td>
+								<td style="text-align: right;">@totalInterest.ToString("N2")</td>
+								<td style="text-align: right;">@totalCharge.ToString("N2")</td>
+								<td style="text-align: right; width: 15%;">@totalTotal.ToString("N2")</td>
+							</tr>
+						</tbody>
+					</table>
+
+					grandTotal += totalTotal;
+				}
+			}
+			<table class="table table-bordered">
+				<tr style="font-weight: bold;">
+					<td style="text-align: right;" colspan="8">Grand Total</td>
+					<td style="text-align: right; width: 15%;">@grandTotal.ToString("N2")</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+

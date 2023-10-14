@@ -1,0 +1,202 @@
+﻿@model SalaryProcessViewModel
+@{
+    ViewData["Title"] = "Salary Contribution";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <style>
+        
+    </style>
+
+<div class="card" style="width: 100%;">
+    <div class="card-body">
+        <h5 class="card-title" style="color: black">Collect Payroll Contribution</h5>
+        <div style="float: right; margin: 16px;">
+            <a class='btn btn-outline-info' style="margin-top: -104px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1014&perentId=6011'><i class="fas fa-backward"></i></a>
+
+        </div>
+        <hr>
+        <div class="container">
+            <form id="frmSalaryProcess" method="post" data-parsley-validate="parsley">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="row">
+
+                    <div class="col-6">
+                        <div class="row">
+                            <label for="salaryPeriodId" class="col-md-3 col-form-label">Salary Period <span style="color:red;">*</span></label>
+                            <div class="col-md-9">
+                                <select name="salaryPeriodId" id="salaryPeriodId" class="form-control" data-parsley-required="true">
+                                    <option value="">Select Salary Period</option>
+                                    @*@foreach (var data in Model.salaryPeriods.Where(x => x.salaryTypeId == 1 && x.lockLabel != 5 && x.lockLabel != 6))*@
+                                    @foreach (var data in Model.salaryPeriods.Where(x => x.salaryTypeId == 1))
+                                    {
+                                        <option value="@data.Id">@data.periodName</option>
+                                    }
+                                </select>
+                                <input type="hidden" name="lockLabel" value="1" />
+                            </div>
+                        </div>
+                                               
+                    </div>
+                    <div class="col-6">
+
+                        <button type="button" id="btnSearch" onclick="getCollection()" class="btn btn-success btn-sm" style="width:80px;float:left;">Search</button>
+
+                        @*<div class="form-group row">
+                            <label for="year" class="col-sm-4 col-form-label">Year <span style="color:red;">*</span></label>
+                            <div class="col-sm-8">
+                                <select class="form-control" name="" id="year" data-parsley-required="true">
+                                    <option class="form-control" value="">Please Select Year</option>
+                                    <option class="form-control" value="2023">2023</option>
+                                    <option class="form-control" value="2022">2022</option>
+                                    <option class="form-control" value="2021">2021</option>
+                                    <option class="form-control" value="2020">2020</option>
+                                </select>
+                            </div>
+                        </div>*@
+                    </div>
+                   
+                </div>
+                <hr />
+                @*<button type="button" id="btnSaveProcess" onclick="SavesalaryProcess()" class="btn btn-success btn-sm" style="width:80px;float:right;">Collect</button>*@
+                <div class="row">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-md-3">
+                        
+                            </div>
+                            <div class="col-md-9">
+                                <button type="button" id="btnSaveProcess" onclick="SavesalaryProcess()" class="btn btn-success" style="width:80px;">Collect</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="row clearfix">
+                    <div class="col-12">
+                        <div class="card mb-4">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold">Employees Salary Contribution</h6>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-striped table-bordered" id="SalaryContributionspouseTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Serial No</th>
+                                            <th>Employee Code</th>
+                                            <th>Employee Name</th>
+                                            <th>Department</th>
+                                            <th>Designation</th>
+                                            @*<th>Month</th>*@
+                                            <th>Year</th>
+                                            <th>Own Contribution</th>
+                                            <th>Company Contribution</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+                <button type="button" id="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+    <script>
+
+        function SavesalaryProcess() {
+                    
+        var salaryPeriodId = $("#salaryPeriodId option:selected").val();
+        if (salaryPeriodId == '' || salaryPeriodId == 'undefined'){
+            alert('Please select salary period');
+            return false;
+        }
+
+        var dtTable = $("#SalaryContributionspouseTable");
+        var tableBody = dtTable.find('tbody');
+        tableBody.empty();
+                       
+        swal({
+            title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+        }).then(function () {
+            Common.Ajax('GET', '/Payroll/SalaryProcess/CollectPayrollContributionByPeriodId?salaryPeriodId=' + salaryPeriodId, [], 'json', ajaxContributionCollection, false);
+            Common.Ajax('GET', '/Payroll/SalaryProcess/GetPayrollContributionByPeriodId?salaryPeriodId=' + salaryPeriodId, [], 'json', ajaxGetProcessedData, false);
+        });
+    }
+
+    function getCollection(){
+        
+        var salaryPeriodId = $("#salaryPeriodId option:selected").val();
+        if (salaryPeriodId == '' || salaryPeriodId == 'undefined'){
+            alert('Please select salary period');
+            return false;
+        }
+        Common.Ajax('GET', '/Payroll/SalaryProcess/GetPayrollContributionByPeriodId?salaryPeriodId=' + salaryPeriodId, [], 'json', ajaxGetProcessedData, false);
+    }
+
+
+    function ajaxContributionCollection(response) {
+        alert(response.Message);
+    }
+    function ajaxGetProcessedData(response) {
+                            
+                var option = "";
+            
+                $("#SalaryContributionspouseTable").DataTable().destroy();
+                var dtTable = $("#SalaryContributionspouseTable");
+                var tableBody = dtTable.find('tbody');
+                tableBody.empty();
+                            
+                var serialNo = 0;
+                $.each(response, function (key, value) {
+
+                    //var total = 0;
+                    serialNo = serialNo + 1;
+                    var dept = '';
+
+                    //total = value.own == null ? 0 : value.own + value.company == null ? 0 : value.company;
+                    dept =  value.department == null ? '' :  value.department;
+
+                    var trHtml = '<tr>' +
+                        '<td>' + serialNo + '</td>' +
+                        '<td>' + value.employeeCode + '</td>' +
+                        '<td>' + value.employeeName + '</td>' +
+                        '<td>' + dept + '</td>' +
+                        '<td>' + value.lastDesignation + '</td>' +
+                        '<td>' + value.year + '</td>' +
+                        '<td>' + value.own + '</td>' +
+                        '<td>' + value.company + '</td>' +
+                        '<td>' + value.Total + '</td>' +
+                        '</tr>';
+
+                    tableBody.append(trHtml);
+                });      
+        }
+
+
+        $(document).ready(function () {
+
+            //Asad Commented On 16.09.2023: Alternative is done At Collection Button...
+            //$("#submit").click(function () {
+            //    swal({
+            //        title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+            //    }).then(function () {
+            //        $("#submitbtn").click();
+            //    });
+            //});            
+        });
+
+        
+    </script>

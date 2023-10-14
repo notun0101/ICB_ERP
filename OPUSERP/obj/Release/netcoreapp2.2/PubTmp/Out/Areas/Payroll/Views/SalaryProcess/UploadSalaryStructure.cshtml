@@ -1,0 +1,85 @@
+﻿@model PayrollReportViewModel
+
+@{
+    ViewData["Title"] = "Upload";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card" style="width: 100%;">
+
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; border-right: 1px solid #D9D8DB">
+            <h5 class="card-title" style="color: black; margin: 0;">Upload Salary Structure</h5>
+        </div>
+        <div class="col-md-8">
+            <div style="float: left;">
+                <div style="padding: 5px;text-align: center;">
+                    <p style="margin: 0; text-transform: uppercase;"</p>
+                    <p style="margin: 0"></p>
+                </div>
+            </div>
+            <div style="float: right; margin: 16px;">
+                @*<a class='btn btn-info mr-1' style="" data-toggle='tooltip' title='Go Back' href='/HRPMSEmployee/Photograph/EditGrid/@Model.employeeInfo?.Id'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>*@
+                @*<a class='btn btn-info' style="" data-toggle='tooltip' title='Print' target='_blank' href='/HRPMSEmployee/InfoView/pdspdf/@Model.employeeInfo?.Id'><i class='fa fa-print'></i></a>*@
+
+            </div>
+        </div>
+    </div>
+    <div class="container">
+
+        <form>
+            <div class="form-group row">
+                @*<div class="col-5">
+                        <img id="user_img_current" style="width:200px;height:200px" src="~/@Model.photograph.url" alt="" class="img-thumbnail float-left">
+                        <input type="hidden" id="hiddenFile" />
+                    </div>*@
+                <div class="col-12 justify-content-center">
+                    <input type="hidden" name="queryString" id="queryString" value="" />
+                    <img id="user_img" style="width:200px;height:200px;margin-left:35%;margin-top:1%;" src="" alt="" class="img-thumbnail float-left">
+                    <input type="file" style="cursor:pointer;" title="Photo Upload" id="imagePath" data-parsley-required="true" name="empPhoto" class="btn btn-default btn-sm pull-right" />
+                    <span style="float:left;color:red;" class="redStar">*</span>
+                </div>
+            </div>
+
+            @*<button type="submit" id="submit1" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:1%;"><i class="fas fa-save"></i></button>*@
+            <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+            <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+        </form>
+    </div>
+</div>
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var filerdr = new FileReader();
+                filerdr.onload = function (e) {
+                    $('#user_img').attr('src', e.target.result);
+                    $('#user_img_current').attr('src', e.target.result);
+                }
+                filerdr.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $(document).ready(function () {
+            var pathname = window.location.pathname;
+            $('#queryString').val(pathname);
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+            });
+
+            $("#btngle").click(function () {
+                $("#myDIV").slideToggle("slow");
+            });
+
+            $("#photo").addClass("active");
+            $("#imagePath").change(function () {
+                readURL(this);
+            });
+        });
+    </script>
+
+
+

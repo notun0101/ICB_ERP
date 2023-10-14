@@ -1,0 +1,222 @@
+﻿
+@{
+    ViewData["Title"] = "ReportPFStatement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4 bg-light">
+
+
+            <div class="card-body">
+                <h5 class="m-0 font-weight-bold text-primary">Find PF Statement</h5>
+                <hr />
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <input type="hidden" id="id" name="id" />
+                        <select id="allDate" name="" formControlName="" class="form-control input-sm">
+                            <option value="">All Dates</option>
+                            <option value="Custom">Custom</option>
+                            <option value="Today">Today</option>
+                        </select>
+                        <br />
+
+                        <input type="text" data-parsley-trigger="keyup" class="form-control" placeholder="Employee Id" name="employeeName" id="employeeName">
+                        <input type="hidden" name="" id="employeeId" value="0">
+                    </div>
+                    <div class="col-sm-4 input-group">
+                        <input name="fromDate" id="fromDate" class="form-control input-group-sm" placeholder="From Date" readonly />
+                        <div class="input-group-prepend">
+                            <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 input-group">
+                        <input name="toDate" id="toDate" class="form-control input-group-sm" placeholder="To Date" readonly />
+                        <div class="input-group-prepend">
+                            <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <button onclick="search()" class="btn btn-sm btn-primary" style="background-color:darkcyan; color:white" id="addcoa" value="View PF Statement">Run Report</button>
+            </div>
+        </div>
+        <br />
+        <div class="row clearfix">
+            <div class="col-12">
+                <div class="card mb-lg-4">
+
+                    <!-- Card Body -->
+                    <div class="card-body" style="padding:40px">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h4 align="center" class="text-success"><strong>Employees' Provident Fund Trust of UBL Finance</strong></h4>
+                                <p align="center">Address: Gulshan<br><strong>PF Statement</strong></p>
+                            </div>
+
+                            <div class="table-responsive m-t">
+                                <table class="table invoice-table" style="width:60%">
+                                    <tbody>
+                                        <tr>
+                                            <th>Employee ID:</th>
+                                            <td id="empId" ></td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Name of the Member:</th>
+                                            <td id="memberName"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Designation:</th>
+                                            <td id="designation"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Date of Joining PF:</th>
+                                            <td>12/4/2019</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Date of Joining:</th>
+                                            <td>12/4/2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th width="5%">Sl</th>
+                                            <th width="50%">Particulars</th>
+                                            <th>Opening Balance</th>
+                                            <th>Transaction during the period</th>
+                                            <th>Closing Balance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Member's Contribution</td>
+                                            <td>135,831</td>
+                                            <td>61,218</td>
+                                            <td>197,049</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Company's Contribution</td>
+                                            <td>135,831</td>
+                                            <td>61,218</td>
+                                            <td>197,049</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Revenue Surplus</td>
+                                            <td>16,950</td>
+                                            <td>-</td>
+                                            <td>16,950</td>
+                                        </tr>
+
+                                        <tr>
+
+                                            <td colspan="2" align="right"><strong>Total:</strong></td>
+                                            <td><strong>288,612</strong></td>
+                                            <td><strong>122,436</strong></td>
+                                            <td><strong>411,048</strong></td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class=""><strong>Note*</strong>Revenue surplus will be credited after the year end calculation.</div>	<br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+            $("#fromDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+            $("#toDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+            Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo', [], 'json', ajaxGetEmployees);
+
+        });
+
+        function search() {
+            var empId = $("#employeeId").val();
+            var AllDate = $("#allDate").val();
+            var FromDate = $("#fromDate").val();
+            var ToDate = $("#toDate").val();
+
+            if (empId == 0) {
+                swal('Warning', 'please try again', 'warning');
+                return false;
+            }
+            if (AllDate == "") {
+                swal('Warning', 'please try again', 'warning');
+                return false;
+            }
+
+            if (FromDate == "") {
+                swal('Warning', 'please try again', 'warning');
+                return false;
+            }
+            if (ToDate == "") {
+                swal('Warning', 'please try again', 'warning');
+                return false;
+            }
+            var url = '/global/api/GetAllEmployessbyId/' + empId;
+            Common.Ajax('GET', url, [], 'json', ajaxGetEmployeesbyId);
+
+        }
+
+
+        function ajaxGetEmployees(response) {
+            console.log(response);
+            var GetEmployeesList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+                obj.name = option.nameEnglish;
+                obj.designation = option.designation;
+                obj.department = option.department.deptName;
+                obj.nationalID = option.nationalID;
+                obj.dateOfBirth = option.dateOfBirth;
+                GetEmployeesList[GetEmployeesList.length] = obj;
+            });
+
+            $('#employeeName').autocomplete({
+                source: GetEmployeesList,
+                select: function (event, ui) {
+                    $("#employeeName").val(ui.item.value);
+                    $("#memberName").val(ui.item.name);
+                    $("#Designation").val(ui.item.designation);
+                    $("#department").val(ui.item.department);
+                    $("#nationalID").val(ui.item.nationalID);
+                    $("#dateOfBirth").val(ui.item.dateOfBirth);
+                    $("#employeeId").val(ui.item.key);
+                }
+            });
+        }
+
+        function ajaxGetEmployeesbyId(response) {
+            console.log(response);
+            $("#memberName").html(response.nameEnglish);
+            $("#empId").html(response.nameEnglish + "(" + response.employeeCode + ")");
+            $("#designation").html(response.designation);
+        }
+
+    </script>
+}

@@ -1,0 +1,618 @@
+﻿@model PayrollReportViewModel
+@{
+    ViewData["Title"] = "Staff Loan Report";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<style>
+
+    .print-card-body {
+        width: 100%;
+        padding-bottom: 10px;
+    }
+
+    .vartical-table th {
+        width: 25%;
+    }
+
+    .vartical-table td {
+        width: 25%;
+    }
+
+    .table td, .table th {
+        padding: .3rem;
+        font-size: 14px;
+        border: 1px solid black !important;
+    }
+
+    table {
+        page-break-inside: auto;
+        border-collapse: collapse;
+        border: 1px solid black !important;
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+        border: 1px solid black !important;
+    }
+
+    thead {
+        display: table-header-group;
+        border: 1px solid black !important;
+    }
+
+    tfoot {
+        display: table-footer-group;
+        border: 1px solid black !important;
+    }
+
+    h6 {
+        font-size: 14px;
+        background-color: gray;
+        color: white !important;
+        padding: 3px;
+    }
+</style>
+
+
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+
+        <div class="container-fluid">
+            <div class="fa-pull-right">
+                <p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+            </div>
+            <div class="row" style="padding-top:0px;">
+                <div class="col-2">
+                    <img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="BDBL Logo" style="height:80px;" />
+                </div>
+                <div class="col-8">
+                    <div style="color:black;text-align:center;">
+                        <h3 style="font-size:20px;">@Model.companies.FirstOrDefault()?.companyName</h3>
+                        <h3 style="font-size:18px;"> Central Accounts Department</h3>
+                        <h3 style="font-size:18px;"> Staff Loan Section</h3>
+                        <h3 style="font-size:18px;"> @Model.staffLoanSchedules.FirstOrDefault()?.branchName</h3>
+                        <br />
+                    </div>
+                </div>
+                <div class="col-2">
+
+                </div>
+            </div>
+
+            <div class="row" style="padding-top:0px; color: black;">
+                <div class="col-6">
+                    FY: Transaction Details
+                </div>
+                <div class="col-6 text-right">
+                    Date Range: @ViewBag.startDate to @ViewBag.endDate
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid ">
+            <div class="col-12">
+                <h3 style="font-size:18px;color:black"> </h3>
+            </div>
+        </div>
+        <br />
+        <div class="container-fluid" style="color:black;">
+            @foreach (var loanId in Model.staffLoanSchedules.GroupBy(x => x.staffLoanId).Select(x => x.Key).Distinct())
+            {
+                <table class="table table bordered" style="border:1px solid black !important; border-top: none !important;">
+                    <thead>
+                        <tr style="border: none !important;">
+                            <th colspan="4" style="border: none !important;">
+                                Id & Name: (@Model.staffLoanEmployees.Where(x => x.loanId == loanId).Select(x => x.empCode).FirstOrDefault()), @Model.staffLoanEmployees.Where(x => x.loanId == loanId).Select(x => x.empName).FirstOrDefault()
+                            </th>
+                            <th colspan="5" class="text-right" style="border: none !important;">
+                                Loan No/Type: (@Model.staffLoanEmployees.Where(x => x.loanId == loanId).Select(x => x.loanNo).FirstOrDefault()), @Model.staffLoanEmployees.Where(x => x.loanId == loanId).Select(x => x.loanType).FirstOrDefault()
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>Date</th>
+                            <th>Salary Period</th>
+                            <th>Particular</th>
+                            <th>Debit</th>
+                            <th>Credit</th>
+                            <th>Principal</th>
+                            <th>Interest</th>
+                            <th>Charge</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @{
+                            int i = 1;
+                            decimal principal = 0;
+                            decimal interest = 0;
+                            decimal charge = 0;
+                            decimal total = 0;
+
+                            var count = Model.staffLoanSchedules.Where(x => x.staffLoanId == loanId).Select(x => x.loanType).Distinct().Count();
+							}
+
+
+                        @if (count > 1)
+                        {
+                            if (Model.staffLoanSchedules.Where(x => x.staffLoanId == loanId).Where(x => x.loanType == "MCA").Count() > 0)
+                            {
+                                <h4>Motor Cycle Loan</h4>
+                                @foreach (var item in Model.staffLoanSchedules.Where(x => x.staffLoanId == loanId).Where(x => x.loanType == "MCA"))
+                                {
+                                    if (item.particular == "Loan Installment")
+                                    {
+                                        principal -= Convert.ToDecimal(item.principal);
+                                        total -= Convert.ToDecimal(item.principal);
+                                        <tr>
+                                            <td></td>
+                                            <td style="text-align: center;">@item.periodName</td>
+                                            <td style="text-align: center;">Recovery From Salary</td>
+                                            <td style="text-align: center;">@item.debit</td>
+                                            <td style="text-align: center;">@item.credit</td>
+                                            <td style="text-align: right;">@principal</td>
+                                            <td style="text-align: center;">@interest</td>
+                                            <td style="text-align: center;">@charge</td>
+                                            <td style="text-align: right;">@total</td>
+                                        </tr>
+                                    }
+                                    else if (item.particular == "Loan Recovery")
+                                    {
+                                        principal -= Convert.ToDecimal(item.principal);
+                                        total -= Convert.ToDecimal(item.principal);
+                                        <tr>
+                                            <td></td>
+                                            <td style="text-align: center;">@item.periodName</td>
+                                            <td style="text-align: center;">@item.particular</td>
+                                            <td style="text-align: center;">@item.debit</td>
+                                            <td style="text-align: center;">@principal</td>
+                                            <td style="text-align: right;">@item.principal</td>
+                                            <td style="text-align: center;">@interest</td>
+                                            <td style="text-align: center;">@charge</td>
+                                            <td style="text-align: right;">@total</td>
+                                        </tr>
+                                    }
+                                    else if (item.particular == "Interest Charged")
+                                    {
+                                        interest += Convert.ToDecimal(item.interest);
+                                        total += Convert.ToDecimal(item.interest);
+                                        <tr>
+                                            <td></td>
+                                            <td style="text-align: center;">@item.periodName</td>
+                                            <td style="text-align: center;">@item.particular</td>
+                                            <td style="text-align: center;">@item.debit</td>
+                                            <td style="text-align: center;">@item.credit</td>
+                                            <td style="text-align: right;">@item.principal</td>
+                                            <td style="text-align: center;">@item.interest</td>
+                                            <td style="text-align: center;">@item.charge</td>
+                                            <td style="text-align: right;">@item.total</td>
+                                        </tr>
+                                    }
+                                    else if (item.particular == "Opening Balance")
+                                    {
+                                        principal += Convert.ToDecimal(item.principal);
+                                        interest += Convert.ToDecimal(item.interest);
+                                        charge += Convert.ToDecimal(item.charge);
+                                        total += Convert.ToDecimal(item.total);
+                                        <tr>
+                                            <td></td>
+                                            <td style="text-align: center;">@item.periodName</td>
+                                            <td style="text-align: center;">@item.particular</td>
+                                            <td style="text-align: center;">@item.debit</td>
+                                            <td style="text-align: center;">@item.credit</td>
+                                            <td style="text-align: right;">@item.principal</td>
+                                            <td style="text-align: center;">@item.interest</td>
+                                            <td style="text-align: center;">@item.charge</td>
+                                            <td style="text-align: right;">@item.total</td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+
+                                    }
+
+                                    i++;
+                                }
+                            }
+                            @if (Model.staffLoanSchedules.Where(x => x.staffLoanId == loanId).Where(x => x.loanType == "MCAR").Count() > 0)
+                            {
+                                <h4>Motor Car Loan</h4>
+                                @foreach (var item in Model.staffLoanSchedules.Where(x => x.staffLoanId == loanId).Where(x => x.loanType == "MCAR"))
+                                {
+                                    if (item.particular == "Loan Installment")
+                                    {
+                                        principal -= Convert.ToDecimal(item.principal);
+                                        total -= Convert.ToDecimal(item.principal);
+                                        <tr>
+                                            <td></td>
+                                            <td style="text-align: center;">@item.periodName</td>
+                                            <td style="text-align: center;">Recovery From Salary</td>
+                                            <td style="text-align: center;">@item.debit</td>
+                                            <td style="text-align: center;">@item.principal</td>
+                                            <td style="text-align: right;">@principal</td>
+                                            <td style="text-align: center;">@interest</td>
+                                            <td style="text-align: center;">@charge</td>
+                                            <td style="text-align: right;">@total</td>
+                                        </tr>
+                                    }
+                                    else if (item.particular == "Loan Recovery")
+                                    {
+                                        principal -= Convert.ToDecimal(item.principal);
+                                        total -= Convert.ToDecimal(item.principal);
+                                        <tr>
+                                            <td></td>
+                                            <td style="text-align: center;">@item.periodName</td>
+                                            <td style="text-align: center;">@item.particular</td>
+                                            <td style="text-align: center;">@item.debit</td>
+                                            <td style="text-align: center;">@item.principal</td>
+                                            <td style="text-align: right;">@principal</td>
+                                            <td style="text-align: center;">@interest</td>
+                                            <td style="text-align: center;">@charge</td>
+                                            <td style="text-align: right;">@total</td>
+                                        </tr>
+                                    }
+                                    else if (item.particular == "Interest Charged")
+                                    {
+                                        interest += Convert.ToDecimal(item.interest);
+                                        total += Convert.ToDecimal(item.interest);
+                                        <tr>
+                                            <td></td>
+                                            <td style="text-align: center;">@item.periodName</td>
+                                            <td style="text-align: center;">@item.particular</td>
+                                            <td style="text-align: center;">@item.interest</td>
+                                            <td style="text-align: center;">@item.credit</td>
+                                            <td style="text-align: right;">@principal</td>
+                                            <td style="text-align: center;">@interest</td>
+                                            <td style="text-align: center;">@charge</td>
+                                            <td style="text-align: right;">@total</td>
+                                        </tr>
+                                    }
+                                    else if (item.particular == "Opening Balance")
+                                    {
+                                        principal += Convert.ToDecimal(item.principal);
+                                        interest += Convert.ToDecimal(item.interest);
+                                        charge += Convert.ToDecimal(item.charge);
+                                        total += Convert.ToDecimal(item.total);
+                                        <tr>
+                                            <td></td>
+                                            <td style="text-align: center;">@item.periodName</td>
+                                            <td style="text-align: center;">@item.particular</td>
+                                            <td style="text-align: center;">@item.debit</td>
+                                            <td style="text-align: center;">@item.credit</td>
+                                            <td style="text-align: right;">@item.principal</td>
+                                            <td style="text-align: center;">@item.interest</td>
+                                            <td style="text-align: center;">@item.charge</td>
+                                            <td style="text-align: right;">@item.total</td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+
+                                    }
+
+                                    i++;
+                                }
+                            }
+                            @if (Model.staffLoanSchedules.Where(x => x.staffLoanId == loanId).Where(x => x.loanType == "CL").Count() > 0)
+                            {
+                                <h4>Computer Loan</h4>
+                                @foreach (var item in Model.staffLoanSchedules.Where(x => x.staffLoanId == loanId).Where(x => x.loanType == "CL"))
+                                {
+                                    if (item.particular == "Loan Installment")
+                                    {
+                                        principal -= Convert.ToDecimal(item.principal);
+                                        total -= Convert.ToDecimal(item.principal);
+                                        <tr>
+                                            <td></td>
+                                            <td style="text-align: center;">@item.periodName</td>
+											<td style="text-align: center;">Recovery From Salary</td>
+                                            <td style="text-align: center;">@item.debit</td>
+                                            <td style="text-align: center;">@item.principal</td>
+                                            <td style="text-align: right;">@principal</td>
+                                            <td style="text-align: center;">@interest</td>
+                                            <td style="text-align: center;">@charge</td>
+                                            <td style="text-align: right;">@total</td>
+                                        </tr>
+                                    }
+                                    else if (item.particular == "Loan Recovery")
+                                    {
+                                        principal -= Convert.ToDecimal(item.principal);
+                                        total -= Convert.ToDecimal(item.principal);
+                                        <tr>
+                                            <td></td>
+                                            <td style="text-align: center;">@item.periodName</td>
+                                            <td style="text-align: center;">@item.particular</td>
+                                            <td style="text-align: center;">@item.debit</td>
+                                            <td style="text-align: center;">@item.principal</td>
+                                            <td style="text-align: right;">@principal</td>
+                                            <td style="text-align: center;">@interest</td>
+                                            <td style="text-align: center;">@charge</td>
+                                            <td style="text-align: right;">@total</td>
+                                        </tr>
+                                    }
+                                    else if (item.particular == "Interest Charged")
+                                    {
+                                        interest += Convert.ToDecimal(item.interest);
+                                        total += Convert.ToDecimal(item.interest);
+                                        <tr>
+                                            <td></td>
+                                            <td style="text-align: center;">@item.periodName</td>
+                                            <td style="text-align: center;">@item.particular</td>
+                                            <td style="text-align: center;">@item.interest</td>
+                                            <td style="text-align: center;">@item.credit</td>
+                                            <td style="text-align: right;">@principal</td>
+                                            <td style="text-align: center;">@interest</td>
+                                            <td style="text-align: center;">@charge</td>
+                                            <td style="text-align: right;">@total</td>
+                                        </tr>
+                                    }
+                                    else if (item.particular == "Opening Balance")
+                                    {
+                                        principal += Convert.ToDecimal(item.principal);
+                                        interest += Convert.ToDecimal(item.interest);
+                                        charge += Convert.ToDecimal(item.charge);
+                                        total += Convert.ToDecimal(item.total);
+                                        <tr>
+                                            <td></td>
+                                            <td style="text-align: center;">@item.periodName</td>
+                                            <td style="text-align: center;">@item.particular</td>
+                                            <td style="text-align: center;">@item.debit</td>
+                                            <td style="text-align: center;">@item.credit</td>
+                                            <td style="text-align: right;">@item.principal</td>
+                                            <td style="text-align: center;">@item.interest</td>
+                                            <td style="text-align: center;">@item.charge</td>
+                                            <td style="text-align: right;">@item.total</td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+
+                                    }
+
+                                    i++;
+                                }
+                            }
+                            @if (Model.staffLoanSchedules.Where(x => x.staffLoanId == loanId).Where(x => x.loanType == "HBA-B13").Count() > 0)
+                            {
+                                <h4>House Building Loan (Before 2013)</h4>
+                                @foreach (var item in Model.staffLoanSchedules.Where(x => x.staffLoanId == loanId).Where(x => x.loanType == "HBA-B13"))
+                                {
+                                    if (item.particular == "Loan Installment")
+                                    {
+                                        principal -= Convert.ToDecimal(item.principal);
+                                        total -= Convert.ToDecimal(item.principal);
+                                        <tr>
+                                            <td></td>
+                                            <td style="text-align: center;">@item.periodName</td>
+											<td style="text-align: center;">Recovery From Salary</td>
+                                            <td style="text-align: center;">@item.debit</td>
+                                            <td style="text-align: center;">@item.principal</td>
+                                            <td style="text-align: right;">@principal</td>
+                                            <td style="text-align: center;">@interest</td>
+                                            <td style="text-align: center;">@charge</td>
+                                            <td style="text-align: right;">@total</td>
+                                        </tr>
+                                    }
+                                    else if (item.particular == "Loan Recovery")
+                                    {
+                                        principal -= Convert.ToDecimal(item.principal);
+                                        total -= Convert.ToDecimal(item.principal);
+                                        <tr>
+                                            <td></td>
+                                            <td style="text-align: center;">@item.periodName</td>
+                                            <td style="text-align: center;">@item.particular</td>
+                                            <td style="text-align: center;">@item.debit</td>
+                                            <td style="text-align: center;">@item.principal</td>
+                                            <td style="text-align: right;">@principal</td>
+                                            <td style="text-align: center;">@interest</td>
+                                            <td style="text-align: center;">@charge</td>
+                                            <td style="text-align: right;">@total</td>
+                                        </tr>
+                                    }
+                                    else if (item.particular == "Interest Charged")
+                                    {
+                                        interest += Convert.ToDecimal(item.interest);
+                                        total += Convert.ToDecimal(item.interest);
+                                        <tr>
+                                            <td></td>
+                                            <td style="text-align: center;">@item.periodName</td>
+                                            <td style="text-align: center;">@item.particular</td>
+                                            <td style="text-align: center;">@item.interest</td>
+                                            <td style="text-align: center;">@item.credit</td>
+                                            <td style="text-align: right;">@principal</td>
+                                            <td style="text-align: center;">@interest</td>
+                                            <td style="text-align: center;">@charge</td>
+                                            <td style="text-align: right;">@total</td>
+                                        </tr>
+                                    }
+                                    else if (item.particular == "Opening Balance")
+                                    {
+                                        principal += Convert.ToDecimal(item.principal);
+                                        interest += Convert.ToDecimal(item.interest);
+                                        charge += Convert.ToDecimal(item.charge);
+                                        total += Convert.ToDecimal(item.total);
+                                        <tr>
+                                            <td></td>
+                                            <td style="text-align: center;">@item.periodName</td>
+                                            <td style="text-align: center;">@item.particular</td>
+                                            <td style="text-align: center;">@item.debit</td>
+                                            <td style="text-align: center;">@item.credit</td>
+                                            <td style="text-align: right;">@item.principal</td>
+                                            <td style="text-align: center;">@item.interest</td>
+                                            <td style="text-align: center;">@item.charge</td>
+                                            <td style="text-align: right;">@item.total</td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+
+                                    }
+
+                                    i++;
+                                }
+                            }
+                            @if (Model.staffLoanSchedules.Where(x => x.staffLoanId == loanId).Where(x => x.loanType == "HBA-A13").Count() > 0)
+                            {
+                                <h4>House Building Loan (After 2013)</h4>
+                                @foreach (var item in Model.staffLoanSchedules.Where(x => x.staffLoanId == loanId).Where(x => x.loanType == "HBA-A13"))
+                                {
+                                    if (item.particular == "Loan Installment")
+                                    {
+                                        principal -= Convert.ToDecimal(item.principal);
+                                        total -= Convert.ToDecimal(item.principal);
+                                        <tr>
+                                            <td style="text-align: center;">@item.periodName</td>
+											<td style="text-align: center;">Recovery From Salary</td>
+                                            <td style="text-align: center;">@item.debit</td>
+                                            <td style="text-align: center;">@item.principal</td>
+                                            <td style="text-align: right;">@principal</td>
+                                            <td style="text-align: center;">@interest</td>
+                                            <td style="text-align: center;">@charge</td>
+                                            <td style="text-align: right;">@total</td>
+                                        </tr>
+                                    }
+                                    else if (item.particular == "Loan Recovery")
+                                    {
+                                        principal -= Convert.ToDecimal(item.principal);
+                                        total -= Convert.ToDecimal(item.principal);
+                                        <tr>
+                                            <td style="text-align: center;">@item.periodName</td>
+                                            <td style="text-align: center;">@item.particular</td>
+                                            <td style="text-align: center;">@item.debit</td>
+                                            <td style="text-align: center;">@item.principal</td>
+                                            <td style="text-align: right;">@principal</td>
+                                            <td style="text-align: center;">@interest</td>
+                                            <td style="text-align: center;">@charge</td>
+                                            <td style="text-align: right;">@total</td>
+                                        </tr>
+                                    }
+                                    else if (item.particular == "Interest Charged")
+                                    {
+                                        interest += Convert.ToDecimal(item.interest);
+                                        total += Convert.ToDecimal(item.interest);
+                                        <tr>
+                                            <td style="text-align: center;">@item.periodName</td>
+                                            <td style="text-align: center;">@item.particular</td>
+                                            <td style="text-align: center;">@item.interest</td>
+                                            <td style="text-align: center;">@item.credit</td>
+                                            <td style="text-align: right;">@principal</td>
+                                            <td style="text-align: center;">@interest</td>
+                                            <td style="text-align: center;">@charge</td>
+                                            <td style="text-align: right;">@total</td>
+                                        </tr>
+                                    }
+                                    else if (item.particular == "Opening Balance")
+                                    {
+                                        principal += Convert.ToDecimal(item.principal);
+                                        interest += Convert.ToDecimal(item.interest);
+                                        charge += Convert.ToDecimal(item.charge);
+                                        total += Convert.ToDecimal(item.total);
+                                        <tr>
+                                            <td style="text-align: center;">@item.periodName</td>
+                                            <td style="text-align: center;">@item.particular</td>
+                                            <td style="text-align: center;">@item.debit</td>
+                                            <td style="text-align: center;">@item.credit</td>
+                                            <td style="text-align: right;">@item.principal</td>
+                                            <td style="text-align: center;">@item.interest</td>
+                                            <td style="text-align: center;">@item.charge</td>
+                                            <td style="text-align: right;">@item.total</td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+
+                                    }
+
+                                    i++;
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                            @foreach (var item in Model.staffLoanSchedules.Where(x => x.staffLoanId == loanId))
+                            {
+                                if (item.particular == "Loan Installment")
+                                {
+                                    principal -= Convert.ToDecimal(item.principal);
+                                    total -= Convert.ToDecimal(item.principal);
+                                    <tr>
+                                        <td style="text-align: center;">@item.effectiveDate?.ToString("dd/MM/yyyy")</td>
+                                        <td style="text-align: center;">@item.periodName</td>
+										<td style="text-align: center;">Recovery From Salary</td>
+                                        <td style="text-align: center;">@item.debit</td>
+                                        <td style="text-align: center;">@item.principal</td>
+                                        <td style="text-align: right;">@principal</td>
+                                        <td style="text-align: center;">@interest</td>
+                                        <td style="text-align: center;">@charge</td>
+                                        <td style="text-align: right;">@total</td>
+                                    </tr>
+                                }
+                                else if (item.particular == "Loan Recovery")
+                                {
+                                    principal -= Convert.ToDecimal(item.principal);
+                                    total -= Convert.ToDecimal(item.principal);
+                                    <tr>
+                                        <td style="text-align: center;">@item.effectiveDate?.ToString("dd/MM/yyyy")</td>
+                                        <td style="text-align: center;">@item.periodName</td>
+                                        <td style="text-align: center;">@item.particular</td>
+                                        <td style="text-align: center;">@item.debit</td>
+                                        <td style="text-align: center;">@item.credit</td>
+                                        <td style="text-align: right;">@item.principal</td>
+                                        <td style="text-align: center;">@item.interest</td>
+                                        <td style="text-align: center;">@item.charge</td>
+                                        <td style="text-align: right;">@item.total</td>
+                                    </tr>
+                                }
+                                else if (item.particular == "Interest Charged")
+                                {
+                                    interest += Convert.ToDecimal(item.interest);
+                                    total += Convert.ToDecimal(item.interest);
+                                    <tr>
+                                        <td style="text-align: center;">@item.effectiveDate?.ToString("dd/MM/yyyy")</td>
+                                        <td style="text-align: center;">@item.periodName</td>
+                                        <td style="text-align: center;">@item.particular</td>
+                                        <td style="text-align: center;">@item.debit</td>
+                                        <td style="text-align: center;">@item.credit</td>
+                                        <td style="text-align: right;">@item.principal</td>
+                                        <td style="text-align: center;">@item.interest</td>
+                                        <td style="text-align: center;">@item.charge</td>
+                                        <td style="text-align: right;">@item.total</td>
+                                    </tr>
+                                }
+                                else if (item.particular == "Opening Balance")
+                                {
+                                    principal += Convert.ToDecimal(item.principal);
+                                    interest += Convert.ToDecimal(item.interest);
+                                    charge += Convert.ToDecimal(item.charge);
+                                    total += Convert.ToDecimal(item.total);
+                                    <tr>
+                                        <td style="text-align: center;">@item.periodLockDate?.ToString("dd/MM/yyyy")</td>
+                                        <td style="text-align: center;">@item.periodName</td>
+                                        <td style="text-align: center;">@item.particular</td>
+                                        <td style="text-align: center;">@item.debit</td>
+                                        <td style="text-align: center;">@item.credit</td>
+                                        <td style="text-align: right;">@item.principal</td>
+                                        <td style="text-align: center;">@item.interest</td>
+                                        <td style="text-align: center;">@item.charge</td>
+                                        <td style="text-align: right;">@item.total</td>
+                                    </tr>
+                                }
+                                else
+                                {
+
+                                }
+
+                                i++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+
+
+
+    </div>
+</div>

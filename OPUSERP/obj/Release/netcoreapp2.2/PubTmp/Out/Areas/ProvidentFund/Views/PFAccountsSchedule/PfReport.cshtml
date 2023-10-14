@@ -1,0 +1,389 @@
+﻿@model PFTransactionViewModel
+@{
+    ViewData["Title"] = "PfReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+                <h5 class="m-0 font-weight-bold text-primary">Provident Fund Report</h5>
+                <a class='btn btn-info mr-4' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1014&perentId=6015'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+            <div class="card-body">
+                <div class="">
+                    <div class="form-group row" style="padding-left:20px">
+                        <label for="" class="col-sm-2 col-form-label"> Report Type : </label>
+                        <div class="col-sm-8">
+                            <select name="rptType" id="rptType" class="form-control" data-parsley-required="true">
+                                <option>Please Select Report Type</option>
+                                <option value="1">Non Refundable (Members' Contribution) Report</option>
+                                <option value="4">Final Settlement (Members' Contribution) Report</option>
+                                <option value="2">Loan Disbursment Report</option>
+                                <option value="3">Statement of Forfeiture Account</option>
+                                <option value="5">PF Account Schedule Report(Total)</option>
+                                <option value="6">PF Account Schedule Report(Own & Company)</option>
+                                <option value="7">Employee Wise Yearly Statement</option>
+                                <option value="8">Individual Yearly Statement</option>
+                                <option value="9">Employee details Report</option>
+                                <option value="10">Branch Wise Monthly Summery Report</option>
+                                <option value="11">Yearly Individual Report</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row year" style="padding-left:20px">
+                        <label for="" class="col-sm-2 col-form-label">Select Year : </label>
+                        <div class="col-sm-8">
+                            <select name="year" id="year" class="form-control" data-parsley-required="true">
+                                <option value="">Select year</option>
+                                @foreach (var data in Model.years)
+                                {
+                                    <option value="@data.yearName">@data.yearName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row year" style="padding-left:20px">
+                        <label for="" class="col-sm-2 col-form-label">Select Month : </label>
+                        <div class="col-sm-8">
+                            <select name="month" id="month" class="form-control" data-parsley-required="true">
+                                <option value="">Select Month</option>
+                                <option value="January">January</option>
+                                <option value="February">February</option>
+                                <option value="March">March</option>
+                                <option value="April">April</option>
+                                <option value="May">May</option>
+                                <option value="June">June</option>
+                                <option value="July">July</option>
+                                <option value="August">August</option>
+                                <option value="September">September</option>
+                                <option value="October">October</option>
+                                <option value="November">November</option>
+                                <option value="December">December</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row year1" style="padding-left:20px">
+                        <label for="" class="col-sm-2 col-form-label">Start year : </label>
+                        <div class="col-sm-3">
+                            <select name="year1" id="year1" class="form-control" data-parsley-required="true">
+                                <option value="">Select year</option>
+                                @foreach (var data in Model.years)
+                                {
+                                    <option value="@data.yearName">@data.yearName</option>
+                                }
+                            </select>
+                        </div>
+                        <label for="" class="col-sm-2 col-form-label" style="padding-left:40px">End year : </label>
+                        <div class="col-sm-3">
+                            <select name="year2" id="year2" class="form-control" data-parsley-required="true">
+                                <option value="">Select year</option>
+                                @foreach (var data in Model.years)
+                                {
+                                    <option value="@data.yearName">@data.yearName</option>
+                                }
+                            </select>
+                        </div>
+
+
+                    </div>
+					<div class="form-group row pfId" style="padding-left:20px">
+						<label for="" class="col-sm-2 col-form-label">Members' ID:</label>
+						<div class="col-sm-3">
+							<input type="text" class="form-control" id="membersName" name="">
+							<input type="hidden" id="memberId" name="pfmember" />
+						</div>
+						<label for="" class="col-sm-2 col-form-label" style="padding-left:40px">Select year : </label>
+						<div class="col-sm-3">
+							<select name="year3" id="year3" class="form-control" data-parsley-required="true">
+								<option value="">Select year</option>
+								@foreach (var data in Model.years)
+								{
+									<option value="@data.yearName">@data.yearName</option>
+								}
+							</select>
+						</div>
+						<div class="col-12 row p-0 m-0 mt-2">
+							<span class="col-8"></span>
+							<input type="checkbox" id="chechBox"/>
+							<label class="ml-3">Month Range</label>
+						</div>
+						<div class="col-12 row p-0 m-0 mt-2 iysD" style="display:none">
+							<label for="" class="col-sm-2 col-form-label">Select Start Month : </label>
+							<div class="col-sm-3">
+								<select id="startMonth" class="form-control" data-parsley-required="true">
+									<option value="">Select Month</option>
+									<option value="1">January</option>
+									<option value="2">February</option>
+									<option value="3">March</option>
+									<option value="4">April</option>
+									<option value="5">May</option>
+									<option value="6">June</option>
+									<option value="7">July</option>
+									<option value="8">August</option>
+									<option value="9">September</option>
+									<option value="10">October</option>
+									<option value="11">November</option>
+									<option value="12">December</option>
+								</select>
+							</div>
+							<label for="" class="col-sm-2 col-form-label">Select End Month : </label>
+							<div class="col-sm-3">
+								<select id="endMonth" class="form-control" data-parsley-required="true">
+									<option value="">Select Month</option>
+									<option value="1">January</option>
+									<option value="2">February</option>
+									<option value="3">March</option>
+									<option value="4">April</option>
+									<option value="5">May</option>
+									<option value="6">June</option>
+									<option value="7">July</option>
+									<option value="8">August</option>
+									<option value="9">September</option>
+									<option value="10">October</option>
+									<option value="11">November</option>
+									<option value="12">December</option>
+								</select>
+							</div>
+						</div>
+					</div>
+                    <br />
+                    <button id="Submit" style="float:right; margin-top:5px;margin-right:180px" class="btn btn-success btn-xs" title="Preview"><i class="fas fa-print"> Print</i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $(".year").hide();
+            $(".year1").hide();
+            $(".year2").hide();
+            $(".pfId").hide();
+            $(".month").hide();
+
+            $("#rptType").change(function () {
+				let report = $("#rptType").val();
+                if (report == 1 || 2 || 4) {
+                    HideAll();
+                    $(".year").show();
+                }
+                if (report == 3) {
+                    HideAll();
+                    $(".year1").show();
+                }
+                if (report == 5) {
+                    HideAll();
+                    $(".year").show();
+                }
+                if (report == 7) {
+                    HideAll();
+                    $(".pfId").show();
+                }
+                if (report == 8) {
+                    HideAll();
+                    $(".pfId").show();
+                }
+                if (report == 9) {
+                    HideAll();
+                    $(".pfId").show();
+                    $(".year2").show();
+                }
+                if (report == 10) {
+                    HideAll();
+                    $(".year").show();
+                    $(".month").show();
+				}
+				if (report == 11) {
+					HideAll();
+					$(".pfId").show();
+				}
+			})
+
+            Common.Ajax('GET', '/ProvidentFund/Member/GetAllMembers', [], 'json', ajaxFunctionAllMembers, false);
+
+        });
+
+        function HideAll() {
+            $(".year").hide();
+            $(".year1").hide();
+            $(".year2").hide();
+            $(".pfId").hide();
+            $(".month").hide();
+        }
+
+        function ajaxFunctionAllMembers(response) {
+            //console.log(response);
+            var GetMemberList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.employeeCode = option.employeeCode;
+                obj.value = option.memberName + "(" + option.employeeCode + ")";
+                GetMemberList[GetMemberList.length] = obj;
+            });
+
+            $('#membersName').autocomplete({
+                source: GetMemberList,
+                select: function (event, ui) {
+                    $("#membersName").val(ui.item.value);
+                    $("#memberId").val(ui.item.key);
+                }
+            });
+		}
+		$('#chechBox').click(function () {
+			var check = document.getElementById('chechBox');
+			if (check.checked == true) {
+				$('.iysD').show();
+			}
+			else {
+				$('.iysD').hide();
+			}
+		})
+
+        $("#Submit").click(function (e) {
+            let report = $("#rptType").val();
+
+            var year = $("#year").val();
+            var year1 = $("#year1").val();
+            var year2 = $("#year2").val();
+            var year3 = $("#year3").val();
+            var pfId = $("#memberId").val();
+            var month = $("#month").val();
+           
+            if (report == 1) {
+                if (year == '') {
+                    alert("Please Select Year");
+                    return false;
+                }
+                window.open('/Payroll/FDRInvestment/NonRefundableContributionPDF?year=' + year, '_blank');
+            }
+            else if (report == 2) {
+                if (year == '') {
+                    alert("Please Select Year");
+                    return false;
+                }
+                window.open('/Payroll/FDRInvestment/LoanDisbursmentSheetPDF?year=' + year, '_blank');
+            }
+            else if (report == 3) {
+                if (year1 == '') {
+                    alert("Please Select Start Year");
+                    return false;
+                }
+                else if (year2 == '') {
+                    alert("Please Select End Year");
+                    return false;
+                }
+                window.open('/ProvidentFund/PFAccountsSchedule/StatementOfForfeitAccountViewPdf?year1=' + year1 + "&year2=" + year2, '_blank');
+            }
+            else if (report == 4) {
+                if (year == '') {
+                    alert("Please Select  Year");
+                    return false;
+                }
+                window.open('/Payroll/FDRInvestment/FinalSettlementContributionPDF?year=' + year, '_blank');
+            }
+            else if (report == 5) {
+                if (year == '') {
+                    alert("Please Select  Year");
+                    return false;
+                }
+                window.open('/Payroll/FDRInvestment/PfScheduleReportPdf?year=' + year, '_blank');
+            }
+            else if (report == 6) {
+                if (year == '') {
+                    alert("Please Select  Year");
+                    return false;
+                }
+                window.open('/Payroll/FDRInvestment/PfAccountScheduleReportPdf?year=' + year, '_blank');
+            }
+            else if (report == 7) {
+                if (year3 == '') {
+                    alert("Please Select  Year");
+                    return false;
+                }
+                if (pfId == '') {
+                    alert("Please Select  Member Id");
+                    return false;
+                }
+
+                window.open('/Payroll/FDRInvestment/PfEmpWiseYearlyStatementPDF?pfId=' + pfId + '&year=' + year3, '_blank');
+            }
+
+            else if (report == 8) {
+                if (year3 == '') {
+                    alert("Please Select  Year");
+                    return false;
+                }
+                if (pfId == '') {
+                    alert("Please Select  Member Id");
+                    return false;
+				}
+				var check = document.getElementById('chechBox');
+				if (check.checked == true) {
+					var startMonth = $('#startMonth').val();
+					var endMonth = $('#endMonth').val();
+					if (startMonth == '') {
+						alert("Please Select Start Month");
+						return false;
+					}
+					if (endMonth == '') {
+						alert("Please Select End Month");
+						return false;
+					}
+					else if (endMonth < startMonth) {
+						alert("Please Change End Month");
+						return false;
+					}
+					window.open('/Payroll/FDRInvestment/PfIndividualYearlyStatementWithMonthPDF?pfId=' + pfId + '&year=' + year3 + '&startMonth=' + startMonth + '&endMonth=' + endMonth, '_blank');
+				}
+				else {
+					window.open('/Payroll/FDRInvestment/PfIndividualYearlyStatementPDF?pfId=' + pfId + '&year=' + year3, '_blank');
+				}
+            }
+
+            else if (report == 9) {
+                if (year3 == '') {
+                    alert("Please Select  Year");
+                    return false;
+                }
+                if (pfId == '') {
+                    alert("Please Select  Member Id");
+                    return false;
+                }
+                window.open('/Payroll/FDRInvestment/PfEmployeeDetailsReportPDF?pfId=' + pfId + '&year=' + year3, '_blank');
+            }
+          
+            else if (report == 10) {
+                if (month == '') {
+                    alert("Please Select Month");
+                    return false;
+                }
+                if (year == '') {
+                    alert("Please Select Year");
+                    return false;
+                }
+                window.open('/Payroll/FDRInvestment/PfBranchWiseMonthlySummeryPDF?year=' + year + '&month=' + month, '_blank');
+			}
+			else if (report == 11) {
+				if (year3 == '') {
+					alert("Please Select Year");
+					return false;
+				}
+				if ($('#memberId').val() == '') {
+					alert("Please Select Member");
+					return false;
+				}
+				window.open('/ProvidentFund/PFAccountsSchedule/IndividualYearlyPfPdf?pfMemberId=' + $('#memberId').val() + '&year=' + year3, '_blank');
+			}
+
+
+        });
+    </script>
+
+} 

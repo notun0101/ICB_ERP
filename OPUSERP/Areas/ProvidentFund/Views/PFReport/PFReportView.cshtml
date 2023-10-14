@@ -1,0 +1,109 @@
+﻿@model OPUSERP.ProvidentFund.VMS.PFReportViewModel
+@{
+    ViewData["Title"] = "ReportCenter";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+        <div class="container-fluid">
+            <div class="row" style="padding-top:0px;">
+                <div class="col-2">
+                    <img src="~/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="OPUS ERP" style="height:50px;" />
+                </div>
+                <div class="col-8" style="color:black;text-align:center">
+                    <h3>@Model.companies.FirstOrDefault().companyName</h3>
+                    <h5>@Model.companies.FirstOrDefault().addressLine</h5>
+                <br />
+                    <h3 style="text-align:center;">PF Loan Report - @ViewBag.year</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid" style="color:black;">
+            <hr style="border:1px solid grey;">
+            <div class="row" style="padding: 5px 0px 5px 0px;">
+                <div class="col-10">
+                    <p>Name: @Model.pfreport?.FirstOrDefault()?.nameEnglish</p>
+                    <p>PF Id: @Model.pfreport?.FirstOrDefault()?.memberCode</p>
+                    <p>Designation: @Model.pfreport?.FirstOrDefault()?.designationName</p>
+                    <p>Department: @Model.pfreport?.FirstOrDefault()?.deptName</p>
+                </div>
+            </div>
+            <div class="row" style="padding: 0px 15px 0px 15px;">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th colspan="5" class="text-center align-text-top">Contribution</th>
+                            <th colspan="4" class="text-center align-text-top">Trusty Loan</th>
+                            <th colspan="4" class="text-center align-text-top"></th>
+                        </tr>
+                        <tr class="align-text-top">
+                            <th class="align-text-top">Month</th>
+                            <th class="align-text-top" width="120px">Date</th>
+                            <th class="align-text-top">Own</th>
+                            <th class="align-text-top">Company</th>
+                            <th class="align-text-top">Distributed Interest</th>
+                            <th class="align-text-top">Loan</th>
+                            <th class="align-text-top">Interest Charge</th>
+                            <th class="align-text-top">Loan Repay</th>
+                            <th class="align-text-top">Loan Balance</th>
+                            <th class="align-text-top">Own Balance</th>
+                            <th class="align-text-top">Company Balance</th>
+                            <th class="align-text-top">Total Net Balance</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            decimal? TotalInterestCharge = 0;
+                            decimal? TotalLoanRepay = 0;
+                            decimal? TotalLoanBalance = 0;
+                            decimal? TotalownBalance = 0;
+                            decimal? TotalIntBalance = 0;
+                            decimal? TotalcompanyBalance = 0;
+                            decimal? TotaltotalNetBalance = 0;
+                        }
+                        @foreach (var item in Model.pfreport)
+                        {
+
+                            TotalInterestCharge += @item.interestCharge;
+                            TotalLoanRepay += @item.loanRepay;
+                            TotalLoanBalance += item.loan + TotalInterestCharge - TotalLoanRepay;
+                            TotalownBalance += @item.own;
+                            TotalcompanyBalance += @item.company;
+                            TotalIntBalance += @item.distributedInterest;
+                            TotaltotalNetBalance = TotalIntBalance + TotalownBalance + TotalcompanyBalance - TotalLoanBalance;
+                            <tr>
+                                <td>@item.month</td>
+                                <td width="120px" class="">@item.transectionDate?.ToString("dd-MMM-yy")</td>
+                                <td class="text-right">@item.own?.ToString("N2")</td>
+                                <td class="text-right">@item.company?.ToString("N2")</td>
+                                <td class="text-right">@item.distributedInterest?.ToString("N2")</td>
+                                <td class="text-right">@item.loan?.ToString("N2")</td>
+                                <td class="text-right">@item.interestCharge?.ToString("N2")</td>
+                                <td class="text-right">@item.loanRepay?.ToString("N2")</td>
+                                <td class="text-right">@TotalLoanBalance?.ToString("N2")</td>
+                                <td class="text-right">@TotalownBalance?.ToString("N2")</td>
+                                <td class="text-right">@TotalcompanyBalance?.ToString("N2")</td>
+                                <td class="text-right">@TotaltotalNetBalance?.ToString("N2")</td>
+                            </tr>
+
+
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+

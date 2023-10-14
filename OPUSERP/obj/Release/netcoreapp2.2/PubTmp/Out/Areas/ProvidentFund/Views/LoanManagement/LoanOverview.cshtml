@@ -1,0 +1,260 @@
+﻿@model LoanApplicationViewModel
+@{
+    ViewData["Title"] = "LoanOverview";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row clearfix">
+    <div class="col-12">
+
+        <div class="card mb-4 bg-light">
+            <div class="card-body">
+                <div class="">
+                    <div class="row ">
+                        <div class="col-sm-3" align="center">
+                            <div class="bg-white">
+                                <h4 class="text-success" style="font-size:60px">120</h4>
+                                <hr />
+                                <h6><a href="">Applied for Loan</a></h6>
+                                <br />
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3" align="center">
+                            <div class="bg-white">
+                                <h4 class="text-success" style="font-size:60px">256</h4>
+                                <hr />
+                                <h6><a href="">Loan Disbursment Pending</a></h6>
+                                <br />
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3" align="center">
+                            <div class="bg-white">
+                                <h4 class="text-success" style="font-size:60px">52</h4>
+                                <hr />
+                                <h6><a href="">Total Loan Due</a></h6>
+                                <br />
+
+                            </div>
+                        </div>
+                        <div class="col-sm-3" align="center">
+                            <div class="bg-white">
+                                <h4 class="text-success" style="font-size:60px">152</h4>
+                                <hr />
+                                <h6><a href="">Total Loan Given (This Year)</a></h6>
+                                <br />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row clearfix">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <h5 class="m-0 font-weight-bold text-primary">Loan Application List</h5>
+                        <hr />
+                        <table class="table table-bordered table-striped" id="tblMemberList" data-parsley-required="true">
+                            <thead style="width:100%;background-color:lightgray">
+                                <tr>
+                                    <th>
+                                        Member ID
+                                    </th>
+                                    <th>
+                                        Member Name
+                                    </th>
+                                    <th>
+                                        Mobile
+                                    </th>
+                                    <th>
+                                        Email
+                                    </th>
+                                    <th>
+                                        Contribution
+                                    </th>
+                                    <th>
+                                        Total fund
+                                    </th>
+                                    <th>
+                                        Loan Amount
+                                    </th>
+                                    <th>
+                                        Manage
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var data in Model.pFLoanManagements)
+                                {
+                                    <tr>
+                                        <td>@data.pfmember?.employeeCode</td>
+                                        <td>@data.pfmember?.memberName</td>
+                                        <td>@data.pfmember?.mobile</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>    </td>
+                                        <td><a href="/ProvidentFund/LoanManagement/EditAppliedLoan?id=@data.Id"><i class="fas fa-eye" style="color:green"></i></a></td>
+                                    </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row clearfix">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <h5 class="m-0 font-weight-bold text-primary">Pending Loan Disbursment List</h5>
+                        <hr />
+                        <table class="table table-bordered table-striped" id="tblMemberList1" data-parsley-required="true">
+                            <thead style="width:100%;background-color:lightgray">
+                                <tr>
+                                    <th>
+                                        Member ID
+                                    </th>
+                                    <th>
+                                        Member Name
+                                    </th>
+                                    <th>
+                                        Mobile
+                                    </th>
+                                    <th>
+                                        Email
+                                    </th>
+                                    <th>
+                                        Application Date
+                                    </th>
+                                    <th>
+                                        Loan Amount (Applied)
+                                    </th>
+                                    <th>
+                                        Loan Amount (Approved)
+                                    </th>
+                                    <th>
+                                        Manage
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var data in Model.pFLoanManagements)
+                                {
+                                    <tr>
+                                        <td>@data.pfmember?.employeeCode</td>
+                                        <td>@data.pfmember?.memberName</td>
+                                        <td>@data.pfmember?.mobile</td>
+                                        <td></td>
+                                        <td>@data.createdAt</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><a href="/ProvidentFund/LoanManagement/PendingLoanPay" class="btn btn-primary btn-xs text-white" style="background-color:lightseagreen">Payment</a></td>
+                                    </tr>
+                                }
+
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row clearfix">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <h5 class="m-0 font-weight-bold text-primary">Due Loan List</h5>
+                        <hr />
+                        <table class="table table-bordered table-striped" id="tblMemberList2" data-parsley-required="true">
+                            <thead style="width:100%;background-color:lightgray">
+                                <tr>
+                                    <th>
+                                        Member ID
+                                    </th>
+                                    <th>
+                                        Member Name
+                                    </th>
+                                    <th>
+                                        Application Date
+                                    </th>
+                                    <th>
+                                        Approve Date
+                                    </th>
+                                    <th>
+                                        Loan Amount (Approved)
+                                    </th>
+                                    <th>
+                                        Loan Paid Amount
+                                    </th>
+                                    <th>
+                                        Repayment Amount
+                                    </th>
+
+                                    <th>
+                                        Manage
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var data in Model.pFLoanManagements)
+                                {
+                                <tr>
+                                    <td>@data.pfmember?.employeeCode</td>
+                                    <td>@data.pfmember?.memberName</td>
+                                    <td>@data.pfmember?.createdAt</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><a href="/ProvidentFund/LoanManagement/ProcessDueLoan" class="btn btn-primary btn-xs text-white" style="background-color:lightseagreen">Payment</a></td>
+
+                                </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+
+            $('#tblMemberList').DataTable();
+            $('#tblMemberList1').DataTable();
+            $('#tblMemberList2').DataTable();
+
+        });
+    </script>
+}
+

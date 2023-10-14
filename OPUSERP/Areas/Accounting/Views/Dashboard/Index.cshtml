@@ -1,0 +1,333 @@
+﻿@model AccountingDashboardViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Style{
+    <style>
+        .redStar {
+            color: red;
+        }
+
+        .active {
+            background: beige;
+            padding: 3px;
+        }
+
+        .cardshaid {
+            -webkit-box-shadow: 0px 2px 24px 0px rgba(0,0,0,0.35);
+            box-shadow: 0px 2px 24px 0px rgba(0,0,0,0.35);
+        }
+    </style>
+}
+
+<div class="container-fluid pt-2">
+
+    <div class="row row-deck" style="color:black">
+        <div class="col-md-4">
+            <div class="block-content block-content-full cardshaid" style="background-color: rgb(255, 255, 255);min-height:254px !important;border-radius:5px;">
+                <div class="form-group row">
+                    <p class="col-sm-7 text-uppercase ml-2 mt-2 font-weight-bold">Cash & Bank Balance</p>
+                    <div class="col-sm-4 mt-2">
+                        <select class="form-control" id="BalanceFiscal">
+                            <option value="0">ALL</option>
+                            @foreach (var data in Model.fiscalYears)
+                            {
+                                <option value="@data.aliasName">@data.aliasName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <table class="table table-borderless table-hover" style="height: 204px; display: grid;">
+                    <tbody id="balanceDiv" style="overflow-y: scroll !important;">
+                        
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="block-content block-content-full cardshaid" style="background-color: rgb(255, 255, 255);min-height:254px !important;border-radius:5px;">
+                <div class="form-group row">
+                    <p class="col-sm-7 text-uppercase ml-2 mt-2 font-weight-bold">Receipts & Payments</p>
+                    <div class="col-sm-4 mt-2">
+                        <select class="form-control" id="RVandPYFiscal">
+                            <option value="0">ALL</option>
+                            @foreach (var data in Model.fiscalYears)
+                            {
+                                <option value="@data.aliasName">@data.aliasName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <table class="table table-borderless table-hover" style="max-height:184px !important;overflow-y:scroll !important">
+                    <tbody id="RVandPaYDiv">
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="block-content block-content-full cardshaid" style="background-color: rgb(255, 255, 255);min-height:254px !important;border-radius:5px;">
+                <div class="form-group row">
+                    <p class="col-sm-7 text-uppercase ml-2 mt-2 font-weight-bold">Profit and (Loss)</p>
+                    <div class="col-sm-4 mt-2">
+                        <select class="form-control" id="profitLossFiscal">
+                            <option value="0">ALL</option>
+                            @foreach (var data in Model.fiscalYears)
+                            {
+                                <option value="@data.aliasName">@data.aliasName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="py-6">
+                    <h3 class="font-w700 ml-2 mb-1 font-weight-bold">Tk. <span id="BalanceTotal"></span></h3>
+                    @*<span class="font-size-sm font-w700 text-uppercase ml-2  -75 font-weight-bolder">Profit Or Loss</span>*@
+                </div>
+                <div class="form-group row">
+                    <p class="col-sm-6 text-uppercase ml-2 mt-2 font-weight-bolder">Tk. <span id="IncomeTotal"></span> <br /> Income</p>
+                    <div class="col-sm-6">
+
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <p class="col-sm-6 text-uppercase ml-2 mt-1 font-weight-bolder">Tk. <span id="ExpenseTotal"></span> <br /> Expenses</p>
+                    <div class="col-sm-6">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card" style="min-height:400px;">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <h5 class="text-primary">Yearly Income Expense Curve: </h5>
+                        </div>
+                        <div class="col-sm-3">
+                            <select class="form-control" id="LineFiscalYear">
+                                <option value="0">ALL</option>
+                                @foreach (var data in Model.fiscalYears)
+                                {
+                                    <option value="@data.aliasName">@data.aliasName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" id="result-LineChart">
+                    <canvas id="LineChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card" style="min-height:400px;">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <h5 class="text-primary">Account Group Wise Curve: </h5>
+                        </div>
+                        <div class="col-sm-3">
+                            <select class="form-control" id="DounatFiscalYear">
+                                <option value="0">ALL</option>
+                                @foreach (var data in Model.fiscalYears)
+                                {
+                                    <option value="@data.aliasName">@data.aliasName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" id="result-DounutChart">
+                    <canvas id="DounutChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+@section Scripts{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="~/js/palette.js"></script>
+    <script>
+        $(document).ready(function () {
+            Common.Ajax('GET', '/Accounting/Dashboard/YearlyIncomeExpense/0', [], 'json', LineChart, false);
+            Common.Ajax('GET', '/Accounting/Dashboard/AccountGroupWiseVoucher/0', [], 'json', DounutChart, false);
+
+            Common.Ajax('GET', '/Accounting/Dashboard/BankAndCashBalance/0', [], 'json', Balance, false);
+
+            Common.Ajax('GET', '/Accounting/Dashboard/RecepiptAndPayment/0', [], 'json', RVandPY, false);
+
+            Common.Ajax('GET', '/Accounting/Dashboard/IncomeExpense/0', [], 'json', IncomeExpence, false);
+
+            $("#DounatFiscalYear").change(function () {
+                var id = $("#DounatFiscalYear").val();
+                Common.Ajax('GET', '/Accounting/Dashboard/AccountGroupWiseVoucher/' + id, [], 'json', DounutChart, false);
+            });
+
+            $("#LineFiscalYear").change(function () {
+                var id = $("#LineFiscalYear").val();
+                Common.Ajax('GET', '/Accounting/Dashboard/YearlyIncomeExpense/' + id, [], 'json', LineChart, false);
+            });
+
+            $("#BalanceFiscal").change(function () {
+                var id = $("#BalanceFiscal").val();
+                Common.Ajax('GET', '/Accounting/Dashboard/BankAndCashBalance/' + id, [], 'json', Balance, false);
+            });
+
+            $("#RVandPYFiscal").change(function () {
+                var id = $("#RVandPYFiscal").val();
+                Common.Ajax('GET', '/Accounting/Dashboard/RecepiptAndPayment/' + id, [], 'json', RVandPY, false);
+            });
+
+            $("#profitLossFiscal").change(function () {
+                var id = $("#profitLossFiscal").val();
+                Common.Ajax('GET', '/Accounting/Dashboard/IncomeExpense/' + id, [], 'json', IncomeExpence, false);
+            });
+
+        });
+
+        function LineChart(response) {
+            //console.log(response);
+            $('#LineChart').remove(); // this is my <canvas> element
+            $('#result-LineChart').append('<canvas id="LineChart"></canvas>');
+
+            var LineChart = document.getElementById('LineChart');
+            var myChart2 = new Chart(LineChart, {
+                type: 'line',
+                data: {
+                    labels: response.months,
+                    datasets: [{
+                        label: 'Income Voucher in a year',
+                        data: response.monthWiseIncome,
+                        //backgroundColor: '#6f99a3',
+                        borderColor: 'red',
+                        borderWidth: 1
+                    }, {
+                        label: 'Expense Voucher in a year',
+                        data: response.monthWiseExpense,
+                        //backgroundColor: '#6f99a3',
+                        borderColor: 'blue',
+                        borderWidth: 1
+                    }
+                    ]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            stacked: true
+                        }]
+                    }
+                }
+            });
+        }
+
+        function DounutChart(response) {
+            $('#DounutChart').remove(); // this is my <canvas> element
+            $('#result-DounutChart').append('<canvas id="DounutChart"></canvas>');
+            //console.log(response);
+            var DounutChart = document.getElementById('DounutChart').getContext('2d');
+            var chart = new Chart(DounutChart, {
+                type: 'doughnut',
+                data: {
+                    labels: response.accountGroup,
+                    datasets: [{
+                        label: "Account Group wise Voucher",
+                        backgroundColor: palette('tol', response.accountGroup.length).map(function (hex) {
+                            return '#' + hex;
+                        }),
+                        borderColor: '#fff',
+                        data: response.accountGroupWiseVouture,
+                    }]
+                },
+            });
+        }
+
+        function getCommaSeparatedTwoDecimalsNumber(number) {
+            const fixedNumber = Number.parseFloat(number).toFixed(2);
+            return String(fixedNumber).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        }
+
+        function Balance(response) {
+            //console.log(response);
+            var options = '';
+            //options += '<option value="">select</option>';
+            $.each(response, function (i, item) {
+                var data = '';
+                if (item.amount < 0) {
+                    data = '(' + getCommaSeparatedTwoDecimalsNumber(item.amount * (-1)) + ')';
+                } else {
+                    data = getCommaSeparatedTwoDecimalsNumber(item.amount);
+                }
+                options += `<tr>
+                                <td>
+                                    <b>${item.name}</b> <br />
+                                    ${item.code} - ${item.type}
+                                </td>
+                                <td>Tk ${data}</td>
+                            </tr>`;
+            });
+            $('#balanceDiv').empty();
+            $('#balanceDiv').append(options);
+        }
+
+        function RVandPY(response) {
+            console.log(response);
+            var option = `<tr>
+                            <td>
+                                Opening Balances
+                            </td>
+                            <td>Tk ${getCommaSeparatedTwoDecimalsNumber(response.Opening)}</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Receipts
+                            </td>
+                            <td>Tk ${getCommaSeparatedTwoDecimalsNumber(response.Receive)}</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Payments
+                            </td>
+                            <td>Tk ${getCommaSeparatedTwoDecimalsNumber(response.Payment)}</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Closing Balance
+                            </td>
+                            <td>Tk ${getCommaSeparatedTwoDecimalsNumber(response.Closing)}</td>
+                        </tr>`
+
+            $('#RVandPaYDiv').empty();
+            $('#RVandPaYDiv').append(option);
+        }
+
+        function IncomeExpence(response) {
+            if (response.balance < 0) {
+                $('#BalanceTotal').text('(' + getCommaSeparatedTwoDecimalsNumber(response.balance * (-1)) + ')');
+            } else {
+                $('#BalanceTotal').text(getCommaSeparatedTwoDecimalsNumber(response.balance));
+            }
+            
+            $('#IncomeTotal').text(getCommaSeparatedTwoDecimalsNumber(response.income));
+            $('#ExpenseTotal').text(getCommaSeparatedTwoDecimalsNumber(response.expense));
+        }
+
+    </script>
+}
+
+

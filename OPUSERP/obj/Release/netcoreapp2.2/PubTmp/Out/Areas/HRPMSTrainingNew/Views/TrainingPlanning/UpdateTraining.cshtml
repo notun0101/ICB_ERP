@@ -1,0 +1,1121 @@
+﻿@model TrainingPlanningViewModel;
+@using Newtonsoft.Json;
+@{
+	ViewData["Title"] = "Update Training";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Style{
+	<!-- Latest compiled and minified CSS -->
+	<link href="~/Assets/MD_Time_Picker/mdtimepicker.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://unpkg.com/multiple-select@1.3.1/dist/multiple-select.min.css">
+	<link href="~/css/site.css" rel="stylesheet" />
+	<link href="~/lib/main.css" rel="stylesheet" />
+
+	<style>
+		.redStar {
+			color: red;
+		}
+
+		ul.ui-autocomplete {
+			z-index: 99999999;
+		}
+	</style>
+}
+
+<div class="card" style="width: 100%;">
+	<div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+		<div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center;">
+			<h5 class="card-title" style="color: black; margin: 8px; text-transform: uppercase;">Create Training</h5>
+		</div>
+		<div class="col-md-8">
+
+			<div style="float: right; margin: 16px;">
+				<a class='btn btn-info mr-3' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=1239'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="card-body">
+		<div class="container">
+			<form asp-area="HRPMSTrainingNew" asp-controller="TrainingPlanning" asp-action="Index" id="FormId" method="post" data-parsley-validate="parsley">
+				<div asp-validation-summary="All" class="text-danger"></div>
+
+				<div class="form-group row">
+					<label for="course" class="col-sm-2 col-form-label">@Model.fLang.course <span style="float:right;" class="redStar">*</span></label>
+					<div class="col-sm-4">
+						@*<input type="text" class="form-control" name="course" id="course" />*@
+						<select type="text" class="form-control" name="course" id="course" data-parsley-required="true">
+							<option value="">Select One</option>
+							@foreach (var data in Model.courseTitles)
+							{
+								<option value="@data.nameEN">@data.nameEN</option>
+							}
+						</select>
+						<input type="hidden" name="planningId" id="planningId">
+						@*<input type="hidden" name="trainingType" id="trainingType" value="2">*@
+					</div>
+					<label for="courseTypeId" class="col-sm-2 col-form-label">Course Type <span style="float:right;" class="redStar">*</span> </label>
+					<div class="col-sm-3">
+						@*<input type="text" class="form-control" name="courseObjective" id="courseObjective">*@
+						<select type="text" class="form-control" name="courseTypeId" id="courseTypeId" data-parsley-required="true">
+							<option value="">Select One</option>
+							@foreach (var data in Model.courseTypeList)
+							{
+								<option value="@data.Id">@data.typeNameEN</option>
+							}
+						</select>
+					</div>
+					<div class="col-sm-1">
+						<span class="btn btn-outline-dark btn-sm" title="Add Course Type" style="cursor:pointer;" onclick="AddCourseType()">+</span>
+					</div>
+				</div>
+
+				<div class="form-group row">
+
+					@*<label for="amount" class="col-sm-2 col-form-label">@Model.fLang.amount </label>
+						<div class="col-sm-4">
+							<input type="text" data-parsley-type="number" class="form-control" name="amount" id="amount">
+						</div>*@
+
+				</div>
+
+				<div class="form-group row">
+					<label for="planeStartDate" class="col-sm-2 col-form-label">@Model.fLang.planeStartDate <span style="float:right;" class="redStar">*</span></label>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" readonly name="planeStartDate" id="planeStartDate" data-parsley-required="true">
+					</div>
+
+					<label for="planeEndDate" class="col-sm-2 col-form-label">@Model.fLang.planeEndDate <span style="float:right;" class="redStar">*</span></label>
+					<div class="col-sm-4">
+						<input type="text" readonly class="form-control" name="planeEndDate" id="planeEndDate" data-parsley-required="true">
+					</div>
+				</div>
+
+				<div class="form-group row">
+					@*<label for="year" class="col-sm-2 col-form-label">@Model.fLang.year </label>
+						<div class="col-sm-4">
+							<select type="text" class="form-control" name="year" id="year" data-parsley-required="true">
+								<option value="">Select One</option>
+								@foreach (var data in Model.years)
+								{
+									<option value="@data.year">@data.year</option>
+								}
+							</select>
+						</div>*@
+
+					<label for="participant" class="col-sm-2 col-form-label">No. of perticipants <span style="float:right;" class="redStar">*</span></label>
+					<div class="col-sm-4">
+						<input type="number" min="1" class="form-control" name="participant" id="participant" data-parsley-required="true">
+					</div>
+
+					<label for="budget" class="col-sm-2 col-form-label">
+						@Model.fLang.budget <span style="float:right;" class="redStar">*</span>
+					</label>
+					<div class="col-sm-3">
+						<select class="form-control" name="sourceOfFundId" id="sourceOfFundId" data-parsley-required="true">
+							<option value="">Select</option>
+							@foreach (var data in Model.sourceOfFundList)
+							{
+								<option value="@data.Id">@data.nameEN</option>
+							}
+						</select>
+					</div>
+					<div class="col-sm-1">
+						<span class="btn btn-outline-dark btn-sm" title="Add Source Of Found" style="cursor:pointer;" onclick="AddSourceOfFound()">+</span>
+					</div>
+				</div>
+				
+
+				<div class="form-group row">
+
+					<label for="trainingType" class="col-sm-2 col-form-label"> Training Type <span style="float:right;" class="redStar">*</span> </label>
+					<div class="col-sm-4">
+						<select type="text" class="form-control" name="trainingType" id="trainingType" data-parsley-required="true">
+							<option value="">Select One</option>
+							<option value="1">Local (In House)</option>
+							<option value="3">Local (Outside)</option>
+							<option value="2">Foreign </option>
+						</select>
+					</div>
+					<label for="country" class="col-sm-2 col-form-label">@Model.fLang.country </label>
+					<div class="col-sm-4">
+						<select class="form-control" name="country" id="country">
+							<option value="">Select One</option>
+							@foreach (var data in Model.countries)
+							{
+								<option value="@data.Id">@data.countryName</option>
+							}
+						</select>
+					</div>
+
+				</div>
+
+
+				<div class="form-group row">
+					<label for="location" class="col-sm-2 col-form-label  hidelocation">@Model.fLang.location </label>
+					<div class="col-sm-4 hidelocation">
+						<input type="text" class="form-control" name="location" id="location" data-parsley-trigger="keyup">
+					</div>
+					<label for="trainingInstituteId" class="col-sm-2 col-form-label">Institute </label>
+					<div class="col-sm-4">
+						<select type="text" class="form-control" name="trainingInstituteId" id="trainingInstituteId">
+							<option value="">Select One</option>
+							@foreach (var data in Model.trainingInstitutes)
+							{
+								<option value="@data.Id">@data.trainingInstituteName</option>
+							}
+						</select>
+					</div>
+				</div>
+
+
+
+
+                <div class="form-group row">
+                    @*<label for="employeeInfoId" class="col-sm-2 col-form-label">Course Coordinator <span style="float:right;" class="redStar">*</span></label>
+        <div class="col-sm-4">
+            <select type="text" class="form-control" name="employeeInfoId" id="employeeInfoId" data-parsley-required="true">
+                <option value="">Select One</option>
+                @foreach (var data in Model.employeeInfoList.Where(x => x.departmentId == 120))
+                {
+                    <option value="@data.Id">@data.nameEnglish (@data.employeeCode)</option>
+                }
+            </select>
+        </div>*@
+
+                    <label for="employeeInfoId" class="col-sm-2 col-form-label">Course Coordinator</label>
+                    <input id="coordinatorIdList" name="coordinatorIdList" style="display:none;" />
+                    <div class="col-sm-4">
+                        <select type="text" class="form-control" name="employeeInfoId" id="coordinator2" data-parsley-required="false">
+                            <option value="">Select One</option>
+                            @foreach (var data in Model.employeeInfoList.Where(x => x.departmentId == 120))
+                            {
+                                <option value="@data.Id">@data.nameEnglish (@data.employeeCode)</option>
+                            }
+                        </select>
+                        <button type="button" id="addCoordinator" value="addCoordinator" class="btn btn-info btn-sm" style="float:right; margin-top:5px;margin-bottom:5px;"> Add Co-ordinator</button>
+
+                    </div>
+                    <label for="remark" class="col-sm-2 col-form-label">Remarks </label>
+                    <div class="col-sm-4">
+                        <textarea type="text" class="form-control" name="remark" id="remark"></textarea>
+                    </div>
+                    <table class="" id="tblCoordinator" style="width:49%;text-align:center; border-collapse:collapse;" border="1"></table>
+
+
+                </div>
+				<hr>
+				<div class="form-group row">
+					<label for="trainerId" class="col-sm-2 col-form-label">  Trainer <span style="float:right;" class="redStar">*</span></label>
+					<input id="resourcePersonIdList" name="resourcePersonIdList" style="display:none;" />
+					<div class="col-sm-4">
+						<select type="text" class="form-control" name="trainerId" id="resourcePeople2">
+							<option value="">Select One</option>
+							@foreach (var data in Model.resourcePeople)
+							{
+								<option value="@data.Id">@data.name</option>
+							}
+						</select>
+					</div>
+					<div class="col-sm-2">
+						<button type="button" id="add" value="Add" class="btn btn-info btn-sm" style="float:left; margin-top:5px;"> Add Trainer</button>
+					</div>
+				</div>
+				<table class="" id="tblPerson" style="width:49%;text-align:center; border-collapse:collapse;" border="1"></table>
+				<hr />
+				<button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+				<button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+<br />
+
+
+@section Scripts{
+	<script src="~/Assets/MD_Time_Picker/mdtimepicker.js"></script>
+	<!--Latest compiled and minified JavaScript-->
+	<script src="https://unpkg.com/multiple-select@1.3.1/dist/multiple-select.min.js"></script>
+	<script src="~/lib/main.js"></script>
+	<script src="~/lib/jquery/dist/notify.js"></script>
+	<script>
+        var Id = '@ViewBag.TrainingId';
+        if (Id > 0) {
+			$("#planningId").val(Id);
+			$("#course").val('@Html.Raw(Model.trainingInfoNewsSingle?.course)');
+			$("#planeStartDate").val('@Html.Raw(Model.trainingInfoNewsSingle?.startDate?.ToString("dd-MMM-yyy"))');
+			$("#planeEndDate").val('@Html.Raw(Model.trainingInfoNewsSingle?.endDate?.ToString("dd-MMM-yyy"))');
+			$("#participant").val('@Html.Raw(Model.trainingInfoNewsSingle?.noOfParticipants)');
+			$("#sourceOfFundId").val('@Html.Raw(Model.trainingInfoNewsSingle?.sourceOfFundId)');
+			$("#trainingType").val('@Html.Raw(Model.trainingInfoNewsSingle?.trainingType)');
+			$("#country").val('@Html.Raw(Model.trainingInfoNewsSingle?.countryId)');
+			$("#location").val('@Html.Raw(Model.trainingInfoNewsSingle?.location)');
+			$("#trainingInstituteId").val('@Html.Raw(Model.trainingInfoNewsSingle?.trainingInstituteId)');
+			$("#employeeInfoId").val('@Html.Raw(Model.trainingInfoNewsSingle?.employeeInfoId)');
+			$("#courseTypeId").val('@Html.Raw(Model.trainingInfoNewsSingle?.courseTypeId)');
+            $("#remark").val('@Html.Raw(Model.trainingInfoNewsSingle?.remarks)');
+            $("#location").val('@Html.Raw(Model.trainingInfoNewsSingle?.location)');
+				$.ajax({
+					url: '@Url.Action("GetTrainingResourcePersonById", "TrainingPlanning")',
+					type: 'POST',
+					data: { id: Id }
+				}).done(function (data) {
+					var item = '';
+					for (var i = 0; i < data.length; i++) {
+						item += '<tr id="rowID' + data[i].Id + '">' +
+							'<td style="display:none;">' + data[i].Id + '</td>' +
+							'<td>' + data[i].name + '</td> ' +
+							'<td>' +
+							'<button type = "button" id = "remove" value = "X" class="btn btn-danger btn-sm deleteitem"  title = "click to delete" > <i class="fa fa-trash-alt"></i></button> ' +
+							'</td> ' +
+							'</tr>';
+					}
+					$("#tblPerson").html(item);
+                })
+
+            $.ajax({
+					url: '@Url.Action("GetCourseCoordinatorById", "TrainingPlanning")',
+					type: 'POST',
+					data: { id: Id }
+				}).done(function (data) {
+					var item = '';
+					for (var i = 0; i < data.length; i++) {
+						item += '<tr id="rowID' + data[i].Id + '">' +
+							'<td style="display:none;">' + data[i].employeeInfoId + '</td>' +
+							'<td>' + data[i].employeeInfo?.nameEnglish  + '</td> ' +
+							'<td>' +
+							'<button type = "button" id = "remove" value = "X" class="btn btn-danger btn-sm deleteitem1"  title = "click to delete" > <i class="fa fa-trash-alt"></i></button> ' +
+							'</td> ' +
+							'</tr>';
+					}
+                    $("#tblCoordinator").html(item);
+                })
+
+
+
+		}
+
+		console.log('Training__________');
+		$("#employeeInfoId").select2();
+		function AddSourceOfFound() {
+			$("#popupModal").modal('show');
+		}
+		function AddCourseType() {
+			$("#popupModalCourseType").modal('show');
+		}
+       
+        $("#tblCoordinator").on("click", ".deleteitem1", function () {
+            $(this).closest("tr").remove();
+        });
+
+		$("#tblPerson").on("click", ".deleteitem", function () {
+			$(this).closest("tr").remove();
+		});
+
+		$("#trainingType").change(function () {
+			var type = $("#trainingType :selected").val();
+			if (type == 1 || type == 3 || type == "") {
+				$("#country").val(1);
+				//$('#country').attr("disabled", true);
+				$(".hidelocation").hide();
+			} else {
+				$("#country").val('');
+				//$('#country').attr("disabled", false);
+				$(".hidelocation").show();
+			}
+		});
+
+		$('#planeStartDate, #planeEndDate').change(function () {
+			DateDifference()
+		});
+
+
+
+		function DateDifference() {
+			var start = $('#planeStartDate').datepicker('getDate');
+			var end = $('#planeEndDate').datepicker('getDate');
+			var days = (end - start) / 1000 / 60 / 60 / 24;
+			return days;
+		};
+
+
+
+		$("#add").click(function () {
+			var id = $("#resourcePeople2 option:selected").val();
+			var name = $("#resourcePeople2 option:selected").text();
+			console.log(id);
+			if ($('table#tblPerson').find('#rowID' + id).length > 0) {
+				swal('', 'already exists this Person!', 'error');
+			}
+			else if (id >0) {
+				var item = '<tr id="rowID' + id+'">' +
+					'<td style="display:none;">' + id + '</td>' +
+					'<td>' + name + '</td> ' +
+					'<td>' +
+					'<button type = "button" id = "remove" value = "X" class="btn btn-danger btn-sm deleteitem"  title = "click to delete" > <i class="fa fa-trash-alt"></i></button> ' +
+					'</td> ' +
+					'</tr>';
+				$("#tblPerson").append(item);
+				$("#resourcePeople2").val("");
+				collectPersonId();
+			} else {
+				swal('', 'Select Person!', 'error').then(function () {});
+			}
+        });
+
+        $("#addCoordinator").click(function () {
+            var id = $("#coordinator2 option:selected").val();
+            var name = $("#coordinator2 option:selected").text();
+            console.log(id);
+            if ($('table#tblCoordinator').find('#rowID' + id).length > 0) {
+                swal('', 'already exists this Person!', 'error');
+            }
+            else if (id > 0) {
+                var item = '<tr id="rowID' + id + '">' +
+                    '<td style="display:none;">' + id + '</td>' +
+                    '<td>' + name + '</td> ' +
+                    '<td>' +
+                    '<button type = "button" id = "remove" value = "X" class="btn btn-danger btn-sm deleteitem1"  title = "click to delete" > <i class="fa fa-trash-alt"></i></button> ' +
+                    '</td> ' +
+                    '</tr>';
+                $("#tblCoordinator").append(item);
+                $("#coordinator2").val("");
+                colleCoordinatorId();
+            } else {
+                swal('', 'Select Person!', 'error').then(function () { });
+            }
+        });
+
+		function collectPersonId() {
+			var Item = '';
+			$('#tblPerson tr').each(function () {
+				Item += $(this).closest("tr").children("td").eq(0).text() + ',';
+			});
+			Item = Item.slice(0, -1);
+			$("#resourcePersonIdList").val(Item);
+		};
+
+        function colleCoordinatorId() {
+            var Item = '';
+            $('#tblCoordinator tr').each(function () {
+                Item += $(this).closest("tr").children("td").eq(0).text() + ',';
+            });
+            Item = Item.slice(0, -1);
+            $("#coordinatorIdList").val(Item);
+        };
+
+
+        var events = [];
+		$('#submit1').click(function () {
+            collectPersonId();
+            colleCoordinatorId();
+			if(isValidForm()) {
+
+			console.log($('#FormId').serializeArray());
+			var data = $('#FormId').serializeArray();
+				console.log(data[0].value);
+
+				@*swal({
+					title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+				}).then(function () {
+					$.ajax({
+						url: '@Url.Action("Index", "TrainingPlanning")',
+						type: 'POST',
+						data: data
+					}).done(function () {
+						if (data[0].value == 0) {
+							swal('success', 'Saved Successfully!', 'success').then(function () {
+								//window.location.replace(/HRPMSTrainingNew/TrainingPlanning/AlltrainingList);
+
+							});
+						}
+						else {
+							swal('success', 'Updated Successfully!', 'success').then(function () {
+								window.location.reload();
+								//window.location.replace(/HRPMSTrainingNew/TrainingPlanning/AlltrainingList);
+
+								//window.location.href = "http://localhost:61246/HRPMSTrainingNew/TrainingPlanning/AlltrainingList#";
+							});;
+						}
+					}).fail(function () {
+						swal('warning', 'Failed!', 'warning');
+					})
+				});*@
+			}
+
+		});
+
+		function isValidForm() {
+			var isValid = false;
+			if ($("#course :selected").val() == '') {
+				$.notify("error: Course Title Required", "error");
+			} else if ($("#courseTypeId :selected").val() == '') {
+				$.notify("error: Course Type Required", "error");
+			}
+			else if ($("#planeStartDate").val() == '') {
+				$.notify("error: Start Date Required", "error");
+			}
+			else if ($("#planeEndDate").val() == '') {
+				$.notify("error: End Date Required", "error");
+			}
+			else if (DateDifference() < 0) {
+				$.notify("error: End Date Must Greater Or Equal to Start Date", "error");
+			}
+			else if ($("#participant").val() == '') {
+				$.notify("error: No Of  participant Required", "error");
+			}
+			else if ($("#sourceOfFundId :selected").val() == '') {
+				$.notify("error: Source Of Fund Required", "error");
+			}
+			else if ($("#trainingType :selected").val() == '') {
+				$.notify("error: Training Type Required", "error");
+			}
+			else if ($("#country :selected").val() == '') {
+				$.notify("error: country Required", "error");
+			}
+			////else if ($("#employeeInfoId :selected").val() == '') {
+			////	$.notify("error: Course Coordinator Required", "error");
+   ////         }
+            else if ($("#coordinatorIdList :selected").val() == '') {
+                $.notify("error: Course Coordinator Required", "error");
+            }
+			else if ($("#resourcePersonIdList").val() == '') {
+				$.notify("error: Resource Person Required", "error");
+			}
+			else {
+				isValid = true;
+			}
+			return isValid;
+		}
+
+
+		function formatDate1(date) {
+			date = new Date(date);
+			var year = date.getFullYear(),
+				month = date.getMonth() + 1, // months are zero indexed
+				day = date.getDate(),
+				hour = date.getHours(),
+				minute = date.getMinutes(),
+				second = date.getSeconds(),
+				hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+				minuteFormatted = minute < 10 ? "0" + minute : minute,
+				morning = hour < 12 ? "am" : "pm";
+
+			return year + "-" + month + "-" + day;
+		}
+
+		function formatDate(date) {
+            date = new Date(date);
+            var year = date.getFullYear(),
+                month = date.getMonth() + 1, // months are zero indexed
+                day = date.getDate(),
+                hour = date.getHours(),
+                minute = date.getMinutes(),
+                second = date.getSeconds(),
+                hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+                minuteFormatted = minute < 10 ? "0" + minute : minute,
+                morning = hour < 12 ? "am" : "pm";
+
+            return day + "/" + + month + "/" + year;
+        }
+        $(document).ready(function () {
+
+
+
+            $('#timepickerIn').mdtimepicker({
+
+                // format of the time value (data-time attribute)
+                timeFormat: 'hh:mm:ss',
+                // format of the input value
+                format: 'hh:mm:ss',
+
+                // theme of the timepicker
+                // 'red', 'purple', 'indigo', 'teal', 'green', 'dark'
+				theme: 'purple',
+
+                // determines if input is readonly
+                readOnly: true,
+
+                // determines if display value has zero padding for hour value less than 10 (i.e. 05:30 PM); 24-hour format has padding by default
+                hourPadding: true,
+
+                // determines if clear button is visible
+                clearBtn: true
+
+            });
+
+            // setting the value
+            // $('#intime').val(formatDate(new Date()) + ' 9:00:00.000');
+            $('#intime').val('');
+            //$('#timepickerIn').mdtimepicker('setValue', dateEf + ' 9:00 AM');
+            //$('#intime').click(function () {
+            //    $('#timepickerIn').mdtimepicker('setValue', '3:30 PM');
+            //})
+            $('#timepickerIn').mdtimepicker().on('timechanged', function (e) {
+
+                console.log(formatDate(new Date()) + ' ' + e.time);
+                $('#intime').val(formatDate(new Date()) + ' ' + e.time)
+            });
+
+
+            $('#timepickerOut').mdtimepicker({
+
+                // format of the time value (data-time attribute)
+                timeFormat: 'hh:mm:ss',
+
+                // format of the input value
+                format: 'hh:mm:ss',
+
+                // theme of the timepicker
+                // 'red', 'purple', 'indigo', 'teal', 'green', 'dark'
+				theme: 'purple',
+
+                // determines if input is readonly
+                readOnly: true,
+
+                // determines if display value has zero padding for hour value less than 10 (i.e. 05:30 PM); 24-hour format has padding by default
+                hourPadding: false,
+
+                // determines if clear button is visible
+                clearBtn: false
+
+            });
+
+            // setting the value
+            // $('#outtime').val(formatDate(new Date()) + ' 18:00:00.000');
+            $('#outtime').val('');
+            // $('#timepickerOut').mdtimepicker('setValue', dateEf + '18:00');
+            $('#timepickerOut').mdtimepicker().on('timechanged', function (e) {
+
+                console.log(formatDate(new Date()) + ' ' + e.time);
+                $('#outtime').val(formatDate(new Date()) + ' ' + e.time)
+            });
+
+
+
+            //$("#timepickerOut").change(function () {
+            //    //var name = $(this).val().split('\\')[2].toString();
+            //    //$('#imageFile').val(name)
+            //    //console.log($(this).val().split('\\'))
+
+            //    var min1 = $('#intime').val().split(':')[1];
+            //    var h1 = $('#intime').val().split('')[0];
+            //    alert(h1);
+            //    var hIntoM1 = h1 * 60;
+            //    var hIntoM3 = (+hIntoM1) + (+min1) ;
+
+
+            //    alert(hIntoM3);
+
+            //    var min2 = $('#outtime').val().split(':')[1];
+
+            //    alert(min2);
+            //    var h2 = $('#outtime').val().split('')[0];
+            //   // var h2 = $('#outtime').val().split('')[0];
+            //    alert(h2);
+            //    var hIntoM2 = h2 * 60;
+            //    var hIntoM4 = (+hIntoM2) + (+min2);
+            //    alert(hIntoM4);
+
+
+            //    var hIntoM = hIntoM3 - hIntoM4;
+            //    alert(hIntoM);
+            //    $('#durationMinutes').val(hIntoM);
+            //});
+
+
+
+
+
+            $('#timepickerOut').change(function () {
+                var LoginTime = $('#intime').val();
+				var expectedTime = $('#outtime').val();
+
+				if (expectedTime != null) {
+					var dateString1 = new Date(formatDate1(new Date()) + ' ' + LoginTime.split(' ')[1]).getTime();
+					var dateString2 = new Date(formatDate1(new Date()) + ' ' + expectedTime.split(' ')[1]).getTime();
+					var late = (parseInt(dateString2) - parseInt(dateString1)) / 1000 / 60;
+                    $('#durationMinutes').val(late);
+
+                }
+
+			})
+
+			$('#timepickerIn').change(function () {
+				var LoginTime = $('#intime').val();
+				var expectedTime = $('#outtime').val();
+
+				if (expectedTime != null) {
+					var dateString1 = new Date(formatDate1(new Date()) + ' ' + LoginTime.split(' ')[1]).getTime();
+					var dateString2 = new Date(formatDate1(new Date()) + ' ' + expectedTime.split(' ')[1]).getTime();
+                    var late = (parseInt(dateString2) - parseInt(dateString1)) / 1000 / 60;
+
+                    if (expectedTime != '') {
+                        $('#durationMinutes').val(late);
+                    }
+
+
+				}
+
+			})
+
+
+
+
+
+
+
+
+
+
+            $('.boxContent').hide();
+            $('.calenderContent').show();
+            $('.calender').addClass('active5');
+
+			$("#submit").click(function () {
+                collectPersonId();
+                colleCoordinatorId();
+				if (isValidForm()) {
+					console.log($('#FormId').serializeArray());
+					swal({
+						title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+					}).then(function () {
+
+						$("#submitbtn").click();
+					});
+				}
+
+            });
+
+            //getEvents();
+            var orgFullTitle = "TRAINING PLANNING (FOREIGN)";
+            //$("#award").addClass("active");
+            $('#trainingPlaneTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        title: orgFullTitle,
+                        messageTop: 'List Of Foreign Training',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        title: orgFullTitle,
+                        messageTop: 'List Of Employee Training'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: orgFullTitle,
+                        messageTop: 'List Of Foreign Training',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+
+
+            $('#planeStartDate').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2030" });
+            $('#planeEndDate').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2030" });
+
+
+            //$('#planeStartDate').datepicker({ uiLibrary: 'bootstrap4' });
+            //$('#planeEndDate').datepicker({ uiLibrary: 'bootstrap4' });
+
+            $('#employeeType').multipleSelect();
+        });
+
+        function Edit(Id, course, courseObjective, amount, startDate, endDate, year, noOfParticipants, employeeTypeId, budget, remark, countryId, location) {
+            $("#planningId").val(Id);
+            $("#course").val(course);
+            $("#courseObjective").val(courseObjective);
+           // $("#amount").val(amount);
+            $("#planeStartDate").val(startDate);
+            $("#planeEndDate").val(endDate);
+            //$("#year").val(year);
+            $("#participant").val(noOfParticipants);
+
+            $("#employeeType").multipleSelect('setSelects', employeeTypeId.split(","));
+            //$("#employeeType").val(employeeTypeId);
+            $("#budget").val(budget);
+            $("#remark").val(remark);
+            $("#country").val(countryId);
+            $("#location").val(location);
+        }
+        function Remove(Id) {
+	        swal({
+		        title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+	        }).then(function () {
+		        $.ajax({
+			        url: '@Url.Action("Delete", "TrainingPlanning")',
+			        data: { Id: Id },
+			        type: 'GET',
+		        })
+		        .done(function () {
+                    swal('', 'Deleted Successfully!', 'success').then(function () {
+                        window.location.reload();
+                    });
+		        })
+		        .fail(function () {
+			        swal('', 'Unable to Delete!', 'warning');
+		        });
+	        });
+
+            calendar.render();
+        }
+	</script>
+}
+
+<div class="modal fade" id="popupModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="col-md-10" style="display: flex; justify-content: flex-start; align-items: center;">
+					<h5 class="card-title" style="color: black; margin: 8px; text-transform: uppercase;">Add Source Of Found</h5>
+				</div>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<br />
+			</div>
+			<div class="card-body">
+				<div class="container">
+					<form asp-area="HRPMSTrainingNew" asp-controller="TrainingPlanning" asp-action="SaveUpdateSourceOfFund" id="FormIdSourceOfFund" method="post" data-parsley-validate="parsley">
+						<div class="form-group row">
+							<input type="hidden" name="Id" id="Id" class="IdSourceOfFund">
+							<label for="nameEN" class="col-sm-2 col-form-label">Name English <span style="float:right;" class="redStar">*</span></label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control form-control-sm" name="nameEN" id="nameEN" data-parsley-required="true" data-parsley-trigger="keyup">
+							</div>
+							<label for="nameBN" class="col-sm-2 col-form-label">Name Bangla <span style="float:right;" class="redStar">*</span></label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control  form-control-sm" name="nameBN" id="nameBN" data-parsley-required="true" data-parsley-trigger="keyup">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="remark" class="col-sm-2 col-form-label">Remark </label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control remarksSourceOfFund  form-control-sm" name="remarks" id="remarks " data-parsley-trigger="keyup">
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-sm-12">
+								<hr />
+								<button type="button" onclick="clearSourceOfFundForm()" value="Clear" class="btn btn-outline-dark btn-sm" style="float:right; margin-top:5px;margin-left:7px;"> Clear</button>
+								<button type="button" id="submitSourceOfFund" value="Submit" class="btn btn-success btn-sm" style="float:right; margin-top:5px;margin-left:7px;"><i class="fas fa-save"></i> Save</button>
+
+							</div>
+						</div>
+						<style>
+							#tblsourceOfFund thead th {
+								color: white;
+							}
+						</style>
+						<table class="" id="tblsourceOfFund" style="width:100%;text-align:center; border-collapse:collapse;" border="1">
+							<thead>
+								<tr style="background:#d9d9d6;color:white;">
+									<th>Sl</th>
+									<th>Name English</th>
+									<th>Name Bangla</th>
+									<th>Remarks</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								@{
+									int index = 1;
+								}
+								@foreach (var data in Model.sourceOfFundList)
+								{
+									<tr>
+										<td>@index</td>
+										<td>@data.nameEN</td>
+										<td>@data.nameBN</td>
+										<td>@data.remarks</td>
+										<td>
+											<a class="btn btn-success" onclick="EditSourceOfFund(@data.Id, '@data.nameEN', '@data.nameBN','@data.remarks')" href="#"><i class="fa fa-edit"></i></a>
+											<a class="btn btn-danger" onclick="DeleteSourceOfFund(@data.Id)" href="#"><i class="fa fa-trash-alt"></i></a>
+										</td>
+									</tr>
+									index++;
+								}
+
+							</tbody>
+						</table>
+					</form>
+				</div>
+			</div>
+			<br />
+		</div>
+	</div>
+</div>
+<script>
+	$("#submitSourceOfFund").click(function () {
+		if (isValidSourceOfFund()) {
+				console.log($('#FormIdSourceOfFund').serializeArray());
+		var data = $('#FormIdSourceOfFund').serializeArray();
+			console.log(data[0].value)
+			swal({
+				title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+			}).then(function () {
+				$.ajax({
+					url: '@Url.Action("SaveUpdateSourceOfFund", "TrainingPlanning")',
+					type: 'POST',
+					data: data
+				}).done(function () {
+					console.log(data);
+
+					if (data[0].value == 0) {
+						swal('success', 'Saved Successfully!', 'success').then(function () {
+							location.reload();
+						});
+					}
+					else {
+						swal('success', 'Updated Successfully!', 'success').then(function () {
+							location.reload();
+						});;
+					}
+				}).fail(function () {
+					swal('warning', 'Failed!', 'warning');
+				})
+			});
+		}
+	});
+
+	function isValidSourceOfFund(){
+		var isValid = false;
+		if ($("#nameEN").val() == "") {
+			swal('warning', 'Name English Required!', 'warning');
+		} else if ($("#nameBN").val() == "") {
+			swal('warning', 'Name Bangla Required!', 'warning');
+		} else {
+			isValid = true;
+		}
+		return isValid;
+	}
+
+	function EditSourceOfFund(Id, nameEN, nameBN, remarks) {
+		$(".IdSourceOfFund").val(Id);
+		$("#nameEN").val(nameEN);
+		$("#nameBN").val(nameBN);
+		$(".remarksSourceOfFund").val(remarks);
+	};
+
+	function clearSourceOfFundForm() {
+		$(".IdSourceOfFund").val('');
+		$("#nameEN").val('');
+		$("#nameBN").val('');
+		$(".remarksSourceOfFund").val('');
+	}
+
+	function DeleteSourceOfFund(Id) {
+		swal({
+			title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+		}).then(function () {
+			$.ajax({
+				url: '@Url.Action("DeletesourceOfFundById", "TrainingPlanning")',
+				data: { Id: Id },
+				type: 'POST',
+			})
+				.done(function () {
+					swal('', 'Deleted Successfully!', 'success');
+					location.reload();
+				})
+				.fail(function () {
+					swal('Cancelled', 'It will not be deleted. Please try again later !!!', 'error');
+				});
+		});
+	};
+
+</script>
+
+
+<div class="modal fade" id="popupModalCourseType" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="col-md-10" style="display: flex; justify-content: flex-start; align-items: center;">
+					<h5 class="card-title" style="color: black; margin: 8px; text-transform: uppercase;">Add Course Type</h5>
+				</div>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<br />
+			</div>
+			<div class="card-body">
+				<div class="container">
+					<form asp-area="HRPMSTrainingNew" asp-controller="TrainingPlanning" asp-action="SaveUpdateCourseType" id="FormIdCourseType" method="post" data-parsley-validate="parsley">
+						<div class="form-group row">
+							<input type="hidden" name="Id" id="Id" class="IdCourseType">
+							<label for="typeNameEN" class="col-sm-2 col-form-label"> Name English <span style="float:right;" class="redStar">*</span></label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control form-control-sm" name="typeNameEN" id="typeNameEN" data-parsley-required="true" data-parsley-trigger="keyup">
+							</div>
+							<label for="typeNameBN" class="col-sm-2 col-form-label"> Name Bangla <span style="float:right;" class="redStar">*</span></label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control  form-control-sm" name="typeNameBN" id="typeNameBN" data-parsley-required="true" data-parsley-trigger="keyup">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="remarks" class="col-sm-2 col-form-label">Remark </label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control remarksCourseType  form-control-sm" name="remarks" id="remarks " data-parsley-trigger="keyup">
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-sm-12">
+								<hr />
+								<button type="button" onclick="clearCourseTypeForm()" value="Clear" class="btn btn-outline-dark btn-sm" style="float:right; margin-top:5px;margin-left:7px;"> Clear</button>
+								<button type="button" id="submitCourseType" value="Submit" class="btn btn-success btn-sm" style="float:right; margin-top:5px;margin-left:7px;"><i class="fas fa-save"></i> Save</button>
+
+							</div>
+						</div>
+						<style>
+							#tblcourseType thead th {
+								color: white;
+							}
+						</style>
+						<table class="" id="tblcourseType" style="width:100%;text-align:center; border-collapse:collapse;" border="1">
+							<thead>
+								<tr style="background:#d9d9d6;color:white;">
+									<th>Sl</th>
+									<th>Type Name English</th>
+									<th>Type Name Bangla</th>
+									<th>Remarks</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								@{
+									int index2 = 1;
+								}
+								@foreach (var data in Model.courseTypeList)
+								{
+									<tr>
+										<td>@index2</td>
+										<td>@data.typeNameEN</td>
+										<td>@data.typeNameBN</td>
+										<td>@data.remarks</td>
+										<td>
+											<a class="btn btn-success" onclick="EditCourseType(@data.Id, '@data.typeNameEN', '@data.typeNameBN','@data.remarks')" href="#"><i class="fa fa-edit"></i></a>
+											<a class="btn btn-danger" onclick="DeleteCourseType(@data.Id)" href="#"><i class="fa fa-trash-alt"></i></a>
+										</td>
+									</tr>
+									index2++;
+								}
+
+							</tbody>
+						</table>
+					</form>
+				</div>
+			</div>
+			<br />
+		</div>
+	</div>
+</div>
+
+<script>
+	$("#submitCourseType").click(function () {
+		if (isValidCourseType()) {
+			console.log($('#FormIdCourseType').serializeArray());
+			var data = $('#FormIdCourseType').serializeArray();
+			console.log(data[0].value)
+			swal({
+				title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+			}).then(function () {
+				$.ajax({
+					url: '@Url.Action("SaveUpdateCourseType", "TrainingPlanning")',
+					type: 'POST',
+					data: data
+				}).done(function () {
+					console.log(data);
+
+					if (data[0].value == 0) {
+						swal('success', 'Saved Successfully!', 'success').then(function () {
+							location.reload();
+						});
+					}
+					else {
+						swal('success', 'Updated Successfully!', 'success').then(function () {
+							location.reload();
+						});;
+					}
+				}).fail(function () {
+					swal('warning', 'Failed!', 'warning');
+				})
+			});
+		}
+	});
+
+	function isValidCourseType(){
+		var isValid = false;
+		if ($("#typeNameEN").val() == "") {
+			swal('warning', 'Name English Required!', 'warning');
+		} else if ($("#typeNameBN").val() == "") {
+			swal('warning', 'Name Bangla Required!', 'warning');
+		} else {
+			isValid = true;
+		}
+		return isValid;
+	}
+
+	function EditCourseType(Id, nameEN, nameBN, remarks) {
+		$(".IdCourseType").val(Id);
+		$("#typeNameEN").val(nameEN);
+		$("#typeNameBN").val(nameBN);
+		$(".remarksCourseType").val(remarks);
+	};
+
+	function clearCourseTypeForm() {
+		$(".IdCourseType").val('');
+		$("#typeNameEN").val('');
+		$("#typeNameBN").val('');
+		$(".remarksCourseType").val('');
+	}
+
+	function DeleteCourseType(Id) {
+		swal({
+			title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+		}).then(function () {
+			$.ajax({
+				url: '@Url.Action("DeleteCourseTypeById", "TrainingPlanning")',
+				data: { Id: Id },
+				type: 'POST',
+			})
+				.done(function () {
+					swal('', 'Deleted Successfully!', 'success');
+					location.reload();
+				})
+				.fail(function () {
+					swal('Cancelled', 'It will not be deleted. Please try again later !!!', 'error');
+				});
+		});
+	};
+
+</script>
+
+
+
+
+
+
+
+

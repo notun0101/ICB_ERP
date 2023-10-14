@@ -1,0 +1,222 @@
+﻿
+@{
+    ViewData["Title"] = "StaffLoanVoucher";
+    Layout = "~/_Layout.cshtml";
+}
+
+
+@section Style{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link href="~/css/site.css" rel="stylesheet" />
+
+    <link href="~/lib/main.css" rel="stylesheet" />
+    <style>
+        #calendar a, #ui-datepicker-div a {
+            color: black !important;
+        }
+        /* Top Counter */
+        .leftImgBox {
+            width: 20%;
+            height: 100%;
+            float: left;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 13px;
+        }
+
+            .leftImgBox img {
+                width: 100%;
+            }
+
+            .leftImgBox i {
+                font-size: 42px !important;
+            }
+
+        .counterBox {
+            float: right;
+            text-align: center;
+            margin: 10px;
+        }
+
+        .counter {
+            font-size: 25px;
+            margin-bottom: 0;
+        }
+
+        .counterBox1 {
+            float: right;
+            text-align: right;
+            margin: 0;
+        }
+
+        .counter1 {
+            font-size: 20px !important;
+            margin-bottom: 0;
+        }
+
+        .counter p {
+            text-align: right;
+        }
+
+        .title {
+            font-size: 15px;
+        }
+
+        a {
+            color: white !important;
+        }
+
+            a:hover {
+                color: white;
+            }
+
+        .active5 {
+            color: darkgreen;
+        }
+
+        .redstar {
+            color: red;
+            float: right;
+        }
+    </style>
+}
+<div class="card" style="width: 100%;">
+    <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+        <h5 class="m-0 font-weight-bold text-primary">Individual Loan Report</h5>
+        <a class='btn btn-info mr-4' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1017&perentId=6229'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+    </div>
+    <div class="card-body">
+
+        <div class="container">
+            <form>
+                <div class="row">
+                    <input type="hidden" id="employeeId" name="employeeId">
+                    <div class="col-sm-12">
+                        <div class="form-group row">
+                                                        
+                            <label for="particular" class="col-sm-3 col-form-label">Particular</label>
+                            <div class="col-sm-3">
+                                <select class="form-control" id="particular">
+                                    <option value=''>Choose Particular</option>
+                                    <option value='1'>Interest Charge Transfer</option>
+                                    <option value='2'>Interest Charged</option>
+                                    <option value='3'>Interest Refund</option>
+                                    <option value='4'>Interest Reverse</option>
+                                    <option value='5'>Interest Reverse (Cr)</option>
+                                    <option value='6'>Legal And Documentation</option>
+                                    <option value='7'>Loan Disbursement</option>
+                                    <option value='8'>Loan Installment</option>
+                                    <option value='9'>Loan Recovery</option>
+                                    <option value='10'>Loan Waiver</option>
+                                    <option value='11'>Opening Balance</option>
+                                    <option value='12'>Principal Refund</option>
+                                    <option value='13'>Priorer Adjustment</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="form-group row">
+                            <label for="startDate" class="col-sm-3 col-form-label">From Date</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control datepicker" id="startDate" readonly>
+                            </div>
+                            <label for="endDate" class="col-sm-3 col-form-label">To Date</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control datepicker" id="endDate" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <a id="submit" type="button" class="btn btn-success" style="float:right; " href='javascript:void(0)'><i class="fas fa-file-pdf"></i> Print</a> &nbsp;
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(document).ready(function () {
+        $('.datepicker').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100" });
+
+        //Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo', [], 'json', ajaxGetEmployees);
+        //Common.Ajax('GET', '/global/api/GetAllEmployeeInfosForVoucherEntry', [], 'json', ajaxGetEmployees);
+
+    });
+    
+    $('#submit').click(function () {
+
+        var particularId = $('#particular option:selected').val();
+        var particular = $('#particular option:selected').text();
+
+        if (particularId == '') {
+            particular = '';
+        }
+
+        var startDate = $('#startDate').val();
+        var endDate = $('#endDate').val();
+        if (startDate == '') {
+            alert('Please select Start Date.');
+            return false;
+        }
+        if (endDate == '') {
+            alert('Please select End Date.');
+            return false;
+        }
+
+        var startDate = $('#startDate').val();
+        var endDate = $('#endDate').val();
+        window.open("/Payroll/PayrollReport/GetVoucherByParticularExcel?particular=" + particular + "&startDate=" + startDate + "&endDate=" + endDate);
+    });
+    
+    function formatDate(date) {
+        date = new Date(date);
+        var year = date.getFullYear(),
+            month = date.getMonth() + 1, // months are zero indexed
+            day = date.getDate(),
+            hour = date.getHours(),
+            minute = date.getMinutes(),
+            second = date.getSeconds(),
+            hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+            minuteFormatted = minute < 10 ? "0" + minute : minute,
+            morning = hour < 12 ? "am" : "pm";
+
+        return day + "/" + + month + "/" + year;
+    }
+    
+    function ajaxGetEmployees(response) {
+        console.log(response)
+        var GeEmployeesList = [];
+        console.log(response)
+        $.each(response, function (id, option) {
+            var obj = new Object();
+            obj.key = option.Id;
+            obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+            obj.employeeCode = option.employeeCode;
+            GeEmployeesList[GeEmployeesList.length] = obj;
+        });
+        $('#employeeName').autocomplete({
+            source: GeEmployeesList,
+            select: function (event, ui) {
+                //$("#employeeName").val(ui.item.value);
+                $("#employeeId").val(ui.item.key);
+                $("#empCode").val(ui.item.employeeCode);
+                Common.Ajax('GET', '/Payroll/PayrollReport/GetLoansByEmployeeCode?empCode=' + ui.item.employeeCode, [], 'json', ajaxGetLoansByEmployeeId);
+            }
+        });
+    }
+
+    function ajaxGetLoansByEmployeeId(response) {
+        console.log(response);
+        $('#loanId').empty();
+        $('#loanId').append(`<option value='0'>Choose Loan Type</option>`)
+        $('#loanId').append(`<option value='ALL'>ALL</option>`)
+        $.each(response, function (i, item) {
+            $('#loanId').append(`<option value='${item.loanId}'>${item.loanName}</option>`)
+        })
+    }
+
+</script>
+

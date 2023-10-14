@@ -1,0 +1,210 @@
+﻿@model PFAccountsViewModel
+@{
+    ViewData["Title"] = "PfEmpWiseYearlyStatement";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+@section Style{
+    <style>
+		body{
+			font-family: Calibri;
+			font-weight: normal;
+		}
+        .print-card-body {
+            width: 100%;
+            padding-bottom: 10px;
+        }
+
+        .vartical-table th {
+            width: 25%;
+        }
+
+        .vartical-table td {
+            width: 25%;
+        }
+
+        .table td, .table th {
+            padding: .3rem;
+            font-size: 14px;
+        }
+
+        table {
+            page-break-inside: auto;
+            border-collapse: collapse;
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        tfoot {
+            display: table-footer-group;
+        }
+
+        h6 {
+            font-size: 14px;
+            background-color: gray;
+            color: white !important;
+            padding: 3px;
+        }
+    </style>
+}
+
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+
+        <div class="container-fluid">
+            <div class="fa-pull-right">
+                <p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+            </div>
+            <div class="row" style="padding-top:0px;">
+                <div class="col-2">
+                    <img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="BDBL Logo" style="height:80px;" />
+                </div>
+                <div class="col-8">
+                    <div style="color:black;text-align:center;">
+                        <h3 style="font-size:20px;">BANGLADESH DEVELOPMENT BANK LIMITED</h3>
+                        <h3 style="font-size:18px;">Central Accounts Depertment</h3>
+                        <h3 style="font-size:15px;">(Provident Fund Section) </h3>
+                        <h3 style="font-size:20px;">
+                            <u> Provident Fund Account Statement for the year @Model.firstDate?.ToString("yyyy")</u>
+                        </h3>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid" style="color:black;">
+
+            <table class="" style="width:100%;">
+                <tbody>
+                    <tr>
+                        <th>PF a/c no: </th>
+                        <td>@Model.pFMember?.memberCode</td>
+                        <th>Designation: </th>
+                        <td>@Model.pfAccounts?.employee?.lastDesignation?.designationName</td>
+
+                    </tr>
+                    <tr>
+                        <th>Name: </th>
+                        <td>@Model.pFMember?.memberName</td>
+                        
+                        <th>Posted In the: </th>
+                        <td>@Model.pFMember?.employeeInfo?.presentPosting</td>
+                        <th></th>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+            <table class="" style="border:1px solid black;width:100%;">
+                <tbody style="">
+                    <tr>
+                        <td>
+                            <u>
+                                Position of Providend Fun
+                            </u>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Opening balance as on @Model.firstDate?.ToString("dd-MM-yy")</td>
+                        <td>@Model.pfAccounts?.openingBalance</td>
+                    </tr>
+                    <tr>
+                        <td>Add: Own/Bank Contribution during the FY  @Model.firstDate?.ToString("yyyy")</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Add: Loan Recovery during FY  @Model.firstDate?.ToString("yyyy")</td>
+                        <td>@Model.pfAccounts?.loan</td>
+                    </tr>
+                    <tr>
+                        <td>Add: Interest during FY  @Model.firstDate?.ToString("yyyy")</td>
+                        <td>@Model.pfAccounts?.interest</td>
+                    </tr>
+                    <tr>
+                        <td>Less: Loan Disburse during FY  @Model.firstDate?.ToString("yyyy")</td>
+                        <td></td>
+                    </tr>
+                     <tr>
+                         <td>Less: Final Settlement/Non Refundable loan during  @Model.firstDate?.ToString("yyyy")</td>
+                        <td></td>
+                    </tr>
+                     <tr>
+                         <td>Closing Balance as on  @Model.lastDate?.ToString("dd-MM-yy")</td>
+                        <td>@Model.pfAccounts?.total</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <br />
+             <table class="" style="border:1px solid black;width:100%;">
+                <tbody style="">
+                    <tr>
+                        <td>
+                            <u>
+                                Position of Loan Balance
+                            </u>
+                        </td>
+                        <td></td>
+                    </tr>
+                   <tr>
+                       <td>Opening Loan Balance as on : @Model.firstDate?.ToString("dd-MM-yy")</td>
+                       <td></td>
+                   </tr>
+                     <tr>
+                         <td>Add: Loan Disburse during FY  @Model.firstDate?.ToString("yyyy")</td>
+                       <td></td>
+                   </tr>
+                     <tr>
+                         <td>Add: Interest on Loan during FY  @Model.firstDate?.ToString("yyyy")</td>
+                       <td></td>
+                   </tr>
+                     <tr>
+                         <td>Less: Loan Recovery during FY  @Model.firstDate?.ToString("yyyy")</td>
+                       <td></td>
+                   </tr>
+                     <tr>
+                         <td>Less: Loan converted to Non Refundable Loan during FY  @Model.firstDate?.ToString("yyyy")</td>
+                       <td></td>
+                   </tr>
+                     <tr>
+                         <td>Closing Loan Balance as on  @Model.lastDate?.ToString("dd-MM-yy")</td>
+                       <td></td>
+                   </tr>
+                </tbody>
+            </table>
+
+            <br />
+
+            <div style="width:100%;padding-left:5px;padding-right:5px;text-align:justify">
+                <p>
+                    <strong>NB</strong><br /> You are requested to please check and confirm the above balance within 10 ( ten ) days from the date of Issuance of this letter / statement. Unless you notify the Provident Fund Section of any discrepancy within the stipulated period, the account statement will be considered as flawless and correct. This is a computer generated statement/ document, signature is not required.
+                </p>
+            </div>
+
+            <div class="row">
+               
+            </div>
+
+
+        </div>
+
+
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+
+    </script>
+
+
+}

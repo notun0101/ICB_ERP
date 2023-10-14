@@ -1,0 +1,175 @@
+﻿@model PayrollReportViewModel
+@{
+    ViewData["Title"] = "PaySlip";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Style{
+    <style>
+        ul.ui-autocomplete {
+            z-index: 99999999;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .active {
+            color: darkcyan;
+        }
+
+        .c {
+            /*min-height: 300px;*/
+            /*background-color: lightgreen !important;*/
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: black;
+        }
+
+            .c a {
+                color: black;
+                outline: none;
+                box-shadow: none !important;
+                border: none;
+            }
+
+            .c .card-footer {
+                height: 50px;
+                background-color: #E9F7EF;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .c:hover {
+                background-color: lightblue;
+                border: 1px solid black !important;
+            }
+
+        .name:hover {
+            cursor: pointer;
+            color: black;
+        }
+
+        a i {
+            font-size: 20px !important;
+            /*margin: 0 !important;*/
+        }
+
+        .redstar {
+            color: red;
+            float: right
+        }
+    </style>
+}
+
+<div class="card-header  d-flex flex-row align-items-center justify-content-between">
+    <h5 class="m-0 font-weight-bold text-primary">Special Report</h5>
+    <a class='btn btn-info btn-sm' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=10&perentId=3322'>@*<i class="fas fa-backward fa-2x "></i>*@<i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="container">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                        <input type="hidden" id="employeeInfoId" value="@Model.employeeInfo?.Id" name="employeeInfoId">
+                    <div class="form-group row" id="forReportType">
+                        <label for="reportTypeId" class="col-sm-3 col-form-label">Report Type <span class="redstar">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control" name="reportTypeId" id="reportTypeId">
+                                <option class="form-control" value="">Select</option>
+                                <option class="form-control" value="BSL">BDBL Securities Ltd.</option>
+                                <option class="form-control" value="BISL">BDBL Investment Services Ltd.</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row" id="forPeriod">
+                        <label for="salaryPeriodId" class="col-sm-3 col-form-label">Period Name <span class="redstar">*</span></label>
+                        <div class="col-sm-9">
+                            @if (User.IsInRole("admin") || User.IsInRole("UAT Admin") || User.IsInRole("PayrollAdmin") || User.IsInRole("PaySlip"))
+                            {
+                                <select name="salaryPeriodId" id="salaryPeriodId" class="form-control">
+                                    <option value="">Select Salary Period</option>
+                                    @foreach (var data in Model.salaryPeriods.Where(x => x.salaryTypeId == 1))
+                                    {
+                                        <option value="@data.Id">@data.periodName</option>
+                                    }
+                                </select>
+                            }
+                            else
+                            {
+                                <select name="salaryPeriodId" id="salaryPeriodId" class="form-control">
+                                    <option value="">Select Salary Period</option>
+                                    @foreach (var data in Model.salaryPeriods.Where(x => x.salaryTypeId == 1))
+                                    {
+                                        <option value="@data.Id">@data.periodName</option>
+                                    }
+                                </select>
+                            }
+
+                        </div>
+                    </div>
+                    <div class="form-group row" id="forButton">
+                        <label class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input type="button" value="Generate" id="btnPrint" class="btn btn-success btn-sm" style="width:120px;" />
+                            &nbsp;&nbsp;&nbsp;
+                            @*<input type="button" value="Load" id="btnExcel" class="btn btn-warning btn-sm" style="width:120px;display:none" />*@
+                            <button id="btnExcel" class="btn btn-facebook btn-sm" title="Excel" style="width:140px;display:none">Load</button>
+                            &nbsp;&nbsp;&nbsp;
+                            <input type="button" id="btnRefresh" value="Refresh" class="btn btn-info btn-sm" style="width:80px;" />
+                            <input type="hidden" id="hidden" value="@DateTime.Now.ToString("dd-MMM-yyyy")" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function(){
+
+            $('#btnRefresh').click(function () {
+                $('#reportTypeId').val('BSL');
+                $('#reportTypeId').val('BISL');
+                $('#salaryPeriodId').val('');
+
+            })
+
+            $("#btnPrint").click(function (e) {
+                let rptType = $('#reportTypeId').val();
+                let salaryPeriodId = $('#salaryPeriodId').val();
+                if (rptType == "") {
+                    swal('Warning', 'Select Report Type', 'warning');
+                    return false;
+                }
+                if (rptType == 'BSL') {
+                    if (salaryPeriodId == 0) {
+                        swal('Warning', 'Select Salary Period', 'warning');
+                        return false;
+                    }
+                    window.open('/Payroll/PayrollReport/SpecialReportPdf?rptType=' + rptType + '&salaryPeriodId=' + salaryPeriodId, '_blank');
+                }
+                else if (rptType == 'BISL') {
+                    if (salaryPeriodId == 0) {
+                        swal('Warning', 'Select Salary Period', 'warning');
+                        return false;
+                    }
+                    window.open('/Payroll/PayrollReport/BISLReportPdf?rptType=' + rptType + '&salaryPeriodId=' + salaryPeriodId, '_blank');
+                }
+              
+            });
+        })
+    </script>
+}

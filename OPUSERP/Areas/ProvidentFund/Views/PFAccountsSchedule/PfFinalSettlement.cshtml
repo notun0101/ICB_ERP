@@ -1,0 +1,223 @@
+﻿@model PfForfeitAccountViewModel
+@{
+    ViewData["Title"] = "PfFinalSettlement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4 bg-light">
+            <div class="card" style="width: 100%;">
+                <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+                    <h5 class="m-0 font-weight-bold text-primary">Pf Final Settlement</h5>
+                    <a class='btn btn-info mr-4' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1014&perentId=6015'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+                </div>
+                <div class="card-body">
+
+                    <div class="">
+                        <form asp-area="ProvidentFund" asp-controller="PFAccountsSchedule" asp-action="PfFinalSettlement" id="FormId" method="post" data-parsley-validate="parsley" enctype="multipart/form-data">
+                            <div class="row col-sm-12 tr">
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-4 col-form-label">Members ID </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="membersName" name="">
+                                            <input type="hidden" id="memberId" name="pfMemberId" />
+                                            <input type="hidden" id="memberCode" name="pfMemberCode" />
+                                            <input type="hidden" id="Id" name="Id" value="0">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-4 col-form-label">PF Total Own </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="pfTotalOwn" name="pfTotalOwn" placeholder="" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-4 col-form-label">PF Total Bank </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="pfTotalBank" name="pfTotalBank" placeholder="" readonly>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="col-sm-6">
+
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-4 col-form-label">PF Total Interest </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="pfTotalInterest" name="pfTotalInterest" placeholder="" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-4 col-form-label">PF Total Loan </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="pfTotalLoan" name="pfTotalLoan" placeholder="" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-4 col-form-label">PF Total</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="pfTotal" name="pfTotal" placeholder="" readonly>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div>
+                                <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+                                <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;margin-right:35px"><i class="fas fa-save"></i> Save</button>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h5 class="m-0 font-weight-bold text-primary">PF Settlement Accounts List</h5>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="FinalSettlement">
+                    <thead>
+                        <tr>
+                            <th>Members Id</th>
+                            <th>Employee Name</th>
+                            <th>PF Total Own</th>
+                            <th>PF Total Bank</th>
+                            <th>PF Total Loan</th>
+                            <th>PF Total Interest</th>
+                            <th>PF Total</th>
+                            <th>Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.finalSettlements)
+                        {
+                            <tr>
+                                <td>@data.pfMemberId</td>
+                                <td>@data.pfMember?.memberName</td>
+                                <td>@data.pfTotalOwn</td>
+                                <td>@data.pfTotalBank</td>
+                                <td>@data.pfTotalLoan</td>
+                                <td>@data.pfTotalInterest</td>
+                                <td>@data.pfTotal</td>
+                                
+
+                                <td>
+                                        @*<a class="btn btn-success" onclick="Edit(@data.Id, @data.pfMemberId, '@data.pfTotalOwn','@data.pfTotalBank', '@data.pfTotalLoan','@data.pfTotalInterest', '@data.pfTotal')" href="#"><i class="fa fa-edit"></i></a>*@
+                                        <a class="btn btn-danger" onclick="Remove(@data.Id)" href="#"><i class="fa fa-trash-alt"></i></a>
+                                    </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        Common.Ajax('GET', '/ProvidentFund/Member/GetAllMembers', [], 'json', ajaxFunctionAllMembers, false);
+
+        $("#submit").click(function () {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+            }).then(function () {
+                $("#submitbtn").click();
+            });
+        });
+
+        $('#FinalSettlement').DataTable();
+
+    });
+
+    function Edit(Id, pfMemberId, pfTotalOwn, pfTotalBank, pfTotalLoan, pfTotalInterest, pfTotal) {
+        $("#Id").val(Id);
+        $("#memberId").val(pfMemberId);
+        $("#pfTotalOwn").val(pfTotalOwn);
+        $("#pfTotalBank").val(pfTotalBank);
+        $("#pfTotalLoan").val(pfTotalLoan);
+        $("#pfTotalInterest").val(pfTotalInterest);
+        $("#pfTotal").val(pfTotal);
+        Common.Ajax('GET', '/global/api/GetAllMembersbyId/' + pfMemberId, [], 'json', ajaxMembersbyId, false);
+
+    }
+
+    function ajaxMembersbyId(response) {
+        console.log(response)
+        $('#membersName').val(response.memberName + "(" + response.memberCode + ")");
+
+    }
+
+    function ajaxFunctionAllMembers(response) {
+        console.log(response);
+        var GetMemberList = [];
+        $.each(response, function (id, option) {
+            var obj = new Object();
+            obj.key = option.Id;
+            obj.value = option.memberName + "(" + option.memberCode + ")";
+            obj.memberCode = option.memberCode;
+            GetMemberList[GetMemberList.length] = obj;
+        });
+
+        $('#membersName').autocomplete({
+            source: GetMemberList,
+            select: function (event, ui) {
+                $("#membersName").val(ui.item.value);
+                $("#memberId").val(ui.item.key);
+                $("#memberCode").val(ui.item.memberCode);
+                Common.Ajax('GET', '/ProvidentFund/PFAccountsSchedule/GetFinalSettlementByMemberId?memberId=' + ui.item.key, [], 'json', ajaxFunctionAllPfAccountMembers, false);
+
+            }
+        });
+    }
+    function ajaxFunctionAllPfAccountMembers(response) {
+        console.log(response);
+        $("#pfTotalOwn").val(response.pfTotalOwn);
+        $("#pfTotalBank").val(response.pfTotalBank);
+        $("#pfTotalInterest").val(response.pfTotalInterest);
+        $("#pfTotalLoan").val(response.pfTotalLoan);
+        $("#pfTotal").val(response.pfTotal);
+    }
+
+     function Remove(Id) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+
+                $.ajax({
+                    url: '@Url.Action("DeleteFinalSettleMent", "PFAccountsSchedule")',
+                    data: { Id: Id },
+                    type: 'POST',
+                })
+                    .done(function () {
+                        swal('', 'Deleted Successfully!', 'success').then(function () {
+                            location.reload();
+                        });
+
+                    })
+                    .fail(function () {
+                        swal('Cancelled', 'It is related with another info, can not deleted !!!', 'error');
+                    });
+            });
+     }
+
+</script>

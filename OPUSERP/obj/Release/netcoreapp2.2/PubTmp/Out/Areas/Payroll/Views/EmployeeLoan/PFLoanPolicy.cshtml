@@ -1,0 +1,250 @@
+﻿@model LoanPolicyViewModel
+@{
+    ViewData["Title"] = "PF Loan Policy";
+    Layout = "~/Areas/Payroll/Views/Shared/_SalaryMasterForm.cshtml";
+}
+
+@section StyleMD{
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+
+            <h5 class="card-title" style="color: black; margin: 8px; text-transform: uppercase;">PF Loan Policy</h5>
+
+        </div>
+        <div class="col-md-8">
+
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info mr-4' style="margin-right:6px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=10&perentId=5990'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        
+        <div class="container">
+            <form asp-area="Payroll" asp-controller="EmployeeLoan" asp-action="PFLoanPolicy" method="post" data-parsley-validate="parsley">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="row">
+                    <input type="hidden" id="editId" name="editId" value=0>
+                    <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="salaryGradeId" class="col-sm-3 col-form-label">Salary Grade </label>
+                            <div class="col-sm-9">
+                                <select name="salaryGradeId" id="salaryGradeId" class="form-control" data-parsley-required="false">
+                                    <option value="">Select Salary Grade</option>
+                                    @foreach (var data in Model.salaryGradesList)
+                                    {
+                                        <option value="@data.Id">@data.gradeName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        @*<div class="form-group row">
+                    <label for="salaryHeadId" class="col-sm-3 col-form-label">Loan Type <span style="color:red;">*</span></label>
+                    <div class="col-sm-9">
+                        <select name="salaryHeadId" id="salaryHeadId" class="form-control" data-parsley-required="true">
+                            <option value="">Select Loan Type</option>
+                            @foreach (var data in Model.salaryHeadsList)
+                            {
+                                <option value="@data.Id">@data.salaryHeadName</option>
+                            }
+                        </select>
+                    </div>
+                </div>*@
+                        <div class="form-group row">
+                            <label for="loanPolicyName" class="col-sm-3 col-form-label">Policy Name </label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="loanPolicyName" name="loanPolicyName" data-parsley-required="false">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="isActive" class="col-sm-3 col-form-label">Is Active? <span style="color:red;">*</span></label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="isActive" name="isActive" data-parsley-required="true">
+                                    <option value="">Select</option>
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="maximumLoanAmount" class="col-sm-5 col-form-label">Maximum Loan Amount <span style="color:red;">*</span></label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control text-right" id="maximumLoanAmount" name="maximumLoanAmount" data-parsley-required="true">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="loanInterestRate" class="col-sm-5 col-form-label">Interest Rate <span style="color:red;">*</span></label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control text-right" id="loanInterestRate" name="loanInterestRate" data-parsley-required="true">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="loanNoOfInstallment" class="col-sm-5 col-form-label">No Of Installment <span style="color:red;">*</span></label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control text-right" id="loanNoOfInstallment" name="loanNoOfInstallment" data-parsley-required="true">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                @*<button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+                <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+                <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">PF Loan List</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="educationalTable">
+                    <thead>
+                        <tr>
+                            <th>Grade Name</th>
+                            @*<th>Loan Type</th>*@
+                            <th>Policy Name</th>
+                            <th>Maximum Amount</th>
+                            <th>Interest Rate</th>
+                            <th>No Of Installment</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.loanPolicies.Where(x=>x.salaryHeadId==34))
+                        {
+                            <tr>
+                                <td>@data.salaryGrade?.gradeName</td>
+                                @*<td>@data.salaryHead?.salaryHeadName</td>*@
+                                <td>@data.loanPolicyName</td>
+                                <td align="right">@data.maximumLoanAmount?.ToString("0,0.00")</td>
+                                <td align="right">@data.loanInterestRate %</td>
+                                <td align="right">@data.loanNoOfInstallment</td>
+                                <td>
+                                    <a class="btn btn-success" onclick="Edit(@data.Id,'@data.salaryGradeId','@data.loanPolicyName','@data.maximumLoanAmount','@data.loanInterestRate','@data.loanNoOfInstallment','@data.isActive')" href="javascript:void(0)"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;
+                                    @*<a class="btn btn-danger" href="javascript:void(0)" onclick="DeleteMaster(@data.Id)"><i class="fa fa-trash-alt"></i></a>*@
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ScriptsMD{
+    <script>
+        $(document).ready(function () {
+           
+            //$('#educationalTable').DataTable();
+            $('#educationalTable').DataTable({
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" + "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        },
+                        title: 'ERP',
+                        messageTop: 'Status List',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        },
+                        title: 'ERP',
+                        messageTop: 'Status List'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: 'ERP',
+                        messageTop: 'Status List',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            }
+            );
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+            });
+
+        });
+        
+        function Edit(Id, salaryGradeId, loanPolicyName, maximumLoanAmount, loanInterestRate, loanNoOfInstallment, isActive) {
+            $('#editId').val(Id);
+            $('#salaryGradeId').val(salaryGradeId);
+            //$('#salaryHeadId').val(salaryHeadId);
+            $('#loanPolicyName').val(loanPolicyName);
+            $('#maximumLoanAmount').val(maximumLoanAmount);
+            $('#loanInterestRate').val(loanInterestRate);
+            $('#loanNoOfInstallment').val(loanNoOfInstallment);
+            $('#isActive').val(isActive);            
+        }
+
+        function DeleteMaster(Id) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+
+                $.ajax({
+                    url: '@Url.Action("DeletePFLoanPolicyById", "SalaryMaster")',
+                    data: { Id: Id },
+                    type: 'POST',
+                })
+                    .done(function () {
+                        swal('', 'Deleted Successfully!', 'success');
+                        window.location.href = "/Payroll/EmployeeLoan/PFLoanPolicy";
+                    })
+                    .fail(function () {
+                        swal('Cancelled', 'It will not be deleted. Please try again later !!!', 'error');
+                    });
+            });
+        }
+
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+

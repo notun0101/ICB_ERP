@@ -1,0 +1,526 @@
+﻿@model OrganogramViewModel
+@{
+    ViewData["Title"] = "Organogram Entry";
+}
+
+
+<style>
+    .redStar {
+        color: red;
+        float:right;
+    }
+</style>
+
+<div class="card" style="width: 100%;">
+    <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+        <h5 class="m-0 font-weight-bold text-primary">Organogram Entry</h5>
+        <a class='btn btn-info mr-4' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=5701'>@*<i class="fas fa-backward fa-2x "></i>*@<i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+    </div>
+
+    <div class="card-body">
+        <form asp-area="HRPMSEmployee" asp-controller="Organogram" asp-action="OrganogramSet" id="FormId" method="post" data-parsley-validate="parsley">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+
+            <div class="form-group row">
+                <label for="title" class="col-sm-2 col-form-label">Office</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control inpName" id="office" value="" name="office" autocomplete="off">
+                    <input type="hidden" id="officeId" name="officeId" class="hdnId" value="">
+                </div>
+                <label for="title" class="col-sm-2 col-form-label">Division</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control inpName" id="hrdivision" value="" name="hrdivision" autocomplete="off">
+                    <input type="hidden" id="hrdivisionId" name="hrdivisionId" class="hdnId" value="">
+                </div>
+                <label for="title" class="col-sm-2 col-form-label">Department</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control inpName" id="department" value="" name="department" autocomplete="off">
+                    <input type="hidden" id="departmentId" name="departmentId" class="hdnId" value="">
+                </div>
+
+                @*<label for="title" class="col-sm-2 col-form-label">Title<span class="redStar">*</span></label>*@
+                <div class="col-sm-4 d-none">
+                    <input type="text" class="form-control" id="title" value="" name="title" data-parsley-required="true" autocomplete="off">
+                    <input type="hidden" id="OrgRelationId" name="OrgRelationId" value="0">
+                </div>
+
+                <label for="parentId" class="col-sm-2 col-form-label">Parent</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="parentId" name="parentId" style="width:100%" ;>
+                        <option value="0">Select</option>
+                        @foreach (var item in Model.organogramRelations)
+                        {
+                            <option value="@item.Id">@item.title</option>
+                        }
+                    </select>
+
+                </div>
+                @*<label for="subTitle" class="col-sm-2 col-form-label">SubTitle </label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="subTitle" value="" name="subTitle">
+
+        </div>*@
+
+
+            </div>
+            <div class="form-group row">
+                <label for="parentId" class="col-sm-2 col-form-label">Responsible </label>
+                <div class="col-sm-4">
+
+                    <input type="hidden" id="employeeId" name="employeeId" value="">
+                    <input type="text" class="form-control" id="employeeName" value="" name="" data-parsley-required="true">
+                </div>
+
+                <label for="isActive" class="col-sm-2 col-form-label">isActive</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="isActive" name="isActive">
+                        <option value="">Select</option>
+                        <option value="0">Yes</option>
+                        <option value="1">No</option>
+
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                @*<label for="parentId" class="col-sm-2 col-form-label">Parent</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" id="parentId" name="parentId" style="width:100%" ;>
+                            <option value="0">Select</option>
+                            @foreach (var item in Model.organogramRelations)
+                            {
+                                <option value="@item.Id">@item.title</option>
+                            }
+                        </select>
+
+                    </div>*@
+
+
+            </div>
+
+
+            <hr />
+
+            <div class="form-group row">
+                <label for="desigName" class="col-sm-2 col-form-label">Designation<span class="redStar">*</span></label>
+                <div class="col-sm-4">
+                    <input type="hidden" id="designationId" name="" value="">
+                    <input type="text" class="form-control" id="desigName" value="" name="">
+
+                </div>
+                <label for="memberCount" class="col-sm-2 col-form-label">Member<span class="redStar">*</span></label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="memberCount" value="" name="">
+
+                </div>
+            </div>
+
+            <div class="row">
+                <table class="table table-bordered" id="orgTbl">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center">Designation </th>
+                            <th style="text-align:center">Member</th>
+                            <th style="width: 4%;">
+                                <button type="button" onclick="Add()" class="btn btn-success btn-sm"><i class="fas fa-plus"></i></button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+
+            <hr>
+            <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+            <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+
+        </form>
+    </div>
+</div>
+
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold">Organogram Entry List</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="OrgTable">
+                    <thead>
+                        <tr>
+                            <th>SI</th>
+                            <th>Title </th>
+                            @*<th>SubTitle</th>*@
+                            <th>Parent </th>
+                            <th>isActive</th>
+                            <th>Responsible</th>
+                            <th>Action</th>
+
+                        </tr>
+                    </thead>
+                    @{ int i = 1;
+                        <tbody>
+                            @foreach (var data in Model.organogramRelations)
+                            {
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@data.title</td>
+                                    @*<td>@data.subTitle</td>*@
+                                    <td>@Model.organogramRelations.Where(x => x.Id == data.parentId).Select(x => x.title).FirstOrDefault()</td>
+
+                                    @if (data.isDelete == 0)
+                                    {
+                                        <td>Yes</td>
+                                    }
+                                    else
+                                    {
+                                        <td>No</td>
+                                    }
+                                    <td>
+                                        @if (data.url == null || data.url == "")
+                                        {
+                                            <img src="~/OrgImg/man.JPG" width="50" height="50" style="border-radius:50%" />
+
+                                        }
+                                        else
+                                        {
+                                            <img src="~/@data.url" width="50" height="50" style="border-radius:50%" />
+                                        }
+                                    </td>
+
+                                    <td>
+                                        <a class="btn btn-info" onclick="ViewEdu(@data.Id)" href="javascript:void(0)"><i class="fas fa-eye"></i></a>
+                                        <a class="btn btn-success" onclick="Edit(@data.Id,'@data.title','@data.subTitle','@data.parentId','@data.isDelete','@data.headId')" href="#"><i class="fa fa-edit"></i></a>
+                                        <a class="btn btn-danger" onclick="Remove(@data.Id)" href="#"><i class="fa fa-trash-alt"></i></a>
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        </tbody>
+                    }
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="orgModal" style="height:100% !important;" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Designation and Member Information</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered" id="orgTblView">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center">Designation </th>
+                            <th style="text-align:center">Member</th>
+
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            var orgFullTitle = "Organogram Entry List";
+            $('#OrgTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1,2,3,4]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'List Of Organogram Entry',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'List Of Organogram Entry',
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "ERP-HRPMS",
+                        messageTop: 'List Of Organogram Entry',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+     
+            Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo1', [], 'json', ajaxGetEmployees);
+            Common.Ajax('GET', '/global/api/GetAllOffices', [], 'json', ajaxGetOffices);
+            Common.Ajax('GET', '/global/api/GetAllDivisions', [], 'json', ajaxGetDivisions);
+            Common.Ajax('GET', '/global/api/GetAllDepartments', [], 'json', ajaxGetDepartments);
+            Common.Ajax('GET', '/global/api/GetAllHrDesignations', [], 'json', ajaxGetAllHrDesignations);
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+            });
+
+            $('#office').on('keydown', function () {
+                $('.inpName:not("#office")').val('');
+                $('.hdnId:not("#officeId")').val('');
+            })
+            $('#hrdivision').on('keydown', function () {
+                $('.inpName:not("#hrdivision")').val('');
+                $('.hdnId:not("#hrdivisionId")').val('');
+            })
+            $('#department').on('keydown', function () {
+                $('.inpName:not("#department")').val('');
+                $('.hdnId:not("#departmentId")').val('');
+            })
+        });
+
+        function ViewEdu(Id) {
+            $("#orgModal").modal('show');
+            Common.Ajax('GET', '/HRPMSEmployee/Organogram/GetOrganogramChildById?id=' + Id, [], 'json', ajaxFunctionView, false);
+
+        }
+
+        function Edit(Id, title, subTitle, parentId, isActive, headId) {
+            $('#OrgRelationId').val(Id);
+            $('#title').val(title);
+            $('#subTitle').val(subTitle);
+            $('#parentId').val(parentId);
+            $('#isActive').val(isActive);
+            Common.Ajax('GET', '/HRPMSEmployee/Organogram/GetOrganogramChildById?id=' + Id, [], 'json', ajaxFunction, false);
+            Common.Ajax('GET', '/HRPMSEmployee/Organogram/GetEmployeeInfoById?id=' + headId, [], 'json', ajaxFunctionEmp, false);
+
+        }
+
+        function ajaxFunctionView(response) {
+            console.log(response)
+            var option = "";
+            $.each(response, function (i, item) {
+                option += `<tr id="edu_${item.Id}">
+							<td>${item.designation.designationName}</td>
+							<td>${item.memberCount}</td>
+
+						</tr>`
+            });
+            $('#orgTblView tbody').empty();
+            $('#orgTblView tbody').append(option);
+        }
+
+
+        function ajaxFunction(response) {
+            console.log(response)
+            var option = "";
+            $.each(response, function (i, item) {
+                option += `<tr id="edu_${item.Id}">
+							<td>${item.designation.designationName}</td>
+							<td>${item.memberCount}</td>
+							<td><a class="btn btn-danger btn-sm" onclick="removeEdu(${item.Id})" href="javascript:void(0)"><i class="fa fa-trash-alt"></i></a>
+    		                </td>
+
+						</tr>`
+            });
+            $('#orgTbl tbody').empty();
+            $('#orgTbl tbody').append(option);
+        }
+
+
+        function ajaxFunctionEmp(response) {
+            console.log(response)
+            $('#employeeName').val(response.nameEnglish);
+            $('#employeeId').val(response.Id);
+
+        }
+        function removeEdu(id) {
+            Common.Ajax('GET', '/HRPMSEmployee/Organogram/DeleteOrganogramChild?id=' + id, [], 'json', ajaxFunctionDeleteChildEdu, false);
+        }
+
+        function ajaxFunctionDeleteChildEdu(response) {
+            if (response > 0) {
+                $('#edu_' + response).remove();
+            }
+        }
+        function Remove(Id) {
+            swal({
+		        title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+	        }).then(function () {
+		        $.ajax({
+			        url: '@Url.Action("Delete", "Organogram")',
+                    data: { id: Id },
+			        type: 'GET',
+		        })
+		        .done(function () {
+                    swal('', 'Deleted Successfully!', 'success').then(function () {
+                        window.location.reload();
+                    });
+		        })
+		        .fail(function () {
+                    swal('', 'Unable to Delete! You have to delete Designation and Member List', 'warning');
+		        });
+	        });
+        }
+
+
+        function Add() {
+            if ($("#designationId").val() == null || $("#designationId").val() == '') {
+                alert('Designation required');
+                return false;
+            }
+            if ($("#memberCount").val() == null || $("#memberCount").val() == '') {
+                alert('Member required');
+                return false;
+            }
+
+            var memberCount = $('#memberCount').val();
+            var designationId = $('#designationId').val();
+            var desigName = $('#desigName').val();
+
+            var row = `<tr id="edu_${designationId}">
+                                <td><input type="hidden" value="0" name="OrgChildId"><input type="hidden" value="${designationId}" name="designationId">${desigName}</td>
+                                <td><input type="hidden" value="${memberCount}" name="memberCount">${memberCount}</td>
+                                <td><a href="javascript:void(0)" onclick="RemoveRow(${designationId})">X</a></td>
+                            </tr>`;
+
+            $('#orgTbl tbody').append(row);
+            $('#designationId').val('');
+            $('#memberCount').val('');
+            $('#desigName').val('');
+        }
+        function RemoveRow(year) {
+            var id = '#edu_' + year;
+            $(id).remove();
+        }
+
+
+        function ajaxGetEmployees(response) {
+            console.log(response)
+            var GeEmployeesList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.nameEnglish;
+                GeEmployeesList[GeEmployeesList.length] = obj;
+            });
+            //console.log(GeEmployeesList);
+            $('#employeeName').autocomplete({
+                source: GeEmployeesList,
+                select: function (event, ui) {
+                    $("#employeeName").val(ui.item.value);
+                    $("#employeeId").val(ui.item.key);
+
+                }
+            });
+        }
+        function ajaxGetOffices(response) {
+            console.log(response)
+            var GeOfficeList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.branchUnitName;
+                GeOfficeList[GeOfficeList.length] = obj;
+            });
+            //console.log(GeEmployeesList);
+            $('#office').autocomplete({
+                source: GeOfficeList,
+                select: function (event, ui) {
+                    $("#office").val(ui.item.value);
+                    $("#officeId").val(ui.item.key);
+                    $('#title').val(ui.item.value);
+                }
+            });
+        }
+        function ajaxGetDivisions(response) {
+            console.log(response)
+            var GeDivisionList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.divName;
+                GeDivisionList[GeDivisionList.length] = obj;
+            });
+            //console.log(GeEmployeesList);
+            $('#hrdivision').autocomplete({
+                source: GeDivisionList,
+                select: function (event, ui) {
+                    $("#hrdivision").val(ui.item.value);
+                    $("#hrdivisionId").val(ui.item.key);
+                    $('#title').val(ui.item.value);
+                }
+            });
+        }
+        function ajaxGetDepartments(response) {
+            console.log(response)
+            var GeDepartmentList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.deptName;
+                GeDepartmentList[GeDepartmentList.length] = obj;
+            });
+            //console.log(GeEmployeesList);
+            $('#department').autocomplete({
+                source: GeDepartmentList,
+                select: function (event, ui) {
+                    $("#department").val(ui.item.value);
+                    $("#departmentId").val(ui.item.key);
+                    $('#title').val(ui.item.value);
+                }
+            });
+        }
+
+        function ajaxGetAllHrDesignations(response) {
+            var lstParticular = [];
+            $.each(response, function (i, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.designationName;
+                lstParticular[lstParticular.length] = obj;
+            });
+            $('#desigName').autocomplete({
+                source: lstParticular,
+                select: function (event, ui) {
+                    $('#designationId').val(ui.item.key);
+                    $("#desigName").val(ui.item.value);
+                }
+            });
+        }
+
+    </script>
+}

@@ -1,0 +1,162 @@
+﻿@model LoanRepaymentViewModel
+@{
+    ViewData["Title"] = "EditLoanRepayment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4 bg-light">
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="m-0 font-weight-bold text-primary">Loan Repayment</h5>
+                    <hr />
+                    <div class="">
+                        <form id="FormId">
+
+                            <div class="row col-sm-12">
+                                <div class="col-sm-6">
+
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-5 col-form-label">Adjustment Amount</label>
+                                        <div class="col-sm-6 ">
+                                            <input type="text" class="form-control" name="adjustmentAmount" id="" value="56800">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-5 col-form-label">Adjustment Account</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" name="adjustmentAccount" id="">
+                                                <option>Cash</option>
+                                                <option>Bank </option>
+                                                <option>Check </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-5 col-form-label">Adjustment Date</label>
+                                        <div class="col-sm-6 input-group">
+                                            <input name="adjustmentDate" id="adjustmentDate" class="form-control input-group-sm" value="" readonly />
+                                            <div class="input-group-prepend">
+                                                <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-5 col-form-label">Note</label>
+                                        <div class="col-sm-6 ">
+                                            <textarea name="note" id="address" class="form-control input-group-sm"> </textarea>
+                                        </div>
+                                    </div>
+
+                                    <br />
+                                    <br />
+
+                                    <div class="form-group">
+                                        <input type="button" class="btn btn-sm btn-success" id="submit" value="Repayment">
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="col-sm-6">
+
+                                    <table class="table invoice-table">
+                                        <tbody>
+                                            <tr>
+                                                <th>Members' ID</th>
+                                                <td>: MEM101</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Members' Name</th>
+                                                <td>: Kamal Hossain</td>
+                                            </tr>
+                                            <tr>
+                                                <th>E-mail</th>
+                                                <td>: kamal@gmail.com</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Mobile No</th>
+                                                <td>: 01756123230</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Application Date</th>
+                                                <td>: 12/4/2019</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Date of approval</th>
+                                                <td>: 12/5/2019</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Loan Amount (Approved)</th>
+                                                <td>: 5,0000</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Paid Amount</th>
+                                                <td>: 30,000</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Repaid Amount</th>
+                                                <td>: 20,000</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Due Amount</th>
+                                                <td>: 0</td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#adjustmentDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+
+    });
+
+    $('#submit').click(function () {
+        console.log($('#FormId').serializeArray());
+        var data = $('#FormId').serializeArray();
+
+        console.log(data[0].value)
+        swal({
+            title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+        }).then(function () {
+            $.ajax({
+                url: '/ProvidentFund/LoanManagement/EditLoanRepayment',
+                type: 'POST',
+                data: data
+            }).done(function () {
+                if (data[0].value == 0) {
+                    swal('success', 'Saved Successfully!', 'success').then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    swal('success', 'Updated Successfully!', 'success').then(function () {
+                        location.reload();
+                    });;
+                }
+            }).fail(function () {
+                swal('warning', 'Failed!', 'warning');
+            })
+        });
+    })
+
+</script>

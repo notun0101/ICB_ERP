@@ -1,0 +1,150 @@
+﻿@model SupervisorViewModel
+@{
+    ViewData["Title"] = "Supervisor";
+}
+@section Style{
+    <style>
+        .redStar {
+            color: red;
+        }
+    </style>
+}
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <h4 style="text-align:center">Assign @Model?.supervisor?.employee?.nameEnglish's Supervisor</h4>
+        </div>
+    </div>
+    <div class="card-body col-12 row">
+        <form asp-action="AddSupervisor" asp-controller="Supervisor" asp-area="HRPMSEmployee" method="post">
+            <div class="col-12 row">
+                <div class="col-md-2">
+                    <div class="card aa" style="width:180px!important">
+                        <div class="pt-2" style="height:220px;text-align:center;">
+                            @if (Model.supervisor.Id > 0)
+                            {
+                                <input type="hidden" id="Id" name="Id" value="@Model?.supervisor?.Id" />
+                                <div style="height:125px">
+                                    @if (Model?.supervisor?.updatedBy != null)
+                                    {
+                                        <img data-toggle="modal" data-target="#exampleModal1" class="rounded-circle" id="user_img" src="~/@Model?.supervisor?.updatedBy" width="100" height="100" />
+                                    }
+                                    else
+                                    {
+                                        <img data-toggle="modal" data-target="#exampleModal1" class="rounded-circle" id="user_img" src="~/EmpImages/g2.png" width="100" height="100" />
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <input type="hidden" id="Id" name="Id" value="0" />
+                                <div style="height:125px">
+                                    <img data-toggle="modal" data-target="#exampleModal1" class="rounded-circle" id="user_img" src="~/EmpImages/g2.png" width="100" height="100" />
+                                </div>
+                            }
+
+                            @if (Model?.supervisor?.supervisorId > 0)
+                            {
+                                <div class="pt-2" id="result" name="supervisorName">@Model?.supervisor?.supervisor?.nameEnglish</div>
+                            }
+                            else
+                            {
+                                <div class="pt-2" id="result" name="supervisorName">Supervisor</div>
+                            }
+                            <input type="hidden" id="nSupervisorId" name="supervisorID" value="@Model?.supervisor?.Id" />
+                            <input type="hidden" id="employeeID" name="employeeID" value="@Model?.employeeID" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 row" style="margin-top:25px">
+                <div class="col-md-2" style="text-align:center">
+                    <input type="submit" id="btnSave" class="btn btn-success" style="margin-left:60px" value="Save" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+@*Add Supervisor Modal*@
+<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form action="/" id="searchForm">
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Supervisor:</label>
+                        <input type="text" class="form-control" id="supervisorName" name="supervisorName" value="" />
+                        <input type="hidden" id="supervisor" name="supervisorID" />
+                        <input type="hidden" id="photoLocation" />
+                    </div>
+
+                    <div class="float-right">
+                        <input class="bg-info text-light btn btn-primary mt-2" type="button" onclick="clickSupervisor()" value="Add">
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            Common.Ajax('GET', '/api/Account/GetUserInfoList/', [], 'json', GetEmployeeInfo);
+        })
+
+        function GetEmployeeInfo(response) {
+            var lstPOP = [];
+            $.each(response, function (i, option) {
+                var obj = new Object();
+                obj.key = option.EmployeeId;
+                obj.value = option.EmpName + " - " + option.EmpCode;
+                obj.photo = option.DivisionName;
+                lstPOP[lstPOP.length] = obj;
+
+            });
+
+            $('#supervisorName').autocomplete({
+                source: lstPOP,
+                select: function (event, ui) {
+                    console.log(ui)
+                    $("#supervisorName").val(ui.item.value);
+                    $("#supervisor").val(ui.item.key);
+                    $("#photoLocation").val(ui.item.photo);
+                }
+            });
+
+        }
+
+        function clickSupervisor() {
+            var target = $('#nSupervisorId').val();
+            var name = $('#supervisorName').val();
+            var val = $('#supervisor').val();
+            var photo = $('#photoLocation').val();
+            if (photo != "") {
+                $('#user_img').attr('src', "/" + photo);
+            }
+            else {
+                $('#user_img').attr('src', "/EmpImages/g2.png");
+            }
+            $('#result').text(name);
+            $('#nSupervisorId').val(val);
+            $('#supervisor').val('');
+            $('#photoLocation').val('');
+            $('#supervisorName').val('');
+            $('#exampleModal1').modal('hide');
+        }
+    </script>
+}
+
+
+

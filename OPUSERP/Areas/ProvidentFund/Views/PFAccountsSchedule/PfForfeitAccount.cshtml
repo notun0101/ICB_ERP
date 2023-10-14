@@ -1,0 +1,306 @@
+﻿@model PfForfeitAccountViewModel
+@{
+    ViewData["Title"] = "PfTransactionProcess";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4 bg-light">
+            <div class="card" style="width: 100%;">
+                <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+                    <h5 class="m-0 font-weight-bold text-primary">Forfeit Account</h5>
+                    <a class='btn btn-info mr-4' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1014&perentId=6015'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+                </div>
+                <div class="card-body">
+
+                    <div class="">
+                        <form asp-area="ProvidentFund" asp-controller="PFAccountsSchedule" asp-action="PfForfeitAccount" id="FormId" method="post" data-parsley-validate="parsley" enctype="multipart/form-data">
+                            <div class="row col-sm-12 tr">
+                                <div class="col-sm-6">
+                                    @*<div class="form-group row">
+                                            <label for="" class="col-sm-4 col-form-label">Members </label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" id="member" name="" placeholder="Select Member">
+                                                <input type="hidden" class="form-control" id="memberId" name="pfId" placeholder="">
+                                                <input type="hidden" id="Id" name="Id" value="0">
+                                            </div>
+                                        </div>*@
+
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-4 col-form-label">Employee Name</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="employeeName" name="" placeholder="Select Employee">
+                                            <input type="hidden" class="form-control" id="employeeID" name="employeeId" placeholder="">
+                                            <input type="hidden" id="Id" name="Id" value="0">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-4 col-form-label">PF Company</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control grossTotal balanceresult" id="pfCompany" name="pfCompany">
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-4 col-form-label">PF Own</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control grossTotal balanceresult" id="pfOwn" name="pfOwn">
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-4 col-form-label">Date</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control Date" id="forfeitDate" name="forfeitDate" readonly>
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="col-sm-6">
+
+
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-4 col-form-label">Loan</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control grossTotal balanceresult" id="loan" name="loan">
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-4 col-form-label">Outstanding Loan</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control grossTotal1 balanceresult" id="outstandingLoan" name="outstandingLoan">
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+
+                                        <label for="" class="col-sm-4 col-form-label">Balance</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="balance" name="balance" readonly value="">
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-4 col-form-label">Reason</label>
+                                        <div class="col-sm-8">
+                                            <textarea type="text" class="form-control" id="reason" name="reason"></textarea>
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div>
+                                <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+                                <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;margin-right:35px"><i class="fas fa-save"></i> Save</button>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold">All Forfeit Accounts</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="NomineeTable">
+                    <thead>
+                        <tr>
+                            <th>Members Id</th>
+                            <th>Employee Name</th>
+                            <th>PF Company</th>
+                            <th>PF Own</th>
+                            <th>Loan</th>
+                            <th>Outstanding Loan</th>
+                            <th>Date</th>
+                            <th>Balance</th>
+                            <th>Reason</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.forfeitAccounts)
+                        {
+                            <tr>
+                                <td>@data.employee?.employeeCode</td>
+                                <td>@data.employee?.nameEnglish</td>
+                                <td>@data.pfCompany</td>
+                                <td>@data.pfOwn</td>
+                                <td>@data.loan</td>
+                                <td>@data.outstandingLoan</td>
+                                <td>@data.forfeitDate?.ToString("dd-MMM-yyyy")</td>
+                                <td>@data.balance</td>
+                                <td>@data.reason</td>
+                                <td>
+                                    <a class="btn btn-success" onclick="Edit(@data.Id, '@data.pfId', '@data.employeeId','@data.pfCompany', '@data.pfOwn','@data.loan', '@data.outstandingLoan', '@data.forfeitDate?.ToString("dd-MMM-yyyy")','@data.balance','@data.reason')" href="#"><i class="fa fa-edit"></i></a>
+                                    <a class="btn btn-danger" onclick="Remove(@data.Id)" href="#"><i class="fa fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    function Edit(Id, pfId, employeeId, pfCompany, pfOwn, loan, outstandingLoan, forfeitDate, balance, reason) {
+        $("#Id").val(Id);
+        $("#memberId").val(pfId);
+        $("#employeeID").val(employeeId);
+
+        $("#pfCompany").val(pfCompany);
+        $("#pfOwn").val(pfOwn);
+        $("#loan").val(loan);
+        $("#outstandingLoan").val(outstandingLoan);
+        $("#forfeitDate").val(forfeitDate);
+        $("#balance").val(balance);
+        $("#reason").val(reason);
+        Common.Ajax('GET', '/global/api/GetAllMembersbyId/' + pfId, [], 'json', ajaxMembersbyId, false);
+        Common.Ajax('GET', '/global/api/GetAllEmployeeInfoById/' + employeeId, [], 'json', ajaxEmployeeInfobyId, false);
+
+    }
+
+    function ajaxMembersbyId(response) {
+        console.log(response)
+        $('#member').val(response.memberName + "(" + response.memberCode + ")");
+
+    }
+
+    function ajaxEmployeeInfobyId(response) {
+        console.log(response)
+        $('#employeeName').val( response.nameEnglish + "(" + response.employeeCode + ")");
+
+    }
+
+    function Remove(Id) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+
+                $.ajax({
+                    url: '@Url.Action("DeleteForfeitAccount", "PFAccountsSchedule")',
+                    data: { Id: Id },
+                    type: 'POST',
+                })
+                    .done(function () {
+                        swal('', 'Deleted Successfully!', 'success').then(function () {
+                            location.reload();
+                        });
+
+                    })
+                    .fail(function () {
+                        swal('Cancelled', 'It is related with another info, can not deleted !!!', 'error');
+                    });
+            });
+        }
+
+    $(document).ready(function () {
+
+        $("#submit").click(function () {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+            }).then(function () {
+                $("#submitbtn").click();
+            });
+        });
+        $(".Date").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+
+        Common.Ajax('GET', '/ProvidentFund/Member/GetAllMembers', [], 'json', ajaxFunctionAllMembers, false);
+        //Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo1', [], 'json', ajaxGetEmployees);
+        Common.Ajax('GET', '/global/api/GetActiveEmployeeAndPfMemberInfo', [], 'json', ajaxGetEmployees);
+
+
+
+        $('.balanceresult').on('change', function () {
+            var sum = 0
+            var classList = document.querySelectorAll(".grossTotal");
+            $.each(classList, function (index, item) {
+                //console.log(item.value);
+                var myVal = item.value;
+                if (!isNaN(myVal) && myVal.length !== 0) {
+                    sum += parseFloat(myVal);
+                    }
+            });
+            var outstanding = $('#outstandingLoan').val();
+            var result = sum - outstanding;
+            $("#balance").val(result);
+
+            //console.log(sum);
+        });
+
+    });
+
+
+
+
+    function ajaxGetEmployees(response) {
+        var GeEmployeesList = [];
+        $.each(response, function (id, option) {
+            var obj = new Object();
+            obj.key = option.Id;
+            obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+            //  obj.designation = option.designation;
+            //  obj.department = option.department.deptName;
+            obj.employeeCode = option.employeeCode;
+            GeEmployeesList[GeEmployeesList.length] = obj;
+        });
+        //console.log(GeEmployeesList);
+        $('#employeeName').autocomplete({
+            source: GeEmployeesList,
+            select: function (event, ui) {
+                $("#employeeName").val(ui.item.value);
+                $("#employeeID").val(ui.item.key);
+                // $("#designationId").val(ui.item.designation);
+                //  $("#departmentId").val(ui.item.department);
+
+            }
+        });
+    }
+
+
+    function ajaxFunctionAllMembers(response) {
+        console.log(response);
+        var GetMemberList = [];
+        $.each(response, function (id, option) {
+            var obj = new Object();
+            obj.key = option.Id;
+            obj.value = option.memberName + "(" + option.memberCode + ")";
+            GetMemberList[GetMemberList.length] = obj;
+        });
+
+        $('#member').autocomplete({
+            source: GetMemberList,
+            select: function (event, ui) {
+                $("#member").val(ui.item.value);
+                $("#memberId").val(ui.item.key);
+            }
+        });
+    }
+
+
+
+
+</script>

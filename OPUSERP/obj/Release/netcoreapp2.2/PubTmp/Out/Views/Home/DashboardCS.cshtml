@@ -1,0 +1,618 @@
+﻿@model OPUSERP.Models.Dashboard.DashboardCSViewModel
+@{
+    ViewData["Title"] = "DashboardCS";
+}
+
+
+
+<style>
+    /*#font {
+        font-size: 12px;
+    }*/
+
+    #icon {
+        width: 45px;
+        height: 52px;
+    }
+
+    .h {
+        font-size: 30px;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+    .ch {
+        height:35px;
+        color:black;
+        font-weight:bold;
+    } 
+    
+
+    .div1 {
+        height: 220px;
+        top: -223px;
+        width: 36px;
+        width: 61px;
+        width: 99% !important;
+        left: 11px;
+    }
+    .boxDesign {
+        transition: .3s all;
+    }
+
+        .boxDesign:hover {
+            transform: scale(.9);
+            border: 1px solid black;
+            box-shadow: 1px 1px gray;
+            color:#149db0;
+        }
+
+
+        .boxDesign1:hover {
+           background-color: #ebf4f7;
+            color: #086977;
+        }
+
+   
+</style>
+
+
+<div class="container-fluid dashboard-content ">
+
+    <div class="widget">
+
+        <div class="row card" style="padding-top:10px;padding-bottom:5px; margin-top:10px;margin-bottom:10px; margin-right:2px; margin-left:2px; background-color: #ADD8E6;">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <h5 class="text-center">SCM Dashboard</h5>
+            </div>
+        </div>
+
+        
+        <div class="row" >
+
+            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12 " onclick="RAPending()" style="cursor: pointer;">
+                <div style="height:236px; background-image: linear-gradient(to right, #f7d5db , #f092b9);border:1px; border-radius:15px;width: 195px;">
+                    
+                    @*<i class="far fa-heart fa-2x" style="color:white;margin-left: 149px;margin-top: 5px;"></i>*@
+                </div>
+                <div class="card w-100 div1 boxDesign"  id="div1">
+                    <div class="card-header">
+                        <h6 class="text-center text-muted ch" >Requisition Approval Pending</h6>
+                    </div>
+                    <div class="card-body">
+                      <img id="icon" src="~/SCM Icon/Requisition.png" /><span class="h">@Model.PendingRequisitionCount</span>
+                     <br />
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12" onclick="RAsPending()" style="cursor: pointer;">
+                <div style="height:236px; background-image: linear-gradient(to right, #b8f0f9 , #32d5ec);border:1px; border-radius:15px;width: 195px;">
+                   @*<i class="far fa-heart fa-2x" style="color:white;margin-left: 149px;margin-top: 5px;"></i>*@
+                </div>
+                <div class="card w-100 div1 boxDesign" >
+                    <div class="card-header">
+                        <h6 class="text-center text-muted ch">Requisition Assign Pending</h6>
+                    </div>
+                    <div class="card-body">
+
+                        <img id="icon" src="~/SCM Icon/Requisition.png" /><span class="h">@Model.AssignPendingRequisitionCount</span>
+
+                        <br />
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12" onclick="CSAPending()" style="cursor: pointer;">
+                <div style="height:236px; background-image: linear-gradient(to right, #fffca6 , #f5e84bf7);border:1px; border-radius:15px;width: 195px;">
+                    @*<i class="far fa-heart fa-2x" style="color:white;margin-left: 149px;margin-top: 5px;"></i>*@
+                </div>
+                <div class="card w-100 div1 boxDesign" >
+                    <div class="card-header">
+                        <h6 class="text-center text-muted ch">CS Approval Pending</h6>
+                    </div>
+                    <div class="card-body">
+
+                        <img id="icon" src="~/SCM Icon/CS.png" /><span class="h">@Model.CSPendingCount</span>
+
+                        <br />
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12" onclick="SingleAPending()" style="cursor: pointer;">
+                <div style="height:236px; background-image: linear-gradient(to right, #c7ffc0 , #77e863);border:1px; border-radius:15px;width: 195px;">
+                    @*<i class="far fa-heart fa-2x" style="color:white;margin-left: 149px;margin-top: 5px;"></i>*@
+                </div>
+                <div class="card w-100 div1 boxDesign" >
+                    <div class="card-header">
+                        <h6 class="text-center text-muted ch">Single Source Approval Pending</h6>
+                    </div>
+                    <div class="card-body">
+
+                        <img id="icon" src="~/SCM Icon/Requisition.png" /><span class="h">@Model.SingelPendingCount</span>
+
+                        <br />
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12" onclick="POAPending()" style="cursor: pointer;">
+                <div style="height:236px; background-image: linear-gradient(to right, #c0c8ff , #8f9cf5);border:1px; border-radius:15px;width: 195px;">
+                    @*<i class="far fa-heart fa-2x" style="color:white;margin-left: 149px;margin-top: 5px;"></i>*@
+                </div>
+                <div class="card w-100 div1 boxDesign" >
+                    <div class="card-header">
+                        <h6 class="text-center text-muted ch">PO Approval Pending</h6>
+                    </div>
+                    <div class="card-body">
+
+                        <img id="icon" src="~/SCM Icon/PO.png" /><span class="h">@Model.POPendingCount</span>
+
+                        <br />
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12" onclick="SPAPending()" style="cursor: pointer;">
+                <div style="height:236px; background-image: linear-gradient(to right, #fbb9f6 , #ffa3f8);border:1px; border-radius:15px;width: 195px;">
+                    @*<i class="far fa-heart fa-2x" style="color:white;margin-left: 149px;margin-top: 5px;"></i>*@
+                </div>
+                <div class="card w-100 div1 boxDesign" >
+                    <div class="card-header">
+                        <h6 class="text-center text-muted ch">Spot Purchase Pending</h6>
+                    </div>
+                    <div class="card-body">
+
+                        <img id="icon" src="~/SCM Icon/SP.png" /><span class="h">@Model.SpotPendingCount</span>
+
+                        <br />
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+        <br />
+
+        <div class="row" style="margin-top: -214px;">
+            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
+                <div class="card w-100" style="height:300px">
+                    <div class="card-header">
+                        <h6 class="text-center text-muted ch">Procurement Type Wise PO Analysis</h6>
+                    </div>
+                    <div class="card-body">
+                      
+                        <div>
+                            <img src="~/SCM Icon/BarChart.png" style="width:600px; height:200px" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                <div class="card w-100" style="height:300px">
+                    <div class="card-header">
+                        <h6 class="text-center text-muted ch">Bill Payment Status</h6>
+                    </div>
+                    <div class="card-body">
+                       
+                        <div id="piechart">
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <br />
+
+        <div class="row" id="font">
+
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                <div class="card w-100 boxDesign1" style="height:400px">
+                    <div class="card-header">
+                        <h6 class="text-center text-muted ch" id="font">Requisition (PR)</h6>
+
+                    </div>
+                    <div class="card-body">
+                        @*<h6 class="text-center text-muted ch" id="font">Requisition (PR)</h6>
+                        <hr />*@
+                        <select class="form-select d-inline-flex brand-select float-right mb-4 border-0" id="PRopId" onchange="countAdd()">
+                            <option value="1" selected="selected">All Time</option>
+                            <option value="2">This Month</option>
+                            <option value="3">This Year</option>
+                        </select>
+                        <div id="PRDl" class="PRBlock">
+                            <dl>
+                                <dt class="d-inline-flex">Total Requisition Raised</dt>
+                                <dd class="ml-4">Number : @Model.AllRequisition.Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.AllReqAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total Requisition Approved</dt>
+                                <dd class="ml-4">Number : @Model.AllRequisition.Where(x => x.statusInfoId == 3).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.AllApReqAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total Requisition Pending</dt>
+                                <dd class="ml-4">Number : @Model.AllRequisition.Where(x => x.statusInfoId != 3 && x.reqType == "Final").Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.AllPendReqAmount)</dd>
+                            </dl>
+                        </div>
+
+                        <div id="PRDlM" class="PRBlock" style="display: none">
+                            <dl>
+                                <dt class="d-inline-flex">Total Requisition Raised</dt>
+                                <dd class="ml-4">Number : @Model.AllRequisition.Where(x => Convert.ToDateTime(x.reqDate).Month == DateTime.Now.Month).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.MonthReqAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total Requisition Approved</dt>
+                                <dd class="ml-4">Number : @Model.AllRequisition.Where(x => Convert.ToDateTime(x.reqDate).Month == DateTime.Now.Month).Where(x => x.statusInfoId == 3).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.MonthApReqAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total Requisition Pending</dt>
+                                <dd class="ml-4">Number : @Model.AllRequisition.Where(x => Convert.ToDateTime(x.reqDate).Month == DateTime.Now.Month).Where(x => x.statusInfoId != 3 && x.reqType == "Final").Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.MonthPendReqAmount)</dd>
+                            </dl>
+                        </div>
+
+                        <div id="PRDlY" class="PRBlock" style="display: none;">
+                            <dl>
+                                <dt class="d-inline-flex">Total Requisition Raised</dt>
+                                <dd class="ml-4">Number : @Model.AllRequisition.Where(x => Convert.ToDateTime(x.reqDate).Year == DateTime.Now.Year).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.YearReqAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total Requisition Approved</dt>
+                                <dd class="ml-4">Number : @Model.AllRequisition.Where(x => Convert.ToDateTime(x.reqDate).Year == DateTime.Now.Year).Where(x => x.statusInfoId == 3).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.YearApReqAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total Requisition Pending</dt>
+                                <dd class="ml-4">Number : @Model.AllRequisition.Where(x => Convert.ToDateTime(x.reqDate).Year == DateTime.Now.Year).Where(x => x.statusInfoId != 3 && x.reqType == "Final").Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.YearPendReqAmount)</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                <div class="card w-100 boxDesign1" style="height:400px">
+                   
+                    <div class="card-header">
+                        <h6 class="text-center text-muted ch" id="font">Comperative Statements (CS)</h6>
+
+                    </div>
+                    <div class="card-body">
+
+                        <select class="form-select d-inline-flex brand-select float-right mb-4 border-0" id="CSopId" onchange="countAdd()">
+                            <option value="1" selected="selected">All Time</option>
+                            <option value="2">This Month</option>
+                            <option value="3">This Year</option>
+                        </select>
+                        <br />
+                        <div id="CSl" class="CSBlock">
+                            <dl>
+                                <dt class="d-inline-flex">Total CS Raised</dt>
+                                <dd class="ml-4">Number : @Model.AllCS.Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.AllCsAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total CS Approved</dt>
+                                <dd class="ml-4">Number : @Model.AllCS.Where(x => x.csStatus == 3).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.AllApCsAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total CS Pending</dt>
+                                <dd class="ml-4">Number : @Model.AllCS.Where(x => x.csStatus != 3 && x.csStatus != 4 && x.csStatus != -1).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.AllPendCsAmount)</dd>
+                            </dl>
+                        </div>
+
+                        <div id="CSM" class="CSBlock" style="display: none;">
+                            <dl>
+                                <dt class="d-inline-flex">Total CS Raised</dt>
+                                <dd class="ml-4">Number : @Model.AllCS.Where(x => Convert.ToDateTime(x.csDate).Month == DateTime.Now.Month).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.MonthCsAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total CS Approved</dt>
+                                <dd class="ml-4">Number : @Model.AllCS.Where(x => x.csStatus == 3).Where(x => Convert.ToDateTime(x.csDate).Month == DateTime.Now.Month).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.MonthApCsAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total CS Pending</dt>
+                                <dd class="ml-4">Number : @Model.AllCS.Where(x => x.csStatus != 3 && x.csStatus != 4 && x.csStatus != -1).Where(x => Convert.ToDateTime(x.csDate).Month == DateTime.Now.Month).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.MonthPendCsAmount)</dd>
+                            </dl>
+                        </div>
+
+                        <div id="CSY" class="CSBlock" style="display: none;">
+                            <dl>
+                                <dt class="d-inline-flex">Total CS Raised</dt>
+                                <dd class="ml-4">Number : @Model.AllCS.Where(x => Convert.ToDateTime(x.csDate).Year == DateTime.Now.Year).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.YearCsAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total CS Approved</dt>
+                                <dd class="ml-4">Number : @Model.AllCS.Where(x => x.csStatus == 3).Where(x => Convert.ToDateTime(x.csDate).Year == DateTime.Now.Year).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.YearApCsAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total CS Pending</dt>
+                                <dd class="ml-4">Number : @Model.AllCS.Where(x => x.csStatus != 3 && x.csStatus != 4 && x.csStatus != -1).Where(x => Convert.ToDateTime(x.csDate).Year == DateTime.Now.Year).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.YearPendCsAmount)</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                <div class="card w-100 boxDesign1" style="height:400px">
+                   
+                    <div class="card-header">
+                        <h6 class="text-center text-muted ch" id="font">Purchase Order (PO)</h6>
+                    </div>
+                    <div class="card-body">
+
+                        <select class="form-select d-inline-flex brand-select float-right mb-4 border-0" id="POopId" onchange="countAdd()">
+                            <option value="1" selected="selected">All Time</option>
+                            <option value="2">This Month</option>
+                            <option value="3">This Year</option>
+                        </select>
+                        <br />
+                        <div id="POl" class="POBlock">
+                            <dl>
+                                <dt class="d-inline-flex">Total PO Raised</dt>
+                                <dd class="ml-4">Number : @Model.AllPurchase.Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.AllPOAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total PO Approved</dt>
+                                <dd class="ml-4">Number :  @Model.AllPurchase.Where(x => x.poStatus == 3).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.AllApPOAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total PO Pending</dt>
+                                <dd class="ml-4">Number :  @Model.AllPurchase.Where(x => x.poStatus != 3).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.AllPendPOAmount)</dd>
+                            </dl>
+                        </div>
+                        <div id="POM" class="POBlock" style="display: none;">
+                            <dl>
+                                <dt class="d-inline-flex">Total PO Raised</dt>
+                                <dd class="ml-4">Number : @Model.AllPurchase.Where(x => Convert.ToDateTime(x.poDate).Month == DateTime.Now.Month).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.MonthPOAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total PO Approved</dt>
+                                <dd class="ml-4">Number :  @Model.AllPurchase.Where(x => x.poStatus == 3).Where(x => Convert.ToDateTime(x.poDate).Month == DateTime.Now.Month).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.MonthApPOAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total PO Pending</dt>
+                                <dd class="ml-4">Number :  @Model.AllPurchase.Where(x => x.poStatus != 3).Where(x => Convert.ToDateTime(x.poDate).Month == DateTime.Now.Month).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.MonthPendPOAmount)</dd>
+                            </dl>
+                        </div>
+                        <div id="POY" class="POBlock" style="display: none;">
+                            <dl>
+                                <dt class="d-inline-flex">Total PO Raised</dt>
+                                <dd class="ml-4">Number : @Model.AllPurchase.Where(x => Convert.ToDateTime(x.poDate).Year == DateTime.Now.Year).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.YearPOAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total PO Approved</dt>
+                                <dd class="ml-4">Number :  @Model.AllPurchase.Where(x => x.poStatus == 3).Where(x => Convert.ToDateTime(x.poDate).Year == DateTime.Now.Year).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.YearApPOAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total PO Pending</dt>
+                                <dd class="ml-4">Number :  @Model.AllPurchase.Where(x => x.poStatus != 3).Where(x => Convert.ToDateTime(x.poDate).Year == DateTime.Now.Year).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.YearPendPOAmount)</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                <div class="card w-100 boxDesign1" style="height:400px">
+                  
+                    <div class="card-header">
+                        <h6 class="text-center text-muted ch" id="font">Spot Purchase (SP)</h6>
+
+                    </div>
+                    <div class="card-body">
+
+                        <select class="form-select d-inline-flex brand-select float-right mb-4 border-0" id="SPopId" onchange="countAdd()">
+                            <option value="1" selected="selected">All Time</option>
+                            <option value="2">This Month</option>
+                            <option value="3">This Year</option>
+                        </select>
+                        <br />
+                        <div id="SPl" class="SPBlock">
+                            <dl>
+                                <dt class="d-inline-flex">Total SP Raised</dt>
+                                <dd class="ml-4">Number : @Model.AllSpotPurchase.Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.AllSpotAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total SP Approved</dt>
+                                <dd class="ml-4">Number : @Model.AllSpotPurchase.Where(x => x.iouStatus == 3).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.AllApSpotAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total SP Pending</dt>
+                                <dd class="ml-4">Number : @Model.AllSpotPurchase.Where(x => x.iouStatus != 3).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.AllPendSpotAmount)</dd>
+                            </dl>
+                        </div>
+
+                        <div id="SPM" class="SPBlock" style="display: none;">
+                            <dl>
+                                <dt class="d-inline-flex">Total SP Raised</dt>
+                                <dd class="ml-4">Number : @Model.AllSpotPurchase.Where(x => Convert.ToDateTime(x.iouDate).Month == DateTime.Now.Month).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.MonthSpotAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total SP Approved</dt>
+                                <dd class="ml-4">Number : @Model.AllSpotPurchase.Where(x => x.iouStatus == 3).Where(x => Convert.ToDateTime(x.iouDate).Month == DateTime.Now.Month).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.MonthApSpotAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total SP Pending</dt>
+                                <dd class="ml-4">Number : @Model.AllSpotPurchase.Where(x => x.iouStatus != 3).Where(x => Convert.ToDateTime(x.iouDate).Month == DateTime.Now.Month).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.MonthPendSpotAmount)</dd>
+                            </dl>
+                        </div>
+                        <div id="SPY" class="SPBlock" style="display: none;">
+                            <dl>
+                                <dt class="d-inline-flex">Total SP Raised</dt>
+                                <dd class="ml-4">Number : @Model.AllSpotPurchase.Where(x => Convert.ToDateTime(x.iouDate).Year == DateTime.Now.Year).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.YearSpotAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total SP Approved</dt>
+                                <dd class="ml-4">Number : @Model.AllSpotPurchase.Where(x => x.iouStatus == 3).Where(x => Convert.ToDateTime(x.iouDate).Year == DateTime.Now.Year).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.YearApSpotAmount)</dd>
+                            </dl>
+                            <dl>
+                                <dt class="d-inline-flex">Total SP Pending</dt>
+                                <dd class="ml-4">Number : @Model.AllSpotPurchase.Where(x => x.iouStatus != 3).Where(x => Convert.ToDateTime(x.iouDate).Year == DateTime.Now.Year).Count()</dd>
+                                <dd class="ml-4">Amount : @String.Format("{0:0.00}", Model.YearPendSpotAmount)</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <br />
+    </div>
+</div>
+
+
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+    // Load google charts
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    // Draw the chart and set the chart values
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+            ['', 3],
+            ['', 8],
+            ['', 2],
+            ['', 3],
+        ]);
+
+        var options = { 'width': 250, 'height': 200 };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        chart.draw(data, options);
+	}
+	$(document).ready(function () {
+
+		$('#PRopId').change(function () {
+			var val = $(this).val();
+			if (val == 1) {
+				$('.PRBlock').hide();
+				$('#PRDl').show();
+			}
+			else if (val == 2) {
+				$('.PRBlock').hide();
+				$('#PRDlM').show();
+			}
+			else {
+				$('.PRBlock').hide();
+				$('#PRDlY').show();
+			}
+		})
+
+		$('#CSopId').change(function () {
+			var val = $(this).val();
+			if (val == 1) {
+				$('.CSBlock').hide();
+				$('#CSl').show();
+			}
+			else if (val == 2) {
+				$('.CSBlock').hide();
+				$('#CSM').show();
+			}
+			else {
+				$('.CSBlock').hide();
+				$('#CSY').show();
+			}
+		})
+
+		$('#SPopId').change(function () {
+			var val = $(this).val();
+			if (val == 1) {
+				$('.SPBlock').hide();
+				$('#SPl').show();
+			}
+			else if (val == 2) {
+				$('.SPBlock').hide();
+				$('#SPM').show();
+			}
+			else {
+				$('.SPBlock').hide();
+				$('#SPY').show();
+			}
+		})
+
+		$('#POopId').change(function () {
+			var val = $(this).val();
+			if (val == 1) {
+				$('.POBlock').hide();
+				$('#POl').show();
+			}
+			else if (val == 2) {
+				$('.POBlock').hide();
+				$('#POM').show();
+			}
+			else {
+				$('.POBlock').hide();
+				$('#POY').show();
+			}
+		})
+	})
+
+	function RAPending() {
+		window.open('/SCMRequisition/RequisitionApprove/ReqApprovelist', '_blank'); 
+	}
+	function RAsPending() {
+		window.open('', '_blank'); 
+	}
+	function CSAPending() {
+		window.open('/SCMPurchaseProcess/PurchaseApprove', '_blank'); 
+	}
+	function SingleAPending() {
+		window.open('/SCMPurchaseProcess/PurchaseApprove/IndexSingleOngoing', '_blank'); 
+	}
+	function POAPending() {
+		window.open('/SCMPurchaseOrder/PurchaseOrder/POListForApprove', '_blank'); 
+	}
+	function SPAPending() {
+		window.open('/SCMIOU/IOU/IOUListForApprove', '_blank'); 
+	}
+</script>

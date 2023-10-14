@@ -1,0 +1,50 @@
+﻿@model IEnumerable<TrainingWithPerticipantVm>
+
+@{
+    ViewData["Title"] = "GetAllTrainingAttendanceView";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+<div class="container mt-5">
+    <h3 class="text-center" style="color:black"> Training Attendance Report </h3>
+	<hr />
+	@foreach (var item in Model)
+    {
+        <div style="background-color: lightgray;padding: 5px;">
+            <h4 style="color:black;  font-family: arial, sans-serif; font-size:150%">Course Title:@item.training?.course</h4>
+            <h3 style="color:black;  font-family: arial, sans-serif; font-size:150%">Trainer Name:@item.training?.trainer?.name</h3>
+        </div>
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Attendance</th>
+                        <th>Mark</th>
+                        <th>Designation</th>
+                        @*<th>Department</th>*@
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var data in item.trainees)
+                    {
+                    <tr>
+                        <td>@data.name</td>
+                        @if (data.isPresent == 0)
+                        {
+                            <td>Absent</td>
+                        }
+                        else
+                        {
+                            <td><b>Present</b></td>
+                        }
+                        <td>@data.marks</td>
+                        <td>@data.designation</td>
+                        @*<td>@data.workingPlace</td>*@
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <br />
+    }
+</div>

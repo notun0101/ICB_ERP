@@ -1,0 +1,85 @@
+﻿@model BulkUploadModel
+@{
+    ViewData["Title"] = "File Upload";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            @*<div class="card-header" style="padding:6px 0px 0px 3px;">
+                <label style="padding:0px 0px 0px 0px;font-size:18px;font-weight:600" class="col-sm-10 pull-left">Accounting Report</label>
+            </div>*@
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h4 class="m-0 font-weight-bold text-primary">Data Migration List</h4>
+                <a href="/Accounting/ImportData/UploadedVoucerList" style="background-color:#024972;" class="btn btn-info btn-sm pull-right">Back To Data Migration List </a>
+            </div>
+
+
+            @*<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h4 class="m-0 font-weight-bold text-primary">Data Migration Import</h4>
+                <a href="/Accounting/ImportData/Index" style="background-color:#024972;" class="btn btn-info btn-sm pull-right">Import </a>
+            </div>*@
+
+            <form asp-area="Accounting" asp-controller="ImportData" asp-action="Index" method="post" enctype="multipart/form-data">
+
+
+                <div class="row" style="margin:10px">
+                    <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="head" class="col-sm-4 col-form-label text-left">Select File<span style="color:red;">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="file" class="form-control input-sm" id="formFile" name="formFile" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+
+                        <input hidden style="float:left;color:white" type="submit" id="submitForm"  class="btn btn-sm btn-info">
+                        <input  style="float:left;color:white" type="button"  id="btnSubmit" value="Upload" class="btn btn-sm btn-info">
+                    </div>
+
+                    <div class="col-sm-4">
+                        Data Upload file Format
+                        <a href="~/HRManualAttachment/AccountsImportDataFormat.xlsx" class="btn btn-success" download> <i class="fa fa-download"></i></a>
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        function btnPreview() {
+            var file = $('#formFile')[0].files[0];
+            var data = new FormData();
+            data.append("xlsx", file);
+            $.ajax({
+                url: '/admin/client/Preview',
+                type: 'POST',
+                data: { data },
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response != 0) {
+
+                    } else {
+                        alert('file not uploaded');
+                    }
+                },
+            });
+        }
+
+        $(document).ready(function () {
+            $('#btnSubmit').on('click', function (e) {
+                blockUI({ message: "Saving data ...", boxed: 1 });
+                $('#submitForm').click();
+            });
+        });
+    </script>
+}

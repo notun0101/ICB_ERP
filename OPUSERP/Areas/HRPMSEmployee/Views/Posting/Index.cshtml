@@ -1,0 +1,770 @@
+﻿@model PostingViewModel
+
+@{
+    ViewData["Title"] = "Posting Info";
+    Layout = "~/Areas/HRPMSEmployee/Views/Shared/_EmployeeForm.cshtml";}
+
+@section StyleEmp{
+    <style>
+        .redStar {
+            color: red;
+            float: right;
+        }
+
+        #myDIV {
+            background-color: white;
+            padding: 20px;
+            box-shadow: 3px 3px 3px 3px lightgray;
+            max-height: 415px;
+            overflow-y: scroll;
+            padding-top: 5px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+            background-color: white;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #F3F3F3;
+        }
+
+        .g {
+            text-decoration: none;
+            color: #1492a5;
+        }
+
+            .g:hover {
+                text-decoration: none;
+                color: #070a67;
+            }
+
+            .g span {
+                font-family: serif;
+            }
+
+        .small-box {
+            text-align: center;
+            border-radius: 10px;
+            padding: 10px;
+            transition: transform .5s;
+        }
+
+            .small-box:hover {
+                background-color: #e8f0fe;
+                transform: scale(.95);
+            }
+
+            .small-box i {
+                font-size: 35px;
+                margin: 10px;
+            }
+    </style>
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; border-right: 1px solid #D9D8DB">
+
+
+            <h5 class="card-title" style="color: black; margin: 0; ">Employee Posting Information</h5>
+        </div>
+        <div class="col-md-8">
+            @if (User.IsInRole("HRAdmin") || User.IsInRole("admin"))
+            {
+                <div style="float: left;">
+
+                    @if (Model.photograph?.url == null || Model.photograph?.url == "")
+                    {
+                        <img src="~/images/user-icon-png.png" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                    }
+                    else
+                    {
+                        <img src="~/@Model.photograph?.url" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                    }
+                    @*<img src="~/@Model.photograph?.url" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />*@
+                    <input type="hidden" id="hiddenFile" />
+                </div>
+            }
+            else
+            {
+                <div style="float: left;">
+
+                    @if (Model.photograph?.url == null || Model.photograph?.url == "")
+                    {
+                        <img src="~/images/user-icon-png.png" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                    }
+                    else
+                    {
+                        <img src="~/@Model.photograph?.url" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />
+
+                    }
+                    @*<img src="~/@Model.photograph?.url" data-toggle="modal" data-target="#updateEmpPhotoModal" style="cursor:pointer; margin-right: 5px;  border-radius: 50%;" title="Click to update photo." />*@
+                    <input type="hidden" id="hiddenFile" />
+                </div>
+            }
+            <div style="float: left;">
+                <div style="padding: 5px;text-align: center;">
+                    <p style="margin: 0; text-transform: uppercase;">@Model.employeeInfo?.nameEnglish</p>
+                    <p style="margin: 0">@Model.employeeInfo?.lastDesignation?.designationName</p>
+                </div>
+            </div>
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info mr-3' style="" data-toggle='tooltip' title='Go Back' href='/HRPMSEmployee/Photograph/EditGrid/@Model.employeeInfo?.Id'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+                @*<a class='btn btn-info' style="" data-toggle='tooltip' title='Print' target='_blank' href='/HRPMSEmployee/InfoView/pdspdf/@Model.employeeInfo?.Id'><i class='fa fa-print'></i></a>*@
+                <a id="btngle" href="javascript:void(0)" class="btn btn-outline-success  mr-5"
+                   style="position: absolute; right: 82px; top: 17px; box-shadow: none; font-size: 17px;"><i class="fas fa-th"></i></a>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+
+        <div class="container">
+            <form asp-area="HRPMSEmployee" asp-controller="Posting" asp-action="Index" id="FormId" method="post" data-parsley-validate="parsley" enctype="multipart/form-data">
+
+                @*<div asp-validation-summary="All" class="text-danger"></div>*@
+
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label for="branchId" class="col-sm-4 col-form-label">SBU<span class="redStar">*</span></label>
+                            <div class="col-sm-8">
+                                @*<input data-parsley-trigger="keyup" type="text" class="form-control" id="branchId" name="branchId" data-parsley-required="true">*@
+                                <input type="hidden" id="employeeId" name="employeeID" value="@Model.employeeId">
+                                <input type="hidden" id="postingID" name="postingID" value="0">
+                                <select class="form-control" id="branchId" name="branchId">
+                                    @foreach (var data in Model.specialBranchUnits)
+                                    {
+                                        <option value="@data.Id">@data.branchUnitName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label for="departmentId" class="col-sm-4 col-form-label">Department</label>
+                            <div class="col-sm-8">
+                                <select class="form-control changable" id="departmentId" name="departmentId">
+                                    <option value="">Select</option>
+                                    @foreach (var data in Model.departments)
+                                    {
+                                        <option value="@data.Id">@data.deptName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label for="hrBranchId" class="col-sm-4 col-form-label">Branch</label>
+                            <div class="col-sm-8">
+                                <select class="form-control changable" id="hrBranchId" name="hrBranchId">
+                                    <option value="">Select</option>
+                                    @foreach (var data in Model.hrBranches)
+                                    {
+                                        <option value="@data.Id">@data.branchName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label for="hrDivisionId" class="col-sm-4 col-form-label">Division</label>
+                            <div class="col-sm-8">
+                                <select class="form-control changable" id="hrDivisionId" name="hrDivisionId">
+                                    <option value="">Select</option>
+                                    @foreach (var data in Model.hrDivisions)
+                                    {
+                                        <option value="@data.Id">@data.divName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label for="hrUnitId" class="col-sm-4 col-form-label">Unit/Cell</label>
+                            <div class="col-sm-8">
+                                <select class="form-control changable" id="hrUnitId" name="hrUnitId">
+                                    <option value="">Select</option>
+                                    @foreach (var data in Model.hrUnits)
+                                    {
+                                        <option value="@data.Id">@data.unitName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="col-10">
+                            <div class="form-group row">
+                                <label for="locationId" class="col-sm-4 col-form-label">Location<span class="redStar">*</span></label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="locationId" name="locationId">
+                                        <option value="">Select</option>
+                                        @foreach (var data in Model.locations)
+                                        {
+                                            <option value="@data.Id">@data.branchUnitName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>*@
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label for="officeId" class="col-sm-4 col-form-label">Office</label>
+                            <div class="col-sm-8">
+                                <select class="form-control changable" id="officeId" name="officeId">
+                                    <option value="">Select</option>
+                                    @foreach (var data in Model.functionInfos)
+                                    {
+                                        <option value="@data.Id">@data.branchUnitName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 d-none">
+                        <div class="form-group row">
+                            <label for="placeName" class="col-sm-4 col-form-label">Place Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="placeName" name="placeName" data-parsley-required="false">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label for="startDate" class="col-sm-4 col-form-label">Start Date</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="startDate" name="startDate" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label for="endDate" class="col-sm-4 col-form-label">End Date</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="endDate" name="endDate" readonly>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 d-none">
+                        <div class="form-group row">
+                            <label for="placeNameBn" class="col-sm-4 col-form-label">Place Name(Bangla)</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="placeNameBn" name="placeNameBn">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label for="remarks" class="col-sm-4 col-form-label">Remarks</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="remarks" name="remarks">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label for="remarks" class="col-sm-4 col-form-label">Type</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" id="type" name="type">
+                                    <option value="1" selected>Main Duty</option>
+                                    <option value="0">Additional Duty</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+                        <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold">Posting Info List</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="PostingTable">
+                    <thead>
+                        <tr>
+                            <th>SBU</th>
+                            <th>Department</th>
+                            <th>Branch</th>
+                            <th>Division</th>
+                            <th>Unit</th>
+                            @*<th>Location</th>*@
+                            @*<th>Place Name</th>*@
+                            @*<th>Place Name(Bangla)</th>*@
+                            <th>Office</th>
+                            <th>Start Date</th>
+                            <th>End date</th>
+                            <th>Type</th>
+                            <th>Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.employeePostingPlaces.Where(x => x.status == 1).OrderByDescending(x => Convert.ToDateTime(x.startDate).Date))
+                        {
+                        <tr>
+                            <td>@data.branch?.branchUnitName</td>
+                            <td>@data.department?.deptName</td>
+                            <td>@data.hrBranch?.branchName</td>
+                            <td>@data.hrDivision?.divName</td>
+                            <td>@data.hrUnit?.unitName</td>
+                            @*<td>@data.location?.branchUnitName</td>*@
+                            @*<td>@data.placeName</td>*@
+                            @*<td>@data.placeNameBn</td>*@
+                            <td>@data.office?.branchUnitName</td>
+                            <td>@data.startDate?.ToString("dd/MM/yyyy")</td>
+                            @if (data.endDate.ToString() == "")
+                            {
+                                <td><strong>Continue..</strong></td>
+                            }
+                            else
+                            {
+                                <td>@data.endDate?.ToString("dd/MM/yyyy")</td>
+                            }
+                            <td>
+                                @if (data.type == 1)
+                                {
+                                    <span class="badge badge-primary">Main Duty</span>
+                                }
+                                else if (data.type == 0)
+                                {
+                                    <span class="badge badge-info">Additional Duty</span>
+                                }
+                                else
+                                {
+
+                                }
+                            </td>
+
+                            <td>
+                                <a class="btn btn-success" onclick="Edit(@data.Id,'@data.employeeId','@data.branchId','@data.departmentId','@data.hrBranchId','@data.hrDivisionId','@data.hrUnitId','@data.locationId','@data.placeName','@data.placeNameBn','@data.officeId','@data.startDate?.ToString("MM/dd/yyyy")','@data.endDate?.ToString("MM/dd/yyyy")','@data.remarks', @data.type)" href="#"><i class="fa fa-edit"></i></a>
+                                <a class="btn btn-danger" onclick="Remove(@data.Id,@data.employeeId)" href="javascript:void(0)"><i class="fa fa-trash-alt"></i></a>
+                                <a class="btn btn-warning" onclick="StatusFt(@data.Id,@data.employeeId)" href="javascript:void(0)">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </a>
+
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myDIV" style="display: none; width: 311px; position: absolute; right: 50px; top: 167px;">
+    <div class="row">
+        <a href="/HRPMSEmployee/Info/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-user-tie"></i><span>Basic</span>
+        </a>
+
+        <a href="/HRPMSEmployee/Address/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-map-marker-alt"></i><span>Address</span>
+        </a>
+        @*<a href="/HRPMSEmployee/Spouse/Index/@Model.employeeId" class="col-md-4 small-box g">
+                <i class="fa fa-female"></i><span>Spouse</span>
+            </a>*@
+        <a href="/HRPMSEmployee/Children/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-child"></i><span>Children</span>
+        </a>
+        <a href="/HRPMSEmployee/EmergencyContact/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-blender-phone"></i><span>Emergency Contact</span>
+        </a>
+        <a href="/HRPMSEmployee/Nominee/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-sitemap"></i><span>Nominee</span>
+        </a>
+        <a href="/HRPMSEmployee/Nominee/EmployeeInsurance/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-university"></i><span>Insurance</span>
+        </a>
+        <a href="/HRPMSEmployee/EducationalQualification/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-graduation-cap"></i><span>Education</span>
+        </a>
+        <a href="/HRPMSEmployee/ProfessionalQualifications/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-chalkboard-teacher"></i><span>Qualification</span>
+        </a>
+        <a href="/HRPMSEmployee/OtherQualifications/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-book-reader"></i><span>Other Qualification</span>
+        </a>
+        <a href="/HRPMSEmployee/Training/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-clipboard-list"></i><span>Training History</span>
+        </a>
+        <a href="/HRPMSEmployee/TransferLog/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-stream"></i><span>Service</span>
+        </a>
+        <a href="/HRPMSEmployee/PromotionLog/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-chart-line"></i><span>Promotion</span>
+        </a>
+        <a href="/HRPMSEmployee/ACRLog/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-clipboard-check"></i><span>History</span>
+        </a>
+        <a href="/HRPMSEmployee/Disciplinary/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-user-times"></i><span>Disciplinary Action</span>
+        </a>
+        <a href="/HRPMSEmployee/Supervisor/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-user-shield"></i><span>Supervisor</span>
+        </a>
+        <a href="/HRPMSEmployee/License/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-id-badge"></i><span>Driving License</span>
+        </a>
+        <a href="/HRPMSEmployee/Passport/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-passport "></i><span>Passport</span>
+        </a>
+        <a href="/HRPMSEmployee/Travel/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-suitcase-rolling"></i><span>Travel</span>
+        </a>
+        <a href="/HRPMSEmployee/Membership/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-user-tag"></i><span>Membership</span>
+        </a>
+        <a href="/HRPMSEmployee/Award/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-medal"></i><span>Award</span>
+        </a>
+        <a href="/HRPMSEmployee/Publication/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-atlas"></i><span>Publication</span>
+        </a>
+        <a href="/HRPMSEmployee/Language/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-language"></i><span>Language</span>
+        </a>
+
+        <a href="/HRPMSEmployee/OtherActivities/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-skating"></i><span>Other Activities</span>
+        </a>
+        <a href="/HRPMSEmployee/BankInfo/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-university"></i><span>Bank Acounts</span>
+        </a>
+        <a href="/HRPMSEmployee/Belongings/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-bold"></i><span>Belongings</span>
+        </a>
+        <a href="/HRPMSEmployee/PreviousEmployment/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-th-list"></i><span>Prev.Employment</span>
+        </a>
+        <a href="/HRPMSEmployee/FreedomFighter/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-user-check"></i><span>Freedom Fighter</span>
+        </a>
+
+
+        <a href="/HRPMSEmployee/Reference/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-user-clock"></i><span>Reference</span>
+        </a>
+        <a href="/HRPMSEmployee/OfficeAssign/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-map-marker-alt"></i><span>Office Assign</span>
+        </a>
+        <a href="/HRPMSEmployee/Photograph/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-user-circle"></i><span>Picture</span>
+        </a>
+        <a href="/HRPMSEmployee/Photograph/Signature/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-user-circle"></i><span>Signature</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeContractInfo/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-file-signature"></i><span>Contract</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fa fa-sitemap"></i><span>Project Activity</span>
+        </a>
+        <a href="/HRPMSEmployee/FinanceCode/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fas fa-code-branch"></i><span>Financial Code</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeAttachment/Index/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fas fa-file"></i><span>Attachment</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/ProjectAssign/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fas fa-air-freshener"></i><span>Project Assign</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/EmployeeOtherInfo/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fas fa-info-circle"></i><span>Other Info</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/EmployeeCostCentre/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fas fa-dollar-sign"></i><span>Cost Centre</span>
+        </a>
+        <a href="/HRPMSEmployee/EmployeeProjectActivity/EmployeeGrade/@Model.employeeId" class="col-md-4 small-box g">
+            <i class="fab fa-glide-g"></i><span>Employee Grade</span>
+        </a>
+
+    </div>
+</div>
+<div class="modal fade" id="updateEmpPhotoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                @*<img src="~/images/Aloha New Logo.png" style="height:50px;" />*@
+                <h5 class="modal-title" id="exampleModalLabel">Update Photo</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-area="HRPMSEmployee" asp-controller="Photograph" asp-action="Index" method="post" enctype="multipart/form-data" data-parsley-validate="parsley">
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="form-group row">
+                        @*<div class="col-5">
+                                <img id="user_img_current" style="width:200px;height:200px" src="~/@Model.photograph.url" alt="" class="img-thumbnail float-left">
+                                <input type="hidden" id="hiddenFile" />
+                            </div>*@
+                        <div class="col-7">
+                            <input type="hidden" name="queryString" id="queryString" value="" />
+                            @if (Model.photograph?.url != null || Model.photograph?.url != "")
+                            {
+                                <img id="user_img" style="width:200px;height:200px;cursor:pointer;" src="~/@Model.photograph?.url" alt="" class="img-thumbnail float-left">
+                            }
+                            else
+                            {
+                                <img id="user_img" style="width:200px;height:200px;cursor:pointer;" src="/images/user-icon-png.png" alt="" class="img-thumbnail float-left">
+                            }
+                            <input type="hidden" name="employeeId" value="@Model.employeeInfo?.Id" />
+                            <input type="hidden" name="photographID" value="@Model.photograph?.Id" />
+                            <input type="file" title="Photo Upload" id="imagePath" data-parsley-required="true" name="empPhoto" class="btn btn-default btn-sm pull-right" />
+                            <span style="float:left;color:red;" class="redStar">*</span>
+                        </div>
+                    </div>
+                    <hr>
+                    <button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section ScriptsEmp{
+    <script>
+
+        $(document).ready(function () {
+
+            var pathname = window.location.pathname;
+            $('#queryString').val(pathname);
+			$("#submit").click(function () {
+				if ($('#departmentId').val() == '' && $('#hrBranchId').val() == '' && $('#hrDivisionId').val() == '' && $('#hrUnitId').val() == '' && $('#officeId').val() == '') {
+					swal('warning', 'You must need to choose posting place!', 'warning');
+				}
+				else {
+					swal({
+						title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+					}).then(function () {
+						$("#submitbtn").click();
+					});
+				}
+            });
+            $("#btngle").click(function () {
+                $("#myDIV").slideToggle("slow");
+            });
+
+			$('.changable').on('change', function () {
+				var id = $(this).val();
+				$('#placeName').val($(this).find(":selected").text());
+				$('.changable').val('');
+				$(this).val(id);
+            })
+
+            $('#PostingTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'Posting Info List',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'Posting Info List'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "ERP-HRPMS",
+                        messageTop: 'Posting Info List',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+            $('#startDate').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100" });
+            $('#endDate').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100" });
+
+        });
+
+        function Edit(Id, employeeId, branchId, departmentId, hrBranchId, hrDivisionId, hrUnitId, locationId, placeName, placeNameBn, officeId, startDate, endDate, remarks, type) {
+            $('#postingID').val(Id);
+            $('#employeeId').val(employeeId);
+            $('#branchId').val(branchId);
+            $('#departmentId').val(departmentId);
+            $('#hrBranchId').val(hrBranchId);
+            $('#hrDivisionId').val(hrDivisionId);
+            $('#hrUnitId').val(hrUnitId);
+            $('#locationId').val(locationId);
+            $('#placeName').val(placeName);
+            $('#placeNameBn').val(placeNameBn);
+            $('#officeId').val(officeId);
+            $('#startDate').val(formatDateMonthName(startDate));
+            if (endDate == '') {
+                $('#endDate').val('Continue..');
+            }
+            else {
+                $('#endDate').val(formatDateMonthName(endDate));
+            }
+            
+            $('#remarks').val(remarks);
+            $('#type').val(type);
+
+        }
+
+        function formatDateMonthName(date) {
+            var monthName = "";
+            datenew = new Date(date);
+            var year = datenew.getFullYear(),
+                month = datenew.getMonth() + 1, // months are zero indexed
+                day = datenew.getDate(),
+                hour = datenew.getHours(),
+                minute = datenew.getMinutes(),
+                second = datenew.getSeconds(),
+                hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+                minuteFormatted = minute < 10 ? "0" + minute : minute,
+                morning = hour < 12 ? "am" : "pm";
+            if (month == 1) {
+                monthName = "Jan";
+            }
+            else if (month == 2) {
+                monthName = "Feb";
+            }
+            else if (month == 3) {
+                monthName = "Mar";
+            }
+            else if (month == 4) {
+                monthName = "Apr";
+            }
+            else if (month == 5) {
+                monthName = "May";
+            }
+            else if (month == 6) {
+                monthName = "Jun";
+            }
+            else if (month == 7) {
+                monthName = "Jul";
+            }
+            else if (month == 8) {
+                monthName = "Aug";
+            }
+            else if (month == 9) {
+                monthName = "Sep";
+            }
+            else if (month == 10) {
+                monthName = "Oct";
+            }
+            else if (month == 11) {
+                monthName = "Nov";
+            }
+            else {
+                monthName = "Dec";
+            }
+            return day + "-" + monthName + "-" + year;
+        }
+
+        function Remove(Id, employeeId) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+                $.ajax({
+                    url: "/HRPMSEmployee/Posting/Delete?id=" + Id + "&empId=" + employeeId,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (res) {
+                        if (res == 'deleted') {
+                            swal('', 'Deleted Successfully!', 'success').then(function () {
+                                location.reload();
+                            })
+                        }
+                        else {
+                            swal('', 'Delete Failed!', 'warning')
+                        }
+                    }
+                });
+                //swal('', 'Deleted Successfully!', 'success')
+            });
+            return false;
+        }
+
+        function StatusFt(Id, employeeId) {
+            Common.Ajax('GET', '/HRPMSEmployee/Posting/type?id=' + Id + "&empId=" + employeeId, [], 'json', AjaxStatus);
+        }
+        function AjaxStatus(response) {
+            console.log(response)
+            if (response == 'ok') {
+                location.reload()
+            }
+        }
+        
+                        //$('#hrUnitId').change(function () {
+                        //    changeThird();
+                        //});
+
+                        //$('#officeId').change(function () {
+                        //    changeThird();
+                        //});
+
+                        //function changeThird() {
+                        //    $('#placeName').val($('#hrUnitId').val() + '' + $('#officeId').val());
+                        //}
+    </script>
+}
+

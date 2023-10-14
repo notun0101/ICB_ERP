@@ -1,0 +1,179 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h2 class="m-0 font-weight-bold text-info">PF Dashboard</h2>
+            </div>
+            <div class="card-body bg-white">
+                <div class="row col-sm-12">
+
+                    <div class="col-sm-3">
+                        <div class="form-group text-center card cardBtn bg-white shadow">
+                            <a class="text-center btn btn-default text-info" align="center" href="/ProvidentFund/Member/MemberOverView">
+                                <p>
+                                    <i class="fa fa-users" style="font-size:48px"></i>
+                                </p>
+                                <hr />
+                                <h4>Members</h4>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="form-group text-center card cardBtn bg-white shadow">
+                            <a class="text-center btn btn-default text-info " align="center" href="/ProvidentFund/Contribution/ContributionOverView">
+                                <p>
+                                    <i class="fa fa-american-sign-language-interpreting" style="font-size:48px"></i>
+                                </p>
+                                <hr />
+                                <h4>Contribution</h4>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="form-group text-center card cardBtn bg-white shadow">
+                            <a class="text-center btn btn-default text-info" align="center" href="/ProvidentFund/Investment/InvestmentOverView">
+                                <p>
+                                    <i class="fas fa-money-check-alt" style="font-size:48px"></i>
+                                </p>
+                                <hr />
+                                <h4>Investment</h4>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="form-group text-center card cardBtn bg-white shadow">
+                            <a class="text-center btn btn-default text-info" align="center" href="/ProvidentFund/PFAccounting/PFAccOverView">
+                                <p>
+                                    <i class="fa fa-calculator" style="font-size:48px"></i>
+                                </p>
+                                <hr />
+                                <h4>PF Accounting</h4>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="row col-sm-12">
+
+                    <div class="col-sm-3">
+                        <div class="form-group text-center card cardBtn bg-white shadow">
+                            <a class="text-center btn btn-default text-info" align="center" href="/ProvidentFund/Discountinuation/DiscountinuationOverview">
+                                <p>
+                                    <i class="fa fa-times-circle" style="font-size:48px"></i>
+                                </p>
+                                <hr />
+                                <h4>Discontinuation</h4>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="form-group text-center card cardBtn bg-white shadow">
+                            <a class="text-center btn btn-default text-info" align="center" href="/ProvidentFund/LoanManagement/LoanOverview">
+                                <p>
+
+                                    <i class="fas fa-exchange-alt" style="font-size:48px"></i>
+                                </p>
+                                <hr />
+                                <h4>Loan Management</h4>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="form-group text-center card cardBtn bg-white shadow">
+                            <a class="text-center btn btn-default text-info" align="center" href="/ProvidentFund/PFReport/ReportCenter">
+                                <p>
+                                    <i class="fas fa-chart-bar" style="font-size:48px"></i>
+                                </p>
+                                <hr />
+                                <h4>PF Report</h4>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="form-group text-center card cardBtn bg-white shadow">
+                            <a class="text-center btn btn-default text-info" align="center" href="">
+                                <p>
+                                    <i class="fa fa-cog" style="font-size:48px"></i>
+                                </p>
+                                <hr />
+                                <h4>User Portal</h4>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h2 class="m-0 font-weight-bold text-info"> Dashboard</h2>
+            </div>
+            <div class="card-body bg-white">
+                <div class="row ">
+
+                    <div class="col-3">
+                        <div class="form-group text-center card cardBtn bg-light">
+                            <a class="text-center btn btn-default text-info" href="/ProvidentFund/Member/MemberOverView">
+                                <br />
+                                <h5 class="">Cash and Bank Blance</h5>
+                                <hr />
+                                <p>
+                                    Brac bank: 2,000,000
+                                    <br />
+                                    Cash: 50,000
+                                </p>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group text-center card cardBtn bg-light">
+                            <a class="text-center btn btn-default text-info" href="/ProvidentFund/Member/MemberOverView">
+                                <br />
+                                <h5 class="">Receipts & Payments</h5>
+                                <hr />
+                                <p>
+                                    Receipts: 100,000
+                                    <br />
+                                    Payments: 700,000
+                                </p>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group text-center card cardBtn bg-light">
+                            <a class="text-center btn btn-default text-info" href="/ProvidentFund/Member/MemberOverView">
+                                <h3 class="text-success" style="font-size:65px">70</h3>
+                                <hr />
+                                <h6>New Members(this year)</h6> 
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group text-center card cardBtn bg-light">
+                            <a class="text-center btn btn-default text-info" href="/ProvidentFund/Member/MemberOverView">
+                                <p align="center" style="font-size:82px">
+                                    <i class="fa fa-plus-circle"></i>
+                                </p>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

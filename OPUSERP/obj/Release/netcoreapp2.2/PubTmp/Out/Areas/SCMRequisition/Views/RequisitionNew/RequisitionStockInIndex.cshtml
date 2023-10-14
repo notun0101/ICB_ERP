@@ -1,0 +1,283 @@
+﻿@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+	/* Top Counter */
+	.leftImgBox {
+		width: 20%;
+		height: 100%;
+		float: left;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-left: 13px;
+	}
+
+		.leftImgBox img {
+			width: 100%;
+		}
+
+	.counterBox {
+		float: right;
+		text-align: center;
+		margin: 10px;
+	}
+
+	.counter {
+		font-size: 25px;
+		margin-bottom: 0;
+	}
+
+	.title {
+		font-size: 15px;
+	}
+
+	a {
+		color: white !important;
+	}
+
+		a:hover {
+			color: white;
+		}
+
+	/* Searching */
+	input[type="text"] {
+		box-shadow: none !important;
+		border: 1px solid #6C757D;
+	}
+
+	/* Filtered Items */
+	.card {
+		display: flex;
+		align-items: center;
+		border: none;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+		transition: all 0.3s ease-in-out;
+	}
+
+		.card img {
+			padding: 10px;
+			width: 46%;
+		}
+
+	#filtered-items {
+		overflow-y: scroll;
+		height: 650px;
+	}
+
+	.card:hover {
+		/* box-shadow: 0 0 11px rgba(33, 33, 33, .2); */
+		transform: scale(0.9, 0.9);
+		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+	}
+
+		.card:hover::after {
+			opacity: 1;
+		}
+
+	/* Add to Cart */
+	.addtocart {
+		padding: 5px;
+	}
+
+	.fa-minus {
+		color: #FB4C5D;
+	}
+
+	.fa-plus {
+		color: #F0BA02;
+	}
+
+	#addtocart {
+		padding-bottom: 0px;
+		margin-bottom: 5px;
+		background-color: #00A75A;
+		border: none;
+		padding: 2px;
+		text-align: center;
+		font-size: 20px;
+		color: white;
+		height: 43px;
+		width: 95%;
+		padding-top: 5px;
+	}
+
+	.list-item-cart img {
+		width: 20px;
+		height: 20px;
+	}
+
+	.list-item-cart span {
+		color: black;
+		font-size: 15px;
+	}
+
+	.list-item-cart a:first-child {
+		color: #EF5160;
+	}
+
+	.list-item-cart a:last-child {
+		color: #EEB907;
+	}
+
+	.list-item-cart input {
+		width: 25px;
+		text-align: center;
+		font-size: 15px;
+		outline: none;
+	}
+
+	/* Bottom List Group */
+	.list-item-bottom {
+		display: flex;
+		align-items: center;
+	}
+
+	.list-group .list-group-item {
+		border-top: none;
+		padding: 5px !important;
+		border-bottom: none;
+		border-left: 1px solid #949494;
+		border-right: 1px solid #949494;
+	}
+
+		.list-group .list-group-item:first-child {
+			border-top: 1px solid #949494;
+		}
+
+		.list-group .list-group-item:last-child {
+			border-bottom: 1px solid #949494;
+		}
+
+	.list-img {
+		width: 40px;
+	}
+
+	.list-text {
+		padding-left: 6px;
+		font-size: 22px;
+	}
+
+	.list-num {
+		font-size: 20px;
+		text-align: right;
+	}
+
+	.box {
+		width: 14.28%;
+		/*transition: width 2s, height 2s, transform 2s;*/
+		transition: background-color 2s, color 2s;
+		border-radius: 15px;
+	}
+
+		.box:hover {
+			background-color: #E5E5E5 !important;
+		}
+
+		.box a {
+			transition: color 2s;
+		}
+
+			.box a:hover {
+				color: black !important;
+			}
+
+	.counterBox1 {
+		width: 60%;
+		/* float: left; */
+		font-size: 140%;
+		margin-left: 14px;
+		/* left: 30px; */
+		float: right;
+		text-align: center;
+		margin-top: 22px !important;
+		margin-right: 10px;
+	}
+
+	.leftImgBox i {
+		font-size: 45px;
+		margin-left: 24px;
+	}
+
+	#itemDetails .list-group {
+		width: 92%;
+		margin-left: 8px;
+	}
+
+	#del {
+		cursor: pointer;
+	}
+
+	#addtocart {
+		background-color: gray;
+	}
+
+	.itemCard {
+		height: 200px;
+	}
+
+	button {
+		box-shadow: none !important;
+	}
+
+	.counter1 {
+		font-size: 29px;
+	}
+
+	.itemCard .card-body {
+		font-size: 22px !important;
+	}
+
+	#myInput {
+		font-size: 20px !important;
+	}
+
+	#description {
+		font-size: 20px;
+		text-align: left;
+	}
+
+		#description table tbody tr td {
+			text-align: left;
+		}
+
+	#previewData {
+		font-size: 20px;
+	}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+<link href="~/css/site.css" rel="stylesheet" />
+
+<div class="container-fluid">
+	<!-- Top Counter -->
+	<div class="row" style="width: 100%;  margin-bottom: 20px;">
+		<div class="col-sm-3 py-1 box" style="background-color: #309FDB; border: 5px solid white;" onclick="DataLoad(2)">
+			<a href="#" id="stationary-btn">
+				<div class="leftImgBox">
+					<i class="far fa-plus-square"></i>
+				</div>
+				<div class="counterBox1">
+					<p class="counter1">New</p>
+				</div>
+			</a>
+		</div>
+		<div class="col-sm-3 py-1 box" style="background-color: #C8D657; color: white; border: 5px solid white;" onclick="DataLoad(3)">
+			<a href="#" id="stationary-btn">
+				<div class="leftImgBox">
+					<i class="far fa-list-alt"></i>
+				</div>
+				<div class="counterBox1">
+					<p class="counter1">List</p>
+				</div>
+			</a>
+		</div>
+	</div>
+</div>
+
+@section Scripts{
+	<script>
+
+	</script>
+}

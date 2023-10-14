@@ -1,0 +1,142 @@
+﻿@model TrainingPlanningViewModel
+@{
+    ViewData["Title"] = "Training Attendance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+   
+    <style>
+        #Attendancebtn{
+            background-color:lightblue;
+            color:whitesmoke;
+            
+        }
+
+        .redStar {
+            color: red;
+        }
+    </style>
+
+
+<div class="card" style="width: 100%;">
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+            <h5 class="card-title" style="color: black; margin: 8px; text-transform: uppercase;">Attendance and Marking</h5>
+        </div>
+        <div class="col-md-8">
+
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1019&perentId=6300'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <hr>
+        <div class="container">
+            <form asp-area="HRPMSTrainingNew" id="FormId" asp-controller="TrainingPlanning" asp-action="TrainingAttendance" method="post" data-parsley-validate="parsley">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="trainingId" class="col-sm-4 col-form-label">Training Name<span class="redStar">*</span></label>
+                                <div class="col-sm-8">
+                                    <input type="hidden" id="TrainingPerticipanId" name="TrainingPerticipanId" @*value="@Model.employeeID" *@>
+                                    <select type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="trainingId" id="trainingId">
+                                        <option value="">Select</option>
+                                        @foreach (var data in Model.trainingInfoNews)
+                                        {
+                                            <option value="@data.Id">@data.course</option>
+                                        }
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" id="Attendancebtn" class="btn btn-dark btn-circle" data-toggle="tooltip" title="GO"style="float:left;">
+                                <i class="fas fa-location-arrow"></i>
+
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+    <script>
+        $(document).ready(function () {
+            $("#Attendancebtn").click(function () {
+                window.location.href = "/HRPMSTrainingNew/TrainingPlanning/TrainingAttendanceNew/" + $("#trainingId").val();
+
+            });
+          //  Common.Ajax('GET', '/HRPMSTrainingNew/TrainingPlanning/GetAllPerticipants', [], 'json', ajaxFuncAllPerticipants, false);
+        //    Common.Ajax('GET', '/HRPMSTrainingNew/TrainingPlanning/GetFinishedTrainings', [], 'json', ajaxFuncFinishedTrainings, false);
+        //    $("#trainingId").change(function () {
+        //        var id = $(this).val();
+
+        //        Common.Ajax('GET', '/HRPMSTrainingNew/TrainingPlanning/GetTrainingInfo/' + id, [], 'json', ajaxTrainingInfo, false);
+
+
+        //        Common.Ajax('GET', '/HRPMSTrainingNew/TrainingPlanning/GetPerticipantsByTrainingId/' + id, [], 'json', ajaxFuncPerticipants, false);
+        //        Common.Ajax('GET', '/HRPMSTrainingNew/TrainingPlanning/GetAllPerticipants', [], 'json', ajaxFuncAllPerticipants, false);
+        //    });
+           
+            
+        });
+
+        //function ajaxFuncFinishedTrainings(response) {
+        //    console.log(response)
+        //    var option = "";
+        //    $.each(response, function (i, item) {
+        //        option += `<option value="${item.Id}">${item.course}</option>`
+        //    });
+        //    $('#trainingId').empty();
+        //    $('#trainingId').append(`<option value="">Select </option>`);
+        //    $('#trainingId').append(option);
+        //}
+        //function ajaxTrainingInfo(response) {
+        //   // alert(response.courseObjective);
+        //    $('#courseObjective').val(response.courseObjective);
+           
+        //}
+
+        //function ajaxFuncAllPerticipants(response) {
+        //    alert(response.attendance);
+        //    if (response.attendance == 1) {
+        //      //  $('#checkbox1').is(':checked'); 
+        //        $('#checkbox1').prop('checked')
+        //    }
+          
+        //}     
+
+        //function ajaxFuncPerticipants(response) {
+
+        //  //  console.log(response.trainingInfoNews);
+
+        //    var htmlData = "";
+        //    $("#DisplayData").empty();
+        //    $.each(response, function (index, item) {
+        //        console.log(item);
+        //        if (item.year == null) {
+        //            item.year = "";
+        //        }
+               
+        //            htmlData += `<tr>
+        //                    <td>${item.nameEnglish}</td>
+        //                    <td><input type="checkbox" id="checkbox1" name="" value=""></td>
+        //                    <td><input type="checkbox" id="checkbox2" name="" value=""></td>
+        //                    </tr>`;
+                
+        //    })
+        //    $("#DisplayData").empty();
+        //    $("#DisplayData").append(htmlData);
+          
+        //}
+
+    </script>

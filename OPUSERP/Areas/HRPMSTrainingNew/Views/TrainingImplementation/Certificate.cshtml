@@ -1,0 +1,428 @@
+﻿@model CertificateViewModel
+@{
+    ViewData["Title"] = "Certificate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+
+
+    .redStar {
+        color: red;
+    }
+</style>
+
+
+<div class="card" style="width: 100%;">
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+            <h5 class="card-title" style="color: black; margin: 8px;">Training & Participent Info</h5>
+        </div>
+        <div class="col-md-8">
+
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info mr-4' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1019&perentId=6300'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="container">
+            <form asp-area="HRPMSTrainingNew" id="FormId" asp-controller="TrainingPlanning" asp-action="TrainingPerticipants" method="post" data-parsley-validate="parsley">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="trainingId" class="col-sm-4 col-form-label">Course Name<span class="redStar">*</span></label>
+                                <div class="col-sm-8">
+                                    <input type="hidden" id="TrainingPerticipanId" name="TrainingPerticipanId">
+                                    <select class="form-control" name="trainingId" id="trainingId" data-parsley-required="true"></select>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-6">
+                            <div class="form-group row" id="hdnEmpidArea">
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" placeholder="Search" autocomplete="off" id="employeeCode" name="employeeCode">
+                                    <input type="hidden" id="employeeId" name="employeeId" value="0" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="row clearfix">
+                                    <div class="col-12" id="trainingInfoDiv">
+
+
+                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-primary">Training Info </h6>
+                                        </div>
+                                        <br />
+                                        <div id="DisplayData" style="padding:0;margin:0">
+
+                                        </div>
+                                        @*<div class="card-body cb text-center" >
+                                            <p>
+                                                <strong>Course Title</strong><br />
+                                                <br /><br />
+                                            </p>
+                                            <p>
+                                                <strong>Strating Date</strong><br />
+                                                <br /><br />
+                                            </p>
+                                            <p>
+                                                <strong>Ending Date</strong><br />
+                                                <br /><br />
+                                            </p>
+                                            <p>
+                                                <strong>Amount (BDT)</strong><br />
+                                                <br /><br />
+                                            </p>
+                                            <p>
+                                                <strong>Subject</strong><br />
+                                                <br /><br />
+                                            </p>
+                                            <p>
+                                                <strong>Trainer</strong><br />
+                                                <br /><br />
+                                            </p>
+                                            <p>
+                                                <strong>Institute</strong><br />
+                                                <br /><br />
+                                            </p>
+                                            <p>
+                                                <strong>Location</strong><br />
+                                                <br /><br />
+                                            </p>
+                                        </div>*@
+
+                                        @*<table class="" id="trainingEnrollTable">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 244px;  padding-bottom: 15px;padding-left: 9px;"><strong>Course Title</strong></th>
+                                                    <th style="width: 138px;  padding-bottom: 15px;"><strong>Strating Date</strong></th>
+
+                                                    <th style="width: 138px;  padding-bottom: 15px;"><strong>Ending Date</strong></th>
+                                                </tr>
+
+                                            </thead>
+                                            <tbody id="DisplayData"></tbody>
+                                        </table>*@
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="row clearfix">
+                                    <div class="col-12">
+
+
+                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-primary">Perticipants </h6>
+                                        </div>
+
+                                        <div class="card-body" style="max-height:350px; overflow: scroll;">
+                                            <table class="table table-striped table-bordered" id="trainingPlaneTable">
+                                                <thead>
+													<tr>
+														<th>Action</th>
+														<th>Name</th>
+														<th>Department</th>
+														<th>Designation</th>
+													</tr>
+												</thead>
+												<tbody id="DisplayDataEmp">
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+
+
+
+
+                </div>
+
+               
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        //Common.Ajax('GET', '/HRPMSTrainingNew/TrainingPlanning/GetAllTraining', [], 'json', ajaxFuncAllTraining, false);
+        //Common.Ajax('GET', '/HRPMSTrainingNew/TrainingPlanning/TrainingPerticipants', [], 'json', ajaxAllParticipents, false);
+        Common.Ajax('GET', '/HRPMSTrainingNew/TrainingPlanning/GetFinishedTrainings', [], 'json', ajaxFuncFinishedTrainings, false);
+        $("#trainingId").change(function () {
+            var id = $(this).val();
+            Common.Ajax('GET', '/HRPMSTrainingNew/TrainingPlanning/GetTrainingInfo/' + id, [], 'json', ajaxTrainingInfo, true);
+            Common.Ajax('GET', '/HRPMSTrainingNew/TrainingImplementation/GetTraineeInfoByTraining/' + id, [], 'json', ajaxTraineeInfo, false);
+        });
+
+        $('.checkInp').on('change', function () {
+            if ($(this).is(':checked')) {
+                $('.checkInp').attr('name', 'perticipants');
+            }
+            else {
+                $('.checkInp').removeAttr('name', 'perticipants');
+            }
+        })
+
+        //Common.Ajax('GET', '/global/api/getEmployeeInfoByOrg/', [], 'json', ajaxEmployeeList, false);
+
+        $("#employeeCode").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#DisplayDataEmp tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
+    });
+
+    
+
+    function ajaxFuncFinishedTrainings(response) {
+        console.log('response')
+        console.log(response)
+        var option = "";
+        $.each(response, function (i, item) {
+            option += `<option value="${item.Id}">${item.course}</option>`
+        });
+        $('#trainingId').empty();
+        $('#trainingId').append(`<option value="">Select </option>`);
+        $('#trainingId').append(option);
+    }
+    function ajaxTraineeInfo(response) {
+        console.log("okkkk");
+        console.log(response);
+        var option = '';
+        $.each(response, function (i, item) {
+            //var empId = item.employee?.Id;
+            //<a class="btn btn-info" data-toggle='tooltip' title='Print' href='javascript:void(0)' onclick="location.href='/HRPMSTrainingNew/TrainingImplementation/GenerateCertificatedPdf?empId=${item.employeeId}&trainingId=${item.trainingInfoNew ?.Id}'"><i class="fa fa-print"></i></a>
+
+            var trainingId = item.trainingInfoNew ?.Id;
+            //alert(empId)
+            //alert(trainingId)
+            //console.log(item.employee)
+            option += `<tr>
+                            <td>
+                                <div style="float: right; margin: 16px;">
+
+                                        <a class="btn btn-info" data-toggle='tooltip' title='Print' href='javascript:void(0)' onclick="location.href='/HRPMSTrainingNew/TrainingImplementation/GenerateCertificatedPdf?trainingId=${item.trainingInfoNew ?.Id}'"><i class="fa fa-print"></i></a>
+
+
+                                    </div>
+                                </td>
+                                <td style="width:30%">${item.name}</td>
+                                <td style="width:30%">${item.employee ?.department ?.deptName}</td>
+                                <td style="width:30%">${item.employee ?.lastDesignation ?.designationName}</td>
+                            </tr>`;
+            })
+            $('#DisplayDataEmp').empty();
+            $('#DisplayDataEmp').append(option);
+        }
+        function ajaxTrainingInfo(response) {
+            console.log(response)
+            console.log(response.resourcePeople)
+           
+            var noOfParticipants ;
+            if (response.trainingInfoNewsSingle.noOfParticipants == null) {
+                noOfParticipants = '';
+            } else {
+                noOfParticipants = response.trainingInfoNewsSingle.noOfParticipants;
+            }
+            var startDate ;
+            if (response.trainingInfoNewsSingle.startDate == null) {
+                startDate = '';
+            } else {
+                startDate = formatDate(response.trainingInfoNewsSingle.startDate);
+            }
+            var endDate ;
+            if (response.trainingInfoNewsSingle.endDate == null) {
+                endDate = '';
+            } else {
+                endDate = formatDate(response.trainingInfoNewsSingle.endDate);
+            }
+            var amount ;
+            if (response.trainingInfoNewsSingle.amount == null) {
+                amount = '';
+            } else {
+                amount = response.trainingInfoNewsSingle.amount;
+            }
+            var year ;
+            if (response.trainingInfoNewsSingle.year == null) {
+                year = '';
+            } else {
+                year = response.trainingInfoNewsSingle.year;
+            }
+            var subject ;
+            if (response.trainingInfoNewsSingle.subject ?.name == null) {
+                subject = '';
+            } else {
+                subject = response.trainingInfoNewsSingle.subject ?.name;
+            }
+            alert(response.resourcePeople?.name);
+
+            var trainer ;
+            if (response.resourcePeople?.name == null) {
+                trainer = '';
+            } else {
+                trainer = response.resourcePeople?.name;
+            }
+            var trainingInstitute ;
+            if (response.trainingInfoNewsSingle.trainingInstitute ?.trainingInstituteName == null) {
+                trainingInstitute = '';
+            } else {
+                trainingInstitute = response.trainingInfoNewsSingle.trainingInstitute ?.trainingInstituteName;
+            }
+            var location ;
+            if (response.trainingInfoNewsSingle?.location == null) {
+                location = '';
+            } else {
+                location = response.trainingInfoNewsSingle?.location;
+            }
+            var country ;
+            if (response.trainingInfoNewsSingle.country ?.countryName == null) {
+                country = '';
+            } else {
+                country = response.trainingInfoNewsSingle.country ?.countryName;
+            }
+            var budget ;
+            if (response.trainingInfoNewsSingle.sourceOfFundId == 1) {
+                budget = 'Government';
+            }
+            else if (response.trainingInfoNewsSingle.sourceOfFundId == 3) {
+                budget = 'Own';
+            }
+            else {
+                budget = 'Other';
+            }
+            var courseObjective ;
+            if (response.trainingInfoNewsSingle?.courseObjective == null) {
+                courseObjective = '';
+            } else {
+                courseObjective = response.trainingInfoNewsSingle?.courseObjective;
+            }
+         
+            var option = "";
+            
+            option += `<div class="card-body cb text-center" >
+                                                <p>
+                                                    <strong>Course Title</strong><br />
+                                                   ${response.trainingInfoNewsSingle?.course} <br />
+                                                </p>
+                                                <p>
+                                                    <strong>Date : </strong> ( ${startDate} to  ${endDate})
+                                                    <br />
+                                                </p>
+
+                                               
+                                                <p>
+                                                    <strong>No of Participant : </strong>  ${noOfParticipants}<br />
+
+                                                </p>
+                                               
+                                                <p>
+                                                    <strong>Trainer : </strong>${trainer}<br />
+
+                                                </p>
+                                                <p>
+                                                    <strong>Location : </strong> ${location}<br />
+
+                                                </p>
+                                                 <p>
+                                                    <strong>Country : </strong>  ${country} <br/>
+
+                                                </p>
+                                                <p>
+                                                 <strong style="padding-left: 15px;">Source Of Fund: </strong>  ${budget}<br />
+
+                                                </p>
+                                               
+                                            </div>`
+            $('#DisplayData').empty();
+            $('#DisplayData').append(option);
+
+        }
+
+        function ajaxFuncAllTraining(response) {
+
+            var htmlData = "";
+            $("#DisplayData").empty();
+            $.each(response, function (index, item) {
+
+
+                htmlData += `<tr>
+                                <td >${item.course}</td>
+                                <td>${formatDate(item.startDate)}</td>
+                                <td>${formatDate(item.endDate)}</td>
+                                <td>${item.employeeTypeNames}</td>
+
+
+                            </tr>`;
+
+            })
+            $("#DisplayData").empty();
+            $("#DisplayData").append(htmlData);
+
+        }
+        function ajaxAllParticipents(response) {
+
+
+            var htmlData1 = "";
+            $("#DisplayDataEmp").empty();
+            $.each(response, function (index, item) {
+                console.log(item);
+
+
+                htmlData += `<tr>
+
+                                <td></td>
+                                <td>${item.nameEnglish}</td>
+
+
+                                <td>${item.designation}</td>
+
+
+                            </tr>`;
+
+            })
+            $("#DisplayDataEmp").empty();
+            $("#DisplayDataEmp").append(htmlData1);
+
+        }
+        function CertificateBtn() {
+            // var id = $('#').val();
+
+            window.open("/HRPMSEmployee/IDCard/GenerateIdCardPdf?id=" + id, '_blank');
+        }
+
+    //<a href="/HRPMSTrainingNew/TrainingImplementation/GenerateCertificatedPdf/${item.employee ?.Id}" id="pdfBtn" class="btn btn-info" style="" target="_blank"><i class="fas fa-graduation-cap"></i></a>
+
+</script>
+
+

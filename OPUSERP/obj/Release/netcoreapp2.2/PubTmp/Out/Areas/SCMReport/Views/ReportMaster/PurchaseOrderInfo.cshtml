@@ -1,0 +1,1137 @@
+﻿@model ReportMasterViewModel
+@{
+    ViewData["Title"] = "RequisitionView";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+    decimal? vat = Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.vat;
+    decimal? tax = Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.tax;
+    decimal? subTotal = Model?.purchaseOrderRPTViewModels?.Sum(x => x.poValueItem);
+    decimal? total = vat + subTotal + tax;
+    string CopyStatus = string.Empty;
+    if (Model.isCopy == 1)
+    {
+        CopyStatus = "Copy";
+    }
+}
+
+@{
+    ViewData["Title"] = "PurchaseOrderInfo";
+}
+<style>
+    body {
+        color: black;
+    }
+
+    table {
+        page-break-inside: auto
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto
+    }
+
+    thead {
+        display: table-header-group
+    }
+
+    tfoot {
+        display: table-footer-group
+    }
+
+    .pb_before {
+        page-break-before: always !important;
+    }
+
+    /***Always insert a page break after the element***/
+    .pb_after {
+        page-break-after: always !important;
+    }
+
+    /***Avoid page break before the element (if possible)***/
+    .pb_before_avoid {
+        page-break-before: avoid !important;
+    }
+
+    /***Avoid page break after the element (if possible)***/
+    .pb_after_avoid {
+        page-break-after: avoid !important;
+    }
+</style>
+
+<div class="container" style="margin-top:30px">
+
+    <div style="width:100%">
+        <div style="width:18%; float:left">
+            <p style="width:273px;color:#022E98!important;padding-bottom:0; margin-bottom:0; font-weight:800">LabRight Bangladesh Limited</p>
+            <h6 style="width:243px;font-family:'Arial Narrow', Arial, sans-serif;font-size:12px;text-wrap:inherit">
+                @Model.companies.FirstOrDefault().addressLine
+            </h6>
+        </div>
+
+        <div style="width:78%;float:left">
+            <p class="float-right">
+                <img src="@Model.companies.FirstOrDefault().filePath" />
+            </p>
+        </div>
+    </div>
+
+    <div style="padding-top:150px!important; text-align:center!important">
+        <h5 style="color:#022E98!important">Service / Work Order</h5>
+    </div>
+
+    <div style="width:100%; margin-top:20px; padding-bottom:20px">
+        <div style="width:48%;float:left;margin-right:20px;">
+            <table style="border:1px solid #ddd">
+                <tr style="font-size:12px">
+                    <th style="width:10%;border-right:1px solid #bbb; padding:5px">Service Order No. </th>
+                    <th style="width:10%;padding:5px">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.reqNo</th>
+                </tr>
+            </table>
+        </div>
+        <div style="width:48%;float:left">
+
+            <table style="border:1px solid #ddd">
+                <tr style="font-size:12px">
+                    <th style="width:10%;border-right:1px solid #bbb;padding:5px">Date</th>
+                    <th style="width:10%;padding:5px">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.poDate</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div style="width:100%; margin-top:20px">
+        <div style="width:48%;float:left;margin-right:20px;">
+            <p style="border:1px solid #ddd; padding:5px; margin-bottom:0!important;text-align:center; background-color:#B4C6E7"><i style="font-weight:800">Service Provider Information</i></p>
+            <p style="padding:12px; border:1px solid #ddd; border-top:0!important; margin-bottom:0; margin-bottom:0!important"></p>
+
+            <table style="border:1px solid #ddd">
+                <tr style="font-size:12px">
+                    <th style="width:10%;border-right:1px solid #bbb;padding:5px">Company Name: </th>
+                    <th style="width:10%;padding:5px">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.supplierName</th>
+                </tr>
+                <tr style="font-size:12px; border:1px solid #bbb">
+                    <th style="width:10%;border-right:1px solid #bbb;padding:5px">Address and Phone</th>
+                    <th style="width:10%;padding:5px">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.supplierAddress</th>
+                </tr>
+                <tr style="font-size:12px; border:1px solid #bbb">
+                    <th style="width:10%;border-right:1px solid #bbb;padding:5px">Representative</th>
+                    <th style="width:10%;padding:5px">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.contactPerson</th>
+                </tr>
+                <tr style="font-size:12px; border:1px solid #bbb">
+                    <th style="width:10%;border-right:1px solid #bbb;padding:5px">Representative Contact No.</th>
+                    <th style="width:10%;padding:5px">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.contactPersonMobile</th>
+                </tr>
+                <tr style="font-size:12px; border:1px solid #bbb">
+                    <th style="width:10%;border-right:1px solid #bbb;padding:5px">Fax</th>
+                    <th style="width:10%;padding:5px"></th>
+                </tr>
+            </table>
+
+        </div>
+        <div style="width:48%;float:left; margin-bottom:20px">
+            <p style="border:1px solid #ddd; padding:5px;margin-bottom:0!important;text-align:center;background-color:#B4C6E7"><i style="font-weight:800">Service Provider Information End User Information</i></p>
+            <p style="padding:12px; border:1px solid #ddd; border-top:0!important;margin-bottom:0!important"></p>
+            <p style=" border:1px solid #ddd; border-top:0!important; margin-bottom:0"><span> </span></p>
+
+
+            <table style="border:1px solid #ddd">
+                <tr style="font-size:12px">
+                    <th style="width:10%;border-right:1px solid #bbb;padding:5px">Company Name: </th>
+                    <th style="width:10%;padding:5px">@Model.companies.FirstOrDefault().companyName</th>
+                </tr>
+                <tr style="font-size:12px; border:1px solid #bbb">
+                    <th style="width:10%;border-right:1px solid #bbb;padding:5px">Address and Phone</th>
+                    <th style="width:10%;padding:5px">@Model.companies.FirstOrDefault().addressLine</th>
+                </tr>
+                <tr style="font-size:12px; border:1px solid #bbb">
+                    <th style="width:10%;border-right:1px solid #bbb;padding:5px">Representative</th>
+                    <th style="width:10%;padding:5px">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.contactPerson</th>
+                </tr>
+                <tr style="font-size:12px; border:1px solid #bbb">
+                    <th style="width:10%;border-right:1px solid #bbb;padding:5px">Representative Contact No.</th>
+                    <th style="width:10%;padding:5px">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.contactPersonMobile</th>
+                </tr>
+                <tr style="font-size:12px; border:1px solid #bbb;">
+                    <th style="width:10%;border-right:1px solid #bbb;padding:5px">Fax</th>
+                    <th style="width:10%;padding:5px"></th>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div style="width:100%;">
+        <table style="width: 100%">
+            <tr>
+                <th style="width:10%;border:1px solid #bbb;padding:5px; text-align:center; background-color:#B4C6E7">Service Description / Packing instruction / Delivery instruction</th>
+            </tr>
+            <tr>
+                <td style="width:10%;border:1px solid #bbb;padding:10px; text-align:center"></td>
+            </tr>
+            <tr>
+                <th style="width:10%;border:1px solid #bbb;padding:5px; text-align:center; background-color:#B4C6E7">Service Details</th>
+            </tr>
+        </table>
+        <table style="border:1px solid #ddd" width="100%">
+            <tr style="border:1px solid #bbb">
+                <td style="border:1px solid #bbb">Sl.</td>
+                <td style="border:1px solid #bbb">Name</td>
+                <td style="border:1px solid #bbb">Description</td>
+                <td style="border:1px solid #bbb">Quantity</td>
+                <td style="border:1px solid #bbb"> Unit price</td>
+                <td style="border:1px solid #bbb">Total price</td>
+            </tr>
+            @{
+                var i = 1;
+                @foreach (var data in @Model.purchaseOrderRPTViewModels)
+                {
+                    <tr>
+                        <td style="border:1px solid #bbb">@i</td>
+                        <td style="border:1px solid #bbb">@data.itemName</td>
+                        <td style="border:1px solid #bbb">@data.itemDescription</td>
+                        <td style="border:1px solid #bbb">@data.poQty</td>
+                        <td style="border:1px solid #bbb"> @data.poRate</td>
+                        <td style="border:1px solid #bbb">@data.poSubTotal</td>
+                    </tr>
+                    i++;
+
+
+                    <tr>
+
+                        <td colspan="5" style="border:1px solid #bbb; text-align:right"> <b style="font:800!important; color:black!important; font-weight:800">Total Price (Including VAT)</b></td>
+                        <td style="border:1px solid #bbb">@data.poSubTotal</td>
+                    </tr>
+                }
+            }
+
+        </table>
+        <h5 style="margin-top:20px; margin-bottom:20px">
+            <b>Total Amount in Word</b>: One hundred twenty thousand and four hundred BDT only.
+        </h5>
+
+        <table style="border:1px solid #ddd" ; width="100%">
+            <tr>
+                <td style="border:1px solid #bbb; padding:5px;text-align:center;background-color:#B4C6E7; font-weight:800">
+                    Terms and Conditions
+                </td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #bbb;">
+                    @*@data.description*@
+                    @Model?.POTermAndCondition?.FirstOrDefault()?.description
+                </td>
+            </tr>
+            @*<tr>
+                <td style="border:1px solid #bbb;">
+                    2. Payment: will be made by Account Payee cheque/pay order after completion of project.
+                </td>
+            </tr>
+
+            <tr>
+                <td style="border:1px solid #bbb;">
+                    3. VAT Registration NO must be marked on VAT Chillan (BIN-002566569-0201).
+                </td>
+            </tr>
+
+            <tr>
+                <td style="border:1px solid #bbb;">
+                    4. Service order number has to be mentioned in all constructive documents.
+                </td>
+            </tr>
+
+            <tr>
+                <td style="border:1px solid #bbb;">
+                    5. Revision: Labright Bangladesh Limited reserves the right to change the WO upon mutually agreed by both parties.
+                </td>
+            </tr>
+
+            <tr>
+                <td style="border:1px solid #bbb;">
+                    6. If found any problem of mismatch it must be replaced by Supplier own cost otherwise payment will be adjusted accordingly.
+                </td>
+            </tr>
+
+            <tr>
+                <td style="border:1px solid #bbb;">
+                    7. Vat & Tax will be applicable as per Government rules & regulation.
+                </td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #bbb;">
+                    8. Place of delivery; at our office (80, Park Road, Block # K Baridhara, D1naka-1212
+                </td>
+            </tr>
+
+            <tr>
+                <td style="border:1px solid #bbb;">
+                    9. Period Delivery: within 3 (Three) days from the date of receiving work order.
+                </td>
+            </tr>*@
+        </table>
+
+        <h5 style="text-align:right; margin-top:20px">
+            <b >Rafiqul Islam Rafique</b>
+        </h5> 
+        <h5 style="text-align:right; margin-top:120px">
+            <p>
+                <img src="@Model.companies.FirstOrDefault().filePath" />
+            </p>
+        </h5>
+
+    </div>
+</div>
+
+@*<div class="container">
+        <div class="row">
+            <div class="col-md-12 mt-4">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5 style="color:#022E98!important">LabRight Bangladesh Limited</h5>
+                        <h6 style="width:233px;font-family:'Arial Narrow', Arial, sans-serif;font-size:15px;text-wrap:inherit">
+                            @Model.companies.FirstOrDefault().addressLine
+                        </h6>
+                    </div>
+
+                    <div class="col-md-8">
+                        <p class="float-right">
+                            <img src="~/Upload/logo/lab_right_logo.png" />
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 mt-3">
+                <h5 style="color:#022E98!important" class="text-center">LabRight Bangladesh Limited</h5>
+            </div>
+
+            <div class="col-md-12 mt-2">
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table table-sm table-bordered" style="width:100%">
+                            <tr>
+                                <td>Service Order No.</td>
+                                <td>@Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.reqNo </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table-bordered" style="width:100%">
+                            <tr>
+                                <td>Date</td>
+                                <td>@Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.reqNo</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table table-sm table-bordered" style="width:100%">
+                            <tr>
+                                <td style="background:#D9E1F2!important; font:800!important" colspan="2" class="text-center"><i>Service Provider Information</i></td>
+
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="text-center p-2"></td>
+                            </tr>
+                            <tr class="">
+                                <td><b style="font:800; color:black!important">Company Name :</b></td>
+                                <td class=""> @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.supplierName</td>
+                            </tr>
+
+                            <tr class="">
+                                <td class="">Address and Phone</td>
+                                <td class=""> @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.supplierAddress</td>
+                            </tr>
+
+                            <tr class="">
+                                <td class="">Representative</td>
+                                <td class=""> @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.contactPerson</td>
+                            </tr>
+
+                            <tr class="">
+                                <td class="">Representative Contact No.</td>
+                                <td class=""> @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.contactPersonMobile</td>
+                            </tr>
+                            <tr class="">
+                                <td class="">Fax</td>
+                                <td class=""></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table table-sm table-bordered" style="width:100%">
+                            <tr>
+                                <td style="background:#D9E1F2!important; font:800!important" colspan="2" class="text-center"><i>End User Information</i></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="text-center p-2"></td>
+                            </tr>
+                            <tr class="">
+                                <td><b style="font:800; color:black!important">Company Name :</b></td>
+                                <td class="">@Model.companies.FirstOrDefault().companyName</td>
+                            </tr>
+
+                            <tr class="">
+                                <td class="">Address and Phone</td>
+                                <td class=""> @Model.companies.FirstOrDefault().addressLine</td>
+                            </tr>
+
+                            <tr class="">
+                                <td class="">Representative & Department</td>
+                                <td class=""></td>
+                            </tr>
+
+                            <tr class="">
+                                <td class="">Representative Contact No.</td>
+                                <td class=""></td>
+                            </tr>
+                            <tr class="">
+                                <td class="">Fax.</td>
+                                <td class=""></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <table class="table table-sm table-bordered" style="width:100%">
+                    <tr>
+                        <td style="background:#D9E1F2!important" colspan="5" class="text-center">Service Description / Packing instruction / Delivery instruction</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" class="p-2"></td>
+                    </tr>
+
+                    <tr>
+                        <td>Sl.</td>
+                        <td>Description</td>
+                        <td>Quantity</td>
+                        <td> Unit price</td>
+                        <td>Total price</td>
+                    </tr>
+                    @{
+                        var i = 1;
+                        @foreach (var data in @Model.purchaseOrderRPTViewModels)
+                        {
+                            <tr>
+                                <td>@i</td>
+                                <td>@data.itemDescription</td>
+                                <td>@data.poQty</td>
+                                <td> @data.poRate</td>
+                                <td>@data.poSubTotal</td>
+                            </tr>
+                            i++;
+                        }
+                    }
+                    <tr>
+
+                        <td colspan="4" class="text-right"> <b style="font:800!important; color:black!important"></b>Total Price (Including VAT)</b></td>
+                        <td>5000.00</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="col-md-12">
+                <h5 class="text-dark"><b style="font:900; color:black!important">Total Amount in Word:</b> One hundred twenty thousand and four hundred BDT only.</h5>
+            </div>
+
+            <div class="col-md-12">
+                <table class="table table-sm table-bordered" style="width:100%">
+                    <tr>
+                        <td style="background:#D9E1F2!important">
+                            Terms and Conditions
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>1. Delivery or work completion date: 3 days.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            2. Payment: will be made by Account Payee cheque/pay order after completion of project.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            3. VAT Registration NO must be marked on VAT Chillan (BIN-002566569-0201).
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            4. Service order number has to be mentioned in all constructive documents.
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            5. Revision: Labright Bangladesh Limited reserves the right to change the WO upon mutually agreed by both parties.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            6. If found any problem of mismatch it must be replaced by Supplier own cost otherwise payment will be adjusted accordingly.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            7. Vat & Tax will be applicable as per Government rules & regulation.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            8. Place of delivery; at our office (80, Park Road, Block # K Baridhara, D1naka-1212
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            9. Period Delivery: within 3 (Three) days from the date of receiving work order.
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="col-md-12">
+                <h6 class="text-right">Rafiqul Islam Rafique</h6>
+            </div>
+            <div class="col-md-12">
+                <p class="float-right" style="margin-top:80px">
+                    <img src="~/Upload/logo/lab_right_logo.png" width="100"/>
+                </p>
+            </div>
+        </div>
+    </div>*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<style>
+        body {
+            color: black;
+        }
+
+        table {
+            page-break-inside: auto
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto
+        }
+
+        thead {
+            display: table-header-group
+        }
+
+        tfoot {
+            display: table-footer-group
+        }
+
+        .pb_before {
+            page-break-before: always !important;
+        }
+
+        /***Always insert a page break after the element***/
+        .pb_after {
+            page-break-after: always !important;
+        }
+
+        /***Avoid page break before the element (if possible)***/
+        .pb_before_avoid {
+            page-break-before: avoid !important;
+        }
+
+        /***Avoid page break after the element (if possible)***/
+        .pb_after_avoid {
+            page-break-after: avoid !important;
+        }
+    </style>
+
+    <div class="container">
+        <div class="row" style="margin-top:5px;">
+            <div class="col-7">
+                <div class="row">
+                    <div class="col-6" style="height:71px;background-color:#4b0082;text-align: center;">
+                        <p style="color:white;padding-top:23px;font-size:10pt;font-style:italic;font-family:'Arial Narrow', Arial, sans-serif"><b>VENDOR COPY</b></p>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-md-12" style="border:1px solid gray;border-left:0px;width:242px">
+                                <span style="font-family:'Arial Narrow', Arial, sans-serif;">PO Date: </span><span style="font-weight:bold;font-family:'Arial Narrow', Arial, sans-serif">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.poDate</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2" style="border-bottom:1px solid gray;font-family:'Arial Narrow', Arial, sans-serif">
+                                PR No:
+                            </div>
+                            <div class="col-10" style="border:1px solid gray;border-top:0;height: 47px;width:209px">
+                                <span style="word-wrap:break-word;font-size:14px;font-family:'Arial Narrow', Arial, sans-serif">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.reqNo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="padding-top:5px;width:485px">
+                    <div class="col-12" style="border:1px solid gray;font-family:'Arial Narrow', Arial, sans-serif;font-size:16px">
+                        INSTRUCTIONS
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12" style="border:1px solid gray;width:485px;border-top:0px;height:300px;font-family:'Arial Narrow', Arial, sans-serif;font-size:14px;">
+                        1. Material should be delivered in good condition & within the schedule time.<br />
+                        2. Material should be delivered as per approved sample.<br />
+                        3. Quantity of site measurement will be entertained.<br />
+                        4. The company have the right to inspect the good and also have power<br />
+                        to reject the same if found unspecified materials.<br />
+                        5. Payment shall be made after confirmation of receipt of materials in good condition.<br />
+                        6. If the above mentioned materials are not supplied within due time this<br />
+                        purchase order will be treated as cancelled.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-5">
+                <div class="row">
+                    <div class="col-3" style="font-family:'Arial Narrow', Arial, sans-serif;margin-left:18px;">
+                        PO No :
+                    </div>
+                    <div class="col-9" style="border:1px solid gray;max-height:46px;margin-left:-10px;font-family:'Arial Narrow', Arial, sans-serif;">
+                        <span style="font-weight:bold;word-wrap:break-word;">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.poNo</span>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:30px;min-height:100px;margin-right:-27px">
+                    <div class="col-4" style="text-align:right;margin-top:40px;">
+                        <span style="font-weight:900;font-family:'Arial Black', Arial, sans-serif;">VENDOR</span>
+                    </div>
+                    <div class="col-8" style="border-left:2px solid;">
+                        <span style="font-family:'Arial Narrow', Arial, sans-serif;word-wrap:break-word;margin-right:-25px">
+                            @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.supplierName<br />
+                            @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.supplierAddress<br />
+                            @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.contactPerson<br />
+                            @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.contactPersonMobile<br />
+                        </span>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:15px;min-height:90px;margin-right:-27px">
+                    <div class="col-4" style="text-align:right;margin-top:40px;">
+                        <span style="font-weight:900;font-family:'Arial Black', Arial, sans-serif;">SHIP TO</span>
+                    </div>
+                    <div class="col-8" style="border-left:2px solid;">
+                        <span style="font-family:'Arial Narrow', Arial, sans-serif;word-wrap:break-word;margin-right:-25px">
+                            @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.projectName<br />
+                            @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.projectLocation<br />
+
+                        </span>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:15px;min-height:90px;margin-right:-27px">
+                    <div class="col-4" style="text-align:right;margin-top:40px;">
+                        <span style="font-weight:900;font-family:'Arial Black', Arial, sans-serif;">BILL TO</span>
+                    </div>
+                    <div class="col-8" style="border-left:2px solid;">
+                        <span style="font-family:'Arial Narrow', Arial, sans-serif;margin-right:-25px;word-wrap:break-word">
+                            @Model.companies.FirstOrDefault().addressLine<br />
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+        <div class="row">
+            <table class="table-bordered-grey" style="width:100%;font-family:'Arial Narrow', Arial, sans-serif;font-size:13px">
+                <tr>
+                    <td style="width:28%;text-align:center;">Buyer : @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.empName</td>
+                    <td style="width:22%;text-align:center;">Delivery Date : @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.deliveryDate</td>
+                    <td style="width:25%;text-align:center;">Payment Terms : @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.paymentTermsCode</td>
+                    <td style="width:25%;text-align:center;">Ship Via : </td>
+                </tr>
+                <tr>
+                    <td style="width:25%;text-align:center;">Buyer Phone : @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.OfficMobile</td>
+                    <td style="width:25%;text-align:center;">C. P : @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.inChargeEmpCode</td>
+                    <td style="width:25%;text-align:center;">Mobile: @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.PIMobile</td>
+                    <td style="width:25%;text-align:center;">F.O.B </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="row">
+            <table class="table-bordered-grey" style="width:100%;font-family:'Arial Narrow', Arial, sans-serif;">
+                <thead>
+                    <tr style="background-color:lightgray;font-size:12px">
+                        <th style="text-align:center;width:10%;">Item</th>
+                        <th style="text-align:center;width:10%;">Quantity</th>
+                        <th style="text-align:center;width:10%;">Unit of measurement(Unm)</th>
+                        <th style="text-align:center;width:40%;">Description</th>
+                        <th style="text-align:center;width:15%;">Unit Price</th>
+                        <th style="text-align:center;width:15%;">Extended Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var data in @Model.purchaseOrderRPTViewModels)
+                    {
+                        <tr style="font-size:13px">
+                            <td style="text-align:center;width:10%;">@data.itemCode</td>
+                            <td style="text-align:right;width:10%;">@data.poQty</td>
+                            <td style="text-align:center;width:10%;">@data.unitName</td>
+                            <td style="text-align:left;width:40%;">@data.itemName</td>
+                            <td style="text-align:right;width:15%;">@data.poRate?.ToString("0.00")</td>
+                            <td style="text-align:right;width:15%;">@data.poValueItem?.ToString("0.00")</td>
+                        </tr>
+
+                    }
+
+                </tbody>
+                <tbody>
+                    <tr>
+                        <td style="text-align:center;width:10%;height:200px;"></td>
+                        <td style="text-align:center;width:10%;height:200px;"></td>
+                        <td style="text-align:center;width:10%;height:200px;"></td>
+                        <td style="text-align:center;width:10%;height:200px;"></td>
+                        <td style="text-align:center;width:10%;height:200px;"></td>
+                        <td style="text-align:center;width:10%;height:200px;"></td>
+                    </tr>
+                </tbody>
+                <tfoot class="table-bordered-white" style="border:none;font-family:'Arial Narrow', Arial, sans-serif;">
+                    <tr>
+                        <th colspan="4" rowspan="5" style="padding-top:100px;padding-left: 100px;">
+                            <span style="font-family:'Arial Narrow', Arial, sans-serif;font-size:14px;border-top:2px solid black;padding: 0px 40px 0 40px;font-weight:100">Authorized By</span>
+                        </th>
+                        <th style="text-align:left;width:15%;font-weight:100">Sub Total</th>
+                        <th style="text-align:right;width:15%;font-weight:100">@Model?.purchaseOrderRPTViewModels?.Sum(x => x.poValueItem)?.ToString("0.00")</th>
+                    </tr>
+                    <tr>
+                        <th style="text-align:left;width:15%;font-weight:100">Discount</th>
+                        <th style="text-align:right;width:15%;font-weight:100">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault().discount?.ToString("0.00")</th>
+                    </tr>
+                    <tr>
+                        <th style="text-align:left;width:15%;font-weight:100">VAT</th>
+                        <th style="text-align:right;width:15%;font-weight:100">@vat?.ToString("0.00")</th>
+                    </tr>
+                    <tr>
+                        <th style="text-align:left;width:15%;font-weight:100">Tax</th>
+                        <th style="text-align:right;width:15%;font-weight:100">@tax?.ToString("0.00")</th>
+                    </tr>
+                    <tr>
+                        <th style="text-align:left;width:15%;font-weight:100">Purchase Order Total</th>
+                        <th style="text-align:right;width:15%;font-weight:100">@total?.ToString("0.00")</th>
+                    </tr>
+                    <tr>
+                        <th colspan="6" style="text-align:right;font-weight:100">In Word: @ViewBag.InWord</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <div class="pb_after"></div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-7">
+                <div class="row">
+                    <div class="col-6" style="height:70px;">
+                        <div style="">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.IsCopy</div>
+
+                        <img src="@Model.companies.FirstOrDefault().filePath" alt="Logo" style="height:65px;width:240px;margin-top:40px;margin-left:-10px" />
+                    </div>
+                    <div class="col-6" style="border-left: 2px solid;margin-top:40px;font-weight:bold;">
+                        <p style="margin-left:-10px;width:233px;font-family:'Arial Narrow', Arial, sans-serif;font-size:15px;text-wrap:inherit">
+                            @Model.companies.FirstOrDefault().addressLine
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-5" style="margin-right:-25px">
+                <img src="~/images/BNB121.PNG" style="height:140px;width:325px;padding-bottom:20px;margin-left:20px" />
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:5px;">
+            <div class="col-7">
+                <div class="row">
+                    <div class="col-6" style="height:71px;background-color:#4b0082;text-align: center;">
+                        <p style="color:white;padding-top:23px;font-size:10pt;font-style:italic;font-family:'Arial Narrow', Arial, sans-serif"><b>ACCOUNTS COPY</b></p>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-md-12" style="border:1px solid gray;border-left:0px;width:242px">
+                                <span style="font-family:'Arial Narrow', Arial, sans-serif;">PO Date: </span><span style="font-weight:bold;font-family:'Arial Narrow', Arial, sans-serif">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.poDate</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2" style="border-bottom:1px solid gray;font-family:'Arial Narrow', Arial, sans-serif">
+                                PR No:
+                            </div>
+                            <div class="col-10" style="border:1px solid gray;border-top:0;height: 47px;width:209px">
+                                <span style="word-wrap:break-word;font-size:14px;font-family:'Arial Narrow', Arial, sans-serif">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.reqNo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="padding-top:5px;width:485px">
+                    <div class="col-12" style="border:1px solid gray;font-family:'Arial Narrow', Arial, sans-serif;font-size:16px">
+                        INSTRUCTIONS
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12" style="border:1px solid gray;width:485px;border-top:0px;height:300px;font-family:'Arial Narrow', Arial, sans-serif;font-size:15px;">
+                        1. Material should be delivered in good condition & within the schedule time.<br />
+                        2. Material should be delivered as per approved sample.<br />
+                        3. Quantity of site measurement will be entertained.<br />
+                        4. The company have the right to inspect the good and also have power<br />
+                        to reject the same if found unspecified materials.<br />
+                        5. Payment shall be made after confirmation of receipt of materials in good condition.<br />
+                        6. If the above mentioned materials are not supplied within due time this<br />
+                        purchase order will be treated as cancelled.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-5">
+                <div class="row">
+                    <div class="col-3" style="font-family:'Arial Narrow', Arial, sans-serif;margin-left:18px;">
+                        PO No :
+                    </div>
+                    <div class="col-9" style="border:1px solid gray;max-height:46px;margin-left:-10px;font-family:'Arial Narrow', Arial, sans-serif;">
+                        <span style="font-weight:bold;word-wrap:break-word;">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.poNo</span>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:30px;min-height:100px;margin-right:-27px">
+                    <div class="col-4" style="text-align:right;margin-top:40px;">
+                        <span style="font-weight:900;font-family:'Arial Black', Arial, sans-serif;">VENDOR</span>
+                    </div>
+                    <div class="col-8" style="border-left:2px solid;">
+                        <span style="font-family:'Arial Narrow', Arial, sans-serif;word-wrap:break-word;margin-right:-25px">
+                            @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.supplierName<br />
+                            @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.supplierAddress<br />
+                            @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.contactPerson<br />
+                            @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.contactPersonMobile<br />
+                        </span>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:15px;min-height:90px;margin-right:-27px">
+                    <div class="col-4" style="text-align:right;margin-top:40px;">
+                        <span style="font-weight:900;font-family:'Arial Black', Arial, sans-serif;">SHIP TO</span>
+                    </div>
+                    <div class="col-8" style="border-left:2px solid;">
+                        <span style="font-family:'Arial Narrow', Arial, sans-serif;word-wrap:break-word;margin-right:-25px">
+                            @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.projectName<br />
+                            @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.projectLocation<br />
+                        </span>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:15px;min-height:90px;margin-right:-27px">
+                    <div class="col-4" style="text-align:right;margin-top:40px;">
+                        <span style="font-weight:900;font-family:'Arial Black', Arial, sans-serif;">BILL TO</span>
+                    </div>
+                    <div class="col-8" style="border-left:2px solid;">
+                        <span style="font-family:'Arial Narrow', Arial, sans-serif;word-wrap:break-word;margin-right:-25px">
+                            @Model.companies.FirstOrDefault().addressLine<br />
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+        <div class="row">
+            <table class="table-bordered-grey" style="width:100%;font-family:'Arial Narrow', Arial, sans-serif;font-size:13px">
+                <tr>
+                    <td style="width:28%;text-align:center;">Buyer : @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.empName</td>
+                    <td style="width:22%;text-align:center;">Delivery Date : @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.deliveryDate</td>
+                    <td style="width:25%;text-align:center;">Payment Terms : @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.paymentTermsCode</td>
+                    <td style="width:25%;text-align:center;">Ship Via : </td>
+                </tr>
+                <tr>
+                    <td style="width:25%;text-align:center;">Buyer Phone : @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.OfficMobile</td>
+                    <td style="width:25%;text-align:center;">C. P : @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.inChargeEmpCode</td>
+                    <td style="width:25%;text-align:center;">Mobile: @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.PIMobile</td>
+                    <td style="width:25%;text-align:center;">F.O.B </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="row">
+            <table class="table-bordered-grey" style="width:100%;font-family:'Arial Narrow', Arial, sans-serif;">
+                <thead>
+                    <tr style="background-color:lightgray;font-size:12px">
+                        <th style="text-align:center;width:10%;">Item</th>
+                        <th style="text-align:center;width:10%;">Quantity</th>
+                        <th style="text-align:center;width:10%;">Unit</th>
+                        <th style="text-align:center;width:40%;">Description</th>
+                        <th style="text-align:center;width:15%;">Unit Price</th>
+                        <th style="text-align:center;width:15%;">Extended Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var data in @Model.purchaseOrderRPTViewModels)
+                    {
+                        <tr style="font-size:13px">
+                            <td style="text-align:center;width:10%;">@data.itemCode</td>
+                            <td style="text-align:right;width:10%;">@data.poQty</td>
+                            <td style="text-align:center;width:10%;">@data.unitName</td>
+                            <td style="text-align:left;width:40%;">@data.itemName</td>
+                            <td style="text-align:right;width:15%;">@data.poRate?.ToString("0.00")</td>
+                            <td style="text-align:right;width:15%;">@data.poValueItem?.ToString("0.00")</td>
+                        </tr>
+
+                    }
+
+                </tbody>
+                <tbody>
+                    <tr>
+                        <td style="text-align:center;width:10%;height:200px;"></td>
+                        <td style="text-align:center;width:10%;height:200px;"></td>
+                        <td style="text-align:center;width:10%;height:200px;"></td>
+                        <td style="text-align:center;width:10%;height:200px;"></td>
+                        <td style="text-align:center;width:10%;height:200px;"></td>
+                        <td style="text-align:center;width:10%;height:200px;"></td>
+                    </tr>
+                </tbody>
+                <tfoot class="table-bordered-white" style="border:none;font-family:'Arial Narrow', Arial, sans-serif;">
+                    <tr>
+                        <th colspan="4" rowspan="5" style="padding-top:100px;padding-left: 100px;">
+                            <span style="font-family:'Arial Narrow', Arial, sans-serif;font-size:14px;border-top:2px solid black;padding: 0px 40px 0 40px;font-weight:100">Authorized By</span>
+                        </th>
+                        <th style="text-align:left;width:15%;font-weight:100">Sub Total</th>
+                        <th style="text-align:right;width:15%;font-weight:100">@Model?.purchaseOrderRPTViewModels?.Sum(x => x.poValueItem)?.ToString("0.00")</th>
+                    </tr>
+                    <tr>
+                        <th style="text-align:left;width:15%;font-weight:100">Discount</th>
+                        <th style="text-align:right;width:15%;font-weight:100">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault().discount?.ToString("0.00")</th>
+                    </tr>
+                    <tr>
+                        <th style="text-align:left;width:15%;font-weight:100">VAT</th>
+                        <th style="text-align:right;width:15%;font-weight:100">@vat?.ToString("0.00")</th>
+                    </tr>
+                    <tr>
+                        <th style="text-align:left;width:15%;font-weight:100">Tax</th>
+                        <th style="text-align:right;width:15%;font-weight:100">@tax?.ToString("0.00")</th>
+                    </tr>
+                    <tr>
+                        <th style="text-align:left;width:15%;font-weight:100">Purchase Order Total</th>
+                        <th style="text-align:right;width:15%;font-weight:100">@total?.ToString("0.00")</th>
+                    </tr>
+                    <tr>
+                        <th colspan="6" style="text-align:right;font-weight:100">In Word: @ViewBag.InWord</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <div class="pb_after"></div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-7">
+                <div class="row">
+                    <div class="col-6" style="height:70px;">
+                        <div style="">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.IsCopy</div>
+
+                        <img src="@Model.companies.FirstOrDefault().filePath" alt="Logo" style="height:65px;width:240px;margin-top:40px;margin-left:-10px" />
+                    </div>
+                    <div class="col-6" style="border-left: 2px solid;margin-top:40px;font-weight:bold;">
+                        <p style="margin-left:-10px;width:233px;font-family:'Arial Narrow', Arial, sans-serif;font-size:15px;text-wrap:inherit">
+                            @Model.companies.FirstOrDefault().addressLine
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-5" style="margin-right:-25px">
+                <img src="~/images/BNB121.PNG" style="height:140px;width:325px;padding-bottom:20px;margin-left:20px" />
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:5px;">
+            <div class="col-7">
+                <div class="row">
+                    <div class="col-6" style="height:71px;background-color:#4b0082;text-align: center;">
+                        <p style="color:white;padding-top:23px;font-size:10pt;font-style:italic;font-family:'Arial Narrow', Arial, sans-serif"><b>OFFICE COPY</b></p>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-md-12" style="border:1px solid gray;border-left:0px;width:242px">
+                                <span style="font-family:'Arial Narrow', Arial, sans-serif;">PO Date: </span><span style="font-weight:bold;font-family:'Arial Narrow', Arial, sans-serif">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.poDate</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2" style="border-bottom:1px solid gray;font-family:'Arial Narrow', Arial, sans-serif">
+                                PR No:
+                            </div>
+                            <div class="col-10" style="border:1px solid gray;border-top:0;height: 47px;width:209px">
+                                <span style="word-wrap:break-word;font-size:14px;font-family:'Arial Narrow', Arial, sans-serif">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.reqNo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="padding-top:5px;width:485px">
+                    <div class="col-12" style="border:1px solid gray;font-family:'Arial Narrow', Arial, sans-serif;font-size:16px">
+                        INSTRUCTIONS
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12" style="border:1px solid gray;width:485px;border-top:0px;height:300px;font-family:'Arial Narrow', Arial, sans-serif;font-size:15px;">
+                        1. Material should be delivered in good condition & within the schedule time.<br />
+                        2. Material should be delivered as per approved sample.<br />
+                        3. Quantity of site measurement will be entertained.<br />
+                        4. The company have the right to inspect the good and also have power<br />
+                        to reject the same if found unspecified materials.<br />
+                        5. Payment shall be made after confirmation of receipt of materials in good condition.<br />
+                        6. If the above mentioned materials are not supplied within due time this<br />
+                        purchase order will be treated as cancelled.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-5">
+                <div class="row">
+                    <div class="col-3" style="font-family:'Arial Narrow', Arial, sans-serif;margin-left:18px;">
+                        PO No :
+                    </div>
+                    <div class="col-9" style="border:1px solid gray;max-height:46px;margin-left:-10px;font-family:'Arial Narrow', Arial, sans-serif;">
+                        <span style="font-weight:bold;word-wrap:break-word;">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.poNo</span>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:30px;min-height:100px;margin-right:-27px">
+                    <div class="col-4" style="text-align:right;margin-top:40px;">
+                        <span style="font-weight:900;font-family:'Arial Black', Arial, sans-serif;">VENDOR</span>
+                    </div>
+                    <div class="col-8" style="border-left:2px solid;">
+                        <span style="font-family:'Arial Narrow', Arial, sans-serif;word-wrap:break-word;">
+                            @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.supplierName<br />
+                            @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.supplierAddress<br />
+                            @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.contactPerson<br />
+                            @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.contactPersonMobile<br />
+                        </span>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:15px;min-height:90px;margin-right:-27px">
+                    <div class="col-4" style="text-align:right;margin-top:40px;">
+                        <span style="font-weight:900;font-family:'Arial Black', Arial, sans-serif;">SHIP TO</span>
+                    </div>
+                    <div class="col-8" style="border-left:2px solid;">
+                        <span style="font-family:'Arial Narrow', Arial, sans-serif;word-wrap:break-word">
+                            @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.projectName<br />
+                            @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.projectLocation<br />
+                        </span>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:15px;min-height:90px;margin-right:-27px">
+                    <div class="col-4" style="text-align:right;margin-top:40px;">
+                        <span style="font-weight:900;font-family:'Arial Black', Arial, sans-serif;">BILL TO</span>
+                    </div>
+                    <div class="col-8" style="border-left:2px solid;">
+                        <span style="font-family:'Arial Narrow', Arial, sans-serif;word-wrap:break-word">
+                            @Model.companies.FirstOrDefault().addressLine<br />
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+        <div class="row">
+            <table class="table-bordered-grey" style="width:100%;font-family:'Arial Narrow', Arial, sans-serif;font-size:13px">
+                <tr>
+                    <td style="width:28%;text-align:center;">Buyer : @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.empName</td>
+                    <td style="width:22%;text-align:center;">Delivery Date : @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.deliveryDate</td>
+                    <td style="width:25%;text-align:center;">Payment Terms : @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.paymentTermsCode</td>
+                    <td style="width:25%;text-align:center;">Ship Via : </td>
+                </tr>
+                <tr>
+
+                    <td style="width:25%;text-align:center;">Buyer Phone : @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.OfficMobile</td>
+                    <td style="width:25%;text-align:center;">C. P : @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.inChargeEmpCode</td>
+                    <td style="width:25%;text-align:center;">Mobile: @Model?.purchaseOrderRPTViewModels?.FirstOrDefault()?.PIMobile</td>
+                    <td style="width:25%;text-align:center;">F.O.B </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="row">
+            <table class="table-bordered-grey" style="width:100%;font-family:'Arial Narrow', Arial, sans-serif;">
+                <thead>
+                    <tr style="background-color:lightgray;font-size:12px">
+                        <th style="text-align:center;width:10%;">Item</th>
+                        <th style="text-align:center;width:10%;">Quantity</th>
+                        <th style="text-align:center;width:10%;">Unit</th>
+                        <th style="text-align:center;width:40%;">Description</th>
+                        <th style="text-align:center;width:15%;">Unit Price</th>
+                        <th style="text-align:center;width:15%;">Extended Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var data in @Model.purchaseOrderRPTViewModels)
+                    {
+                        <tr style="font-size:13px">
+                            <td style="text-align:center;width:10%;">@data.itemCode</td>
+                            <td style="text-align:right;width:10%;">@data.poQty</td>
+                            <td style="text-align:center;width:10%;">@data.unitName</td>
+                            <td style="text-align:left;width:40%;">@data.itemName</td>
+                            <td style="text-align:right;width:15%;">@data.poRate?.ToString("0.00")</td>
+                            <td style="text-align:right;width:15%;">@data.poValueItem?.ToString("0.00")</td>
+                        </tr>
+
+                    }
+
+                </tbody>
+                <tbody>
+                    <tr>
+                        <td style="text-align:center;width:10%;height:200px;"></td>
+                        <td style="text-align:center;width:10%;height:200px;"></td>
+                        <td style="text-align:center;width:10%;height:200px;"></td>
+                        <td style="text-align:center;width:10%;height:200px;"></td>
+                        <td style="text-align:center;width:10%;height:200px;"></td>
+                        <td style="text-align:center;width:10%;height:200px;"></td>
+                    </tr>
+                </tbody>
+                <tfoot class="table-bordered-white" style="border:none;font-family:'Arial Narrow', Arial, sans-serif;">
+                    <tr>
+                        <th colspan="4" rowspan="5" style="padding-top:100px;padding-left: 100px;">
+                            <span style="font-family:'Arial Narrow', Arial, sans-serif;font-size:14px;border-top:2px solid black;padding: 0px 40px 0 40px;font-weight:100">Authorized By</span>
+                        </th>
+                        <th style="text-align:left;width:15%;font-weight:100">Sub Total</th>
+                        <th style="text-align:right;width:15%;font-weight:100">@Model?.purchaseOrderRPTViewModels?.Sum(x => x.poValueItem)?.ToString("0.00")</th>
+                    </tr>
+                    <tr>
+                        <th style="text-align:left;width:15%;font-weight:100">Discount</th>
+                        <th style="text-align:right;width:15%;font-weight:100">@Model?.purchaseOrderRPTViewModels?.FirstOrDefault().discount?.ToString("0.00")</th>
+                    </tr>
+                    <tr>
+                        <th style="text-align:left;width:15%;font-weight:100">VAT</th>
+                        <th style="text-align:right;width:15%;font-weight:100">@vat?.ToString("0.00")</th>
+                    </tr>
+                    <tr>
+                        <th style="text-align:left;width:15%;font-weight:100">Tax</th>
+                        <th style="text-align:right;width:15%;font-weight:100">@tax?.ToString("0.00")</th>
+                    </tr>
+                    <tr>
+                        <th style="text-align:left;width:15%;font-weight:100">Purchase Order Total</th>
+                        <th style="text-align:right;width:15%;font-weight:100">@total?.ToString("0.00")</th>
+                    </tr>
+                    <tr>
+                        <th colspan="6" style="text-align:right;font-weight:100">In Word: @ViewBag.InWord</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>*@

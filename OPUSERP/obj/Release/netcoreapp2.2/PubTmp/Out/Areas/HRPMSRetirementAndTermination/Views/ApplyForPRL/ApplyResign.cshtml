@@ -1,0 +1,519 @@
+﻿@model PRLApplicationViewModel
+
+@{
+    ViewData["Title"] = "Apply for Resignation";
+}
+
+@section Style{
+    <style>
+        .redClolor {
+            color: red;
+            float:right;
+        }
+
+        .btnWith {
+            width: 95%;
+        }
+
+        h5 {
+            color: darkblue;
+        }
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #user_img1:hover {
+            border-radius: 5px;
+            cursor: zoom-in;
+            transition: 0.3s !important;
+            opacity: 0.5;
+            box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+        }
+    </style>
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+            <h5 class="card-title" style="color: black; margin: 8px;">Apply for resignation</h5>
+        </div>
+        <div class="col-md-8">
+
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info mr-4' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=5753'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <form asp-area="HRPMSRetirementAndTermination" id="FormId" asp-controller="ApplyForPRL" asp-action="ApplyResign" method="post" data-parsley-validate="parsley"  enctype="multipart/form-data">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="card" style="padding:2%;">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group row">
+                                <label for="employeeId" class="col-sm-2 col-form-label">Employee Code<span class="redClolor">*</span></label>
+                                <input type="hidden" id="employeeId" name="employeeId"  />
+                                <input type="hidden" id="resignId" name="resignId" value="0" />
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" data-parsley-required="true" id="empNameId" name="empNameId">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="designation" class="col-sm-4 col-form-label">@Model.flang.designation</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="designation" id="designation" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="employeeName" class="col-sm-4 col-form-label">@Model.flang.employeeName</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="employeeName" id="employeeName"  readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" style="padding: 2%; margin-top: 1%;">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="resignDate" class="col-sm-4 col-form-label">Resign Date <span class="redClolor">*</span></label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" readonly name="resignDate" id="resignDate" data-parsley-required="true">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="lastWorkingDate" class="col-sm-4 col-form-label">Last Working Date <span class="redClolor">*</span></label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" readonly name="lastWorkingDate" id="lastWorkingDate" data-parsley-required="true">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="resignReason" class="col-4 col-form-label">Reason <span class="redClolor">*</span></label>
+                                <div class="col-8">
+                                    <textarea class="form-control" rows="3" name="resignReason" id="resignReason" data-parsley-required="true"></textarea>
+                                </div>
+                            </div>
+                        </div> 
+                        
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="resignReason" class="col-4 col-form-label">Next Approver<span class="redClolor">*</span></label>
+                                <div class="col-8">
+                                    <input type="text" class="form-control" id="empNameId1" name=""  value="" data-parsley-required="true">
+                                    <input type="hidden" id="employeeId1" name="nextApprover" value="" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label class="col-sm-4 col-form-label">Attachment</label>
+
+
+                                <div class="col-8">
+                                    <img id="user_img1" style="width:180px;height:180px;" src="~/images/file_imge.jpg" alt="" class="img-thumbnail float-left">
+                                    <input type="hidden" id="userFile" />
+                                    <input type="hidden" name="resignId" value="@Model.resignId" />
+
+                                    <input type="file" title="Photo Upload" id="imagePath1" data-parsley-required="false" name="resignPhoto" class="btn btn-default btn-sm pull-right" />
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                    <hr>
+                    @*<button type="button" id="submit" value="Submit" class="btn btn-success btn-sm" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+
+                    <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+                    <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+
+         </form>
+        </div>
+    </div>
+</div>
+
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">All Applied resignations</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="childrenTable">
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Designation</th>
+                            <th>Resign Date</th>
+                            <th>Last Working Date</th>
+                            <th>Attachment</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.resignInformation)
+                        {
+                        <tr>
+                            <td>@data.employee?.employeeCode - @data.employee?.nameEnglish</td>
+                            <td>@data.employee?.lastDesignation?.designationName</td>
+                            <td>@data.resignDate?.ToString("dd-MMM-yyyy")</td>
+                            <td>@data.lastWorkingDate?.ToString("dd-MMM-yyyy")</td>
+                            @if (data.url == null)
+                            {
+                                <td></td>
+
+                            }
+                            else
+                            {
+
+                                <td> <a href="~/EmpAttachment/@data.url" target="_blank"><i class="fas fa-link"><u>Click Here</u></i></a></td>
+
+                            }
+                            <td>
+                                <a class="btn btn-success" onclick="Edit(@data.Id,'@data.employeeId','@data.employee?.nameEnglish','@data.employee?.lastDesignation?.designationName','@data.employee?.employeeCode','@data.resignDate?.ToString("dd-MMM-yyyy")','@data.lastWorkingDate?.ToString("dd-MMM-yyyy")','@data.resignReason','@data.url', @data.nextApprover)" href="#"><i class="fa fa-edit"></i></a>
+                                @*<a class="btn btn-danger" onclick="Remove(@data.Id,@data.employeeId)" href="#"><i class="fa fa-trash-alt"></i></a>*@
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="imgViewModal" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLabel">Photo Preview</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" style="color: black; box-shadow: none !important; outline: none!important;">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <img class="" src="" id="imgView" style="height:545px;width:465px;">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="pdfViewModal" style="height:100% !important;" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" style="height: 100%;" role="document">
+        <div class="modal-content" style="height:100% !important;">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLabel">PDF Preview</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <iframe id="pdfFrame" src="yourpdffile.pdf" style="width:100%;height:100% !important;"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+
+        @*$('#submit').click(function () {
+           
+		console.log($('#FormId').serializeArray());
+		var data = $('#FormId').serializeArray();
+
+		console.log(data[0].value)
+		swal({
+			title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+		}).then(function () {
+			$.ajax({
+                url: '@Url.Action("ApplyResign", "ApplyForPRL")',
+				type: 'POST',
+				data: data
+			}).done(function () {
+                if (data[0].value == 0) {
+                    swal('success', 'Saved Successfully!', 'success').then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    swal('success', 'Updated Successfully!', 'success').then(function () {
+                        location.reload();
+                    });;
+                }
+			}).fail(function () {
+				swal('warning', 'Failed!', 'warning');
+			})
+		});
+                })*@
+
+
+
+
+        $(document).ready(function () {
+            var orgFullTitle = "Applied Resign List";
+            $('#childrenTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'Applied Resign List',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        title: "ERP-HRPMS",
+                        messageTop: 'Applied Resign List'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "ERP-HRPMS",
+                        messageTop: 'Applied Resign List',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+            });
+            $("#user_img1").click(function () {
+                var img = $(this).attr('src');
+                if (img.indexOf("pdfIcon.png") >= 0) {
+                    //alert($("#userFile").val())
+                    $("#pdfFrame").attr('src', $("#userFile").val());
+                    $("#pdfViewModal").modal('show');
+                }
+                else {
+                    $("#imgView").attr('src', img);
+                    $("#imgViewModal").modal('show');
+                }
+
+
+            });
+            $("#imagePath1").change(function () {
+                readURL1(this);
+            });
+            $('#resignDate').datepicker({});
+            $('#lastWorkingDate').datepicker({ uiLibrary: 'bootstrap4' });
+
+            Common.Ajax('GET', '/global/api/getEmployeeInfoByOrg/', [], 'json', ajaxEmployeeList, false);
+            Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo', [], 'json', ajaxGetEmployees);
+
+        });
+
+        function ajaxEmployeeList(response) {
+            console.log(response);
+            var GetEmployeeList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.employeeCode + ' - ' + option.nameEnglish;
+                obj.name = option.nameEnglish;
+                obj.designation = option.lastDesignation?.designationName;
+               
+                GetEmployeeList[GetEmployeeList.length] = obj;
+            });
+           
+
+            $('#empNameId1').autocomplete({
+                source: GetEmployeeList,
+                select: function (event, ui) {
+                    $("#employeeId1").val(ui.item.key);
+                    $("#empNameId1").val(ui.item.value);
+                }
+            });
+        }
+
+
+
+        function ajaxGetEmployees(response) {
+            var GeEmployeesList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.employeeCode + ' - ' + option.nameEnglish;
+                //  obj.designation = option.designation;
+                obj.department = option.department?.deptName;
+                obj.employeeCode = option.employeeCode;
+                obj.designation = option.lastDesignation ?.designationName;
+                GeEmployeesList[GeEmployeesList.length] = obj;
+            });
+            //console.log(GeEmployeesList);
+            $('#empNameId').autocomplete({
+                source: GeEmployeesList,
+                select: function (event, ui) {
+                    $("#employeeName").val(ui.item.value);
+                    $("#employeeId").val(ui.item.key);
+                    $("#designation").val(ui.item.designation);
+                   // $("#departmentId").val(ui.item.department);
+                }
+            });
+
+            
+        }
+
+        function ClearFiles() {
+            $("#type").val("");
+            $("#fileTitle").val("");
+            $('#uploadFile').val("");
+        }
+
+        var index = 0;
+        function addTable() {
+            var table = $("#fileHistoryList tbody");
+            var type = $("#type").val();
+            var fileTitle = $("#fileTitle").val();
+            var filename = $('#uploadFile').val().split('\\').pop();
+            var sl = 1;
+            sl = sl + index;
+            if (type == '') {
+                alert("Please entry type of file");
+                return false;
+            }
+            if (fileTitle == '') {
+                alert("Please entry type of fileTitle");
+                return false;
+            }
+            if (uploadFile == '') {
+                alert("Please entry type of uploadFile");
+                return false;
+            }
+            var validation = $(".clsFileName").html();
+            if (validation == filename) {
+                alert("this file already uploaded !!!!. Choose another file");
+                $('#uploadFile').val("");
+                return false;
+            }
+            table.append("<tr id='trId" + index + "'>" +
+                "<td>" + sl + "</td><td>" + type + "</td><td>" + fileTitle + "</td><td class='clsFileName' id='filename" + index + "'>" + filename + "</td><td><button class='btn btn-danger btn-sm' onclick='DeletetableTr(" + index + ")'><i class='fa fa-trash'></i></button></td>"
+                + "</tr >")
+
+            index = index + 1;
+            ClearFiles();
+        }
+
+        function DeletetableTr(index) {
+            $("#trId" + index).remove();
+        }
+
+        //function ajaxFunctionNext(response) {
+        // //   alert(response.nameEnglish)
+        //    $('#employeeId1').val(response.Id);
+        //    $('#empNameId1').val(response.nameEnglish);
+        //}
+
+        function Edit(Id, employeeId, nameEnglish, designation, employeeCode, resignDate, lastWorkingDate, resignReason, url, nextApprover) {
+         //   Common.Ajax('GET', '/HRPMSRetirementAndTermination/ApplyForPRL/GetEmpIdByUserId?id=' + nextApprover, [], 'json', ajaxFunctionNext, true);
+
+            $('#resignId').val(Id);
+            $('#employeeId').val(employeeId);
+            $('#empNameId').val(employeeCode + '-' + nameEnglish);
+            $('#designation').val(designation);
+            $('#employeeName').val(nameEnglish);
+            $('#resignDate').val(resignDate);
+            $('#lastWorkingDate').val(lastWorkingDate);
+            $('#resignReason').val(resignReason);
+            $('#employeeId1').val(nextApprover);
+            $("#empNameId").prop("readonly", true);
+            if (url.indexOf(".pdf") >= 0) {
+                //alert(attachmentUrl)
+                $('#user_img1').attr("src", "/EmpAttachment/pdfIcon.png");
+                $('#userFile').val("/EmpAttachment/" + url);
+            }
+            else if (url == null || url == "") {
+                $('#user_img1').attr("src", "/images/file_imge.jpg");
+            }
+            else {
+                $('#user_img1').attr("src", "/EmpAttachment/" + url);
+            }
+
+            var UserId = $('#employeeId1').val();
+            Common.Ajax('GET', '/HRPMSRetirementAndTermination/ApplyForPRL/GetEmployeeByUserId?userId=' + UserId, [], 'json', ajaxGetEmployeeByUserId, false);
+
+
+        }
+
+
+        function ajaxGetEmployeeByUserId(response) {
+            console.log(response)
+         
+            $("#empNameId1").val(response.nameEnglish);
+            $('#employeeId1').val(response.Id);
+       
+        }
+
+        function readURL1(input) {
+            if (input.files && input.files[0]) {
+                var filerdr = new FileReader();
+                filerdr.onload = function (e) {
+                    console.log(e);
+                    var srcUrl = e.target.result;
+                    if (srcUrl.indexOf("application/pdf") > 0) {
+                        $('#user_img1').attr('src', "/EmpAttachment/pdfIcon.png");
+                        $('#userFile').val(e.target.result);
+                    }
+                    else {
+                        $('#user_img1').attr('src', e.target.result);
+                    }
+
+                }
+                filerdr.readAsDataURL(input.files[0]);
+            }
+        }
+
+    </script>
+}

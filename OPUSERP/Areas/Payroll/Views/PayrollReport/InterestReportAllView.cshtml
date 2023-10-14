@@ -1,0 +1,294 @@
+﻿@model PayrollReportViewModel
+@{
+	ViewData["Title"] = "StaffLoanBalanceAsOnDateView";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<style>
+
+	.print-card-body {
+		width: 100%;
+		padding-bottom: 10px;
+	}
+
+	.vartical-table th {
+		width: 25%;
+	}
+
+	.vartical-table td {
+		width: 25%;
+	}
+
+	.table td, .table th {
+		padding: .3rem;
+		font-size: 14px;
+		border: 1px solid black !important;
+	}
+
+	table {
+		page-break-inside: auto;
+		border-collapse: collapse;
+		border: 1px solid black !important;
+	}
+
+	tr {
+		page-break-inside: avoid;
+		page-break-after: auto;
+		border: 1px solid black !important;
+	}
+
+	thead {
+		display: table-header-group;
+		border: 1px solid black !important;
+	}
+
+	tfoot {
+		display: table-footer-group;
+		border: 1px solid black !important;
+	}
+
+	h6 {
+		font-size: 14px;
+		background-color: gray;
+		color: white !important;
+		padding: 3px;
+	}
+</style>
+
+
+<div class="print-card" style="width: 100%;">
+	<div class="print-card-body">
+
+		@*<div class="container-fluid">
+				<div class="row" style="padding-top:0px;">
+					<div class="col-2">
+						<img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="BDBL Logo" style="height:80px;" />
+					</div>
+					<div class="col-8">
+						<div style="color:black;text-align:center;">
+							<h3 style="font-size:20px;">@Model.companies.FirstOrDefault()?.companyName</h3>
+							<h3 style="font-size:18px;"> Central Accounts Department</h3>
+							<h3 style="font-size:18px;"> Interest Charge Report </h3>
+							<br />
+						</div>
+					</div>
+					<div class="col-2">
+
+					</div>
+				</div>
+
+				<div class="row" style="padding-top:0px; color: black;">
+					<div class="col-6">
+					</div>
+					<div class="col-6 text-right">
+						Date Range: @ViewBag.startDate to @ViewBag.endDate
+					</div>
+				</div>
+			</div>
+			<div class="container-fluid ">
+				<div class="col-12">
+					<h3 style="font-size:18px;color:black"> </h3>
+				</div>
+			</div>
+			<br />*@
+		<div class="container-fluid" style="color:black;">
+			@foreach (var branch in Model.allstaffLoanInterestVms.Where(x => x.type == "branch").OrderBy(x => Convert.ToInt32(x.branchCode)).Select(x => x.branchName).Distinct())
+			{
+				@*<h5><u>@branch</u></h5>*@
+				@foreach (var emp in Model.allstaffLoanInterestVms.Where(x => x.type == "branch" && x.branchName == branch).OrderBy(x => Convert.ToInt32(x.designationCode)).ThenBy(x => x.seniorityLevel).Select(x => x.employeeCode).Distinct())
+				{
+					<div class="container-fluid">
+						<div class="row" style="padding-top:0px;">
+							<div class="col-2">
+								<img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="BDBL Logo" style="height:80px;" />
+							</div>
+							<div class="col-8">
+								<div style="color:black;text-align:center;">
+									<h3 style="font-size:20px;">@Model.companies.FirstOrDefault()?.companyName</h3>
+									<h3 style="font-size:18px;"> Central Accounts Department</h3>
+									<h3 style="font-size:18px;"> Interest Charge Report </h3>
+									<h3 style="font-size:18px;"> @Model.employeeInfos.Where(x => x.employeeCode == emp).Select(x => x.posting).FirstOrDefault() </h3>
+									<br />
+								</div>
+							</div>
+							<div class="col-2">
+
+							</div>
+						</div>
+
+						<div class="row" style="padding-top:0px; color: black;">
+							<div class="col-6">
+							</div>
+							<div class="col-6 text-right">
+								Date Range: @ViewBag.startDate to @ViewBag.endDate
+							</div>
+						</div>
+					</div>
+					<div class="container-fluid ">
+						<div class="col-12">
+							<h3 style="font-size:18px;color:black"> </h3>
+						</div>
+					</div>
+					<br />
+
+					<div style="width: 100%;">
+						<div style="width: 50%; float: left;">
+							<p>Emp Id: @emp</p>
+							<p>Designation: @Model.employeeInfos.Where(x => x.employeeCode == emp).Select(x => x.designation).FirstOrDefault()</p>
+						</div>
+						<div style="width: 50%; float: left;">
+							<p>Name: @Model.employeeInfos.Where(x => x.employeeCode == emp).Select(x => x.empName).FirstOrDefault()</p>
+							<p>Posting: @Model.employeeInfos.Where(x => x.employeeCode == emp).Select(x => x.posting).FirstOrDefault()</p>
+						</div>
+					</div>
+					<br />
+					<br />
+					@foreach (var type in Model.allstaffLoanInterestVms.Where(x => x.employeeCode == emp).Select(x => x.loanType).Distinct())
+					{
+						<h5>@type</h5>
+						<table class="table table-bordered">
+							<thead>
+								<tr style="text-align: center;">
+									<th>SL</th>
+									<th>E.Id</th>
+									<th>Name</th>
+									<th>Designation</th>
+									<th>Loan Type</th>
+									<th>Date</th>
+									<th>Interest Charged</th>
+									<th>Interest Due</th>
+								</tr>
+							</thead>
+							<tbody>
+								@{
+									int i = 1;
+								}
+								@foreach (var data in Model.allstaffLoanInterestVms.Where(x => x.employeeCode == emp && x.loanType == type))
+								{
+									<tr>
+										<td>@i</td>
+										<td>@data.employeeCode</td>
+										<td>@data.nameEnglish</td>
+										<td style="text-align: center;">@data.desig</td>
+										<td style="text-align: center;">@data.loanType</td>
+										<td style="text-align: center;">@data.effectiveDate?.ToString("dd/MM/yyyy")</td>
+										<td style="text-align: right;">@data.interestCharged?.ToString("N2")</td>
+										<td style="text-align: right;">@data.total?.ToString("N2")</td>
+									</tr>
+									i++;
+								}
+								<tr>
+									<th colspan="6" style="text-align: right;">Total</th>
+									<th style="text-align: right;">@Model.allstaffLoanInterestVms.Where(x => x.employeeCode == emp && x.loanType == type).Sum(c => c.interestCharged)?.ToString("N2")</th>
+									<th style="text-align: right;"></th>
+								</tr>
+							</tbody>
+						</table>
+						<br />
+					}
+					<div style="page-break-after: always;"></div>
+				}
+			}
+			<br />
+
+			@foreach (var branch in Model.allstaffLoanInterestVms.Where(x => x.type == "zone").OrderBy(x => Convert.ToInt32(x.branchCode)).Select(x => x.branchName).Distinct())
+			{
+				@*<h4><u>@branch</u></h4>*@
+
+				@foreach (var emp in Model.allstaffLoanInterestVms.Where(x => x.type == "zone" && x.branchName == branch).OrderBy(x => Convert.ToInt32(x.designationCode)).ThenBy(x => x.seniorityLevel).Select(x => x.employeeCode).Distinct())
+				{
+					<div class="container-fluid">
+						<div class="row" style="padding-top:0px;">
+							<div class="col-2">
+								<img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="BDBL Logo" style="height:80px;" />
+							</div>
+							<div class="col-8">
+								<div style="color:black;text-align:center;">
+									<h3 style="font-size:20px;">@Model.companies.FirstOrDefault()?.companyName</h3>
+									<h3 style="font-size:18px;"> Central Accounts Department</h3>
+									<h3 style="font-size:18px;"> Interest Charge Report </h3>
+									<h3 style="font-size:18px;"> @Model.employeeInfos.Where(x => x.employeeCode == emp).Select(x => x.posting).FirstOrDefault() </h3>
+									<br />
+								</div>
+							</div>
+							<div class="col-2">
+
+							</div>
+						</div>
+
+						<div class="row" style="padding-top:0px; color: black;">
+							<div class="col-6">
+							</div>
+							<div class="col-6 text-right">
+								Date Range: @ViewBag.startDate to @ViewBag.endDate
+							</div>
+						</div>
+					</div>
+					<div class="container-fluid ">
+						<div class="col-12">
+							<h3 style="font-size:18px;color:black"> </h3>
+						</div>
+					</div>
+					<br />
+
+					<div style="width: 100%;">
+						<div style="width: 50%;">
+							<p>Emp Id: @emp</p>
+							<p>Designation: @Model.employeeInfos.Where(x => x.employeeCode == emp).Select(x => x.designation).FirstOrDefault()</p>
+						</div>
+						<div style="width: 50%; float: left;">
+							<p>Name: @Model.employeeInfos.Where(x => x.employeeCode == emp).Select(x => x.empName).FirstOrDefault()</p>
+							<p>Posting: @Model.employeeInfos.Where(x => x.employeeCode == emp).Select(x => x.posting).FirstOrDefault()</p>
+						</div>
+					</div>
+					<br />
+					<br />
+					@foreach (var type in Model.allstaffLoanInterestVms.Where(x => x.employeeCode == emp).Select(x => x.loanType).Distinct())
+					{
+						<h4>@type</h4>
+						<table class="table table-bordered">
+							<thead>
+								<tr style="text-align: center;">
+									<th>SL</th>
+									<th>E.Id</th>
+									<th>Name</th>
+									<th>Designation</th>
+									<th>Loan Type</th>
+									<th>Date</th>
+									<th>Interest Charged</th>
+									<th>Interest Due</th>
+								</tr>
+							</thead>
+							<tbody>
+								@{
+									int i = 1;
+								}
+								@foreach (var data in Model.allstaffLoanInterestVms.Where(x => x.employeeCode == emp && x.loanType == type))
+								{
+									<tr>
+										<td>@i</td>
+										<td>@data.employeeCode</td>
+										<td>@data.nameEnglish</td>
+										<td style="text-align: center;">@data.desig</td>
+										<td style="text-align: center;">@data.loanType</td>
+										<td style="text-align: center;">@data.effectiveDate?.ToString("dd/MM/yyyy")</td>
+										<td style="text-align: right;">@data.interestCharged?.ToString("N2")</td>
+										<td style="text-align: right;">@data.total?.ToString("N2")</td>
+									</tr>
+									i++;
+								}
+								<tr>
+									<th colspan="6" style="text-align: right;">Total</th>
+									<th style="text-align: right;">@Model.allstaffLoanInterestVms.Where(x => x.employeeCode == emp && x.loanType == type).Sum(x => x.interestCharged)?.ToString("N2")</th>
+									<th style="text-align: right;"></th>
+								</tr>
+							</tbody>
+						</table>
+					}
+					<div style="page-break-after: always;"></div>
+				}
+			}
+		</div>
+	</div>
+</div>
+

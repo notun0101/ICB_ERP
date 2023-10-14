@@ -1,0 +1,263 @@
+﻿@model SpecialBranchUnitViewModel
+@{
+    ViewData["TitleMD"] = "Special Branch Unit";
+    Layout = "~/Areas/HRPMSMasterData/Views/Shared/_MasterDataForm.cshtml";
+}
+@section StyleMD{
+    <style>
+        .redStar {
+            color: red;
+        }
+
+        .pagination > li > a,
+        .pagination > li > span {
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #337ab7;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+
+        .pagination > .active > a,
+        .pagination > .active > a:focus,
+        .pagination > .active > a:hover,
+        .pagination > .active > span,
+        .pagination > .active > span:focus,
+        .pagination > .active > span:hover {
+            z-index: 3;
+            color: #fff;
+            cursor: default;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+
+        .pagination-container {
+            margin: 20px 0;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+    </style>
+}
+
+    <div class="card" style="width: 100%;">
+        <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+            <h5 class="m-0 font-weight-bold text-primary">Special Branch Unit</h5>
+            <a class='btn btn-info mr-4' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=5701'>@*<i class="fas fa-backward fa-2x "></i>*@<i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+        </div>
+        <div class="card-body">
+            @*<a class='btn btn-outline-info mr-3' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=5701'><i class="fas fa-backward"></i></a>
+
+            <h5 class="card-title" style="color: black">Strategic Business Unit</h5>
+
+            <hr>*@
+            <div class="container">
+                <form asp-area="HRPMSMasterData" asp-controller="SpecialBranceUnit" asp-action="Index" method="post" data-parsley-validate="parsley">
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="form-group row">
+                        <input type="hidden" name="id" id="id" value="0" />
+
+                        <label for="companyId" class="col-sm-2 col-form-label">Bank Name<span style="float:right;" class="redStar">*</span></label>
+                        <div class="col-sm-10">
+                            <select class="form-control" name="companyId" id="companyId" data-parsley-required="true">
+                                @foreach (var data in Model.companies)
+                                {
+                                    <option value="@data.Id">@data.companyName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-2 col-form-label">SBU Name <span style="float:right;" class="redStar">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="name" id="name">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="branchCode" class="col-sm-2 col-form-label">SBU Code</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="branchCode" id="branchCode">
+                        </div>
+                    </div>
+                    @*<div class="form-group row">
+
+            <div class="col-sm-2" style="overflow:hidden;padding:0;">
+                <label for="startDate" class="col-sm-12 col-form-label">Is Default?</label>
+
+            </div>
+            <div class="col-sm-1">
+                <input class="form-control" type="checkbox" id="isdefault" value="0" name="isdefault" style="float:left;" />
+            </div>
+
+        </div>*@
+                    <hr />
+                    @*<button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>*@
+                    <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;" data-toggle='tooltip' title='Save'><i class="fas fa-save"></i></button>
+                    <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;" data-toggle='tooltip' title='Save'><i class="fas fa-save"></i> Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">All Special Branch Units</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="departmentTable">
+                    <thead>
+                        <tr>
+                            <th>Bank Name</th>
+                            <th>SBU Name</th>
+                            <th>SBU Code</th>
+                            <th>Action</th>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.specialBranchUnits)
+                        {
+                            <tr>
+                                <td>@data.company?.companyName</td>
+                                <td>@data.branchUnitName</td>
+                                <td>@data.branchCode</td>
+                                <td>
+                                    <a class="btn btn-success" onclick="Edit(@data.Id, '@data.branchUnitName', '@data.branchCode', @data.companyId,@data.isdefault)" href="#"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;
+                                    <a class="btn btn-danger" title="Delete" href="javascript:void(0)" onclick="DeleteMaster(@data.Id)"><i class="fa fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ScriptsMD{
+    <script>
+        $(document).ready(function () {
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+            });
+            $("#SpecialBranchUnit").addClass("active");
+            //$('#departmentTable').DataTable();
+            var orgFullTitle = "Special Branch Unit List";
+            $('#departmentTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2]
+                        },
+                        title: "Special Branch Unit",
+                        messageTop: 'List Of Special Branch Unit',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2]
+                        },
+                        title: "Special Branch Unit",
+                        messageTop: 'List Of Special Branch Unit'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "Special Branch Unit",
+                        messageTop: 'List Of Special Branch Unit',
+                        exportOptions: {
+                            columns: [0, 1, 2]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+
+            $("#isdefault").click(function () {
+               
+                if ($("#isdefault").val() == 1) {
+                    $("#isdefault").val('0');
+                    $("#isdefault").attr("Checked", false);
+                    }
+                else {
+                    $("#isdefault").val('1');
+                    $("#isdefault").attr("Checked", true);
+                }
+
+            });
+        });
+
+        function Edit(Id, name, code, company,isdefault) {
+
+           
+            $("#id").val(Id);
+            $("#name").val(name);
+            $("#branchCode").val(code);
+            $("#companyId").val(company);
+            $("#isdefault").val(isdefault);
+            if ($("#isdefault").val() == 1) {
+          
+                $("#isdefault").attr("Checked",true);
+            }
+            else {
+          
+                $("#isdefault").attr("Checked",false);
+            }
+        }
+
+        function DeleteMaster(Id) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+
+                $.ajax({
+                    url: '@Url.Action("DeleteSpecialBranchUnitById", "SpecialBranceUnit")',
+                    data: { Id: Id },
+                    type: 'POST',
+                })
+                    .done(function () {
+                        swal('', 'Deleted Successfully!', 'success').then(function () {
+                            location.reload();
+                        });
+
+                        //swal('', 'Deleted Successfully!', 'success');
+                        //window.location.href = "/HRPMSMasterData/SpecialBranceUnit/Index";
+                    })
+                    .fail(function () {
+                        swal('Cancelled', 'It is related with another info, can not deleted !!!', 'error');
+                    });
+            });
+        }
+    </script>
+}
+

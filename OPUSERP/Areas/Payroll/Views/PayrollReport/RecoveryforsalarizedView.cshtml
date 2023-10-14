@@ -1,0 +1,147 @@
+﻿@model PayrollReportViewModel
+@{
+    ViewData["Title"] = "StaffLoanBalanceAsOnDateView";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+
+<style>
+
+    .print-card-body {
+        width: 100%;
+        padding-bottom: 10px;
+    }
+
+    .vartical-table th {
+        width: 25%;
+    }
+
+    .vartical-table td {
+        width: 25%;
+    }
+
+    .table td, .table th {
+        padding: .3rem;
+        font-size: 14px;
+        border: 1px solid black !important;
+    }
+
+    table {
+        page-break-inside: auto;
+        border-collapse: collapse;
+        border: 1px solid black !important;
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+        border: 1px solid black !important;
+    }
+
+    thead {
+        display: table-header-group;
+        border: 1px solid black !important;
+    }
+
+    tfoot {
+        display: table-footer-group;
+        border: 1px solid black !important;
+    }
+
+    h6 {
+        font-size: 14px;
+        background-color: gray;
+        color: white !important;
+        padding: 3px;
+    }
+</style>
+
+
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+
+        <div class="container-fluid">
+            @*<div class="fa-pull-right">
+                    <p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+                </div>*@
+            <div class="row" style="padding-top:0px;">
+                <div class="col-2">
+                    <img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="BDBL Logo" style="height:80px;" />
+                </div>
+                <div class="col-8">
+                    <div style="color:black;text-align:center;">
+                        <h3 style="font-size:20px;">@Model.companies.FirstOrDefault()?.companyName</h3>
+                        <h3 style="font-size:18px;"> Central Accounts Department</h3>
+                        <h3 style="font-size:18px;"> Salaried Loan Deduction</h3>
+                        <br />
+                    </div>
+                </div>
+                <div class="col-2">
+
+                </div>
+            </div>
+
+            <div class="row" style="padding-top:0px; color: black;">
+                <div class="col-6">
+                </div>
+                <div class="col-6 text-right">
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid ">
+            <div class="col-12">
+                <h3 style="font-size:18px;color:black"> </h3>
+            </div>
+        </div>
+        <br />
+        <div class="container-fluid" style="color:black;">
+            @foreach (var item in Model.salariedLoanDeductionVms.OrderBy(x => x.loanType).Select(x => x.loanType).Distinct())
+            {
+                <h5>@item</h5>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr style="text-align: center;">
+                            <th>E.Id</th>
+                            <th>Employee Name</th>
+                            <th>Period Name</th>
+                            <th>loan Type</th>
+                            <th>Designation</th>
+                            <th>Loan Type</th>
+                            <th>Salary</th>
+                            <th>Loan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 1;
+                            decimal totalsalary = 0;
+                            decimal totalloan = 0;
+                        }
+                        @foreach (var data in Model.salariedLoanDeductionVms.OrderBy(x => Convert.ToInt32(x.designationCode)).ThenBy(x => Convert.ToInt32(x.senioritylevel)).Where(x => x.loanType == item))
+                        {
+                            <tr>
+                                <td>@data.employeeCode</td>
+                                <td style="text-align: left;">@data.employeeName</td>
+                                <td>@data.periodName</td>
+                                <td style="text-align: center;">@data.loanType</td>
+                                <td style="text-align: center;">@data.shortName</td>
+                                <td style="text-align: center;">@data.loanType</td>
+                                <td style="text-align: right;">@data.Salary?.ToString("N2")</td>
+                                <td style="text-align: right; width: 15%;">@data.Loan?.ToString("N2")</td>
+                            </tr>
+                            totalsalary += Convert.ToDecimal(data.Salary);
+                            totalloan += Convert.ToDecimal(data.Loan);
+                            i++;
+                        }
+                        <tr>
+                            <th colspan="6">Total</th>
+                            <th style="text-align: right;">@(Model.salariedLoanDeductionVms.Where(x => x.loanType == item).Sum(x => x.Salary)?.ToString("N2"))</th>
+                            <th style="text-align: right;">@(Model.salariedLoanDeductionVms.Where(x => x.loanType == item).Sum(x => x.Loan)?.ToString("N2"))</th>
+                        </tr>
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+

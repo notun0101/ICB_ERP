@@ -1,0 +1,92 @@
+CBS Note
+--------
+XML Format
+----------
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:api="http://api">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <api:dataInsert>
+        <api:in_user_id>EHR</api:in_user_id>
+         <api:in_Auth_Key>123456</api:in_Auth_Key>
+         <api:in_ChkSum>2731C9E8471B1B1F6E977E7A00ABEC4EE8376268</api:in_ChkSum>
+         <api:in_request_id>HR1</api:in_request_id>
+         <api:in_xml_data><![CDATA[
+<GLDESCRIPTION><ENTITY><ACCTCODE>14100-065</ACCTCODE></ENTITY></GLDESCRIPTION>
+
+]]></api:in_xml_data>
+         <api:in_Bin_data></api:in_Bin_data>
+         <api:in_request_type>get_gl_description</api:in_request_type>
+         <api:in_Add_Param_One>100</api:in_Add_Param_One>
+         <api:in_Add_Param_Two></api:in_Add_Param_Two>
+      </api:dataInsert>
+   </soapenv:Body>
+</soapenv:Envelope>
+
+Test API
+--------
+Api link:http://10.100.7.234:8084/isteler_CBS_API/services/DataInsertMain?wsdl
+
+Live API
+--------
+<wsdlsoap:address location="http://10.100.7.3/isteler_CBS_API/services/DataInsertMain"/>
+
+
+--All Processed Table
+select * from CBSVoucher where postingBranchId = 11
+select * from CBSSalarySheet where officeId = 11
+select * from postingXmls where BranchId = 5 where type = 'Individual'
+select * from postingSalaryXML where BranchId = 6 where BranchId = 195 where type = 'Individual'
+select * from postingUnionXML where type = 'IndUnion'
+select * from salaryPostingLogs where officeId = 11
+
+--Delete All Processed Table
+delete CBSVoucher
+delete postingXmls
+delete CBSSalarySheet
+delete postingSalaryXML
+delete postingUnionXML
+delete salaryPostingLogs
+
+--Individual(Ctg.) Sps
+EXEC sp_CBSProcessSalaryVoucherInd 55, 11
+EXEC sp_GenerateVoucherXMLInd 55
+EXEC sp_CBSProcessSalarySheetInd 55
+EXEC sp_GenerateSalaryXMLInd 55
+EXEC sp_PostVoucherByBranchOfficerUnionInd '2022','February'
+EXEC sp_GenerateUnionXMLInd 55
+
+sp_GetSalaryPostingInfoByPeriodId 55
+
+--Process Branch Salary
+EXEC sp_CBSProcessSalarySheetByYearMonthAndSBU 55, '0', '0', 195
+
+--Generate Zone XML Salary
+EXEC sp_GetNetPayByYearMonthAndSBUCBSPostingZone '2022', 'February','0', '0', 6, '065'
+
+
+
+
+
+
+Manual February
+---------------
+100MB000268 R
+100MB000269 N
+
+070MB000002 Khatunganj Salary
+065MB000062 6 Salary 65 Zonal Office Dhaka North
+065MB000063 7 Salary 65	Zonal Office Dhaka South
+067MB000006 6 Salary 67 Zonal Office Dhaka North
+
+UNION
+065MB000119 Dhaka South 7
+065MB000120 Zonal Office Ctg 5
+065MB000121 Dhaka North 6
+065MB000122 Khulna Zone 8
+065MB000123 Rajshahi Zone 9
+065MB000124 Sylhet Zone 10
+
+066MB000005 Head Office 66 Salary
+065MB000066 Head Office 65 Salary
+067MB000005 Head Office 67 Salary
+

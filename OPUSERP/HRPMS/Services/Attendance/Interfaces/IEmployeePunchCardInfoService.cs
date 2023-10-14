@@ -1,0 +1,177 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using OPUSERP.Areas.HRPMSAttendence;
+using OPUSERP.Areas.HRPMSAttendence.Models;
+using OPUSERP.Data.Entity;
+using OPUSERP.Data.Entity.MasterData;
+using OPUSERP.HRPMS.Data.Entity.Attendance;
+using OPUSERP.HRPMS.Data.Entity.Employee;
+using OPUSERP.HRPMS.Data.Entity.Leave;
+using OPUSERP.HRPMS.Data.Entity.Master;
+
+namespace OPUSERP.HRPMS.Services.MasterData.Interfaces
+{
+    public interface IEmployeePunchCardInfoService
+    {
+        Task<IEnumerable<HrUnit>> GetAllUnits();
+        //Task<IEnumerable<OverTimeReportViewModel>> GetOverTimeReport(DateTime fdate, DateTime todate, int depId, int branchId, int divisionId, int zoneId, int officeId);
+        Task<IEnumerable<MonthlyAttendanceVm>> GetMonthlyInTimeAttendance(int year, int month, int deptId, int branchId, int zoneId, int officeId, int hrUnitId, int hrDivitionId);
+        Task<IEnumerable<OverTimeReportViewModel>> GetOverTimeReport(DateTime fdate, DateTime todate, int depId, int branchId, int divisionId, int zoneId, int officeId, int employeeInfoId);
+        Task<string> GetBrancheNameById(int Id);
+        Task<bool> SaveEmployeePunchCardInfo(EmployeePunchCardInfo employeePunchCardInfo);
+        Task<IEnumerable<EmployeePunchCardInfo>> GetAllEmployeePunchCardInfo();
+        Task<EmployeePunchCardInfo> GetEmployeePunchCardInfoById(int id);
+        Task<bool> DeleteEmployeePunchCardInfoById(int id);
+        Task<int> SaveEmployeeManualAttendence(EmpManualAttendance model);
+        Task<IEnumerable<EmpAttendance>> GetAllManualAttendence();
+        Task<IEnumerable<EmpAttendance>> GetAllManualAttendenceByDateFilter(string date);
+        Task<EmployeePunchCardInfo> GetPunchCardByCode(string code);
+        Task<int> MonthlyPresentAttendanceByPunchCard(string punch, int month);
+        Task<int> MonthlyPresentAttendanceByPunchCard(string punch, int month, int year);
+        Task<int> PresentAttendanceByPunchCardAndDateRange(string punch, DateTime fromDate, DateTime toDate);
+        Task<IEnumerable<HrBranch>> GetAllHrBranches();
+        Task<IEnumerable<HrBranch>> GetHrBranchesByZoneId(int? zoneId);
+        Task<IEnumerable<FunctionInfo>> GetFunctionInfo();
+        Task<IEnumerable<HrDivision>> GetAllHrDivisions();
+        Task<IEnumerable<EmployeeInfo>> GetAllEmployeeWithPunchCardNoBranch(int branch, string designation, int shift);
+        Task<IEnumerable<EmployeeInfo>> GetAllEmployeeWithPunchCardNoDivision(int division, string designation, int shift);
+        Task<int> CheckLeaveByDate(DateTime? mydateh, string empCode);
+        Task<EmployeePunchCardInfo> GetEmployeePunchCardInfoByByEmpCode(string empCode);
+        Task<EmployeeInfo> GetEmpInfoByPunchCard(string punchCardNo);
+        Task<IEnumerable<EmpAttendance>> GetAllManualAttendenceByDateRange(DateTime? from, DateTime? to);
+        //Task<IEnumerable<DailyAttendenceViewModel>> GetAttendenceBetweenDates(DateTime? fromDate, DateTime? toDate);
+        Task<IEnumerable<EmployeeInfo>> GetAllEmployeeWithPunchCard();
+        Task<EmpAttendance> GetDailyAttendenceByEmpCode(string code);
+        Task<EmployeePunchCardInfo> GetPunchCardByUserName(string username);
+        Task<EmpAttendance> GetAttendenceByDateAndPunchCard(DateTime? date, string punchCardNo);
+        Task<EmployeeInfo> GetEmployeeByUsername(string username);
+        //Task<int> MonthlyAttendenceCountByUserAndPunchCard(string username);
+        Task<bool> SaveUploadEmployeeAttendence(AttendenceApi att);
+        //Task<int> MonthlyAttendenceCountByUserAndPunchCard(string username, int month);
+        Task<int> GetAllEmployeeAttendenceCountByDateRange1(DateTime? start, DateTime? end);
+        Task<IEnumerable<EmpAttendanceWithDates>> GetAttendenceByMonthAndEmpCode(int month, string code, int year);
+        Task<int> GetTotalPresentByMonthandYear(int month, int year);
+        Task<int> GetTotalLateByMonth(int month, int year);
+        Task<IEnumerable<EmployeeInfo>> GetTotalLeaveByMonth(int month, int year);
+        Task<IEnumerable<EmployeeInfo>> GetTotalLeaveByMonthWP(int month, int year);
+        Task<int> GetDailyTotalLateByMonth(DateTime? start);
+        Task<int> GetIndivisualTotalLateByMonth(int month);
+        Task<IEnumerable<EmployeeInfo>> GetIndivisualTotalLeaveByMonth(int month);
+        Task<IEnumerable<EmployeeInfo>> GetIndivisualTotalLeaveByDateRange(DateTime fromDate, DateTime toDate);
+        Task<IEnumerable<EmployeeInfo>> GetIndivisualTotalLeaveByMonthWP(int month);
+        Task<IEnumerable<EmployeeInfo>> GetIndivisualTotalLeaveByDateRangeWP(DateTime fromDate, DateTime toDate);
+        Task<IEnumerable<EmployeeInfo>> GetDailyTotalLeaveByMonth();
+        //Task<int> GetIndivisualTotalLateByMonth(DateTime? start);
+        Task<IEnumerable<EmployeeInfo>> GetTotalLeaveByDate(DateTime date);
+        Task<ShiftGroupViewModel> GetShiftByEmpCode(string code);
+        Task<int> MonthlyAttendenceCountByUserAndPunchCard(string username, int month);
+        Task<string> GetUsernameByEMpCode(string empCode);
+        Task<IEnumerable<EmployeePunchCardInfoViewModel>> GetAllEmployeeWithPunchCardInfo();
+        Task<EmpAttendance> GetDailyAttendenceByEmpCodeDate(string code, string date);
+        Task<EmployeeInfo> GetEmployeeInfoByDeptDesigShift(int departmet, string dsig, int shift);
+
+        Task<string> GetPlaceNameById(string type, int id);
+        Task<IEnumerable<Department>> GetAllDepartment();
+        Task<IEnumerable<ShiftGroupMaster>> GetAllShift();
+        Task<IEnumerable<EmployeeInfo>> GetAllEmployee();
+        Task<IEnumerable<EmployeeInfo>> GetAllEmployeeDept();
+
+        Task<int> GetTotalAttendanceByEmpCodeMonthAndYear(string empCode, int month, int year);
+        Task<int> GetAllActiveCountByMonthAndYear(int month, int year);
+        Task<EmployeeInfo> GetEmployeeByEmpCode(string empCode);
+        Task<IEnumerable<EmpAbsentDates>> GetAllAbsentByMonthAndYearAndEmpCode(int month, int year, string empCode);
+        Task<int> GetAllAbsentCountByMonthAndYearAndEmpCode(int month, int year, string empCode);
+		int GetTotalSubsideryDaysByEmpCodeMonthAndYear(string empCode, int month, int year);
+		int GetTotalSubsideryDaysByEmpCodeBranchMonthAndYear(string empCode, int hrBranch, int month, int year);
+		//
+		//Task<IEnumerable<EmpAttendanceWithDates>> GetTotalPresentByMonthandYearDepartDesigShift(int month, int year, string code, string department, string designation, string shift);
+		Task<IEnumerable<EmployeeInfo>> GetAllEmployeeWithPunchCardNo(int department, string designation, int shift);
+        Task<IEnumerable<EmpAttendanceWithDates>> GetAttendenceByMonthAndEmpCodeWithDepert(int month, string code, int year, int department, string designation, int shift);
+        Task<IEnumerable<EmpAttendanceWithDates>> GetAttendenceByMonthAndEmpCodeWithDepert1(int month, string code, int year, int department, string designation, int shift);
+        Task<int> GetTotalPresentByMonthandYear(int month, int year, int department, string designation, int shift);
+        Task<int> GetAllEmployeeAttendenceCountByDateRange(DateTime? date, int department, string designation, int shift);
+        Task<int> GetLeaveStatusByEmpCodeAndDate(string code, string date);
+
+
+        Task<int> GetTotalWorkingDaysByEmpId(int id, int year, int month);
+        Task<int> GetTotalLateByEmpId(int id, int year, int month);
+        Task<IEnumerable<EmployeeInfo>> GetAllFilteredEmployee(int department, string designation, int shift);
+        Task<int> FilteredEmployeeCount(int department, string designation, int shift);
+        Task<int> FilteredEmployeeLateCount(int year, int month, int department, string designation, int shift);
+        Task<string> GetDepartmentNameById(int id);
+        Task<string> GetShiftNameById(int id);
+        Task<ApplicationUser> GetUserByUsername(string username);
+        Task<int> GetIndivisualTotalLateByMonthAndCard(int month, string cardNo);
+        Task<EmpAttendance> GetLateAttendenceByDateAndPunchCard(DateTime? date, string punchCardNo);
+        Task<int> GetTotalLateByMonth(int month, string cardNo, int year);
+        Task<int> GetDailyTotalLateByMonthCard(DateTime? start, string cardNo);
+        Task<int> CheckAttendanceByDateAndPunchCard(string workDate, string cardNo);
+        Task<EmpAttendance> GetAttendanceById(int id);
+		Task<EmpManualAttendance> GetManualAttendanceById(int id);
+		Task<int> SaveEmpAttendence(EmpAttendance model);
+		Task<int> ApproveManualAttendance(int Id, string code);
+		Task<IEnumerable<EmpAttendance>> ProcessAttendance(string Fdate, string Tdate);
+        Task<IEnumerable<LunchSubsidyViewModel>> GetLunchSubsidy(string type, int typeId, int year, int month);
+
+        Task<string> GetBranchNameBanglaByType(string type, int typeId);
+
+		Task<IEnumerable<Designation>> GetAllDesignation();
+        Task<EmployeeInfo> GetEmployeename();
+        Task<int> GetIndivisualTotalLateByMonth(int month, string cardNo);
+        Task<int> GetIndivisualTotalLateByDateRange(DateTime fromDate, DateTime toDate, string cardNo);
+        Task<int> GetTotalPresentByMonthYearAndEmpCode(int month, int year, string code);
+        Task<int> GetTotalAbsentByMonthYearAndEmpCode(int month, int year, string code);
+        Task<int> GetTotalLeaveByMonthYearAndEmpCode(int month, int year, string code);
+        Task<int> GetTotalHolidayByMonthYearAndEmpCode(int month, int year);
+        Task<int> GetTotalWorkByMonthYearAndEmpCode(int month, int year, string code);
+        Task<decimal> GetAverageByMonthYearAndEmpCode(int month, int year, string code);
+        Task<int> GetTotalPresentByDateAndEmpCode(DateTime? startDate, DateTime? endDate, string code);
+        Task<int> GetTotalAbsentByDateAndEmpCode(DateTime? startDate, DateTime? endDate, string code);
+        Task<int> GetTotalLeaveByDateAndEmpCode(DateTime? startDate, DateTime? endDate, string code);
+        Task<int> GetTotalHolidayByDateAndEmpCode(DateTime? startDate, DateTime? endDate);
+        Task<int> GetTotalWorkByDateAndEmpCode(DateTime? startDate, DateTime? endDate, string code);
+        Task<decimal> GetAverageByDateAndEmpCode(DateTime? startDate, DateTime? endDate, string code);
+        //Task<int> GetTotalLeaveByDateAndEmpCode(DateTime Fdate, DateTime Tdate, string code);
+        //Task<int> GetTotalHolidayByMonthDateAndEmpCode(DateTime Fdate, DateTime Tdate);
+        //Task<decimal> GetAverageByDateAndEmpCode(DateTime Fdate, DateTime Tdate, string code);
+        Task<int> GetHolidaysByMonth(int month);
+        Task<int> GetHolidaysByDateRange(DateTime fromdate, DateTime todate);
+        Task<IEnumerable<EmployeeInfo>> GetEmployeesByType(string type, int typeId);
+        Task<IEnumerable<EmployeeInfo>> GetEmployeesByTypeNew(string type, int typeId, int month, int year);
+        Task<LunchSubsidyReportViewModel> GetEmployeesByTypeAndTypeId(string type, int typeID);
+        Task<EmpAttendance> GetDailyAbsentByEmpCodeDate(string code, string date);
+        Task<IEnumerable<FunctionInfo>> GetAllOffice();
+        Task<IEnumerable<MonthlyAttendanceVm>> GetMonthlyAttendance(int year, int month, int deptId, int branchId, int zoneId);
+        Task<IEnumerable<Location>> GetAllZone();
+        Task<IEnumerable<EmployeeInfo>> GetAllEmployeeWithPunchCardNoForDDSZO(int department, string designation, int shift, int zone, int office);
+        Task<IEnumerable<EmployeeInfo>> GetAllEmployeeWithPunchCardNoZoneNew(int zone, string designation, int shift);
+        Task<IEnumerable<EmployeeInfo>> GetAllEmployeeWithPunchCardNoOffice(int office, string designation, int shift);
+        Task<int> GetTotalLeaveByMonthAndEmpCode(string code, int month);
+        Task<int> GetAllHolidaysByMonthYearNew(int month, int year);
+        Task<int> GetTotalLeaveByMonthAndEmpCodeInd(string code, int month, int year);
+        Task<IEnumerable<AllEmployeeAttendanceViewModel>> GetEmployeeAttendanceBySp(string fromDate, string toDate);
+        Task<IEnumerable<EmpManualAttBySpVM>> GetAllManualAttendanceBySp();
+		Task<IEnumerable<ManualAttendanceApproval>> GetManualAttendanceForApproval(string user);
+        Task<IEnumerable<ManualAttendanceApproval>> GetMyPendingManualAttendance(string empCode);
+        Task<IEnumerable<ManualAttendanceApproval>> GetMyApprovedManualAttendance(string empCode);
+        Task<IEnumerable<ManualAttendanceApproval>> GetMyRejectedManualAttendance(string empCode);
+        Task<string> ApproveManualAttendance(string empCode, int id, string approverEmpCode);
+        Task<string> RejectManualAttendance(string empCode, int id, string rejectedByEmpCode, string reasonforreject);
+        Task<IEnumerable<ManualAttendanceViewModel>> GetManualAttendanceByAnyKey(string employeeCode, int? approverId, string fromDate, string toDate);
+		Task<IEnumerable<ManualAttendanceApprovalApi>> GetMyPendingManualAttendanceAPI(string empCode);
+		Task<IEnumerable<ManualAttendanceApprovalApi>> GetMyApprovedManualAttendanceAPI(string empCode);
+		Task<IEnumerable<ManualAttendanceApprovalApi>> GetMyRejectedManualAttendanceAPI(string empCode);
+		Task<IEnumerable<ManualAttendanceApproval>> GetApprovedAttendanceForApproval(string user);
+		Task<IEnumerable<ManualAttendanceApproval>> GetRejectedAttendanceForApproval(string user);
+
+		Task<EmployeeInfo> GetEmployeeInfoByByEmpCode(string empCode);
+
+		Task<EmpManualAttendance> GetEmpManualAttendanceById(int Id);
+        Task<string> GetDivisionNameById(int Id);
+        Task<string> GetLocatioNameById(int Id);
+        Task<string> GetOfficeNameById(int Id);
+        Task<int> SaveSMSResponseLog(SMSResponseLog log);
+    }
+}

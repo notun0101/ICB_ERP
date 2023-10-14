@@ -1,0 +1,164 @@
+﻿@model SalaryYearViewModel
+
+@{
+
+     ViewData["Title"] = "SalaryYear";
+    Layout = "~/Areas/Payroll/Views/Shared/_SalaryMasterForm.cshtml";
+}
+
+@section StyleMD{
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-body">
+        <h5 class="card-title" style="color: black">Salary Year</h5>
+        <div style="float: right; margin: 16px;">
+            <a class='btn btn-info mr-2' style="margin-top: -96px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=10&perentId=5962'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+        </div>
+        <hr>
+        <div class="container">
+            <form asp-area="Payroll" id="FormId" asp-controller="SalaryMaster" asp-action="SalaryYear" method="post" data-parsley-validate="parsley">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="row">
+                    <div class="col-sm-3">
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="yearName" class="col-sm-3 col-form-label">Year Name <span style="color:red;">*</span></label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="yearName" value="" name="yearName" data-parsley-required="true">
+                                <input type="hidden" id="editId" name="editId" value=0>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="startDate" class="col-sm-3 col-form-label">Start Date <span style="color:red;">*</span></label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="startDate" name="startDate" autocomplete="off" data-parsley-required="true">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="endDate" class="col-sm-3 col-form-label">End Date <span style="color:red;">*</span></label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="endDate" name="endDate" autocomplete="off" data-parsley-required="true">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                    </div>
+                </div>
+                <hr>
+                <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<br />
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Salary Year List</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="educationalTable">
+                    <thead>
+                        <tr>
+                            <th>Year Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.salaryYearsList)
+                        {
+                            <tr>
+                                <td>@data.yearName</td>
+                                <td>@data.startDate?.ToString("dd-MMM-yyyy")</td>
+                                <td>@data.endDate?.ToString("dd-MMM-yyyy")</td>
+                                <td>
+                                    <a class="btn btn-success" onclick="Edit(@data.Id,'@data.yearName','@data.startDate','@data.endDate')" href="javascript:void(0)"><i class="fa fa-edit"></i></a>
+                                    @*<a class="btn btn-danger" onclick="Delete(@data.Id)" href="#"><i class="fa fa-trash-alt"></i></a>*@
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ScriptsMD{
+    <script>
+        $('#submit').click(function () {
+		console.log($('#FormId').serializeArray());
+		var data = $('#FormId').serializeArray();
+
+		console.log(data[0].value)
+		swal({
+			title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+		}).then(function () {
+			$.ajax({
+				url: '@Url.Action("Index", "SalaryMaster")',
+				type: 'POST',
+				data: data
+			}).done(function () {
+                if (data[0].value == 0) {
+                    swal('success', 'Saved Successfully!', 'success').then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    swal('success', 'Updated Successfully!', 'success').then(function () {
+                        location.reload();
+                    });;
+                }
+			}).fail(function () {
+				swal('warning', 'Failed!', 'warning');
+			})
+		});
+	})
+
+        $(document).ready(function () {
+            $("#salaryYear").addClass("active");
+            $('#educationalTable').DataTable(); 
+            $("#startDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2050" }).datepicker("setDate", new Date());
+            $("#endDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2050" }).datepicker("setDate", new Date());
+        });
+       
+        function getPurchaseDate(pdate) {
+            var formattedDate = new Date(pdate);
+            var d = formattedDate.getDate();
+            var m = formattedDate.getMonth();
+            var y = formattedDate.getFullYear();
+            var monthNames = [
+                "Jan", "Feb", "Mar",
+                "Apr", "May", "Jun", "Jul",
+                "Aug", "Sep", "Oct",
+                "Nov", "Dec"
+            ];
+            var fullDate = d + "-" + monthNames[m] + "-" + y;
+            return fullDate;
+        }
+        function Edit(Id, yearName, startDate, endDate) {
+            $('#editId').val(Id);
+            $('#yearName').val(yearName);
+            $('#startDate').val(getPurchaseDate(startDate));
+            $('#endDate').val(getPurchaseDate(endDate));
+        }
+
+        function Delete(Id) {
+            
+        }
+
+    </script>
+}
+
+
+

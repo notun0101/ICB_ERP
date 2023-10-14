@@ -1,0 +1,454 @@
+﻿@model PayrollReportViewModel
+@{
+    ViewData["Title"] = "AllLoan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+
+    .print-card-body {
+        width: 100%;
+        padding-bottom: 10px;
+    }
+
+    .vartical-table th {
+        width: 25%;
+    }
+
+    .vartical-table td {
+        width: 25%;
+    }
+
+    .table td, .table th {
+        padding: .3rem;
+        font-size: 14px;
+        border: 1px solid black !important;
+    }
+
+    table {
+        page-break-inside: auto;
+        border-collapse: collapse;
+        border: 1px solid black !important;
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+        border: 1px solid black !important;
+    }
+
+    thead {
+        display: table-header-group;
+        border: 1px solid black !important;
+    }
+
+    tfoot {
+        display: table-footer-group;
+        border: 1px solid black !important;
+    }
+
+    h6 {
+        font-size: 14px;
+        background-color: gray;
+        color: white !important;
+        padding: 3px;
+    }
+</style>
+<div class="card" style="width: 100%;">
+    <div class="card-header row" style="background-color:#EAF6FA;">
+        <div class="col-8">
+            <h5 class="card-title" style="color: black">All Loan</h5>
+        </div>
+
+        <div class="col-4">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    @*<a class='btn btn-info' style="margin-left: 125px;" data-toggle='tooltip' href='javascript:void(0)' onclick="PrintPdf()"><i style=" " class="fas fa-print"></i> Print</a>*@
+
+                    <a class='btn btn-info mr-4' style="margin-left: 9px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1017&perentId=6229'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <img src="~/Assets/processing.gif" id="loader" style="display: none; width: 400px; margin: 0 auto;" />
+    <div class="card-body">
+        <div class="col-sm-12 row">
+            <div class="col-12" style="color: black; font-size: 17px; padding-top: 24px;">
+                <table style="border:none;">
+                    @*<tr>
+                            <td> <span style="font-weight:bold;">Select Date  </span></td>
+                            <td>
+                                <input type="text" id="date1" autocomplete="off" placeholder="Select Date" class="form-control" readonly>
+                            </td>
+                            <td>
+                                <a href="javascript:void(0)" id="btnFind" style="font-size: 13px;" class="btn btn-success"><i class="fas fa-search"></i> Find</a>
+                            </td>
+                        </tr>*@
+                    <tr>
+                        <td><span style="font-weight:bold;">Department</span><span style="margin-left:3px;"></span> </td>
+                        <td style="width: 50%;">
+                            <select class="form-control dropChange" id="department" value="" name="">
+                                <option value="">-Select-</option>
+                                @foreach (var data in Model.departments.OrderBy(x => x.deptName))
+                                {
+                                    <option value="@data.Id">@data.deptName.ToUpper()</option>
+                                }
+                            </select>
+                        </td>
+                        <td><span style="font-weight:bold;">Branch</span><span style="margin-left:3px;"></span> </td>
+                        <td style="width: 50%;">
+                            <select class="form-control dropChange" id="hrBranches" value="" name="">
+                                <option value="">-Select-</option>
+                                @foreach (var data in Model.hrBranches.OrderBy(x => x.branchName))
+                                {
+                                    <option value="@data.Id">@data.branchName.ToUpper()</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span style="font-weight:bold;">Division</span><span style="margin-left:3px;"></span> </td>
+                        <td style="width: 50%;">
+                            <select class="form-control dropChange" id="hrDivisions" value="" name="">
+                                <option value="">-Select-</option>
+                                @foreach (var data in Model.hrDivisions.OrderBy(x => x.divName))
+                                {
+                                    <option value="@data.Id">@data.divName.ToUpper()</option>
+                                }
+                            </select>
+                        </td>
+                        <td><span style="font-weight:bold;">Office</span><span style="margin-left:5px;"></span></td>
+                        <td>
+                            <select class="form-control dropChange" id="officeId" value="" name="">
+                                <option value="A">-Select-</option>
+                                @foreach (var data in Model.functionInfos.OrderBy(x => x.branchUnitName))
+                                {
+                                    <option value="@data.Id">@data.branchUnitName.ToUpper()</option>
+                                }
+                            </select>
+                            <input type="hidden" id="rptType" value="" />
+                        </td>
+
+
+
+                    <tr>
+                    <tr>
+                        <td><span style="font-weight:bold;">Zone</span><span style="margin-left:3px;"></span> </td>
+                        <td style="width: 50%;">
+                            <select class="form-control dropChange" id="zoneId" value="" name="">
+                                <option value="">-Select-</option>
+                                @foreach (var data in Model.locations.OrderBy(x => x.branchUnitName))
+                                {
+                                    <option value="@data.Id">@data.branchUnitName.ToUpper()</option>
+                                }
+                            </select>
+                        </td>
+                        <td><span style="font-weight:bold;">Unit</span><span style="margin-left:5px;"></span></td>
+                        <td>
+                            <select class="form-control dropChange" id="hrUnitId" value="" name="">
+                                <option value="A">-Select-</option>
+                                @foreach (var data in Model.hrUnits.OrderBy(x => x.unitName))
+                                {
+                                    <option value="@data.Id">@data.unitName.ToUpper()</option>
+                                }
+                            </select>
+                            <input type="hidden" id="rptType" value="" />
+                        </td>
+
+
+                    </tr>
+                    <tr>
+                        <td><span style="font-weight:bold;">SBU</span><span style="margin-left:3px;"></span> </td>
+                        <td style="width: 50%;">
+                            <select class="form-control dropChange" id="sbu" value="" name="">
+                                <option value="">-Select-</option>
+                                @foreach (var data in Model.specialBranchUnits.OrderBy(x => x.branchUnitName))
+                                {
+                                    <option value="@data.Id">@data.branchUnitName.ToUpper()</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr style="display: none;">
+                        <td><span style="font-weight:bold;">Shift </span><span style="margin-left:13px;"></span></td>
+                        <td>
+                            <input type="hidden" id="shift" name="shift" value="1" />
+                        </td>
+                    </tr>
+
+                    <tr style="border:none">
+                        <td style="padding: 5px;">
+                            <a href="javascript:void(0)" id="btnFind" style="font-size: 13px !important;" class="btn btn-success"><i class="fas fa-search"></i> Search</a>
+                        </td>
+                    </tr>
+                </table>
+                <br />
+
+            </div>
+            <div class="col-6">
+
+            </div>
+            <div class="col-6">
+
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<hr />
+
+@*<div class="row clearfix">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style="background-color: #EAF6FA;">
+                    <h6 class="m-0 font-weight-bold">All Loan Info List</h6>
+                </div>
+                <img src="~/Assets/processing.gif" id="loader" style="width: 200px; margin: 0 auto; display: none;" />
+                <div class="card-body">
+                    <table class="table table-striped table-bordered" id="loantable">
+                        <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>Employee Id </th>
+                                <th>Employee Name</th>
+                                <th>Designation</th>
+                                <th>Loan Type</th>
+                                <th>Loan Date</th>
+                                <th>Principal</th>
+                                <th>Interest</th>
+                                <th>Total</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+@section Scripts{
+    <script src="~/Assets/paginathing.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('#department').change(function () {
+                if ($(this).val() != '') {
+                    $('#hrBranches').val('').attr('readonly', 'true');
+                    $('#hrDivisions').val('').attr('readonly', 'true');
+                    $('#department').removeAttr('readonly');
+                    $('#rptType').val('department');
+                }
+            })
+            $('#hrBranches').change(function () {
+                if ($(this).val() != '') {
+                    $('#department').val('').attr('readonly', 'true');
+                    $('#hrDivisions').val('').attr('readonly', 'true');
+                    $('#hrBranches').removeAttr('readonly');
+                    $('#rptType').val('hrBranches');
+                }
+            })
+            $('#hrDivisions').change(function () {
+                if ($(this).val() != '') {
+                    $('#department').val('').attr('readonly', 'true');
+                    $('#hrBranches').val('').attr('readonly', 'true');
+                    $('#hrDivisions').removeAttr('readonly');
+                    $('#rptType').val('hrDivisions');
+                }
+            })
+
+            $('#btnFind').on('click', function () {
+                //$('.card-body').hide();
+                //$('#loader').show();
+
+
+                var Date = $('#date1').val();
+
+                var depart = $('#department').val();
+                var branch = $('#hrBranches').val();
+                var division = $('#hrDivisions').val();
+				var zone = $('#zoneId').val();
+                var desig = $('#designation').val();
+                var shift = $('#shift').val();
+
+                if (depart == '') {
+                    depart = 0;
+                }
+                else {
+                    depart = $('#department').val();
+                }
+                if (branch == '') {
+                    branch = 0;
+                }
+                else {
+                    branch = $('#hrBranches').val();
+                }
+                if (division == '') {
+                    division = 0;
+                }
+                else {
+                    division = $('#hrDivisions').val();
+				}
+				if (zone == '') {
+					zone = 0;
+				}
+				else {
+					zone = $('#zoneId').val();
+				}
+                if (desig == 'A') {
+                    desig = 'A';
+                }
+                else {
+                    desig = $('#designation').val();
+                }
+                if (shift == '') {
+                    shift = 0;
+                }
+                else {
+                    shift = $('#shift').val();
+                }
+
+                if (depart != '') {
+					window.open('/Payroll/PayrollReport/AllEmployeeLoanPDF?type=department&id=' + depart);
+                }
+                if (branch != '') {
+					window.open('/Payroll/PayrollReport/AllEmployeeLoanPDF?type=branch&id=' + branch);
+				}
+				if (division != '') {
+					window.open('/Payroll/PayrollReport/AllEmployeeLoanPDF?type=division&id=' + division);
+				}
+				if (zone != '') {
+					window.open('/Payroll/PayrollReport/AllEmployeeLoanPDF?type=zone&id=' + zone);
+				}
+                //alert(depart)
+                //alert(desig)
+
+            })
+        })
+
+        function ajaxFunction(response) {
+            console.log(response)
+            $('#loantable').DataTable().destroy();
+            $('#loantable tbody').empty();
+            //return false;
+            console.log('ok2');
+            console.log(response);
+            var option = "";
+
+            $.each(response.allLoans, function (i, item) {
+                option += `<tr>
+                                                            <td>${item.employeeCode}</td>
+                                                            <th>${item.employeeName}</th>
+                                                            <th>${item.designationName}</th>
+                                                            <th>${item.loanType}</th>
+                                                            <td>${item.loanDate ?.ToString("dd MMM yyyy")}</td>
+                                                            <td>${item.principalAmount}</td>
+                                                            <td>${item.interestAmount}</td>
+                                                            <td>${item.totalAmount}</td>
+                                                        </tr>`
+            });
+            $('#loantable tbody').append(option);
+            $('#loantable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                "pageLength": 10,
+                retrieve: true,
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        title: "Bangladesh Development Bank Ltd.",
+                        messageTop: 'All Loan',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        title: "Bangladesh Development Bank Ltd.",
+                        messageTop: 'All Loan'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "Bangladesh Development Bank Ltd.",
+                        messageTop: 'All Loan',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+
+            //$('#loader').hide();
+            $('.card-body').show();
+            $('#loantable').show();
+        }
+
+        function PrintPdf() {
+            var Date = $('#date1').val();
+            var depart = $('#department').val();
+            var branch = $('#hrBranches').val();
+            var division = $('#hrDivisions').val();
+            var desig = $('#designation').val();
+            var shift = $('#shift').val();
+            if (Date != '') {
+                if ($('#rptType').val() != 'department' && $('#rptType').val() != 'hrBranches' && $('#rptType').val() != 'hrDivisions') {
+                    window.open('/Payroll/PayrollReport/AllEmployeeLoanPDF?type=department&Date=' + Date + '&dbdId=' + depart + '&designation=' + desig + '&shift=' + shift, '_blank');
+                }
+                if ($('#rptType').val() == 'department') {
+                    window.open('/Payroll/PayrollReport/AllEmployeeLoanPDF?type=department&Date=' + Date + '&dbdId=' + depart + '&designation=' + desig + '&shift=' + shift, '_blank');
+                }
+                if ($('#rptType').val() == 'hrBranches') {
+                    window.open('/Payroll/PayrollReport/AllEmployeeLoanPDF?type=branch&Date=' + Date + '&dbdId=' + branch + '&designation=' + desig + '&shift=' + shift, '_blank');
+                }
+                if ($('#rptType').val() == 'hrDivisions') {
+                    window.open('/Payroll/PayrollReport/AllEmployeeLoanPDF?type=division&Date=' + Date + '&dbdId=' + division + '&designation=' + desig + '&shift=' + shift, '_blank');
+                }
+            }
+
+        }
+        function convertto12hourtime(time) {
+            var ftime = time.split(":");
+            var hour = ftime[0];
+            var realhour = "";
+            var time = "";
+
+            if (parseInt(hour) == 0) {
+                realhour = "12";
+                time = realhour + ":" + ftime[1] + ":" + ftime[2] + " AM";
+            }
+            else if (parseInt(hour) == 12) {
+                realhour = "12";
+                time = realhour + ":" + ftime[1] + ":" + ftime[2] + " PM";
+            }
+            else if (parseInt(hour) < 12 && parseInt(hour) != 0) {
+                realhour = hour;
+                time = realhour + ":" + ftime[1] + ":" + ftime[2] + " AM";
+            }
+            else {
+                realhour = hour - 12;
+                time = realhour + ":" + ftime[1] + ":" + ftime[2] + " PM";
+            };
+            return time;
+        }
+
+    </script>
+}

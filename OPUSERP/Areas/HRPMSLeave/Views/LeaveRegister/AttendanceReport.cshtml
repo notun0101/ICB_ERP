@@ -1,0 +1,87 @@
+﻿@model LateAttandenceDataVM
+@{
+    ViewData["Title"] = "Attendance Report";
+
+}
+
+@section Style{
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        .redStar {
+            color: red;
+        }
+
+        .active {
+            background: beige;
+            padding: 3px;
+        }
+    </style>
+}
+<div class="card" style="width: 100%;">
+    <div class="card-header row" style="background-color:#EAF6FA;">
+        <div class="col-10">
+            <h5 class="card-title" style="color: black"> Report</h5>
+        </div>
+        <div class="col-2" style="text-align: right;">
+            <a class='btn btn-info mr-lg-4 float-right' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1020&perentId=6295'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="col-md-12">
+            <div class="form-group row">
+                <label for="report" class="col-sm-3 col-form-label">Report Type <span class="redStar">*</span></label>
+                <div class="col-sm-8">
+                    <select class="form-control" id="report" name="report" required>
+                        <option value="">Please Select Report Type</option>
+                        <option value="1">Approve Late Attendance </option>
+                        <option value="2">Reject Late Attendance </option>
+                        <option value="3">Approve Early Leave </option>
+                        <option value="4">Reject Early Leave </option>
+                    </select><br />
+
+                             <div class="col-sm-4" style="float:right">
+                                 @*<a id="submit" type="button" style="margin-left: 160px;" class="btn btn-success btn-xs" title="Preview" href='javascript:void(0)'><i class="fas fa-print"></i> Print</a>*@
+                                 <a class='btn btn-info' data-toggle='tooltip' href='javascript:void(0)' onclick="PrintPdf()"><i style=" font-size: 16px;" class="fas fa-print"> Print</i></a>
+                             </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        //var rptType = $('#report').val();
+
+        //if (rptType==1) {
+
+        //}
+
+    });
+    
+
+    function PrintPdf() {
+        var rptType = $('#report').val();
+        
+
+        if (rptType == 1) {
+            window.open('/HRPMSLeave/LeaveRegister/LateAttendanceAcceptedPDF?userName='+@Model.employeeCode, '_blank');
+        }
+        else if (rptType == 2) {
+            window.open('/HRPMSLeave/LeaveRegister/LateAttendanceRejectedPDF?userName='+@Model.employeeCode, '_blank');
+        }
+        else if (rptType == 3) {
+            window.open('/HRPMSLeave/LeaveRegister/EarlyLeaveAttendancePDF?userName='+@Model.employeeCode, '_blank');
+        }
+        else if (rptType == 4) {
+            window.open('/HRPMSLeave/LeaveRegister/RejectEarlyLeaveAttendancePDF?userName='+@Model.employeeCode, '_blank');
+        }
+
+        else {
+            swal('warning', 'You must choose any report type!', 'warning');
+        }
+
+    }
+
+</script>

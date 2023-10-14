@@ -1,0 +1,121 @@
+﻿@model ManualAttendanceReportVM
+@{
+	ViewData["Title"] = "Attendance Report";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+<div class="print-card" style="width: 100%;">
+	<div class="print-card-body">
+		<div class="container-fluid">
+			<div style="width:100%;overflow:hidden;">
+
+				<div style="width:15%;float:left;">
+					<img src="/Assets/bdbl.png" alt="" style="height:100px;">
+				</div>
+				<div style="width:80%;float:left;">
+					<h3 style="text-align:center;color:black;"><b>@Model.companies.FirstOrDefault().companyName</b></h3>
+					<h5 style="text-align:center;color:black;"><b>Name: @Model.ManualAttendanceViewModels.FirstOrDefault().EmployeeName</b></h5>
+					<h5 style="text-align:center;color:black;"><b>ID: @Model.ManualAttendanceViewModels.FirstOrDefault().EmployeeCode</b></h5>
+					<h5 style="text-align:center;color:black;">Attendance Report</h5>
+				</div>
+			</div>
+		</div>
+		<br />
+		<div class="container-fluid" style="color:black;">
+			<div class="row" style="padding: 0px 15px 0px 15px;">
+				<table class="table table-bordered vartical-table" style="width: 100%; background-color: white !important;">
+					<thead>
+						<tr>
+							<th style="width: 5%;">Date</th>
+							<th style="width: 5%; text-align: center;">Attendance Type</th>
+							<th style="width: 5%; text-align: center;">Status</th>
+							<th style="width: 5%; text-align: center;">In Time</th>
+							<th style="width: 5%; text-align: center;">Out Time</th>
+							<th style="width: 5%; text-align: center;">Approver Id</th>
+							<th style="width: 5%; text-align: center;">Approver Name</th>
+						</tr>
+					</thead>
+					<tbody>
+						@{
+							@foreach (var item in Model.ManualAttendanceViewModels)
+							{
+								<tr>
+									<td style="width: 5%; text-align: center;">@Html.Raw(String.Format("{0:dd-MM-yyyy}", @item.WorkDate))</td>
+									<td style="width: 5%; text-align: center;">@item.AttendanceType</td>
+									<td style="width: 5%; text-align:center;">@item.ApproveStatusFull</td>
+									<td style="width: 5%; text-align: center;">@item?.StartTime</td>
+									<td style="width: 5%; text-align: center;">@item?.EndTime</td>
+									<td style="width: 5%; text-align: center;">@item?.ApproverCode</td>
+									<td style="width: 5%; text-align: center;">@item.ApproverName</td>
+								</tr>
+
+							}
+						}
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts{
+
+}
+<style>
+	.divstyle {
+		color: black;
+	}
+
+	.divstyleee {
+		text-align: center;
+		vertical-align: middle;
+		padding-top: 70px;
+	}
+
+	.spanStyle {
+		color: black;
+		font-size: small;
+		text-align: center;
+	}
+
+	.boldspanStyle {
+		color: black;
+		font-weight: bolder;
+		text-align: center;
+	}
+
+	.print-card-body {
+		width: 100%;
+		padding-bottom: 10px;
+	}
+
+	.vartical-table th {
+		width: 25%;
+		text-align: center;
+		vertical-align: top;
+	}
+
+	.table td, .table th {
+		padding: .3rem;
+		font-size: 10px;
+	}
+
+	table {
+		page-break-inside: auto
+	}
+
+	tr {
+		page-break-inside: avoid;
+		page-break-after: auto;
+	}
+
+	thead {
+		display: table-header-group;
+	}
+
+	tfoot {
+		display: table-footer-group;
+	}
+</style>

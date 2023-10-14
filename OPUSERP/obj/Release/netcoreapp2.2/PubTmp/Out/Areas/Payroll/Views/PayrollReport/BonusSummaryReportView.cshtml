@@ -1,0 +1,162 @@
+﻿@model PayrollReportViewModel
+@{
+	ViewData["Title"] = "Bonus Summary Report";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+
+<style>
+
+	.print-card-body {
+		width: 100%;
+		padding-bottom: 10px;
+	}
+
+	.vartical-table th {
+		width: 25%;
+	}
+
+	.vartical-table td {
+		width: 25%;
+	}
+
+	.table td, .table th {
+		padding: .3rem;
+		font-size: 14px;
+		border: 1px solid black !important;
+	}
+
+	table {
+		page-break-inside: auto;
+		border-collapse: collapse;
+		border: 1px solid black !important;
+	}
+
+	tr {
+		page-break-inside: avoid;
+		page-break-after: auto;
+		border: 1px solid black !important;
+	}
+
+	thead {
+		display: table-header-group;
+		border: 1px solid black !important;
+	}
+
+	tfoot {
+		display: table-footer-group;
+		border: 1px solid black !important;
+	}
+
+	h6 {
+		font-size: 14px;
+		background-color: gray;
+		color: white !important;
+		padding: 3px;
+	}
+</style>
+
+
+<div class="print-card" style="width: 100%;">
+	<div class="print-card-body">
+
+		<div class="container-fluid">
+			<div class="fa-pull-right">
+			</div>
+			<div class="row" style="padding-top:0px;">
+				<div class="col-2">
+					<img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="BDBL Logo" style="height:80px;" />
+				</div>
+				<div class="col-8">
+					<div style="color:black;text-align:center;">
+						<h3 style="font-size:20px;">@Model.companies.FirstOrDefault()?.companyName</h3>
+						<h3 style="font-size:18px;">@Model.bonusSummary.FirstOrDefault().branchName</h3>
+						<h3 style="font-size:18px;">Central Accounts Department</h3>
+						<h4 style="font-size:18px;"><u>Summary of @Model.bonusSummary.FirstOrDefault()?.reportHead for the year @Model.salaryPeriod?.salaryYear?.yearName</u></h4>
+						<br />
+					</div>
+				</div>
+				<div class="col-2">
+
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid ">
+			<div class="col-12">
+				<h3 style="font-size:18px;color:black"> </h3>
+			</div>
+		</div>
+		<br />
+		<div class="container-fluid" style="color:black;">
+			<div class="row">
+				<div class="col-12">
+					<table class="table table-bordered">
+						<thead>
+							<tr style="text-align: center;">
+								<th>SL</th>
+								<th>Designation</th>
+								<th>Basic Salary</th>
+								<th>Gross Bonus</th>
+								<th>Rev</th>
+								<th>Net Bonus</th>
+							</tr>
+						</thead>
+						<tbody>
+							@{
+								int i = 0;
+							}
+							@foreach (var item in Model.bonusSummary)
+							{
+								i++;
+								<tr>
+									<td>@i</td>
+									<td>@item.designationName.ToUpper()</td>
+									<td style="text-align: right; width: 15%;">@item.Basic?.ToString("N2")</td>
+									<td style="text-align: right; width: 15%;">@item.GrossBonus?.ToString("N2")</td>
+									<td style="text-align: right; width: 15%;">@item.Rev?.ToString("N2")</td>
+									<td style="text-align: right; width: 15%;">@((item.GrossBonus - item.Rev)?.ToString("N2"))</td>
+								</tr>
+							}
+							<tr>
+								<td colspan="2">Total (@Model.bonusSummary.FirstOrDefault()?.TotalEmp Employees)</td>
+								<td style="text-align: right; width: 15%;">@Model.bonusSummary.Sum(x => x.Basic)?.ToString("N2")</td>
+								<td style="text-align: right; width: 15%;">@Model.bonusSummary.Sum(x => x.GrossBonus)?.ToString("N2")</td>
+								<td style="text-align: right; width: 15%;">@Model.bonusSummary.Sum(x => x.Rev)?.ToString("N2")</td>
+								<td style="text-align: right; width: 15%;">@((Model.bonusSummary.Sum(x => x.GrossBonus) - Model.bonusSummary.Sum(x => x.Rev))?.ToString("N2"))</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<br />
+			<div class="row">
+				@*(@OPUSERP.Helpers.AmountInWord.ConvertToWords(Model.bonusSummaryByBranch?.Sum(x => x.TotalBonus)?.ToString("N2")))*@
+				<div class="col-12">
+                    <p style="text-align: justify;">
+						A sum of Tk.
+				@Model.bonusSummary.Sum(x => x.GrossBonus)?.ToString("N2")
+				(@OPUSERP.Helpers.AmountInWord.ConvertToWords(Model.bonusSummary.Sum(x => x.GrossBonus)?.ToString("N2"))) may be sanctioned and paid to the Executives & Staffs of BDBL, Head Office, Dhaka being the @Model.bonusSummary.FirstOrDefault()?.reportHead during the year 2022 by debiting Provision for @Model.bonusSummary.FirstOrDefault()?.reportHead A/C. 639/643 subject to Pre-Audit clearence.</p>
+				</div>
+			</div>
+			<br />
+			<br />
+			<br />
+
+			<table class="table" style="border: none !important;">
+				<tr style="border: none !important;">
+					<td style="text-align: left;border: none !important;">Assistant General Manager</td>
+					<td style="text-align: right;border: none !important;">Deputy General Manager (CAD)</td>
+				</tr>
+			</table>
+			<br /><br />
+			<table class="table" style="border: none !important;">
+				<tr style="border: none !important;">
+					<td style="text-align: left;border: none !important;">Deputy General Manager (AID)</td>
+					<td style="text-align: right;border: none !important;"></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+

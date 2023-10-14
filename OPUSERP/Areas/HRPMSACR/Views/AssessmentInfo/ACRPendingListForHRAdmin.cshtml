@@ -1,0 +1,997 @@
+﻿@model ACRAssessmentVM
+@{
+    ViewData["Title"] = "ACRPendingListForHRAdmin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<div class="card">
+
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+            <h5 class="card-title" style="color: black; margin: 8px;"> Pending ACR Assign</h5>
+        </div>
+        <div class="col-md-8">
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info btn-sm' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1016&perentId=6202'><i class="fas fa-angle-double-left"> <span style=""> Back</span></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="fa-pull-right" style="display:none">
+            <input type="button" value="Assign All" class="btn btn-success btn-sm" onclick="Assaign()" /><br /><br />
+        </div>
+        <div id="flip" style="display:none">Click to slide the panel down or up</div>
+        <div id="panel">
+            <br />
+            <div class="row">
+                <div class="col-md-6">
+                    <span class="col-md-2">Search by Code </span>&nbsp;&nbsp;
+                    <input id="myInput" style="margin-left:65px;" class="fortextbox" type="text" placeholder="Search.." />
+                </div>
+                <div class="col-md-6">
+                    <span class="col-md-2">Search by Recommendator Code </span>&nbsp;&nbsp;
+                    <input id="myrecommendator" class="fortextbox" type="text" placeholder="Search.." />
+                </div>
+
+
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-6">
+                    <span class="col-md-2">Search by Signatory Code </span>&nbsp;&nbsp;
+                    <input id="mysignatory" class="fortextbox" type="text" placeholder="Search.." />
+                </div>
+                <div class="col-md-6">
+                    <span class="col-md-2">Search by Final Signatory Code </span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input id="myfinal" class="fortextbox" type="text" placeholder="Search.." />
+                </div>
+
+
+            </div>
+
+            <br /><br /><br />
+
+            <form id="tblAcr">
+                <table class="table table-bordered table-striped" id="AssignTbl">
+                    <thead>
+                        <tr>
+                            <th>Emp Code</th>
+                            <th>Emp Name</th>
+                            <th>Year</th>
+                            <th>ACR Type</th>
+                            <th>Emp Type</th>
+                            <th>Assessment No</th>
+                            <th>Recomendator</th>
+                            <th>Signatory</th>
+                            <th>Final Signatory</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model.assessments)
+                        {
+                            @if (item.acrType == "Yearly" && item.empType == "Officer" && item.designationCode != "10") //SO to AGM (Yearly)
+                            {
+                                <tr id="tr_@item.assessmentId">
+                                    <td>
+                                        @item?.empCode
+                                        <input type="hidden" name="assId" value="@item.assessmentId" />
+                                    </td>
+                                    <td>@item?.empName</td>
+                                    <td>@item?.assessmentYear</td>
+                                    <td>@item?.acrType</td>
+                                    <td>@item?.empType</td>
+                                    <td>@item?.assessmentNo</td>
+                                    <td>
+
+                                        @if (item.recommendator == null)
+                                        {
+                                            <select class="form-control recommendator" style="text-transform: uppercase;">
+                                                <option value="" selected>Select</option>
+                                                <option value="2567">2567-Dr.Syed Mohammad Moazzam Hossain</option>
+                                                @foreach (var data in Model.AllEmployees.OrderBy(x => Convert.ToInt32(x.employeeCode)))
+                                                {
+                                                    <option value="@data.employeeCode">@data.employeeCode-@data.nameEnglish</option>
+                                                }
+                                            </select>
+                                        }
+                                        else
+                                        {
+                                            @*<option value="@item.recommendator">@item.recommendator-@item.recommendatorName</option>*@
+                                            <span class="spnRecommendator">@item.recommendator-@item.recommendatorName</span>
+                                        }
+
+
+
+                                    </td>
+                                    <td>
+
+                                        @if (item.signatory == null)
+                                        {
+                                        <select class="form-control signatory" name="signatory" style="text-transform: uppercase;">
+                                            <option value="" selected>Select</option>
+                                            <option value="2567">2567-Dr.Syed Mohammad Moazzam Hossain</option>
+                                            @foreach (var data in Model.AllEmployees.OrderBy(x => Convert.ToInt32(x.employeeCode)))
+                                            {
+                                                <option value="@data.employeeCode">@data.employeeCode-@data.nameEnglish</option>
+                                            }
+                                        </select>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.signatory-@item.signatoryName</span>
+                                            @*<option value="@item.signatory">@item.signatory-@item.signatoryName</option>*@
+                                        }
+
+                                    </td>
+                                    <td>
+                                        @if (item.signatory2 == null)
+                                        {
+                                        <select class="form-control signatory2" name="signatory2" style="text-transform: uppercase;">
+
+                                            <option value="2567">2567-Dr.Syed Mohammad Moazzam Hossain</option>
+                                            <option value="2666">2666-Kazi Alamgir</option>
+                                            @*@foreach (var data in Model.AllEmployees.OrderBy(x => Convert.ToInt32(x.employeeCode)).Where(x => x.employeeCode == "2666"))*@
+                                            @foreach (var data in Model.AllEmployees.OrderBy(x => Convert.ToInt32(x.employeeCode)).Where(x => x.lastDesignationId == 270 || x.lastDesignationId == 262))
+                                            {
+                                                <option value="@data.employeeCode">@data.employeeCode-@data.nameEnglish</option>
+                                            }
+                                        </select>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.signatory2-@item.signatory2Name</span>
+                                            @*<option value="@item.signatory2">@item.signatory2-@item.signatory2Name</option>*@
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.statusInfoId == 7)
+                                        {
+                                            <a href="/HRPMSACR/HtmlReport/AcrReportOfficerPdf?assessmentId=@item.assessmentId" target="_blank" class="btn btn-success btn-sm"><i class="fas fa-file"></i> Report</a>
+                                        }
+                                        else if (item.recommendator != null || item.signatory != null)
+                                        {
+                                            <a href="javascript:void(0)" class="btn btn-success btn-sm"><i class="fas fa-check"></i> Assigned</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="javascript:void(0)" class="btn btn-info btn-sm" onclick="AssaignSingle(@item.assessmentId)"><i class="fas fa-check"></i> Assign</a>
+                                            <a href="javascript:void(0)" class="btn btn-danger btn-sm" onclick="Assaigncancel(@item.assessmentId)">Cancel</a>
+
+                                            @if (@item.empType == "Top")
+                                            {
+                                                <a href="javascript:void(0)" class="btn btn-secondary btn-sm" onclick="AcrPreviewExecutiveOfficer(@item.assessmentId , @item.empCode)">Preview</a>
+
+                                            }
+                                            else if (@item.empType == "Officer")
+                                            {
+                                                <a href="javascript:void(0)" class="btn btn-secondary btn-sm" onclick="AcrPreview(@item.assessmentId , @item.empCode)">Preview</a>
+                                                <a href="javascript:void(0)" class="btn btn-secondary btn-sm" onclick="AcrPreviewPrevReport(@item.assessmentId , @item.empCode)">PDF</a>
+
+                                            }
+                                            else if (@item.empType == "Clerk")
+                                            {
+
+                                            }
+                                            else if (@item.empType == "NonClerk")
+                                            {
+
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            else if (item.acrType == "Yearly" && item.empType == "Officer" && item.designationCode == "10") //Officer (Yearly)
+                            {
+                                <tr id="tr_@item.assessmentId">
+                                    <td>
+                                        @item?.empCode
+                                        <input type="hidden" name="assId" value="@item.assessmentId" />
+                                    </td>
+                                    <td>@item?.empName</td>
+                                    <td>@item?.assessmentYear</td>
+                                    <td>@item?.acrType</td>
+                                    <td>@item?.empType</td>
+                                    <td>@item?.assessmentNo</td>
+                                    <td>
+
+                                        @if (item.recommendator == null)
+                                        {
+                                            <select class="form-control recommendator" style="text-transform: uppercase;">
+                                                <option value="" selected>Select</option>
+                                                <option value="2567">2567-Dr.Syed Mohammad Moazzam Hossain</option>
+                                                @foreach (var data in Model.AllEmployees.OrderBy(x => Convert.ToInt32(x.employeeCode)))
+                                                {
+                                                    <option value="@data.employeeCode">@data.employeeCode-@data.nameEnglish</option>
+                                                }
+                                            </select>
+                                        }
+                                        else
+                                        {
+                                            @*<option value="@item.recommendator">@item.recommendator-@item.recommendatorName</option>*@
+                                            <span class="spnRecommendator">@item.recommendator-@item.recommendatorName</span>
+                                        }
+
+                                    </td>
+                                    <td>
+
+                                        @if (item.signatory == null)
+                                        {
+                                        <select class="form-control signatory" name="signatory" style="text-transform: uppercase;">
+                                            <option value="" selected>Select</option>
+                                            <option value="2567">2567-Dr.Syed Mohammad Moazzam Hossain</option>
+                                            @foreach (var data in Model.AllEmployees.OrderBy(x => Convert.ToInt32(x.employeeCode)))
+                                            {
+                                                <option value="@data.employeeCode">@data.employeeCode-@data.nameEnglish</option>
+                                            }
+                                        </select>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.signatory-@item.signatoryName</span>
+                                            @*<option value="@item.signatory">@item.signatory-@item.signatoryName</option>*@
+                                        }
+
+                                    </td>
+                                    <td>
+
+
+
+
+
+                                        @if (item.signatory2 == null)
+                                        {
+                                        <select class="form-control signatory2" name="signatory2" style="text-transform: uppercase;">
+                                            <option value="" selected>Select</option>
+                                            <option value="2567">2567-Dr.Syed Mohammad Moazzam Hossain</option>
+                                            <option value="2666">2666-Kazi Alamgir</option>
+                                            @foreach (var data in Model.AllEmployees.OrderBy(x => Convert.ToInt32(x.employeeCode)))
+                                            {
+                                                <option value="@data.employeeCode">@data.employeeCode-@data.nameEnglish</option>
+                                            }
+                                        </select>
+                                        }
+                                        else
+                                        {
+                                            @*<option value="@item.signatory2">@item.signatory2-@item.signatory2Name</option>*@
+                                            <span>@item.signatory2-@item.signatory2Name</span>
+                                        }
+
+                                    </td>
+                                    <td>
+                                        @if (item.statusInfoId == 7)
+                                        {
+                                            <a href="/HRPMSACR/HtmlReport/AcrReportOfficerPdf?assessmentId=@item.assessmentId" target="_blank" class="btn btn-success btn-sm"><i class="fas fa-file"></i> Report</a>
+                                        }
+                                        else if (item.recommendator != null || item.signatory != null)
+                                        {
+                                            <a href="javascript:void(0)" class="btn btn-success btn-sm"><i class="fas fa-check"></i>Assigned</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="javascript:void(0)" class="btn btn-info btn-sm" onclick="AssaignSingle(@item.assessmentId)"><i class="fas fa-check"></i> Assign</a>
+                                            <a href="javascript:void(0)" class="btn btn-danger btn-sm" onclick="Assaigncancel(@item.assessmentId)">Cancel</a>
+
+                                            @if (@item.empType == "Top")
+                                            {
+                                                <a href="javascript:void(0)" class="btn btn-secondary btn-sm" onclick="AcrPreviewExecutiveOfficer(@item.assessmentId , @item.empCode)">Preview</a>
+
+                                            }
+                                            else if (@item.empType == "Officer")
+                                            {
+                                                <a href="javascript:void(0)" class="btn btn-secondary btn-sm" onclick="AcrPreview(@item.assessmentId , @item.empCode)">Preview</a>
+                                                <a href="javascript:void(0)" class="btn btn-secondary btn-sm" onclick="AcrPreviewPrevReport(@item.assessmentId , @item.empCode)">PDF</a>
+
+                                            }
+                                            else if (@item.empType == "Clerk")
+                                            {
+
+                                            }
+                                            else if (@item.empType == "NonClerk")
+                                            {
+
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            else if (item.acrType == "Yearly" && item.empType == "Top") //DGM to Above (Yearly)
+                            {
+                                <tr id="tr_@item.assessmentId">
+                                    <td>
+                                        @item?.empCode
+                                        <input type="hidden" name="assId" value="@item.assessmentId" />
+                                    </td>
+                                    <td>@item?.empName</td>
+                                    <td>@item?.assessmentYear</td>
+                                    <td>@item?.acrType</td>
+                                    <td>@item?.empType</td>
+                                    <td>@item?.assessmentNo</td>
+                                    <td>
+
+                                        @if (item.recommendator == null)
+                                        {<select class="form-control recommendator" style="text-transform: uppercase;">
+                                                <option value="" selected>Select</option>
+                                                <option value="2567">2567-Dr.Syed Mohammad Moazzam Hossain</option>
+                                                @foreach (var data in Model.AllEmployees.OrderBy(x => Convert.ToInt32(x.employeeCode)))
+                                                {
+                                                    <option value="@data.employeeCode">@data.employeeCode-@data.nameEnglish</option>
+                                                }
+                                            </select>
+                                        }
+                                        else
+                                        {
+                                            @*<option value="@item.recommendator">@item.recommendator-@item.recommendatorName</option>*@
+                                            <span class="spnRecommendator">@item.recommendator-@item.recommendatorName</span>
+                                        }
+
+                                    </td>
+                                    <td></td>
+                                    <td>
+                                        @if (item.signatory2 == null)
+                                        {
+                                        <select class="form-control signatory2" style="text-transform: uppercase;">
+                                            <option value="2567">2567-Dr.Syed Mohammad Moazzam Hossain</option>
+                                            <option value="2666">2666-Kazi Alamgir</option>
+                                            @foreach (var data in Model.AllEmployees.OrderBy(x => Convert.ToInt32(x.employeeCode)).Where(x => x.employeeCode == "2666"))
+                                            {
+
+                                                <option value="@data.employeeCode">@data.employeeCode-@data.nameEnglish</option>
+                                            }
+                                        </select>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.signatory2-@item.signatory2Name</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.statusInfoId == 7)
+                                        {
+                                            <a href="/HRPMSACR/HtmlReport/AcrReportExcecutivePdf?assessmentId=@item.assessmentId" target="_blank" class="btn btn-success btn-sm"><i class="fas fa-file"></i> Report</a>
+                                        }
+                                        else if (item.recommendator != null || item.signatory != null)
+                                        {
+                                            <a href="javascript:void(0)" class="btn btn-success btn-sm"><i class="fas fa-check"></i>Assigned</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="javascript:void(0)" class="btn btn-info btn-sm" onclick="AssaignSingle(@item.assessmentId)"><i class="fas fa-check"></i> Assign</a>
+                                            <a href="javascript:void(0)" class="btn btn-danger btn-sm" onclick="Assaigncancel(@item.assessmentId)">Cancel</a>
+
+                                            @if (@item.empType == "Top")
+                                            {
+                                                <a href="javascript:void(0)" class="btn btn-secondary btn-sm" onclick="AcrPreviewExecutiveOfficer(@item.assessmentId , @item.empCode)">Preview</a>
+
+                                            }
+                                            else if (@item.empType == "Officer")
+                                            {
+                                                <a href="javascript:void(0)" class="btn btn-secondary btn-sm" onclick="AcrPreview(@item.assessmentId , @item.empCode)">Preview</a>
+                                                <a href="javascript:void(0)" class="btn btn-secondary btn-sm" onclick="AcrPreviewPrevReport(@item.assessmentId , @item.empCode)">PDF</a>
+
+                                            }
+                                            else if (@item.empType == "Clerk")
+                                            {
+
+                                            }
+                                            else if (@item.empType == "NonClerk")
+                                            {
+
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            else if (item.acrType == "Yearly" && item.empType == "Clerk") //Staff (Yearly)
+                            {
+                                <tr id="tr_@item.assessmentId">
+                                    <td>
+                                        @item?.empCode
+                                        <input type="hidden" name="assId" value="@item.assessmentId" />
+                                    </td>
+                                    <td>@item?.empName</td>
+                                    <td>@item?.assessmentYear</td>
+                                    <td>@item?.acrType</td>
+                                    <td>@item?.empType</td>
+                                    <td>@item?.assessmentNo</td>
+                                    <td>
+
+                                        @if (item.recommendator == null)
+                                        {
+                                            <select class="form-control recommendator" style="text-transform: uppercase;">
+                                                <option value="" selected>Select</option>
+                                                <option value="2567">2567-Dr.Syed Mohammad Moazzam Hossain</option>
+                                                @foreach (var data in Model.AllEmployees.OrderBy(x => Convert.ToInt32(x.employeeCode)))
+                                                {
+                                                    <option value="@data.employeeCode">@data.employeeCode-@data.nameEnglish</option>
+                                                }
+                                            </select>
+                                        }
+                                        else
+                                        {
+                                            <span class="spnRecommendator">@item.recommendator-@item.recommendatorName</span>
+                                            @*<option value="@item.recommendator">@item.recommendator-@item.recommendatorName</option>*@
+                                        }
+
+                                    </td>
+                                    <td>
+
+                                        @if (item.signatory == null)
+                                        {
+                                        <select class="form-control signatory" name="signatory" style="text-transform: uppercase;">
+                                            <option value="" selected>Select</option>
+                                            <option value="2567">2567-Dr.Syed Mohammad Moazzam Hossain</option>
+                                            @foreach (var data in Model.AllEmployees.OrderBy(x => Convert.ToInt32(x.employeeCode)))
+                                            {
+                                                <option value="@data.employeeCode">@data.employeeCode-@data.nameEnglish</option>
+                                            }
+                                        </select>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.signatory-@item.signatoryName</span>
+                                            @*<option value="@item.signatory">@item.signatory-@item.signatoryName</option>*@
+                                        }
+
+                                    </td>
+                                    <td>
+                                        <select class="form-control signatory2" name="signatory2" style="text-transform: uppercase;">
+                                            @if (item.signatory2 == null)
+                                            {
+                                                <option value="" selected>Select</option>
+                                                <option value="2567">2567-Dr.Syed Mohammad Moazzam Hossain</option>
+                                                <option value="2666">2666-Kazi Alamgir</option>
+                                                @foreach (var data in Model.AllEmployees.OrderBy(x => Convert.ToInt32(x.employeeCode)))
+                                                {
+                                                    <option value="@data.employeeCode">@data.employeeCode-@data.nameEnglish</option>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.signatory2">@item.signatory2-@item.signatory2Name</option>
+                                            }
+                                        </select>
+                                    </td>
+                                    <td>
+                                        @if (item.statusInfoId == 7)
+                                        {
+                                            <a href="/HRPMSACR/HtmlReport/AcrReportClericalPdf?assessmentId=@item.assessmentId" target="_blank" class="btn btn-success btn-sm"><i class="fas fa-file"></i> Report</a>
+                                        }
+                                        else if (item.recommendator != null || item.signatory != null)
+                                        {
+                                            <a href="javascript:void(0)" class="btn btn-success btn-sm"><i class="fas fa-check"></i>Assigned</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="javascript:void(0)" class="btn btn-info btn-sm" onclick="AssaignSingle(@item.assessmentId)"><i class="fas fa-check"></i> Assign</a>
+
+                                            <a href="javascript:void(0)" class="btn btn-danger btn-sm" onclick="Assaigncancel(@item.assessmentId)">Cancel</a>
+
+                                            @if (@item.empType == "Top")
+                                            {
+                                                <a href="javascript:void(0)" class="btn btn-secondary btn-sm" onclick="AcrPreviewExecutiveOfficer(@item.assessmentId , @item.empCode)">Preview</a>
+
+                                            }
+                                            else if (@item.empType == "Officer")
+                                            {
+                                                <a href="javascript:void(0)" class="btn btn-secondary btn-sm" onclick="AcrPreview(@item.assessmentId , @item.empCode)">Preview</a>
+                                                <a href="javascript:void(0)" class="btn btn-secondary btn-sm" onclick="AcrPreviewPrevReport(@item.assessmentId , @item.empCode)">PDF</a>
+
+                                            }
+                                            else if (@item.empType == "Clerk")
+                                            {
+
+                                            }
+                                            else if (@item.empType == "NonClerk")
+                                            {
+
+                                            }
+
+                                        }
+
+
+                                    </td>
+                                </tr>
+                            }
+                            else if (item.acrType != "Yearly")
+                            {
+                                var className = "";
+                                if (item.empType == "Officer" && item.designationCode != "10")
+                                {
+                                    className = "info";
+                                }
+                                else if (item.empType == "Officer" && item.designationCode == "10")
+                                {
+                                    className = "success";
+                                }
+                                else if (item.empType == "Top")
+                                {
+                                    className = "danger";
+                                }
+                                else if (item.empType == "Clerk")
+                                {
+                                    className = "warning";
+                                }
+                                else
+                                {
+                                    className = "default";
+                                }
+
+                                <tr id="tr_@item.assessmentId">
+                                    <td>
+                                        @item?.empCode
+                                        <input type="hidden" name="assId" value="@item.assessmentId" />
+                                    </td>
+                                    <td>@item?.empName</td>
+                                    <td>@item?.assessmentYear</td>
+                                    <td>@item?.acrType</td>
+                                    <td>@item?.empType</td>
+                                    <td>@item?.assessmentNo</td>
+                                    <td>
+
+                                        @if (item.recommendator == null)
+                                        {<select class="form-control recommendator" style="text-transform: uppercase;">
+                                                <option value="" selected>Select</option>
+                                                <option value="2567">2567-Dr.Syed Mohammad Moazzam Hossain</option>
+                                                @foreach (var data in Model.AllEmployees.OrderBy(x => Convert.ToInt32(x.employeeCode)))
+                                                {
+                                                    <option value="@data.employeeCode">@data.employeeCode-@data.nameEnglish</option>
+                                                }
+                                            </select>
+                                        }
+                                        else
+                                        {
+                                            <span class="spnRecommendator">@item.recommendator-@item.recommendatorName</span>
+                                            @*<option value="@item.recommendator">@item.recommendator-@item.recommendatorName</option>*@
+                                        }
+
+                                    </td>
+                                    <td>
+
+                                        @if (item.signatory == null)
+                                        {
+                                        <select class="form-control signatory" name="signatory" style="text-transform: uppercase;">
+                                            <option value="" selected>Select</option>
+                                            <option value="2567">2567-Dr.Syed Mohammad Moazzam Hossain</option>
+                                            @foreach (var data in Model.AllEmployees.OrderBy(x => Convert.ToInt32(x.employeeCode)))
+                                            {
+                                                <option value="@data.employeeCode">@data.employeeCode-@data.nameEnglish</option>
+                                            }
+                                        </select>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.signatory-@item.signatoryName</span>
+                                            @*<option value="@item.signatory">@item.signatory-@item.signatoryName</option>*@
+                                        }
+
+                                    </td>
+                                    <td>
+
+                                        @if (item.signatory2 == null)
+                                        {
+                                        <select class="form-control signatory2" name="signatory2" style="text-transform: uppercase;">
+                                            <option value="" selected>Select</option>
+                                            <option value="2567">2567-Dr.Syed Mohammad Moazzam Hossain</option>
+                                            <option value="2666">2666-Kazi Alamgir</option>
+                                            @foreach (var data in Model.AllEmployees.OrderBy(x => Convert.ToInt32(x.employeeCode)))
+                                            {
+                                                <option value="@data.employeeCode">@data.employeeCode-@data.nameEnglish</option>
+                                            }
+                                        </select>
+                                        }
+                                        else
+                                        {
+                                            @foreach (var data in Model.AllEmployees.OrderBy(x => Convert.ToInt32(x.employeeCode)).Where(x => x.employeeCode == item.signatory2))
+                                            {
+                                                @*<option value="@data.employeeCode">@data.employeeCode-@data.nameEnglish</option>*@
+                                                <span>@data.employeeCode-@data.nameEnglish</span>
+                                            }
+                                        }
+
+                                    </td>
+                                    <td>
+                                        @if (item.statusInfoId == 7)
+                                        {
+                                            if (item.empType == "Officer" && item.designationCode != "10")
+                                            {
+                                                <a href="/HRPMSACR/HtmlReport/AcrReportOfficerPdf?assessmentId=@item.assessmentId" target="_blank" class="btn btn-success btn-sm"><i class="fas fa-file"></i> Report</a>
+                                            }
+                                            if (item.empType == "Officer" && item.designationCode == "10")
+                                            {
+                                                <a href="/HRPMSACR/HtmlReport/AcrReportOfficerPdf?assessmentId=@item.assessmentId" target="_blank" class="btn btn-success btn-sm"><i class="fas fa-file"></i> Report</a>
+                                            }
+                                            if (item.empType == "Top")
+                                            {
+                                                <a href="/HRPMSACR/HtmlReport/AcrReportExcecutivePdf?assessmentId=@item.assessmentId" target="_blank" class="btn btn-success btn-sm"><i class="fas fa-file"></i> Report</a>
+                                            }
+                                            if (item.empType == "Clerk")
+                                            {
+                                                <a href="/HRPMSACR/HtmlReport/AcrReportClericalPdf?assessmentId=@item.assessmentId" target="_blank" class="btn btn-success btn-sm"><i class="fas fa-file"></i> Report</a>
+                                            }
+                                        }
+                                        @*else if (item.recommendator == null || item.signatory == null)
+                                            {
+                                                <a href="javascript:void(0)" class="btn btn-warning btn-sm"><i class="fas fa-check"></i>Not Assigned</a>
+                                            }*@
+                                        else if (item.recommendator != null || item.signatory != null)
+                                        {
+                                            <a href="javascript:void(0)" class="btn btn-success btn-sm"><i class="fas fa-check"> </i>Assigned</a>
+
+                                        }
+                                        else
+                                        {
+                                            <a href="javascript:void(0)" class="btn btn-info btn-sm" onclick="AssaignSingle(@item.assessmentId)"><i class="fas fa-check"></i> Assign</a>
+                                            <a href="javascript:void(0)" class="btn btn-danger btn-sm" onclick="Assaigncancel(@item.assessmentId)">Cancel</a>
+
+                                            @if (@item.empType == "Top")
+                                            {
+                                                <a href="javascript:void(0)" class="btn btn-secondary btn-sm" onclick="AcrPreviewExecutiveOfficer(@item.assessmentId , @item.empCode)">Preview</a>
+
+                                            }
+                                            else if (@item.empType == "Officer")
+                                            {
+                                                <a href="javascript:void(0)" class="btn btn-secondary btn-sm" onclick="AcrPreview(@item.assessmentId , @item.empCode)">Preview</a>
+                                                <a href="javascript:void(0)" class="btn btn-secondary btn-sm" onclick="AcrPreviewPrevReport(@item.assessmentId , @item.empCode)">PDF</a>
+
+                                            }
+                                            else if (@item.empType == "Clerk")
+                                            {
+
+                                            }
+                                            else if (@item.empType == "NonClerk")
+                                            {
+
+                                            }
+
+                                        }
+
+                                        @*<a href="javascript:void(0)" class="btn btn-warning btn-sm" onclick="ChangeSignatory(@item.assessmentId)">Signatory</a>*@
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+
+                            }
+                        }
+
+                    </tbody>
+                </table>
+
+
+                <table class="table table-bordered table-striped d-none">
+                    <thead>
+                        <tr>
+                            <th>Emp Code</th>
+                            <th>Emp Name</th>
+                            <th>Year</th>
+                            <th>Assessment No</th>
+                            <th>Recomendator</th>
+                            <th>Signatory</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model.assessments)
+                        {
+                            <tr id="tr_@item.assessmentId">
+                                <td>
+                                    @item?.empCode
+                                    <input type="hidden" name="assId" value="@item.assessmentId" />
+                                </td>
+                                <td>@item?.empName</td>
+                                <td>@item?.assessmentYear</td>
+                                <td>@item?.assessmentNo</td>
+                                <td>
+                                    <select class="form-control recommendator" style="text-transform: uppercase;">
+                                        @if (item.recommendator == null)
+                                        {
+                                            <option value="" selected>Select</option>
+                                            @foreach (var data in Model.AllEmployees.OrderBy(x => Convert.ToInt32(x.employeeCode)))
+                                            {
+                                                <option value="@data.employeeCode">@data.employeeCode-@data.nameEnglish</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.recommendator">@item.recommendator-@item.recommendatorName</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="form-control signatory" name="signatory" style="text-transform: uppercase;">
+                                        @if (item.signatory == null)
+                                        {
+                                            <option value="" selected>Select</option>
+                                            @foreach (var data in Model.AllEmployees.OrderBy(x => Convert.ToInt32(x.employeeCode)))
+                                            {
+                                                <option value="@data.employeeCode">@data.employeeCode-@data.nameEnglish</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.signatory">@item.signatory-@item.signatoryName</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td>
+                                    @if (item.recommendator != null && item.statusInfoId == 4)
+                                    {
+                                        <span class="badge badge-primary">Recommendator <a href="javascript:void(0)" onclick="AssaignSingle(@item.assessmentId)" class="btn btn-outline-warning btn-sm"><i class="fas fa-check"></i></a></span>
+                                    }
+                                    else if (item.routeOrder == 2 && item.signatory != null && item.statusInfoId == 6)
+                                    {
+                                        <a href="javascript:void(0)" class="btn btn-success btn-sm">Signatory Assigned</a>
+                                    }
+                                    else if (item.routeOrder == 2 && item.recommendator != null && item.signatory != null && item.statusInfoId == 5)
+                                    {
+                                        <a href="javascript:void(0)" class="btn btn-danger btn-sm">Signatory Assigned</a>
+                                    }
+                                    else if (item.recommendator != null && item.signatory != null && item.statusInfoId == 7)
+                                    {
+                                        <span class="badge badge-success">
+                                            ACR Completed
+                                            @if (item.empType == "Officer")
+                                            {
+                                                <a href="/HRPMSACR/HtmlReport/AcrReportOfficerPdf?assessmentId=@item.assessmentId" class="btn btn-outline-danger btn-sm"><i class="fas fa-print"></i></a>
+                                            }
+                                            @if (item.empType == "Top")
+                                            {
+                                                <a href="/HRPMSACR/HtmlReport/AcrReportExcecutivePdf?assessmentId=@item.assessmentId" class="btn btn-outline-danger btn-sm"><i class="fas fa-print"></i></a>
+                                            }
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <a href="javascript:void(0)" class="btn btn-info btn-sm" onclick="AssaignSingle(@item.assessmentId)"><i class="fas fa-check"></i> Assign</a>
+                                        @*@if (item.empType == "Officer")
+                                            {
+                                                <a href="/HRPMSACR/Officer?id=@item.assessmentId&empCode=@item.empCode" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
+                                            }
+                                            @if (item.empType == "Top")
+                                            {
+                                                <a href="/HRPMSACR/ExecutiveOfficer?id=@item.assessmentId&empCode=@item.empCode" class="btn btn-success btn-sm"><i class="fas fa-eye"></i></a>
+                                            }*@
+                                    }
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Change Signatory</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label class="col-md-4">Signatory Id</label>
+                        <div class="col-md-8">
+                            <input type="hidden" name="assessmentId" id="newAssessmentId" value="" />
+                            <input type="text" class="form-control" name="newSignatory" id="newSignatory" value="" placeholder="Type Signatory Id + Enter" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-4">Name</label>
+                        <div class="col-md-8">
+                            <input type="text" readonly class="form-control" name="newSignatoryName" id="newSignatoryName" value="" placeholder="" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-4">Designation</label>
+                        <div class="col-md-8">
+                            <input type="text" readonly class="form-control" name="newSignatoryDesig" id="newSignatoryDesig" value="" placeholder="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success btn-sm" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info btn-sm" onclick="SaveNewSignatory()">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts{
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+
+                //$('#AssignTbl').DataTable().destroy();
+                //$('#AssignTbl').DataTable({ });
+
+
+
+                $("#flip").click(function () {
+                    $("#panel").slideToggle("slow");
+                });
+
+                $("#flip1").click(function () {
+                    $("#panel1").slideToggle("slow");
+                });
+
+                $('#newSignatory').keypress(function (e) {
+                    if (e.which == 13) {
+                        var signatoryId = $('#newSignatory').val();
+
+                        Common.Ajax('GET', '/Auth/Account/GetEmployeeInfoByCode?code=' + signatoryId, [], 'json', ajaxGetEmployeeInfoByCode, false);
+                    }
+                });
+
+                //Filter table
+                $("#myInput").on("keyup", function () {
+                    var value = $(this).val().toLowerCase();
+                    $("#tblAcr tbody tr").filter(function () {
+                        //$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                        $(this).toggle($(this.children[0]).text().toLowerCase().indexOf(value) > -1)
+                        //$(this).toggle($(this.children[1]).text().toLowerCase().indexOf(value) > -1)
+                        //$(this).toggle($(this.children[2]).text().toLowerCase().indexOf(value) > -1)
+                        //$(this).toggle($(this.children[3]).text().toLowerCase().indexOf(value) > -1)
+                        //$(this).toggle($(this.children[4]).text().toLowerCase().indexOf(value) > -1)
+                        //$(this).toggle($(this.children[5]).text().toLowerCase().indexOf(value) > -1)
+                    });
+                });
+
+                $("#myrecommendator").on("keyup", function () {
+                    var value = $(this).val().toLowerCase();
+                    //
+                    $("#tblAcr tbody tr").filter(function () {
+                        $(this).toggle($(this.children[6]).find('span').text().toLowerCase().indexOf(value) > -1)
+
+                    });
+                });
+                $("#mysignatory").on("keyup", function () {
+                    var value = $(this).val().toLowerCase();
+
+                    $("#tblAcr tbody tr").filter(function () {
+                        $(this).toggle($(this.children[7]).find('span').text().toLowerCase().indexOf(value) > -1)
+
+                    });
+                });
+                $("#myfinal").on("keyup", function () {
+                    var value = $(this).val().toLowerCase();
+
+                    $("#tblAcr tbody tr").filter(function () {
+                        $(this).toggle($(this.children[8]).find('span').text().toLowerCase().indexOf(value) > -1)
+
+                    });
+                });
+            });
+
+            function ChangeSignatory(id) {
+                $('#newAssessmentId').val(id);
+                Common.Ajax('GET', '/HRPMSACR/AssessmentInfo/GetAssessmentById?assId=' + id, [], 'json', ajaxGetAssessmentById, false);
+
+                $('#exampleModalCenter').modal('show');
+            }
+            function AcrPreview(id, code) {
+                // window.location.href = '@Url.Action("AcrPreview", "Officer")?id=' + id + '&empCode=' + code + '';
+                window.open("/HRPMSACR/Officer/AcrPreview?id=" + id + '&empCode=' + code, '_blank');
+            }
+            function AcrPreviewPrevReport(id, code) {
+                window.open("/HRPMSACR/HtmlReport/AcrReportOfficerPdf?assessmentId=" + id, '_blank');
+            }
+            ///HRPMSACR/HtmlReport/AcrReportOfficerPdf?assessmentId=647
+
+            function AcrPreviewExecutiveOfficer(id, code) {
+                window.open("/HRPMSACR/ExecutiveOfficer/AcrPreviewExecutiveOfficer?id=" + id + '&empCode=' + code, '_blank');
+            }
+
+            function ajaxGetAssessmentById(res) {
+                console.log(res);
+                $('#newAssessmentId').val(res.Id);
+                $('#newSignatory').val(res.employeeCode);
+                $('#newSignatoryName').val(res.nameEnglisj);
+                $('#newSignatoryDesig').val(res.nameEnglisj);
+            }
+
+            function SaveNewSignatory() {
+                var assId = $('#assessmentId').val();
+                var newSignatory = $('#newSignatory').val();
+
+                Common.Ajax('GET', '/HRPMSACR/AssessmentInfo/UpdateSignatory?assId=' + assId + '&newSignatory=' + newSignatory, [], 'json', ajaxUpdateSignatory, false);
+            }
+
+            function ajaxUpdateSignatory(res)
+            {
+                if (res == 'saved') {
+                    swal('Success', 'Signatory Updated Successfully', 'success').then(function () {
+                        location.reload();
+                    })
+                }
+                else {
+                    swal('Warning', 'Signatory Update Failed', 'warning');
+                }
+            }
+
+            function ajaxGetEmployeeInfoByCode(res) {
+                if (res != null) {
+                    $('#newSignatoryName').val(res.nameEnglish);
+                    $('#newSignatoryDesig').val(res.designation);
+                }
+                else {
+                    swal('Warning', 'Invalid Id!');
+                }
+            }
+
+            function Assaign() {
+                var formData = $('#tblAcr').serialize();
+                $.ajax({
+                    url: '/HRPMSACR/AssessmentInfo/SaveAcrAssaign',
+                    type: 'POST',
+                    data: formData
+                }).done(function (res) {
+                    swal('', 'Assaigned Successfully!', 'success').then(function () {
+                        location.reload();
+                    });
+                }).fail(function () {
+                    swal('', 'Something Wrong!', 'warning');
+                })
+            }
+
+            function AssaignSingle(assId) {
+                var recom = $('#tr_' + assId + ' .recommendator').val();
+                var signatory = $('#tr_' + assId + ' .signatory').val();
+                var signatory2 = $('#tr_' + assId + ' .signatory2').val();
+
+                if (recom == '') {
+                    recom = null;
+                }
+                if (signatory == '') {
+                    signatory = null;
+                }
+                if (signatory2 == '') {
+                    signatory2 = null;
+                }
+
+                $.ajax({
+                    url: '/HRPMSACR/AssessmentInfo/SaveAcrAssaignSingle',
+                    type: 'POST',
+                    data: { assId: assId, recom: recom, signatory: signatory, signatory2: signatory2 }
+                }).done(function (res) {
+                    swal('Success', 'Assigned Successfully!', 'success').then(function () {
+                        location.reload();
+                    });
+                }).fail(function () {
+                    swal('', 'Something Wrong!', 'warning');
+                })
+            }
+
+
+            function Assaigncancel(assId) {
+
+
+                $.ajax({
+                    url: '/HRPMSACR/AssessmentInfo/SaveAcrAssaignCancel',
+                    type: 'POST',
+                    data: { assId: assId}
+                }).done(function (res) {
+                    if (res > 0) {
+                        swal('Success', 'Cancel Successfully!', 'success').then(function () {
+                            location.reload();
+                        });
+                    } else {
+                        swal('', 'Something Wrong!', 'warning');
+                    }
+
+                }).fail(function () {
+                    swal('', 'Something Wrong!', 'warning');
+                })
+            }
+        </script>
+    }

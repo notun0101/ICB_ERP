@@ -1,0 +1,585 @@
+﻿@model PayrollReportViewModel
+@{
+    ViewData["Title"] = "All TAX Report";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+<style>
+    .divstyle {
+        color: black;
+    }
+
+    .divstyleee {
+        text-align: center;
+        vertical-align: middle;
+        padding-top: 70px;
+    }
+
+    .spanStyle {
+        color: black;
+        font-size: small;
+        text-align: center;
+    }
+
+    .boldspanStyle {
+        color: black;
+        font-weight: bolder;
+        text-align: center;
+    }
+
+    .print-card-body {
+        width: 100%;
+        padding-bottom: 10px;
+    }
+
+    .vartical-table th {
+        width: 20%;
+        text-align: center;
+        vertical-align: top;
+    }
+
+    .table td, .table th {
+        padding: .4rem;
+        border: 1px solid black;
+        font-size: 11px;
+        font-size: 10px;
+    }
+
+    table {
+        page-break-inside: auto
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+        @foreach (var item in Model.indivisualEmpSalaryReportViewModels.Select(x => x.employeeCode).Distinct().ToList())
+        {
+
+            decimal grandIncome = 0;
+            decimal pfBankCont = 0;
+            decimal pfBank = 0;
+            decimal pfOwn = 0;
+            decimal grandBonus = 0;
+            decimal netIncome = 0;
+            decimal taxPaid = 0;
+            int cnt = @Model.indivisualEmpSalaryReportViewModels.Count();
+
+            decimal sumbasic = 0; decimal? sumhr = 0;decimal? sumbicycle = 0; decimal? summed = 0; decimal? sumda = 0; decimal? sumhh = 0; decimal? sumcook = 0; decimal? sumenter = 0;
+            decimal? sumcharge = 0; decimal? sumsump = 0; decimal? sumconv = 0; decimal? sumtel = 0; decimal? sumed = 0; decimal? sumar = 0; decimal? sumoa = 0;
+            decimal? summa = 0; decimal? sumtotpaid = 0; decimal sumgi = 0; decimal sumhbl = 0; decimal sumcar = 0; decimal sumcycle = 0; decimal sumcomp = 0;
+            decimal sumpf = 0; decimal? sumincometax = 0; decimal sumarded = 0; decimal sumuni = 0; decimal sumbf = 0; decimal sumpic = 0; decimal sumnews = 0; decimal sumoded = 0;
+            decimal sumrev = 0; decimal? sumtotded = 0; decimal? sumtotnet = 0; decimal? sumnewyear = 0; decimal? sumfitr = 0; decimal? sumadhha = 0; decimal? sumgrossbonus = 0;
+
+            <div class="print-card" style="width: 100%;">
+                <div class="print-card-body">
+                    <div class="container-fluid">
+                        <div style="width:100%;overflow:hidden;">
+
+                            <div style="width:10%;float:left;">
+                                <img src="/Assets/bdbl.png" alt="" style="height:50px;">
+                            </div>
+                            <div style="width:80%;float:left;">
+                                <h6 style="text-align:center;color:black; font-size: 25px;"><b>@Model.companies.FirstOrDefault()?.companyName</b></h6>
+
+
+                                <h6 style="text-align:center;color:black;">
+                                    Salary Statement for the period of @ViewBag.fDate?.ToString("dd-MMM-yyyy")
+                                    To
+                                    @ViewBag.tDate?.ToString("dd-MMM-yyyy")
+                                </h6>
+                            </div>
+                            <div style="width:15%;float:right;">
+                                <div class="fa-pull-right">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container" style="color: black !important; text-align: center;">
+                        <table class="table" style="display:none">
+                            <tr style="border: none;">
+                                <td style="border: none;">Name : @Model.employeeInfos.Where(x => x.employeeCode == item).Select(x => x.empName).FirstOrDefault() (@Model.employeeInfos.Where(x => x.employeeCode == item).Select(x => x.employeeCode).FirstOrDefault())</td>
+                                @*<td style="border: none;">@Model.employeeInfos.Where(x => x.employeeCode == item).Select(x => x.empName).FirstOrDefault()</td>*@
+                                <td style="border: none;">Designation : @Model.employeeInfos.Where(x => x.employeeCode == item).Select(x => x.designation).FirstOrDefault()</td>
+                                @*<td style="border: none;">@Model.employeeInfos.Where(x => x.employeeCode == item).Select(x => x.designation).FirstOrDefault()</td>*@
+                                <td style="border: none;">Posting Place : @Model.employeeInfos.Where(x => x.employeeCode == item).Select(x => x.posting).FirstOrDefault()</td>
+                                @*<td style="border: none;">@Model.employeeInfos.Where(x => x.employeeCode == item).Select(x => x.posting).FirstOrDefault()</td>*@
+                            </tr>
+                        </table>
+                        <span style="font-size:11px">Name : <label>@Model.employeeInfos.Where(x => x.employeeCode == item).Select(x => x.empName).FirstOrDefault() (@Model.employeeInfos.Where(x => x.employeeCode == item).Select(x => x.employeeCode).FirstOrDefault())</label> </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:11px">Designation : <label> @Model.employeeInfos.Where(x => x.employeeCode == item).Select(x => x.designation).FirstOrDefault()</label> </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:11px">Posting Place : <label>@Model.employeeInfos.Where(x => x.employeeCode == item).Select(x => x.posting).FirstOrDefault()</label>  </span>
+                    </div>
+
+
+
+                    <div class="container" style="color:black;">
+                        <div class="row" style="padding: 0px 16px 0px 16px;">
+                            <table class="table" id="tblTop">
+                                <tr>
+                                    <td style="opacity: 1;">Particulars</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        <td style="text-align: center;">@monthName</td>
+                                    }
+                                    <td style="text-align: center;">Total</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;" colspan="@(Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().Count() + 2)">
+                                        A. Salary & Allowance Paid
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Basic Paid</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumbasic += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => Convert.ToDecimal(x.Basic)).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode==item).Select(x => x.Basic).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumbasic.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>House Rent</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumhr += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.HouseRent).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.HouseRent).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumhr?.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Medical</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        summed += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.Medical).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.Medical).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@summed?.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Dearness Allowance</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumda += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.Dearness).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.Dearness).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumda?.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>House Hold</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumhh += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.HouseHold).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.HouseHold).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumhh?.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Cook/Mali</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumcook += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.Cook).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.Cook).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumcook?.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Entertainment/Wash</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumenter += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.Entertainment).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.Entertainment).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumenter?.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Charge</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumcharge += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.Charge).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.Charge).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumcharge?.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Sumptuary</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumsump += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.Sumptuary).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.Sumptuary).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumsump?.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Conveyance/Transport</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumconv += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.Conveyance).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.Conveyance).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumconv?.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Telephone</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumtel += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.MobileAllowance).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.MobileAllowance).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumtel?.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Education</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumed += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.Education).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.Education).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumed?.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Arrear</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumar += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.ArrearAddition).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.ArrearAddition).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumar?.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Other Allowance</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumoa += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.OtherAllowance).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.OtherAllowance).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumoa?.ToString("N2")</td>
+                                </tr>
+                                <tr style="display:none">
+                                    <td>Misc Allowance</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        summa += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.Misc).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.Misc).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@summa?.ToString("N2")</td>
+                                </tr>
+                                <tr style="display:none">
+                                    <td>Bank Contribution To Pension Fund</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        pfBank += Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item && x.periodName == monthName).Select(x => Convert.ToDecimal(x.PensionFundBank)).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item && x.periodName == monthName).Select(x => x.PensionFundBank).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                </tr>
+                                <tr style="display:none">
+                                    <td>Bank Cont. To Gratuity Fund</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item && x.periodName == monthName).Select(x => x.GratuityFundBank).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                </tr>
+                                <tr style="display:none">
+                                    <td>Bank Contribution to Provident Fund</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        pfBankCont += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => Convert.ToDecimal(x.PfBankCont)).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.PfBankCont).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                </tr>
+                                <tr style="font-weight: bold;">
+                                    <td>Total Paid By Bank</td>
+                                    @*@foreach (var monthName in Model.salaryPeriods.Select(x => x.monthName).Distinct().ToList())*@
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumtotpaid += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => Convert.ToDecimal(x.GROSSWPF)).FirstOrDefault();
+                                        <td style="text-align: right;">
+                                            @Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item && x.periodName == monthName).Select(x => x.GROSSWPF).Sum()?.ToString("N2")
+                                        </td>
+                                    }
+                                    <td style="text-align: right;">@sumtotpaid?.ToString("N2")</td>
+                                </tr>
+
+
+
+
+
+                                <tr>
+                                    <td style="font-weight: bold;" colspan="@(Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().Count() + 2)">
+                                        B. Deduction
+                                    </td>
+                                </tr>
+                                <tr style="display:none">
+                                    <td>Bank Contribution to Provident Fund</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.PfBankCont).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                </tr>
+                                <tr>
+                                    <td>Provident Fund</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        pfOwn += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => Convert.ToDecimal(x.PFSubscription)).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.PFSubscription).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@pfOwn.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Group Insurance</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumgi += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => Convert.ToDecimal(x.GroupInsurance)).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.GroupInsurance).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumgi.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>House Building Loan</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumhbl += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => Convert.ToDecimal(x.HouseBuilding)).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.HouseBuilding).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumhbl.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Motor Car Loan</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumcar += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => Convert.ToDecimal(x.MotorCar)).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.MotorCar).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumcar.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Motor Cycle Loan</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumcycle += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => Convert.ToDecimal(x.MotorCycle)).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.MotorCycle).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumcycle.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Bicycle Advance</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumbicycle += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => Convert.ToDecimal(x.BicycleAdvance)).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.BicycleAdvance).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumbicycle?.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Computer Loan</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumcomp += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => Convert.ToDecimal(x.ComputerLoan)).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.ComputerLoan).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumcomp.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>PF Loan</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumpf += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => Convert.ToDecimal(x.PFAdvance)).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.PFAdvance).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumpf.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Income Tax</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        taxPaid += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => Convert.ToDecimal(x.IncomeTax)).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.IncomeTax).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@taxPaid.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Arrear Deduction</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumarded += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => Convert.ToDecimal(x.ArrearDeduction)).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.ArrearDeduction).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumarded.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Tele/Off Ass/Union Sub</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumuni += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => Convert.ToDecimal(x.UnionSubscription)).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.UnionSubscription).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumuni.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Benevolent Fund</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumbf += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => Convert.ToDecimal(x.Benevolent)).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.Benevolent).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumbf.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Pic Drop/Bus</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumpic += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => Convert.ToDecimal(x.BusFare)).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.BusFare).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumpic.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Newspaper</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumnews += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => Convert.ToDecimal(x.Newspaper)).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.Newspaper).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumnews.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Other Deduction</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumoded += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => Convert.ToDecimal(x.OtherDed)).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.OtherDed).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumoded.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Revenue Stamp</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumrev += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => Convert.ToDecimal(x.RevenueStamp)).FirstOrDefault();
+                                        <td style="text-align: right;">@Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.RevenueStamp).FirstOrDefault()?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align: right;">@sumrev.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Total Deduction</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumtotded += @Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.TOTALDEDUCT).Sum();
+                                        <td style="text-align: right;">
+                                            @Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.TOTALDEDUCT).Sum()?.ToString("N2")
+                                        </td>
+                                    }
+                                    <td style="text-align: right;">@sumtotded?.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td>Net Pay</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        netIncome += Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => Convert.ToDecimal(x.NET)).Sum();
+                                        <td style="text-align: right;">
+                                            @Model.indivisualEmpSalaryReportViewModels.Where(x => x.periodName == monthName && x.employeeCode == item).Select(x => x.NET).Sum()?.ToString("N2")
+                                        </td>
+                                    }
+                                    <td style="text-align: right;">@netIncome.ToString("N2")</td>
+                                </tr>
+
+
+
+
+
+                                <tr>
+                                    <td style="font-weight: bold;" colspan="@(Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().Count() + 2)">
+                                        C. Bonus
+                                    </td>
+                                    @*<td style="font-weight: bold;" colspan="@(Model.salaryPeriods.Select(x => x.monthName).Distinct().Count() + 2)">
+                                        C. Bonus
+                                    </td>*@
+                                </tr>
+                                @foreach (var bonus in Model.bonusTaxReports.Where(x => x.employeeCode == item))
+                                {
+                                <tr>
+                                    <td>@bonus.periodName</td>
+                                    @foreach (var period in Model.indivisualEmpSalaryReportViewModels.Where(x => x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        <td style="text-align: right;">@(bonus.monthName == period ? bonus.BonusAmount?.ToString("N2") : "0")</td>
+                                    }
+                                    <td style="text-align: right;">@bonus.BonusAmount?.ToString("N2")</td>
+                                </tr>
+                                }
+
+                                <tr style="font-weight: bold;">
+                                    <td>Gross Bonus</td>
+                                    @foreach (var monthName in Model.indivisualEmpSalaryReportViewModels.Where(x=> x.employeeCode == item).Select(x => x.periodName).Distinct().ToList())
+                                    {
+                                        sumgrossbonus += @Model.bonusTaxReports.Where(x => x.employeeCode == item && x.monthName == monthName).Sum(x => x.BonusAmount);
+                                        <td style="text-align: right;">@Model.bonusTaxReports.Where(x => x.employeeCode == item && x.monthName == monthName).Sum(x => x.BonusAmount)?.ToString("N2")</td>
+                                    }
+                                    <td style="text-align:right">@sumgrossbonus?.ToString("N2")</td>
+                                </tr>
+                            </table>
+
+                        </div>
+                        @*<div class="row" style="margin-top:-20px;margin-left:30px;">
+                            <hr />
+                            <table class="table">
+                                <tr>
+                                    <td style="border: none;">Total Paid By Bank</td>
+                                    <td style="border: none;">: @sumtotpaid</td>
+                                    <td style="border: none;">PF Bank Contribution</td>
+                                    <td style="border: none;">: @pfBankCont</td>
+                                    <td style="border: none;">Gross Bonus</td>
+                                    <td style="border: none;">: @Model.bonusTaxReports.Where(x => x.employeeCode == item).Sum(x => x.NetAmount)</td>
+                                </tr>
+                                <tr>
+                                    <td style="border: none;">Net Income</td>
+                                    <td style="border: none;">: @netIncome</td>
+                                    <td style="border: none;">PF Own Contribution</td>
+                                    <td style="border: none;">: @pfOwn</td>
+                                    <td style="border: none;">Tax Paid</td>
+                                    <td style="border: none;">: @taxPaid</td>
+                                </tr>
+                            </table>
+                            <hr />
+                        </div>*@
+                    </div>
+
+                </div>
+
+            </div>
+            @*FOOTER*@
+            <footer style="color:black;margin-top:-20px;margin-left:30px;font-size:6px">
+                <h6 style="font-size:12px;">1. This is a computer generated statement which is issued without any alteration and does not require a signature.</h6>
+                <h6 style="font-size:12px;margin-top:-5px">2. You are requested to check and confirm the above balance within 15 (fifteen) days from date of publication of this statement. Unless you notify <br /> Central Accounts Department of any discrepancies within stipulated period, the account statement will be considered as complete and correct.</h6>
+            </footer>
+            <div style="page-break-after: always;"></div>
+
+        }
+
+
+    </div>
+
+</div>
+
+        
+       
+
+
+
+
+
+
+        @section Scripts{
+
+        }
+

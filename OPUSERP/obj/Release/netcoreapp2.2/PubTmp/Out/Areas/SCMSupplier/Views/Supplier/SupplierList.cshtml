@@ -1,0 +1,356 @@
+﻿@model SupplierViewModel
+@{
+    ViewData["TitleMD"] = "Supplier List";
+    Layout = "~/Areas/MasterData/Views/Shared/_CustomerDataForm.cshtml";
+}
+@section StyleMD{
+    <style>
+        /*#educationalTable tbody tr {
+            cursor: pointer;
+        }*/
+        .fas {
+            margin-top: 10px;
+            font-size: 25px;
+        }
+
+        .active {
+            color: darkcyan;
+        }
+
+        .c {
+            min-height: 330px;
+            background-color: #FDF2E9;
+        }
+
+            .c .card-footer {
+                height: 50px;
+                background-color: #E9F7EF;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+        .cb {
+            height: 180px;
+        }
+
+        .c .cb {
+            transition: .3s all;
+            cursor: pointer;
+        }
+
+        .c:hover .cb {
+            background-color: #D6DBE9;
+        }
+
+        #myInput1 {
+            width: 50%;
+            position: absolute;
+            right: 18px;
+            box-shadow: none;
+        }
+
+
+        .pagination > li > a,
+        .pagination > li > span {
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #337ab7;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+
+        .pagination > .active > a,
+        .pagination > .active > a:focus,
+        .pagination > .active > a:hover,
+        .pagination > .active > span,
+        .pagination > .active > span:focus,
+        .pagination > .active > span:hover {
+            z-index: 3;
+            color: #fff;
+            cursor: default;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+
+        .pagination-container {
+            margin: 20px 0;
+            display: flex;
+            justify-content: flex-end;
+        }
+    </style>
+
+   
+
+}
+
+<i class="fas fa-th text-left mx-2"></i>
+<i class="fas fa-list-alt text-left mx-2"></i>
+
+<button type="button" class="btn btn-default btn-sm" style="width:100px;background-color:#024972;color:white;float:right;margin-top:3px; margin-right:20px" onclick="location.href='@Url.Action("Index", "Supplier")'">Create</button>
+
+@*<div class="row clearfix">
+        <div class="col-12">
+            <div class="card mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Supplier List</h6>
+                    <a href="~/SCMSupplier/Supplier/Index" class="btn btn-info btn-sm pull-right" style="background-color:#024972;">Add New</a>
+                </div>
+                <!-- Card Body -->
+                @{
+                    int i = 1;
+
+                    <div class="card-body">
+                        <table class="table table-striped table-bordered" id="educationalTable">
+                            <thead>
+                                <tr>
+                                    <th>SL#</th>
+                                    <th>Organization Name</th>
+                                    <th>Trade License Number</th>
+                                    <th>Contact Number</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var data in Model.organizations)
+                                {
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>@data.organizationName</td>
+                                        <td>@data.LicenseNumber</td>
+                                        <td>@data.mobile</td>
+
+                                        <td>
+                                            <a class="btn btn-success" title="Edit Data" href="/SCMSupplier/Supplier/Index?id=@data.Id&actionType=defaultOpen"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>*@
+<div class="row clearfix" id="listView" style="display: none;">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">Suppiler List</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="educationalTable">
+                    <thead>
+                        <tr>
+                            <th>SL#</th>
+                            <th>Organization Name</th>
+                            <th>Trade License Number</th>
+                            <th>Contact Number</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int slno = 0;
+
+                            @foreach (var data in Model.organizations)
+                            {
+                                slno = slno + 1;
+                                <tr>
+                                    <td>@slno</td>
+                                    <td>@data.organizationName</td>
+                                    <td>@data.LicenseNumber</td>
+                                    <td>@data.mobile</td>
+
+                                    <td>
+                                        <a class="btn btn-success" title="Edit Data" href="/SCMSupplier/Supplier/Index?id=@data.Id&actionType=defaultOpen"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row clearfix" id="gridView">
+    <div class="col-12">
+        <div class="card mb-4">
+
+            <div class="card-header py-3 d-flex flex-row align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">Suppiler List</h6>
+                <input type="text" class="form-control" placeholder="Search here..." id="myInput1" />
+            </div>
+
+            <div class="card-body">
+                <div class="row" id="cards">
+                    @foreach (var data in Model.organizations)
+                    {
+                        <div class="col-md-3 mb-1 searchdiv">
+                            <a href="@Url.Action("Index", "Supplier", new { id = data.Id })" style="text-decoration: none; color: black;">
+
+                                <div class="card c" style="font-size: 16px;">
+                                    <div class="card-body cb text-center">
+                                        <strong>Organization Name:</strong> <br />
+                                        @data.organizationName <br /> <br />
+                                        <strong>Trade License Number:</strong> <br />
+                                        @data.LicenseNumber <br /><br />
+                                        <strong>Contact Number:</strong> <br />
+                                        @data.mobile
+                                    </div>
+                                    <div class="card-footer text-center font-weight-bold">
+                                       
+                                        @*<a class="btn btn-success" title="Edit Data" href="/SCMSupplier/Supplier/Index?id=@data.Id&actionType=defaultOpen"><i class="fa fa-edit"></i></a>*@
+                                    </div>
+                                </div>
+                            </a>
+
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ScriptsMD{
+    <script src="~/Assets/paginathing.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#education").addClass("active");
+            $('#educationalTable').DataTable({
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" + "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        },
+                        title: 'ERP',
+                        messageTop: 'Supplier List',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        },
+                        title: 'ERP',
+                        messageTop: 'Supplier List'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: 'ERP',
+                        messageTop: 'Supplier List',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+            $('#gridView').show();
+            $('#listView').hide();
+
+            $('.fas').removeClass('active');
+            $('.fa-th').addClass('active');
+
+            $("#myInput1").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $(".searchdiv").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        });
+        $('.fa-list-alt').click(function () {
+            $('#listView').show();
+            $('#gridView').hide();
+
+            $('.fas').removeClass('active');
+            $('.fa-list-alt').addClass('active');
+        })
+        $('.fa-th').click(function () {
+            $('#listView').hide();
+            $('#gridView').show();
+
+            $('.fas').removeClass('active');
+            $('.fa-th').addClass('active');
+        })
+        $('#cards').paginathing({
+
+            // Limites your pagination number
+            // false or number
+            limitPagination: 6,
+            // limitPagination: false,
+
+            // Pagination controls
+            perPage: 8,
+            prevNext: true,
+            firstLast: true,
+            prevText: '&laquo;',
+            nextText: '&raquo;',
+            firstText: 'First',
+            lastText: 'Last',
+            containerClass: 'pagination-container',
+            ulClass: 'pagination',
+            liClass: 'page',
+            activeClass: 'active',
+            disabledClass: 'disabled',
+            pageNumbers: true,
+            insertAfter: '#cards'
+        })
+
+
+        //var table = $('#educationalTable').DataTable();
+                        //$('#educationalTable tbody').on('click', 'tr', function () {
+                        //    var data = table.row(this).data();
+                        //    var iddata = data[0];
+                        //    let id = iddata.replace('<span style="display:none">', "").replace("</span>", "");
+                        //    var vid = parseInt(id.split('-')[1]);
+                        //    window.location.href = "/MasterData/Customer/CustomerDetails/?id=" + vid;
+                        //});
+
+
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

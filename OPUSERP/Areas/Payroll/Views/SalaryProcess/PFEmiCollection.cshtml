@@ -1,0 +1,198 @@
+﻿@model SalaryProcessViewModel
+@{
+    ViewData["Title"] = "PF Loan EMI";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+
+</style>
+
+<div class="card" style="width: 100%;">
+    <div class="card-body">
+        <h5 class="card-title" style="color: black">Collect PF Loan EMI</h5>
+        <div style="float: right; margin: 16px;">
+            <a class='btn btn-outline-info' style="margin-top: -104px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1014&perentId=6011'><i class="fas fa-backward"></i></a>
+
+        </div>
+        <hr>
+        <div class="container">
+            <form id="frmSalaryProcess" method="post" data-parsley-validate="parsley">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="row">
+
+                    <div class="col-6">
+                        <div class="row">
+                            <label for="salaryPeriodId" class="col-md-3 col-form-label">Salary Period <span style="color:red;">*</span></label>
+                            <div class="col-md-9">
+                                <select name="salaryPeriodId" id="salaryPeriodId" class="form-control" data-parsley-required="true">
+                                    <option value="">Select Salary Period</option>
+                                    
+                                    @*@foreach (var data in Model.salaryPeriods.Where(x => x.salaryTypeId == 1 && x.lockLabel != 5 && x.lockLabel != 6))*@
+                                    @foreach (var data in Model.salaryPeriods.Where(x => x.salaryTypeId == 1))
+                                    {
+                                        <option value="@data.Id">@data.periodName</option>
+                                    }
+                                </select>
+                                <input type="hidden" name="lockLabel" value="1" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-6">
+                        <button type="button" id="btnSearch" onclick="getCollection()" class="btn btn-success btn-sm" style="width:80px;float:left;">Search</button>                        
+                    </div>
+
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-md-3">
+                            </div>
+                            <div class="col-md-9">
+                                <button type="button" id="btnProcess" onclick="collectPayrollLoanEmi()" class="btn btn-success" style="width:80px;">Collect</button>
+                                <button type="button" id="btnGenerateVoucher" class="btn btn-success" style="width:160px;">Generate Voucher</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="row clearfix">
+                    <div class="col-12">
+                        <div class="card mb-4">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold">Payroll Loan EMI</h6>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-striped table-bordered" id="tablePayrollLoanEmi">
+                                    <thead>
+                                        <tr>
+                                            <th>Serial No</th>
+                                            <th>Employee Code</th>
+                                            <th>Employee Name</th>
+                                            <th>Branch Name</th>
+                                            <th>Department</th>
+                                            <th>Designation</th>
+                                            <th>Year</th>
+                                            <th>EMI</th>
+                                            @*<th>Company Contribution</th>
+                                            <th>Total</th>*@
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+                <button type="button" id="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function collectPayrollLoanEmi() {
+
+        var salaryPeriodId = $("#salaryPeriodId option:selected").val();
+        if (salaryPeriodId == '' || salaryPeriodId == 'undefined') {
+            alert('Please select salary period');
+            return false;
+        }
+
+        var dtTable = $("#tablePayrollLoanEmi");
+        var tableBody = dtTable.find('tbody');
+        tableBody.empty();
+
+        swal({
+            title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+        }).then(function () {
+            Common.Ajax('GET', '/Payroll/SalaryProcess/CollectPayrollLoanEmiByPeriodId?salaryPeriodId=' + salaryPeriodId, [], 'json', ajaxPayrollLoanEmiCollection, false);
+            Common.Ajax('GET', '/Payroll/SalaryProcess/GetPayrollLoanEmiByPeriodId?salaryPeriodId=' + salaryPeriodId, [], 'json', ajaxGetProcessedData, false);
+        });
+
+            }
+
+    function getCollection() {
+
+        var salaryPeriodId = $("#salaryPeriodId option:selected").val();
+        if (salaryPeriodId == '' || salaryPeriodId == 'undefined') {
+            alert('Please select salary period');
+            return false;
+        }
+        
+        Common.Ajax('GET', '/Payroll/SalaryProcess/GetPayrollLoanEmiByPeriodId?salaryPeriodId=' + salaryPeriodId, [], 'json', ajaxGetProcessedData, false);
+    }
+
+
+    function ajaxPayrollLoanEmiCollection(response) {
+        alert(response.Message);
+    }
+    function ajaxGetProcessedData(response) {
+
+        var option = "";
+
+        $("#tablePayrollLoanEmi").DataTable().destroy();
+        var dtTable = $("#tablePayrollLoanEmi");
+        var tableBody = dtTable.find('tbody');
+        tableBody.empty();
+
+        var serialNo = 0;
+        $.each(response, function (key, value) {
+
+            serialNo = serialNo + 1;
+            
+            var deptName = '';
+            deptName = value.department == null ? '' : value.department;
+
+            var branchName = '';
+            branchName = value.BranchName == null ? '' : value.BranchName;
+
+            var trHtml = '<tr>' +
+                '<td>' + serialNo + '</td>' +
+                '<td>' + value.employeeCode + '</td>' +
+                '<td>' + value.employeeName + '</td>' +
+                '<td>' + branchName + '</td>' +
+                '<td>' + deptName + '</td>' +
+                '<td>' + value.lastDesignation + '</td>' +
+                '<td>' + value.year + '</td>' +
+                '<td>' + value.Emi + '</td>' +
+                '</tr>';
+
+            tableBody.append(trHtml);
+        });
+    }
+        
+    function ajaxGenerateVoucher(response) {
+        alert(response.Message);
+    }
+
+    $(document).ready(function () {
+
+        //Asad Commented On 16.09.2023: Alternative is done At Collection Button...
+        //$("#btnSearch").click(function () {
+        //    getCollection();
+        //});
+
+        $("#btnGenerateVoucher").click(function () {
+
+            var salaryPeriodId = $("#salaryPeriodId option:selected").val();
+            if (salaryPeriodId == '' || salaryPeriodId == 'undefined') {
+                alert('Please select salary period');
+                return false;
+            }
+            Common.Ajax('GET', '/Payroll/SalaryProcess/GenerateVoucherOnPayrollLoanEmiByPeriodId?salaryPeriodId=' + salaryPeriodId, [], 'json', ajaxGenerateVoucher, false);
+        });
+        
+
+    });
+
+
+</script>

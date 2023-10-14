@@ -1,0 +1,238 @@
+﻿@model SalaryLedgerReportView
+
+@{
+    ViewData["Title"] = "Salary Ledger Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Style{
+    <style>
+        ul.ui-autocomplete {
+            z-index: 99999999;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .active {
+            color: darkcyan;
+        }
+
+        .c {
+            /*min-height: 300px;*/
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: black;
+        }
+
+            .c a {
+                color: black;
+                outline: none;
+                box-shadow: none !important;
+                border: none;
+            }
+
+            .c .card-footer {
+                height: 50px;
+                background-color: #E9F7EF;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .c:hover {
+                background-color: lightblue;
+                border: 1px solid black !important;
+            }
+
+        .name:hover {
+            cursor: pointer;
+            color: black;
+        }
+
+        a i {
+            font-size: 20px !important;
+            /*margin: 0 !important;*/
+        }
+
+        .redstar {
+            color: red;
+            float: right
+        }
+    </style>
+}
+
+<div class="card-header  d-flex flex-row align-items-center justify-content-between">
+    <h5 class="m-0 font-weight-bold text-primary">Salary Ledger Reports</h5>
+    <a class='btn btn-info btn-sm' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=10&perentId=3322'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="container">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                    <input type="hidden" id="employeeInfoId" name="employeeInfoId">
+                    <div class="form-group row" id="forReportType">
+                        <label for="reportTypeId" class="col-sm-3 col-form-label">Report Type <span class="redstar">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control" name="reportTypeId" id="reportTypeId">
+                                <option class="form-control" value="MWLR">Month Wise Ledger Report</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row" id="forPeriod">
+                        <label for="salaryPeriodId" class="col-sm-3 col-form-label">Period Name <span class="redstar">*</span></label>
+                        <div class="col-sm-9">
+                            <select name="salaryPeriodId" id="salaryPeriodId" class="form-control">
+                                <option value="0">Select Salary Period</option>
+                                @foreach (var data in Model.salaryPeriods)
+                                {
+                                    <option value="@data.Id">@data.periodName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row" id="forPeriod">
+                        <label for="salaryHeadId" class="col-sm-3 col-form-label">Head Name <span class="redstar">*</span></label>
+                        <div class="col-sm-9">
+                            <select name="salaryHeadId" id="salaryHeadId" class="form-control">
+                                <option value="0">Select Salary Head</option>
+                                @foreach (var data in Model.salaryHeads)
+                                {
+                                    <option value="@data.Id">@data.salaryHeadName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row" id="forSbu">
+                        <label for="hrBranchId" class="col-sm-3 col-form-label">Branch Name </label>
+                        <div class="col-sm-9">
+                            <select name="hrBranchId" id="hrBranchId" class="form-control chooseOpt">
+                                <option value="0">Select Branch</option>
+                                @foreach (var data in Model.hrBranches.OrderBy(x => x.branchName))
+                                {
+                                    <option value="@data.Id">@data.branchName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row" id="department">
+                        <label for="departmentId" class="col-sm-3 col-form-label">Department Name </label>
+                        <div class="col-sm-9">
+                            <select name="departmentId" id="departmentId" class="form-control chooseOpt">
+                                <option value="0">Select Department</option>
+                                @foreach (var data in Model.departments.OrderBy(x => x.deptName))
+                                {
+                                    <option value="@data.Id">@data.deptName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row" id="division">
+                        <label for="hrDivisionId" class="col-sm-3 col-form-label">Division Name </label>
+                        <div class="col-sm-9">
+                            <select name="hrDivisionId" id="hrDivisionId" class="form-control chooseOpt">
+                                <option value="0">Select Department</option>
+                                @foreach (var data in Model.hrDivisions.OrderBy(x => x.divName))
+                                {
+                                    <option value="@data.Id">@data.divName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row" id="forSbu">
+                        <label for="officeId" class="col-sm-3 col-form-label">Office Name </label>
+                        <div class="col-sm-9">
+                            <select name="officeId" id="officeId" class="form-control chooseOpt">
+                                <option value="0">Select Office</option>
+                                @foreach (var data in Model.offices.OrderBy(x => x.branchUnitName))
+                                {
+                                    <option value="@data.Id">@data.branchUnitName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row" id="forSbu">
+                        <label for="hrUnitId" class="col-sm-3 col-form-label">Unit Name </label>
+                        <div class="col-sm-9">
+                            <select name="hrUnitId" id="hrUnitId" class="form-control chooseOpt">
+                                <option value="0">Select Unit</option>
+                                @foreach (var data in Model.hrUnits.OrderBy(x => x.unitName))
+                                {
+                                    <option value="@data.Id">@data.unitName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row" id="forSbu">
+                        <label for="locationId" class="col-sm-3 col-form-label">Zone Name </label>
+                        <div class="col-sm-9">
+                            <select name="zoneId" id="zoneId" class="form-control chooseOpt">
+                                <option value="0">Select Zone</option>
+                                @foreach (var data in Model.zones.OrderBy(x => x.branchUnitName))
+                                {
+                                    <option value="@data.Id">@data.branchUnitName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row" id="forButton">
+                        <label class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input type="button" value="Export To PDF" id="btnPrint" class="btn btn-facebook btn-sm" style="width:110px;" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script>
+		$(document).ready(function(){
+			$('#btnSalaryPdf').click(function () {
+				var salaryPeriodId = $('#salaryPeriodId').val();
+				var hrBranchId = $('#hrBranchId').val();
+				window.open('/Payroll/PayrollReport/SalaryAdditionDiductionPDF?salaryPeriodId=' + salaryPeriodId + '&branchId=' + hrBranchId, '_blank');
+            })
+
+            $('#btnPrint').click(function () {
+                var hrBranchId = $('#hrBranchId').val();
+                var departmentId = $('#departmentId').val();
+                var hrDivisionId = $('#hrDivisionId').val();
+                var officeId = $('#officeId').val();
+                var zoneId = $('#zoneId').val();
+                var hrUnitId = $('#hrUnitId').val();
+                var salaryPeriodId = $('#salaryPeriodId').val();
+                var salaryHeadId = $('#salaryHeadId').val();
+
+                var rptType = $('#reportTypeId').val();
+                if (rptType == 'MWLR') {
+                    window.open('/Payroll/PayrollReport/PfTypeReportPdf?hrBranchId=' + hrBranchId + '&departmentId=' + departmentId + '&hrDivisionId=' + hrDivisionId + '&hrUnitId=' + hrUnitId + '&officeId=' + officeId + '&zoneId=' + zoneId + '&salaryPeriodId=' + salaryPeriodId + '&salaryHeadId=' + salaryHeadId, '_blank');
+                }
+                if (rptType == 'NPRPT') {
+                    window.open('/Payroll/PayrollReport/NewPayReportPdf?hrBranchId=' + hrBranchId + '&departmentId=' + departmentId + '&hrDivisionId=' + hrDivisionId + '&hrUnitId=' + hrUnitId + '&officeId=' + officeId + '&zoneId=' + zoneId + '&salaryPeriodId=' + salaryPeriodId + '&salaryHeadId=' + salaryHeadId, '_blank');
+                }
+            })
+		})
+    </script>
+}

@@ -1,0 +1,188 @@
+﻿
+@{
+    ViewData["Title"] = "DiscountinuationOverview";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row clearfix">
+    <div class="col-12">
+
+        <div class="card mb-4 bg-light">
+            <div class="card-body">
+                <div class="">
+                    <div class="row ">
+                        <div class="col-sm-3" align="center">
+                            <div class="bg-white">
+                                <h3 class="text-success" style="font-size:60px">100</h3>
+                                <hr />
+                                <h6><a href="">Applied for discontinuation</a></h6>
+                                <br />
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3" align="center">
+                            <div class="bg-white">
+                                <h3 class="text-success" style="font-size:60px">70</h3>
+                                <hr />
+                                <h6><a href="">Final Settlement Pending</a></h6>
+                                <br />
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3" align="center">
+                            <div class="bg-white">
+                                <h3 class="text-success" style="font-size:60px">20</h3>
+                                <hr />
+                                <h6><a href="">Total discontinuation (This Year)</a></h6>
+                                <br />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row clearfix">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h5 class="m-0 font-weight-bold text-primary">Member List (Applier for Discontinuation)</h5>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped" id="tblMemberList" data-parsley-required="true">
+                            <thead style="width:100%;background-color:lightgray">
+                                <tr>
+                                    <th>
+                                        Member ID
+                                    </th>
+                                    <th>
+                                        Member Name
+                                    </th>
+                                    <th>
+                                        Mobile
+                                    </th>
+                                    <th>
+                                        Email
+                                    </th>
+                                    <th>
+                                        Contribution
+                                    </th>
+                                    <th>
+                                        Accumulated Profit
+                                    </th>
+                                    <th>
+                                        Manage
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>MEM101</td>
+                                    <td>Kamal Hossain</td>
+                                    <td>01756214250</td>
+                                    <td>kamal@gmail.com</td>
+                                    <td>5000</td>
+                                    <td>2000</td>
+                                    <td><a href="/ProvidentFund/Discountinuation/EditAppliedDiscont"><i class="fas fa-eye" style="color:green"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <td>MEM102</td>
+                                    <td>Saddam Hossain</td>
+                                    <td>01789654120</td>
+                                    <td>25,000</td>
+                                    <td>20,000</td>
+                                    <td>Active</td>
+                                    <td><a href="/ProvidentFund/Discountinuation/EditAppliedDiscont"><i class="fas fa-eye" style="color:green"></i></a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row clearfix">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h5 class="m-0 font-weight-bold text-primary">Member List (Final Settlement Pending)</h5>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped" id="tblMemberList1" data-parsley-required="true">
+                            <thead style="width:100%;background-color:lightgray">
+                                <tr>
+                                    <th>
+                                        Member ID
+                                    </th>
+                                    <th>
+                                        Member Name
+                                    </th>
+                                    <th>
+                                        Mobile
+                                    </th>
+                                    <th>
+                                        Email
+                                    </th>
+                                    <th>
+                                        Contribution
+                                    </th>
+                                    <th>
+                                        Accumulated Profit
+                                    </th>
+                                    <th>
+                                        Manage
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>MEM101</td>
+                                    <td>Kamal Hossain</td>
+                                    <td>01756214250</td>
+                                    <td>kamal@gmail.com</td>
+                                    <td>5000</td>
+                                    <td>2000</td>
+                                    <td><a href="/ProvidentFund/Discountinuation/EditAppliedDiscont"><i class="fas fa-eye" style="color:green"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <td>MEM102</td>
+                                    <td>Saddam Hossain</td>
+                                    <td>01789654120</td>
+                                    <td>25,000</td>
+                                    <td>20,000</td>
+                                    <td>Active</td>
+                                    <td><a href="/ProvidentFund/Discountinuation/EditAppliedDiscont"><i class="fas fa-eye" style="color:green"></i></a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+
+            $('#tblMemberList').DataTable();
+            $('#tblMemberList1').DataTable();
+
+        });
+    </script>
+}
+

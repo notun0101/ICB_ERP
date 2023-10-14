@@ -1,0 +1,135 @@
+﻿@model DailyAttendenceViewModel
+@{
+	ViewData["Title"] = "Monthly Attendance Report";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+<div class="print-card" style="width: 100%;">
+	<div class="print-card-body">
+		<div class="container-fluid">
+            <div style="width:100%;overflow:hidden;">
+
+                <div style="width:10%;float:left;">
+                    <img src="/Assets/bdbl.png" alt="" style="height:100px;">
+                </div>
+
+
+                <div style="width:80%;float:left;">
+                    <h3 style="text-align:center;color:black;"><b>@Model.companies.FirstOrDefault().companyName</b></h3>
+                    <h4 style="text-align:center;color:black;">@Model.departmentName</h4>
+                    <h4 style="text-align:center;color:black;">@Model.branchName</h4>
+                    <h4 style="text-align:center;color:black;">@Model.divisionName</h4>
+                    <h4 style="text-align:center;color:black;">@Model.locationName</h4>
+                    <h4 style="text-align:center;color:black;">@Model.officeName</h4>
+                    <h4 style="text-align:center;color:black;">Over Time Report for the Date of @ViewBag.fdate?.ToString("dd-MMM-yyyy") to @ViewBag.todate?.ToString("dd-MMM-yyyy") </h4>
+                </div>
+                <div style="width:80%;float:left;">
+                </div>
+            </div>
+		</div>
+		<br />
+		<div class="container-fluid" style="color:black;">
+			<div class="row">
+				<table class="table table-bordered vartical-table" style="width: 100%; background-color: white !important;">
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th>Name</th>
+                            <th>Work Date</th>
+                            <th>In Time</th>
+                            <th>Out Time</th>
+							<th>Morning Overtime</th>
+                            <th>Evening Overtime</th>
+                            <th>Total Overtime</th>
+							
+						</tr>
+					</thead>
+					<tbody>
+						@{
+							
+							@foreach (var item in Model.overtimereportviewmodels)
+							{
+                        <tr>
+                            <td>@item?.empCode</td>
+                            <td>@item?.empName</td>
+                            <td>@item?.workDate</td>
+                            <td>@item?.startTime</td>
+
+                            <td>@item?.endTime</td>
+                            <td>@item?.BOT</td>
+                            <td>@item?.AOT</td>
+                            <td>@item?.TOT</td>
+
+                        </tr>
+
+							}
+						}
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+	</div>
+</div>
+
+@section Scripts{
+
+}
+<style>
+	.divstyle {
+		color: black;
+	}
+
+	.divstyleee {
+		text-align: center;
+		vertical-align: middle;
+		padding-top: 70px;
+	}
+
+	.spanStyle {
+		color: black;
+		font-size: small;
+		text-align: center;
+	}
+
+	.boldspanStyle {
+		color: black;
+		font-weight: bolder;
+		text-align: center;
+	}
+
+	.print-card-body {
+		width: 100%;
+		padding-bottom: 10px;
+	}
+
+	.vartical-table th {
+		width: 25%;
+		text-align: center;
+		vertical-align: top;
+	}
+
+	
+
+	table {
+		page-break-inside: auto
+	}
+
+	tr {
+		page-break-inside: avoid;
+		page-break-after: auto;
+        text-align:center;
+
+
+	}
+
+	thead {
+		display: table-header-group;
+	}
+
+	tfoot {
+		display: table-footer-group;
+	}
+</style>

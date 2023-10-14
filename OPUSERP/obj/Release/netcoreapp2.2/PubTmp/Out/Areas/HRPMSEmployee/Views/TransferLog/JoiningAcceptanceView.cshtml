@@ -1,0 +1,114 @@
+﻿@model TransferLogViewModel
+@using OPUSERP.Helpers;
+@{
+    ViewData["Title"] = "pdf";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+@using OPUSERP.ERPServices.MasterData.Interfaces
+@using OPUSERP.ERPService.AuthService.Interfaces
+@using System
+@inject IERPCompanyService eRPCompanyService
+@inject IUserInfoes userInfo
+@{
+    var companies = await eRPCompanyService.GetAllCompany();
+    var company = companies.FirstOrDefault()?.filePath;
+    var companyName = companies.FirstOrDefault()?.companyName;
+}
+
+<style>
+
+    .p {
+        font-size: 20px;
+        margin-bottom: 90px;
+        margin-top: 200px;
+        text-indent: 50px;
+    }
+
+    .header {
+        text-align: center;
+        margin: 30px
+    }
+
+    .box {
+        margin-top: 95px;
+        margin-left: 95px;
+        margin-left: 95px;
+        margin-bottom: 95px;
+        color: black;
+    }
+
+    table th {
+        width: 70%;
+        border: 10px;
+        line-height: inherit
+    }
+
+    td {
+        height: 50px;
+    }
+
+    .f {
+        font-size: 20px;
+    }
+
+    div {
+        font-size: 20px;
+    }
+</style>
+<div class="box">
+    <h4 style="text-align:center">
+        বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড
+    </h4><br />
+    <h4 style=" text-align:center"><span style="text-transform:uppercase;"><u>Bangladesh Development Bank Limited</u></span></h4>
+    <p style=" text-align:center">(A STATE OWNED BANK)<br />@Model.transferLog?.toBranch?.branchNameBn</p>
+
+    <div style="float:right">
+        <div style="float:left ;margin-top:30px;">
+            তারিখঃ @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@DateTime.Now.ToString("dd-MM-yyyy"))
+        </div>
+        <div style="float:left;">
+            .........../............/............
+            <br />
+            <hr />
+
+        </div>
+    </div>
+    <br />  <br />
+    নং- ২০.৪.১.১/ @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.employeeInfo?.employeeCode)
+    <br />  <br />
+    <div>
+        ডেপুটি জেনারাল ম্যানেজার <br />
+        হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্ট <br />
+        বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড <br />
+        হেড অফিস <br />
+        ঢাকা । <br />
+    </div>
+    <br />  <br />
+    <p style="text-indent: 50px;">
+        বিষয়ঃ কাজে যোগদান প্রসঙ্গে- <br />
+    </p>
+    <p style="text-indent: 70px;">হিসাবঃ @Model.employeeInfo?.nameBangla, @Model.employeeInfo?.lastDesignation?.designationNameBN।    </p>
+
+    <br />
+    <br />
+
+    প্রিয় মহোদয় ,  <br />
+                   <p style="text-indent: 50px;">
+                       উপুরজুক্ত বিষয়ে আপনাদের  @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.transferLog?.orderDate?.ToString("dd/MM/yyyy"))  তারিখের @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.transferLog?.orderNo)নম্বর নিয়োগ পত্র এবং পরবর্তীতে  <br />
+                       ০৫/০১/২০২০ তারিখের ০৬.১/২.৩/১৬৭  নম্বর পত্রের প্রতি সদয় দৃষ্টি আকর্ষণ করা হ'ল।
+                   </p>
+
+    <p>০২/  উল্লেখ্য, আপনাদের উক্ত পত্রের প্রেক্ষিতে জনাব @Model.employeeInfo?.nameBangla, @Model.employeeInfo?.lastDesignation?.designationNameBN গত ০৮/০১/২০২০  <br /> তারিখ পূর্বাহ্ণে এই ব্রাঞ্চ অফিসে কাজে যোগদান করেছেন । তাঁর কাজে যোগদানপত্রের ১(কপি) আপ্নাদের সদয়  <br />অবগতির ও প্রয়োজনীয় ব্যবস্থা গ্রহণের জন্য এতদসঙ্গে প্রেরণ করা হ'ল ।  </p>
+    <p style="text-indent: 50px;">ধন্যবাদান্তে,</p>
+
+
+    <div style="text-align:right">
+        আপনার বিশ্বস্ত, <br />
+        (@Model.joiningSignatory?.nameBangla) <br />
+        @Model.joiningSignatory?.lastDesignation?.designationNameBN<br />
+
+    </div>
+    <p>সংযুক্তিঃ বর্ণনামতে । </p>
+</div>
+

@@ -1,0 +1,193 @@
+﻿@model PayrollReportViewModel
+@{
+	ViewData["Title"] = "Pay Slip Report";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<div style="width:100%;overflow:hidden;">
+    <div style="width:100%;overflow:hidden;">
+        <div style="width:25%;float:left;">
+            <img src="/Assets/bdbl.png" alt="" style="height:50px;">
+        </div>
+
+
+        <div style="width:50%;float:left;">
+            <h5 style="text-align:center;color:black;"><b>@Model.companies.FirstOrDefault()?.companyName</b></h5>
+            
+            <h6 style="text-align:center;color:black;font-size:larger;">Pay slip for the month of @Model.payslipReportViewModels?.FirstOrDefault()?.periodName</h6>
+        </div>
+        <div style="width:25%;float:right;">
+            <h5 style="text-align:center;color:black;background-color:white;"><i>CONFIDENTIAL</i></h5>
+        </div>
+    </div>
+    <br /><br />
+  
+    <div>
+        <table style="border:solid 1px;width:100%;">
+            <tr>
+                <td style="border:solid 1px;padding-left:3px;font-size:small;border-color:lightgray;">Employee Name: </td>
+                <td style="border:solid 1px;padding-left:3px;font-size:small;border-color:lightgray;">@Model.payslipReportViewModels?.FirstOrDefault()?.nameEnglish</td>
+                <td style="border:solid 1px;padding-left:3px;font-size:small;border-color:lightgray;">Designation: </td>
+                <td style="border:solid 1px;padding-left:3px;font-size:small;border-color:lightgray;">@Model.payslipReportViewModels?.FirstOrDefault()?.designation</td>
+            </tr>
+            <tr>
+                <td style="border:solid 1px;padding-left:3px;font-size:small;border-color:lightgray;">Employee ID: </td>
+                <td style="border:solid 1px;padding-left:3px;font-size:small;border-color:lightgray;">@Model.payslipReportViewModels?.FirstOrDefault()?.employeeCode</td>
+                <td style="border:solid 1px;padding-left:3px;font-size:small;border-color:lightgray;">Posting: </td>
+				<td style="border:solid 1px;padding-left:3px;font-size:small;border-color:lightgray;">
+					@Model.payslipReportViewModels?.FirstOrDefault()?.department
+				</td>
+            </tr>
+            <tr>
+                <td style="border:solid 1px;padding-left:3px;font-size:small;border-color:lightgray;">Account / Wallet No.: </td>
+
+                <td style="padding-left:5px;font-size:small;border-color:lightgray;">@Model.payslipReportViewModels?.FirstOrDefault()?.bankAccountNo</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+    <br />
+    <div style="color:black;font-size:larger;background-color:darkgrey;border:solid 1px;padding-left:5px;">
+        <label><b>Pay Slip Details</b></label>
+    </div>
+    <div style="width:100%;overflow:hidden;">
+        <div style="width:50%;float:left;">
+            <div style="color:black;font-size:larger;border:solid 1px;text-align:center;">
+                <label>Earnings</label>
+            </div>
+            <div>
+                <table style="border:solid 1px;width:100%;">
+                    <thead>
+                        <tr>
+                            <th style="border:solid 1px;padding-left:3px;font-size:large;border-color:black;">Component</th>
+                            <th style="border:solid 1px;padding-left:3px;font-size:large;border-color:black;">Amount</th>
+                            <th style="border:solid 1px;padding-left:3px;font-size:large;border-color:black;">Arrear</th>
+                            <th style="border:solid 1px;padding-left:3px;font-size:large;border-color:black;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+							decimal addition = 0;
+							decimal bankCont = 0;
+                        }
+                        @foreach (var data in Model.payslipAdditionViewModels.Where(x => x.sortOrder != null))
+						{
+							if (data.amount != 0 && data.salaryHeadName != "Gratuity Fund bank Cont." && data.salaryHeadName != "Pension Fund Bank Contribution" && data.salaryHeadName != "Pension Fund Deduction")
+							{
+                        <tr>
+                            <td style="border:solid 1px;padding-left:3px;font-size:small;border-color:black;">@data.salaryHeadName</td>
+                            <td style="border:solid 1px;padding-left:3px;font-size:small;border-color:black;text-align:right;">@data.amount?.ToString("N2")</td>
+
+                            <td style="border:solid 1px;padding-left:3px;font-size:small;border-color:black;text-align:right;">@data.Emparrearamount?.ToString("N2")</td>
+                            <td style="border:solid 1px;padding-left:3px;font-size:small;border-color:black;text-align:right;"></td>
+
+
+                        </tr>
+							}
+
+                            @if (data.salaryHeadName != "Pension Fund Bank Contribution" && data.salaryHeadName != "Gratuity Fund bank Cont." && data.salaryHeadName != "Pension Fund Deduction")
+                            {
+                                addition = addition + Convert.ToDecimal(data.amount);
+
+                            }
+                            if (data.salaryHeadName == "PF Bank Contribution" && data.salaryHeadName != "Gratuity Fund bank Cont.")
+                            {
+                                bankCont += Convert.ToDecimal(data.amount);
+                            }
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            @{
+                                decimal net = Convert.ToDecimal(Model.payslipReportViewModels?.FirstOrDefault()?.NET);
+                            }
+                            <td style="text-align:left;border:1px solid;border-color:grey;font-weight:bold;">Total Earnings: </td>
+                            <td style="text-align:right;border:1px solid;border-color:grey;font-weight:bold;">@addition.ToString("N2")</td>
+                            <td style="text-align:right;border:1px solid;border-color:grey;font-weight:bold;"></td>
+                            <td style="text-align:right;border:1px solid;border-color:grey;font-weight:bold;"></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left;border:1px solid;border-color:grey;font-weight:bold;">Net Payable: </td>
+                            <td style="text-align:right;border:1px solid;border-color:grey;font-weight:bold;" id="netPay"></td>
+                            <td style="text-align:right;border:1px solid;border-color:grey;font-weight:bold;"></td>
+                            <td style="text-align:right;border:1px solid;border-color:grey;font-weight:bold;"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <div style="width:50%;float:right;">
+            <div style="color:black;font-size:larger;border:solid 1px;text-align:center;">
+                <label>Deductions</label>
+            </div>
+            <div>
+                <table style="border:solid 1px;width:100%;">
+                    <thead>
+                        <tr>
+                            <th style="border:solid 1px;padding-left:3px;font-size:large;border-color:black;">Component</th>
+                            <th style="border:solid 1px;padding-left:3px;font-size:large;border-color:black;">Amount</th>
+                            <th style="border:solid 1px;padding-left:3px;font-size:large;border-color:black;">Arrear</th>
+                            <th style="border:solid 1px;padding-left:3px;font-size:large;border-color:black;">Total</th>
+                        </tr>
+                    </thead>
+					<tbody>
+						@{
+							decimal totalDeduct = 0;
+						}
+						@foreach (var data in Model.payslipDeductionViewModels.Where(x => x.sortOrder != null))
+						{
+							if (data.amount != 0 && data.salaryHeadName != "Gratuity Fund Deduction")
+							{
+                        <tr>
+                            <td style="border:solid 1px;padding-left:3px;font-size:small;border-color:black;">@data.salaryHeadName</td>
+                            <td style="border:solid 1px;padding-left:3px;font-size:small;border-color:black;text-align:right;">@data.amount?.ToString("N2")</td>
+                            <td style="border:solid 1px;padding-left:3px;font-size:small;border-color:black;text-align:right;"></td>
+                            <td style="border:solid 1px;padding-left:3px;font-size:small;border-color:black;text-align:right;"></td>
+                        </tr>
+							}
+
+							@if (data.salaryHeadName != "Gratuity Fund Deduction")
+							{
+								totalDeduct = totalDeduct + Convert.ToDecimal(data.amount);
+							}
+							
+						}
+					</tbody>
+                    <tfoot>
+                        <tr>
+                            <td style="text-align:left;border:1px solid;border-color:grey;font-weight:bold;">Total Deductions: </td>
+                            <td style="text-align:right;border:1px solid;border-color:grey;font-weight:bold;">@totalDeduct.ToString("N2")</td>
+                            <td style="text-align:right;border:1px solid;border-color:grey;font-weight:bold;"></td>
+                            <td style="text-align:right;border:1px solid;border-color:grey;font-weight:bold;"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+		$(document).ready(function () {
+			var netpay = @(addition - totalDeduct).toFixed(2);
+			$('#netPay').text(numberWithCommas(netpay));
+			$('#bankTransfer').text(numberWithCommas(@addition - @totalDeduct));
+
+		});
+
+		function numberWithCommas(x) {
+			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+    </script>
+}
+
+
+
+
+

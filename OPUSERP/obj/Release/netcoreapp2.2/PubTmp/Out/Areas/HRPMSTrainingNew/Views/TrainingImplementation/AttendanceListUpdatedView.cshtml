@@ -1,0 +1,172 @@
+﻿@model TrainingEnrollViewModel
+@{
+	ViewData["Title"] = "Attendance Sheet";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<style>
+	body {
+		color: black !important;
+	}
+
+	#footertbl tr td p {
+		margin: 0;
+	}
+
+	.pagebreak {
+		clear: both;
+		page-break-after: always;
+	}
+</style>
+
+@{
+	int counter = 0;
+	var topics = Model.trainingWithPerticipants.Where(x => x.isBreak != 1 && x.topic != "Registration").Select(x => x.topic).Distinct().ToList();
+}
+
+@foreach (var item in topics)
+{
+	counter++;
+	<div class="text-center p-4">
+		<h5 style="font-weight: 900">Bangladesh Development Bank Limited</h5>
+		<h6 style="text-decoration: underline">BDBL Bhaban-2 (Level-16), 12, Karwan Bazar, Dhaka-1215</h6>
+		<h6 style="text-decoration: underline">Training Institute</h6>
+
+		<h6>@Model.trainingWithPerticipants?.FirstOrDefault()?.courseTypeNameEN</h6>
+		<h6>"@Model.trainingWithPerticipants?.FirstOrDefault()?.courseTitle"</h6>
+
+		@{
+			TimeSpan? Difference = new TimeSpan();
+			if (@Model.trainingWithPerticipants?.FirstOrDefault()?.endDate != null)
+			{
+				Difference = @Model.trainingWithPerticipants?.FirstOrDefault()?.endDate - @Model.trainingWithPerticipants?.FirstOrDefault()?.startDate;
+			}
+			int totalDay = Convert.ToInt32(Difference.Value.TotalDays) + 1;
+		}
+		<h6 style="text-decoration: underline">Duration: <span> @totalDay</span> Days; Date: @Model.trainingWithPerticipants?.FirstOrDefault()?.startDate?.ToString("dd MMM, yyyy")-@Model.trainingWithPerticipants?.FirstOrDefault()?.endDate?.ToString("dd MMM, yyyy")</h6>
+		<h6 style="text-decoration: underline">Attendance Sheet</h6>
+	</div>
+
+	<table class="report-table-2">
+		<tr>
+			<td style="width: 80%"></td>
+			<td>Date: @DateTime.Now.ToString("dd-MM-yyyy")</td>
+		</tr>
+		@*<tr>
+			<td style="width: 80%">
+				Topic: @Model.trainingWithPerticipants?.Where(x => x.topic == item)?.FirstOrDefault()?.topic
+			</td>
+			<td>
+				Time: @Model.trainingWithPerticipants?.Where(x => x.topic == item)?.FirstOrDefault()?.startTime?.Split(' ')[1].Substring(0, 5) - @Model.trainingWithPerticipants?.FirstOrDefault()?.endTime?.Split(' ')[1].Substring(0, 5)
+			</td>
+		</tr>*@
+	</table>
+	<table class="report-table-1" id="participantTable" border="1" cellpadding="3" cellspacing="0">
+        <thead>
+            <tr>
+                <th rowspan="2">SL.</th>
+                <th rowspan="2">Name of the Officers</th>
+                @*<th>Perticipants ID</th>*@
+                <th rowspan="2">Present Place of Posting</th>
+                <th colspan="4">Signature</th>
+            </tr>
+            <tr>
+                <th>1st Session <br /> (10:45-12:00)</th>
+                <th>2nd Session <br /> (12:00-01:30)</th>
+                <th>4th Session <br /> (02:15-03:30)</th>
+                <th>5th Session <br /> (03:30-04:45)</th>
+            </tr>
+        </thead>
+		<tbody>
+			@{
+				@foreach (var data in Model.trainingWithPerticipants?.Where(x => x.topic == item)?.Select(x => x.designationName).Distinct())
+				{
+					int i = 1;
+					<tr>
+						<td colspan="8" style="font-weight: bold;"><u>@data</u></td>
+					</tr>
+					@foreach (var item1 in Model.trainingWithPerticipants?.Where(x => x.topic == item)?.Where(x => x.designationName == data))
+					{
+						
+						string sing = item1.Signature;
+                    <tr>
+                        <td style="text-align:center;">@i</td>
+                        <td>@item1.employeeName</td>
+                        @*<td style="text-align:center;">@item1.employeeCode</td>*@
+                        <td>@item1.placeOfPosting</td>
+                        <td style="min-width:100px;">
+                            @*@foreach (var schedule in Model.TrainingSchedules.Where(x => x.trainerId == item1.trainerId))
+                            {
+                                if (TimeSpan.Parse(schedule.startTime) <= TimeSpan.Parse("10:45:00") && TimeSpan.Parse(schedule.endTime) >= TimeSpan.Parse("12:00:00"))
+                                {
+                                    <img src="~/@sing" alt="" />
+                                }
+                            }*@
+                            <img src="~/@sing" alt="" />
+                        </td>
+                        <td style="min-width:100px;">
+                            @*@foreach (var schedule in Model.TrainingSchedules.Where(x => x.trainerId == item1.trainerId))
+                            {
+                                if (TimeSpan.Parse(schedule.startTime) <= TimeSpan.Parse("12:00:00") && TimeSpan.Parse(schedule.endTime) >= TimeSpan.Parse("13:30:00"))
+                                {
+                                    <img src="~/@sing" alt="" />
+                                }
+                            }*@
+                            <img src="~/@sing" alt="" />
+                        </td>
+                        <td style="min-width:100px;">
+                            @*@foreach (var schedule in Model.TrainingSchedules.Where(x => x.trainerId == item1.trainerId))
+                            {
+                                if (TimeSpan.Parse(schedule.startTime) <= TimeSpan.Parse("14:15:00") && TimeSpan.Parse(schedule.endTime) >= TimeSpan.Parse("15:30:00"))
+                                {
+                                    <img src="~/@sing" alt="" />
+                                }
+                            }*@
+                            <img src="~/@sing" alt="" />
+                        </td>
+                        <td style="min-width:100px;">
+                            @*@foreach (var schedule in Model.TrainingSchedules.Where(x => x.trainerId == item1.trainerId))
+                            {
+                                if (TimeSpan.Parse(schedule.startTime) <= TimeSpan.Parse("15:30:00") && TimeSpan.Parse(schedule.endTime) >= TimeSpan.Parse("16:45:00"))
+                                {
+                                    <img src="~/@sing" alt="" />
+                                }
+                            }*@
+                            <img src="~/@sing" alt="" />
+                        </td>
+                    </tr>
+						i++;
+					}
+				}
+			}
+		</tbody>
+	</table>
+	<br />
+	<br />
+	<table class="table table-borderless" id="footertbl">
+		<tr>
+			<td>
+				<p><u>Name of Speaker</u></p>
+				<p> @Model.trainingWithPerticipants?.Where(x => x.topic == item)?.FirstOrDefault()?.trainerName </p>
+				<p style="font-size:12px;"> @Model.trainingWithPerticipants?.Where(x => x.topic == item)?.FirstOrDefault()?.trainerDesignation </p>
+				<p>Bangladesh Development Bank Ltd.</p>
+			</td>
+			<td>
+				<div style="text-align:left;float:right;">
+					<p><u>Course Coordinator</u></p>
+					<p>(@Model.CourseCoordinators?.FirstOrDefault()?.employeeInfo?.nameEnglish)</p>
+					<p style="font-size:12px;"> @Model.CourseCoordinators?.FirstOrDefault()?.employeeInfo?.lastDesignation?.designationName</p>
+					<p>Training Institute</p>
+				</div>
+
+			</td>
+		</tr>
+	</table>
+
+	@if (counter != topics.Count)
+	{
+		<div class="pagebreak"> </div>
+	}
+}
+
+

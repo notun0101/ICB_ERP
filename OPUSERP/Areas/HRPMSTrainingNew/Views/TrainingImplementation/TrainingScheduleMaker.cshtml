@@ -1,0 +1,564 @@
+﻿@model TrainingScheduleViewModel
+@{
+	ViewData["Title"] = "Training Schedule Maker";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Assets/MD_Time_Picker/mdtimepicker.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/multiple-select@1.3.1/dist/multiple-select.min.css">
+<style>
+	.redStar{
+		color:red;
+	}
+</style>
+<div class="card">
+ 
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+            <h4>    Training Schedule Maker</h4>
+           
+        </div>
+        <div class="col-md-8">
+
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1019&perentId=6300'><i class="fas fa-angle-double-left"></i> Back</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <form method="post" id="scheduleForm">
+            <div class="row">
+                <div class="col-md-6">
+					<div class="form-group row">
+						<label for="trainingId" class="col-sm-4 col-form-label">Training <span style="float:right;" class="redStar">*</span></label>
+						<div class="col-sm-8">
+							<input type="hidden" name="trainingScheduleId" id="trainingScheduleId" value="0" />
+							<select class="form-control" id="trainingId" name="trainingId">
+								<option value="">Choose Training</option>
+								@foreach (var item in Model.trainingInfoNews)
+								{
+									<option startdate="@item.startDate?.ToString("dd-MMM-yy")" enddate="@item.endDate?.ToString("dd-MMM-yy")" value="@item.Id">@item.course (@item.startDate?.ToString("dd-MMM-yy") to @item.endDate?.ToString("dd-MMM-yy"))</option>
+								}
+							</select>
+						</div>
+						@*<a href="javascript:void(0)" onclick="AddTraining()" class="btn btn-success btn-sm"><i class="fas fa-plus float-left"></i></a>*@
+
+					</div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label for="effectiveDate" class="col-sm-4 col-form-label"> Date <span style="float:right;" class="redStar">*</span></label>
+                        <div class="col-sm-8">
+                            <input type="text" name="effectiveDate" class="form-control" autocomplete="off" id="effectiveDate" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label for="topic" class="col-sm-4 col-form-label">Topic <span style="float:right;" class="redStar">*</span></label>
+                        <div class="col-sm-8">
+                            <input type="text" name="topic" class="form-control" id="topic" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label for="trainerId" class="col-sm-4 col-form-label">Trainer </label>
+						<div class="col-sm-8">
+							<select class="form-control" name="trainerId" id="trainerId">
+								<option value="">Choose Trainer</option>
+							</select>
+							<input type="hidden" name="trainerSId" class="form-control" id="trainerSId" />
+						</div>
+                        @*<div class="col-md-1">
+                            <a href="javascript:void(0)" onclick="AddTrainer()" class="btn btn-success btn-sm"><i class="fas fa-plus float-left"></i></a>
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label for="startTime" class="col-sm-4 col-form-label">Start Time <span style="float:right;" class="redStar">*</span></label>
+                        <div class="col-sm-8">
+                            <input type="text" name="startTime" class="form-control" id="startTime" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label for="endTime" class="col-sm-4 col-form-label">End Time <span style="float:right;" class="redStar">*</span></label>
+                        <div class="col-sm-8">
+                            <input type="text" name="endTime" class="form-control" id="endTime" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label for="isBreak" class="col-sm-4 col-form-label">Is Break <span style="float:right;" class="redStar">*</span></label>
+                        <div class="col-sm-8">
+                            <select class="form-control" id="isBreak" name="isBreak">
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group row">
+                        <label for="sortOrder" class="col-sm-4 col-form-label">Sort Order</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="sortOrder" onkeyup="checkShort()" class="form-control" id="sortOrder" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12" style="font-size: 25px;" id="trainerDiv">
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+
+                </div>
+
+                <div class="col-md-6">
+                    <a href="javascript:void(0)" class="btn btn-sm btn-success fa-pull-right" onclick="AddSchedule()"><i class="fas fa-save" style="margin-right:5px;"></i>Save</a>
+                </div>
+            </div>
+        </form>
+
+
+    </div>
+    <div class="card-footer">
+        <table class="table table-bordered table-striped table-hover datatable" id="appendTable">
+            <thead>
+                <tr>
+                    <th>SL</th>
+                    <th>Training</th>
+                    <th>Date</th>
+                    <th>Topic</th>
+                    <th>Trainer</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>IsBreak</th>
+                    <th>Sort order</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<input id="shortId" type="hidden" value="0"/>
+@section Scripts{
+	<script src="~/Assets/MD_Time_Picker/mdtimepicker.js"></script>
+	<!--Latest compiled and minified JavaScript-->
+	<script src="https://unpkg.com/multiple-select@1.3.1/dist/multiple-select.min.js"></script>
+	<script src="~/lib/main.js"></script>
+	<script src="~/lib/jquery/dist/notify.js"></script>
+	<script>
+
+		var trainerNew = 0;
+		$(document).ready(function () {
+             $('#appendTable').DataTable();
+
+            
+			//Common.Ajax('GET', '/HRPMSTrainingNew/TrainingImplementation/GetAllTrainingSchedules', [], 'json', ajaxGetAllSchedules1, false);
+
+			$('#effectiveDate').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100" });
+
+			$('#startTime').mdtimepicker({
+				timeFormat: 'hh:mm:ss',
+				format: 'hh:mm:ss',
+				theme: 'purple',
+				readOnly: true,
+				hourPadding: true,
+				clearBtn: true
+
+			});
+			$('#endTime').mdtimepicker({
+				timeFormat: 'hh:mm:ss',
+				format: 'hh:mm:ss',
+				theme: 'purple',
+				readOnly: true,
+				hourPadding: true,
+				clearBtn: true
+			});
+			
+			$('#trainingId').on('change', function () {
+				var id = this.value;
+				Common.Ajax('GET', '/HRPMSTrainingNew/TrainingImplementation/GetTrainerByTrainingId?id=' + this.value, [], 'json', ajaxGetTrainerByTrainingId, false);
+				Common.Ajax('GET', '/HRPMSTrainingNew/TrainingImplementation/GetAllScheduleByTrainingId?id=' + this.value, [], 'json', ajaxGetAllSchedules, false).done(function () {
+					$.ajax({
+						url: '@Url.Action("GetTrainerListByTrainingId", "TrainingImplementation")',
+						type: 'POST',
+						data: { id: id } 
+					}).done(function (res) {
+						console.log(res);
+						for (var i = 0; i < res.length; i++) {
+							$("#tr" + res[i].trainingId).html(res[i].trainers);
+						}
+
+					});
+				});
+                
+			});
+
+			$('#trainerId').on('change', function () {
+				var id = this.value;
+				//alert(id);
+			//	var trainerId = $('#trainerId :selected').val();
+				$('#trainerSId').val(id);
+				
+			});
+
+
+
+
+		});
+		$("#effectiveDate").change(function () {
+			if ($("#trainingId :selected").val() == '') {
+				$.notify("error: Please Select Training first!", "error");
+				$("#effectiveDate").val('');
+			} else {
+				if (!CheckDateValid()) {
+					$("#effectiveDate").val('');
+				}
+			};
+		});
+		
+        function checkShort() {
+            var trainingId = $("#trainingId option:selected").val();
+            var sortOrder = $("#sortOrder").val();
+            Common.Ajax('GET', '/HRPMSTrainingNew/TrainingImplementation/CheckShortOrder?no=' + sortOrder + '&Tid=' + trainingId, [], 'json', checkShortValidity, false);
+        }
+        function checkShortValidity(res) {
+            if (res) {
+                $("#shortId").val(1);
+            } else {
+                $("#shortId").val(0);
+            }
+        }
+		function CheckDateValid() {
+			isValid = false;
+			var startdate = $("#trainingId").find('option:selected').attr('startdate');
+			var enddate = $("#trainingId").find('option:selected').attr('enddate');
+			var effectiveDate = $("#effectiveDate").val();
+
+			if (Date.parse(effectiveDate) > Date.parse(enddate)) {
+				$.notify("error: Effective date between  " + startdate + " and " + enddate +"!", "error");
+			}
+			else if (Date.parse(effectiveDate) < Date.parse(startdate)) {
+				$.notify("error:  Effective date between  " + startdate + " and " + enddate +"!", "error");
+			} else {
+				isValid = true;
+			}
+			return isValid ;
+		};
+
+		$("#startTime, #endTime").change(function () {
+			if ($("#startTime").val().length > 0 && $("#endTime").val().length > 0) {
+				if (!CheckTimeValid()) {
+					$("#startTime").val('');
+					$("#endTime").val('');
+				};
+			}
+		});
+
+		function CheckTimeValid() {
+			var isValid = false;
+			var start_time = $("#startTime").val();
+			var end_time = $("#endTime").val();
+			var stt = new Date("November 13, 2021 " + start_time);
+			stt = stt.getTime();
+			var endt = new Date("November 13, 2021 " + end_time);
+			endt = endt.getTime();
+			console.log("Time1: " + stt + " Time2: " + endt);
+
+			if (stt > endt) {
+				$.notify("error:  Start time must be smaller then End-time", "error");
+			} else {
+				isValid = true;
+			}
+			return isValid;
+		}
+
+		function isValidForm() {
+			var isValid = false;
+			if ($("#trainingId :selected").val() == '') {
+				$.notify("error: Please select training first!", "error");
+			} else if ($("#effectiveDate").val() == '') {
+				$.notify("error: Date Required", "error");
+			}
+			else if ($("#topic").val() == '') {
+				$.notify("error: Topic Required", "error");
+			}
+			else if ($("#startTime").val() == '') {
+				$.notify("error: Start Time Required", "error");
+			}
+			else if ($("#endTime").val() == '') {
+				$.notify("error: End Time Required", "error");
+			}
+			
+			//else if ($("#isBreak").val() == '0' && $('#trainerDiv').find('span').length == '') {
+   //            $.notify("Please select a Trainer!.", "error");
+			//}
+			
+			else {
+				isValid = true;
+			}
+			return isValid;
+		}
+
+
+		function AddTrainer() {
+            var trainerId = $('#trainerId :selected').val();
+            var trainerName = $('#trainerId :selected').text();
+            var trainer = $('#trainerId :selected').val() + '-' + $('#trainerId :selected').text();
+			if (trainerId > 0) {
+				if ($('#trainerDiv').find('#trainer_' + trainerId).length > 0) {
+					$.notify("already exists this Person!.", "error");
+				} else {
+					var option = ` <span id="trainer_${trainerId}" class="badge badge-info">${trainerName} <input type="hidden" name="trainerId" value="${trainer}" /> <a href="javascript:void(0)" class="text-danger" onclick="RemoveTrainer(${trainerId})">x</a></span>`;
+					$('#trainerDiv').append(option);
+				}
+				$('#trainerId').val('');
+			} else {
+				$.notify("Please select a Trainer before add.", "error");
+			}
+		};
+
+		function RemoveTrainer(trainerId) {
+			$("#trainer_" + trainerId).remove();
+		};
+
+		function clearForm() {
+			$('#trainerDiv').html('');
+			$("#topic").val('');
+			$("#startTime").val('');
+			$("#endTime").val('');
+			$('#trainerId').val('');
+			$('#sortOrder').val('');
+		};
+
+        function ajaxGetTrainerByTrainingId(response) {
+			var option = '';
+			$('#trainerId').empty();
+			$('#trainerId').append(`<option value="">Choose Trainer</option>`);
+            $.each(response, function (i, item) {
+				if (item.Id == trainerNew) {
+					option += `<option selected value="${item.Id}">${item.name}</option>`
+				} else {
+					option += `<option value="${item.Id}">${item.name}</option>`
+				}
+               
+            })
+           
+            
+            $('#trainerId').append(option);
+        }
+
+		function AddSchedule() {
+            if (isValidForm()) {
+
+                var ss = $("#shortId").val();
+                if (ss == 1) {
+                    $.notify("error: This Order Number already taken", "error");
+                    return;
+                }
+
+                
+
+
+                if ($("#effectiveDate").val() == '') {
+                    $.notify("error: Please Select Date!", "error");
+                    return;
+                }
+
+
+
+				var formData = $('#scheduleForm').serialize();
+				$.ajax({
+					url: '@Url.Action("SaveSchedule", "TrainingImplementation")',
+					type: 'Post',
+					data: formData
+                }).done(function (res) {
+					//Common.Ajax('GET', '/HRPMSTrainingNew/TrainingImplementation/GetAllScheduleByTrainingId?id=' + res, [], 'json', ajaxGetAllSchedules, false)
+                    location.reload();
+					if (res != null) {
+						$.ajax({
+							url: '@Url.Action("GetTrainerListByTrainingId", "TrainingImplementation")',
+							type: 'POST',
+							data: { id: $("#trainingId :selected").val() }
+						}).done(function (res) {
+							console.log(res);
+							for (var i = 0; i < res.length; i++) {
+								$("#tr" + res[i].trainingId).html(res[i].trainers);
+							}
+
+						});
+						clearForm();
+					}
+				})
+				.fail(function () {
+					console.log("Unable to Save. Please Try Again");
+				});
+			};
+      
+		};
+        function tConvert(time) {
+            // Check correct time format and split into components
+            time = time.toString().match(/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+
+            if (time.length > 1) { // If time format correct
+                time = time.slice(1);  // Remove full string match value
+                time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM
+                time[0] = +time[0] % 12 || 12; // Adjust hours
+            }
+            return time.join(''); // return adjusted time or original string
+        }
+        function ajaxGetAllSchedules(response) {
+            console.log(response);
+            var option = '';
+            var index = 0;
+            $.each(response, function (i, item) {
+                var breakStr = 'No';
+                if (item.isBreak == 1) {
+                    breakStr = 'Yes';
+                }
+                index++;
+
+                var today = new Date(item.effectiveDate);
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var yyyy = today.getFullYear();
+                today = dd + '/' + mm + '/' + yyyy;
+                console.log(today);
+                if (item.sortOrder == null) {
+                    item.sortOrder = ''
+                }
+
+
+                option += `<tr>
+	                        <td>${index}</td>
+                            <td>${item.training?.course}</td>
+                            <td>${today}</td>
+                            <td>${item.topic}</td>
+                            <td  id="tr${item.Id}">${item.trainer?.name}</td>
+                            <td>${tConvert(item.startTime)}</td>
+                            <td>${tConvert(item.endTime)}</td>
+                            <td>${breakStr}</td>
+                            <td>${item.sortOrder}</td>
+                            <td>
+                                <a href="javascript:void(0)" onclick="EditSchedule(${item.Id},'${item.trainingId}','${item.topic}','${item.trainerId}', '${today}','${item.startTime}','${item.endTime}',${item.isBreak},${item.sortOrder})" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
+                                <a href="javascript:void(0)" onclick="DeleteSchedule(${item.Id})" class="btn btn-sm btn-danger"><i class="fas fa-times"></i></a>
+                                <a href="javascript:void(0)" title="Save As" onclick="EditSchedule(0,'${item.trainingId}','${item.topic}','${item.trainerId}', '${today}','${item.startTime}','${item.endTime}',${item.isBreak},${item.sortOrder})" class="btn btn-sm btn-info"><i class="fa fa-arrow-up" aria-hidden="true"></i></a>
+
+	</td>
+                        </tr>`
+            });
+            
+            $('#appendTable').DataTable().destroy();
+            $('#appendTable tbody').empty();
+            $('#appendTable tbody').append(option);
+            $('#appendTable').DataTable();
+
+		}
+		function ajaxGetAllSchedules1(response) {
+            console.log(response);
+			var option = ''; var index = 0;
+            $.each(response, function (i, item) {
+                var breakStr = 'No';
+                if (item.isBreak == 1) {
+                    breakStr = 'Yes';
+                }
+				index++;
+
+				var today = new Date(item.effectiveDate);
+				var dd = String(today.getDate()).padStart(2, '0');
+				var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+				var yyyy = today.getFullYear();
+				today = dd + '/' + mm + '/' + yyyy;
+				console.log(today);
+                if (item.sortOrder == null) {
+                    item.sortOrder = ''
+                }
+
+				option += `<tr>
+	                        <td>${index}</td>
+                            <td>${item.training?.course}</td>
+                            <td>${today}</td>
+                            <td>${item.topic}</td>
+                            <td  id="tr${item.Id}">${item.trainer?.name}</td>
+                            <td>${tConvert(item.startTime)}</td>
+                            <td>${tConvert(item.endTime)}</td>
+                            <td>${breakStr}</td>
+                            <td>${item.sortOrder}</td>
+                            <td>
+                                <a href="javascript:void(0)" onclick="EditSchedule(${item.Id},'${item.training ?.course}','${item.topic}','${item.trainers}', '${today}','${item.startTime}','${item.endTime}',${item.isBreak},${item.sortOrder})" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
+                                <a href="javascript:void(0)" onclick="DeleteSchedule(${item.Id})" class="btn btn-sm btn-danger"><i class="fas fa-times"></i></a>
+                            </td>
+                        </tr>`
+				
+
+
+
+            })
+            $('#appendTable tbody').empty();
+            $('#appendTable').DataTable().destroy()
+
+			$('#appendTable tbody').append(option);
+
+            $('#appendTable').DataTable();
+
+
+		}
+		
+
+        function DeleteSchedule(id) {
+            Common.Ajax('GET', '/HRPMSTrainingNew/TrainingImplementation/DeleteSchedule?id=' + id, [], 'json', ajaxDeleteSchedule, false);
+        }
+		function ajaxDeleteSchedule(res) {
+			$.notify("Delete Operation Successfully!", "success");
+            Common.Ajax('GET', '/HRPMSTrainingNew/TrainingImplementation/GetAllScheduleByTrainingId?id=' + res, [], 'json', ajaxGetAllSchedules, false);
+		}
+
+
+		function EditSchedule(id,course, topic, trainerId, date, startTime, endTime, isBreak, sortOrder) {
+            
+            $("#trainingScheduleId").val(id);
+			$("#effectiveDate").val(date);
+            $("#topic").val(topic);
+            $("#trainerId").val(trainerId);
+			$("#trainerSId").val(trainerId);
+            //var option = ` <span id="trainer_${trainerId}" class="badge badge-info">${trainerName} <input type="hidden" name="trainerId" value="${trainer}" /> <a href="javascript:void(0)" class="text-danger" onclick="RemoveTrainer(${trainerId})">x</a></span>`;
+            //$('#trainerDiv').append(option);
+
+            $("#startTime").val(startTime);
+            $("#endTime").val(endTime);
+            $("#isBreak").val(isBreak);
+			$("#sortOrder").val(sortOrder);
+			trainerNew = trainerId;
+			Common.Ajax('GET', '/HRPMSTrainingNew/TrainingImplementation/GetTrainerByTrainingId?id=' + course, [], 'json', ajaxGetTrainerByTrainingId, false);
+
+        }
+	</script>
+}

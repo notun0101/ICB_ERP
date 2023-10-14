@@ -1,0 +1,172 @@
+﻿
+@{
+    ViewData["Title"] = "EditJournal";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h5 class="m-0 font-weight-bold text-primary">Update Journal</h5>
+            </div>
+            <div class="card-body bg-white">
+
+                <form asp-area="ProvidentFund" asp-controller="" asp-action="" method="post">
+
+                    <div class="row col-sm-12">
+                        <div class="col-sm-6">
+
+                            <div class="form-group row">
+                                <label for="" class="col-sm-5 col-form-label">Transaction Date</label>
+                                <div class="col-sm-6 input-group">
+                                    <input name="" id="" class="form-control input-group-sm Date" value="" />
+                                    <div class="input-group-prepend">
+                                        <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="" class="col-sm-5 col-form-label">Attachment.</label>
+                                <div class="col-sm-6 ">
+                                    <input type="file" class="form-control" name="" id="">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-6">
+
+                            <div class="form-group row">
+                                <label for="" class="col-sm-5 col-form-label">Journal No.</label>
+                                <div class="col-sm-6 ">
+                                    <input type="text" class="form-control" name="" id="">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="" class="col-sm-5 col-form-label">Description.</label>
+                                <div class="col-sm-6 ">
+                                    @*<input type="text" class="form-control" name="" id="">*@
+                                    <textarea class="form-control" rows="2" name="" id=""></textarea>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+
+
+
+                    <table class="table table-striped table-bordered table-hover bg-white" id="TblTransaction">
+                        <thead>
+                            <tr>
+
+                                <th>Account</th>
+                                <th>Debits</th>
+                                <th>Credits</th>
+                                <th>Description</th>
+                                <th>Party Ref.</th>
+                                <th>Project Ref.</th>
+                                <th>Manage</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="tblTbody">
+                            <tr id="tr_0">
+                                <td>
+                                    <select class="form-control" name="" id="">
+                                        <option>Select an Option</option>
+                                        <option>Checking-Bank</option>
+                                        <option>Savings-Bank</option>
+                                        <option>Accounts Receivable</option>
+                                        <option>Inventory Asset</option>
+                                        <option>Prepaid Expenses</option>
+                                        <option>Uncategorized Asset</option>
+                                        <option>Undeposited Funds</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="" id="">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="" id="">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="" id="">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="" id="">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="" id="">
+                                </td>
+
+                                <td><a href="#"><i class="fa fa-trash" style="border:none; color:red"></i></a></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                    <br />
+                    <br />
+                    <a class="btn btn-sm btn-outline-info" onclick="AddTR()"><i class="fa fa-plus"></i></a>&nbsp;
+                    <input type="button" class="btn btn-sm btn-primary bg-success text-white" id="submit" value="Update">&nbsp;
+                    <input type="button" class="btn btn-sm btn-default" onclick="Removes()" value="Delete" style="border: 1px solid #CC3333;">
+
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#TblTransaction').DataTable();
+
+    });
+
+    var nm = 0
+    function AddTR() {
+        nm = 1 + nm;
+        $('#tblTbody').append('<tr id="tr_' + nm + '">' + '<td><select class="form-control" name="" id=""> < option > Select an Option</option ><option>Checking-Bank</option><option>Savings-Bank</option><option>Accounts Receivable</option><option>Inventory Asset</option><option>Prepaid Expenses</option><option>Uncategorized Asset</option><option>Undeposited Funds</option></select ></td ><td><input type="text" class="form-control" name="" id=""></td><td><input type="text" class="form-control" name="" id=""></td><td><input type="text" class="form-control" name="" id=""></td><td><input type="text" class="form-control" name="" id=""></td><td><input type="text" class="form-control" name="" id=""></td><td><a onclick="Remove(this)" href="javascript:void(0)"><i class="fa fa-trash" style="color:red"></i></a></td></tr>')
+    }
+
+    function Remove(res) {
+        $(res).closest('tr').remove()
+    }
+
+    function Removes(Id) {
+
+        if (Id == "") {
+            swal('Warning', 'please try again', 'warning');
+            return false;
+        }
+        swal({
+            title: 'Are you sure?', text: 'Do you want to Delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, Delete it!'
+        }).then(function () {
+            $.get("/ProvidentFund/Member/DeleteMember?id=" + Id, function (data) {
+                if (data.Success) {
+                    swal('', data.Message, 'success').then(function () {
+                        location.reload();
+                    })
+                } else {
+                    swal('Warning', data.Message, 'warning');
+                }
+
+
+            });
+
+        })
+
+    }
+
+</script>
+
+

@@ -1,0 +1,58 @@
+﻿@model TrainingEnrollViewModel
+@using OPUSERP.Helpers;
+@using System;
+
+
+@{
+	ViewData["Title"] = "Money Recept Report";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+<style>
+	table {
+		/*border-collapse: collapse;*/
+		width: 100%;
+		border: 2px solid black;
+	}
+	th {
+		padding: 15px;
+		border: 2px solid gray;
+	}
+	td {
+		padding: 15px;
+		border: 2px solid gray;
+	}
+	tr:nth-child(even) {
+		background-color: #f2f2f2;
+	}
+</style>
+<div class="text-center p-4" style="color:black">
+	<h5 style="font-weight: 900">Bangladesh Development Bank Limited</h5>
+	<h6 style="text-decoration: underline">BDBL Bhaban-2 (Level-16), 12, Karwan Bazar, Dhaka-1215</h6>
+	<h6 style="text-decoration: underline">Training Institute</h6>
+	<br />
+	<h5 style="text-decoration: underline">MONEY RECEIPT</h5>
+</div>
+<br />
+<div style="color:black">
+	<p>
+		@{
+			decimal? totalamount = @Model.trainingHonorariumViewModel.ToList()[0].receivedMoney - @Model.trainingHonorariumViewModel.ToList()[0].taxAmount;
+		}
+		Received with thanks Taka @totalamount (@AmountInWord.ConvertToWords(@totalamount.ToString()) ) after deduction
+		of Taka  @Model.trainingHonorariumViewModel.ToList()[0].taxAmount (@AmountInWord.ConvertToWords((@Model.trainingHonorariumViewModel.ToList()[0].taxAmount.ToString()))) as Tax at Source( @Model.trainingHonorariumViewModel.ToList()[0].taxPercentage %) out of Taka<span>
+	@Model.trainingHonorariumViewModel.ToList()[0].receivedMoney
+	(
+	@AmountInWord.ConvertToWords(@Model.trainingHonorariumViewModel.ToList()[0].receivedMoney.ToString())
+	)
+</span> as honorarium from BDBL Training Institute for conducting <span>@Model.trainingHonorariumViewModel.ToList()[0].session (@AmountInWord.ConvertWholeNumber(@Model.trainingHonorariumViewModel.ToList()[0].session.ToString())) session</span> of the training
+		course named <span>“@Model.trainingHonorariumViewModel.ToList()[0].trainngName”</span> held on <span>@Model.trainingHonorariumViewModel.ToList()[0].effectiveDate?.ToString("dd MMMM, yyyy").</span>
+	</p>
+</div>
+<br />
+<br />
+<br />
+<div style="text-align:right;color:black">
+	(@Model.trainingHonorariumViewModel.ToList()[0].trainerName)<br />
+	@Model.trainingHonorariumViewModel.ToList()[0].designation<br />
+	Bangladesh Development Bank Ltd<br />
+</div>

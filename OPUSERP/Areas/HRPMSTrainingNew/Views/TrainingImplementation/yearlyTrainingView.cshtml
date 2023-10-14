@@ -1,0 +1,71 @@
+﻿@model TrainingEnrollViewModel
+@{
+    ViewData["Title"] = "Yealy Training List";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<style>
+    body {
+        color: black !important;
+    }
+
+    table {
+        font-size: 14px !important;
+    }
+
+        table thead tr th {
+            text-align: center;
+        }
+
+    #footertbl tr td p {
+        margin: 0;
+    }
+</style>
+<div class="text-center p-4">
+    <h5 style="font-weight: 900">Bangladesh Development Bank Limited</h5>
+    <h6 style="text-decoration: underline">BDBL Bhaban-2 (Level-16), 12, Karwan Bazar, Dhaka-1215</h6>
+    <h6 style="text-decoration: underline">Training Institute</h6>
+   
+    <h6 style="text-decoration: underline">Training Course/Workshop Arranged in the Year @Model.yearlyTrainings?.FirstOrDefault()?.startDate?.Year</h6>
+</div>
+
+<table class="report-table-1" border="1" cellpadding="3"cellspacing="0" id="participantTable">
+    <thead>
+        <tr>
+            <th>SL No.</th>
+            <th>Name of The Course</th>
+            <th>Duration (Working Days)</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Number of Participants</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ 
+            int i = 1;
+            int totalDay = 0;
+            int totalParticipants = 0;
+        }
+        @foreach (var item in Model.yearlyTrainings)
+        {
+            <tr>
+                <td style="text-align:center;">@i</td>
+                <td>@item.course</td>
+                <td  style="text-align:center;">@item.durationDays</td>
+                <td>@item.startDate?.ToString("dd MMM yyyy")</td>
+                <td>@item.endDate?.ToString("dd MMM yyyy")</td>
+                <td  style="text-align:center;">@item.totalPerticipants</td>
+            </tr>
+            totalDay += (int)item.durationDays;
+            totalParticipants += (int)item.totalPerticipants;
+            i++;
+        }
+            <tr>
+                <td colspan="2" class="text-center">Total</td>
+                <td  style="text-align:center;">@totalDay</td>
+                <td></td>
+                <td></td>
+                <td  style="text-align:center;">@totalParticipants</td>
+            </tr>
+    </tbody>
+</table>

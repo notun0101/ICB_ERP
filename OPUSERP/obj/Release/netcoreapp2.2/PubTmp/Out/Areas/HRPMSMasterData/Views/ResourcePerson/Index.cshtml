@@ -1,0 +1,462 @@
+﻿@model ResourcePersonViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    .redStar {
+        font-size: 5px;
+        color: red;
+    }
+
+    .fa-select, .fa-select option {
+        font-family: fontAwesome, 'Lato', 'Font Awesome 5 Free';
+        font-weight: 300 !important;
+        /*color: black !important;*/
+        font-size: 16px !important;
+        padding: 5px;
+    }
+</style>
+
+<div class="card">
+	<div class="card-header">
+		<span class="font-weight-bold" style="font-size:25px;">Resource Person Add</span>
+		<a class='btn btn-info mr-4' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1019&perentId=6300'>@*<i class="fas fa-backward fa-2x "></i>*@<i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+	</div>
+    <div class="card-body">
+        <form id="" asp-area="HRPMSMasterData" asp-controller="ResourcePerson" asp-action="Index" method="post" enctype="multipart/form-data">
+            @*<div asp-validation-summary="All" class="text-danger"></div>*@
+			<div class="row">
+				<div class="col-6">
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label">Type</label>
+						<div class="col-sm-8">
+							<select class="form-control" id="type" name="type">
+								<option value="">Select</option>
+								<option value="In Hose">In House</option>
+								<option value="External">External </option>
+
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-12 employeeCodeDiv_" id="employeeCodeDiv" style="display:none;">
+					<div class="form-group row" id="hdnEmpidArea">
+						<label for="employeeCode" class="col-sm-2 col-form-label">Employee's Id (If any)</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" placeholder="Search" id="employeeCode" name="employeeCode">
+							<input type="hidden" id="employeeInfoId" name="employeeInfoId" value="0" />
+						</div>
+					</div>
+				</div>
+				@*<div class="col-6 employeeCodeDiv_" style="display:none;">
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label">Posting Place</label>
+						<div class="col-sm-8">
+							<input class="form-control" readonly type="text" id="employeePostingPlace" name="employeePostingPlace" >
+						</div>
+					</div>
+				</div>*@
+				<div class="col-6">
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label">Name <span><i class="fas fa-star-of-life redStar"></i></span></label>
+						<div class="col-sm-8">
+							<input class="form-control" type="text" id="name" name="name" data-parsley-required="true">
+						</div>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label">
+							Designation<span></span>
+						</label>
+						<div class="col-sm-8">
+							<input class="form-control" type="text" id="designation" name="designation">
+						</div>
+					</div>
+				</div>
+
+				<div class="col-6">
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label">Work Place </label>
+						<div class="col-sm-8">
+							<input type="hidden" name="ResourcePersonId" id="ResourcePersonId" value="0" />
+							<input class="form-control" type="text" id="workPlace" name="workPlace">
+						</div>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label">Specialization </label>
+						<div class="col-sm-8">
+
+							<input class="form-control" type="text" id="specialization" name="specialization">
+						</div>
+					</div>
+				</div>
+
+				<div class="col-6">
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label">Contact</label>
+						<div class="col-sm-8">
+							<input class="form-control" type="number" id="contactNumber" name="contactNumber">
+						</div>
+					</div>
+				</div>
+
+				<div class="col-6">
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label">Email</label>
+						<div class="col-sm-8">
+							<input class="form-control" type="email" id="email" name="email" data-parsley-required="true">
+						</div>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label">Address</label>
+						<div class="col-sm-8">
+							<input class="form-control" type="text" id="address" name="address">
+						</div>
+					</div>
+				</div>
+
+				<div class="col-6">
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label">Org. Type </label>
+						<div class="col-sm-8">
+							<input class="form-control" type="text" id="orgType" name="orgType">
+						</div>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label">Remarks</label>
+						<div class="col-sm-8">
+							<input class="form-control" type="text" id="remarks" name="remarks">
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+
+
+
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Profile Photo <span><i class="fas fa-star-of-life redStar"></i></span></label>
+                <div class="col-sm-4">
+					<div style="width: 150px; height: 150px; position: relative;">
+						<img src="~/images/defaultperson.png" id="imgPreview" style="width: 100%; height: 100%;border:1px solid #E0E0E0;cursor:pointer" />
+						<input class="form-control" type="file" id="profilePhoto" name="personPhoto" style="position: absolute; top: 0; left: 0; height: 100%; width: 100%; opacity: 0;">
+						<input type="hidden" id="photoUrl" name="photoUrl"  />
+					</div>
+                </div>
+
+
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-10 ml-sm-auto">
+
+                    <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px; display:none;"><i class="fas fa-save"></i></button>
+                    <button type="button" id="submit" value="Submit" class="btn btn-success" style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Resource Person List</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="PersonTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Designation</th>
+                            <th>Work Place</th>
+                            <th>Specialization</th>
+                            <th>Contact</th>
+                            <th>Type</th>
+                            <th>Action</th>
+                    </thead>
+                    <tbody>
+                        @foreach (var data in Model.resourcePersons)
+                        {
+                            <tr>
+                                <td>@data.name</td>
+                                <td>@data.designation</td>
+                                <td>@data.workPlace</td>
+                                <td>@data.specialization</td>
+                                <td>@data.contactNumber</td>
+                                <td>@data.type</td>
+                                <td>
+                                    <a class="btn btn-success btn-sm" onclick="Edit(@data.Id, '@data.name', '@data.designation', '@data.workPlace', '@data.specialization', '@data.contactNumber', '@data.type', '@data.email', '@data.address', '@data.orgType', '@data.remarks', '@data.url',@data.employeeInfoId)" href="#"><i class="fa fa-edit"></i></a>
+                                    <a class="btn btn-danger btn-sm" href="javascript:void(0)" onclick="DeleteMaster(@data.Id)"><i class="fa fa-trash-alt"></i></a>
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+            });
+            $('#profilePhoto').change(function () {
+                var input = this;
+                var url = $(this).val();
+                var ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
+                if (input.files && input.files[0] && (ext == "gif" || ext == "png" || ext == "jpeg" || ext == "jpg")) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#imgPreview').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+                else {
+                    $('#imgPreview').attr('src', '/images/user.png');
+                }
+            });
+
+	
+
+
+            $("#department").addClass("active");
+            $('#PersonTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
+                        },
+                        title: "Resource Person List",
+                        messageTop: 'List of all  Resource Person',
+                        class: 'btn btn-info'
+                    },
+                    //{
+                    //    extend: 'csvHtml5',
+                    //    text: '<i class="fa fa-file-excel"></i> CSV',
+                    //    titleAttr: 'CSV',
+                    //    exportOptions: {
+                    //        columns: [0, 1, 2, 3, 4, 5]
+                    //    },
+                    //    title: "Resource Person List",
+                    //    messageTop: 'List of all  Resource Person'
+                    //},
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "Resource Person List",
+                        messageTop: 'List of all  Resource Person',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+        });
+
+
+		function Edit(Id, name, designation, workPlace, specialization, contactNumber, type, email, address, orgType, remarks, url, employeeInfoId) {
+            $("#ResourcePersonId").val(Id);
+            $("#name").val(name);
+            $("#designation").val(designation);
+            $("#workPlace").val(workPlace);
+            $("#specialization").val(specialization);
+            $("#contactNumber").val(contactNumber);
+            $("#type").val(type);
+            $("#email").val(email);
+            $("#address").val(address);
+            $("#orgType").val(orgType);
+			$("#remarks").val(remarks);
+			$("#employeeInfoId").val(employeeInfoId);
+            //$("#profilePhoto").val(url);
+
+			if (url.length > 0) {
+				$('#imgPreview').attr("src", "/EmpImages/" + url);
+			} else {
+				
+				$('#imgPreview').attr("src", "/images/defaultperson.png");
+			}
+			if (employeeInfoId > 0) {
+				GetEmployeePostingPlace(employeeInfoId);
+				$(".employeeCodeDiv_").show();
+
+			} else {
+				$(".employeeCodeDiv_").hide();
+			}
+			$("#employeeCode").val('');
+			
+			///EmpImages/637744073295139488.JPG
+
+
+            //if (url.indexOf(".pdf") >= 0) {
+            //    //alert(attachmentUrl)
+            //    $('#user_img1').attr("src", "/EmpAttachment/pdfIcon.png");
+            //    $('#userFile').val("/EmpImages/" + url);
+            //}
+            //else
+
+                if (url == null || url == "") {
+                    $('#profilePhoto').attr("src", "/images/defaultperson.png");
+            }
+            else {
+                    $('#profilePhoto').attr("src", "/EmpImages/" + url);
+            }
+
+           
+        }
+        function DeleteMaster(Id) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+
+                $.ajax({
+                    url: '@Url.Action("DeleteResourcePerson", "ResourcePerson")',
+                    data: { Id: Id },
+                    type: 'GET',
+                })
+                    .done(function () {
+                        swal('', 'Deleted Successfully!', 'success').then(function () {
+                            location.reload();
+                        });
+
+                        //swal('', 'Deleted Successfully!', 'success').then(function () {
+                        //    window.location.reload();
+                        //});                       
+                    })
+                    .fail(function () {
+                        swal('Cancelled', 'It is related with another info, can not deleted !!!', 'error');
+                    });
+            });
+        }
+    </script>
+	<script>
+		var GetEmployeeList = [];
+		$(document).ready(function () {
+			$('#employeeCode').autocomplete({
+				source: GetEmployeeList,
+
+				select: function (event, ui) {
+					console.log(ui)
+					$("#name").val(ui.item.name);
+					$("#employeeInfoId").val(ui.item.key);
+					$("#designation").val(ui.item.designation);
+					$("#orgType").val(ui.item.orgType);
+					//$("#nid").val(ui.item.nationalID);
+					$("#contactNumber").val(ui.item.mobile);
+					$("#email").val(ui.item.email);
+					LoadEmployeeImage(ui.item.key);
+					GetEmployeePostingPlace(ui.item.key);
+				}
+			});
+			Common.Ajax('GET', '/global/api/getEmployeeInfoByOrg/', [], 'json', ajaxEmployeeList, false);
+		});
+
+				function GetEmployeePostingPlace(Id) {
+				$.ajax({
+					url: '@Url.Action("GetEmployeePostingPlace", "ResourcePerson")',
+					data: { EmpId: Id },
+					type: 'GET',
+				}).done(function (result) {
+					console.log(result);
+					//$("#employeePostingPlace").val(result);
+					$("#workPlace").val(result);
+				});
+			}
+		
+		$("#type").change(function () {
+			//$("#employeePostingPlace").val('');
+			if ($("#type :selected").val() == "In Hose") {
+				$(".employeeCodeDiv_").show();
+			} else {
+				$(".employeeCodeDiv_").hide();
+				$("#employeeInfoId").val('');
+				$("#employeeCode").val('');
+			}
+			
+		})
+
+		function LoadEmployeeImage(id) {
+			$.ajax({
+				url: '@Url.Action("GetEmployeeImage", "ResourcePerson")',
+				data: { id: id },
+				type: 'GET',
+			}).done(function (result) {
+				console.log(result);
+				if (result.url.length > 0) {
+					$('#imgPreview').attr("src", "/" + result.url);
+					$('#photoUrl').val(result.url.replace("EmpImages\\", '' ));
+				}
+			
+				else {
+					$('#imgPreview').attr("src", "/images/defaultperson.png");
+				}
+			});
+                    
+		}
+
+		function ajaxEmployeeList(response) {
+			//console.log(response);
+
+			$.each(response, function (id, option) {
+				if (option.employeeCode == 'e56789') {
+					console.log(option);
+				}
+				var obj = new Object();
+				obj.key = option.Id;
+				obj.value = option.employeeCode + ' - ' + option.nameEnglish;
+				obj.name = option.nameEnglish;
+				obj.designation = option.lastDesignation?.designationName;
+				obj.orgType = option.orgType;
+				obj.nationalID = option.nationalID;
+				obj.mobile = option.mobileNumberPersonal;
+				obj.email = option.emailAddress;
+				GetEmployeeList[GetEmployeeList.length] = obj;
+			});
+
+		}
+	</script>
+}

@@ -1,0 +1,1288 @@
+﻿@model IELTSTeacherViewModel
+@{
+    ViewData["Title"] = "NewTeacher";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Style{
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Roboto&display=swap" rel="stylesheet">
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            height: 100%;
+            background: -webkit-linear-gradient(to left, #4F61F2, #2a0845);
+        }
+
+        body {
+            font-family: 'Josefin Sans', sans-serif;
+            background: transparent;
+        }
+
+        #teacherform {
+            text-align: center;
+            position: relative;
+            margin-top: 30px;
+        }
+
+            #teacherform fieldset {
+                background: white;
+                border: 0 none;
+                border-radius: 0px;
+                box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+                padding: 20px 30px;
+                box-sizing: border-box;
+                width: 80%;
+                margin: 0 10%;
+                position: relative;
+            }
+
+                #teacherform fieldset:not(:first-of-type) {
+                    display: none;
+                }
+
+            #teacherform input, #teacherform textarea {
+                padding: 15px;
+                border: 1px solid #ccc;
+                border-radius: 20px;
+                margin-bottom: 10px;
+                width: 100%;
+                box-sizing: border-box;
+                color: #2C3E50;
+                font-size: 13px;
+            }
+
+            #teacherform select {
+                border: 1px solid #ccc;
+                border-radius: 20px;
+                margin-bottom: 10px;
+                width: 100%;
+                box-sizing: border-box;
+                font-size: 13px;
+            }
+
+            #teacherform input:focus, #teacherform textarea:focus {
+                -moz-box-shadow: none !important;
+                -webkit-box-shadow: none !important;
+                box-shadow: none !important;
+                border: 1px solid #ee0979;
+                outline-width: 0;
+                transition: All 0.5s ease-in;
+                -webkit-transition: All 0.5s ease-in;
+                -moz-transition: All 0.5s ease-in;
+                -o-transition: All 0.5s ease-in;
+            }
+
+            #teacherform .action-button {
+                width: 100px;
+                background: #ee0979;
+                font-weight: bold;
+                color: white;
+                border: 0 none;
+                border-radius: 25px;
+                cursor: pointer;
+                padding: 10px 5px;
+                margin: 10px 5px;
+            }
+
+                #teacherform .action-button:hover, #teacherform .action-button:focus {
+                    box-shadow: 0 0 0 2px white, 0 0 0 3px #ee0979;
+                }
+
+            #teacherform .action-button-previous {
+                width: 100px;
+                background: #C5C5F1;
+                font-weight: bold;
+                color: white;
+                border: 0 none;
+                border-radius: 25px;
+                cursor: pointer;
+                padding: 10px 5px;
+                margin: 10px 5px;
+            }
+
+                #teacherform .action-button-previous:hover, #teacherform .action-button-previous:focus {
+                    box-shadow: 0 0 0 2px white, 0 0 0 3px #C5C5F1;
+                }
+
+        .fs-title {
+            font-size: 18px;
+            text-transform: uppercase;
+            color: #2C3E50;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        .fs-subtitle {
+            font-weight: normal;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        #progressbar {
+            margin-bottom: 5px;
+            margin-top: 5px;
+            overflow: hidden;
+            counter-reset: step;
+        }
+
+            #progressbar li {
+                list-style-type: none;
+                color: white;
+                text-transform: uppercase;
+                font-size: 9px;
+                width: 20%;
+                float: left;
+                position: relative;
+                letter-spacing: 1px;
+            }
+
+                #progressbar li:before {
+                    content: counter(step);
+                    counter-increment: step;
+                    width: 24px;
+                    height: 24px;
+                    line-height: 26px;
+                    display: block;
+                    font-size: 12px;
+                    color: #333;
+                    background: white;
+                    border-radius: 25px;
+                    margin: 0 auto 10px auto;
+                }
+
+                #progressbar li:after {
+                    content: '';
+                    width: 100%;
+                    height: 2px;
+                    background: white;
+                    position: absolute;
+                    left: -50%;
+                    top: 9px;
+                    z-index: -1;
+                }
+
+                #progressbar li:first-child:after {
+                    content: none;
+                }
+
+                #progressbar li.active:before, #progressbar li.active:after {
+                    background: #4F61F2;
+                    color: white;
+                }
+
+
+        .dme_link {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+            .dme_link a {
+                background: #FFF;
+                font-weight: bold;
+                color: #ee0979;
+                border: 0 none;
+                border-radius: 25px;
+                cursor: pointer;
+                padding: 5px 25px;
+                font-size: 12px;
+            }
+
+                .dme_link a:hover, .dme_link a:focus {
+                    background: #C5C5F1;
+                    text-decoration: none;
+                }
+        #tExpertice::-webkit-scrollbar {
+            display: none;
+        }
+
+        #sotbl::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+}
+<div class="card">
+    <div class="card-header">
+        <div class="col-12" style="text-align:center">
+            <h4 style="display:inline">New Teacher</h4>
+            <a class="btn btn-info float-right" href="/HRPMSTraining/TrainingTeacher/AllTeacher" style="color:aqua"><i class="fa fa-fast-backward fa-2x"></i></a>
+        </div>
+        <div class="col-12 row">
+            <div class="col-1"></div>
+            <ul id="progressbar" class="col-10 row" style="background:#3CACF4; border-radius:20px;margin-left:15px">
+                <li class="active col-2 btn">Basic</li>
+                <li class="col-2 btn">Social Media</li>
+                <li class="col-2 btn">Career</li>
+                <li class="col-2 btn">Education</li>
+                <li class="col-2 btn">Expertice</li>
+                <li class="col-2 btn">Final</li>
+            </ul>
+        </div>
+    </div>
+    <div class="card-body" style="height: 900px !important">
+        <form asp-area="HRPMSTraining" asp-controller="TrainingTeacher" asp-action="NewTeacher" id="teacherform" enctype="multipart/form-data" data-parsley-validate="parsley" method="post">
+            <div class="col-12" style="margin-top:-20px;">
+                <fieldset>
+                    <h2 class="fs-title">Teacher Basic</h2>
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <hr />
+                    <div class="row" style="text-align:left">
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="teacherCode" class="col-sm-4 col-form-label">Teacher Code</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="teacherCode" value="@Model?.teacher?.teacherCode" name="teacherCode" data-parsley-required="true">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="nameEnglish" class="col-sm-4 col-form-label">Name</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="nameEnglish" value="@Model?.teacher?.nameEnglish" name="nameEnglish" data-parsley-required="true">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="text-align:left">
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="maritalStatus" class="col-sm-4 col-form-label">Marital Status</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" name="maritalStatus" id="maritalStatus" data-parsley-required="true">
+                                        @if (@Model?.teacher?.maritalStatus != null)
+                                        {
+                                            <option value="@Model?.teacher?.maritalStatus">@Model?.teacher?.maritalStatus</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="">--Select One--</option>
+                                        }
+                                        <option value="Married">Married</option>
+                                        <option value="Unmarried">Unmarried</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="addressPresent" class="col-sm-4 col-form-label">Present Address</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="addressPresent" value="@Model?.teacher?.addressPresent" name="addressPresent" data-parsley-required="true">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="text-align:left">
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="addressPermanant" class="col-sm-4 col-form-label">Permanant Address</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="addressPermanant" value="@Model?.teacher?.addressPermanant" name="addressPermanant" data-parsley-required="true">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="bloodGroup" class="col-sm-4 col-form-label">Blood Group</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" name="bloodGroup" id="bloodGroup">
+                                        @if (@Model?.teacher?.bloodGroup != null)
+                                        {
+                                            <option value="@Model?.teacher?.bloodGroup">@Model?.teacher?.bloodGroup</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="">--Select One--</option>
+                                        }
+                                        <option value="A+">A+</option>
+                                        <option value="A-">A-</option>
+                                        <option value="B+">B+</option>
+                                        <option value="B-">B-</option>
+                                        <option value="O+">O+</option>
+                                        <option value="O-">O-</option>
+                                        <option value="AB+">AB+</option>
+                                        <option value="AB-">AB-</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="text-align:left">
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="mobilePersonal" class="col-sm-4 col-form-label">Mobile Number</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="mobilePersonal" onkeypress="return validateNumber(event)" value="@Model?.teacher?.mobilePersonal" name="mobilePersonal" data-parsley-required="true">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="mobileOffice" class="col-sm-4 col-form-label">Office Number</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="mobileOffice" onkeypress="return validateNumber(event)" value="@Model?.teacher?.mobileOffice" name="mobileOffice">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="text-align:left">
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="emailPersonal" class="col-sm-4 col-form-label">Email</label>
+                                <div class="col-sm-8">
+                                    <input type="email" class="form-control" id="emailPersonal" value="@Model?.teacher?.emailPersonal" name="emailPersonal" data-parsley-required="true">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="dateOfBirth" class="col-sm-4 col-form-label">Date Of Birth</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="dateOfBirth" value="@Model?.teacher?.dateOfBirth?.ToString("dd-MMM-yyyy")" name="dateOfBirth" readonly data-parsley-required="true">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="text-align:left">
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="eTin" class="col-sm-4 col-form-label">E-TIN</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="eTin" value="@Model?.teacher?.eTin" name="eTin">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="nid" class="col-sm-4 col-form-label">NID</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="nid" value="@Model?.teacher?.nid" name="nid">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="text-align:left">
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="heightCm" class="col-sm-4 col-form-label">Height(cm)</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="heightCm" value="@Model?.teacher?.heightCm" name="heightCm">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="weightKg" class="col-sm-4 col-form-label">Weight(Kg)</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="weightKg" value="@Model?.teacher?.weightKg" name="weightKg">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="text-align:left">
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="gender" class="col-sm-4 col-form-label">Gender</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" name="gender" id="gender" data-parsley-required="true">
+                                        @if (@Model?.teacher?.gender != null)
+                                        {
+                                            <option value="@Model?.teacher?.gender">@Model?.teacher?.gender</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="">--Select One--</option>
+                                        }
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="religion" class="col-sm-4 col-form-label">Religion</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" name="religion" id="religion">
+                                        @if (Model?.teacher?.religion != null)
+                                        {
+                                            <option value="@Model?.teacher?.religion?.Id">@Model?.teacher?.religion?.name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="">--Select One--</option>
+                                        }
+                                        @foreach (var item in Model?.religions)
+                                        {
+                                            <option value="@item?.Id">@item?.name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group row" style="text-align:left">
+                                <label for="about" class="col-sm-4 col-form-label">About</label>
+                                <div class="col-sm-8">
+                                    <textarea class="form-control col-12" style="height:200px" id="about" name="about" data-parsley-required="true">@Model?.teacher?.about</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group row" style="text-align:left">
+                                <label for="photo" class="col-sm-4 col-form-label">Photo</label>
+                                <div class="col-sm-8">
+                                    @if (Model?.teacher?.photoUrl != null)
+                                    {
+                                        <img id="user_img" style="width:200px;height:200px" src="~/@Model?.teacher?.photoUrl" alt="" class="img-thumbnail float-left">
+                                    }
+                                    else
+                                    {
+                                        <img id="user_img" style="width:200px;height:200px" src="~/images/user.png" alt="" class="img-thumbnail float-left">
+                                    }
+                                    <input type="file" title="Photo Upload" id="teacherPhotoUrl" name="teacherPhotoUrl" class="img-thumbnail float-left" />
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="button" style="background-color:#4F61F2" name="next" class="next action-button" value="Next" />
+                </fieldset>
+                <fieldset>
+                    <h2 class="fs-title" style="display:inline">Teacher Social Media</h2>
+                    <i class="fa fa-plus fa-2x float-right" style="color:#3cacf4" data-toggle="modal" data-target="#socailModal"></i>
+                    <hr />
+                    <div class="row" style="text-align:left">
+                        <div class="col-12" style="text-align:left">
+                            <table class="table table-bordered" id="socialTbl" style="width:100%">
+                                <thead style="text-align:center">
+                                    <tr>
+                                        <th width="30%">Name</th>
+                                        <th width="30%">User Name</th>
+                                        <th width="30%">Link</th>
+                                        <th width="10%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{ 
+                                        var i = 100;
+                                        @foreach (var item in Model?.teacherSocialMeadias)
+                                        {
+                                            <tr id="so@(i)">
+                                                <td>@item?.name<input type="hidden" name="socialNameArr" value="@item?.name" data-parsley-required="true" /></td>
+                                                <td>@item?.username<input type="hidden" name="socialUserNameArr" value="@item?.username"  data-parsley-required="true"/></td>
+                                                <td>@item?.url<input type="hidden" name="socialLinkArr" value="@item?.url" /></td>
+                                                <td><i onclick="removeSocial(@i)" class="fa fa-trash" style="color:red"></i></td>
+                                            </tr>
+                                            i++;
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <input type="button" name="previous" style="background-color:#2AB7F8" class="previous action-button-previous" value="Previous" />
+                    <input type="button" name="next" style="background-color:#4F61F2" class="next action-button" value="Next" />
+                </fieldset>
+                <fieldset>
+                    <div class="col-12" style="margin:20px">
+                        <h2 class="fs-title" style="display:inline">Teacher Career</h2>
+                        <i class="fa fa-plus fa-2x float-right" style="color:#3cacf4" data-toggle="modal" data-target="#careerModal"></i>
+                    </div>
+                    <hr />
+                    <input type="hidden" class="form-control" id="teacherId" value="@Model?.teacher?.Id" name="teacherId">
+                    <div class="col-12" style="text-align:left">
+                        <table class="table table-bordered" id="careerTbl" style="width:100%">
+                            <thead style="text-align:center">
+                                <tr>
+                                    <th width="25%">Company Name</th>
+                                    <th width="20%">Role</th>
+                                    <th width="13%">Start Year</th>
+                                    <th width="13%">End Year</th>
+                                    <th width="19%">Description</th>
+                                    <th width="10%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var j = 100;
+                                    @foreach (var item in Model?.teacherCareers)
+                                    {
+                                        <tr id="cr@(j)">
+                                            <td>@item?.companyName<input type="hidden" name="companyNameArr" value="@item?.companyName"  data-parsley-required="true"/></td>
+                                            <td>@item?.role<input type="hidden" name="roleArr" value="@item?.role"  data-parsley-required="true"/></td>
+                                            <td>@item?.startYear<input type="hidden" name="startYearArr" value="@item?.startYear"  data-parsley-required="true"/></td>
+                                            <td>@item?.endYear<input type="hidden" name="endYearArr" value="@item?.endYear"  data-parsley-required="true"/></td>
+                                            <td>@item?.description<input type="hidden" name="descriptionArr" value="@item?.description"  data-parsley-required="true"/></td>
+                                            <td><i onclick="removeCareer(@j)" class="fa fa-trash" style="color:red"></i></td>
+                                        </tr>
+                                        j++;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <input type="button" name="previous" style="background-color:#2AB7F8" class="previous action-button-previous" value="Previous" />
+                    <input type="button" name="next" style="background-color:#4F61F2" class="next action-button" value="Next" />
+                </fieldset>
+                <fieldset>
+                    <div class="col-12" style="margin:20px">
+                        <h2 class="fs-title" style="display:inline">Teacher Education</h2>
+                        <i class="fa fa-plus fa-2x float-right" style="color:#3cacf4" data-toggle="modal" data-target="#educationModal"></i>
+                    </div>
+                    <div class="col-12" style="text-align:left">
+                        <table class="table table-bordered" id="degreeTbl" style="width:100%">
+                            <thead style="text-align:center">
+                                <tr>
+                                    <th width="25%">University</th>
+                                    <th width="20%">Degree</th>
+                                    <th width="20%">Session</th>
+                                    <th width="25%">Description</th>
+                                    <th width="10%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var k = 100;
+                                    @foreach (var item in Model?.teacherEducations)
+                                    {
+                                        <tr id="dg@(k)">
+                                            <td>@item?.universityName<input type="hidden" name="universityArr" value="@item?.universityName"  data-parsley-required="true"/></td>
+                                            <td>@item?.degree<input type="hidden" name="degreeArr" value="@item?.degree"  data-parsley-required="true"/></td>
+                                            <td>@item?.session<input type="hidden" name="sessionArr" value="@item?.session"  data-parsley-required="true"/></td>
+                                            <td>@item?.description<input type="hidden" name="desEduArr" value="@item?.description" /></td>
+                                            <td><i onclick="removeCareer(@k)" class="fa fa-trash" style="color:red"></i></td>
+                                        </tr>
+                                        k++;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <input type="button" name="previous" style="background-color:#2AB7F8" class="previous action-button-previous" value="Previous" />
+                    <input type="button" name="next" style="background-color:#4F61F2" class="next action-button" value="Next" />
+                </fieldset>
+                <fieldset>
+                    <input type="hidden" class="form-control" id="index" value="1">
+                    <div class="col-12" style="margin:20px">
+                        <h2 class="fs-title" style="text-align:center;display:inline">Teacher Expertice</h2>
+                        <i class="fa fa-plus fa-2x float-right" style="color:#3cacf4" data-toggle="modal" data-target="#experticeModal"></i>
+                    </div>
+                    <div class="col-12">
+                        <table class="table table-bordered" id="experticeTbl" style="width:100%">
+                            <thead style="text-align:center">
+                                <tr>
+                                    <th width="45%">Title</th>
+                                    <th width="45%">Subtitle</th>
+                                    <th width="10%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var l = 100;
+                                    @foreach (var item in Model?.teacherExpertises)
+                                    {
+                                        <tr id="ex@(l)">
+                                            <td>@item?.title<input type="hidden" name="titleArr" value="@item?.title"  data-parsley-required="true"/></td>
+                                            <td>@item?.subtitle<input type="hidden" name="subtitleArr" value="@item?.subtitle" /></td>
+                                            <td><i onclick="removeExpertice(@l)" class="fa fa-trash" style="color:red"></i></td>
+                                        </tr>
+                                        l++;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <input type="button" name="previous" style="background-color:#2AB7F8" class="previous action-button-previous" value="Previous" />
+                    <input type="button" name="next" style="background-color:#4F61F2" class="next action-button" value="Next" />
+                </fieldset>
+                <fieldset>
+                    <h2 class="fs-title">Final</h2>
+                    <input type="button" name="previous" style="background-color:#2AB7F8" class="previous action-button-previous" value="Previous" />
+                    @*<input type="button" data-toggle="modal" data-target="#previewModal" style="background-color:#4f61f2" class="action-button-previous" value="Preview" />*@
+                    <input type="button" style="background-color:#4f61f2" class="action-button-previous" id="btnPreview" value="Preview" />
+                    <button type="submit" style="border-radius:20px" id="submit" value="Submit" class="btn btn-outline-info"><i class="fas fa-save"></i> Submit</button>
+
+                </fieldset>
+            </div>
+        </form>
+    </div>
+</div>
+@*Preview Modal*@
+<div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="row">
+                <div class="col-12 row" s>
+                    <div class="col-7 row">
+                        <div class="col-5" style="text-align:center;">
+                            <div style="height:160px; width:120px;background-color:darkgoldenrod;margin-left: 40px">
+                                @if (Model?.teacher?.photoUrl != null)
+                                {
+                                    <img src="~/@Model?.teacher?.photoUrl" id="teacherImage" style="border-radius:50%;margin-top: 40px;" height="110" width="110" />
+                                }
+                                else
+                                {
+                                    <img src="~/images/defaultperson.png" id="teacherImage" style="border-radius:50%;margin-top: 40px;" height="110" width="110" />
+                                }
+
+                            </div>
+                        </div>
+                        <div class="col-7">
+                            <h2 id="tName" style="margin-top:30px">@Model?.teacher?.nameEnglish</h2>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <table style="width:100%;height:130px;margin-top: 33px" id="socialPre">
+                            <tr>
+                                <td width="15%">
+                                    <i class="fa fa-location-arrow" style="color:#3cacf4"></i>
+                                </td>
+                                <td width="85" id="tLoc">@Model?.teacher?.addressPresent</td>
+                            </tr>
+                            <tr>
+                                <td width="15%">
+                                    <i class="fa fa-mobile" style="color:#3cacf4"></i>
+                                </td>
+                                <td width="85" id="tMobile">@Model?.teacher?.mobilePersonal</td>
+                            </tr>
+                            <tr>
+                                <td width="15%">
+                                    <i class="fa fa-mail-bulk" style="color:#3cacf4"></i>
+                                </td>
+                                <td width="85" id="tEmail">@Model?.teacher?.emailPersonal</td>
+                            </tr>
+                            @{ var b = 100;
+                                @foreach (var item in Model?.teacherSocialMeadias)
+                                {
+                                    <tr id=soPre@(b)>
+                                        <td width="15%">
+                                            <i class="fas fa-globe" style="color:#3cacf4"></i>
+                                        </td>
+                                        <td>@item?.username</td>
+                                    </tr>
+                                }
+                            }
+                        </table>
+                    </div>
+                </div>
+                <div class="col-12" style="height:40px"></div>
+                <div class="col-12 row">
+                    <div class="col-7">
+                        <div class="col-12 row" style="margin-left: 17px">
+                            <div class="col-2" style="background-color:#b8860b;margin-left:12px;"></div>
+                            <div class="col-10 row">
+                                <div class="col-12">
+                                    <h2>ABOUT ME</h2>
+                                </div>
+                                <div class="col-12">
+                                    <p id="aboutMe">
+                                        @Model?.teacher?.about
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12" style="height:40px"></div>
+                        <div class="col-12 row">
+                            <div class="col-12">
+                                <h2>CAREER</h2>
+                            </div>
+                            <div class="col-12 row" id="tAbout">
+                                @{ var a = 100;
+                                    @foreach (var item in Model?.teacherCareers)
+                                    {
+                                        <div class="col-12 row" id="crPre@(a)">
+                                            <div class="col-3">
+                                                <p id="cStart">@item?.endYear</p>
+                                                <p id="cEnd">@item?.startYear</p>
+                                            </div>
+                                            <div class="col-9 row">
+                                                <div class="col-12">
+                                                    <h4 style="display:inline;color:aqua">@item?.role</h4>&nbsp;&nbsp;<h4 style="display:inline">@item?.companyName</h4>
+                                                </div>
+                                                <div class="col-12">
+                                                    <p style="height:200px">@item?.description</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-5" style="border-left:1px solid">
+                        <div class="col-12" style="height:40px"></div>
+                        <div class="col-12 row">
+                            <div class="col-12">
+                                <h2>Expertise</h2>
+                            </div>
+                            <div class="col-12">
+                                <ul style="margin-left:30px;height:150px;overflow-y:scroll" id="tExpertice">
+                                    @{ var c = 100;
+                                        @foreach (var item in Model?.teacherExpertises)
+                                        {
+                                            <li style="list-style-type: circle;" id=exPre@(c)>@item?.title-@item?.subtitle</li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <div class="col-12" style="text-align:center">
+                        <button type="button" style="border-radius:20px; text-align:center" id="preSubmit" value="Submit" class="btn btn-outline-info"><i class="fas fa-save"></i> Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*Education Modal*@
+<div class="modal fade" id="educationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width:450px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left" id="myModalLabel">Teacher Education Info</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12">
+                    <div class="form-group row">
+                        <label for="universityName" class="col-sm-4 col-form-label">University Name</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="universityName" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="degree" class="col-sm-4 col-form-label">Degree</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="degree" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="session" class="col-sm-4 col-form-label">Session</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="session" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row" style="text-align:left">
+                        <label for="description" class="col-sm-4 col-form-label">Description</label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control col-12" id="descriptionEdu"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <div class="col-12" style="text-align:center">
+                        <button type="button" class="btn btn-success" id="btnDegreeAdd"><i class="fa fa-plus"> Add</i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*Expertice Modal*@
+<div class="modal fade" id="experticeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width:400px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left" id="myModalLabel">Teacher Expertice Info</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12">
+                    <div class="form-group row">
+                        <label for="title" class="col-sm-4 col-form-label">Title</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="title" value="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="subtitle" class="col-sm-4 col-form-label">Subtitle</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="subtitle" value="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <div class="col-12" style="text-align:center">
+                        <button type="button" class="btn btn-success" id="btnExperticeAdd"><i class="fa fa-plus"> Add</i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*Career Modal*@
+<div class="modal fade" id="careerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width:600px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left" id="myModalLabel">Teacher Career Info</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12">
+                    <div class="row" style="text-align:left">
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="startYear" class="col-sm-4 col-form-label">Start Year</label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" id="startYear" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="endYear" class="col-sm-4 col-form-label">End Year</label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" id="endYear" value="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="text-align:left">
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="role" class="col-sm-4 col-form-label">Role</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="role" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group row">
+                                <label for="companyName" class="col-sm-4 col-form-label">Company Name</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="companyName" value="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="text-align:left">
+                        <div class="col-12">
+                            <div class="form-group row" style="text-align:left">
+                                <label for="description" class="col-sm-2 col-form-label">Description</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control col-12" id="description"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <div class="col-12" style="text-align:center">
+                        <button type="button" class="btn btn-success" id="btnCareerAdd"><i class="fa fa-plus"> Add</i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*Social Modal*@
+<div class="modal fade" id="socailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width:400px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title pull-left" id="myModalLabel">Teacher Social Info</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12">
+                    <div class="row" style="text-align:left">
+                        <div class="col-12">
+                            <div class="form-group row">
+                                <label for="startYear" class="col-sm-4 col-form-label">Social Media</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="name" value="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="text-align:left">
+                        <div class="col-12">
+                            <div class="form-group row">
+                                <label for="endYear" class="col-sm-4 col-form-label">User Name</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="userName" value="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="text-align:left">
+                        <div class="col-12">
+                            <div class="form-group row">
+                                <label for="endYear" class="col-sm-4 col-form-label">Link</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="link" value="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <div class="col-12" style="text-align:center">
+                        <button type="button" class="btn btn-success" id="btnSocialAdd"><i class="fa fa-plus"> Add</i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#dateOfBirth').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2030" });
+
+        })
+
+        $("#teacherPhotoUrl").change(function () {
+            readURL(this);
+        });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var filerdr = new FileReader();
+                filerdr.onload = function (e) {
+                    $('#user_img').attr('src', e.target.result);
+                    $('#teacherImage').attr('src', e.target.result);
+                }
+                filerdr.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $('#btnExperticeAdd').click(function () {
+            var index = $('#index').val();
+            var title = $('#title').val();
+            var subtitle = $('#subtitle').val();
+            var ecpertice = `<tr id=ex${index}><td>${title}<input type="hidden" name="titleArr"  data-parsley-required="true" value="${title}"/></td><td>${subtitle}<input type="hidden" data-parsley-required="true" name="subtitleArr" value="${subtitle}"/></td><td><i onclick="removeExpertice(${index})" class="fa fa-trash" style="color:red"></i></td></tr>`;
+            var previewAdd = `<li id=exPre${index}>${title}-${subtitle}</li>`;
+            if (title == '') {
+                swal({
+                    title: 'Empty', text: 'Title field are empty!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Ok!'
+                }).then(function () {
+                    return false;
+                });
+            }
+            else if (subtitle == '') {
+                swal({
+                    title: 'Empty', text: 'Subtitle field are empty!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Ok!'
+                }).then(function () {
+                    return false;
+                });
+            }
+            else {
+                $('#experticeTbl tbody').append(ecpertice);
+                $('#tExpertice').append(previewAdd);
+                index++;
+                $('#index').val(index);
+                $('#title').val('');
+                $('#subtitle').val('');
+                $('#experticeModal').modal('hide');
+            }
+        })
+
+        function removeExpertice(index) {
+            $('#ex' + index).remove();
+            $('#exPre' + index).remove();
+        }
+
+        $('#btnDegreeAdd').click(function () {
+            var index = $('#index').val();
+            var universityName = $('#universityName').val();
+            var degree = $('#degree').val();
+            var session = $('#session').val();
+            var descriptionEdu = $('#descriptionEdu').val();
+            var eduData = `<tr id=dg${index}><td width="25%">${universityName}<input type="hidden" data-parsley-required="true" name="universityArr" value="${universityName}"/></td><td width="20%">${degree}<input type="hidden" data-parsley-required="true" name="degreeArr" value="${degree}"/></td><td width="20%">${session}<input type="hidden" data-parsley-required="true" name="sessionArr" value="${session}"/></td><td width="25%">${descriptionEdu}<input type="hidden" name="desEduArr" value="${descriptionEdu}"/></td><td width="10%"><i onclick="removeDegree(${index})" class="fa fa-trash" style="color:red"></i></td></tr>`;
+            var previewAdd = `<div id="dgPre${index}" class="col-12 row"><div class="col-6" id="tUVPre">
+                                            <p>${degree}</p>
+                                            <p>${universityName}</p>
+                                        </div>
+                                        <div class="col-6">
+                                            <p>${session}</p>
+                                        </div></div>`;
+            if (degree == '') {
+                swal({
+                    title: 'Empty', text: 'Degree field are empty!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Ok!'
+                }).then(function () {
+                    return false;
+                });
+            }
+            else if (universityName == '') {
+                swal({
+                    title: 'Empty', text: 'University Name field are empty!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Ok!'
+                }).then(function () {
+                    return false;
+                });
+            }
+            else if (session == '') {
+                swal({
+                    title: 'Empty', text: 'Session field are empty!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Ok!'
+                }).then(function () {
+                    return false;
+                });
+            }
+            else {
+                $('#degreeTbl tbody').append(eduData);
+                $('#tEduPre').append(previewAdd);
+                index++;
+                $('#index').val(index);
+                $('#universityName').val('');
+                $('#degree').val('');
+                $('#session').val('');
+                $('#descriptionEdu').val('');
+                $('#educationModal').modal('hide');
+            }
+        })
+
+        function removeDegree(index) {
+            $('#dg' + index).remove();
+            $('#dgPre' + index).remove();
+        }
+
+        $('#btnCareerAdd').click(function () {
+            var index = $('#index').val();
+            var startYear = $('#startYear').val();
+            var endYear = $('#endYear').val();
+            var role = $('#role').val();
+            var companyName = $('#companyName').val();
+            var description = $('#description').val();
+            var careerData = `<tr id=cr${index}><td>${companyName}<input type="hidden" data-parsley-required="true" name="companyNameArr" value="${companyName}" /></td><td>${role}<input type="hidden" name="roleArr" data-parsley-required="true" value="${role}"/></td><td>${startYear}<input type="hidden" data-parsley-required="true" name="startYearArr" value="${startYear}"/></td><td>${endYear}<input type="hidden" data-parsley-required="true" name="endYearArr" value="${endYear}"/></td><td>${description}<input type="hidden" name="descriptionArr" data-parsley-required="true" value="${description}"/></td><td><i onclick="removeCareer(${index})" class="fa fa-trash" style="color:red"></i></td></tr>`;
+            var previewAdd = `<div class="col-12 row" id="crPre${index}">
+                                        <div class="col-3">
+                                            <p id="cStart">${endYear}</p>
+                                            <p id="cEnd">${startYear}</p>
+                                        </div>
+                                        <div class="col-9 row">
+                                            <div class="col-12">
+                                                <h4 style="display:inline;color:aqua">${role}</h4>&nbsp;&nbsp;<h4 style="display:inline">${companyName}</h4>
+                                            </div>
+                                            <div class="col-12">
+                                                <p style="height:200px">${description}</p>
+                                            </div>
+                                        </div>
+                                    </div>`
+            if (startYear == '') {
+                swal({
+                    title: 'Empty', text: 'Start Year field are empty!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Ok!'
+                }).then(function () {
+                    return false;
+                });
+            }
+            else if (endYear == '') {
+                swal({
+                    title: 'Empty', text: 'End Year Name field are empty!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Ok!'
+                }).then(function () {
+                    return false;
+                });
+            }
+            else if (role == '') {
+                swal({
+                    title: 'Empty', text: 'Role field are empty!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Ok!'
+                }).then(function () {
+                    return false;
+                });
+            }
+            else if (companyName == '') {
+                swal({
+                    title: 'Empty', text: 'Company Name field are empty!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Ok!'
+                }).then(function () {
+                    return false;
+                });
+            }
+            else {
+                $('#careerTbl tbody').append(careerData);
+                $('#tAbout').append(previewAdd);
+                index++;
+                $('#index').val(index);
+                $('#startYear').val('');
+                $('#endYear').val('');
+                $('#role').val('');
+                $('#companyName').val('');
+                $('#description').val('');
+                $('#careerModal').modal('hide');
+            }
+        })
+
+        function removeCareer(index) {
+            $('#cr' + index).remove();
+            $('#crPre' + index).remove();
+        }
+
+        $('#btnSocialAdd').click(function () {
+            var index = $('#index').val();
+            var name = $('#name').val();
+            var userName = $('#userName').val();
+            var link = $('#link').val();
+            var socialData = `<tr id=so${index}><td>${name}<input type="hidden" data-parsley-required="true" name="socialNameArr" value="${name}" /></td><td>${userName}<input type="hidden" name="socialUserNameArr" data-parsley-required="true" value="${userName}"/></td><td>${link}<input type="hidden" name="socialLinkArr" value="${link}"/></td><td><i onclick="removeSocial(${index})" class="fa fa-trash" style="color:red"></i></td></tr>`;
+            var previewAdd = `<tr id=soPre${index}>
+                                <td width="15%">
+                                    <i class="fas fa-globe" style="color:#3cacf4"></i>
+                                </td>
+                                <td>${userName}</td>
+                            </tr>`
+            if (name == '') {
+                swal({
+                    title: 'Empty', text: 'Name field are empty!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Ok!'
+                }).then(function () {
+                    return false;
+                });
+            }
+            else if (userName == '') {
+                swal({
+                    title: 'Empty', text: 'User Name field are empty!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Ok!'
+                }).then(function () {
+                    return false;
+                });
+            }
+            else if (link == '') {
+                swal({
+                    title: 'Empty', text: 'Link field are empty!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Ok!'
+                }).then(function () {
+                    return false;
+                });
+            }
+            else {
+                $('#socialTbl tbody').append(socialData);
+                $('#socialPre').append(previewAdd);
+                index++;
+                $('#index').val(index);
+                $('#name').val('');
+                $('#userName').val('');
+                $('#link').val('');
+                $('#socailModal').modal('hide');
+            }
+        })
+
+        function removeSocial(index) {
+            $('#so' + index).remove();
+            $('#soPre' + index).remove();
+        }
+
+        function validateNumber(e) {
+            const pattern = /^[0-9]$/;
+
+            return pattern.test(e.key)
+        }
+
+        $('#btnPreview').click(function () {
+            var img = '';
+            var name = $('#nameEnglish').val();
+            var address = $('#addressPresent').val();
+            var mobile = $('#mobilePersonal').val();
+            var email = $('#emailPersonal').val();
+            var linkId = $('#linkedIn').val();
+            var fb = $('#facebook').val();
+            var aboutMe = $('#about').val();
+            $('#tLoc').empty();
+            $('#tLoc').append(address);
+            $('#tName').empty();
+            $('#tName').append(name);
+            $('#tMobile').empty();
+            $('#tMobile').append(mobile);
+            $('#tEmail').empty();
+            $('#tEmail').append(email);
+            $('#tFb').empty();
+            $('#tFb').append(fb);
+            $('#tLinked').empty();
+            $('#tLinked').append(linkId);
+            $('#aboutMe').empty();
+            $('#aboutMe').append(aboutMe);
+            $('#previewModal').modal('show')
+        })
+
+        $('#preSubmit').click(function () {
+            $('#submit').click();
+        })
+
+        var current_fs, next_fs, previous_fs;
+        var left, opacity, scale;
+        var animating;
+
+        $(".next").click(function () {
+            if (animating) return false;
+            animating = true;
+
+            current_fs = $(this).parent();
+            next_fs = $(this).parent().next();
+
+            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+
+            next_fs.show();
+            current_fs.animate({ opacity: 0 }, {
+                step: function (now, mx) {
+                    scale = 1 - (1 - now) * 0.2;
+                    left = (now * 50) + "%";
+                    opacity = 1 - now;
+                    current_fs.css({
+                        'transform': 'scale(' + scale + ')',
+                        'position': 'absolute'
+                    });
+                    next_fs.css({ 'left': left, 'opacity': opacity });
+                },
+                duration: 500,
+                complete: function () {
+                    current_fs.hide();
+                    animating = false;
+                },
+                easing: 'easeInOutBack'
+            });
+        });
+
+        $(".previous").click(function () {
+            if (animating) return false;
+            animating = true;
+
+            current_fs = $(this).parent();
+            previous_fs = $(this).parent().prev();
+
+            $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+
+            previous_fs.show();
+            current_fs.animate({ opacity: 0 }, {
+				step: function (now, mx) {
+                    scale = 0.8 + (1 - now) * 0.2;
+                    left = ((1 - now) * 50) + "%";
+                    opacity = 1 - now;
+                    current_fs.css({ 'left': left });
+                    previous_fs.css({ 'transform': 'scale(' + scale + ')', 'opacity': opacity });
+                },
+                duration: 800,
+                complete: function () {
+                    current_fs.hide();
+                    animating = false;
+                },
+                easing: 'easeInOutBack'
+            });
+        });
+    </script>
+}

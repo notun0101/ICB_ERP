@@ -1,0 +1,103 @@
+﻿@model MonthWiseAttendance
+@{
+    ViewData["Title"] = "Date Wise Attendance";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-header row">
+        <div class="col-12 text-center">
+            <h2 style="color: black">BANGLADESH DEVELOPMENT BANK LTD.</h2>
+            <h3 style="color: black">Head Office, Dhaka</h3>
+            <h5 class="card-title" style="color: black">Date Wise Attendance</h5>
+            <h5 style="color: black">@ViewBag.startDate.ToString("dd MMM yyyy") to @ViewBag.endDate.ToString("dd MMM yyyy")</h5>
+        </div>
+    </div>
+
+    <div class="">
+        
+            <table class="table table-bordered table-striped">
+                <thead class="text-center">
+                    <tr style="background-color: gray;">
+                        <th>Employee Id</th>
+                        <th>Name</th>
+                        <th>Designation</th>
+                        <th>Total Present</th>
+                        <th>Total Absent</th>
+                        @*<th>Total On Leave</th>*@
+                        <th>Actual Holidays</th>
+                        <th>Total Working Days</th>
+                        <th>Ratings</th>
+                        <th>Average</th>
+                    </tr>
+                    <tr style="background-color: lightgray;">
+                        <th></th>
+                        <th></th>
+                        <th>P</th>
+                        <th>A</th>
+                        @*<th>L</th>*@
+                        <th>H</th>
+                        <th></th>
+                        <th></th>
+                     
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @*@foreach (var item in Model.monthWiseViewAttendance)
+        {
+            <tr style="text-align: center;">
+                <td>@item.employee?.employeeCode</td>
+                <td style="text-align: left;">@item.employee?.nameEnglish</td>
+                <td>@item.totalPresent</td>
+                <td>@item.totalAbsent</td>
+                <td>@item.totalOnLeave</td>
+                <td>@item.totalHolidays</td>
+                <td>@item.totalWorkingDays</td>
+
+                @if (item.average >= 90)
+                {
+                    <td>EXCELLENT</td>
+                }
+                else if (item.average >= 80)
+                {
+                    <td>GOOD</td>
+                }
+                else
+                {
+                    <td>NORMAL</td>
+                }
+
+                @if (item.average != 0)
+                {
+                    <td>@item.average?.ToString("##.##") %</td>
+                }
+                else
+                {
+                    <td>0.00 %</td>
+                }
+            </tr>
+        }*@
+
+
+                    @foreach (var item in Model.allEmployeeAttendanceVM)
+                    {
+                        <tr style="text-align: center;">
+                            <td>@item.empCode</td>
+                            <td style="text-align: left;">@item.empName</td>
+                            <td style="text-align: left;">@item.desigName</td>
+                            <td>@item.Attend</td>
+                            <td>@item.totalAbsent</td>
+                            @*<td>@item.totalOnLeave</td>*@
+                            <td>@item.holidayCount</td>
+                            <td>@item.workingDays</td>
+                            <td>@item.Ratings</td>
+                            <td>@item.average %</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        
+    </div>>
+</div>>

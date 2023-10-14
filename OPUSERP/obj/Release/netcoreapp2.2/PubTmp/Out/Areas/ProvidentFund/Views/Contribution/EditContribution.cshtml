@@ -1,0 +1,152 @@
+﻿@model ContributionViewModel
+
+@{
+    ViewData["Title"] = "EditContribution";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+
+            <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+                <h5 class="m-0 font-weight-bold text-primary">Update Contribution</h5>
+                <a class='btn btn-info mr-4' style="float:right" data-toggle='tooltip' title='Go Back' href='/ProvidentFund/Contribution/ContributionList'>@*<i class="fas fa-backward fa-2x "></i>*@<i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+
+
+            <div class="card-body">               
+                <form id="FormId">
+                    <div class="row col-sm-12">
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <label for="" class="col-sm-4 col-form-label">Members' ID</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="membersName" name="pfmember" value="">
+                                    <input type="hidden" id="memberId" name="pfmember" value="@Model.pfmember" />
+                                    <input type="hidden" id="contributionId" name="contributionId" value="@Model.contributionId" />
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="" class="col-sm-4 col-form-label">Transaction Date</label>
+                                <div class="col-sm-6 input-group">
+                                    <input name="transectionDate" id="tranDate" class="form-control input-group-sm Date" value="@Model.transectionDate" />
+
+                                    <div class="input-group-prepend">
+                                        <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="" class="col-sm-4 col-form-label">Contribution Month</label>
+                                <div class="col-sm-6 input-group">
+                                    <input name="contributionMonth" id="contMonth" class="form-control input-group-sm Date" value="@Model.contributionMonth" />
+
+                                    <div class="input-group-prepend">
+                                        <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+
+                            <div class="form-group row">
+                                <label for="" class="col-sm-5 col-form-label">Company Contributioin</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" name="companyContribution" id="compCont" value="@Model.companyContribution">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="" class="col-sm-5 col-form-label">Employee Contributioin</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" name="employeeContribution" id="empCont" value="@Model.employeeContribution">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <hr>
+                    <div style="padding-right:80px">
+                        <input type="button" class="btn btn-sm btn-primary bg-success text-white" id="btnSave" value="Update">&nbsp;
+                        @*<button type="button" id="reset" class="btn btn-danger " style="float:right; margin-top:5px;margin-right:5px;"><i class="fas fa-sync"></i></button>*@
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".Date").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+
+        Common.Ajax('GET', '/ProvidentFund/Member/GetAllMembers', [], 'json', ajaxFunctionAllMembers, false);
+
+        $("#reset").on("click", function (event) {
+            $('#employeeName').val('');
+            $('#tranDate').val('');
+            $('#contMonth').val('');
+            $('#compCont').val('');
+            $('#empCont').val('');
+        });
+        $("#membersName").val(@Model.pfmember);
+
+    });
+
+    function ajaxFunctionAllMembers(response) {
+        console.log(response);
+        var GetMemberList = [];
+        $.each(response, function (id, option) {
+            var obj = new Object();
+            obj.key = option.Id;
+            obj.value = option.memberName;
+            GetMemberList[GetMemberList.length] = obj;
+        });
+
+        $('#membersName').autocomplete({
+            source: GetMemberList,
+            select: function (event, ui) {
+                $("#membersName").val(ui.item.value);
+                $("#memberId").val(ui.item.key);
+            }
+        });
+    }
+
+
+    $('#btnSave').click(function () {
+        console.log($('#FormId').serializeArray());
+        var data = $('#FormId').serializeArray();
+
+        console.log(data[0].value)
+        swal({
+            title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+        }).then(function () {
+            $.ajax({
+                url: '/ProvidentFund/Contribution/EditContribution',
+                type: 'POST',
+                data: data
+            }).done(function () {
+                if (data[0].value == 0) {
+                    swal('success', 'Saved Successfully!', 'success').then(function () {
+                        //location.reload();
+                        window.location.href = '/ProvidentFund/Contribution/ContributionList';
+                    });
+                }
+                else {
+                    swal('success', 'Updated Successfully!', 'success').then(function () {
+                        //location.reload();
+                        window.location.href = '/ProvidentFund/Contribution/ContributionList';
+                    });;
+                }
+            }).fail(function () {
+                swal('warning', 'Failed!', 'warning');
+            })
+        });
+    })
+
+</script>

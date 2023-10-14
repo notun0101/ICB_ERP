@@ -1,0 +1,171 @@
+﻿@model PayrollReportViewModel
+@{
+	ViewData["Title"] = "Bonus Report";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+
+<style>
+
+	.print-card-body {
+		width: 100%;
+		padding-bottom: 10px;
+	}
+
+	.vartical-table th {
+		width: 25%;
+	}
+
+	.vartical-table td {
+		width: 25%;
+	}
+
+	.table td, .table th {
+		padding: .3rem;
+		font-size: 14px;
+		border: 1px solid black !important;
+	}
+
+	table {
+		page-break-inside: auto;
+		border-collapse: collapse;
+		border: 1px solid black !important;
+	}
+
+	tr {
+		page-break-inside: avoid;
+		page-break-after: auto;
+		border: 1px solid black !important;
+	}
+
+	thead {
+		display: table-header-group;
+		border: 1px solid black !important;
+	}
+
+	tfoot {
+		display: table-footer-group;
+		border: 1px solid black !important;
+	}
+
+	h6 {
+		font-size: 14px;
+		background-color: gray;
+		color: white !important;
+		padding: 3px;
+	}
+</style>
+
+
+<div class="print-card" style="width: 100%;">
+	<div class="print-card-body">
+
+		<div class="container-fluid">
+			@*<div class="fa-pull-right">
+					<p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+				</div>*@
+			<div class="row" style="padding-top:0px;">
+				<div class="col-2">
+					<img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="BDBL Logo" style="height:80px;" />
+				</div>
+				<div class="col-8">
+					<div style="color:black;text-align:center;">
+						<h3 style="font-size:20px;">@Model.companies.FirstOrDefault()?.companyName</h3>
+						<h3 style="font-size:18px;">Central Accounts Department</h3>
+						<h3 style="font-size:18px;">@ViewBag.branchName</h3>
+						<h3 style="font-size:18px;">@Model.bonuses?.FirstOrDefault()?.branchName</h3>
+						<br />
+					</div>
+				</div>
+				<div class="col-2">
+
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid ">
+			<div class="col-12">
+				<h3 style="font-size:18px;color:black"> </h3>
+			</div>
+		</div>
+		<br />
+		<div class="container-fluid" style="color:black;">
+			@{
+				int totalEmp = 0;
+			}
+			@foreach (var data in Model.bonuses.OrderBy(x => Convert.ToInt32(x.designationCode)).Select(x => x.designationName).Distinct())
+			{
+				int emp = 0;
+				<p>@data</p>
+				<table class="table table-bordered">
+					<thead>
+						<tr style="text-align: center;">
+							<th>Sl</th>
+							<th>Emp Id</th>
+							<th>Name</th>
+							<th>Basic Salary</th>
+							<th>Gross Bonus/ Allowance</th>
+							<th style="width: 10% !important;">Revenue Stamp</th>
+							<th>Net Bonus/ Allowance</th>
+							<th>Account</th>
+						</tr>
+					</thead>
+					<tbody>
+						@{
+							int i = 0;
+							decimal total = 0;
+						}
+						@foreach (var item in Model.bonuses.OrderBy(x => x.seniorityLevel).Where(x => x.designationName == data))
+						{
+							i++;
+							emp++;
+							totalEmp++;
+							total += Convert.ToDecimal(item.BasicSalary);
+							<tr>
+								<td>@i</td>
+								<td>@item.employeeCode</td>
+								<td>@item.employeeName</td>
+								<td style="text-align: right; width: 15%;">@item.BasicSalary?.ToString("N2")</td>
+								<td style="text-align: right; width: 15%;">@item.BonusAmount?.ToString("N2")</td>
+								<td style="text-align: right; width: 10% !important;">@item.Revenue?.ToString("N2")</td>
+								<td style="text-align: right; width: 15%;">@item.TotalAmount?.ToString("N2")</td>
+								<td>@item.accountNo</td>
+							</tr>
+						}
+						<tr>
+							<td colspan="3">Total - @emp</td>
+							<td style="text-align: right; width: 15%;">@Model.bonuses.Where(x => x.designationName == data).Sum(x => x.BasicSalary)?.ToString("N2")</td>
+							<td style="text-align: right; width: 15%;">@Model.bonuses.Where(x => x.designationName == data).Sum(x => x.BonusAmount)?.ToString("N2")</td>
+							<td style="text-align: right; width: 15%;">@Model.bonuses.Where(x => x.designationName == data).Sum(x => x.Revenue)?.ToString("N2")</td>
+							<td style="text-align: right; width: 15%;">@((Model.bonuses.Where(x => x.designationName == data).Sum(x => x.BonusAmount) - Model.bonuses.Where(x => x.designationName == data).Sum(x => x.Revenue))?.ToString("N2"))</td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			}
+			<table class="table table-bordered">
+				<tr style="font-weight: bold;">
+					<td style="width: 25%;">Grand Total - @totalEmp</td>
+					<td style="text-align: right; width: 15%;">@Model.bonuses.Sum(x => x.BasicSalary)?.ToString("N2")</td>
+					<td style="text-align: right; width: 15%;">@Model.bonuses.Sum(x => x.BonusAmount)?.ToString("N2")</td>
+					<td style="text-align: right; width: 15%;">@Model.bonuses.Sum(x => x.Revenue)?.ToString("N2")</td>
+					<td style="text-align: right; width: 15%;">@((Model.bonuses.Sum(x => x.BonusAmount) - Model.bonuses.Sum(x => x.Revenue))?.ToString("N2"))</td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+
+		<br /><br /><br />
+		<div class="row" style="color:black;">
+			<div class="col-4 text-center">
+				<p style="border-top: 1px solid">Prepared By</p>
+			</div>
+			<div class="col-4 text-center">
+				<p style="border-top: 1px solid">Checked By</p>
+			</div>
+			<div class="col-4 text-center">
+				<p style="border-top: 1px solid">Approved By</p>
+			</div>
+		</div>
+	</div>
+</div>
+

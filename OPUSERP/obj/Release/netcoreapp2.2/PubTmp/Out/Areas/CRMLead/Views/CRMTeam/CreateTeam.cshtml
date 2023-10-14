@@ -1,0 +1,316 @@
+﻿@model TeamInfoViewModel
+@{
+    //ViewData["Title"] = "AddTeamMember";
+}
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<style>
+    .aaa {
+        border-radius: 0 !important
+    }
+</style>
+<br />
+
+<div class="col-md-12">
+    <form asp-action="AddTeamMember" asp-controller="CRMTeam" asp-area="CRMLead" method="post">
+        <div class="card">
+            <div class="card-header">
+                <div class="row no-gutters">
+                    <div class="col-md-1">
+                        <div class=" p-0">
+                            <h6>Team Code</h6>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="code" name="teamCode" required />
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-2">
+                        <div class=" p-0">
+                            <h6>Team Name</h6>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="team" name="teamName" required />
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-1">
+                        <a href="/CRMLead/CRMTeam/CRMTeamList" class="btn btn-success"><i class="fas fa-list"></i></a>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="card-body pb-0">
+                <div class="row">
+
+                    <div class="col-md-2">
+                        <div class="card aa" style="width:180px!important">
+                            <div class="pt-2" style="height:220px;text-align:center;">
+                                <div class="">
+                                    <img data-toggle="modal" data-target="#exampleModal1" class="rounded-circle" src="~/EmpImages/g2.png" width="100" />
+                                </div>
+                                <div class="pt-2" id="result" name="leaderName">team Leader</div>
+                                <input type="hidden" id="nRaiserId" name="leaderId" value="" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body pb-0 mb-0">
+
+                <div class="row no-gutters mb-2">
+
+                    <div class="col-md-2">
+
+                        <div class="card cc" style="width:180px!important">
+                            <div>
+                                <button id="del2" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span id="del3" class="btn btn-danger btn-sm aaa" aria-hidden="true">&times;</span>
+                                </button>
+                                <button type="button" class="close addF1" data-dismiss="modal" aria-label="Close">
+                                    <span class="add1 btn btn-info btn-sm aaa" aria-hidden="true"><i class="fas fa-plus"></i></span>
+                                </button>
+
+                            </div>
+                            <div class="pt-3 outer-approve" style="height:220px;text-align:center;" id="a1" onclick="openModal('1')">
+                                <div>
+                                    <img class="rounded-circle imgCls" src="~/EmpImages/g2.png" width="100" />
+                                </div>
+                                <p class="pt-2 name result2 nextApproverName" id="result2" name="memberName">Team Member </p>
+                                <input type="hidden" class="result23" name="teamMemberById" value="" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>`
+
+
+            <div class="mt-3 mb-3 mr-4">
+                <input type="submit" id="submit" name="submit" class="btn btn-info btn-sm float-right" value="Save" />
+            </div>
+        </div>
+    </form>
+
+</div>
+
+
+<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form action="/" id="searchForm">
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Team Leader:</label>
+                        <input type="text" class="form-control" id="leader" name="leader" value="" />
+                        <input type="hidden" id="raiser" name="raiserID" />
+                    </div>
+
+                    <div class="float-right">
+                        <input class="bg-info text-light btn btn-primary mt-2" type="button" onclick="clickteam()" value="Add">
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Team Member:</label>
+                        <input type="hidden" class="form-control" id="target">
+                        <input type="text" class="form-control" name="memberName" id="member">
+                        <input type="hidden" id="nApproverId" value="" />
+                    </div>
+
+
+                    <div class="float-right">
+                        <button type="button" class="bg-info text-light btn btn-primary mt-2" onclick="clickApprove()">Add</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@*<button type="button" class="close addF1" data-dismiss="modal" aria-label="Close">
+        <span class="add1 btn btn-info btn-sm aaa" aria-hidden="true"><i class="fas fa-plus"></i></span>
+    </button>*@
+
+@*<input type="text" id="member" name="name" value="" />*@
+@section Scripts{
+    <script>
+
+        function GetEmployeeInfo(response) {
+            var lstPOP = [];
+            $.each(response, function (i, option) {
+                var obj = new Object();
+                obj.key = option.UserId;
+                obj.value = option.EmpName + " - " + option.EmpCode;
+                //obj.email = option.emailAddress;
+                lstPOP[lstPOP.length] = obj;
+
+            });
+
+            $('#leader').autocomplete({
+                source: lstPOP,
+                select: function (event, ui) {
+                    console.log(ui)
+                    $("#leader").val(ui.item.value);
+                    $("#raiser").val(ui.item.key);
+                    //$("#Email").val(ui.item.email);
+                }
+            });
+
+            $('#member').autocomplete({
+                source: lstPOP,
+                select: function (event, ui) {
+                    $("#member").val(ui.item.value);
+                    $("#nApproverId").val(ui.item.key);
+                    //$("#Email").val(ui.item.email);
+                }
+            });
+
+        }
+
+
+
+        $(document).ready(function () {
+            Common.Ajax('GET', '/api/Account/GetUserInfoList/', [], 'json', GetEmployeeInfo);
+
+            $(document).on('click', '#del1', function () {
+                $(this).closest('.aa').toggleClass('strike').fadeOut('slow', function () { $(this).remove(); });
+            });
+
+
+            $(document).on('click', '#del2', function () {
+                $(this).closest('.bb').toggleClass('strike').fadeOut('slow', function () { $(this).remove(); });
+            });
+
+
+            $(document).on('click', '#del3', function () {
+                $(this).closest('.cc').toggleClass('strike').fadeOut('slow', function () { $(this).parent('.col-md-2').remove(); });
+            });
+
+        })
+
+        function clickteam() {
+            var val = $('#leader').val();
+            var val1 = $('#raiser').val();
+            $('#result').text(val);
+            $('#nRaiserId').val(val1);
+            $('#leader').val('');
+            $('#raiser').val('');
+            $('#exampleModal1').modal('hide');
+        }
+
+        function clickmeamber() {
+            var val = $('#member').val();
+            $('#result2').text(val);
+            $('#exampleModal2').modal('hide');
+        }
+
+
+        //$("#searchForm").submit(function (event) {
+        //    event.preventDefault();
+        //    var $form = $(this),
+        //        term = $form.find("input[name='s']").val(),
+        //        url = $form.attr("action");
+        //    var posting = $.post(url, { s: term });
+        //    posting.done(function (data) {
+        //        var content = $(data).find("#content");
+        //        $("#result").empty().append(content);
+        //    });
+        //});
+
+
+
+        $(".add1").click(function () {
+            var i = Math.floor(Math.random() * 90000) + 10000;
+            $(this).closest('.no-gutters').append(`<div class="col-md-2">
+
+                                <div class="card cc" style="width:180px!important">
+                                    <div>
+
+                                        <button id="del2" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span id="del3" class="btn btn-danger btn-sm aaa" aria-hidden="true">&times;</span>
+                                        </button>
+
+                                    </div>
+                                    <div class="pt-3 outer-approve" style="height:220px;text-align:center;" id="a${i}" onclick="openModal('${i}')">
+                                        <div>
+                                            <img class="rounded-circle imgCls" src="/EmpImages/g2.png" width="100" />
+                                        </div>
+                                        <p class="pt-2 name" id="result2" name="nextApproverName">Team Member</p>
+                                        <input type="hidden" class="result23" name="teamMemberById" value="" />
+                                    </div>
+                                </div>
+                            </div>`);
+
+            $('#a' + i).children().find('.addF1').hide();
+            $('#a' + i).find('.addF1').show();
+        });
+
+        function clickApprove() {
+            var target = $('#target').val();
+            var val = $('#member').val();
+            var approveid = $('#nApproverId').val();
+            //var option = `<div>
+            //					<img class="rounded-circle img" src="/EmpImages/g2.png" width="100" />
+            //				</div>
+            //				<p class="pt-2 name" id="result2">${val}</p>
+            //				<input type="hidden"  id="raiser" name="raiserID"/>`;
+            //$('#' + target).empty();
+            //$('#' + target).append(option);
+            $('#' + target).find('#result2').text(val);
+            //alert($('#nApproverId').val())
+            //$('#' + target).find('.result23').val(val);
+            $('#' + target).find('.result23').val(approveid);
+
+            $('#target').val('');
+            $('#member').val('');
+            $('#nApproverId').val('');
+            //$('#' +target).closest('#result2').text('dsads');
+            $('#exampleModal2').modal('hide');
+            $('.addF1').show();
+        }
+
+        $('.imgCls').click(function () {
+            var id = $(this).closest('.outer-approve').prop('id');
+            $('#target').val(id);
+            $('#exampleModal2').modal('show');
+        })
+        function openModal(a) {
+            var id = $('#a' + a).closest('.outer-approve').prop('id');
+            $('#target').val(id);
+            $('#exampleModal2').modal('show');
+        }
+    </script>
+}
+
+
+

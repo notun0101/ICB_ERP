@@ -1,0 +1,79 @@
+﻿@model UploadLoanViewModel
+@{
+    ViewData["Title"] = "UploadLoanData";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+            <h5 class="card-title" style="color: black; margin: 8px;">Upload Loan Data</h5>
+        </div>
+        <div class="col-md-8">
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info mr-4' style="margin-right:6px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1017&perentId=6229'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <form asp-area="Payroll" asp-controller="StaffLoan" asp-action="UploadLoanData" method="post" enctype="multipart/form-data">
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <input type="file" class="form-control" name="postedFile" id="postedFile" value="" />
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="submit" value="Upload" class="btn btn-success" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="width: 100%;">
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+            <h5 class="card-title" style="color: black; margin: 8px;">Upload Loan History</h5>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered table-striped table-primary" id="tbl">
+                        <thead>
+                            <tr>
+                                <th>File Name</th>
+                                <th>Total Data</th>
+                                <th>Upload Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.uploadExcelLogs.OrderByDescending(x => x.createdAt))
+                            {
+                                <tr>
+                                    <td><a href="~/UploadLoanExcel/@item.fileName">@item.fileName</a></td>
+                                    <td>@item.totalData</td>
+                                    <td>@item.uploadDate?.ToString("dd MMM yyyy")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{ 
+	<script>
+		$(document).ready(function(){
+			$('#tbl').DataTable({});
+		})
+	</script>
+}

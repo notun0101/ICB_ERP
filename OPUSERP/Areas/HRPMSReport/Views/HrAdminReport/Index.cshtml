@@ -1,0 +1,2768 @@
+﻿@model AllHrReportViewModel
+@{
+    ViewData["Title"] = "HR Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Style{
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        .redStar {
+            color: red;
+        }
+
+        .active {
+            background: beige;
+            padding: 3px;
+        }
+    </style>
+    <style>
+        ul.ui-autocomplete {
+            z-index: 99999999;
+        }
+    </style>
+}
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header" style="padding:6px 0px 0px 3px;">
+                <h5 class="d-inline ml-4">HR Report</h5>
+                <a class='btn btn-info mr-lg-4 float-right' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=202'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+            </div>
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label for="report" class="col-sm-3 col-form-label">Report By <span class="redStar">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="report" name="report" required>
+                                <option value="">Please Select Report Type</option>
+                                @*<option value="1">Department Wise List </option>*@
+                                <option value="2">Designation Wise Employee List</option>
+                                <option value="3">Blood Group Wise Employee List</option>
+                                <option value="4">SBU Wise Employee List</option>
+                                <option value="5">Education Qualification Wise List(Major Subject)</option>
+                                <option value="6">Education Qualification Wise List(University)</option>
+                                <option value="7">Education Qualification Wise List(Level)</option>
+                                <option value="8">Training  Wise List</option>
+                                <option value="9">Office Item Wise List</option>
+                                <option value="10">Designation Wise Summary List</option>
+                                <option value="11">Department Wise Summary List</option>
+                                @*<option value="12">Age Wise Summary List</option>*@
+                                <option value="13">Religion Wise Summary List</option>
+                                <option value="14">Gender Wise Summary List</option>
+                                <option value="15">Joining Date Wise Seniority List</option>
+                                <option value="16">Confirmation Date Wise Summary List</option>
+                                <option value="17">Award Wise Summary List</option>
+                                <option value="18">Retirement Date Wise Summary List</option>
+                                <option value="19">Resignation Date Wise Summary List</option>
+                                <option value="20">Suspension Date Wise Summary List</option>
+
+                                @*<option value="21">Division Wise Summary List</option>*@
+                                <option value="22">District Wise Summary List</option>
+                                <option value="23">Posting Place Wise List</option>
+                                <option value="24">Banking Diploma Summary List</option>
+                                <option value="25">Age Wise HR Information</option>
+                                <option value="26">Role Wise HR Information</option>
+                                <option value="27">Seniority Wise PRL Information</option>
+                                <option value="28">3 Years & Above Seniority List</option>
+                                <option value="29">Date Wise Seniority List</option>
+                                @*<option value="30">Branch Manager List</option>*@
+                                <option value="30">Branch Manager List</option>
+                                <option value="31">Promotion Entitle Seniority List </option>
+                                <option value="32">Division Wise Employee List </option>
+                                <option value="33">Branch Wise Employee List </option>
+                                <option value="34">Department Wise Employee List </option>
+                                <option value="35">Office Wise Employee List </option>
+                                <option value="36">Working experience in Branch Employee List </option>
+                                <option value="38">Office Wise Position of Officers & Staffs </option>
+                                <option value="39">Manpower by Age-group </option>
+                                <option value="40">Manpower by Gender-group </option>
+                                <option value="37">Department Wise List of Officers </option>
+                                <option value="41">Office Wise List of Officers </option>
+                                <option value="42">Division Wise List of Officers </option>
+                                <option value="43">CSR Reporting on gender equity issues </option>
+                                <option value="44">Vacancy Summary Report</option>
+                                <option value="45">Employee Marking Report</option>
+
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row HideShow" id="DepartmentSelect">
+                        <label for="ledgerId" class="col-sm-3 col-form-label">Department <span class="redStar">*</span></label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="Type here" id="deptName" name="deptName" />
+                            <input type="hidden" class="form-control" id="deptId" name="" value="0" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row HideShow" id="DesignationSelect">
+                        <label for="subLedgerId" class="col-sm-3 col-form-label">Designation <span class="redStar">*</span></label>
+                        <div class="col-sm-9">
+                            @*<input type="text" class="form-control" id="desigNamee" placeholder="Type here" name="desigName" />*@
+                            <input type="hidden" class="form-control" id="desigId" name="" value="0" />
+
+                            <select class="form-control" id="desigName" name="desigName">
+                                <option value="0">Select Designation</option>
+                                @foreach (var data in Model.designations)
+                                {
+                                    <option value="@data.Id">@data.designationName</option>
+                                }
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="form-group row HideShow" id="employee-block">
+                        <label for="employeeId" class="col-sm-3 col-form-label">Employee</label>
+                        <div class="col-sm-9">
+                            <input type="hidden" class="form-control" id="employeeId" name="employeeId" value="0" />
+                            <input type="text" class="form-control" id="employeeName" name="employeeName" data-parsley-required="true" data-parsley-trigger="keyup" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="form-group row HideShow" id="BloodSelect">
+                        <label for="voucherType" class="col-sm-3 col-form-label">Blood Group <span class="redStar">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="bloodGroup" name="">
+                                <option value="0">All Group</option>
+                                <option value="O-">O-</option>
+                                <option value="O+">O+</option>
+                                <option value="A-">A-</option>
+                                <option value="A+">A+</option>
+                                <option value="B-">B-</option>
+                                <option value="B+">B+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="AB+">AB+</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row HideShow" id="SbuSelect">
+                        <label for="sbu" class="col-sm-3 col-form-label">SBU <span class="redStar">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="sbu" name="sbu">
+                                <option value="0">All Sbu</option>
+                                @foreach (var data in Model.specialBranchUnits)
+                                {
+                                    <option value="@data.Id">@data.branchUnitName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row HideShow" id="SubjectSelect">
+                        <label for="subjectId" class="col-sm-3 col-form-label">Subject <span class="redStar">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="subjectId" name="subjectId">
+                                <option value="0">All Subject</option>
+                                @foreach (var data in Model.subjects)
+                                {
+                                    <option value="@data.Id">@data.subjectName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row HideShow" id="UniversitySelect">
+                        <label for="universityId" class="col-sm-3 col-form-label">Board/University <span class="redStar">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="universityId" name="universityId">
+                                <option value="0">All</option>
+                                @foreach (var data in Model.organizations)
+                                {
+                                    <option value="@data.Id">@data.organizationName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row HideShow" id="LoeSelect">
+                        <label for="loeId" class="col-sm-3 col-form-label">Level of Education <span class="redStar">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="loeId" name="loeId">
+                                <option value="0">All</option>
+                                @foreach (var data in Model.levelofEducations)
+                                {
+                                    <option value="@data.Id">@data.levelofeducationName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row HideShow" id="TrainingSelect">
+                        <label for="courseId" class="col-sm-3 col-form-label">Training Course <span class="redStar">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="courseId" name="courseId">
+                                <option value="0">All</option>
+                                @foreach (var data in Model.courseTitles)
+                                {
+                                    <option value="@data.Id">@data.nameEN</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row HideShow" id="BelongingSelect">
+                        <label for="belongingId" class="col-sm-3 col-form-label">Belonging Item <span class="redStar">*</span></label>
+                        <div class="col-sm-9">
+                            <select type="text" class="form-control" id="belongingId" name="belongingId">
+                                <option value="0">All</option>
+                                @foreach (var data in Model.belongingItems)
+                                {
+                                    <option value="@data.Id">@data.ItemName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row HideShow" id="ReligionSelect">
+                        <label for="religionId" class="col-sm-3 col-form-label">Religions <span class="redStar">*</span></label>
+                        <div class="col-sm-9">
+                            <select type="text" class="form-control" id="religionId" name="religionId">
+                                <option value="0">All</option>
+                                @foreach (var data in Model.religions)
+                                {
+                                    <option value="@data.Id">@data.name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row HideShow" id="GenderSelect">
+                        <label for="religionId" class="col-sm-3 col-form-label">Gender <span class="redStar">*</span></label>
+                        <div class="col-sm-9">
+                            <select type="text" class="form-control" id="genderDrop">
+                                <option value="All">All</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row HideShow" id="JoiningDate">
+                        <label for="religionId" class="col-sm-3 col-form-label">Joining Date <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="joiningFrom" readonly class="form-control datepicker" />
+                        </div>
+                        <div class="col-sm-1">
+                            To
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="joiningTo" readonly class="form-control datepicker" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row HideShow" id="ConfirmationDate">
+                        <label for="confirmationFrom" class="col-sm-3 col-form-label">Confirmation Date <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="confirmationFrom" readonly class="form-control datepicker" />
+                        </div>
+                        <div class="col-sm-1">
+                            To
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="confirmationTo" readonly class="form-control datepicker" />
+                        </div>
+                    </div>
+                    <div class="form-group row HideShow" id="retirementDate">
+                        <label for="retirementFrom" class="col-sm-3 col-form-label">Retirement Date <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="retirementFrom" readonly class="form-control datepicker" />
+                        </div>
+                        <div class="col-sm-1">
+                            To
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="retirementTo" readonly class="form-control datepicker" />
+                        </div>
+                    </div>
+                    <div class="form-group row HideShow" id="resignationDate">
+                        <label for="resignationFrom" class="col-sm-3 col-form-label">Resignation Date <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="resignationFrom" readonly class="form-control datepicker" />
+                        </div>
+                        <div class="col-sm-1">
+                            To
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="resignationTo" readonly class="form-control datepicker" />
+                        </div>
+                    </div>
+                    <div class="form-group row HideShow" id="suspensionDate">
+                        <label for="suspensionFrom" class="col-sm-3 col-form-label">Suspension Date <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="suspensionFrom" readonly class="form-control datepicker" />
+                        </div>
+                        <div class="col-sm-1">
+                            To
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="suspensionTo" readonly class="form-control datepicker" />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row HideShow" id="DivisionSelect">
+                        <label for="divisionId" class="col-sm-3 col-form-label">Division <span class="redStar">*</span></label>
+                        <div class="col-sm-9">
+                            <select type="text" class="form-control" id="divisionId" name="divisionId">
+                                <option value="0">All</option>
+                                @foreach (var data in Model.divisions)
+                                {
+                                    <option value="@data.Id">@data.divisionName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row HideShow" id="DistrictSelect">
+                        <label for="districtId" class="col-sm-3 col-form-label">Districts <span class="redStar">*</span></label>
+                        <div class="col-sm-9">
+                            <select type="text" class="form-control" id="districtId" name="districtId">
+                                <option value="0">All</option>
+                                @foreach (var data in Model.districts)
+                                {
+                                    <option value="@data.Id">@data.districtName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row HideShow" id="BranchSelect">
+                        <label for="branchId" class="col-sm-3 col-form-label">Branch <span class="redStar">*</span></label>
+                        <div class="col-sm-9">
+                            <select type="text" class="form-control" id="branchId" name="branchId">
+                                <option value="0">All</option>
+                                @foreach (var data in Model.branches)
+                                {
+                                    <option value="@data.Id">@data.branchUnitName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row HideShow" id="DiplomaSelect">
+                        <label for="bankingDiploma" class="col-sm-3 col-form-label">Diploma Part <span class="redStar">*</span></label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="bankingDiploma" name="bankingDiploma" style="width: 98%;">
+                                <option value="0">Both</option>
+                                <option value="Part 1">Part 1</option>
+                                <option value="Part 2">Part 2</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row HideShow" id="AgeSelect">
+                        <label for="ageFrom" class="col-sm-3 col-form-label">Age <span class="redStar">*</span></label>
+                        <div class="col-sm-9">
+                            <input type="text" value="" id="ageFrom" name="ageFrom" class="form-control" />
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row HideShow" id="RoleDesignation">
+                        <label for="RoleId" class="col-sm-3 col-form-label">Role <span class="redStar">*</span></label>
+                        <div class="col-sm-3">
+                            <select type="text" class="form-control" id="RoleId" name="RoleId">
+                                <option value="0">All</option>
+                                @foreach (var data in Model.customRoles)
+                                {
+                                    <option value="@data.Id">@data.roleName</option>
+                                }
+                            </select>
+                        </div>
+                        <label for="designationId" class="col-sm-2 col-form-label">Designation</label>
+                        <div class="col-sm-4">
+                            <select type="text" class="form-control" id="designationId" name="designationId">
+                                <option value="0">All</option>
+                                @foreach (var data in Model.designations)
+                                {
+                                    <option value="@data.Id">@data.designationName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row HideShow" id="prlDate">
+                        <label for="prlFrom" class="col-sm-3 col-form-label">PRL Date <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="prlFrom" readonly class="form-control datepicker" />
+                        </div>
+
+                    </div>
+                    <div class="form-group row HideShow" id="TransferDate">
+                        <label for="TransferId" class="col-sm-3 col-form-label">Transfer Date <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="transferFrom" readonly class="form-control datepicker" />
+                        </div>
+                        <div class="col-sm-1">
+                            Years
+                        </div>
+                        <div class="col-sm-4">
+
+                            <input type="number" value="3" id="transferYear" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group row HideShow" id="SlDate">
+                        <label for="prlFrom" class="col-sm-3 col-form-label">Joining Date <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="SlFrom" readonly class="form-control datepicker" />
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row HideShow" id="hrBranchSelect">
+                        @*<label for="hrBranchId" class="col-sm-3 col-form-label">Branch <span class="redStar">*</span></label>
+                                <div class="col-sm-4">
+                                    <select type="text" class="form-control" id="hrBranchId" name="hrBranchId">
+                                        <option value="">Select</option>
+
+                                        @foreach (var data in Model.hrBranches)
+                                        {
+                                            <option value="@data.Id">@data.branchName</option>
+                                        }
+                                    </select>
+                                </div>
+
+                               <label for="jdFrom" class="col-sm-2 col-form-label">Joining Date <span class="redStar">*</span></label>
+                               <div class="col-sm-3">
+                              <input type="text" value="" id="jdFrom" readonly class="form-control datepicker" />
+                            </div>*@
+                        <div class="col-12">
+                            <div class="form-group row" id="">
+                                <label for="hrBranchId" class="col-sm-3 col-form-label"> Branch : </label>
+                                <div class="col-sm-9">
+                                    <select name="hrBranchId" id="hrBranchId" class="form-control" data-parsley-required="true">
+                                        <option value="1000">Select Branch</option>
+                                        @foreach (var item in Model.hrBranches)
+                                        {
+                                            <option value="@item.Id">@item.branchName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row date1" style="">
+                                <label for="date1" class="col-sm-3 col-form-label">From Date: </label>
+                                <div class="col-sm-3">
+                                    <input type="text" id="fDateHr" class="form-control datepickerHr" readonly value="" placeholder="Select Date..." />
+                                </div>
+                                <label for="date2" class="col-sm-3 col-form-label">To Date : </label>
+                                <div class="col-sm-3">
+                                    <input type="text" id="tDateHr" class="form-control datepickerHr2" readonly value="" placeholder="Select Date..." />
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+                    </div>
+
+
+
+
+                    <div class="form-group row HideShow" id="lastPromotionDate">
+                        <label for="prlFrom" class="col-sm-3 col-form-label">Promotion Date <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="PromotionFrom" readonly class="form-control datepicker" />
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group row HideShow" id="hrDivisionSelect">
+                        <label for="divisionId" class="col-sm-3 col-form-label">Division <span class="redStar">*</span></label>
+                        <div class="col-sm-3">
+                            <select type="text" class="form-control" id="hrDivisionId" name="">
+                                <option value="">Select</option>
+                                <option value="2000" selected>All Division</option>
+                                @foreach (var data in Model.hrDivisions)
+                                {
+                                    <option value="@data.Id">@data.divName</option>
+                                }
+                            </select>
+                        </div>
+
+                        <label for="postFrom" class="col-sm-3 col-form-label">Posting Date <span class="redStar">*</span></label>
+                        <div class="col-sm-3">
+                            <input type="text" value="" id="postFrom" readonly class="form-control datepicker" />
+                        </div>
+
+                    </div>
+                    <div class="form-group row HideShow" id="hrBranchList">
+                        <label for="hrBranchId" class="col-sm-3 col-form-label">Branch Name <span class="redStar">*</span></label>
+                        <div class="col-sm-3">
+                            <select type="text" class="form-control" id="hrBranch1Id" name="">
+                                @*<option value="0">All Branch</option>*@
+                                <option value="5000">All Branch</option>
+                                @foreach (var data in Model.hrBranches)
+                                {
+                                    <option value="@data.Id">@data.branchName</option>
+                                }
+                            </select>
+                        </div>
+
+                        <label for="postFrom" class="col-sm-3 col-form-label">Posting Date <span class="redStar">*</span></label>
+                        <div class="col-sm-3">
+                            <input type="text" value="" id="postBranchFrom" readonly class="form-control datepicker" />
+                        </div>
+
+                    </div>
+                    <div class="form-group row HideShow" id="deparmentList">
+                        <label for="deppartmentId" class="col-sm-3 col-form-label">Deparment Name <span class="redStar">*</span></label>
+                        <div class="col-sm-3">
+                            <select type="text" class="form-control" id="deppartmentId" name="">
+                                <option value="5000">All Department</option>
+                                @foreach (var data in Model.departments)
+                                {
+                                    <option value="@data.Id">@data.deptName</option>
+                                }
+                            </select>
+                        </div>
+
+                        <label for="postFrom" class="col-sm-3 col-form-label">Posting Date <span class="redStar">*</span></label>
+                        <div class="col-sm-3">
+                            <input type="text" value="" id="postDepFrom" readonly class="form-control datepicker" />
+                        </div>
+
+                    </div>
+                    <div class="form-group row HideShow" id="officeList">
+                        <label for="officeId" class="col-sm-3 col-form-label">Office <span class="redStar">*</span></label>
+                        <div class="col-sm-3">
+                            <select type="text" class="form-control" id="officeId" name="">
+                                <option value="5000">All Office</option>
+                                @foreach (var data in Model.functionInfos)
+                                {
+                                    <option value="@data.Id">@data.branchUnitName</option>
+                                }
+                            </select>
+                        </div>
+
+                        <label for="postOff" class="col-sm-3 col-form-label">Posting Date <span class="redStar">*</span></label>
+                        <div class="col-sm-3">
+                            <input type="text" value="" id="postOff" readonly class="form-control datepicker" />
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row HideShow" id="PdDate">
+                        <label for="PostingDFrom" class="col-sm-3 col-form-label">Posting Date <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="PostingDFrom" readonly class="form-control datepicker" />
+                        </div>
+
+                    </div>
+                    <div class="form-group row HideShow" id="DepPost">
+                        <label for="PostingDFrom" class="col-sm-3 col-form-label">Posting Date <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="DepPostFrom" readonly class="form-control datepicker" />
+                        </div>
+
+                    </div>
+                    <div class="form-group row HideShow" id="PositionDate">
+                        <label for="PostingDFrom" class="col-sm-3 col-form-label">Posting Date <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="PositionPost" readonly class="form-control datepicker" />
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row HideShow" id="ageDate">
+                        <label for="ageDFrom" class="col-sm-3 col-form-label">Date <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="ageDFrom" readonly class="form-control datepicker" />
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row HideShow" id="gdDate">
+                        <label for="GDFrom" class="col-sm-3 col-form-label">Date <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="GDFrom" readonly class="form-control datepicker" />
+                        </div>
+
+                    </div>
+                    <div class="form-group row HideShow" id="OfficeDate">
+                        <label for="OfficeFrom" class="col-sm-3 col-form-label">Date <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="OfficeFrom" readonly class="form-control datepicker" />
+                        </div>
+
+                    </div>
+                    <div class="form-group row HideShow" id="DivDate">
+                        <label for="DivFrom" class="col-sm-3 col-form-label">Date <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="DivFrom" readonly class="form-control datepicker" />
+                        </div>
+
+                    </div>
+                    <div class="form-group row HideShow" id="csrDate">
+                        <label for="csrFrom" class="col-sm-3 col-form-label">Date <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="csrFrom" readonly class="form-control datepicker" />
+                        </div>
+
+                    </div>
+                    <div class="form-group row HideShow" id="vacDate">
+                        <label for="vacFrom" class="col-sm-3 col-form-label">Date <span class="redStar">*</span></label>
+                        <div class="col-sm-4">
+                            <input type="text" value="" id="vacFrom" readonly class="form-control datepicker" />
+                        </div>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-9"></label>
+                        <div class="col-sm-3">
+                            <button type="button" onclick="Excel()" title="Load" style="display: none;" class="btn btn-info btn-xs">Excel</button>&nbsp;&nbsp;&nbsp;
+                            <button id="SubmitButton" style="margin-left: 160px;" class="btn btn-success btn-xs" title="Preview"><i class="fas fa-print"> Print</i></button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div style="display:none;">
+    <div class="row" id="DeptTable">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="padding:6px 0px 0px 3px;">
+                    <label id="levelName" style="padding:0px 0px 0px 0px;font-size:18px;font-weight:600" class="col-sm-10 pull-left"></label>
+                </div>
+
+                <div class="card-body">
+                    <table class="table table-bordered table-striped" id="tblDept">
+                        <thead>
+                            <tr>
+                                <th>SL#</th>
+                                <th>Employee ID</th>
+                                <th>Name</th>
+                                <th>Designation</th>
+                                <th>Department</th>
+                                <th>Branch</th>
+                                <th>DOJ</th>
+                                <th>DOB</th>
+                                <th>Email</th>
+                                <th>Mobile</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="BloodTable">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="padding:6px 0px 0px 3px;">
+                    <label id="levelName" style="padding:0px 0px 0px 0px;font-size:18px;font-weight:600" class="col-sm-10 pull-left"></label>
+                </div>
+
+                <div class="card-body">
+                    <table class="table table-bordered table-striped" id="tblBlood">
+                        <thead>
+                            <tr>
+                                <th>SL#</th>
+                                <th>Employee ID</th>
+                                <th>Name</th>
+                                <th>Designation</th>
+                                <th>Department</th>
+                                <th>Branch</th>
+                                <th>DOJ</th>
+                                <th>DOB</th>
+                                <th>Email</th>
+                                <th>Mobile</th>
+                                <th>Blood Group</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="SbuTable">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="padding:6px 0px 0px 3px;">
+                    <label id="levelName" style="padding:0px 0px 0px 0px;font-size:18px;font-weight:600" class="col-sm-10 pull-left"></label>
+                </div>
+
+                <div class="card-body">
+                    <table class="table table-bordered table-striped" id="tblSbu">
+                        <thead>
+                            <tr>
+                                <th>SL#</th>
+                                <th>Employee ID</th>
+                                <th>Name</th>
+                                <th>Designation</th>
+                                <th>Department</th>
+                                <th>DOJ</th>
+                                <th>Status</th>
+                                <th>NID</th>
+                                <th>Mobile</th>
+                                <th>DOB</th>
+                                <th>Blood Group</th>
+                                <th>District</th>
+                                <th>Branch</th>
+                                <th>Last Promo. Date</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="SubTable">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="padding:6px 0px 0px 3px;">
+                    <label id="levelName" style="padding:0px 0px 0px 0px;font-size:18px;font-weight:600" class="col-sm-10 pull-left"></label>
+                </div>
+
+                <div class="card-body">
+                    <table class="table table-bordered table-striped" id="tblSubject">
+                        <thead>
+                            <tr>
+                                <th>SL#</th>
+                                <th>Employee ID</th>
+                                <th>Name</th>
+                                <th>Designation</th>
+                                <th>Department</th>
+                                <th>Gender</th>
+                                <th>Major Subject</th>
+                                <th>Result</th>
+                                <th>University</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="OrgTable">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="padding:6px 0px 0px 3px;">
+                    <label id="levelName" style="padding:0px 0px 0px 0px;font-size:18px;font-weight:600" class="col-sm-10 pull-left"></label>
+                </div>
+
+                <div class="card-body">
+                    <table class="table table-bordered table-striped" id="tblOrg" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>SL#</th>
+                                <th>Employee ID</th>
+                                <th>Name</th>
+                                <th>Designation</th>
+                                <th>Department</th>
+                                <th>Gender</th>
+                                <th>Major Subject</th>
+                                <th>University</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row" id="LoeTable">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="padding:6px 0px 0px 3px;">
+                    <label id="levelName" style="padding:0px 0px 0px 0px;font-size:18px;font-weight:600" class="col-sm-10 pull-left"></label>
+                </div>
+
+                <div class="card-body">
+                    <table class="table table-bordered table-striped" id="tblLoe" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>SL#</th>
+                                <th>Employee ID</th>
+                                <th>Name</th>
+                                <th>Designation</th>
+                                <th>Department</th>
+                                <th>Gender</th>
+                                <th>LoE</th>
+                                <th>Result</th>
+                                <th>University</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="TrainingTable">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="padding:6px 0px 0px 3px;">
+                    <label id="levelName" style="padding:0px 0px 0px 0px;font-size:18px;font-weight:600" class="col-sm-10 pull-left"></label>
+                </div>
+
+                <div class="card-body">
+                    <table class="table table-bordered table-striped" id="tblTraining">
+                        <thead>
+                            <tr>
+                                <th>SL#</th>
+                                <th>Employee ID</th>
+                                <th>Name</th>
+                                <th>Designation</th>
+                                <th>Department</th>
+                                <th>Training Name</th>
+                                <th>Duration</th>
+                                <th>Year</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="BelongingTable">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header" style="padding:6px 0px 0px 3px;">
+                    <label id="levelName" style="padding:0px 0px 0px 0px;font-size:18px;font-weight:600" class="col-sm-10 pull-left"></label>
+                </div>
+
+                <div class="card-body">
+                    <table class="table table-bordered table-striped" id="tblBelonging" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>SL#</th>
+                                <th>Employee ID</th>
+                                <th>Name</th>
+                                <th>Designation</th>
+                                <th>Department</th>
+                                <th>Email</th>
+                                <th>Mobile</th>
+                                <th>Belonging Item</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+@section Scripts{
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        $(document).ready(function () {
+            $(".datepickerHr").datepicker({
+                dateFormat: 'dd-MM-yy', showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100", date: new Date()
+            })
+            $(".datepickerHr2").datepicker({
+                dateFormat: 'dd-MM-yy', showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100", date: new Date()
+            })
+            $('.datepickerHr').val(formatDateMonthName(new Date(2021, 1, 1)));
+            $('.datepickerHr2').val(formatDateMonthName(new Date()));
+
+
+
+            //var currentYear = new Date().getFullYear();
+            //for (var i = currentYear; i > currentYear - 10; i--) {
+            //    $("#transferYear").append('<option value="' + i.toString() + '">' + i.toString() + '</option>');
+            //}
+
+            $(".datepicker").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1940:2080" }).datepicker("setDate", new Date());
+            $('#report').select2();
+            Common.Ajax('GET', '/global/api/GetDepartment', [], 'json', ajaxGetDepartment);
+            Common.Ajax('GET', '/global/api/GetAllHrDesignations', [], 'json', ajaxGetAllHrDesignations);
+            $("#designationId").select2();
+            Common.Ajax('GET', '/global/api/GetAllEmployeeInfo', [], 'json', ajaxGetEmployees, false);
+            $('.HideShow').hide();
+            $('table').hide();
+
+
+            $('#report').change(function () {
+                let report = $('#report').val();
+                if (report == 1) {
+                    $('#levelName').html('  Department Wise');
+
+                    $('.HideShow').hide();
+                    $('#DepartmentSelect').show();
+
+
+                    $('#deptId').val(0);
+                    $('#subjectId').val(0);
+                    $('#deptName').val('');
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 2) {
+                    $('#levelName').html('  Designation Wise');
+
+                    $('.HideShow').hide();
+                    $('#DesignationSelect').show();
+                    $('#deptId').val(0);
+                    $('#subjectId').val(0);
+                    $('#deptName').val('');
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 3) {
+                    $('#levelName').html('  Blood Group Wise');
+
+
+                    $('.HideShow').hide();
+                    $('#BloodSelect').show();
+                    $('#deptId').val(0);
+                    $('#subjectId').val(0);
+                    $('#deptName').val('');
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val('0');
+                }
+                else if (report == 4) {
+                    $('#levelName').html('  SBU Wise');
+                    $('.HideShow').hide();
+                    $('#SbuSelect').show();
+
+
+
+
+                    $('#desigId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#deptId').val(0);
+                    $('#subjectId').val(0);
+                    $('#deptName').val('');
+                }
+                else if (report == 5) {
+                    $('#levelName').html('  Subject Wise');
+                    $('.HideShow').hide();
+                    $('#SubjectSelect').show();
+
+
+
+
+                    $('#subjectId').val(0);
+                    $('#universityId').val(0);
+                    $('#loeId').val(0);
+                }
+                else if (report == 6) {
+                    $('#levelName').html('  University Wise');
+                    $('.HideShow').hide();
+                    $('#UniversitySelect').show();
+
+
+
+
+                    $('#subjectId').val(0);
+                    $('#universityId').val(0);
+                    $('#loeId').val(0);
+                }
+                else if (report == 7) {
+                    $('#levelName').html('  Level of Education Wise');
+                    $('.HideShow').hide();
+                    $('#LoeSelect').show();
+
+
+
+
+                    $('#subjectId').val(0);
+                    $('#universityId').val(0);
+                    $('#loeId').val(0);
+                }
+                else if (report == 8) {
+                    $('#levelName').html('  Training Course Wise');
+                    $('.HideShow').hide();
+                    $('#TrainingSelect').show();
+
+
+                }
+                else if (report == 9) {
+                    $('#levelName').html('  Belonging Item Wise');
+                    $('.HideShow').hide();
+                    $('#BelongingSelect').show();
+
+
+
+                    $('#belongingId').val(0);
+                }
+                else if (report == 10) {
+                    $('#levelName').html('  Designation Wise Summary');
+
+
+
+                    $('#deptId').val(0);
+                    $('#subjectId').val(0);
+                    $('#deptName').val('');
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 11) {
+                    $('#levelName').html('  Department Wise Summary');
+
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 13) {
+                    $('#levelName').html('  Department Wise Summary');
+
+                    $('.HideShow').hide();
+                    $('#ReligionSelect').show();
+
+
+
+
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 14) {
+                    $('#levelName').html('  Department Wise Summary');
+
+
+                    $('.HideShow').hide()
+                    $('#GenderSelect').show();
+
+
+
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 15) {
+                    $('#levelName').html('  Department Wise Summary');
+
+
+
+                    $('.HideShow').hide()
+                    $('#JoiningDate').show();
+
+
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 16) {
+                    $('#levelName').html('  Department Wise Summary');
+
+
+
+                    $('.HideShow').hide();
+                    $('#ConfirmationDate').show();
+
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 18) {
+                    $('#levelName').html('  Department Wise Summary');
+
+
+
+                    $('.HideShow').hide();
+                    $('#retirementDate').show();
+
+
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 19) {
+                    $('#levelName').html('  Department Wise Summary');
+
+                    $('.HideShow').hide();
+                    $('#resignationDate').show();
+
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 20) {
+                    $('#levelName').html('  Department Wise Summary');
+
+
+
+
+                    $('.HideShow').hide();
+                    $('#suspensionDate').show();
+
+
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 21) {
+                    $('#levelName').html('  Department Wise Summary');
+
+
+
+                    $('.HideShow').hide();
+                    $('#DivisionSelect').show();
+
+
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 22) {
+                    $('#levelName').html('  Department Wise Summary');
+
+
+
+
+                    $('.HideShow').hide();
+                    $('#DistrictSelect').show();
+
+
+
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 23) {
+                    $('#levelName').html('  Department Wise Summary');
+
+
+
+                    $('.HideShow').hide();
+                    $('#BranchSelect').show();
+
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 24) {
+                    $('#levelName').html('  Department Wise Summary');
+
+                    $('.HideShow').hide();
+                    $('#DiplomaSelect').show();
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 25) {
+                    $('#levelName').html('  Age Wise HR Information');
+
+                    $('.HideShow').hide();
+                    $('#AgeSelect').show();
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 26) {
+                    $('#levelName').html('  Age Wise HR Information');
+                    $('.HideShow').hide();
+                    $('#RoleDesignation').show();
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+
+                else if (report == 27) {
+                    //$('#levelName').html('Seniority Wise PRL Date');
+
+
+                    $('.HideShow').hide();
+                    $('#prlDate').show();
+
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 29) {
+                    //$('#levelName').html('Seniority Wise PRL Date');
+
+
+                    $('.HideShow').hide();
+                    $('#SlDate').show();
+
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 28) {
+                    $('.HideShow').hide();
+                    $('#TransferDate').show();
+
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 30) {
+                    $('.HideShow').hide();
+                    $('#hrBranchSelect').show();
+
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 31) {
+                    $('.HideShow').hide();
+                    $('#lastPromotionDate').show();
+
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 32) {
+                    $('.HideShow').hide();
+                    $('#hrDivisionSelect').show();
+
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 33) {
+                    $('.HideShow').hide();
+                    $('#hrBranchList').show();
+
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    ///$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 34) {
+                    $('.HideShow').hide();
+                    $('#deparmentList').show();
+
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 35) {
+                    $('.HideShow').hide();
+                    $('#officeList').show();
+
+
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 36) {
+                    $('.HideShow').hide();
+                    $('#PdDate').show();
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+                }
+                else if (report == 37) {
+                    $('.HideShow').hide();
+                    $('#PdDate').show();
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+
+                }
+                else if (report == 38) {
+                    $('.HideShow').hide();
+                    $('#PdDate').show();
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 45) {
+                    $('.HideShow').hide();
+                    $('#employee-block').show();
+                }
+                else if (report == 39) {
+                    $('.HideShow').hide();
+                    $('#ageDate').show();
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 40) {
+                    $('.HideShow').hide();
+                    $('#gdDate').show();
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 41) {
+                    $('.HideShow').hide();
+                    $('#OfficeDate').show();
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 42) {
+                    $('.HideShow').hide();
+                    $('#DivDate').show();
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 43) {
+                    $('.HideShow').hide();
+                    $('#csrDate').show();
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+                else if (report == 44) {
+                    $('.HideShow').hide();
+                    $('#vacDate').show();
+
+                    $('#desigId').val(0);
+                    $('#subjectId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+
+                }
+
+                else {
+                    $('#DeptSelect').hide();
+                    $('#SubSelect').hide();
+                    $('#DesigSelect').hide();
+                    //$('#BloodTable').hide();
+                    //$('#SubTable').hide();
+                    //$('#SbuTable').hide();
+                    $('#ReligionSelect').hide();
+                    $('#DivisionSelect').hide();
+                    $('#DistrictSelect').hide();
+                    $('#DiplomaSelect').hide();
+                    $('#AgeSelect').hide();
+                    $('#RoleDesignation').hide();
+                    $('#BranchSelect').hide();
+                    $('#GenderSelect').hide();
+                    $('#JoiningDate').hide();
+                    $('#ConfirmationDate').hide();
+                    $('#retirementDate').hide();
+                    $('#resignationDate').hide();
+                    $('#suspensionDate').hide();
+                    $('#desigId').val(0);
+                    //$('#desigName').val('');
+                    $('#desigName').val(0);
+                    $('#deptId').val(0);
+                    $('#subjectId').val(0);
+                    $('#deptName').val('');
+                    $('#sbu').val(0);
+                    $('#bloodGroup').val(0);
+                }
+            });
+            $("#SubmitButton").click(function (e) {
+                let report = $('#report :selected').val();
+
+                let deptId = parseInt($('#deptId').val()) ? parseInt($('#deptId').val()) : 0;
+                ////let desigId = $('#desigId').val();
+                let desigId = parseInt($('#desigName').val()) ? parseInt($('#desigName').val()) : 0;
+                let bloodGroup = $('#bloodGroup').val();
+                let sbuId = parseInt($('#sbu').val()) ? parseInt($('#sbu').val()) : 0;
+                let subjectId = parseInt($('#subjectId').val()) ? parseInt($('#subjectId').val()) : 0;
+                let universityId = parseInt($('#universityId').val()) ? parseInt($('#universityId').val()) : 0;
+                let loeId = parseInt($('#loeId').val()) ? parseInt($('#loeId').val()) : 0;
+                let courseId = parseInt($('#courseId').val()) ? parseInt($('#courseId').val()) : 0;
+                let belongingId = parseInt($('#belongingId').val()) ? parseInt($('#belongingId').val()) : 0;
+                let religionId = parseInt($('#religionId').val()) ? parseInt($('#religionId').val()) : 0;
+
+                //let value = $('#genderDrop').val();
+                let gendername = $('#genderDrop').val();
+                let joiningFrom = $('#joiningFrom').val();
+                let joiningTo = $('#joiningTo').val();
+                let confirmationFrom = $('#confirmationFrom').val();
+                let confirmationTo = $('#confirmationTo').val();
+                let retirementFrom = $('#retirementFrom').val();
+                let retirementTo = $('#retirementTo').val();
+                let resignationFrom = $('#resignationFrom').val();
+                let resignationTo = $('#resignationTo').val();
+                let suspensionFrom = $('#suspensionFrom').val();
+                let suspensionTo = $('#suspensionTo').val();
+                let prlFrom = $('#prlFrom').val();
+                let transferDate = $('#transferFrom').val();
+                let transferYear = $('#transferYear').val();
+                let jdDate = $('#jdFrom').val();
+                let PromotionFrom = $('#PromotionFrom').val();
+                let postFrom = $('#postFrom').val();
+                let postBranch = $('#postBranchFrom').val();
+                let postDep = $('#postDepFrom').val();
+                let postOffice = $('#postOff').val();
+                let postingD = $('#PostingDFrom').val();
+                let DepPostFrom = $('#DepPostFrom').val();
+                let PositionPost = $('#PositionPost').val();
+                let ageDFrom = $('#ageDFrom').val();
+                let GDFroms = $('#GDFrom').val();
+                let OfficeFrom = $('#OfficeFrom').val();
+                let DivFrom = $('#DivFrom').val();
+                let csrFrom = $('#csrFrom').val();
+                let vacFrom = $('#vacFrom').val();
+                let fDateHr = $('#fDateHr').val();
+                let tDateHr = $('#tDateHr').val();
+
+                let officeId = parseInt($('#officeId').val()) ? parseInt($('#officeId').val()) : 0;
+                let deppartmentId = parseInt($('#deppartmentId').val()) ? parseInt($('#deppartmentId').val()) : 0;
+                let hrBranchId = parseInt($('#hrBranchId').val()) ? parseInt($('#hrBranchId').val()) : 0;
+                let hrBranch1Id = parseInt($('#hrBranch1Id').val()) ? parseInt($('#hrBranch1Id').val()) : 0;
+                let hrDivisionId = parseInt($('#hrDivisionId').val()) ? parseInt($('#hrDivisionId').val()) : 0;
+                let divisionId = parseInt($('#divisionId').val()) ? parseInt($('#divisionId').val()) : 0;
+                let districtId = parseInt($('#districtId').val()) ? parseInt($('#districtId').val()) : 0;
+                let branchId = parseInt($('#branchId').val()) ? parseInt($('#branchId').val()) : 0;
+                let diplomaPart = $('#bankingDiploma').val();
+                let age = $('#ageFrom').val();
+                let Role = $('#RoleId').val();
+                let Designation = $('#designationId').val();
+                //let deptName = $('#deptName').val();
+                //let desigName = $('#desigName').val();
+                let callName;
+                if (report == 10) {
+                    callName = 'Desig';
+                }
+                else if (report == 11) {
+
+                    callName = 'Dept';
+                }
+                else if (report == 13) {
+
+                    callName = 'Religion';
+                }
+                else if (report == 14) {
+
+                    callName = 'Gender';
+                }
+                else if (report == 15) {
+
+                    callName = 'JoiningDate';
+                }
+                else if (report == 16) {
+
+                    callName = 'ConfirmationDate';
+                }
+                else if (report == 17) {
+
+                    callName = 'Award';
+                }
+                else if (report == 18) {
+
+                    callName = 'Retirement';
+                }
+                else if (report == 19) {
+
+                    callName = 'Resignation';
+                }
+                else if (report == 20) {
+
+                    callName = 'Suspension';
+                }
+                else if (report == 21) {
+
+                    callName = 'Division';
+                }
+                else if (report == 22) {
+
+                    callName = 'District';
+                }
+                else if (report == 23) {
+
+                    callName = 'Branch';
+                }
+                else if (report == 24) {
+
+                    callName = 'Diploma';
+                } else if (report == 25) {
+
+                    callName = 'Age1';
+                }
+                else if (report == 26) {
+
+                    callName = 'Role';
+                }
+                else if (report == 27) {
+
+                    callName = 'SeniorityPRL';
+                }
+                else if (report == 28) {
+
+                    callName = '3Years';
+                }
+                else if (report == 29) {
+                    callName = 'SeniorityList';
+                }
+
+                else if (report == 30) {
+                    callName = 'BranchWise';
+                }
+
+                else if (report == 31) {
+                    callName = 'lastPromotionDate';
+                }
+                else if (report == 32) {
+                    callName = 'DivisionWise';
+                }
+
+                else if (report == 33) {
+                    callName = 'HrBranchWise';
+                }
+
+                else if (report == 34) {
+                    callName = 'DepartmenthWise';
+                }
+
+                else if (report == 35) {
+                    callName = 'HrOfficeWise';
+                }
+
+                else if (report == 36) {
+                    callName = 'BranchExp';
+                }
+
+                else if (report == 37) {
+                    callName = 'AllDepWise';
+                }
+
+                else if (report == 38) {
+                    callName = 'OfficeWisePosting';
+                }
+
+                else if (report == 39) {
+                    callName = 'MPAge';
+                }
+
+                else if (report == 40) {
+                    callName = 'GD';
+                }
+                else if (report == 41) {
+                    callName = 'OfficeWise';
+                }
+                else if (report == 42) {
+                    callName = 'DivWise';
+                }
+
+                else if (report == 43) {
+                    callName = 'CSRAge';
+                }
+                else if (report == 44) {
+                    callName = 'Vac';
+                }
+                else if (report == 45) {
+                    callName = 'Marking';
+                }
+
+
+                else {
+                    callName = "Age";
+                }
+
+
+                if (report == 1 || report == 2 || report == 3 || report == 4) {
+                    var bGroup = '';
+                    if (bloodGroup == 'O-') {
+                        bGroup = 'On'
+                    }
+                    else if (bloodGroup == 'O+') {
+                        bGroup = 'Op'
+                    }
+                    else if (bloodGroup == 'A-') {
+                        bGroup = 'An'
+                    }
+                    else if (bloodGroup == 'A+') {
+                        bGroup = 'Ap'
+                    }
+                    else if (bloodGroup == 'B-') {
+                        bGroup = 'Bn'
+                    }
+                    else if (bloodGroup == 'B+') {
+                        bGroup = 'Bp'
+                    }
+                    else if (bloodGroup == 'AB-') {
+                        bGroup = 'ABn'
+                    }
+                    else if (bloodGroup == 'AB+') {
+                        bGroup = 'ABp'
+                    }
+                    else {
+                        bGroup = 0;
+                    }
+
+
+
+
+
+                    window.open('/HRPMSReport/HrAdminReport/HrReportDataByDesig?rptType=' + report + "&desigId=" + desigId + "&deptId=" + deptId + "&bloodGroup=" + bGroup + "&sbuId=" + sbuId, '_blank');
+                }
+                else if (report == 5 || report == 6 || report == 7) {
+                    window.open('/HRPMSReport/HrAdminReport/HrReportDataByEducation?rptType=' + report + "&subjectId=" + subjectId + "&universityId=" + universityId + "&loeId=" + loeId, '_blank');
+                }
+                else if (report == 8) {
+                    window.open('/HRPMSReport/HrAdminReport/HrReportDataByTrainingCourse?rptType=' + report + "&courseId=" + courseId, '_blank');
+                }
+                else if (report == 9) {
+                    window.open('/HRPMSReport/HrAdminReport/HrReportDataByBelongingItem?rptType=' + report + "&belongingId=" + belongingId, '_blank');
+                }
+                else if (report == 10) {
+                    window.open('/HRPMSReport/HrAdminReport/HrReportDataBySummary?rptType=' + report + "&callName=" + callName, '_blank');
+                }
+                else if (report == 11) {
+                    window.open('/HRPMSReport/HrAdminReport/HrReportDataBySummary?rptType=' + report + "&callName=" + callName, '_blank');
+                }
+                else if (report == 12) {
+
+                    window.open('/HRPMSReport/HrAdminReport/HrReportDataBySummary?rptType=' + report + "&callName=" + callName, '_blank');
+                }
+                else if (report == 13) {
+
+                    window.open('/HRPMSReport/HrAdminReport/HrReportDataPdf?type=' + callName + "&id=" + religionId, '_blank');
+                }
+                else if (report == 14) {
+                    window.open('/HRPMSReport/HrAdminReport/HrReportGenderPdf?type=' + callName + "&name=" + gendername, '_blank');
+                }
+                else if (report == 15) {
+                    window.open('/HRPMSReport/HrAdminReport/HrReportJoiningDatePdf?type=' + callName + "&from=" + joiningFrom + "&to=" + joiningTo, '_blank');
+                }
+                else if (report == 16 || report == 18 || report == 19 || report == 20) {
+                    var fromD = new Date();
+                    var toD = new Date();
+                    if (report == 16) {
+                        fromD = confirmationFrom;
+                        toD = confirmationTo;
+                    }
+                    if (report == 18) {
+                        fromD = retirementFrom;
+                        toD = retirementTo;
+                    }
+                    if (report == 19) {
+                        fromD = resignationFrom;
+                        toD = resignationTo;
+                    }
+                    if (report == 20) {
+                        fromD = suspensionFrom;
+                        toD = suspensionTo;
+                    }
+
+                    window.open('/HRPMSReport/HrAdminReport/HrReportJoiningDatePdf?type=' + callName + "&from=" + fromD + "&to=" + toD, '_blank');
+                }
+
+                else if (report == 17) {
+                    window.open('/HRPMSReport/HrAdminReport/HrReportAwardDatePdf?type=' + callName, '_blank');
+                }
+                else if (report == 21) {
+
+                    window.open('/HRPMSReport/HrAdminReport/HrReportDivisionDistrictBranchPdf?type=' + callName + "&id=" + divisionId, '_blank');
+                }
+                else if (report == 22) {
+                    window.open('/HRPMSReport/HrAdminReport/HrReportDivisionDistrictBranchPdf?type=' + callName + "&id=" + districtId, '_blank');
+                }
+                else if (report == 23) {
+                    window.open('/HRPMSReport/HrAdminReport/HrReportDivisionDistrictBranchPdf?type=' + callName + "&id=" + branchId, '_blank');
+                }
+                else if (report == 24) {
+                    window.open('/HRPMSReport/HrAdminReport/HrReportBankingDiplomaPdf?type=' + callName + "&part=" + diplomaPart, '_blank');
+                }
+                else if (report == 25) {
+                    window.open('/HRPMSReport/HrAdminReport/HrReportByAge1Pdf?type=' + callName + "&age=" + age, '_blank');
+                }
+                else if (report == 26) {
+                    window.open('/HRPMSReport/HrAdminReport/HrReportByRolePdf?type=' + callName + "&Role=" + Role + "&Designation=" + Designation, '_blank');
+                }
+                else if (report == 27) {
+
+                    window.open('/HRPMSReport/HrAdminReport/HrReportBySeniorityWisePRLPDF?type=' + callName + "&prlDate=" + prlFrom, '_blank');
+
+                }
+                else if (report == 28) {
+
+                    window.open('/HRPMSReport/HrAdminReport/HrReportBySeniorityPDF?type=' + callName + "&transferDate=" + transferDate + "&years=" + transferYear, '_blank');
+
+                }
+                else if (report == 29) {
+
+                    var SlDate = $("#SlFrom").val();
+                    window.open('/HRPMSReport/HrAdminReport/HrReportBySeniorityWisePDF?type=' + callName + "&joiningDate=" + SlDate, '_blank');
+
+                }
+                else if (report == 30) {
+
+                    //window.open('/HRPMSReport/HrAdminReport/HrReportBranchWisePDF?type=' + callName + "&joiningDate=" + jdDate + "&Id=" + hrBranchId, '_blank');
+                    window.open("/HRPMSReport/HrAdminReport/GetBranchManagerByDatePDF?hrBranchId=" + hrBranchId + "&fromDate=" + fDateHr + "&toDate=" + tDateHr, '_blank');
+
+                }
+                else if (report == 31) {
+
+                    window.open('/HRPMSReport/HrAdminReport/HrReportBylastPromotionDatePDF?type=' + callName + "&lastPromotionDate=" + PromotionFrom, '_blank');
+
+                }
+                else if (report == 32) {
+
+                    window.open('/HRPMSReport/HrAdminReport/HrReportDivisionWisePDF?type=' + callName + "&postingdate=" + postFrom + "&divId=" + hrDivisionId, '_blank');
+
+                }
+                else if (report == 33) {
+
+                    window.open('/HRPMSReport/HrAdminReport/HrBranchWiseEmpReportByPostingDatePDF?type=' + callName + "&postingdate=" + postBranch + "&branchId=" + hrBranch1Id, '_blank');
+
+                }
+                else if (report == 34) {
+
+                    window.open('/HRPMSReport/HrAdminReport/HrReportDepartmentWisePDF?type=' + callName + "&postingdate=" + postDep + "&deptId=" + deppartmentId, '_blank');
+
+                }
+                else if (report == 35) {
+
+                    window.open('/HRPMSReport/HrAdminReport/HrOfficeWiseEmpReportByPostingDatePDF?type=' + callName + "&postingdate=" + postOffice + "&officeId=" + officeId, '_blank');
+
+                }
+                else if (report == 36) {
+
+                    window.open('/HRPMSReport/HrAdminReport/BranchWorkingExplanationPDF?type=' + callName + "&postingdate=" + postingD, '_blank');
+
+                }
+                else if (report == 37) {
+
+                    window.open('/HRPMSReport/HrAdminReport/AllDepWiseEmpReportByPostingDatePdf?type=' + callName + "&postingdate=" + DepPostFrom, '_blank');
+
+                }
+                else if (report == 38) {
+
+                    window.open('/HRPMSReport/HrAdminReport/OfficewisePositionByPostDatePdf?type=' + callName + "&postingdate=" + PositionPost, '_blank');
+
+                }
+                else if (report == 39) {
+
+                    window.open('/HRPMSReport/HrAdminReport/HrReportManpowerByAgeGroupPDF?type=' + callName + "&toDate=" + ageDFrom, '_blank');
+
+                }
+                else if (report == 40) {
+
+                    window.open('/HRPMSReport/HrAdminReport/HrReportManpowerByGenderPDF?type=' + callName + "&toDates=" + GDFroms, '_blank');
+
+                }
+                else if (report == 41) {
+
+                    window.open('/HRPMSReport/HrAdminReport/OfficeWiseEmpReportByPostingDatePdf?type=' + callName + "&postingdate=" + OfficeFrom, '_blank');
+
+                }
+                else if (report == 42) {
+
+                    window.open('/HRPMSReport/HrAdminReport/DivWiseEmpReportByPostingDatePdf?type=' + callName + "&postingdate=" + DivFrom, '_blank');
+
+                }
+                else if (report == 43) {
+
+                    window.open('/HRPMSReport/HrAdminReport/CSRAgeReportPDF?type=' + callName + "&birthDate=" + csrFrom, '_blank');
+
+                }
+                else if (report == 44) {
+
+                    window.open('/HRPMSReport/HrAdminReport/HrReportVacancyPDF?type=' + callName + "&toDates=" + vacFrom, '_blank');
+
+                }
+                else if (report == 45) {
+
+                    window.open('/HRPMSEmployee/Info/EmployeeMarkingReportPdf?employeeId=' + $('#employeeId').val(), '_blank');
+
+                }
+
+                //else {
+                //    window.open('/HRPMSReport/HrAdminReport/HrReportDataByDesig?rptType=' + report + "&desigId=" + desigId + "&deptId=" + deptId + "&bloodGroup=" + bloodGroup + "&sbuId=" + sbuId, '_blank');
+
+                //}
+            });
+        });
+        function Excel() {
+            let report = $('#report').val();
+
+            let deptId = parseInt($('#deptId').val()) ? parseInt($('#deptId').val()) : 0;
+            let desigId = $('#desigId').val();
+            let bloodGroup = $('#bloodGroup').val();
+            let sbuId = parseInt($('#sbu').val()) ? parseInt($('#sbu').val()) : 0;
+            let subjectId = parseInt($('#subjectId').val()) ? parseInt($('#subjectId').val()) : 0;
+            let universityId = parseInt($('#universityId').val()) ? parseInt($('#universityId').val()) : 0;
+            let loeId = parseInt($('#loeId').val()) ? parseInt($('#loeId').val()) : 0;
+            let courseId = parseInt($('#courseId').val()) ? parseInt($('#courseId').val()) : 0;
+            let belongingId = parseInt($('#belongingId').val()) ? parseInt($('#belongingId').val()) : 0;
+            //let deptName = $('#deptName').val();
+            //let desigName = $('#desigName').val();
+            let callName;
+            if (report == 10) {
+                callName = 'Desig';
+            }
+            else if (report == 11) {
+
+                callName = 'Dept';
+            }
+            else if (report == 12) {
+                callName = "Age";
+            }
+
+            if (report == 1 || report == 2 || report == 3 || report == 4) {
+                Common.Ajax('GET', '/HRPMSReport/HrAdminReport/HrReportDataByDesigExcel?rptType=' + report + "&desigId=" + desigId + "&deptId=" + deptId + "&bloodGroup=" + bloodGroup + "&sbuId=" + sbuId, [], 'json', normalword);
+                //window.open('/HRPMSReport/HrAdminReport/HrReportDataByDesig?rptType=' + report + "&desigId=" + desigId + "&deptId=" + deptId + "&bloodGroup=" + bloodGroup + "&sbuId=" + sbuId, '_blank');
+
+            }
+            else if (report == 5 || report == 6 || report == 7) {
+
+                Common.Ajax('GET', '/HRPMSReport/HrAdminReport/HrReportDataByEducationExcel?rptType=' + report + "&subjectId=" + subjectId + "&universityId=" + universityId + "&loeId=" + loeId, [], 'json', normalword);
+            }
+            else if (report == 8) {
+                Common.Ajax('GET', '/HRPMSReport/HrAdminReport/HrReportDataByTrainingCourseExcel?rptType=' + report + "&courseId=" + courseId, [], 'json', normalword);
+            }
+            else if (report == 9) {
+                Common.Ajax('GET', '/HRPMSReport/HrAdminReport/HrReportDataByBelongingItemExcel?rptType=' + report + "&belongingId=" + belongingId, [], 'json', normalword);
+            }
+            else if (report == 10) {
+                Common.Ajax('GET', '/HRPMSReport/HrAdminReport/HrReportDataBySummaryExcel?rptType=' + report + "&callName=" + callName, [], 'json', normalword);
+            }
+            else if (report == 11) {
+
+                Common.Ajax('GET', '/HRPMSReport/HrAdminReport/HrReportDataBySummaryExcel?rptType=' + report + "&callName=" + callName, [], 'json', normalword);
+            }
+            else if (report == 12) {
+
+                Common.Ajax('GET', '/HRPMSReport/HrAdminReport/HrReportDataBySummaryExcel?rptType=' + report + "&callName=" + callName, [], 'json', normalword);
+            }
+
+            //else {
+            //     Common.Ajax('GET','/HRPMSReport/HrAdminReport/HrReportDataByDesigExcel?rptType=' + report + "&desigId=" + desigId + "&deptId=" + deptId + "&bloodGroup=" + bloodGroup + "&sbuId=" + sbuId, [], 'json', normalword);
+
+            //}
+
+        }
+
+        function normalword(response) {
+            console.log(response);
+            //window.location.href = response;
+            //swal('', 'Review Successfully!', 'success');
+            // e.preventDefault();  //stop the browser from following
+            // window.location.href = response;
+            window.open('/pdf/' + response);
+            //window.location.reload();
+        }
+        function Refresh() {
+            let report = $('#report').val();
+
+            let deptId = parseInt($('#deptId').val()) ? parseInt($('#deptId').val()) : 0;
+            let desigId = $('#desigId').val();
+            let bloodGroup = $('#bloodGroup').val();
+            let sbuId = parseInt($('#sbu').val()) ? parseInt($('#sbu').val()) : 0;
+            let subjectId = parseInt($('#subjectId').val()) ? parseInt($('#subjectId').val()) : 0;
+            let universityId = parseInt($('#universityId').val()) ? parseInt($('#universityId').val()) : 0;
+            let loeId = parseInt($('#loeId').val()) ? parseInt($('#loeId').val()) : 0;
+            let courseId = parseInt($('#courseId').val()) ? parseInt($('#courseId').val()) : 0;
+            let belongingId = parseInt($('#belongingId').val()) ? parseInt($('#belongingId').val()) : 0;
+            let deptName = $('#deptName').val();
+            let desigName = $('#desigName').val();
+            let callName;
+            if (report == 10) {
+                callName = deptName
+            }
+            else if (report == 11) {
+                callName = desigName
+            }
+            else {
+                callName = ''
+            }
+
+            if (report == 1) {
+                $('#levelName').html('  Department Wise Hr Report');
+
+                GetHrReportData(desigId, deptId, bloodGroup, sbuId);
+            }
+            else if (report == 2) {
+                $('#levelName').html('  Designation Wise Hr Report');
+
+                GetHrReportData(desigId, deptId, bloodGroup, sbuId);
+            }
+            else if (report == 3) {
+                $('#levelName').html('  Blood Group Wise Hr Report ');
+
+                GetHrReportDataBlood(desigId, deptId, bloodGroup, sbuId);
+            }
+            else if (report == 4) {
+                $('#levelName').html('  SBU Wise Hr Report ');
+
+                GetHrReportDataSBu(desigId, deptId, bloodGroup, sbuId);
+            }
+            else if (report == 5) {
+                $('#levelName').html('  Education Wise Hr Report ');
+
+                GetHrReportDataEducation(subjectId, universityId, loeId);
+            }
+            else if (report == 6) {
+                $('#levelName').html('  Board/University Wise Hr Report ');
+
+                GetHrReportDataOrganization(subjectId, universityId, loeId);
+            }
+            else if (report == 7) {
+                $('#levelName').html('  Level of Education Wise Hr Report ');
+
+                GetHrReportDataLoE(subjectId, universityId, loeId);
+            }
+            else if (report == 8) {
+                $('#levelName').html('  Training Course Wise Hr Report ');
+
+                GetHrReportDataTrCourse(courseId);
+            }
+            else if (report == 9) {
+                $('#levelName').html('  Belonging Item Wise Hr Report ');
+
+                GetHrReportDataBelongingItem(belongingId);
+            }
+            else if (report == 10) {
+                $('#levelName').html('  Belonging Item Wise Hr Report ');
+
+                //GetHrReportDataBelongingItem(belongingId);
+            }
+            else if (report == 11) {
+                $('#levelName').html('  Belonging Item Wise Hr Report ');
+
+                //GetHrReportDataBelongingItem(belongingId);
+            }
+            else if (report == 12) {
+                $('#levelName').html('  Belonging Item Wise Hr Report ');
+
+                //GetHrReportDataBelongingItem(belongingId);
+            }
+            else {
+                $('#DeptTable').show();
+                GetHrReportData(desigId, deptId, bloodGroup, sbuId);
+            }
+
+        }
+
+        function GetHrReportDataBelongingItem(belongingId) {
+            table = $('#tblBelonging').DataTable({
+                ajax: {
+                    url: "/global/api/GetHrDataByBelongingItem/" + belongingId,
+                    dataSrc: ""
+                },
+                scrollX: true,
+                destroy: true,
+                columns: [
+                    { data: "rowSlNo" },
+                    { data: "employeeCode" },
+                    { data: "nameEnglish" },
+                    { data: "designation" },
+                    { data: "deptName" },
+                    { data: "emailAddress" },
+                    { data: "mobileNumberOffice" },
+                    { data: "ItemName" }
+                ],
+                stateSave: true,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" + "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        },
+                        title: "SBU Wise HR Report",
+                        messageTop: 'SBU Wise HR Report',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        },
+                        title: "SBU Wise HR Report",
+                        messageTop: 'SBU Wise HR Report'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "SBU Wise HR Report",
+                        messageTop: 'SBU Wise HR Report',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+        }
+
+        function GetHrReportDataTrCourse(courseId) {
+            table = $('#tblTraining').DataTable({
+                ajax: {
+                    url: "/global/api/GetHrDataByTrCourse/" + courseId,
+                    dataSrc: ""
+                },
+                scrollX: true,
+                destroy: true,
+                columns: [
+                    { data: "rowSlNo" },
+                    { data: "employeeCode" },
+                    { data: "nameEnglish" },
+                    { data: "designation" },
+                    { data: "deptName" },
+                    { data: "course" },
+                    { data: "days" },
+                    { data: "year" },
+                    { data: "completionStatus" }
+                ],
+                stateSave: true,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" + "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        },
+                        title: "SBU Wise HR Report",
+                        messageTop: 'SBU Wise HR Report',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        },
+                        title: "SBU Wise HR Report",
+                        messageTop: 'SBU Wise HR Report'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "SBU Wise HR Report",
+                        messageTop: 'SBU Wise HR Report',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+        }
+
+        function GetHrReportDataOrganization(subjectId, universityId, loeId) {
+            table = $('#tblOrg').DataTable({
+                ajax: {
+                    url: "/global/api/GetHrDataByEducation/" + subjectId + "/" + universityId + "/" + loeId,
+                    dataSrc: ""
+                },
+                scrollX: true,
+                destroy: true,
+                columns: [
+                    { data: "rowSlNo" },
+                    { data: "employeeCode" },
+                    { data: "nameEnglish" },
+                    { data: "designation" },
+                    { data: "deptName" },
+                    { data: "gender" },
+                    { data: "subjectName" },
+                    { data: "organizationName" }
+                ],
+                stateSave: true,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" + "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                        },
+                        title: "SBU Wise HR Report",
+                        messageTop: 'SBU Wise HR Report',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                        },
+                        title: "SBU Wise HR Report",
+                        messageTop: 'SBU Wise HR Report'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "SBU Wise HR Report",
+                        messageTop: 'SBU Wise HR Report',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+        }
+
+        function GetHrReportDataLoE(subjectId, universityId, loeId) {
+            table = $('#tblLoe').DataTable({
+                ajax: {
+                    url: "/global/api/GetHrDataByEducation/" + subjectId + "/" + universityId + "/" + loeId,
+                    dataSrc: ""
+                },
+                scrollX: true,
+                destroy: true,
+                columns: [
+                    { data: "rowSlNo" },
+                    { data: "employeeCode" },
+                    { data: "nameEnglish" },
+                    { data: "designation" },
+                    { data: "deptName" },
+                    { data: "gender" },
+                    { data: "levelofeducationName" },
+                    { data: "resultMaxValue" },
+                    { data: "organizationName" }
+                ],
+                stateSave: true,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" + "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        },
+                        title: "SBU Wise HR Report",
+                        messageTop: 'SBU Wise HR Report',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        },
+                        title: "SBU Wise HR Report",
+                        messageTop: 'SBU Wise HR Report'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "SBU Wise HR Report",
+                        messageTop: 'SBU Wise HR Report',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+        }
+
+        function GetHrReportDataEducation(subjectId, universityId, loeId) {
+            table = $('#tblSubject').DataTable({
+                ajax: {
+                    url: "/global/api/GetHrDataByEducation/" + subjectId + "/" + universityId + "/" + loeId,
+                    dataSrc: ""
+                },
+                scrollX: true,
+                destroy: true,
+                columns: [
+                    { data: "rowSlNo" },
+                    { data: "employeeCode" },
+                    { data: "nameEnglish" },
+                    { data: "designation" },
+                    { data: "deptName" },
+                    { data: "gender" },
+                    { data: "subjectName" },
+                    { data: "resultMaxValue" },
+                    { data: "organizationName" }
+                ],
+                stateSave: true,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" + "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        },
+                        title: "SBU Wise HR Report",
+                        messageTop: 'SBU Wise HR Report',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        },
+                        title: "SBU Wise HR Report",
+                        messageTop: 'SBU Wise HR Report'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "SBU Wise HR Report",
+                        messageTop: 'SBU Wise HR Report',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+        }
+
+        function GetHrReportDataSBu(desigId, deptId, bloodGroup, sbuId) {
+            table = $('#tblSbu').DataTable({
+                ajax: {
+                    url: "/global/api/GetHrDataByDesig/" + desigId + "/" + deptId + "/" + bloodGroup + "/" + sbuId,
+                    dataSrc: ""
+                },
+                scrollX: true,
+                destroy: true,
+                columns: [
+                    { data: "rowSlNo" },
+                    { data: "employeeCode" },
+                    { data: "nameEnglish" },
+                    { data: "designation" },
+                    { data: "deptName" },
+                    { data: "joiningDate" },
+                    { data: "activityStatus" },
+                    { data: "nationalID" },
+                    { data: "mobileNumberOffice" },
+                    { data: "dateOfBirth" },
+                    { data: "bloodGroup" },
+                    { data: "homeDistrict" },
+                    { data: "branchUnitName" },
+                    { data: "lastPromotionDate" }
+
+
+                ],
+                stateSave: true,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" + "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                        },
+                        title: "SBU Wise HR Report",
+                        messageTop: 'SBU Wise HR Report',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                        },
+                        title: "SBU Wise HR Report",
+                        messageTop: 'SBU Wise HR Report'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "SBU Wise HR Report",
+                        messageTop: 'SBU Wise HR Report',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+        }
+
+        function GetHrReportDataBlood(desigId, deptId, bloodGroup, sbuId) {
+            table = $('#tblBlood').DataTable({
+                ajax: {
+                    url: "/global/api/GetHrDataByDesig/" + desigId + "/" + deptId + "/" + bloodGroup + "/" + sbuId,
+                    dataSrc: ""
+                },
+                scrollX: true,
+                destroy: true,
+                columns: [
+                    { data: "rowSlNo" },
+                    { data: "employeeCode" },
+                    { data: "nameEnglish" },
+                    { data: "designation" },
+                    { data: "deptName" },
+                    { data: "branchUnitName" },
+                    { data: "joiningDate" },
+                    { data: "dateOfBirth" },
+                    { data: "emailAddress" },
+                    { data: "mobileNumberOffice" },
+                    { data: "bloodGroup" }
+                ],
+                stateSave: true,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" + "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+                        },
+                        title: "Daily Bill Receive",
+                        messageTop: 'Daily Bill Receive Report',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+                        },
+                        title: "Daily Bill Receive",
+                        messageTop: 'Daily Bill Receive Report'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "Daily Bill Receive",
+                        messageTop: 'Daily Bill Receive Report',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+        }
+
+        function GetHrReportData(desigId, deptId, bloodGroup, sbuId) {
+            table = $('#tblDept').DataTable({
+                ajax: {
+                    url: "/global/api/GetHrDataByDesig/" + desigId + "/" + deptId + "/" + bloodGroup + "/" + sbuId,
+                    dataSrc: ""
+                },
+                scrollX: true,
+                destroy: true,
+                columns: [
+                    { data: "rowSlNo" },
+                    { data: "employeeCode" },
+                    { data: "nameEnglish" },
+                    { data: "designation" },
+                    { data: "deptName" },
+                    { data: "branchUnitName" },
+                    { data: "joiningDate" },
+                    { data: "dateOfBirth" },
+                    { data: "emailAddress" },
+                    { data: "mobileNumberOffice" }
+
+
+                ],
+                stateSave: true,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" + "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                        },
+                        title: "Day Book",
+                        messageTop: 'Day Book Report',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                        },
+                        title: "Day Book",
+                        messageTop: 'Day Book Report'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "Day Book",
+                        messageTop: 'Day Book Report',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+        }
+
+
+
+        function ajaxGetDepartment(response) {
+            var lstParticular = [];
+            $.each(response, function (i, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.deptName;
+                lstParticular[lstParticular.length] = obj;
+            });
+            $('#deptName').autocomplete({
+                source: lstParticular,
+                select: function (event, ui) {
+                    $('#deptId').val(ui.item.key);
+                    $("#deptName").val(ui.item.value);
+                }
+            });
+        }
+
+        function ajaxGetAllHrDesignations(response) {
+            var lstParticular = [];
+            $.each(response, function (i, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.designationName;
+                lstParticular[lstParticular.length] = obj;
+            });
+            $('#desigNamee').autocomplete({
+                source: lstParticular,
+                select: function (event, ui) {
+                    $('#desigId').val(ui.item.key);
+                    $("#desigNamee").val(ui.item.value);
+                }
+            });
+        }
+
+
+        function ajaxGetEmployees(response) {
+            var GeEmployeesList = [];
+
+            $.each(response, function (id, option) {
+                console.log(option)
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+                GeEmployeesList[GeEmployeesList.length] = obj;
+            });
+            $('#employeeName').autocomplete({
+                source: GeEmployeesList,
+                select: function (event, ui) {
+                    $("#employeeName").val(ui.item.value);
+                    $("#employeeId").val(ui.item.key);
+
+                }
+            });
+        }
+
+        function formatDateMonthName(date) {
+            var monthName = "";
+            date = new Date(date);
+            var year = date.getFullYear(),
+                month = date.getMonth() + 1, // months are zero indexed
+                day = date.getDate(),
+                hour = date.getHours(),
+                minute = date.getMinutes(),
+                second = date.getSeconds(),
+                hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+                minuteFormatted = minute < 10 ? "0" + minute : minute,
+                morning = hour < 12 ? "am" : "pm";
+            if (month == 1) {
+                monthName = "January";
+            }
+            else if (month == 2) {
+                monthName = "February";
+            }
+            else if (month == 3) {
+                monthName = "March";
+            }
+            else if (month == 4) {
+                monthName = "April";
+            }
+            else if (month == 5) {
+                monthName = "May";
+            }
+            else if (month == 6) {
+                monthName = "June";
+            }
+            else if (month == 7) {
+                monthName = "July";
+            }
+            else if (month == 8) {
+                monthName = "August";
+            }
+            else if (month == 9) {
+                monthName = "September";
+            }
+            else if (month == 10) {
+                monthName = "October";
+            }
+            else if (month == 11) {
+                monthName = "November";
+            }
+            else {
+                monthName = "December";
+            }
+            return day + "-" + monthName + "-" + year;
+        }
+
+
+            //function ajaxGetDuesCustomerList(response) {
+
+                                                    //    var options = '<option value="">Select</option>';
+                                                    //    $.each(response, function (i, item) {
+                                                    //        options += '<option value="' + item.Id + '">' + item.voucherTypeName + '</option>';
+                                                    //    });
+                                                    //    $('#bloodGroup').empty();
+                                                    //    $('#bloodGroup').append(options);
+
+
+                                                    //}
+
+
+    </script>
+}
+
+
+

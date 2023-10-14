@@ -1,0 +1,544 @@
+﻿@{
+    ViewData["Title"] = "Operation Theater";
+    // Layout = "~/ Views / Shared / _Layout.cshtml";
+}
+
+
+@section Style{
+    <style>
+        .redStar {
+            color: red;
+        }
+
+        .container {
+            padding: 2rem 0rem;
+        }
+
+        h4 {
+            margin: 2rem 0rem 1rem;
+        }
+
+        /*.table-image {
+            td, th
+
+        {
+            vertical-align: middle;
+        }
+        }*/
+    </style>
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-header">
+        <h5 style="color: black" class="fa-pull-left">Operation Theater Information</h5>
+        <a href="/HospitalManagement/HospitalCommon/OTList" class="btn btn-success btn-sm fa-pull-right">All Info</a>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <form asp-area="HospitalManagement" asp-controller="HospitalCommon" asp-action="OperationTheater" method="post" id="infoCreateForm" data-parsley-validate="parsley">
+
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 style="font-size:18px;color:black;"> OT Information</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label for="HospitalNo" class="col-sm-4 col-form-label">Hospital No</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="HospitalNo" value="" name="HospitalNo" autocomplete="off">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group row">
+
+                                        <label for="IPNo" class="col-sm-4 col-form-label">IP No</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="IPNo" value="" name="IPNo">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+
+
+                                    <div class="form-group row">
+                                        <label for="BedType" class="col-sm-4 col-form-label">Bed Type</label>
+
+                                        <div class="col-sm-8">
+                                            <select class="form-control" id="BedType" name="BedType">
+                                                <option value="">Select</option>
+                                                <option value="Special">Special</option>
+                                                <option value="General">General</option>
+                                                <option value="Other">Other</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group row">
+                                        <label for="WardName" class="col-sm-4 col-form-label">Ward Name</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="WardName" value="" name="WardName">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group row">
+                                        <label for="BedNo" class="col-sm-4 col-form-label">Bed No</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="BedNo" value="" name="BedNo">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <hr />
+                <br />
+                <div class="card">
+                    <div class="card-header">
+                        <h2 style="font-size:18px;color:black;"> Patient Information</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="col-12">
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group row">
+
+                                        <label for="OPNo" class="col-sm-4 col-form-label">Operation No</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="OPNo" value="" name="OperationNo">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label for="OPdate" class="col-sm-4 col-form-label">Operation Date</label>
+                                        <div class="col-sm-8">
+                                            <input type="date" class="form-control datePicker" id="OPdate" value="" name="OPdate" autocomplete="off">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group row">
+                                        <label for="PatientName" class="col-sm-4 col-form-label">Patient Name</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="PatientName" value="" name="PatientName" style="text-transform:uppercase">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group row">
+                                        <label for="PatientAge" class="col-sm-4 col-form-label">Patient Age</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="PatientAge" value="" name="PatientAge">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group row">
+                                        <label for="address" class="col-sm-4 col-form-label">Address</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="address" value="" name="address">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label for="gender" class="col-sm-4 col-form-label">Gender</label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control" id="gender" name="gender">
+                                                <option value="">Select</option>
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                                <option value="Other">Other</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group row">
+                                        <label for="AdmitDate" class="col-sm-4 col-form-label">Admit Date</label>
+                                        <div class="col-sm-8">
+                                            <input type="date" class="form-control datePicker" id="AdmitDate" value="" name="AdmitDate">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group row">
+                                        <label for="TransDate" class="col-sm-4 col-form-label">Trans Date</label>
+                                        <div class="col-sm-8">
+                                            <input type="date" class="form-control datePicker" id="TransDate" value="" name="TransDate">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <hr />
+                <br />
+                <div class="card">
+                    <div class="card-header">
+                        <h2 style="font-size:18px;color:black;"> Surgery Information</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="col-12">
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label for="surgery" class="col-sm-4 col-form-label">Surgery</label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control" id="surgery" name="surgery">
+                                                <option value="">Select</option>
+                                                <option value="Eye">Eye</option>
+                                                <option value="Kidny">Kidny</option>
+                                                <option value="Heart">Heart</option>
+                                                <option value="Tonsillectonmy">Tonsillectonmy</option>
+                                                <option value="Amputation">Amputation</option>
+                                                <option value="Laparotomy">LaparotomyKidny</option>
+                                                <option value="Teeth Extraction">Teeth Extraction</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label for="SurgeryDate" class="col-sm-4 col-form-label">Surgery Date </label>
+                                        <div class="col-sm-8">
+
+                                            <input type="date" class="form-control datePicker" id="SurgeryDate" value="" name="SurgeryDate">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label for="SurgeryTime" class="col-sm-4 col-form-label">Surgery Time </label>
+                                        <div class="col-sm-8">
+
+                                            <input type="time" class="form-control fa-times" id="SurgeryTime" value="" name="SurgeryTime">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label for="duration" class="col-sm-4 col-form-label">Duration </label>
+                                        <div class="col-sm-8">
+
+                                            <input type="text" class="form-control fa-times" id="duration" value="" name="duration">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label for="OperationTheater" class="col-sm-4 col-form-label">Operation Theater</label>
+                                        <div class="col-sm-8">
+                                            <select type="text" class="form-control" id="OperationTheater" name="OperationTheater">
+                                                <option value="">Select</option>
+                                                <option value="Major">Major_1</option>
+                                                <option value="Major">Major_2</option>
+                                                <option value="Major">Major_3</option>
+                                                <option value="Minor">Minor_1</option>
+                                                <option value="Minor">Minor_2</option>
+                                                <option value="Minor">Minor_3</option>
+                                                @*<option value="">Select</option>
+                                                    @foreach (var data in Model.departments)
+                                                    {
+                                                        <option value="@data.Id">@data.deptName</option>
+                                                    }*@
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label for="concession" class="col-sm-4 col-form-label">Con. %</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="concession" value="" name="concession">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label for="NetAmmount" class="col-sm-4 col-form-label">Net Ammount</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="NetAmmount" name="NetAmmount" autocomplete="off">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label for="majorMinor" class="col-sm-4 col-form-label">Major/Minor(J/I)</label>
+                                        <div class="col-sm-8">                                           
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="major" id="major">
+                                                <label class="form-check-label" for="major">J</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="major" id="minor">
+                                                <label class="form-check-label" for="large">I</label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label for="Anesthessia" class="col-sm-4 col-form-label">Anesthessia (G/L/E/D/K)</label>
+                                        <div class="col-sm-8">
+
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" name="general" id="general">
+                                                <label class="form-check-label" for="inlineCheckbox1">G</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" name="general" id="large">
+                                                <label class="form-check-label" for="large">L</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" name="general">
+                                                <label class="form-check-label" for="inlineCheckbox3">S </label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" name="general">
+                                                <label class="form-check-label" for="inlineCheckbox3">E </label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" name="general">
+                                                <label class="form-check-label" for="inlineCheckbox3">D </label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" name="general">
+                                                <label class="form-check-label" for="inlineCheckbox3">K </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+                <button type="button" id="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<hr />
+
+<div class="card card-cascade narrower">
+   <div class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+
+       
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary">Billing Information</h6>
+        </div>     
+    </div>
+   <div class="px-4">
+        <div class="table-wrapper">
+            <!--Table-->
+            <table class="table table-striped table-bordered table-hover mb-0" id="billingTable">
+                <!--Table head-->
+                <thead>
+                    <tr>
+                    
+                        <th>
+                            <input class="form-check-input" type="checkbox" id="All1">
+                            <label class="form-check-label mr-2 label-table" for="All1">Select All</label>
+                        </th>
+                        <th class="th-lg">
+                            <a>
+                                Service
+                                <i class="fas fa-sort ml-1"></i>
+                            </a>
+                        </th>
+                        <th class="th-lg">
+
+                            Gross Ammount
+                            <i class="fas fa-sort ml-1"></i>
+
+                        </th>
+                        <th class="th-lg">
+
+                            Concession
+                            <i class="fas fa-sort ml-1"></i>
+
+                        </th>
+                        <th class="th-lg">
+
+                            Net Amount
+                            <i class="fas fa-sort ml-1"></i>
+
+                        </th>
+
+                    </tr>
+                </thead>
+                <!--Table head-->
+                <!--Table body-->
+                <tbody>
+                    <tr>
+                        <th scope="row">
+                            <input class="form-check-input" type="checkbox" id="checkbox1" >
+                            <label class="form-check-label label-table" for="checkbox1"></label>
+                        </th>
+
+                        <td>Drug And Consumption</td>
+                        <td>900</td>
+                        <td> 10%</td>
+                        <td>800</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            <input class="form-check-input" type="checkbox" id="checkbox2">
+                            <label class="form-check-label label-table" for="checkbox2"></label>
+                        </th>
+                        <td>Drug And Consumption</td>
+                        <td>900</td>
+                        <td> 10%</td>
+                        <td>800</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            <input class="form-check-input" type="checkbox" id="checkbox3">
+                            <label class="form-check-label label-table" for="checkbox3"></label>
+                        </th>
+                        <td>Pharmacy</td>
+                        <td>900</td>
+                        <td> 10%</td>
+                        <td>800</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Total=</td>
+                        <td>900</td>
+                        <td>00 </td>
+                        <td>00</td>
+                    </tr>
+
+                </tbody>
+                <!--Table body-->
+            </table>
+            <!--Table-->
+        </div>
+
+    </div>
+
+</div>
+<!-- Table with panel -->
+
+
+
+
+@section Scripts{
+        <script>
+          
+
+            $(document).ready(function () {
+            $("#All1").click(function(){
+         $('#billingTable input:checkbox').not(this).prop('checked', this.checked);
+     });
+
+                $("#BloodBank").addClass("active");
+                $('#educationalTable').DataTable();
+
+                $('#Donationdate').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100" });
+            });
+
+
+            function Edit(Id, buildingId, nameEn, nameBn, type, status, remarks) {
+                $('#Id').val(Id);
+                $('#buildingId').val(buildingId);
+                $('#nameEn').val(nameEn);
+                $('#nameBn').val(nameBn);
+                $('#type').val(type);
+                $('#status').val(status);
+                $('#remarks').val(remarks);
+
+            }
+
+            function Delete(Id) {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+                }).then(function () {
+
+                    $.ajax({
+                        url: '@Url.Action("DeleteBloodBankById", "HospitalCommon")',
+                        data: { Id: Id },
+                        type: 'POST',
+                    })
+                        .done(function () {
+                            swal('', 'Deleted Successfully!', 'success');
+                            window.location.href = "/HospitalManagement/HospitalCommon/BloodBank";
+                        })
+                        .fail(function () {
+                            swal('Cancelled', 'It will not be deleted. Please try again later !!!', 'error');
+                        });
+                });
+            }
+
+        </script>
+    }
+
+
+
+
+
+
+

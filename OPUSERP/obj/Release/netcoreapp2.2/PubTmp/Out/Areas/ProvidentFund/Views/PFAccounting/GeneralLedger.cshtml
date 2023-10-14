@@ -1,0 +1,165 @@
+﻿
+@{
+    ViewData["Title"] = "GeneralLedger";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row clearfix">
+    <div class="col-12">
+
+        <div class="card-body  bg-white">
+            <h5 class="m-0 font-weight-bold text-primary">General Ledger</h5>
+            <hr />
+            <br/>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <input type="hidden" id="id" name="id" />
+                    <select id="accounts" name="" formControlName="" class="form-control input-sm">
+                        <option value="">Select Accounts</option>
+                        <option value="My Account 1">My Account 1</option>
+                        <option value="My Account 2">My Account 2</option>
+                    </select>
+                </div>
+                <div class="col-sm-4 input-group">
+                    <input name="fromDate" id="fromDate" class="form-control input-group-sm" placeholder="From Date" />
+                    <div class="input-group-prepend">
+                        <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                    </div>
+                </div>
+                <div class="col-sm-4 input-group">
+                    <input name="toDate" id="toDate" class="form-control input-group-sm" placeholder="To Date" />
+                    <div class="input-group-prepend">
+                        <i class="fas fa-calendar-alt form-control input-group-sm input-group-text bg-white"></i>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <button type="button" onclick="search()" class="btn btn-sm btn-primary" style="background-color:darkcyan; color:white" id="addcoa" value="View PF Statement">Run Report</button>
+        </div>
+        <br/>
+
+        <div class="row clearfix">
+            <div class="col-12">
+                <div class="card mb-lg-4">
+
+                    <!-- Card Body -->
+                    <div class="card-body" style="padding:40px">
+                        <div class="col-sm-12">
+                            <h4 class="text-success" align="center">Employees' Provident Fund Trust of BDBL Finance</h4>
+                            <p align="center">
+                                <strong>Address: </strong> House: 40, Lake Drive Road, SEC-7, Uttara, Dhaka-1230
+                                <br />
+                                <br />
+                                General Ledger <br />
+                                Accounts Receivables
+                            </p>
+                        </div>
+                        <br />
+                        <br />
+                        <table class="table table-striped table-bordered table-hover" id="">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Trans No</th>
+                                    <th>Type</th>
+                                    <th>Narration</th>
+                                    <th>Party</th>
+                                    <th>Particular</th>
+                                    <th>Debit</th>
+                                    <th>Credit</th>
+                                    <th>Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Opening Balance</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>45,287,974.80</td>
+                                    <td>41,987,984.85</td>
+                                    <td>3,299,989.95</td>
+
+                                </tr>
+                                <tr>
+
+                                    <td>12/2/2021</td>
+                                    <td>TRNSH85</td>
+                                    <td>JV</td>
+                                    <td>Customer-MONIRUJJAMAN TITON</td>
+                                    <td>MONIRUJJAMAN TITON</td>
+                                    <td>Cash in hand - HO 1,000.00</td>
+                                    <td>0</td>
+                                    <td>1,000.00</td>
+                                    <td>3,298,989.95</td>
+
+                                </tr>
+                                <tr>
+
+                                    <td>28-04-2019</td>
+                                    <td>CD5CC5744A	</td>
+                                    <td>Receipt</td>
+                                    <td>Customer-JAMAL HOSSEN</td>
+                                    <td>JAMAL HOSSEN</td>
+                                    <td>Cash in hand - HO 13,000.00</td>
+                                    <td>0</td>
+                                    <td>13,000.00</td>
+                                    <td>3,285,989.95</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Closing Balance	</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>0.00</td>
+                                    <td>14,000.00</td>
+                                    <td>3,285,989.95</td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $("#fromDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker(new Date());
+        $("#toDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker(new Date());
+
+    });
+
+    function search() {
+        var Accounts = $("#accounts").val();
+        var FromDate = $("#fromDate").val();
+        var ToDate = $("#toDate").val();
+
+        if (Accounts == "") {
+            swal('Warning', 'please try again', 'warning');
+            return false;
+        }
+
+        if (FromDate == "") {
+            swal('Warning', 'please try again', 'warning');
+            return false;
+        }
+        if (ToDate == "") {
+            swal('Warning', 'please try again', 'warning');
+            return false;
+        }
+    }
+
+</script>

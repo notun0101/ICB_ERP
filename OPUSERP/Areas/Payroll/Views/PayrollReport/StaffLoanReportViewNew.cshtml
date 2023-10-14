@@ -1,0 +1,135 @@
+﻿@model PayrollReportViewModel
+@{
+    ViewData["Title"] = "Staff Loan Report";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+<style>
+
+    .print-card-body {
+        width: 100%;
+        padding-bottom: 10px;
+    }
+
+    .vartical-table th {
+        width: 25%;
+    }
+
+    .vartical-table td {
+        width: 25%;
+    }
+
+    .table td, .table th {
+        padding: .3rem;
+        font-size: 14px;
+        border: 1px solid black !important;
+    }
+
+    table {
+        page-break-inside: auto;
+        border-collapse: collapse;
+        border: 1px solid black !important;
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+        border: 1px solid black !important;
+    }
+
+    thead {
+        display: table-header-group;
+        border: 1px solid black !important;
+    }
+
+    tfoot {
+        display: table-footer-group;
+        border: 1px solid black !important;
+    }
+
+    h6 {
+        font-size: 14px;
+        background-color: gray;
+        color: white !important;
+        padding: 3px;
+    }
+</style>
+
+
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+
+        <div class="container-fluid">
+            <div class="fa-pull-right">
+                <p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+            </div>
+            <div class="row" style="padding-top:0px;">
+                <div class="col-2">
+                    <img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="BDBL Logo" style="height:80px;" />
+                </div>
+                <div class="col-8">
+                    <div style="color:black;text-align:center;">
+                        <h3 style="font-size:20px;">@Model.companies.FirstOrDefault()?.companyName</h3>
+                        <h3 style="font-size:18px;"> @ViewBag.type </h3>
+                        <h3 style="font-size:18px;"> Staff Loan Report</h3>
+                        <h4 style="font-size:18px;"> Date Range: @ViewBag.startDate to @ViewBag.endDate</h4>
+                        <br />
+                    </div>
+                </div>
+                <div class="col-2">
+
+                </div>
+            </div>
+            <div class="row" style="padding-top:50px; color: black !important;">
+                <div class="col-md-12 text-dark" style="color: black !important;">
+                    <p>Name: @Model.employeeInfoForLoan?.nameEnglish</p>
+                    <p>Designation: @Model.employeeInfoForLoan?.designation</p>
+                    <p>Posting: @Model.staffLoanTrans?.FirstOrDefault()?.posting</p>
+                    <p></p>
+                    <p>Employee Id: @Model.employeeInfoForLoan?.employeeCode</p>
+                    <p>Loan Id: @Model.staffLoanTrans?.FirstOrDefault()?.newLoanNo</p>
+                    <p>Loan Type: @Model.staffLoanTrans?.FirstOrDefault()?.loanType</p>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid ">
+            <div class="col-12">
+                <h3 style="font-size:18px;color:black"> </h3>
+            </div>
+        </div>
+        <br />
+        <div class="container-fluid" style="color:black;">
+            <table class="table table border" style="border:1px solid black !important">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Salary Period</th>
+                        <th>Particular</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                        <th>Principal</th>
+                        <th>Interest</th>
+                        <th>Charge</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.staffLoanTrans)
+                    {
+                        <tr>
+                            <td>@item.effectiveDate?.ToString("dd/MM/yyyy")</td>
+                            <td>@item.salaryPeriod</td>
+                            <td>@item.particular</td>
+                            <td style="text-align: right;">@item.debit?.ToString("#.##")</td>
+                            <td style="text-align: right;">@item.credit?.ToString("#.##")</td>
+                            <td style="text-align: right;">@item.principal?.ToString("#.##")</td>
+                            <td style="text-align: right;">@item.interest?.ToString("#.##")</td>
+                            <td style="text-align: right;">@item.charge?.ToString("#.##")</td>
+                            <td style="text-align: right;">@item.total?.ToString("#.##")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,88 @@
+﻿
+@{
+    ViewData["Title"] = "DistrbuteList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            @*<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h2 class="m-0 font-weight-bold text-primary">Profit Distribution List</h2>
+        </div>*@
+
+
+            <div class="card-body bg-white">
+                <div class="">
+                    <h5 class="m-0 font-weight-bold text-primary">Profit Distribution List</h5>
+                </div>
+                <hr />
+
+                <table class="table table-striped table-bordered table-hover" id="TblProfitDistributionList">
+                    <thead>
+                        <tr>
+
+                            <th>Profit DistributionDate</th>
+                            <th>Member Name</th>
+                            <th>Contribution</th>
+                            <th>Accumulated Profit</th>
+                            <th>Total after profit distribution</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>16-06-2021</td>
+                            <td>Kamal Hosen</td>
+                            <td>50,000</td>
+                            <td>10000</td>
+                            <td>60,000</td>
+                            <td>
+                                <a href="">
+                                    <i class="fa fa-eye" style="color:green"></i>
+                                </a>
+                                &nbsp;
+                                <button class="btn btn-danger" onclick="Remove()"><i class="fa fa-trash" style="border:none"></i></button>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#TblProfitDistributionList').DataTable();
+    });
+    function Remove(Id) {
+
+        if (Id == "") {
+            swal('Warning', 'please try again', 'warning');
+            return false;
+        }
+        swal({
+            title: 'Are you sure?', text: 'Do you want to Delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, Delete it!'
+        }).then(function () {
+            $.get("/ProvidentFund/Member/DeleteMember?id=" + Id, function (data) {
+                if (data.Success) {
+                    swal('', data.Message, 'success').then(function () {
+                        location.reload();
+                    })
+                } else {
+                    swal('Warning', data.Message, 'warning');
+                }
+
+
+            });
+
+        })
+
+    }
+
+</script>

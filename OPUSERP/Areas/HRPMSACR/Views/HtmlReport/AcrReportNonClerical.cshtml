@@ -1,0 +1,705 @@
+﻿@model OPUSERP.Areas.HRPMSACR.Models.ReportViewModel
+
+@{
+    ViewData["Title"] = "ClericalReportPdfView";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+
+}
+
+@using OPUSERP.Helpers;
+@using System;
+
+<style>
+    .print-card-body {
+        /*width: 100%;*/
+        padding-bottom: 10px;
+        background-color: white;
+    }
+
+    .header {
+        text-align: center;
+        margin: 30px
+    }
+
+    .card-header p {
+        text-align: center;
+    }
+
+    #row-margin-top-id {
+        margin-top: 37px;
+    }
+
+    table thead tr td th {
+        text-align: center;
+        font-size: 34px;
+    }
+
+    a {
+        text-decoration: none;
+        display: inline-block;
+        padding: 8px 16px;
+    }
+
+        a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+    .previous {
+        background-color: #f1f1f1;
+        color: black;
+    }
+
+    .next {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .round {
+        border-radius: 50%;
+    }
+
+    td.TdWidth {
+        width: 100px;
+    }
+
+    .tdFontSize {
+        /*font-size: 34px;*/
+        color: black
+    }
+
+    .textalign {
+        text-align: center
+    }
+    .fsize {
+        font-size: 18px
+    }
+</style>
+
+<div class="print-card">
+    <div class="print-card-body">
+        <div class="container-fluid">
+            <div class="fa-pull-right">
+                @*<p style="font-size:12px;color:gray;">Print at: @DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")</p>*@
+                <p style="font-size:20px;color:black;">
+                    ফরম # ০২ <img src="~/EmpImages/bisorgo.png" width="5" style="margin-bottom:08px" /> &nbsp;০১ <img src="~/EmpImages/bisorgo.png" width="5" style="margin-bottom:08px" /> &nbsp;০৩
+                </p>
+            </div>
+            <div class="row" style="padding-top:0px;">
+                <div class="col-2" style="margin-right:35px">
+                    <img src="~/Assets/bdbl.png" style="height:190px;width:220px;padding-bottom:37%" />
+                </div>
+                <div class="col-8" style="margin-top:12px">
+                    <div style="color:black;text-align:center;">
+                        <h1 style="margin: 0;"><b>বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড</b></h1>
+                        <h3><b>গোপনীয় অনুবেদন</b></h3>
+                        <h4>
+                            ৪র্থ শ্রেণীর কর্মচারী <br />
+                            
+                        </h4>
+                    </div>
+                </div>
+                <div class="col-2"></div>
+            </div>
+
+            <div class="col-12" style="float:left; line-height:1.1;">
+
+                <div class="row" style="color:black;font-size:15px">
+
+                    <div class="row col-sm-12">
+                        <div class="" style="width: 100%;">
+                            <div class="" style="font-size:15px">
+                                <div class="row">
+                                    <div class="col-lg-8 col-md-8 col-sm-8">
+
+                                        <div>
+                                            <table class="table table-bordered tdFontSize" style="width: 100%;height:100%;border:2px solid black">
+                                                <tr>
+                                                    <td colspan="3">
+                                                        অনুবেদনের সময়কালঃ @*<img src="~/EmpImages/bisorgo.png" width="5" style="height:17px;" />*@ &nbsp;&nbsp;&nbsp; <span style="font-size:18px">@Model.employeeInfoViewModel.FirstOrDefault().fromDate</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; হতে &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="font-size:18px">@Model.employeeInfoViewModel.FirstOrDefault().toDate</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; পর্যন্ত 
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td rowspan="1">
+
+                                                        <p>পরিচিতি নম্বরঃ <span style="font-size:18px">@Model.employeeInfoViewModel.FirstOrDefault().EmpCode</span></p>
+                                                    </td>
+
+                                                    <td>বার্ষিক</td>
+                                                    <td style="width:10%"></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td></td>
+                                                    <td>ত্রৈমাসিক</td>
+                                                    <td style="width:10%"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td>বিশেষ</td>
+                                                    <td style="width:10%"></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                            <br />
+                            <div class="tdFontSize">
+
+                                <p style="text-align:center"><u><b>১ম অংশ</b></u></p>
+
+
+                                <div class="">
+                                    <p>১। নামঃ  <span style="font-size:18px">@Model.employeeInfoViewModel.FirstOrDefault().EmpName</span></p>
+                                    <p>
+                                        ২। পিতার/স্বামীর নামঃ  <span style="font-size:18px">
+                                            @if (@Model.employeeInfoViewModel.FirstOrDefault().FatherName != null)
+                                            {
+                                                @Model.employeeInfoViewModel.FirstOrDefault().FatherName
+                                            }
+                                            else
+                                            {
+                                                @Model.employeeInfoViewModel.FirstOrDefault().SpouseName
+                                            }
+
+                                        </span>
+                                    </p>
+                                    <p>
+                                        ৩। চাকুরীতে যোগদানের তারিখ <span style="font-size:18px">@Convert.ToDateTime(Model.employeeInfoViewModel.FirstOrDefault().JoiningDate).ToString("dd-MMM-yyyy")</span>
+                                        <span>পদমর্যাদা <span style="font-size:18px">@Model.employeeInfoViewModel.FirstOrDefault().JoiningDesignationName</span></span>
+                                        <span>বেতন স্কেল<span style="font-size:18px">@Model.employeeInfoViewModel.FirstOrDefault().SalaryScale </span></span>
+                                    </p>
+                                    <p>
+                                        ৪। পরবর্তী পদোন্নতি সমূহের তারিখ ও পদবী ( যদি থাকে ) <span style="font-size:18px">@Convert.ToDateTime(Model.employeeInfoViewModel.FirstOrDefault().LastPromotionDate).ToString("dd-MMM-yyyy")</span>
+
+                                    </p>
+                                    <p>
+                                        ৫। বর্তমান পদবী <span style="font-size:18px">@Model.employeeInfoViewModel.FirstOrDefault().DesignationName</span>
+                                       বেতন স্কেল<span style="font-size:18px"> @Model.employeeInfoViewModel.FirstOrDefault().SalaryScale</span>
+                                    </p>
+                                    <p>৬। জন্ম তারিখ <span style="font-size:18px">@Convert.ToDateTime(Model.employeeInfoViewModel.FirstOrDefault().BirthDate).ToString("dd-MMM-yyyy")</span></p>
+                                    <p>৭। শিক্ষাগত যোগ্যতাঃ  (ক)চাকুরীতে যোগদানের সময় <span style="font-size:18px">@Model.employeeInfoViewModel.FirstOrDefault().LastEducation</span><span>(খ)বর্তমান যোগ্যতা <span style="font-size:18px">@Model.employeeInfoViewModel.FirstOrDefault().LastEducation</span></span></p>
+
+                                    <table class="table table-bordered" id="tblEducationalQualifications" style="width: 100%;height:100%;border:2px solid black">
+                                        <tr>
+                                            <td class="tdLargeFontSize" style="width:50%;">
+                                                ৮| বৈবাহিক অবস্থা ( <i class="fas fa-check"></i>চিহ্ন দিন)
+                                            </td>
+                                            <td style="width:50%;text-align:center;">
+                                                @if (@Model.employeeInfoViewModel.FirstOrDefault().MaritalStatus == "Married")
+                                                {
+                                                    <label class="tdLargeFontSize" style="text-decoration: line-through;">অবিবাহিত<span style="margin-right:20px"></span>|<span style="margin-right:40px"></span></label>
+                                                    <label class="tdLargeFontSize">|<span style="margin-right:20px"></span>বিবাহিত<span style="margin-right:20px"></span>|<span style="margin-right:40px"></span></label>
+                                                    <label class="tdLargeFontSize" style="text-decoration: line-through;"><span style="margin-right:20px"></span>|বিপত্নীক/বিধবা<span style="margin-right:20px"></span>|<span style="margin-right:20px"></span>|</label>
+                                                }
+                                                else if (@Model.employeeInfoViewModel.FirstOrDefault().MaritalStatus == "Unmarried")
+                                                {
+                                                    <label class="tdLargeFontSize" >অবিবাহিত<span style="margin-right:20px"></span>|<span style="margin-right:40px"></span></label>
+                                                    <label class="tdLargeFontSize" style="text-decoration: line-through">|<span style="margin-right:20px"></span>বিবাহিত<span style="margin-right:20px"></span>|<span style="margin-right:40px"></span></label>
+                                                    <label class="tdLargeFontSize" style="text-decoration: line-through;">|<span style="margin-right:20px"></span>বিপত্নীক/বিধবা<span style="margin-right:20px"></span>|<span style="margin-right:20px"></span>|</label>
+                                                    @*<label class="tdLargeFontSize" style="text-decoration: line-through;">বিধবা</label><br />*@
+                                                }
+                                                else if (@Model.employeeInfoViewModel.FirstOrDefault().MaritalStatus == "3")
+                                                {
+                                                    <label class="tdLargeFontSize" style="text-decoration: line-through;">অবিবাহিত<span style="margin-right:20px"></span>|<span style="margin-right:40px"></span></label>
+                                                    <label class="tdLargeFontSize" style="text-decoration: line-through;">|<span style="margin-right:20px"></span>বিবাহিত<span style="margin-right:20px"></span>|<span style="margin-right:40px"></span></label>
+                                                    <label class="tdLargeFontSize" style="">|<span style="margin-right:20px"></span>বিপত্নীক/বিধবা<span style="margin-right:20px"></span>|<span style="margin-right:20px"></span>|</label>
+                                                    @*<label class="tdLargeFontSize">বিধবা</label><br />*@
+
+                                                }
+                                                else if (@Model.employeeInfoViewModel.FirstOrDefault().MaritalStatus == "4")
+                                                {
+                                                    <label class="tdLargeFontSize" style="text-decoration: line-through;">অবিবাহিত<span style="margin-right:20px"></span>|<span style="margin-right:40px"></span></label>
+                                                    <label class="tdLargeFontSize" style="text-decoration: line-through;">|<span style="margin-right:20px"></span>বিবাহিত<span style="margin-right:20px"></span>|<span style="margin-right:50px"></span></label>
+                                                    <label class="tdLargeFontSize">|<span style="margin-right:20px"></span>বিপত্নীক/বিধবা<span style="margin-right:20px"></span>|<span style="margin-right:20px"></span>|</label>
+                                                    @*<label class="tdLargeFontSize" style="text-decoration: line-through;">বিধবা</label><br />*@
+                                                }
+                                                else
+                                                {
+                                                    <label class="tdLargeFontSize">অবিবাহিত<span style="margin-right:20px"></span>|<span style="margin-right:40px"></span></label>
+                                                    <label class="tdLargeFontSize">|<span style="margin-right:20px"></span>বিবাহিত<span style="margin-right:20px"></span>|<span style="margin-right:40px"></span></label>
+                                                    <label class="tdLargeFontSize">|<span style="margin-right:20px"></span>বিপত্নীক/বিধবা<span style="margin-right:20px"></span>|<span style="margin-right:20px"></span>|</label>
+                                                    @*<label class="tdLargeFontSize">বিধবা<span style="margin-right:20px"></span></label><br />*@
+                                                }
+                                            </td>
+
+                                            @*<tr>
+                                                    <td> </td>
+                                                    <td>সন্তান সংখ্যা (বয়স সহ):</td>
+                                                </tr>*@
+                                        </tr>
+                                        <tr>
+                                            <td class="tdLargeFontSize" style="width:50%;"></td>
+                                            <td style="width:50%;text-align:left;">সন্তান সংখ্যা (বয়স সহ )&nbsp;<img src="~/EmpImages/bisorgo.png" width="5" style="height:10px" />&nbsp; <span style="font-size:18px">@Model.employeeInfoViewModel.FirstOrDefault().NoOfChild জন</span></td>
+                                        </tr>
+                                    </table>                                  
+                                    <p>৯| ব্যাংকের চাকরীতে যোগদানের পূর্বে চাকুরীর অভিজ্ঞতা (যদি থাকে).....</p>
+                                    <p>...........</p>
+
+                                    <p>১০| ব্যাংকের চাকুরীতে অভিজ্ঞতা (যে সব পদে বহাল ছিলেন)</p>
+                                    <table class="table table-bordered" id="tblEmployeeTraining" style="width: 100%;height:100%;border:2px solid black">
+                                        <thead>
+                                            <tr class="textalign" style="font-size:18px">
+                                                <th rowspan="2" style="">কর্মস্থল <br />(সর্বশেষ কর্মস্থল প্রথমে উল্লেখ্য )</th>
+                                                <th rowspan="2" style="">পদের নাম</th>
+                                                <th colspan="2" style="text-align:center;">সময়কাল </th>
+                                                <th colspan="2" style="text-align:center;">মেয়াদ  </th>
+                                            </tr>
+                                            <tr class="textalign " style="font-size:18px">
+                                                <th>হতে </th>
+                                                <th>পর্যন্ত</th>
+                                                <th>বছর  </th>
+                                                <th>মাস </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @*<tr style="text-align:center">
+                <td rowspan="2" style="text-align:center">
+                    কর্মস্থল <br /><br />
+                    (সর্বশেষ কর্মস্থল প্রথমে উল্লেখ্য)
+                </td>
+                <td rowspan="2">পদের নাম</td>
+                <td colspan="2">সময়কাল</td>
+                <td colspan="2">মেয়াদ </td>
+
+
+            </tr>
+            <tr style="text-align:center">
+
+
+                <td>হতে </td>
+                <td>পর্যন্ত</td>
+                <td>বছর  </td>
+             <td>মাস</td></tr>*@
+
+
+
+                                            @{
+                                                int s = 0;
+                                            }
+                                            @if (Model.empPostings?.Count() > 0)
+                                            {
+                                                @foreach (var item in Model.empPostings)
+                                                {
+                                                    s++;
+                                                    <tr style="font-size:20px">
+                                                        <td>@s</td>
+                                                        <td>@item.designationNameBN</td>
+                                                        @*<td>@item.placeNameBn</td>*@
+                                                        <td>@item.startDate?.ToString("dd-MMM-yyyy")</td>
+                                                        <td>@item.endDate?.ToString("dd-MMM-yyyy")</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td class="text-center"></td>
+                                                    <td class="text-center"></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            }
+
+
+                                        </tbody>
+
+                                    </table>
+
+
+                                    <div class="">
+                                        @*<p>১১। অন্যান্য তথ্য: </p>
+                                        <p style="text-align:center">
+                                            উপরে বর্ণিত তথ্যাবলী সঠিক ও নির্ভুল।
+                                        </p>*@
+                                        <div class="row">
+                                            <div class="col-5">
+                                                <p>
+                                                    অনুমোদনকারী কর্মকর্তার স্বাক্ষর ও সীল:
+                                                    <img src="@Model.employeeInfoViewModel.FirstOrDefault().OwnSignaturePath" height="30" width="180" class="img-circle" /><br />
+                                                </p>
+                                                <p>
+                                                    তারিখ:
+                                                    <span style="font-size:18px">@Convert.ToDateTime(Model.employeeInfoViewModel?.FirstOrDefault()?.AssessmentDate).ToString("dd-MMM-yyyy")</span>
+
+                                                </p>
+
+                                            </div>
+                                            <div class="col-2">
+
+                                            </div>
+                                            <div class="col-5">
+                                                <p>অনুবেদনাধীন কর্মচারীর স্বাক্ষর:</p>
+
+                                                <p>তারিখ: <span style="font-size:18px">@Convert.ToDateTime(Model.employeeInfoViewModel?.FirstOrDefault()?.AssessmentDate).ToString("dd-MMM-yyyy")</span></p>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <div class="col-12" style="float:left; line-height:1;margin-top:5%;">
+
+        <div class="row" style="color:black;">
+
+            <div class="row col-sm-12">
+                <div class="tdFontSize" style="width: 100%;">
+
+                    <p style="text-align:center;font:bold;font-size:20px;color:black"><u><b>২য় অংশ</b> </u></p>
+                    <p style="text-align:left;font-size:20px;color:black">১১। অনুবেদনকারী কর্মকর্তা কর্তৃক প্রযোজ্য ঘরে অনুস্বাক্ষর দিয়া মূল্যায়ন করিতে হইবে ।</p>
+                    <table class="table table-bordered">
+
+                        @*<thead>
+                <tr class="tdFontSize">
+                    <th style="width:20%;vertical-align:middle;text-align:center;" rowspan="2">মূল্যায়নের বিষয়</th>
+                    <th style="width:20%;vertical-align:middle;text-align:center;" colspan="5">প্রা প্ত মা ন</th>
+                </tr>
+                <tr class="tdFontSize">
+                    <th style="width:10%;vertical-align:middle;text-align:center;">৫</th>
+                    <th style="width:10%;vertical-align:middle;text-align:center;">৪</th>
+                    <th style="width:10%;vertical-align:middle;text-align:center;">৩</th>
+                    <th style="width:10%;vertical-align:middle;text-align:center;">২</th>
+                    <th style="width:10%;vertical-align:middle;text-align:center;">১</th>
+                </tr>
+
+            </thead>*@
+
+                        <tbody>
+                            <tr style="text-align:center;font-size:20px">
+                                <td>মূল্যায়নের বিষয়</td>
+                                <td>অসাধারণ</td>
+                                <td>উত্তম</td>
+                                <td>ভাল</td>
+                                <td>চলনসই</td>
+                                <td>চলতি মানের নীচে</td>
+                            </tr>
+                            <tr style="text-align:left;font-size:20px">
+                                <td>১) বুদ্ধিমত্তা ও মানসিক সতর্কতা</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr style="text-align:left;font-size:20px">
+                                <td>২) কর্মোদ্যম </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr style="text-align:left;font-size:20px">
+                                <td>৩) অধ্যবসায়, কাজের প্রতি নিষ্ঠা ও নির্দেষ পালনে তৎপরতা </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr style="text-align:left;font-size:20px">
+                                <td>৪) কাজের প্রতি আগ্রহ </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr style="text-align:left;font-size:20px">
+                                <td>৫) অবয়ন ও পোশাক</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr style="text-align:left;font-size:20px">
+                                <td>৬)স্বাস্থ্য ও শারীরিক  যোগ্যতা</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr style="text-align:left;font-size:20px">
+                                <td>৭) বিশ্বাসযোগ্যতা ও নির্ভরশীলতা </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr style="text-align:left;font-size:20px">
+                                <td>৮) সময়ানুবর্তিতা</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr style="text-align:left;font-size:20px">
+                                <td>৯) নিরাপত্তা ও গোপনীয়তা পালনে সতর্কতা</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr style="text-align:left;font-size:20px">
+                                <td>১০) উর্দ্বতন কর্মকর্তাদের ও অধঃস্তনদের সাথে আচরণ </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr style="text-align:left;font-size:20px">
+                                <td>১১) সুনাম </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr style="text-align:left;font-size:20px">
+                                <td>১২) শৃঙ্খলাবোধ</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr style="text-align:left;font-size:20px">
+                                <td>১৩)ব্যাংকের গ্রাহকদের প্রতি আচরণ </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-bordered" border="1" style="font-size:20px">
+                        <tbody>
+                            <tr style="text-align:center;">
+                                <td style="text-align:left;">১২। (ক) অনুবেদনকারী কর্মকর্তার মন্তব্যঃ </td>
+                                <td>সুপারিশ </td>
+                                <td colspan="2">হ্যাঁ/না</td>
+                            </tr>
+                            <tr style="text-align:left;border-bottom: none !important;">
+                                <td style="border-bottom: none !important;"> @Model.employeeInfoViewModel.FirstOrDefault().remarks</td>
+                                <td>(ক) স্থায়ীকরণের যোগ্য </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr style="text-align:left;">
+                                <td></td>
+                                <td>(খ)পরবর্তী বেতন বৃদ্ধির জন্য উপযুক্ত </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr style="text-align:left;">
+                                <td>(খ)দৈনন্দিন কাজে বাংলা ভাষা ব্যবহারে তাঁর আগ্রহ ও দক্ষতা </td>
+                                <td>(গ)দক্ষতার প্রতিবন্ধকতা অতিক্রমণের জন্য যোগ্য </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr style="text-align:left;">
+                                <td></td>
+                                <td>(ঘ)পদোন্নতির জন্য যোগ্য </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br />
+                    <br />
+                    <div class="" style="">
+
+                        <div class="row">
+                            <div class="col-5">
+                                <p></p>
+                                <p></p>
+                                <p>তারিখঃ <span class="fsize">@Model.employeeInfoViewModel.FirstOrDefault().recommendationDate</span></p>
+
+                            </div>
+                            <div class="col-2">
+
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    অনুবেদনকারী কর্মকর্তার স্বাক্ষর<br />
+                                    <img src="@Model.employeeInfoViewModel.FirstOrDefault().RecommendetorPath" height="80" width="150" class="img-circle" /><br />
+                                </p>
+                                <p>(নাম ও সীলমোহর)</p>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <br />
+                    <br />
+                    <table class="table table-bordered" border="1" style="font-size:20px">
+                        <tbody>
+                            <tr style="text-align:center;">
+                                <td style="text-align:left;">১৪। (ক) প্রতিস্বাক্ষরকারী কর্মকর্তার মন্তব্যঃ  </td>
+                                <td>সুপারিশ </td>
+                                <td colspan="2">হ্যাঁ/না</td>
+                            </tr>
+                            <tr style="text-align:left;border-bottom: none !important;">
+                                <td style="border-bottom: none !important;">@Model.employeeInfoViewModel.FirstOrDefault().additionalComment</td>
+                                <td>(ক) স্থায়ীকরণের যোগ্য </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr style="text-align:left;">
+                                <td></td>
+                                <td>(খ)পরবর্তী বেতন বৃদ্ধির জন্য উপযুক্ত </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr style="text-align:left;">
+                                <td>(খ)দৈনন্দিন কাজে বাংলা ভাষা ব্যবহারে তাঁর আগ্রহ ও দক্ষতা </td>
+                                <td>(গ)দক্ষতার প্রতিবন্ধকতা অতিক্রমণের জন্য যোগ্য </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr style="text-align:left;">
+                                <td> @Model.employeeInfoViewModel.FirstOrDefault().signlanguageUsage</td>
+                                <td>(ঘ)পদোন্নতির জন্য যোগ্য </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <br />
+                    <br />
+                    <div class="" style="">
+
+                        <div class="row">
+                            <div class="col-5">
+                                <p></p>
+                                <p></p>
+                                <p>তারিখঃ <span class="fsize">@Model.employeeInfoViewModel.FirstOrDefault().signatoryDate</span> </p>
+                            </div>
+                            <div class="col-2">
+
+                            </div>
+                            <div class="col-5">
+                                <p>
+                                    প্রতিস্বাক্ষরকারী কর্মকর্তার স্বাক্ষর
+                                    <img src="@Model.employeeInfoViewModel.FirstOrDefault().SignatoryPath" height="80" width="150" class="img-circle" /><br />
+                                </p>
+                                <p>(নাম ও সীলমোহর)</p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var marks = parseFloat(@Model.employeesAcrsViewModel.FirstOrDefault().TotalValueSignatory);
+            $("#totalNumber").val((marks).toFixed(2));
+
+            @*if(@Model.employeeTrainingViewModel.Count()>0)
+            {
+                $("#divTraining").show();
+            }
+            else{
+                $("#divTraining").hide();
+            }*@
+        });
+    </script>
+}
+
+
+<style>
+    .paddingAllSide {
+        padding: 10px 0px 10px 0px;
+    }
+
+    .borderAll {
+        border: solid 1px;
+        border-color: black;
+        text-align: center;
+    }
+
+    .showcircle {
+        height: 35px;
+        width: 35px;
+        -webkit-border-radius: 25px;
+        -moz-border-radius: 25px;
+        border-radius: 30px;
+        border: 1px solid red;
+        line-height: 30px;
+        text-align: center;
+    }
+
+    .table td, .table th {
+        padding: .3rem;
+    }
+
+    .tdFontSize {
+        font-size: 25px;
+        color: black;
+    }
+
+    .tdLargeFontSize {
+        font-size: 20px;
+        color: black;
+    }
+
+    table {
+        page-break-inside: auto;
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    tfoot {
+        display: table-footer-group;
+    }
+</style>
+
+

@@ -1,0 +1,259 @@
+﻿@model OPUSERP.Areas.ProvidentFund.Models.LoanCollectionVm
+@{
+    ViewData["Title"] = "UploadLoanInfo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+        <div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+            <h5 class="card-title" style="color: black; margin: 8px;">Loan Collection</h5>
+        </div>
+        <div class="col-md-8">
+            <div style="float: right; margin: 16px;">
+                <a class='btn btn-info mr-4' style="margin-right:6px;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=11&perentId=2444'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <form asp-area="ProvidentFund" asp-controller="LoanManagement" asp-action="LoanCollection" method="post" data-parsley-validate="parsley" id="FormId">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <input type="hidden" name="uploadLoanDataId" id="uploadLoanDataId" value="0" />
+    
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="memberCode" class="col-sm-4 col-form-label">Employee Id</label>
+                            <div class="col-sm-8">
+                                <input type="text" data-parsley-trigger="keyup" class="form-control " name="" id="memberCode" placeholder="Select Employee">
+                                <input type="hidden" name="memberCode" id="membersCode">
+                                <input type="hidden" name="pfmemberId" id="memberId">
+                                <input type="hidden" name="loanManagementId" id="Id">
+                                <input type="hidden" name="employeeInfoId" id="employeeInfoId">
+                            </div>
+                        </div>
+
+                     
+                        <div class="form-group row">
+                            <label for="loanPrincipalAmount" class="col-sm-4 col-form-label">Remaining Principal</label>
+                            <div class="col-sm-8">
+                                <input type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57' data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="loanPrincipal" id="loanPrincipal" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="AdjustAmount" class="col-sm-4 col-form-label">Collection Amount</label>
+                            <div class="col-sm-8">
+                                <input type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57' data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="collectionAmount" id="AdjustAmount">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="txtPaymentAccount" class="col-sm-4 col-form-label text-left">Payment Account<span style="color:red;">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-group-sm" name="txtPaymentAccount" id="txtPaymentAccount" />
+                                <input type="hidden" id="LedgerRelationId" name="LedgerRelationId" />
+
+                            </div>
+                        </div>
+                      
+
+                    
+                       
+                      @*  <div class="form-group row">
+                            <label for="bankId" class="col-sm-4 col-form-label">Bank Name</label>
+                            <div class="col-sm-8">
+                                <select id="bankId" name="ledgerId" class="form-control" data-parsley-required="true" data-parsley-trigger="keyup">
+                                    <option value="">Please Select Bank Name</option>
+                                    @foreach (var data in Model.ledgers)
+                                    {
+                                        <option value="@data.Id">@data?.accountName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>*@
+                     
+
+                    </div>
+
+                    <div class="col-md-6  ">
+                        <div class="form-group row">
+                            <label for="Date" class="col-sm-4 col-form-label">Collection Date</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control " id="CollectionDate" name="CollectionDate" readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-group row d-none">
+                            <label for="memberName" class="col-sm-4 col-form-label">Employee Name</label>
+                            <div class="col-sm-8">
+                                <input id="memberName" name="memberName" value="" class="form-control">
+                            </div>
+                        </div>
+                      
+
+                        <div class="form-group row">
+                            <label for="loanInterestAmount" class="col-sm-4 col-form-label">Remaining Interest</label>
+                            <div class="col-sm-8">
+                                <input type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57' data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="" id="loanInterest" readonly>
+                            </div>
+                        </div>
+
+                      
+                     
+                        
+
+                        @*<div class="form-group row">
+                            <label for="branchId" class="col-sm-4 col-form-label">Branch Name</label>
+                            <div class="col-sm-8">
+                                <select id="branchId" name="branchId" class="form-control" data-parsley-required="true" data-parsley-trigger="keyup">
+                                    <option value="">Please Select Branch Name</option>
+                                    @foreach (var data in Model.specialBranchUnits)
+                                    {
+                                        <option value="@data.Id">@data?.branchUnitName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>*@
+                        
+                        <div class="form-group row">
+                            <label for="note" class="col-sm-4 col-form-label">Narration</label>
+                            <div class="col-sm-8">
+                                <textarea type="text" rows="3" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="note" id="note"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <button type="button" value="Submit" id="btnSave" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#CollectionDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2010:2030" }).datepicker("setDate", new Date());
+        
+            Common.Ajax('GET', '/ProvidentFund/LoanManagement/GetMemberForLoanSettlement', [], 'json', ajaxFunctionAllApproveMembers);
+            Common.Ajax('GET', '/api/global/getLedersForPayment/' + 2, [], 'json', GetLedgerList);           
+           
+        });
+
+        $('#btnSave').click(function () {
+            var note = $('#note').val();
+            if (note == '') {
+                swal('Attention!', 'Please enter a note', 'warning');
+                return false;
+            }
+                      
+            console.log($('#FormId').serializeArray());
+            var data = $('#FormId').serializeArray();
+
+            console.log(data[0].value)
+            swal({
+                title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+            }).then(function () {
+                $.ajax({
+                    url: '/ProvidentFund/LoanManagement/LoanCollection',
+                    type: 'POST',
+                    data: data
+                }).done(function () {
+                    if (data[0].value == 0) {
+                        swal('success', 'Saved Successfully!', 'success').then(function () {
+                            location.reload();
+                            //window.location.href = '/ProvidentFund/LoanManagement/UploadLoanInfo';
+                        });
+                    }
+                    else {
+                        swal('success', 'Updated Successfully!', 'success').then(function () {
+                            //location.reload();
+                            window.location.href = '/ProvidentFund/LoanManagement/LoanCollection';
+                        });
+                    }
+                }).fail(function () {
+                    swal('warning', 'Failed!', 'warning');
+                })
+            });
+        })
+
+      
+
+        function ajaxFunctionAllApproveMembers(response) {
+            console.log(response);
+            console.log("OK");
+            var GetMemberList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.pfmember?.memberName + " " + "(" + option.pfmember ?.memberCode + ")";
+                obj.memberCode = option.pfmember?.memberCode;
+                obj.memberName = option.memberName;
+                obj.memberId = option.pfmember?.Id;
+                obj.employeeInfoId = option.pfmember?.employeeInfoId;
+                obj.Id = option.Id;
+                GetMemberList[GetMemberList.length] = obj;
+            });
+
+            $('#memberCode').autocomplete({
+                source: GetMemberList,
+                select: function (event, ui) {
+                    $("#memberCode").val(ui.item.value);
+                    $("#membersCode").val(ui.item.memberCode);
+                    $("#memberId").val(ui.item.memberId);
+                    $("#memberName").val(ui.item.memberName);
+                    $("#Id").val(ui.item.Id);
+                    $("#employeeInfoId").val(ui.item.employeeInfoId);
+                   
+
+                    Common.Ajax('GET', '/ProvidentFund/LoanManagement/GetEarlySettlementClosingBalance?memberCode=' + ui.item.memberCode, [], 'json', ajaxEarlySettlementClosingBalance);
+                }
+            });
+        }
+
+        
+
+      
+      
+
+        function ajaxEarlySettlementClosingBalance(res) {
+          
+            $("#loanPrincipal").val(res.PrincipalBalance);
+            $("#loanInterest").val(res.InterestProvisionBalance);
+        }
+
+        function GetLedgerList(response) {
+            $('#txtPaymentAccount').empty();
+            $("#LedgerRelationId").val('');
+
+            var lstLedger = [];
+            $.each(response, function (i, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.ledgerId = option.ledgerId;
+                obj.accountCode = option.accountCode;
+                obj.natureId = option.natureId;
+                obj.value = option.accountName + ' (' + option.accountCode + ')';
+                lstLedger[lstLedger.length] = obj;
+            });
+            $('#txtPaymentAccount').autocomplete({
+                source: lstLedger,
+                select: function (event, ui) {
+                    $('#txtPaymentAccount').val(ui.item.value);
+
+                    $("#LedgerRelationId").val(ui.item.key);
+                    //GetVoucherNo();
+                    // Common.Ajax('GET', '/api/global/getOpenBalanceById/' + ui.item.key, [], 'json', GetPaymentLedgerBalance);
+                }
+            });
+        }
+
+       
+
+     
+    </script>
+}
+
+

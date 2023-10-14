@@ -1,0 +1,103 @@
+﻿
+@model YearlyBudgetReportDetails
+@{
+    ViewData["Title"] = "YearlyBudgetDetailsView";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+<style>
+    .header-cls {
+        text-align: left;
+        color: black;
+    }
+
+    .header-clst {
+        text-align: center;
+        color: black;
+    }
+
+    .text-align-center-cls {
+        text-align: center;
+    }
+
+    .table-cls {
+        margin-top: 100px;
+    }
+
+    .signature-div-cls p {
+        text-align: right;
+        color: black;
+        margin-right: 50px;
+    }
+</style>
+<br />
+<section>
+    <div class="container-fluid">
+
+        <div class="header-cls" style="text-align:center;">
+            <img src="@Model.company.filePath" alt="Urban ERP" style="height:80px;" />
+            <h3>@Model.company.companyName</h3>
+            <label>@Model.company.addressLine</label>
+            <h5 style="text-align: center;">Budget Report</h5><br />
+            @if (ViewBag.SBUName != null)
+            {
+                <p style="font-size:18px;width:100%;margin-top:-15px;">SBU : @ViewBag.SBUName</p>
+            }
+            @if (ViewBag.projectName != null)
+            {
+                <p style="font-size:18px;width:100%;margin-top:-15px;">Project Name : @ViewBag.projectName</p>
+            }
+            <p style="font-size:18px;width:100%;margin-top:-15px;">Period : @ViewBag.FromDate?.ToString("dd-MMM-yyyy") &nbsp; to &nbsp; @ViewBag.ToDate?.ToString("dd-MMM-yyyy")</p>
+        </div>
+
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Budget Head</th>
+                        @foreach (var data in Model.yearlyBudgetReports.Select(x => x.yearName).Distinct())
+                        {
+                            <th>@data</th>
+                        }
+                        <th>Total Budget</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        decimal? AllTotal = 0;
+
+                        @foreach (var item in Model.yearlyBudgetReports.Select(x => x.headName).Distinct())
+                        {
+                            decimal? Total = 0;
+                            //Total = item.TotalBudget + Total;
+                            //Totalactualex = item.TotalActualExpense + Totalactualex;
+                            //Totalcurrent = item.CurrentBudgetTotal + Totalcurrent;
+                            //Totalex = item.ActualAmount + Totalex;
+                            <tr>
+                                <td>@item</td>
+                                @foreach (var data in Model.yearlyBudgetReports.Where(x => x.headName == item))
+                                {
+                                    Total = Total + data.amount;
+                                    <td style="text-align:right">@data.amount?.ToString("0,0.00")</td>
+                                }
+                                <td style="text-align:right">@Total?.ToString("0,0.00")</td>
+                            </tr>
+                        }
+
+                        <tr>
+                            <th>Total</th>
+                            @foreach (var data in Model.yearlyBudgetReports.Select(x => x.yearName).Distinct())
+                            {
+                                AllTotal = AllTotal + Model.yearlyBudgetReports.Where(x => x.yearName == data).Sum(x => x.amount);
+
+                                <th style="text-align:right">@Model.yearlyBudgetReports.Where(x => x.yearName == data).Sum(x => x.amount)?.ToString("0,0.00")</th>
+                            }
+                            <th style="text-align:right">@AllTotal?.ToString("0,0.00")</th>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+

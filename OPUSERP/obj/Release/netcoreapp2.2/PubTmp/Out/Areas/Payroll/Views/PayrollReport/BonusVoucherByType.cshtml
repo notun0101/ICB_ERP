@@ -1,0 +1,204 @@
+﻿@model PayrollReportViewModel
+@{
+	ViewData["Title"] = "Bonus Voucher";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+<style>
+
+	.print-card-body {
+		width: 100%;
+		padding-bottom: 10px;
+	}
+
+	.vartical-table th {
+		width: 25%;
+	}
+
+	.vartical-table td {
+		width: 25%;
+	}
+
+	.table td, .table th {
+		padding: .3rem;
+		font-size: 14px;
+		border: 1px solid black !important;
+	}
+
+	table {
+		page-break-inside: auto;
+		border-collapse: collapse;
+		border: 1px solid black !important;
+	}
+
+	tr {
+		page-break-inside: avoid;
+		page-break-after: auto;
+		border: 1px solid black !important;
+	}
+
+	thead {
+		display: table-header-group;
+		border: 1px solid black !important;
+	}
+
+	tfoot {
+		display: table-footer-group;
+		border: 1px solid black !important;
+	}
+
+	h6 {
+		font-size: 14px;
+		background-color: gray;
+		color: white !important;
+		padding: 3px;
+	}
+
+	.pageBreak {
+		page-break-after: always;
+	}
+</style>
+
+
+@foreach (var item in Model.bonusVouchers.Where(x => x.amount > 0).Select(z => z.branchName).Distinct())
+{
+	<div class="print-card" style="width: 100%;">
+		<div class="print-card-body">
+
+			<div class="container-fluid">
+				@*<div class="fa-pull-right">
+						<p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+					</div>*@
+				<div class="row" style="padding-top:0px;">
+					<div class="col-2">
+						<img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="BDBL Logo" style="height:80px;" />
+					</div>
+					<div class="col-8">
+						<div style="color:black;text-align:center;">
+							<h3 style="font-size:20px;">@Model.companies.FirstOrDefault()?.companyName</h3>
+							<h3 style="font-size:20px;"><u>@item (@Model.bonusVouchers?.Where(x => x.branchName == item)?.FirstOrDefault()?.branchCode)</u></h3>
+                            <h4 style="font-size:18px;"> @Model.bonusVouchers?.FirstOrDefault()?.bonusName for the year @ViewBag.year </h4>
+							<br />
+						</div>
+					</div>
+					<div class="col-2">
+
+					</div>
+				</div>
+			</div>
+			<div class="container-fluid ">
+				<div class="col-12">
+					<h3 style="font-size:18px;color:black"> </h3>
+				</div>
+			</div>
+			<br />
+			<div class="container-fluid" style="color:black;">
+				<table class="table table border" style="border:1px solid black !important">
+					<thead>
+						<tr>
+							<th style="width:3%">SL</th>
+							<th style="width:80%">Particulars </th>
+							<th style="width:2%">Account Code</th>
+							<th style="width:15%">Amount</th>
+							<th style="width:15%">Posted By</th>
+						</tr>
+						<tr>
+							<th style="width:83%" colspan="2">DEBIT</th>
+							<th style="width:2%"></th>
+							<th style="width:15%"></th>
+							<th style="width:15%"></th>
+						</tr>
+					</thead>
+					<tbody>
+						@{
+							int i = 1;
+							decimal debit = 0;
+						}
+						@foreach (var data in Model.bonusVouchers.Where(x => x.type == "DEBIT" && x.branchName == item))
+						{
+							<tr>
+								<td style="width:3%">@i</td>
+								<td style="width:80%">
+									@data.heading
+								</td>
+								<td style="width:2%">
+									@data.accountCode
+								</td>
+								<td style="width:15%; text-align: right;">@Convert.ToDecimal(data.amount).ToString("#,##0.00")</td>
+								<td style="width:15%"> </td>
+							</tr>
+							i++;
+							debit += Convert.ToDecimal(data.amount);
+						}
+						<tr>
+							<th style="width:85%" colspan="3"></th>
+							<th style="width:15%; text-align: right;">@debit.ToString("#,##0.00")</th>
+							<th style="width:15%"></th>
+						</tr>
+						<tr>
+							<th style="width:100%" colspan="5">@OPUSERP.Helpers.AmountInWord.ConvertToWords(debit.ToString())</th>
+						</tr>
+					</tbody>
+				</table>
+				<table class="table table border" style="border:1px solid black !important">
+					<thead>
+						<tr>
+							<th style="width:3%">SL</th>
+							<th style="width:80%">Particulars </th>
+							<th style="width:2%">Account Code</th>
+							<th style="width:15%">Amount</th>
+							<th style="width:15%">Posted By</th>
+						</tr>
+						<tr>
+							<th style="width:83%" colspan="2">CREDIT</th>
+							<th style="width:2%"></th>
+							<th style="width:15%"></th>
+							<th style="width:15%"></th>
+						</tr>
+					</thead>
+					<tbody>
+						@{
+							int j = 1;
+							decimal credit = 0;
+						}
+						@foreach (var data in Model.bonusVouchers.Where(x => x.type == "CREDIT" && x.branchName == item))
+						{
+							if (data.amount > 0)
+							{
+								<tr>
+									<td style="width:3%">@j</td>
+									<td style="width:80%">@data.heading</td>
+									<td style="width:2%">@data.accountCode</td>
+									<td style="width:15%; text-align: right;">@Convert.ToDecimal(data.amount).ToString("#,##0.00")</td>
+									<td style="width:15%"></td>
+								</tr>
+								j++;
+								credit += Convert.ToDecimal(data.amount);
+							}
+						}
+						<tr>
+							<th style="width:85%" colspan="3"></th>
+							<th style="width:15%; text-align: right;">@credit.ToString("#,##0.00")</th>
+							<th style="width:15%"></th>
+						</tr>
+						<tr>
+							<th style="width:100%" colspan="5">@OPUSERP.Helpers.AmountInWord.ConvertToWords(credit.ToString())</th>
+						</tr>
+						<tr style="font-size: 12px;">
+							<th colspan="5">Prepared By: </th>
+						</tr>
+						<tr style="font-size: 12px;">
+							<td colspan="2">Transfer Scroll No: </td>
+							<td>PRINCIPAL OFFICER</td>
+							<td colspan="2">PRINCIPAL OFFICER</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+
+
+		</div>
+	</div>
+	<div class="pageBreak"></div>
+}
+

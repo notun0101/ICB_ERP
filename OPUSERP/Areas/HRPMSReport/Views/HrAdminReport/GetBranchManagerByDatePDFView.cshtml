@@ -1,0 +1,139 @@
+﻿@model AllHrReportViewModel
+
+@{
+    ViewData["Title"] = "Branch Manager PDF";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+
+}
+@section Style{
+    <style>
+
+        .print-card-body {
+            width: 100%;
+            padding-bottom: 10px;
+        }
+
+        .vartical-table th {
+            width: 25%;
+        }
+
+        .vartical-table td {
+            width: 25%;
+        }
+
+        .table td, .table th {
+            padding: .3rem;
+            font-size: 14px;
+        }
+
+        table {
+            page-break-inside: auto;
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        tfoot {
+            display: table-footer-group;
+        }
+
+        h6 {
+            font-size: 14px;
+            background-color: gray;
+            color: white !important;
+            padding: 3px;
+        }
+        thead tr{
+            border-bottom: 1px solid black;
+        }
+        tbody tr td:first-child {
+            border-bottom: 1px solid black;
+        }
+    </style>
+}
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+        <div class="container-fluid">
+            <div class="fa-pull-right">
+            </div>
+            <div class="row" style="padding-top:0px;">
+                <div class="col-2">
+                    <img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="NGOF" style="height:80px;" />
+                </div>
+                <div class="col-8">
+                    <div style="color:black;text-align:center;">
+                        <h4 style="text-transform: uppercase;font-size:18px;">Bangladesh Development Bank Limited</h4>
+                        <h4 style="text-transform: uppercase;font-size:18px;">@Model.branchManagerViewModels.FirstOrDefault()?.branchName</h4>
+                        @*<h4 style="text-transform: uppercase;font-size:18px;"><u>human resource management department</u></h4>*@
+                        <h5 style="font-size:18px;"><u>Branch Manager List From (@ViewBag.fromDate?.ToString("dd-MMM-yyyy")) To (@ViewBag.toDate?.ToString("dd-MMM-yyyy")) </u></h5>
+                        <br />
+                        <br />
+                    </div>
+                </div>
+                @*<div class="col-2"></div>*@
+            </div>
+        </div>
+
+        <div class="container-fluid" style="color:black;">
+
+            <div class="row" style="">
+               
+
+                <table class="table table-bordered " style="width:100%; ">
+                    <thead>
+                        <tr>
+                            <th>Emp Id</th>
+                            <th>Employee Name</th>
+                            <th>Designation</th>
+                            <th>Branch Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Responsibility</th>
+                        </tr>
+                       
+                    </thead>
+                    <tbody>
+                        @{
+                            int j = 0;
+                            @foreach (var data in Model.branchManagerViewModels)
+                            {
+                                j++;
+
+                                <tr>
+                                    <td style="">@data.employeeCode</td>
+                                    <td style="">@data.nameEnglish</td>
+                                    <td style="">@data.Designation</td>
+                                    <td style="">@data.branchName</td>
+                                    <td style="">@data.startDate?.ToString("dd-MMM-yyyy")</td>
+                                    <td style="">@data.endDate?.ToString("dd-MMM-yyyy")</td>
+                                    <td style="">@data.Responsibility</td>
+                                </tr>
+
+                            }
+                            j++;
+                        }
+
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+      
+    </script>
+
+}
+
+

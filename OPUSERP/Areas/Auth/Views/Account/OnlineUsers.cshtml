@@ -1,0 +1,163 @@
+﻿@model IEnumerable<OPUSERP.Areas.HRPMSEmployee.Models.AllUsersOnlineStatusVm>
+@{
+	ViewData["TitleMD"] = "OnlineUsers";
+	Layout = "~/Areas/HRPMSMasterData/Views/Shared/_MasterDataForm.cshtml";
+}
+
+
+@*<div class="container">
+	<div class="row"> </div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<div class="col-md-3">User</div>
+				<div class="col-md-9"><input type="text" id="userName" /></div>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<div class="col-md-3">Message</div>
+				<div class="col-md-9">
+					<input type="text" id="userMessage" />
+					<input type="button" id="sendMessage" value="Send Message" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<hr />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-6"> </div>
+		<div class="col-6">
+			<ul id="messagesList"></ul>
+		</div>
+	</div>
+</div>*@
+
+
+
+
+<div class="row clearfix">
+	<div class="col-12">
+		<div class="card mb-4">
+			<!-- Card Header - Dropdown -->
+			<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+				<h6 class="m-0 font-weight-bold text-primary">All Users</h6>
+			</div>
+			<!-- Card Body -->
+			<div class="card-body">
+				<table class="table table-striped table-bordered" id="usersTable">
+					<thead>
+						<tr>
+							<th>SL</th>
+							<th>Emp Id</th>
+							<th>Employee Name</th>
+							<th>Designation</th>
+							<th>Posting</th>
+							<th>Last Active</th>
+							<th>Total Sign In</th>
+							<th>Status</th>
+					</thead>
+					<tbody>
+						@{
+							int i = 0;
+						}
+						@foreach (var data in Model.Where(x => x.employeeCode != "665544"))
+						{
+							i++;
+							<tr>
+								<td style="text-align: center;">@i</td>
+								<td style="text-align: center;">@data.employeeCode</td>
+								<td>@data.nameEnglish</td>
+								<td>@data.designationShortName</td>
+								<td>@data.Posting</td>
+								<td style="text-align: center;">@data.lastLoggedInTime</td>
+								<td style="text-align: center;">@data.totalLoggedIn</td>
+								<td style="text-align: center;">
+									@if (data.OnlineStatus == "Online")
+									{
+										<i class="fas fa-circle" style="color: #007FF6;"></i>
+									}
+									else
+									{
+										<i class="fas fa-circle" style="color: darkgrey;"></i>
+									}
+								</td>
+							</tr>
+						}
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section ScriptsMD{
+	@*<script src="~/js/signalr/dist/browser/signalr.js"></script>
+	<script src="~/js/onlineusers.js"></script>*@
+	<script>
+		$(document).ready(function () {
+			//async function start() {
+			//	try {
+			//		await connection.start();
+			//		console.log("SignalR Connected.");
+			//	} catch (err) {
+			//		console.log(343);
+			//		console.log(err);
+			//		//setTimeout(start, 5000);
+			//	}
+			//};
+			//connection.onclose(async () => {
+			//	await start();
+			//});
+
+			$('#usersTable').DataTable();
+			setInterval(function () {
+				LoadUsers();
+			}, 60000);
+
+			//clearInterval(interval);
+		})
+
+		function LoadUsers() {
+			Common.Ajax('GET', '/Auth/Account/OnlineUsersJson', [], 'json', ajaxLoadUsers);
+		}
+
+		function ajaxLoadUsers(response) {
+			$('#usersTable').DataTable().destroy();
+			var option = '';
+			$.each(response, function (i, item) {
+				var status = '<i class="fas fa-circle" style="color: darkgrey;"></i>'
+				if (item.OnlineStatus == 'Online') {
+					status = '<i class="fas fa-circle" style="color: #007FF6;"></i>'
+				}
+				var lastLoggedInTime = item.lastLoggedInTime;
+				var totalLoggedIn = item.totalLoggedIn;
+				if (item.lastLoggedInTime == null) {
+					lastLoggedInTime = ''
+				}
+				if (item.totalLoggedIn == null) {
+					totalLoggedIn = 0
+				}
+				option += `<tr>
+												<td style="text-align: center;">${i + 1}</td>
+												<td style="text-align: center;">${item.employeeCode}</td>
+												<td>${item.nameEnglish}</td>
+												<td>${item.designationShortName}</td>
+												<td>${item.Posting}</td>
+												<td style="text-align: center;">${lastLoggedInTime}</td>
+												<td style="text-align: center;">${totalLoggedIn}</td>
+												<td style="text-align: center;">${status}</td>
+											</tr>`
+			})
+
+			$('#usersTable tbody').empty();
+			$('#usersTable tbody').append(option);
+			$('#usersTable').DataTable();
+		}
+	</script>
+}

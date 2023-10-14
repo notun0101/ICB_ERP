@@ -1,0 +1,110 @@
+﻿@model ApplicationFormViewModel
+@using OPUSERP.Helpers;
+
+@{
+    ViewData["Title"] = "Appointment Letter";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+@using OPUSERP.ERPServices.MasterData.Interfaces
+@using OPUSERP.ERPService.AuthService.Interfaces
+@using System
+@inject IERPCompanyService eRPCompanyService
+@inject IUserInfoes userInfo
+@{
+    var companies = await eRPCompanyService.GetAllCompany();
+    var company = companies.FirstOrDefault()?.filePath;
+    var companyName = companies.FirstOrDefault()?.companyName;
+}
+<link href="https://fonts.maateen.me/adorsho-lipi/font.css" rel="stylesheet">
+<style>
+    body {
+        color: black;
+        font-size: 23px !important;
+        font-family: 'AdorshoLipi', sans-serif;
+    }
+
+    p {
+        margin: 0;
+    }
+</style>
+<div id="sub1">
+    <img src="/Assets/bdbl.png" style="height:60px;width:80px;" alt="">
+</div>
+<h5 style="text-align: center; text-decoration: underline; font-size: 28px;">হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্ট</h5>
+<div style="width: 100%;">
+    <div style="width: 50%; float: left;">
+        নং-_______________________
+    </div>
+    <div style="width: 50%; float: left; text-align: right;">
+        তারিখ- @Model.applicationForm?.reportDateBn
+        @*@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.Today.ToString("dd-MM-yyyy")) <br />*@
+
+    </div>
+</div>
+<div style="width: 100%;">
+    <div style="width: 50%; float: left; text-align: left; height: 250px; margin-top: 30px;">
+        <strong style="font-size: 25px;">@Model.applicationForm?.nameBN</strong><br />
+        পিতা- @Model.applicationForm?.fNmaeBN <br />
+        গ্রাম- @Model.applicationForm?.addressBangla <br />
+        ডাকঘর- @Model.applicationForm?.postBangla <br />
+        থানা/উপজেলা- @Model.permanent?.thana?.thanaNameBn <br />
+        জেলা- @Model.permanent?.district?.districtNameBn <br />
+        মোবাইল- @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.applicationForm?.mobile)
+    </div>
+    <div style="width: 50%; float: right; font-weight: bolder; font-size: 25px; float: right; text-align: right; margin-top: 30px; height: 250px;">
+        <span style="text-decoration: underline;">রেজিষ্টার্ড এ/ডি</span>
+    </div>
+</div>
+<div style="width: 100%; text-align: center;">
+    <strong>বিষয়ঃ <span style="text-decoration: underline;">বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড এ '@Model.applicationForm?.occupation' পদে নিয়োগ।</span></strong>
+</div>
+
+
+<p>প্রিয় মহোদয়,</p>
+<p style="text-indent: 50px;">
+    আমরা অত্যন্ত আনন্দের সাথে জানাচ্ছি যে, বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড-এ '@Model.applicationForm?.occupation'
+    পদে নিয়োগের জন্য আপনার আবেদন এবং পরবর্তীতে গৃহীত লিখিত পরীক্ষা ও মৌখিক পরীক্ষার ফলাফলের ভিত্তিতে নিম্নলিখিত
+    শর্ত সাপেক্ষে আপনাকে উক্ত পদে ২২,০০০-৫৩,০৬০ টাকা বেতন স্কেলে নিয়োগের জন্য মনোনীত করা হয়েছে।
+</p>
+@Html.Raw(Model.applicationForm?.termsAndConditions)
+
+
+@*<div style="margin-left: 50px; margin-top: 10px;">
+        @Html.Raw(Model.applicationForm?.termsAndConditions)
+    </div>*@
+@*<div style="margin-top: 10px; width: 100%;">
+        <p style="margin-left: 50px;">(০১) আপনাকে বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড এর পাবনা ব্রাঞ্চ, পাবনা তে পদায়ন করা হ'ল।</p>
+        <p style="margin-left: 50px;">(০২) আপনাকে শিক্ষানবিস 'সিনিয়র অফিসার' হিসাবে ০১(এক) বৎসর কাজ করতে হবে এবং ত্রৈমাসিক বিশেষ গোপনীয় প্রতিবেদনের মাধ্যমে শিক্ষানবিসকালে আপনার কর্মমান পর্যবেক্ষন করা হবে। এক বৎসর শিক্ষানবিসকালে আপনার কর্মমান সন্তোষজনক না হলে আপনার শিক্ষানবিসকাল আরও অনূর্ধ ০৬(ছয়) মাস বর্ধিত করা হবে। বর্ধিত সময়েও কর্মমান সন্তোষজনক না হলে আপনাকে চাকুরীতে বহাল রাখা যাবে না।</p>
+
+    </div>
+    <div style="width: 100%; height: 200px; margin-bottom: 20px;">
+        <div style="height: 200px; width: 75%; float: left; padding-left: 130px;">
+            ধন্যবাদান্তে,
+        </div>
+        <div style="height: 200px; width: 25%; float: right; text-align: center;">
+            <p>আপনার বিশ্বস্ত</p>
+            <p>স্বা/-</p>
+            <p>(কবির আহমেদ)</p>
+            <p>ডেপুটি জেনারেল ম্যানেজার</p>
+        </div>
+    </div>
+
+    <div style="width: 100%;">
+        <p style="text-decoration: underline;">অনুলিপি</p>
+        <p style="text-indent: 50px;">@Model.applicationForm?.mailingAddress</p>
+    </div>
+    <div style="width: 100%;">
+        <div style="width: 25%; text-align: center; float: right;">
+            <p>স্বা/-</p>
+            <p>ডেপুটি জেনারেল ম্যানেজার</p>
+        </div>
+    </div>*@
+
+@section Scripts{
+    <script>
+		$(document).ready(function () {
+			alert('@Html.Raw(Model.applicationForm?.mailingAddress)')
+			$('#mailAddress').text('@Html.Raw(Model.applicationForm?.mailingAddress)');
+		});
+    </script>
+}

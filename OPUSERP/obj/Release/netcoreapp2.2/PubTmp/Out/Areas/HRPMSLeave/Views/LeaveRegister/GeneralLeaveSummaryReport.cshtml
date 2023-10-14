@@ -1,0 +1,873 @@
+﻿@model LeaveRegisterViewModel
+@using OPUSERP.Helpers;
+@{
+    ViewData["Title"] = "GeneralLeaveSummaryReport";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+@section Style{
+    <style>
+
+        .print-card-body {
+            width: 100%;
+            padding-bottom: 10px;
+        }
+
+        .vartical-table th {
+            width: 25%;
+        }
+
+        .vartical-table td {
+            width: 25%;
+        }
+
+        .table td, .table th {
+            padding: .3rem;
+            font-size: 14px;
+            border: 1px solid black !important;
+        }
+
+        table {
+            page-break-inside: auto;
+            border-collapse: collapse;
+            border: 1px solid black !important;
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
+            border: 1px solid black !important;
+        }
+
+        thead {
+            display: table-header-group;
+            border: 1px solid black !important;
+        }
+
+        tfoot {
+            display: table-footer-group;
+            border: 1px solid black !important;
+        }
+
+        h6 {
+            font-size: 14px;
+            background-color: gray;
+            color: white !important;
+            padding: 3px;
+        }
+    </style>
+}
+@{
+        int year = Convert.ToDateTime(Model.employee?.joiningDateGovtService).Year;
+        int month = Convert.ToDateTime(Model.employee?.joiningDateGovtService).Month;
+
+        var days = (new DateTime(year, month, DateTime.DaysInMonth(year, month)) - Convert.ToDateTime(Model.employee?.joiningDateGovtService)).Days;
+
+        int Ryear = Convert.ToDateTime(Model.employee?.DateOfRetirement).Year;
+        int Rmonth = Convert.ToDateTime(Model.employee?.DateOfRetirement).Month;
+
+        var days2 = (Convert.ToDateTime(Model.employee?.DateOfRetirement)- new DateTime(Ryear, Rmonth, 1)).Days;
+
+        int joiningdays = (new DateTime(year, 12, 31) - Convert.ToDateTime(Model.employee?.joiningDateGovtService)).Days;
+        int retirementdays = (Convert.ToDateTime(Model.employee?.DateOfRetirement) - new DateTime(Ryear, 1, 1)).Days;
+
+        var oneYearless = Convert.ToDateTime(Model.employee?.joiningDateGovtService);
+        var newYear = oneYearless.AddYears(1).Year;
+
+        var oneYearlessR = Convert.ToDateTime(Model.employee?.DateOfRetirement);
+        var newYearR = oneYearlessR.AddYears(-1).Year;
+        var totalworkyear = newYearR - newYear;
+        var totaldays = 365 * totalworkyear;
+        int leapyear = 0;
+        @while (true)
+    {
+            if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0)
+            {
+                leapyear++;
+            }
+            if (year + 1 == Ryear)
+            {
+                break;
+            }
+            year++;
+        }
+        var totalpresent = joiningdays + retirementdays + leapyear + totaldays;
+
+        var totalusedleave = Model.FullLeave + Model.AverageLeave + Model.ExtraOrdinaryLeave;
+
+        var Totalworkdays = totalpresent - totalusedleave;
+
+        var Totalaverageleave11 = Totalworkdays / 11;
+
+        var usedleave2 = Model.FullLeave + Model.ExtraOrdinaryLeave;
+
+        var grantleave = Totalaverageleave11 - usedleave2;
+
+        var Totalhalfleave11 = Totalworkdays / 12;
+        var usedleavehalf = Model.AverageLeave / 2;
+
+        var grantleave2 = Totalhalfleave11 - usedleavehalf;
+
+
+    }
+
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+
+        <div class="container-fluid">
+            <div class="fa-pull-right">
+                <p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+            </div>
+            <div class="row" style="padding-top:0px;">
+                <div class="col-2">
+                    <img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="BDBL Logo" style="height:80px;" />
+                </div>
+                <div class="col-8">
+                    <div style="color:black;text-align:center;">
+                        <h3 style="font-size:20px;">বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড</h3>
+                        <h3 style="font-size:20px;">হেড অফিস, ঢাকা । </h3>
+                        <h3 style="font-size:18px;">হিউম্যান রিসোর্স ম্যানেজমেন্ট ডিপার্টমেন্ট </h3>
+                        <br />
+                    </div>
+                </div>
+                <div class="col-2">
+
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid ">
+           
+                <h3 style="font-size:18px;color:black">বিষয়: সাধারণ ছুটির হিসাব- </h3>
+                <h3 style="font-size:18px;color:black">হিসাব: @Model.employee?.nameBangla , @Model.employee?.lastDesignation?.designationNameBN । </h3>
+           
+        </div>
+        <br />
+        <div class="container-fluid" style="color:black;">
+            <table class="table table border" style="border:1px solid black !important">
+                <tbody>
+                    <tr>
+                        <td style="width:3%">(০১)</td>
+                        <td style="width:80%">চাকরিতে যোগদানের তারিখ </td>
+                        <td style="width:2%">:</td>
+                        <td style="width:15%">@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@Model.employee?.joiningDateGovtService?.ToString("dd/MM/yyyy"))</td>
+                    </tr>
+                    <tr>
+                        <td style="width:3%">(০২)</td>
+                        <td style="width:80%">ছুটির হিসাব করতে হবে -</td>
+                        <td style="width:2%">:</td>
+                        <td style="width:15%">@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@Model.employee?.DateOfRetirement?.ToString("dd/MM/yyyy")) পর্যন্ত </td>
+                    </tr>
+                    <tr>
+                        <td style="width:3%">(০৩)</td>
+                        <th style="width:80%">ইতঃপূর্বে  ভোগকৃত ছুটির পরিমান </th>
+                        <td style="width:2%">:</td>
+                        <td style="width:15%"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:3%">(ক)</td>
+                        <td style="width:80%">গড় বেতনে অর্জিত ছুটি থেকে</td>
+                        <td style="width:2%">:</td>
+                        <td style="width:15%">@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@Model.FullLeave.ToString()) দিন </td>
+                    </tr>
+                    <tr>
+                        <td style="width:3%">(খ)</td>
+                        <td style="width:80%">অর্ধ -গড় বেতনে অর্জিত ছুটি থেকে </td>
+                        <td style="width:2%">:</td>
+                        <td style="width:15%">@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@Model.AverageLeave.ToString()) দিন </td>
+                    </tr>
+                    <tr>
+                        <td style="width:3%">(গ)</td>
+                        <td style="width:80%">প্রসূতি ছুটি(আলোচ্য ছুটি গড় বেতনে অর্জিত ছুটি থেকে বাদ  যায় না)</td>
+                        <td style="width:2%">:</td>
+                        <td style="width:15%"> </td>
+                    </tr>
+                    <tr>
+                        <td style="width:3%">(ঘ)</td>
+                        <td style="width:80%"> অধ্যয়ন ছুটি</td>
+                        <td style="width:2%">:</td>
+                        <td style="width:15%"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:3%">(ঙ)</td>
+                        <td style="width:80%"> শ্রান্তি বিনোদন ছুটি</td>
+                        <td style="width:2%">:</td>
+                        <td style="width:15%">@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@Model.RecreationLeave.ToString()) বার</td>
+                    </tr>
+                    <tr>
+                        <td style="width:3%">(চ)</td>
+                        <td style="width:80%">বিনা বেতনে অসাধারণ ছুটি</td>
+                        <td style="width:2%">:</td>
+                        <td style="width:15%">@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@Model.ExtraOrdinaryLeave.ToString()) দিন</td>
+                    </tr>
+                    <tr>
+
+                        <th colspan="3" style="text-align:right;padding-right:25px"> মোট : </th>
+                        <th style="width:15%">@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(totalusedleave .ToString()) দিন</th>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="font-size:18px;"><u>উক্ত কর্মকর্তার অর্জিত ছুটির হিসাব নিম্নরূপ :</u></h3>
+
+            <table class="table table-border text-center" style="margin-bottom:0px">
+                <tbody>
+                    <tr>
+                        <th colspan="5" class="text-left">(ক) মোট চাকুরিকাল </th>
+                    </tr>
+                    <tr class="text-center">
+                        <td colspan="2">@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@Model.employee?.joiningDateGovtService?.ToString("yyyy")) সন</td>
+
+                        <td> সন</td>
+                        <td colspan="2">@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@Model.employee?.DateOfRetirement?.ToString("yyyy"))  সন</td>
+                    </tr>
+                    <tr class="text-center">
+                        <td>মাস</td>
+                        <td>দিন</td>
+                        <td> @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@newYear.ToString()) হতে @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(newYearR.ToString()) = @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@totalworkyear.ToString()) বৎসর  </td>
+                        <td>মাস</td>
+                        <td>দিন</td>
+                    </tr>
+                    <tr>
+                        <td>জানুয়ারি</td>
+                        @if (1 >= month)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(year, 1).ToString())</td>
+
+                        }
+                        else
+                        {
+                            if (1 == month)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+
+
+                        <td>৩৬৫ * @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@totalworkyear.ToString()) = @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(totaldays.ToString()) দিন</td>
+
+                        <td>জানুয়ারি </td>
+                        @if (1 <= Rmonth)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(Ryear, 1).ToString())</td>
+
+
+
+                        }
+                        else
+                        {
+                            if (1 == Rmonth)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days2.ToString())</td>
+
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td>ফেব্রুয়ারি</td>
+                        @if (2 > month)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(year, 2).ToString())</td>
+
+
+
+                        }
+                        else
+                        {
+                            if (2 == month)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                        <td></td>
+                        <td>ফেব্রুয়ারি</td>
+                        @if (2 < Rmonth)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(Ryear, 2).ToString())</td>
+
+                        }
+                        else
+                        {
+
+                            if (2 == Rmonth)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days2.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td>মার্চ</td>
+                        @if (3 > month)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(year, 3).ToString())</td>
+
+                        }
+                        else
+                        {
+                            if (3 == month)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                        <td></td>
+                        <td>মার্চ</td>
+                        @if (3 < Rmonth)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(Ryear, 3).ToString())</td>
+
+                        }
+                        else
+                        {
+
+                            if (3 == Rmonth)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days2.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td>এপ্রিল</td>
+                        @if (4 > month)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(year, 4).ToString())</td>
+
+                        }
+                        else
+                        {
+                            if (4 == month)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                        <td></td>
+                        <td>এপ্রিল</td>
+                        @if (4 < Rmonth)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(Ryear, 4).ToString())</td>
+
+                        }
+                        else
+                        {
+                            if (4 == Rmonth)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days2.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td>মে</td>
+                        @if (5 > month)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(year, 5).ToString())</td>
+
+                        }
+                        else
+                        {
+                            if (5 == month)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                        <td></td>
+                        <td>মে</td>
+                        @if (5 < Rmonth)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(Ryear, 5).ToString())</td>
+
+                        }
+                        else
+                        {
+                            if (5 == Rmonth)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days2.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td>জুন</td>
+                        @if (6 > month)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(year, 6).ToString())</td>
+
+                        }
+                        else
+                        {
+                            if (6 == month)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                        <td></td>
+                        <td>জুন</td>
+                        @if (6 < Rmonth)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(Ryear, 6).ToString())</td>
+
+                        }
+                        else
+                        {
+                            if (6 == Rmonth)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days2.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td>জুলাই</td>
+                        @if (7 > month)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(year, 7).ToString())</td>
+
+                        }
+                        else
+                        {
+                            if (7 == month)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                        <td></td>
+                        <td>জুলাই</td>
+                        @if (7 < Rmonth)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(Ryear, 7).ToString())</td>
+
+                        }
+                        else
+                        {
+                            if (7 == Rmonth)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days2.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td>আগস্ট </td>
+                        @if (8 > month)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(year, 8).ToString())</td>
+
+                        }
+                        else
+                        {
+                            if (8 == month)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                        <td></td>
+                        <td>আগস্ট </td>
+                        @if (8 < Rmonth)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(Ryear, 8).ToString())</td>
+
+                        }
+                        else
+                        {
+                            if (8 == Rmonth)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days2.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td>সেপ্টেম্বর</td>
+                        @if (9 > month)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(year, 9).ToString())</td>
+
+                        }
+                        else
+                        {
+                            if (9 == month)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                        <td></td>
+                        <td>সেপ্টেম্বর</td>
+                        @if (9 < Rmonth)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(Ryear, 9).ToString())</td>
+
+                        }
+                        else
+                        {
+                            if (9 == Rmonth)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days2.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td>অক্টোবর</td>
+                        @if (10 > month)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(year, 10).ToString())</td>
+
+                        }
+                        else
+                        {
+                            if (10 == month)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                        <td></td>
+                        <td>অক্টোবর</td>
+                        @if (10 < Rmonth)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(Ryear, 10).ToString())</td>
+
+                        }
+                        else
+                        {
+                            if (10 == Rmonth)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days2.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td>নভেম্বর</td>
+                        @if (11 > month)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(year, 11).ToString())</td>
+
+                        }
+                        else
+                        {
+                            if (11 == month)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                        <td></td>
+                        <td>নভেম্বর</td>
+                        @if (11 < Rmonth)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(Ryear, 11).ToString())</td>
+
+                        }
+                        else
+                        {
+                            if (11 == Rmonth)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days2.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td>ডিসেম্বর</td>
+                        @if (12 > month)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(year, 12).ToString())</td>
+
+                        }
+                        else
+                        {
+                            if (12 == month)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                        <td></td>
+                        <td>ডিসেম্বর</td>
+                        @if (12 < Rmonth)
+                        {
+                            <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(DateTime.DaysInMonth(Ryear, 12).ToString())</td>
+
+                        }
+                        else
+                        {
+                            if (12 == Rmonth)
+                            {
+                                <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(days2.ToString())</td>
+
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@joiningdays.ToString()) দিন </th>
+                        <th></th>
+                        <th></th>
+                        <th>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@retirementdays.ToString()) দিন</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td style="padding:0px">
+                            <table class="table table-border" style="margin-bottom:0px">
+                                <tr>
+                                    <td>অর্থাৎ  @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@totalworkyear.ToString()) বৎসর X ৩৬৫ </td>
+                                    <td>=</td>
+                                    <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(totaldays.ToString()) দিন </td>
+                                </tr>
+                                <tr>
+                                    <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@Model.employee?.joiningDateGovtService?.ToString("yyyy")) সন</td>
+                                    <td>=</td>
+                                    <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@joiningdays.ToString()) দিন</td>
+                                </tr>
+                                <tr>
+                                    <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@Model.employee?.DateOfRetirement?.ToString("yyyy")) সন</td>
+                                    <td>=</td>
+                                    <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@retirementdays.ToString()) দিন</td>
+                                </tr>
+                                <tr>
+
+                                    <td>লিপ ইয়ার</td>
+                                    <td>=</td>
+                                    <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(leapyear.ToString()) দিন</td>
+                                </tr>
+                                <tr>
+                                    <td>মোট</td>
+                                    <td>=</td>
+                                    <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@totalpresent.ToString()) দিন </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td colspan="2"></td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+            <br />
+            <br />
+            <br />
+            <br />
+            <table class="table table border">
+                <tbody>
+                    <tr>
+                        <th colspan="4" class="text-left">(খ ) বাদ : ভোগকৃত ছুটিকালীন সময় - </th>
+                    </tr>
+                    <tr>
+                        <td style="width:3%">(ক)</td>
+                        <td style="width:80%">গড় বেতনে অর্জিত ছুটি থেকে</td>
+                        <td style="width:2%">-</td>
+                        <td style="width:15%">@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@Model.FullLeave.ToString()) দিন </td>
+                    </tr>
+                    <tr>
+                        <td style="width:3%">(খ)</td>
+                        <td style="width:80%">অর্ধ -গড় বেতনে অর্জিত ছুটি থেকে </td>
+                        <td style="width:2%">-</td>
+                        <td style="width:15%">@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@Model.AverageLeave.ToString()) দিন </td>
+                    </tr>
+                    <tr>
+                        <td style="width:3%">(গ)</td>
+                        <td style="width:80%">প্রসূতি ছুটি(আলোচ্য ছুটি গড় বেতনে অর্জিত ছুটি থেকে বাদ  যায় না)</td>
+                        <td style="width:2%">-</td>
+                        <td style="width:15%"> </td>
+                    </tr>
+                    <tr>
+                        <td style="width:3%">(ঘ)</td>
+                        <td style="width:80%"> অধ্যয়ন ছুটি</td>
+                        <td style="width:2%">-</td>
+                        <td style="width:15%"></td>
+                    </tr>
+                    <tr>
+                        <td style="width:3%">(ঙ)</td>
+                        <td style="width:80%"> শ্রান্তি বিনোদন ছুটি</td>
+                        <td style="width:2%">-</td>
+                        <td style="width:15%">@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@Model.RecreationLeave.ToString()) বার</td>
+                    </tr>
+                    <tr>
+                        <td style="width:3%">(চ)</td>
+                        <td style="width:80%">বিনা বেতনে অসাধারণ ছুটি</td>
+                        <td style="width:2%">-</td>
+                        <td style="width:15%">@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.ExtraOrdinaryLeave.ToString()) দিন</td>
+                    </tr>
+                    <tr>
+
+                        <th colspan="3" style="text-align:right;padding-right:25px"> মোট : </th>
+                        <th style="width:15%">@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(totalusedleave.ToString()) দিন</th>
+                    </tr>
+                    <tr>
+                        <th colspan="4" style="text-align:left;padding-left:25px">মোট কর্মদিনের সংখ্যা (ক - খ) = @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@totalpresent.ToString())-@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@totalusedleave.ToString()) দিন = @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(@Totalworkdays.ToString("#.##")) দিন</th>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="table table-border text-center">
+                <tbody>
+                    <tr>
+                        <td style="text-align:left"> গড় বেতনে মোট অর্জিত ছুটির পরিমান</td>
+                        <td>(১১: ১ হারে)</td>
+                        <td>(@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Totalworkdays.ToString("#.##"))/১১) </td>
+                        <td>=</td>
+                        <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Totalaverageleave11.ToString("#.##")) দিন</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:left">ইতঃমধ্যে ভোগকৃত অর্জিত ছুটি</td>
+                        <td>-</td>
+                        <td></td>
+                        <td>=</td>
+                        <td>(-)@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(usedleave2.ToString()) দিন</td>
+                    </tr>
+                    <tr>
+                        <th style="text-align:left">প্রাপ্য  অর্জিত ছুটির  পরিমান </th>
+                        <th>-</th>
+                        <th></th>
+                        <th>=</th>
+                        <th><u>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(grantleave.ToString("#.##")) দিন</u></th>
+                    </tr>
+                    <tr>
+                        <td style="text-align:left">অর্ধবেতনে  অর্জিত ছুটির  পরিমান </td>
+                        <td>(১২: ১ হারে)</td>
+                        <td>(@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Totalworkdays.ToString("#.##"))/১২ )</td>
+                        <td>=</td>
+                        <td>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Totalhalfleave11.ToString("#.##")) দিন</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:left">ইতঃমধ্যে ভোগকৃত অর্ধ  বেতনে  ছুটি </td>
+                        <td></td>
+                        <td></td>
+                        <td>=</td>
+                        <td>(-)@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(usedleavehalf.ToString()) দিন </td>
+                    </tr>
+                    <tr>
+                        <th style="text-align:left">প্রাপ্য  অর্জিত অর্ধ বেতনে ছুটির পরিমান </th>
+                        <th>-</th>
+                        <th></th>
+                        <th>=</th>
+                        <th><u>@EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(grantleave2.ToString("#.##")) দিন </u></th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="container-fluid">
+           
+                <h3 style="font-size:18px;color:black">পূর্ণবেতনে ছুটির পরিমান  @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(grantleave.ToString("#.##")) দিন</h3>
+                <h3 style="font-size:18px;color:black">অর্ধবেতনে  ছুটির পরিমান  @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(grantleave2.ToString("#.##")) দিন </h3>
+                <h3 style="font-size:18px;color:black">তিনি @EnglishToBanglaNumber.ConvertEnglishNumToBanglaNum(Model.RecreationLeave.ToString()) (@(Model.RecreationLeave == 0 ? "শূন্য" : AmountInWordBn.ConvertWholeNumberBn(Model.RecreationLeave.ToString()))) বার শ্রান্তি বিনোদন সুবিধা @(Model.RecreationLeave != 0 ? "(১.৫ মাস  ও  ১.০০ মাসের মূল বেতনের সমপরিমাণ)" : "") ভোগ করেছেন। </h3>
+            
+        </div>
+
+
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+
+    </script>
+
+
+}

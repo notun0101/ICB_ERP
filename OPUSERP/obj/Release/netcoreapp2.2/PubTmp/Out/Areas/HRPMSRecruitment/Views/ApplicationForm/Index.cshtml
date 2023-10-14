@@ -1,0 +1,997 @@
+﻿@model ApplicationFormViewModel
+@{
+    ViewData["Title"] = "Application Form";
+}
+<style>
+
+    span.error {
+        display: block;
+        visibility: hidden;
+        color: red;
+        font-size: 90%;
+        width: 80px;
+    }
+
+    tr.error {
+        background-color: rgba(255,0,0,0.35);
+    }
+    .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    #user_img1:hover {
+        border-radius: 5px;
+        cursor: zoom-in;
+        transition: 0.3s !important;
+        opacity: 0.5;
+        box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    }
+    #user_sign:hover {
+        border-radius: 5px;
+        cursor: zoom-in;
+        transition: 0.3s !important;
+        opacity: 0.5;
+        box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    }
+    #user_img2:hover {
+        border-radius: 5px;
+        cursor: zoom-in;
+        transition: 0.3s !important;
+        opacity: 0.5;
+        box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    }
+
+</style>
+
+<div class="card" style="width: 100%;">
+    <div class="card-body">
+        <h5 class="card-title" style="color: black">Application Form</h5>
+        <hr>
+        <div >
+            
+            <form asp-area="HRPMSRecruitment" asp-controller="ApplicationForm" asp-action="Index" method="post" enctype="multipart/form-data">
+
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 style="color: black;">General Information : </h5>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="form-group row">
+                            <label for="applicantsNo" class="col-sm-2 col-form-label">Applicants No</label>
+                            <div class="col-sm-4">
+                                <input type="hidden" id="ApplicationId" name="ApplicationId" value="0" />
+                                <input type="text" class="form-control" readonly id="applicantsNo" value="@Model.applicantsNo" name="applicantsNo">
+                            </div>
+                            <label for="paymentRefno" class="col-sm-2 col-form-label">Payment Reference No</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="paymentRefno" value="" name="payRef">
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+                            <label for="nameBn" class="col-sm-2 col-form-label">Name (in Bangla)</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="nameBn" value="" name="nameBn">
+                            </div>
+
+                            <label for="nameEn" class="col-sm-2 col-form-label">Name (in English)<span style="color:red">*</span></label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="nameEn" value="" name="nameEn" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="nid" class="col-sm-2 col-form-label">NID No</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="nidNO" value="" name="nidNO">
+                            </div>
+
+                            <label for="bin" class="col-sm-2 col-form-label">BIN No</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="binNO" value="" name="binNO">
+                            </div>
+                        </div>
+                        <div class=" row justify-content-center align-items-center">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label for="dateOfBirth" class="col-sm-4 col-form-label">Date of Birth<span style="color:red">*</span></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control datepicker " readonly required id="birthDate" value="" name="birthDate">
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label for="locationOfBirth" class="col-sm-4 col-form-label">Location of Birth</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="locationOfBirth" value="" name="birtPlace">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <label for="fnameBn" class="col-sm-2 col-form-label">Father's Name (in Bangla)</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="fnameBn" value="" name="fNmaeBN">
+                            </div>
+
+                            <label for="fnameEn" class="col-sm-2 col-form-label">Father's Name (in English)</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="fnameEn" value="" name="fNmaeEN">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="mnameBn" class="col-sm-2 col-form-label">Mother's Name (in Bangla)</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="mnameBn" value="" name="mNmaeBN">
+                            </div>
+
+                            <label for="mnameEn" class="col-sm-2 col-form-label">Mother's Name (in English)</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="mnameEn" value="" name="mNmaeEN">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="spouseNameBn" class="col-sm-2 col-form-label">Spouse Name (in Bangla)</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="spouseNameBn" value="" name="sNameBN">
+                            </div>
+
+                            <label for="spouseNameEn" class="col-sm-2 col-form-label">Spouse Name (in English)</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="spouseNameEn" value="" name="sNameEN">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="photo" class="col-sm-2 col-form-label">Applicant's Photo</label>
+                            <div class="col-sm-4">
+                                <img id="user_img1" style="width:150px;height:150px;border-radius: 47%;" src="~/images/defaultperson.png" alt="" class="img-thumbnail float-left">
+
+                                <input type="hidden" id="userFile" />
+                                <input type="hidden" name="ApplicationId" value="@Model.ApplicationId" />
+                                <input type="file" title="Photo Upload" class="btn btn-default btn-sm pull-right" id="imagePath1" name="applicantPhoto">
+                            </div>
+
+                            <label for="sign" class="col-sm-2 col-form-label">Applicant's Signature</label>
+                            <div class="col-sm-4">
+                                <img id="user_sign" style="width:150px;height:150px;border-radius: 47%;" src="~/images/sig.jpg" alt="" class="img-thumbnail float-left">
+
+                                <input type="hidden" id="userFile1" />
+                                <input type="hidden" name="ApplicationId" value="@Model.ApplicationId" />
+                                @*<input type="file" title="Photo Upload" class="btn btn-default btn-sm pull-right" id="imagePath1" name="applicantPhoto">*@
+
+                                <input type="file" title="Signature Upload" class="btn btn-default btn-sm pull-right" id="sign" name="applicantSignature">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="paymentDoc" class="col-sm-2 col-form-label">Payment Docs</label>
+                            <div class="col-sm-4">
+                                <img id="user_img2" style="width:150px;height:150px;" src="~/images/file_imge.jpg" alt="" class="img-thumbnail float-left">
+                                <input type="hidden" id="userFile2" />
+                                <input type="hidden" name="ApplicationId" value="@Model.ApplicationId" />
+                                <input type="file" title="Payment Doc Upload" class="btn btn-default btn-sm pull-right" id="paymentDoc" name="payDoc">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h5 style="color: black;">Present Address : </h5>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <h5 style="color: black;">Permanent Address : </h5>
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="copyAs" onclick="CopyAddress()" class=" col-form-label" ><input type="checkbox" class="form-check-inline" style="margin-right:5px;" id="copyAs" name="copyAs" />Same as Present Address</label>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card-body">
+                       <div class="form-group row">
+                            <input type="hidden" id="PresentAdressId" name="PresentAdressId" value="0" />
+                            <label for="presentDivision" class="col-sm-2 col-form-label">Division</label>
+                            <div class="col-sm-4">
+                                <select type="text" class="form-control" id="presentDivision" value="" name="divisionId" data-parsley-required="true"></select>
+
+                            </div>
+                            <input type="hidden" id="PermanentAdressId" name="PermanentAdressId" value="0" />
+                            <label for="PermanentDivision" class="col-sm-2 col-form-label">Division</label>
+                            <div class="col-sm-4">
+                                <select type="text" class="form-control" id="PermanentDivision" value="" name="divisionIdp" data-parsley-required="true"></select>
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="presentDistrict" class="col-sm-2 col-form-label">District</label>
+                            <div class="col-sm-4">
+                                <select type="text" class="form-control" id="presentDistrict" value="" name="districtId" data-parsley-required="true"></select>
+
+                            </div>
+
+                            <label for="PermanentDistrict" class="col-sm-2 col-form-label">District</label>
+                            <div class="col-sm-4">
+                                <select type="text" class="form-control" id="PermanentDistrict" value="" name="districtIdp" data-parsley-required="true"></select>
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="presentUpazilla" class="col-sm-2 col-form-label">Upazilla</label>
+                            <div class="col-sm-4">
+                                <select type="text" class="form-control" id="presentUpazilla" value="" name="thanaId" data-parsley-required="true"></select>
+
+                            </div>
+
+                            <label for="PermanentUpazilla" class="col-sm-2 col-form-label">Upazilla</label>
+                            <div class="col-sm-4">
+                                <select type="text" class="form-control" id="PermanentUpazilla" value="" name="thanaIdp" data-parsley-required="true"></select>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="presentPostOffice" class="col-sm-2 col-form-label">Post Office</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="presentPostOffice1" value="" name="postOffice">
+                            </div>
+
+                            <label for="PermanentPostOffice" class="col-sm-2 col-form-label">Post Office</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="PermanentPostOffice1" value="" name="postOfficep">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="presentHouseNo" class="col-sm-2 col-form-label">Road Block/House No</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="presentHouseNo" value="" name="blockSector">
+                            </div>
+
+                            <label for="PermanentHouseNo" class="col-sm-2 col-form-label">Road Block/House No</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="PermanentHouseNo" value="" name="blockSectorp">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="card">
+                    <div class="card-header">
+                        <h5 style="color: black;">Communication : </h5>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="form-group row">
+                            <label for="mobile" class="col-sm-2 col-form-label">Mobile No</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="mobile" value="" name="mobile">
+                            </div>
+
+                            <label for="PermanentHouseNo" class="col-sm-2 col-form-label">E-Mail</label>
+                            <div class="col-sm-4">
+                                <input type="email" class="form-control" id="email" value="" name="email">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="nationality" class="col-sm-2 col-form-label">Nationality<span style="color:red">*</span></label>
+                            <div class="col-sm-4">
+                                <select class="form-control" id="nationality" name="nationality" data-parsley-required="true">
+                                    <option value="Bangladeshi">Bangladeshi</option>
+                                    <option value="Foreigner">Foreigner</option>
+                                </select>
+                            </div>
+
+                            <label for="Gender" class="col-sm-2 col-form-label">Gender</label>
+                            <div class="col-sm-4">
+                                <input type="radio" id="Gender" value="1" name="gender"> Male
+                                <input type="radio" id="Gender" value="2" name="gender"> Female
+                                <input type="radio" id="Gender" value="0" name="gender"> Other
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="religion" class="col-sm-2 col-form-label">Religion</label>
+                            <div class="col-sm-4">
+
+                                @*<select class="form-control" name="religionId" id="religionId">
+                                    <option value="">Select </option>
+                                    @foreach (var data in Model.Religion)
+                                    {
+                                        <option value="@data.Id">@data.name</option>
+
+                                    }
+                                </select>*@
+                            </div>
+
+                            <label for="occupation" class="col-sm-2 col-form-label">Occupation</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="occupation" value="" name="occupation">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                <br />
+
+                <div class="card">
+                    <div class="card-header">
+                         <h5 style="color: black;">Educational Qualification : </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            
+                            <table class="table table-bordered table-responsive" id="eduTable">
+                                <tr>
+                                    <th id="spanRow">Description of Educational Qualification</th>
+                                    <th>Degree</th>
+                                    <th>Institution</th>
+                                    <th>Board/Versity</th>
+                                    <th>Roll No</th>
+                                    <th>Country</th>
+                                    <th>Year of Certification</th>
+                                    <th>Main Subject</th>
+                                    <th>GPA/Division</th>
+                                    <th>Action</th>
+                                </tr>
+                                <tr id="mainrow">
+                                    <td>
+                                        <select type="text" class="clstype form-control" id="type" value="">
+                                            <option value="">Select Here</option>
+                                            <option value="SSC">SSC</option>
+                                            <option value="HSC">HSSC</option>
+                                            <option value="Honors">Honors</option>
+                                            <option value="Masters">Masters</option>
+                                        </select>
+                                        <span class="error">required</span>
+                                    </td>
+                                    <td><input type="text" class="clsdegree form-control" id="degree" /><span class="error">required</span></td>
+                                    <td><input type="text" class="clsInst form-control" id="institution" value=""><span class="error">required</span></td>
+                                    <td><input type="text" class="clsBoard clsBoard1 form-control" id="board" value=""><span class="error">required</span></td>
+                                    <td><input type="text" class="clsRoll form-control" id="roll" value=""><span class="error">required</span></td>
+                                    <td><input type="text" class="clsCountry form-control" id="country" value=""><span class="error">required</span></td>
+                                    <td><input type="text" class="clsCertification form-control" id="certifiationYear" value=""><span class="error">required</span></td>
+                                    <td><input type="text" class="clsSub form-control" id="Subject" value="" ><span class="error">required</span></td>
+                                    <td><input type="text" class="clsGpa form-control" id="gpa" value="" ><span class="error">required</span></td>
+                                    <td>
+                                        <input type="button" id="add" value="Add" style="width:50px" class="btn btn-success" />
+                                    </td>
+                                </tr>
+
+                            </table>
+                            <div id="orderItems">
+                                <table class="table table-responsive" id="educationDetails"></table>
+                                <span id="orderItemError" style="color:red"></span>
+                            </div>
+                            <div class="col-md-12">
+                                <table id="appendEdu">
+                                    @*<tr>
+                                        <td><input type="text" class="form-control" name="degree" readonly value="" /></td>
+                                        <td><input type="text" class="form-control" name="institution" readonly value="" /></td>
+                                        <td><input type="text" class="form-control" name="boardUniversity readonly value=""" /></td>
+                                        <td><input type="text" class="form-control" name="rollNo"  readonly value="" /></td>
+                                        <td><input type="text" class="form-control" name="country"  readonly value="" /></td>
+                                        <td><input type="text" class="form-control" name="yearOfCertification" readonly value="" /></td>
+                                        <td><input type="text" class="form-control" name="mainSubject" readonly value="" /></td>
+                                        <td><input type="text" class="form-control" name="gpaDivision" readonly value="" /></td>
+                                    </tr>*@
+                                </table>
+                                <table style="display: none">
+                                    <tr>
+                                        <td>Others (if any) </td>
+                                        <td colspan="8" width="100%"><input type="text" class="form-control" id="others" value="" name="others"> </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+               <br />
+                <div class="card">
+                    <div class="card-header">
+                        <h5 style="color: black;">Experience : </h5>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="form-group row">
+                            <input type="hidden" id="ExpId" value="0" />
+                            <label for="nameOfOffice" class="col-sm-2 col-form-label">Name of Office</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="nameOfOffice" value="">
+                            </div>
+
+                            <label for="position" class="col-sm-2 col-form-label">Position</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="position" value="">
+                            </div>
+                        </div>
+
+                         <div class="form-group row">
+                            <label for="joinDate" class="col-sm-2 col-form-label">Joining Date</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="joinDate" readonly value="">
+                            </div>
+
+                            <label for="resignDate" class="col-sm-2 col-form-label">Resigning Date</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="resignDate" readonly value="">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <input type="button" class="btn btn-info btn-sm float-right" onclick="AddMultipleExperience()" id="btnAdd" name="btnAdd" value="Add">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <table class="table table-bordered" id="ExpTbl">
+                                <thead>
+                                    <tr>
+                                        <th>Name of Office </th>
+                                        <th>Position</th>
+                                        <th>Joining Date</th>
+                                        <th>Resigning Date </th>
+                                        <th>Action </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+        
+                <br />
+                <div class="card">
+                    <div class="card-header">
+                        <h5 style="color: black;">Quota : </h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+
+                            <tr>
+                                <td>Under Freedom Fighter Quata?</td>
+                                <td>
+                                    <input type="hidden" id="QuotaIdr" name="QuotaIdr" value="0" />
+                                    Yes <input type="radio" id="isFredomFighter" value="1" name="isFredomFighter">
+                                    No <input type="radio" id="isFredomFighter1" value="0" name="isFredomFighter">
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr id="OnOff">
+                                <td>Relation With Freedom Fighter</td>
+                                <td><input type="text" class="form-control" id="relation" value="" name="relation"></td>
+                                <td>Document of Freedom Fighter</td>
+                                <td><input type="file" class="form-control" id="docsOfFF" value="" name="document"></td>
+                            </tr>
+                            <tr>
+                                <td>Disable/Orphan</td>
+                                <td>
+                                    Yes <input type="radio" id="Disable" value="1" name="isDisable">
+                                    No <input type="radio" id="Disable" value="0" name="isDisable">
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Is Trible People ?</td>
+                                <td>
+                                    Yes <input type="radio" id="trible" value="1" name="isTrible">
+                                    No <input type="radio" id="trible" value="0" name="isTrible">
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Is Anser ? </td>
+                                <td>
+                                    Yes <input type="radio" id="anser" value="1" name="isAnser">
+                                    No <input type="radio" id="anser" value="0" name="isAnser">
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Under Other Quota</td>
+                                <td>
+                                    Yes <input type="radio" id="otherY" value="1" name="isOther">
+                                    No <input type="radio" id="otherN"  value="0" name="isOther">
+                                </td>
+                                <td > <span id="Q1">Which Quata?</span></td>
+                                <td id="Q2"><input type="text" class="form-control" id="otherQuotaName" value="" name="otherQuotaName"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+       
+
+                <hr />
+                <button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-plus-square"></i></button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="imgViewModal" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLabel">Photo Preview</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" style="color: black; box-shadow: none !important; outline: none!important;">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <img class="" src="" id="imgView" style="height:545px;width:465px;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="imgViewModal1" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLabel">Sign Preview</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" style="color: black; box-shadow: none !important; outline: none!important;">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <img class="" src="" id="imgView1" style="height:545px;width:465px;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="pdfViewModal2" style="height:100% !important;" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" style="height: 100%;" role="document">
+        <div class="modal-content" style="height:100% !important;">
+            <div class="modal-header">
+
+                <h5 class="modal-title" id="exampleModalLabel">PDF Preview</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <iframe id="pdfFrame2" src="yourpdffile.pdf" style="width:100%;height:100% !important;"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("#language").addClass("active");
+            $('#date').datepicker({ uiLibrary: 'bootstrap4' });
+            $('#dateOfBirth').datepicker({ uiLibrary: 'bootstrap4' });
+            $('#resignDate').datepicker({ uiLibrary: 'bootstrap4' });
+            $('#joinDate').datepicker({ uiLibrary: 'bootstrap4' });
+            $('#spanRow').rowSpan = 2;
+            $("#OnOff").hide();
+            $("#Q1").hide();
+            $("#otherQuotaName").hide();
+            $("#imagePath1").change(function () {
+                readURL1(this);
+            });
+            $("#sign").change(function () {
+                readURL12(this);
+            });
+
+            $("#user_img1").click(function () {
+                var img = $(this).attr('src');
+                if (img.indexOf("pdfIcon.png") >= 0) {
+                    //alert($("#userFile").val())
+                    $("#pdfFrame").attr('src', $("#userFile").val());
+                    $("#pdfViewModal").modal('show');
+                }
+                else {
+                    $("#imgView").attr('src', img);
+                    $("#imgViewModal").modal('show');
+                }
+            });
+            $("#user_sign").click(function () {
+                var img = $(this).attr('src');
+                $("#imgView1").attr('src', img);
+                $("#imgViewModal1").modal('show');
+               
+            });
+            $("#user_img2").click(function () {
+                var img = $(this).attr('src');
+                if (img.indexOf("pdfIcon.png") >= 0) {
+                    //alert($("#userFile").val())
+                    $("#pdfFrame2").attr('src', $("#userFile2").val());
+                    $("#pdfViewModal2").modal('show');
+                }
+               
+
+
+            });
+
+            $("#paymentDoc").change(function () {
+                readURL2(this);
+            });
+            $('.datepicker').datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1900:2100" });
+
+
+            Common.Ajax('GET', '/global/api/divisions/1', [], 'json', ajaxDivision, false);
+             Common.Ajax('GET', '/global/api/divisions/1', [], 'json', ajaxPermanentDivision, false);
+
+            $("#presentDivision").change(function () {
+                var id = $(this).val();
+                Common.Ajax('GET', '/global/api/districts/' + id, [], 'json', ajaxDistrict, false);
+            });
+
+            $("#PermanentDivision").change(function () {
+                var id = $(this).val();
+                Common.Ajax('GET', '/global/api/districts/' + id, [], 'json', ajaxPermanentDistrict, false);
+            });
+
+            $("#presentDistrict").change(function () {
+                var id = $(this).val();
+                Common.Ajax('GET', '/global/api/thanas/' + id, [], 'json', ajaxThana, false);
+            });
+
+            $("#PermanentDistrict").change(function () {
+                var id = $(this).val();
+                Common.Ajax('GET', '/global/api/thanas/' + id, [], 'json', ajaxPermanentThana, false);
+            });
+
+            @*//Present
+            if (@Model.present.divisionId > 0) {
+                $('#presentDivision').val(@Model.present.divisionId);
+                var divisionId = @Model.present.divisionId;
+                Common.Ajax('GET', '/global/api/districts/' + divisionId, [], 'json', ajaxDistrict, false);
+
+                $('#presentDistrict').val(@Model.present.districtId);
+                var districtId = @Model.present.districtId;
+                Common.Ajax('GET', '/global/api/thanas/' + districtId, [], 'json', ajaxThana, false);
+
+                $('#presentUpazilla').val(@Model.present.thanaId);
+            }
+
+        //Permanent
+            if (@Model.permanent.divisionId > 0) {
+                $('#PermanentDivision').val(@Model.permanent.divisionId);
+                var divisionId = @Model.permanent.divisionId;
+                Common.Ajax('GET', '/global/api/districts/' + divisionId, [], 'json', ajaxPermanentDistrict, false);
+
+                $('#PermanentDistrict').val(@Model.permanent.districtId);
+                var districtId = @Model.permanent.districtId;
+                Common.Ajax('GET', '/global/api/thanas/' + districtId, [], 'json', ajaxPermanentThana, false);
+
+                $('#PermanentUpazilla').val(@Model.permanent.thanaId);
+            }*@
+
+            $('#add').click(function () {
+                //validation and add order items
+                var isAllValid = true;
+                if ($('#type').val() == "") {
+                    isAllValid = false;
+                    $('#type').siblings('span.error').css('visibility', 'visible');
+                }
+                else {
+                    $('#type').siblings('span.error').css('visibility', 'hidden');
+                }
+                if ($('#degree').val() == "") {
+                    isAllValid = false;
+                    $('#degree').siblings('span.error').css('visibility', 'visible');
+                } else {
+                    $('#degree').siblings('span.error').css('visibility', 'hidden');
+                }
+                if ($('#institution').val() == "") {
+                    isAllValid = false;
+                    $('#institution').siblings('span.error').css('visibility', 'visible');
+                } else {
+                    $('#institution').siblings('span.error').css('visibility', 'hidden');
+                }
+                if ($('#board').val() == "") {
+                    isAllValid = false;
+                    $('#board').siblings('span.error').css('visibility', 'visible');
+                } else {
+                    $('#board').siblings('span.error').css('visibility', 'hidden');
+                }
+                if ($('#country').val() == "") {
+                    isAllValid = false;
+                    $('#country').siblings('span.error').css('visibility', 'visible');
+                } else {
+                    $('#country').siblings('span.error').css('visibility', 'hidden');
+                }
+                if ($('#certifiationYear').val() == "") {
+                    isAllValid = false;
+                    $('#certifiationYear').siblings('span.error').css('visibility', 'visible');
+                } else {
+                    $('#certifiationYear').siblings('span.error').css('visibility', 'hidden');
+                }
+                if ($('#roll').val() == "") {
+                    isAllValid = false;
+                    $('#roll').siblings('span.error').css('visibility', 'visible');
+                } else {
+                    $('#roll').siblings('span.error').css('visibility', 'hidden');
+                }
+                if ($('#Subject').val() == "") {
+                    isAllValid = false;
+                    $('#Subject').siblings('span.error').css('visibility', 'visible');
+                } else {
+                    $('#Subject').siblings('span.error').css('visibility', 'hidden');
+                }
+                if ($('#gpa').val() == "") {
+                    isAllValid = false;
+                    $('#gpa').siblings('span.error').css('visibility', 'visible');
+                } else {
+                    $('#gpa').siblings('span.error').css('visibility', 'hidden');
+                }
+
+                if (isAllValid) {
+                    //var $newRow = $('#mainrow').clone().removeAttr('id');
+                    //$('.clstype', $newRow).val($('#type').val());
+                    //$('.clsdegree', $newRow).val($('#degree').val());
+
+                    //Replace add button with remove button
+                   // $('#add', $newRow).addClass('remove').val('Remove').removeClass('btn-success').addClass('btn-danger');
+
+                    //remove id attribute from new clone row
+                    //$('#type,#degree,#institution,#board,#roll,#country,#certifiationYear,#Subject,#gpa,#add', $newRow).removeAttr('id');
+                    //$('span.error', $newRow).remove();
+                    //append clone row
+                    var clstype = $('.clstype :selected').val();
+                    var clsdegree = $('.clsdegree').val();
+                    var clsInst = $('.clsInst').val();
+                    var clsBoard = $('.clsBoard1').val();
+                    var clsRoll = $('.clsRoll').val();
+                    var clsCountry = $('.clsCountry').val();
+                    var clsCertification = $('.clsCertification').val();
+                    var clsSub = $('.clsSub').val();
+                    var clsGpa = $('.clsGpa').val();
+                    $('#appendEdu').append(`<tr>
+                                                <td><input type="hidden" class="form-control" name="EduId" value="0" /><input type="text" class="form-control" name="type" readonly value="${clstype}" /></td>
+                                                <td><input type="text" class="form-control" name="degree" readonly value="${clsdegree}" /></td>
+                                                <td><input type="text" class="form-control" name="boardUniversity" readonly value="${clsInst}" /></td>
+                                                <td><input type="text" class="form-control" name="institution" readonly value="${clsBoard}" /></td>
+                                                <td><input type="text" class="form-control" name="rollNo"  readonly value="${clsRoll}" /></td>
+                                                <td><input type="text" class="form-control" name="country"  readonly value="${clsCountry}" /></td>
+                                                <td><input type="text" class="form-control" name="yearOfCertification" readonly value="${clsCertification}" /></td>
+                                                <td><input type="text" class="form-control" name="mainSubject" readonly value="${clsSub}" /></td>
+                                                <td><input type="text" class="form-control" name="gpaDivision" readonly value="${clsGpa}" /></td>
+                                            </tr>`);
+                    //$('#educationDetails').append($newRow);
+
+                    //clear select data
+                    Refresh();
+                }
+
+
+            })
+
+            //remove button click event
+            $('#educationDetails').on('click', '.remove', function () {
+                $(this).parents('tr').remove();
+            });
+        });
+        function CopyAddress() {
+            if ($('#copyAs').is(":checked")) {
+                $('#PermanentPostOffice1').val($('#presentPostOffice1').val());
+                $('#PermanentHouseNo').val($('#presentHouseNo').val());
+              
+                $('#PermanentDivision').val($('#presentDivision').val());
+
+                var divId = $('#presentDivision').val();
+                Common.Ajax('GET', '/global/api/districts/' + divId, [], 'json', ajaxPermanentDistrict, false);
+                $('#PermanentDistrict').val($('#presentDistrict').val());
+
+                var disId = $('#presentDistrict').val();
+                Common.Ajax('GET', '/global/api/thanas/' + disId, [], 'json', ajaxPermanentThana, false);
+                $('#PermanentUpazilla').val($('#presentUpazilla').val());
+
+              
+            }
+            else {
+                
+                $('#PermanentHouseNo').val($('').val());
+                $('#PermanentPostOffice1').val($('').val());
+                $('#PermanentDivision').val($('').val());
+
+                var divId = $('#presentDivision').val();
+                Common.Ajax('GET', '/global/api/districts/' + divId, [], 'json', ajaxPermanentDistrict, false);
+                $('#PermanentDistrict').val($('').val());
+
+                var disId = $('#presentDistrict').val();
+                Common.Ajax('GET', '/global/api/thanas/' + disId, [], 'json', ajaxPermanentThana, false);
+                $('#PermanentUpazilla').val($('').val());
+
+            }
+        };
+
+        function ajaxDivision(response) {
+            var options = '<option value="">Select</option>';
+            $.each(response, function (i, item) {
+                options += '<option value="' + item.Id + '">' + item.divisionName + '</option>';
+            });
+            $('#presentDivision').empty();
+            $('#presentDivision').append(options);
+        }
+
+        function ajaxPermanentDivision(response) {
+            var options = '<option value="">Select</option>';
+            $.each(response, function (i, item) {
+                options += '<option value="' + item.Id + '">' + item.divisionName + '</option>';
+            });
+            $('#PermanentDivision').empty();
+            $('#PermanentDivision').append(options);
+        }
+
+        function ajaxDistrict(response) {
+            var options = '<option value="">Select</option>';
+            $.each(response, function (i, item) {
+                options += '<option value="' + item.Id + '">' + item.districtName + '</option>';
+            });
+            $('#presentDistrict').empty();
+            $('#presentDistrict').append(options);
+        }
+
+        function ajaxPermanentDistrict(response) {
+            var options = '<option value="">Select</option>';
+            $.each(response, function (i, item) {
+                options += '<option value="' + item.Id + '">' + item.districtName + '</option>';
+            });
+            $('#PermanentDistrict').empty();
+            $('#PermanentDistrict').append(options);
+        }
+
+        function ajaxThana(response) {
+            var options = '<option value="">Select</option>';
+            $.each(response, function (i, item) {
+                options += '<option value="' + item.Id + '">' + item.thanaName + '</option>';
+            });
+            $('#presentUpazilla').empty();
+            $('#presentUpazilla').append(options);
+        }
+
+        function ajaxPermanentThana(response) {
+            var options = '<option value="">Select</option>';
+            $.each(response, function (i, item) {
+                options += '<option value="' + item.Id + '">' + item.thanaName + '</option>';
+            });
+            $('#PermanentUpazilla').empty();
+            $('#PermanentUpazilla').append(options);
+        }
+
+        function Refresh() {
+            $('#type').val('');
+            $('#degree').val('');
+            $('#institution').val('');
+            $('#board').val('');
+            $('#roll').val('');
+            $('#country').val('');
+            $('#certifiationYear').val('');
+            $('#Subject').val('');
+            $('#gpa').val('');
+            $('#orderItemError').empty();
+        }
+        $("#isFredomFighter1").click(function () {
+            $("#OnOff").hide();
+        });
+        $("#isFredomFighter").click(function () {
+            $("#OnOff").show();
+        });
+
+        $("#otherN").click(function () {
+            $("#Q1").hide();
+            $("#otherQuotaName").hide();
+        });
+        $("#otherY").click(function () {
+            $("#Q1").show();
+            $("#otherQuotaName").show();
+        });
+
+
+
+
+        function AddMultipleExperience() {
+            var nameOfOffice = $('#nameOfOffice').val();
+            var position = $('#position').val();
+            var joinDate = $('#joinDate').val();
+            var resignDate = $('#resignDate').val();
+
+            var row = `<tr id="exp_${nameOfOffice}">
+							<td><input type="hidden" value="0" name="ExpId"><input type="hidden" value="${nameOfOffice}" name="officeName">${nameOfOffice}</td>
+							<td><input type="hidden" value="${position}" name="position">${position}</td>
+							<td><input type="hidden" value="${joinDate}" name="from">${joinDate}</td>
+							<td><input type="hidden" value="${resignDate}" name="to">${resignDate}</td>
+                            <td><a href="javascript:void(0)" onclick="RemoveRow('${nameOfOffice}')">X</a></td>
+						</tr>`;
+
+            $('#ExpTbl tbody').append(row);
+        }
+
+        function RemoveRow(exp) {
+            var id = '#exp_' + exp;
+            $(id).remove();
+        }
+        //function AddRow() {
+        //    var row = "<tr id ='newRow'>< td ><select type='text' class='form-control' id='degree' value=''name='degree'>" +
+        //        "<option value=''>Select Here</option><option value=''>Ex 1</option><option value=''>Ex 2</option></select></td >" +
+        //        "< td ><input type='text' class='form-control' id='institution' value=''name='institution'></td>" +
+        //        "<td><input type='text' class='form-control' id='board' value='' name='board'></td>" +
+        //        "<td><input type='text' class='form-control' id='roll' value='' name='board'></td>" +
+        //        "<td><input type='text' class='form-control' id='country' value=''name='board'></td>" +
+        //        "<td><input type='text' class='form-control' id='certifiationYear' value='' name='board'></td>" +
+        //        "<td><input type='text' class='form-control' id='Subject' value='' name='board'></td>" +
+        //        "<td><input type='text' class='form-control' id='gpa' value='' name='board'></td>" +
+        //        "<td><a class='btn btn-default' id='add' onclick='AddRow()'><i class='fas fa-plus-circle'></i></a><a class='btn btn-default' id='remove' onclick='RemoveRow()'><i class='fas fa-minus-circle'></i></a></td></tr>";
+        //    $('#spanRow').rowSpan = 5;
+        //    $('#appendRow').append(row);
+        //}
+        //function RemoveRow(){
+        //    $('#newRow').remove();
+        //}
+
+        function readURL1(input) {
+            if (input.files && input.files[0]) {
+                var filerdr = new FileReader();
+                filerdr.onload = function (e) {
+                    $('#user_img1').attr('src', e.target.result);
+                }
+                filerdr.readAsDataURL(input.files[0]);
+            }
+        }
+        function readURL12(input) {
+            if (input.files && input.files[0]) {
+                var filerdr = new FileReader();
+                filerdr.onload = function (e) {
+                    $('#user_sign').attr('src', e.target.result);
+                }
+                filerdr.readAsDataURL(input.files[0]);
+            }
+        }
+        function readURL2(input) {
+            if (input.files && input.files[0]) {
+                var filerdr = new FileReader();
+                filerdr.onload = function (e) {
+                    console.log(e);
+                    var srcUrl = e.target.result;
+                    if (srcUrl.indexOf("application/pdf") > 0) {
+                        $('#user_img2').attr('src', "/EmpAttachment/pdfIcon.png");
+                        $('#userFile2').val(e.target.result);
+                    }
+                    else {
+                        $('#user_img2').attr('src', e.target.result);
+                    }
+
+                }
+                filerdr.readAsDataURL(input.files[0]);
+            }
+        }
+
+    </script>
+}
+

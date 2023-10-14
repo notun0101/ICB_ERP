@@ -1,0 +1,91 @@
+﻿
+@{
+    ViewData["Title"] = "FixationReports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .redStar{
+        color:red;
+        font-size: 16px;
+    }
+</style>
+
+<div class="card">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">  Fixation Reports</h6>
+        <a class='btn btn-info mr-4' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1013&perentId=5926'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+    </div>
+    <div class="card-body">
+        <div class="col-md-12">
+            <div class="form-group row">
+                <label for="report" class="col-sm-3 col-form-label">Report By <span class="redStar">*</span></label>
+                <div class="col-sm-9">
+                    <select class="form-control" id="fixation">
+                        <option value="0">Choose Report Type</option>
+                        <option value="1">Yearly Fixation Report (Officers)</option>
+                        <option value="2">Yearly Fixation Report (Staffs)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row r1 showhide" style="display: none;">
+                <label for="report" class="col-sm-3 col-form-label">Year</label>
+                <div class="col-sm-4">
+                    <input type="text" name="year" id="year" value="@DateTime.Now.Year" class="form-control" />
+                </div>
+
+                <label for="report" class="col-sm-1 col-form-label">Type</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="type">
+                        <option value="All">All</option>
+                        <option value="Promotion">Promotion</option>
+                        <option value="Increment" selected>Increment</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="report" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-9">
+                    <input type="button" value="PDF" class="btn btn-success btn-sm fa-pull-right" id="btnReport" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{ 
+    <script>
+        $(document).ready(function () {
+
+            $('#fixation').on('change', function () {
+                var fixation = $('#fixation').val();
+
+                if (fixation == 1 || fixation == 2) {
+                    $('.showhide').hide();
+                    $('.r1').show();
+                }
+                else {
+                    $('.showhide').hide();
+                }
+            })
+
+            $('#btnReport').click(function () {
+                var fixation = $('#fixation').val();
+                var year = $('#year').val();
+                var type = $('#type').val();
+
+                if (fixation == 1) {
+                    window.open('/Payroll/Fixation/FixationYearlyreportPdf?year=' + year + '&type=' + type);
+				}
+				else if (fixation == 2) {
+					window.open('/Payroll/Fixation/FixationYearlyreportStaffPdf?year=' + year + '&type=' + type);
+				}
+                else {
+                    swal('warning', 'Please choose report type', 'warning');
+                }
+            })
+        })
+    </script>
+}

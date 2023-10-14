@@ -1,0 +1,175 @@
+﻿@model PFLoanViewModel
+@{
+    ViewData["Title"] = "NonRefundableContribution";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+@section Style{
+    <style>
+
+        .print-card-body {
+            width: 100%;
+            padding-bottom: 10px;
+        }
+
+        .vartical-table th {
+            width: 25%;
+        }
+
+        .vartical-table td {
+            width: 25%;
+        }
+
+        .table td, .table th {
+            padding: .3rem;
+            font-size: 14px;
+        }
+
+        table {
+            page-break-inside: auto;
+            border-collapse: collapse;
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        tfoot {
+            display: table-footer-group;
+        }
+
+        h6 {
+            font-size: 14px;
+            background-color: gray;
+            color: white !important;
+            padding: 3px;
+        }
+    </style>
+}
+
+<div class="print-card" style="width: 100%;">
+    <div class="print-card-body">
+
+        <div class="container-fluid">
+            <div class="fa-pull-right">
+                <p style="font-size:smaller;">Print at: @DateTime.Now.ToString("dd-MMM-yyyy HH:mm:ss")</p>
+            </div>
+            <div class="row" style="padding-top:0px;">
+                <div class="col-2">
+                    <img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="BDBL Logo" style="height:80px;" />
+                </div>
+                <div class="col-8">
+                    <div style="color:black;text-align:center;">
+                        <h3 style="font-size:20px;">BANGLADESH DEVELOPMENT BANK LIMITED</h3>
+                        <h3 style="font-size:20px;">HEAD OFFICE: DHAKA</h3>
+                        <h3 style="font-size:18px;">Central Accounts Depertment</h3>
+                        <h3 style="font-size:15px;">BSB Employees' General Provident Fund</h3>
+                        <h3 style="font-size:18px;">Non-Refundable (Members' Contribution)</h3>
+                        <h3 style="font-size:15px;">For the Year Ended @Model.rptDate</h3>
+
+                        <br />
+                    </div>
+                </div>
+                <div class="col-2"></div>
+            </div>
+        </div>
+
+        <div class="container-fluid" style="color:black;">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="border-bottom:1px solid black !important;">Sl No.</th>
+                        <th style="border-bottom:1px solid black !important;">Name</th>
+                        <th style="border-bottom:1px solid black !important;">Designation</th>
+                        <th style="border-bottom:1px solid black !important;">Date</th>
+                        <th style="border-bottom:1px solid black !important;">Amount in TK.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 1;
+                        int j = 1;
+
+                        decimal totalamountHO = 0;
+                        decimal totalamountBO = 0;
+                    }
+                    <tr>
+                        <td colspan="5" style="margin-left:0px;padding-top:10px;padding-bottom:10px"><strong>(A) Head Office:</strong></td>
+                    </tr>                   
+                    @foreach (var item in Model.pfAccountsSchedules.Where(x => x.employee?.hrBranchId == 205))
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.employee?.nameEnglish</td>
+                            <td>@item.employee?.lastDesignation?.designationName</td>
+                            <td>@item.createdAt?.ToString("dd-MMM-yyyy")</td>
+                            <td style="text-align:right;">@item.total</td>
+                        </tr>
+                        i++;
+
+                        totalamountHO += Convert.ToDecimal(item.total);
+                    }
+                    <tr>
+                        <th style="border-right:none"></th>
+                        <th style="border-left:none;border-right: none;"></th>
+                        <th style="border-right:none;border-left: none;">Sub-Total(A)</th>
+                        <th style="border-left:none"></th>
+                        <th style="text-align:right;">@totalamountHO</th>
+                    </tr>
+                    <tr>
+                        <td colspan="5" style="margin-left:0px;padding-top:10px;padding-bottom:10px"><strong>(B) Branch Office:</strong></td>
+                    </tr>
+                    @foreach (var item in Model.pfAccountsSchedules.Where(x => x.employee?.hrBranchId != null))
+                    {
+
+                        <tr>
+                            <td>@j</td>
+                            <td>@item.employee?.nameEnglish</td>
+                            <td>@item.employee?.lastDesignation?.designationName</td>
+                            <td>@item.createdAt?.ToString("dd-MMM-yyyy")</td>
+                            <td style="text-align:right;">@item.total</td>
+                        </tr>
+                        j++;
+
+                        totalamountBO += Convert.ToDecimal(item.total);
+
+                    }
+                    <tr>
+                        <th style="border-right:none"></th>
+                        <th style="border-left:none;border-right: none;"></th>
+                        <th style="border-right:none;border-left: none;">Sub-Total(B)</th>
+                        <th style="border-left:none"></th>
+                        <th style="text-align:right;">@totalamountBO</th>
+                    </tr>
+
+                    <tr>
+
+                        <th style="border-right:none"></th>
+                        <th style="border-left:none;border-right: none;"></th>
+                        <th style="border-right:none;border-left: none;">Total:(A+B)</th>
+                        <th style="border-left:none"></th>
+                        <th style="text-align:right;">@Decimal.Add(totalamountHO ,totalamountBO)</th>
+                    </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+
+
+
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+
+    </script>
+
+
+}

@@ -1,0 +1,114 @@
+﻿@model HrCommunicationViewModel
+
+@{
+    ViewData["TitleMD"] = "HRCommunications";
+    //Layout = "~/Areas/HRPMSMasterData/Views/Shared/_MasterDataForm.cshtml";
+    Layout = "~/Areas/HRPMSMasterData/Views/Shared/_MasterDataForm.cshtml";
+}
+
+
+
+
+<style>
+
+    .active {
+        color: darkcyan;
+    }
+
+    /*.c {
+     
+        background-color: lightgreen;
+    }
+
+        .c .card-footer {
+            height: 50px;
+            background-color: #E9F7EF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        .c .cb {
+            transition: .1s all;
+           
+        }
+
+        .c:hover {
+           
+            background-color: lightblue;
+          
+            border: 1px solid black !important;
+        }*/
+    .c {
+        text-decoration: none;
+        border: 1px solid black;
+        transition: .3s all;
+        background-color: lightgray;
+    }
+
+        .c:hover {
+            background-color: #ADD8E6;
+            /*background: #73ddff;*/
+            border: 2px solid #0b9ac8;
+            overflow: hidden;
+            color: #ffffff;
+            transform: scale(1.05)
+        }
+
+    .d {
+        color: black;
+        font-size: 10pt;
+        font-weight: 400;
+    }
+
+    
+    .fas:hover, i:hover, .fa:hover {
+        color: #0b9ac8;
+    }
+
+    .name:hover {
+        cursor: pointer;
+        color: black;
+        color: #ffffff;
+    }
+
+    a i {
+        font-size: 25px !important;
+        /*margin: 0 !important;*/
+    }
+</style>
+
+
+
+<div class="card" style="width: 100%;">
+
+    <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+        <h4 class="m-0 font-weight-bold text-primary">HR Communications </h4>
+        <a class='btn btn-info  btn-sm' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=5701'>@*<i class="fas fa-backward fa-2x "></i>*@<i class="fas fa-angle-double-left"><span style=""> Back</span></i></a>
+
+    </div>
+    <div class="card-body">
+        <div class="row" id="cards">
+            <div class="col-md-3">
+                <div class="card c" @*style="height: 117px" *@>
+                    <a class="text-center btn btn-default " href='/HRPMSMasterData/Communication' color: black; style="padding-bottom: 18px;">
+                        <br /> <strong class="name" style="font:bold;font-size: 20px;"> Condolence Letter</strong><br />
+                        <i class="far fa-envelope-open" aria-hidden="true" style="color:blue"></i> <br />
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="col-md-3">
+                <div class="card c" @*style="height: 117px;" *@>
+                    <a class="text-center btn btn-default " href="/HRPMSMasterData/Communication/Retirement" color: black; style="padding-bottom: 18px;">
+                        <br /> <strong class="name" style="font:bold;font-size: 20px;"> Retirement Letter</strong><br />
+                        <i class="far fa-envelope-open fa-7x" aria-hidden="true" style="color:blue"></i> <br />
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

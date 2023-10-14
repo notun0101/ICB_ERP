@@ -1,0 +1,1251 @@
+﻿@model LeaveRegisterViewModel
+@{
+	ViewData["Title"] = "Leave Status";
+	//Layout = "~/Areas/HRPMSLeave/Views/Shared/_LeaveForm.cshtml";
+}
+@section Style{
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+	<link href="~/css/site.css" rel="stylesheet" />
+
+	<link href="~/lib/main.css" rel="stylesheet" />
+	<style>
+		#calendar a, #ui-datepicker-div a {
+			color: black !important;
+		}
+		/* Top Counter */
+		.leftImgBox {
+			width: 20%;
+			height: 100%;
+			float: left;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin-left: 13px;
+		}
+
+			.leftImgBox img {
+				width: 100%;
+			}
+
+			.leftImgBox i {
+				font-size: 42px !important;
+			}
+
+		.counterBox {
+			float: right;
+			text-align: center;
+			margin: 10px;
+		}
+
+		.counter {
+			font-size: 25px;
+			margin-bottom: 0;
+		}
+
+		.counterBox1 {
+			float: right;
+			text-align: right;
+			margin: 0;
+		}
+
+		.counter1 {
+			font-size: 20px !important;
+			margin-bottom: 0;
+		}
+
+		.counter p {
+			text-align: right;
+		}
+
+		.title {
+			font-size: 15px;
+		}
+
+		a {
+			color: white !important;
+		}
+
+			a:hover {
+				color: white;
+			}
+
+		.active5 {
+			color: darkgreen;
+		}
+	</style>
+}
+
+    <div class="card">
+        <div class="card-header py-3 d-flex flex-row align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Leave Calender</h6>
+            <a class='btn btn-info' style=" margin-left:80%;" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=1018&perentId=6283'><i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+
+        </div>
+        <div class="card-body">
+            <div class="form-group row" id="foremployeeName">
+                <div class="col-sm-6">
+                    <div class="form-group row">
+                        <input type="hidden" id="employeeInfoId" name="employeeInfoId">
+
+                        <label for="employeeInfoId" class="col-md-4 col-form-label">Employee Name</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="employeeName" name="employeeName" data-parsley-trigger="keyup">
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="designation" class="col-sm-4 col-form-label">Designation </label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="designation" name="designation" placeholder="Designation" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="department" class="col-sm-4 col-form-label">Department</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="department" name="department" placeholder="Department" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <img id="userImg" style="width: 180px;height: 165px;border-radius: 120px;" src="~/images//defaultperson.png" alt="" class="img-thumbnail float-left">
+
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+<div class="card div" style="width: 100%;">
+	@*<div class="card-header row outBox" style="background-color: #EAF6FA;padding: 0; color: black;">
+		<div class="col-md-4" style="display: flex; justify-content: flex-start; align-items: center; ">
+			<h5 class="card-title" style="color: black; margin: 8px; text-transform: uppercase;">@Model.fLang.title</h5>
+		</div>
+		<div class="col-md-8">
+			<div style="float: right; margin: 16px;">
+				<a class='btn btn-info' style="" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=1242'><i class="fas fa-backward"></i></a>
+			</div>
+		</div>
+	</div>*@
+	<div class="card-body">
+		<form asp-area="HRPMSLeave" asp-controller="LeaveRegister" asp-action="LeaveApply" id="FormId" method="post" enctype="multipart/form-data" data-parsley-validate="parsley">
+			<div asp-validation-summary="All" class="text-danger"></div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							Leave Balance
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="row" style="">
+										<div class="col-md-12">
+											<div class="container fill">
+												<div class="table-responsive">
+													<table class="table table-striped table-bordered" style="width: 100%;">
+														<thead class="text-center" style="background-color:lightgray;">
+															<tr>
+																<th>Type</th>
+																<th>Opening Balance</th>
+																<th>Availed</th>
+																<th>Balance</th>
+															</tr>
+														</thead>
+														<tbody id="leaveBalanceTbody"></tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="card">
+						<div class="card-header">
+							Approval Matrix
+						</div>
+						<div class="card-body row" id="approvalMatrixDIv" style="margin-left: 71px;margin-right: 26px;width: 73%;">
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<br />
+<hr />
+<div class="row clearfix div">
+	<div class="col-12">
+		<div class="card mb-4">
+			<!-- Card Header - Dropdown -->
+			<div class="card-header py-3 d-flex flex-row align-items-center justify-content-start">
+				<h6 class="m-0 font-weight-bold text-primary">@Model.fLang.title</h6>
+				<i class="fas fa-list-alt list" style="font-size: 16px; margin: 5px; background-color: lightgray; padding: 5px; cursor: pointer !important;"></i>
+				<i class="fas fa-calendar-alt calender" style="font-size: 16px; margin: 5px; background-color: lightgray; padding: 5px; cursor: pointer !important;"></i>
+			</div>
+			<!-- Card Body -->
+			<div class="card-body">
+				<div class="boxContent listContent">
+					<table class="table table-striped table-bordered" id="leaveApplyTable">
+						<thead>
+							<tr>
+								<th>@Model.fLang.employeeName</th>
+								<th>@Model.fLang.leaveType</th>
+								<th>@Model.fLang.leaveFrom</th>
+								<th>@Model.fLang.leaveTo</th>
+								<th>@Model.fLang.totalDays</th>
+								<th>@Model.fLang.leavePurpose</th>
+								<th>@Model.fLang.status</th>
+								<th>@Model.fLang.action</th>
+						</thead>
+						<tbody id="leaveRegTbody">
+							
+						</tbody>
+					</table>
+				</div>
+
+				<div class="card boxContent calenderContent">
+					<div class="card-body">
+						<div class="row" id='calendar' title="click for confirmation" style="height:20%; width:100%; color: black !important;"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="ValidatModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content" style="width:1040px;">
+			<div class="modal-header">
+				<label class="modal-title pull-left" id="myModalLabel" style="color:rgb(9, 7, 161);font-size:1em;">
+					View Leave Status
+				</label>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<br />
+			</div>
+			<div class="modal-body">
+				<table id="statusTable" class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th>Leave From Date</th>
+							<th>Leave To Date</th>
+							<th>Leave Type</th>
+							<th>Person</th>
+							<th>Status</th>
+							<th>Date</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-arrow-left"></i> Back</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="popupModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<br />
+			</div>
+			<div class="modal-body">
+
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary btn-sm" data-dismiss="modal"><i class="fa fa-arrow-left"></i> Back</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts{
+	<script src="~/lib/main.js"></script>
+	<script>
+		var events = [];
+
+		$('.list').click(function () {
+			$('.boxContent').hide();
+			$('.listContent').show();
+			$('.list').removeClass('active5');
+			$('.calender').removeClass('active5');
+			$('.list').addClass('active5');
+		})
+		$('.calender').click(function () {
+			$('.boxContent').hide();
+			$('.calenderContent').show();
+			$('.list').removeClass('active5');
+			$('.calender').removeClass('active5');
+			$('.calender').addClass('active5');
+		})
+
+        $('#submit').click(function () {
+			swal({
+				title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+			}).then(function () {
+				$('#submit1').click();
+			})
+        });
+
+
+		function DayDiffrence(date1, date2) {
+			//var date1, date2;
+			//define two date object variables with dates inside it
+			date1 = new Date(date1);
+			date2 = new Date(date2);
+
+			//calculate time difference
+			var time_difference = date2.getTime() - date1.getTime();
+
+			//calculate days difference by dividing total milliseconds in a day
+			var days_difference = time_difference / (1000 * 60 * 60 * 24);
+
+			return days_difference;
+        }
+
+
+		function getEvents(id) {
+			$.ajax({
+				url: "/HRPMSLeave/LeaveRegister/GetLeaveDatesByEmpId/"+id,
+				type: "GET",
+				dataType: "JSON",
+				success: function (result) {
+					$.each(result.leaveRegisterslist, function (i, data) {
+						console.log("ok")
+						console.log(result)
+						console.log({
+							title: data.employee.nameEnglish,
+							start: formatDateNew(data.leaveFrom),
+							end: formatDateNew(data.leaveTo),
+							id: data.Id
+							//backgroundColor: "#9501fc",
+							//borderColor: "#fc0101"
+						})
+						events.push({
+							title: data.employee.nameEnglish,
+							start: formatDateNew(data.leaveFrom),
+							end: formatDateNew(data.leaveTo),
+							id: data.Id
+							//backgroundColor: "#9501fc",
+							//borderColor: "#fc0101"
+						});
+					});
+					//console.log('ok3');
+					//console.log(events);
+					GenerateCalender();
+					//callback(events);
+				}
+			});
+			return events;
+		}
+
+		function formatDateNew(date) {
+			date = new Date(date);
+			var dateNew = new Date(date.setMonth(date.getMonth() + 1));
+			var m = '';
+			var d = '';
+			if (parseInt(dateNew.getMonth()) < 10) {
+				m = '0' + dateNew.getMonth();
+			}
+			else {
+				m = dateNew.getMonth();
+			}
+			if (parseInt(dateNew.getDate()) < 10) {
+				d = '0' + dateNew.getDate();
+			}
+			else {
+				d = dateNew.getDate();
+			}
+			return dateNew.getFullYear() + '-' + m + '-' + d;
+		}
+		function GenerateCalender() {
+			console.log(events)
+			var calendarEl = document.getElementById('calendar');
+			var calendar = new FullCalendar.Calendar(calendarEl, {
+				headerToolbar: {
+					left: 'prev,next today',
+					center: 'title',
+					right: 'dayGridMonth,timeGridWeek,timeGridDay'
+				},
+
+				initialDate: Date.now(),
+				navLinks: true, // can click day/week names to navigate views
+				selectable: true,
+				selectMirror: true,
+				select: function (arg) {
+					//alert(arg.startStr);
+
+					var diff = DayDiffrence(formatDate(new Date()), formatDate(arg.startStr));
+					//alert(diff);
+
+					if (diff < 0) {
+						swal('warning', "You Can't Set Schedule in previous day!!", "warning");
+						return false;
+					} else {
+
+					}
+
+					calendar.unselect()
+				},
+				eventClick: function (arg) {
+					console.log(arg.event._instance.range.start)
+					console.log(arg)
+					$('#date_range').text(formatDateNew(arg.event._instance.range.start) + ' to ' + formatDateNew(arg.event._instance.range.end));
+					//$('#leave_purpose').text('')
+					//alert(arg.event._def.publicId);
+					Common.Ajax('GET', '/HRPMSLeave/LeaveRegister/PreviewApi?id=' + arg.event._def.publicId, [], 'json', ajaxPreviewApi, false);
+				},
+				editable: true,
+				dayMaxEvents: true, // allow "more" link when too many events
+				events: events,
+				eventRender: function (event, element) {
+					element.qtip(
+						{
+							content: event.description
+						});
+				},
+
+				editable: false
+			});
+
+			calendar.render();
+		}
+		function ajaxPreviewApi(response) {
+			console.log("ok2");
+			console.log(response);
+			var name = '';
+			var code = '';
+			var dept = '';
+			var desig = '';
+			var subName = ''
+			var subDes = '';
+			var tbl = "";
+			var matrix = "";
+			var emergencyContactNo = "";
+			var address = "";
+			if (response.leaveRegister.emergencyContactNo != null) {
+				emergencyContactNo = response.leaveRegister.emergencyContactNo;
+			}
+			if (response.leaveRegister.address != null) {
+				address = response.leaveRegister.address;
+			}
+			if (response.leaveRegister.employee.nameEnglish != null) {
+				name = response.leaveRegister.employee.nameEnglish;
+				code = response.leaveRegister.employee.employeeCode;
+			}
+			if (response.leaveRegister.employee.department != null) {
+				dept = response.leaveRegister.employee.department.deptName;
+			}
+			if (response.leaveRegister.employee.designation != null) {
+				desig = response.leaveRegister.employee.designation;
+			}
+			if (response.leaveRegister.substitutionUser != null) {
+				subName = response.leaveRegister.substitutionUser.nameEnglish;
+				subDes = response.leaveRegister.substitutionUser.designation;
+			}
+			$.each(response.leaveStatusViewModels, function (i, item) {
+				tbl += `<tr>
+							<td>${item.LeaveTypeName}</td>
+							<td>${item.leaveCarryDays}</td>
+							<td>${item.leaveAvailed}</td>
+							<td>${item.cumLeaveBalance}</td>
+						</tr>`;
+			});
+			$.each(response.appDetailsWithLogs, function (i, item) {
+				if (item.isDelete == 1) {
+					if (item.leaveStatusLog != null) {
+						matrix += `<div class="col-md-4 p-0">
+										<div class="card" style="width: 100%; background-color: lightsalmon !important; min-height: 100% !important;">
+										<img src="/images/defaultperson.png" style="width: 70px; height: 70px; border-radius: 50%; text-align: center; margin: 0 auto;" class="card-img-top" />
+										<div class="card-body text-center px-1">
+											<p>${item.approvalDetail.approver.nameEnglish}</p>
+											<p>${item.approvalDetail.approver.designation}</p>
+											<div style="background-color: green; color: white; min-height: 40px;">
+												<p style="margin-bottom: 0;">${item.leaveStatusLog.remarks}</p>
+												<p>${formatDate(item.leaveStatusLog.createdAt)}</p>
+											</div>
+											<span class="badge-success px-1">${item.approvalDetail.sortOrder}</span>
+										</div>
+									</div>
+								</div>`
+					}
+					else {
+						matrix += `<div class="col-md-4 p-0">
+										<div class="card" style="width: 100%; background-color: lightsalmon !important; min-height: 100% !important;">
+										<img src="/images/defaultperson.png" style="width: 70px; height: 70px; border-radius: 50%; text-align: center; margin: 0 auto;" class="card-img-top" />
+										<div class="card-body text-center px-1">
+											<p>${item.approvalDetail.approver.nameEnglish}</p>
+											<p>${item.approvalDetail.approver.designation}</p>
+											<div style="background-color: yellow; min-height: 40px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+												<p>Pending</p>
+											</div>
+											<span class="badge-success px-1">${item.approvalDetail.sortOrder}</span>
+										</div>
+									</div>
+								</div>`
+					}
+				}
+				else {
+					if (item.leaveStatusLog != null) {
+						matrix += `<div class="col-md-4 p-0">
+									<div class="card" style="width: 100%; background-color: lightgreen !important;  min-height: 100% !important;">
+										<img src="/images/defaultperson.png" style="width: 70px; height: 70px; border-radius: 50%; text-align: center; margin: 0 auto;" class="card-img-top" />
+										<div class="card-body text-center px-1">
+											<p>${item.approvalDetail.approver.nameEnglish}</p>
+											<p>${item.approvalDetail.approver.designation}</p>
+											<div style="background-color: green; color: white; min-height: 40px;">
+												<p style="margin-bottom: 0;">${item.leaveStatusLog.remarks}</p>
+												<p>${formatDate(item.leaveStatusLog.createdAt)}</p>
+											</div>
+											<span class="badge-success px-1">${item.approvalDetail.sortOrder}</span>
+										</div>
+									</div>
+								</div>`
+					}
+					else {
+						matrix += `<div class="col-md-4 p-0">
+									<div class="card" style="width: 100%; background-color: lightgreen !important;  min-height: 100% !important;">
+										<img src="/images/defaultperson.png" style="width: 70px; height: 70px; border-radius: 50%; text-align: center; margin: 0 auto;" class="card-img-top" />
+										<div class="card-body text-center px-1">
+											<p>${item.approvalDetail.approver.nameEnglish}</p>
+											<p>${item.approvalDetail.approver.designation}</p>
+											<div style="background-color: yellow; min-height: 40px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+												<p>Pending</p>
+											</div>
+											<span class="badge-success px-1">${item.approvalDetail.sortOrder}</span>
+										</div>
+									</div>
+								</div>`
+					}
+
+					}
+			});
+			var option = `<div class="card" style="width: 100%;">
+							<div class="card-body">
+								<div class="container-fluid">
+									<div class="row" style="padding-top:0px;">
+										<div class="col-2">
+											<img src="${response.companies[0].filePath}" alt="OPUS ERP" style="height:50px;" />
+										</div>
+										<div class="col-8">
+											<div style="color:black;text-align:center;">
+												<h3>${response.companies[0].companyName}</h3>
+												<label>${response.companies[0].addressLine}</label>
+											</div>
+										</div>
+										<div class="col-2"></div>
+									</div>
+								</div>
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-3">
+										</div>
+										<div class="col-6 text-center">
+											<h3 class="card-title" style="color: black;margin-top: 25px;"><b>LEAVE APPLICATION FORM</b></h3>
+										</div>
+
+									</div>
+								</div>
+								<hr>
+								<div class="container">
+
+									<div class="row clearfix">
+
+										<div class="row clearfix">
+											<div class="col-12">
+												<div class="card">
+													<div class="card-header">
+														<h6 class="m-0 font-weight-bold text-primary" id="personal">SUBMITTED BY</h6>
+													</div>
+													<div class="card-body">
+														<table id="table" style="width: 100%;">
+
+															<tbody>
+																<tr style="">
+																	<td style="padding: 7px;"><strong style="font-size:18px;">Employee Name : </strong>${name}</td>
+																	<td style="padding: 7px;"><strong style="font-size:18px;">Employee Code : </strong>${code}</td>
+																</tr>
+																<tr style="">
+																	<td style="padding: 7px;"><strong style="font-size:18px;">Department : </strong>${dept}</td>
+																	<td style="padding: 7px;"><strong style="font-size:18px;">Designation : </strong>${desig}</td>
+																</tr>
+															</tbody>
+														</table>
+													</div>
+												</div>
+
+											</div>
+											<!-- Card Body -->
+											<div class="card-body">
+												<form asp-area="HRPMSLeave" asp-controller="LeaveRegister" asp-action="LeaveApply" id="FormId" method="post" enctype="multipart/form-data" data-parsley-validate="parsley">
+													<div asp-validation-summary="All" class="text-danger"></div>
+													<div class="row">
+														<div class="col-md-6">
+															<div class="card">
+																<div class="card-header" >
+																	<h6 class="m-0 font-weight-bold text-primary" id="personal">LEAVE APPLY INFO</h6>
+
+																</div>
+																<div class="card-body">
+																	<div class="row">
+																		<div class="col-md-12">
+
+																			<div class="form-group row">
+																				<input type="hidden" id="Id" name="id" value="0" />
+																				<input type="hidden" id="maxSickCarry" name="maxSickCarry" value="0" />
+																				<label for="leaveTypeId" class="col-sm-4 col-form-label">${response.fLang.leaveType}</label>
+																				<div class="col-sm-8">
+																					<label id="dataa" class="col-sm-8 col-form-label">${response.leaveRegister.leaveType.nameEn}</label>
+
+																				</div>
+																			</div>
+																			<hr />
+
+																			<div class="form-group row">
+																				<label for="leaveFrom" class="col-sm-4 col-form-label">Leave  From</label>
+																				<div class="col-sm-8">
+																					<label id="dataa" class="col-sm-8 col-form-label">${response.leaveRegister.leaveFrom}</label>
+
+																				</div>
+																			</div>
+																			<hr />
+																			<div class="form-group row" id="LeaveToDiv">
+																				<label for="leaveTo" class="col-sm-4 col-form-label">Leave To</label>
+																				<div class="col-sm-8">
+																					<label id="dataa" class="col-sm-8 col-form-label">${response.leaveRegister.leaveTo}</label>
+																				</div>
+																			</div>
+
+																			<hr />
+																			<div class="form-group row" id="LeaveDayDiv">
+																				<label for="daysLeave" class="col-sm-4 col-form-label">Duration </label>
+																				<div class="col-sm-8">
+																					<label id="dataa" class="col-sm-8 col-form-label">${response.leaveRegister.daysLeave}</label>
+																				</div>
+																			</div>
+																			<hr />
+																			<div class="form-group row">
+																				<label for="purposeOfLeave" class="col-sm-4 col-form-label">Reason Of Leave</label>
+																				<div class="col-sm-8">
+																					<label id="dataa" class="col-sm-8 col-form-label">${response.leaveRegister.purposeOfLeave}</label>
+																				</div>
+																			</div>
+																			<hr />
+																			<div class="form-group row">
+																				<label for="whenLeave" class="col-sm-4 col-form-label">When Leave</label>
+																				<div class="col-sm-8">
+																					<label id="dataa" class="col-sm-8 col-form-label">${response.leaveRegister.whenLeave}</label>
+
+																				</div>
+																			</div>
+																			<hr />
+																		</div>
+																	</div>
+
+																	<div class="form-group row">
+																		<label for="address" class="col-sm-4 col-form-label">Address During Leave</label>
+																		<div class="col-sm-8">
+																			<label id="dataa" class="col-sm-8 col-form-label">${address}</label>
+																		</div>
+																	</div>
+																	<hr />
+																	<div class="form-group row">
+																		<label for="emergencyContactNo" class="col-sm-4 col-form-label">Emergency No</label>
+																		<div class="col-sm-8">
+																			<label id="dataa" class="col-sm-8 col-form-label">${emergencyContactNo}</label>
+
+																		</div>
+																	</div>
+																</div>
+															</div>
+
+															<div class="card" >
+																	<div class="card-body" style="height: 171px;">
+																		<div class="form-group row">
+																			<label for="substitutionEmpCode" class="col-sm-4 col-form-label">Subs. Employee Name</label>
+																			<div class="col-sm-8">
+																				<label id="dataa" class="col-sm-8 col-form-label">${subName}</label>
+																			</div>
+																		</div>
+																		<hr />
+																		<div class="form-group row">
+																			<label  class="col-sm-4 col-form-label">Designation</label>
+																			<div class="col-sm-8">
+																				<label id="dataa" class="col-sm-8 col-form-label">${subDes}</label>
+																			</div>
+																		</div>
+
+																	</div>
+																</div>
+
+														</div>
+														<div class="col-md-6">
+															<div class="card">
+																<div class="card-header" style="font-size:15px;">
+																	<h6 class="m-0 font-weight-bold text-primary" id="personal">  LEAVE BALANCE</h6>
+
+																</div>
+																<div class="card-body">
+																	<div class="row">
+																		<div class="col-sm-12">
+																			<div class="row" style="">
+																				<div class="col-md-12">
+																					<div class="container fill">
+																						<div class="table-responsive">
+																							<table class="table table-striped table-bordered" id="tbl" style="width: 100%;">
+																								<thead class="text-center" style="background-color: lightgray;">
+																									<tr>
+																										<th>Type</th>
+																										<th>Opening Balance</th>
+																										<th>Availed</th>
+																										<th>Balance</th>
+																									</tr>
+																								</thead>
+																								<tbody></tbody>
+																							</table>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<br />
+															<div class="card">
+																<div class="card-header">
+																	<h6 class="m-0 font-weight-bold text-primary" id="personal">APPROVERS</h6>
+																</div>
+																<div class="card-body row" id="matrix"></div>
+															</div>
+														</div>
+													</div>
+												</form>
+											</div>
+										</div>
+
+
+								</div>
+							</div>
+						</div>
+						</div>`
+			$('#popupModal .modal-body').empty();
+			$('#popupModal .modal-body').append(option);
+			$('#tbl tbody').empty();
+			$('#tbl tbody').append(tbl);
+			$('#matrix').empty();
+			$('#matrix').append(matrix);
+			$('#popupModal').modal('show');
+		}
+		//document.addEventListener('DOMContentLoaded', function (e) {
+		//	console.log('events');
+		//	console.log(events);
+		//	var calendarEl = document.getElementById('calendar');
+		//	var calendar = new FullCalendar.Calendar(calendarEl, {
+		//		headerToolbar: {
+		//			left: 'prev,next today',
+		//			center: 'title',
+		//			right: 'dayGridMonth,timeGridWeek,timeGridDay'
+		//		},
+
+		//		initialDate: Date.now(),
+		//		navLinks: true, // can click day/week names to navigate views
+		//		selectable: true,
+		//		selectMirror: true,
+		//		select: function (arg) {
+		//			//alert(arg.startStr);
+
+		//			var diff = DayDiffrence(formatDate(new Date()), formatDate(arg.startStr));
+		//			//alert(diff);
+
+		//			if (diff < 0) {
+		//				swal("You Can't Set Schedule in previous day!!", "warning");
+		//				return false;
+		//			} else {
+		//				window.location.href = "/Rental/RentInvoice/CalenderBarNew?date=" + arg.startStr;
+		//			}
+
+		//			calendar.unselect()
+		//		},
+		//		eventClick: function (arg) {
+		//			if (confirm('Are you sure you want to delete this event?')) {
+		//				arg.event.remove()
+		//			}
+		//		},
+		//		editable: true,
+		//		dayMaxEvents: true, // allow "more" link when too many events
+		//		events: events,
+		//		eventRender: function (event, element) {
+		//			element.qtip(
+		//				{
+		//					content: event.description
+		//				});
+		//		},
+
+		//		editable: false
+		//	});
+
+		//	calendar.render();
+		//});
+
+
+		$('#checkFile').on('change', function () {
+			if ($(this).is(':checked')) {
+				$('#fileBox').show();
+			}
+			else {
+				$('#fileBox').hide();
+			}
+        })
+
+        
+
+		function ajaxGetEmployees(response) {
+			console.log(response)
+            var GeEmployeesList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+                obj.designation = option.lastDesignation ?.designationName;
+                obj.department = option.department ?.deptName;
+                obj.employeeCode = option.employeeCode;
+                GeEmployeesList[GeEmployeesList.length] = obj;
+            });
+
+            $('#employeeName').autocomplete({
+                source: GeEmployeesList,
+				select: function (event, ui) {
+					console.log(ui.item.key)
+                    $("#employeeName").val(ui.item.value);
+                    $("#designation").val(ui.item.designation);
+                    $("#department").val(ui.item.department);
+					$("#employeeInfoId").val(ui.item.key);
+					Common.Ajax('GET', '/HRPMSLeave/LeaveRegister/GetLeaveStatusByEmpId?id=' + ui.item.key, [], 'json', ajaxFunctionLoadStatus, false);
+                    Common.Ajax('GET', '/HRPMSLeave/LeaveRegister/GetEmployessPhotoById?id=' + ui.item.key, [], 'json', ajaxFunctionEmployessPhotoById, false);
+                    Common.Ajax('GET', '/HRPMSMasterData/FormatMaster/GetAllEmployeeInfoById?id=' + ui.item.key, [], 'json', ajaxFunction, false);
+
+                }
+            });
+        }
+        function ajaxFunction(response) {
+            console.log(response);
+            $('#code').val(response.employeeCode);
+            $('#department').val(response.department.deptName);
+            $('#designation').val(response.lastDesignation.designationName);
+        }
+
+        function ajaxFunctionEmployessPhotoById(response) {
+			console.log(response);
+			var url = '/images//defaultperson.png';
+			if (response != null) {
+				if (response.url != null) {
+					url = response.url;
+				}
+			}
+			$("#userImg").attr("src", "/"+url);
+        }
+
+		function ajaxFunctionLoadStatus(response) {
+			$('.div').show();
+			console.log(response)
+			var option = "";
+			var option1 = "";
+			var option3 = "";
+			$.each(response.leaveStatusViewModels, function (i, item) {
+                option += `<tr class="text-center">
+								<td>${item.LeaveTypeName}</td>
+								<td>${item.leaveCarryDays}</td>
+								<td>${item.leaveAvailed}</td>
+								<td>${item.cumLeaveBalance}</td>
+							</tr>`
+			});
+			$.each(response.approvalDetails, function (i, item) {
+				var designationName = '';
+				if (item?.approver?.designation != null) {
+					designationName = item?.approver?.designation
+				}
+				if (item.isDelete == 1) {
+					option1 += `<div class="col-md-4 p-0">
+										<div class="card" style="width: 100%; background-color: lightsalmon !important; min-height: 100% !important;">
+											<img src="/images/defaultperson.png" style="width: 70px; height: 70px; border-radius: 50%; text-align: center; margin: 0 auto;" class="card-img-top" />
+											<div class="card-body text-center px-1">
+												<p>${item?.approver?.nameEnglish}</p>
+												<p>${designationName}</p>
+												<span class="badge-success px-1">${item?.sortOrder}</span>
+											</div>
+										</div>
+									</div>`
+				}
+				else {
+					option1 += `<div class="col-md-4 p-0">
+										<div class="card" style="width: 100%; background-color: lightgreen !important;  min-height: 100% !important;">
+											<img src="/images/defaultperson.png" style="width: 70px; height: 70px; border-radius: 50%; text-align: center; margin: 0 auto;" class="card-img-top" />
+											<div class="card-body text-center px-1">
+												<p>${item?.approver?.nameEnglish}</p>
+												<p>${designationName}</p>
+												<span class="badge-success px-1">${item?.sortOrder}</span>
+											</div>
+										</div>
+									</div>`
+				}
+			});
+			$.each(response.leaveRegisterslist, function (i, item) {
+				var status = '';
+				var fileUrl = '';
+				if (item.leaveStatus == 1 || item.leaveStatus == 2)
+				{
+					status = 'On Approval'
+				}
+				else if (item.leaveStatus == 3)
+				{
+					status = 'Approved'
+				}
+				else if (item.leaveStatus == 4)
+				{
+					status = 'Return'
+				}
+				else if (item.leaveStatus == 5)
+				{
+					status = 'Reject'
+				}
+				else
+				{
+					status = 'Cancel'
+				}
+				if (item.fileUrl != "" && item.fileUrl != null) {
+					fileUrl = item.fileUrl
+				}
+				else {
+					fileUrl = ''
+				}
+				var leaveFrom = "";
+				if (item.leaveFrom != null) {
+					leaveFrom = formatDate(item.leaveFrom);
+				}
+				var leaveTo = "";
+				if (item.leaveTo != null) {
+					leaveTo = formatDate(item.leaveTo);
+				}
+				option3 += `<tr>
+									<td>${item.employee?.nameEnglish}</td>
+									<td>${item.leaveType ?.nameEn}</td>
+									<td>${leaveFrom}</td>
+									<td>${leaveTo}</td>
+									<td>${item.daysLeave}</td>
+									<td>${item.purposeOfLeave}</td>
+									<td>${status}</td>
+
+									<td>
+										<a class="btn btn-info" data-toggle="modal" data-target="#ValidatModal" onclick="GetStatus(${item.Id})" title="View" href="#"><i class="fa fa-eye"></i></a>
+										<a class="btn btn-success" href="~/${fileUrl}" target="_blank"><i class="fa fa-file"></i></a>
+										<a class='btn btn-success' data-toggle='tooltip' title='Preview' target='_blank' href='/HRPMSLeave/LeaveRegister/Preview/${item.Id}'><i class='fas fa-print'></i></a>
+									</td>
+								</tr>`
+			});
+			$('#leaveBalanceTbody').empty();
+			$('#leaveBalanceTbody').append(option);
+
+			$('#approvalMatrixDIv').empty();
+			$('#approvalMatrixDIv').append(option1);
+
+			$('#leaveRegTbody').empty();
+			$('#leaveRegTbody').append(option3);
+
+			getEvents($('#employeeInfoId').val());
+		}
+
+        $(document).ready(function () {
+
+            Common.Ajax('GET', '/global/api/GetEmployessPhotoByIdStatus?id=' + $("#employeeInfoId").val(), [], 'json', ajaxFunctionEmployessPhotoById, false);
+
+            //Common.Ajax('GET', '/global/api/GetAllEmployess', [], 'json', ajaxGetEmployees);
+            Common.Ajax('GET', '/global/api/GetActiveAllEmployeeInfo', [], 'json', ajaxGetEmployees);
+
+			$('.boxContent').hide();
+			$('.div').hide();
+			$('.calenderContent').show();
+			$('.calender').addClass('active5');
+
+			$("#divHalfDay").hide();
+			$('#fileBox').hide();
+            $("#divLeaveDay").hide();
+            $(document).on('change', 'input[type=radio][name=hasDay]', function (event) {
+                switch ($(this).val()) {
+                    case 'FullDay':
+                        $('#divLeaveDay').hide();
+                        $("#hasDay").val('FullDay');
+                        break;
+                    case 'HalfDay':
+                        $('#divLeaveDay').show();
+                        $("#hasDay").val('HalfDay');
+                        break;
+                }
+            });
+
+            $('#leaveTypeId').change(function () {
+                var leaveType = $("#leaveTypeId option:selected").text();
+                var leaveTypeId = $("#leaveTypeId").val();
+                if (leaveType == "Half Day Leave") {
+                    $("#leaveTo").val('@DateTime.Now');
+                    $("#daysLeave").val(1);
+                    $("#LeaveToDiv").hide();
+                    $("#LeaveDayDiv").hide();
+                }
+                else if (leaveType == "Sick Leave" || leaveType == "Earned Leave") {
+                    $("#divHalfDay").show();
+                }
+                else {
+                    $("#leaveTo").val('');
+                    $("#daysLeave").val('');
+                    $("#LeaveToDiv").show();
+                    $("#LeaveDayDiv").show();
+                    $("#divHalfDay").hide();
+                }
+                GetAvailableLeaveBalance();
+                Common.Ajax('GET', '/global/api/GetLeavePolicyByTypeandYear/' + leaveTypeId, [], 'json', ajaxGetLeavePolicyByTypeandYear);
+            });
+
+            $("#leaveApply").addClass("active");
+
+           var orgFullTitle = "LEAVE REGISTER";
+            $('#leaveApplyTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        title: orgFullTitle,
+                        messageTop: 'List Of Foreign Training',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        title: orgFullTitle,
+                        messageTop: 'List Of Employee Training'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: orgFullTitle,
+                        messageTop: 'List Of Foreign Training',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+
+
+            $("#leaveFrom").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2015:2050" }).datepicker();
+            $("#leaveTo").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "2015:2050" }).datepicker();
+
+            Common.Ajax('GET', '/global/api/GetAllEmployeeInfo/', [], 'json', ajaxEmployeeList);
+
+            $('#leaveFrom').change(function () {
+                GetTotalLeaveDaysByType();
+            });
+            $('#leaveTo').change(function () {
+                GetTotalLeaveDaysByType();
+            });
+        });
+
+        function PageReload() {
+            window.location.reload();
+        }
+
+        function GetTotalLeaveDaysByType() {
+            Common.Ajax('GET', '/HRPMSLeave/LeaveRegister/GetTotalLeaveDaysBetweenDate/?frmDate=' + $("#leaveFrom").val() + "&toDate=" + $("#leaveTo").val() + "&leaveType=" + $("#leaveTypeId").val(), [], 'json', ajaxGetTotalLeaveDaysBetweenDate);
+        }
+
+        function ajaxGetTotalLeaveDaysBetweenDate(response) {
+            //$('#daysLeave').empty();
+            $('#daysLeave').val(response.daysLeave);
+            GetTenure();
+        }
+
+        function ajaxGetLeavePolicyByTypeandYear(response) {
+            //var value = response;
+            $("#maxSickCarry").val(response.maxBridgeLimit);
+        }
+
+        function GetDayMonthYear(openDate, maturityDate) {
+            var Tenure = {};
+            var odate = Date.parse(openDate);
+            var mdate = Date.parse(maturityDate);
+            var diff_date = mdate - odate;
+            var dt = new Date(maturityDate);
+            var num_years = diff_date / 31536000000;
+            var num_months = (diff_date % 31536000000) / 2628000000;
+            var num_days = ((diff_date % 31536000000) % 2628000000) / 86400000;
+
+            var MWOD = diff_date / 2628000000;
+            var tDay = diff_date / 86400000;
+
+            Tenure.Year = Math.floor(num_years);
+            Tenure.TMonth = Math.floor(MWOD);
+            Tenure.FracMonth = Math.floor(num_months);
+            Tenure.TDay = Math.floor(tDay);
+            return Tenure;
+        }
+
+        function GetTenure() {
+            //var Tenure = GetDayMonthYear($("#leaveFrom").val(), $("#leaveTo").val());
+            //$('#daysLeave').val(Tenure.TDay + 1);
+
+            let x = parseInt($("#daysLeave").val());
+            let y = parseInt($("#leaveOpenBalance").val());
+            let maxSick = parseInt($("#maxSickCarry").val());
+            if (x > y) {
+                alert("Your Leave Balance is Over!!");
+                $("#daysLeave").val(0);
+                return false;
+            }
+
+            if ($("#leaveTypeId").val() == 2 && x > 3) {
+                alert("Casual Leave not more then 3 days!!");
+                $("#daysLeave").val(0);
+            }
+
+            if ($("#leaveTypeId").val() == 1 && x > maxSick) {
+                alert("Sick Leave not more then 2 days!!");
+                $("#daysLeave").val(0);
+            }
+        }
+
+        function GetStatus(id) {
+            Common.Ajax('GET', '/global/api/GetAllLeaveStatusLogByLeaveId/' + id, [], 'json', AjaxGetStatus);
+        }
+
+        function AjaxGetStatus(response) {
+            console.log("ok");
+            console.log(response);
+            var dtTable = $("#statusTable");
+            var tableBody = dtTable.find('tbody');
+            tableBody.empty();
+            $.each(response, function (key, value) {
+                var trHtml = '<tr>' +
+					'<td>' + formatDate(response[0].leaveStatusLog.leaveRegister.leaveFrom) + '</td>' +
+					'<td>' + formatDate(response[0].leaveStatusLog.leaveRegister.leaveTo) + '</td>' +
+					'<td>' + response[0].leaveStatusLog.leaveRegister.leaveType.nameEn + '</td>' +
+					'<td>' + value.employeeInfo.nameEnglish + '</td>' +
+					'<td>' + value.leaveStatusLog.remarks + '</td>' +
+					'<td>' + formatDate(value.leaveStatusLog.date) + '</td>' +
+                    '</tr>';
+
+                tableBody.append(trHtml);
+            })
+		}
+
+        function ajaxEmployeeList(response) {
+            console.log(response);
+            var GetEmployeeList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.employeeCode + ' - ' + option.nameEnglish;
+                obj.name = option.nameEnglish;
+                obj.designation = option.designation;
+                obj.orgType = option.orgType;
+                obj.nationalID = option.nationalID;
+                GetEmployeeList[GetEmployeeList.length] = obj;
+            });
+            $('#substitutionEmpCode').autocomplete({
+                source: GetEmployeeList,
+				select: function (event, ui) {
+					console.log(ui)
+                    $("#substitutionUserId").val(ui.item.key);
+					$("#substitutionEmpDes").val(ui.item.designation);
+                }
+            });
+        }
+
+        function GetAvailableLeaveBalance() {
+            var id = @ViewBag.employeeId;// $("#employeeId").val();
+            var leaveTypeId = $("#leaveTypeId").val();
+            var leaveType = $("#leaveTypeId option:selected").text();
+            if (leaveType=="Half Day Leave") {
+                leaveTypeId = 2;
+            }
+            if (id == "" && leaveTypeId == "") {
+                alert("Please Enter Employee Id and Leave Type Correctly !!");
+            } else {
+                Common.Ajax('GET', '/global/api/GetLeaveBalanceByempId/' + id + '/' + leaveTypeId, [], 'json', ajaxLeaveBalance);
+            }
+        }
+
+        function ajaxLeaveOpeningBalance(response) {
+            //console.log(response);
+            if (response) {
+                $("#substitutionEmpCode").val(response.supervisor.employeeCode);
+                $("#subsEmpName").val(response.supervisor.nameEnglish);
+                $("#approverDesignation").val(response.supervisor.designation);
+            } else {
+                alert("Please Enter Correct Employee Id");
+            }
+        }
+
+        function ajaxLeaveBalance(response) {
+            var value = response;
+            $("#leaveOpenBalance").val(value);
+            $("#lOb").val(value);
+        }
+
+        function Edit(Id, employeeId, whenLeave, leaveTypeId, leaveFrom, leaveTo, daysLeave, address, purposeOfLeave, emergencyContactNo) {
+            $("#id").val(Id);
+            $("#employeeId").val(employeeId);
+            $("#whenLeave").val(whenLeave);
+            $("#leaveTypeId").val(leaveTypeId);
+            $("#leaveFrom").val(leaveFrom);
+            $("#leaveTo").val(leaveTo);
+            $("#daysLeave").val(daysLeave);
+            $("#address").val(address);
+            //$("#substitutionEmpCode").val(substitutionEmpCode);
+            $("#purposeOfLeave").val(purposeOfLeave);
+            $("#emergencyContactNo").val(emergencyContactNo);
+        }
+
+        function formatDate(date) {
+            var monthNames = [
+                "Jan", "Feb", "Mar",
+                "Apr", "May", "Jun", "Jul",
+                "Aug", "Sep", "Oct",
+                "Nov", "Dec"
+            ];
+            date = new Date(date);
+            var day = date.getDate();
+            var monthIndex = date.getMonth();
+            var year = date.getFullYear();
+
+            return day + ' ' + monthNames[monthIndex] + ' ' + year;
+        }
+	</script>
+}

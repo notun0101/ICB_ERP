@@ -1,0 +1,194 @@
+﻿@model SalaryGradeViewModel
+@{
+    ViewData["TitleMD"] = Model.fLang.title;
+    Layout = "~/Areas/HRPMSMasterData/Views/Shared/_MasterDataForm.cshtml";
+}
+
+@section StyleMD{
+    <style>
+        .redStar {
+            color: red;
+        }
+    </style>
+}
+
+    <div class="card" style="width: 100%;">
+        <div class="card-header  d-flex flex-row align-items-center justify-content-between">
+            <h5 class="m-0 font-weight-bold text-primary">@Model.fLang.title</h5>
+            <a class='btn btn-info mr-4' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=5702'>@*<i class="fas fa-backward fa-2x "></i>*@<i class="fas fa-angle-double-left"> <span style="">Back</span></i></a>
+
+        </div>
+        <div class="card-body">
+            @*<a class=' mr-5' style="float:right" data-toggle='tooltip' title='Go Back' href='/Home/GridMenuPage?moduleId=3&perentId=5702'><i class="fas fa-chevron-circle-left" style="font-size:33px;"></i></a>
+            <h5 class="card-title" style="color: black">@Model.fLang.title</h5>
+            <hr>*@
+            <div class="container">
+                <form asp-area="HRPMSMasterData" asp-controller="SalaryGrade" asp-action="Index" method="post" data-parsley-validate="parsley">
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="form-group row">
+                        <input type="hidden" name="salaryGradeId" id="salaryGradeId" value="0" />
+
+                        <label for="gradeName" class="col-sm-2 col-form-label">@Model.fLang.gradeName <span style="float:right;" class="redStar">*</span></label>
+                        <div class="col-sm-10">
+                            <input type="text" data-parsley-required="true" data-parsley-trigger="keyup" class="form-control" name="gradeName" id="gradeName">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="basicAmount" class="col-sm-2 col-form-label">@Model.fLang.basic </label>
+                        <div class="col-sm-10">
+                            <input type="text" data-parsley-required="false" data-parsley-trigger="keyup" class="form-control" name="basicAmount" id="basicAmount">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="payScale" class="col-sm-2 col-form-label">@Model.fLang.payScale </label>
+                        <div class="col-sm-10">
+                            <input type="text" data-parsley-required="false" data-parsley-trigger="keyup" class="form-control" name="payScale" id="payScale">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="currentBasic" class="col-sm-2 col-form-label">@Model.fLang.currentBasic </label>
+                        <div class="col-sm-10">
+                            <input type="text" data-parsley-required="false" data-parsley-trigger="keyup" class="form-control" name="currentBasic" id="currentBasic">
+                        </div>
+                    </div>
+                    <hr />
+                    <button type="submit" id="submitbtn" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;display:none;"><i class="fas fa-save"></i></button>
+                    <button type="button" id="submit" value="Submit" class="btn btn-success " style="float:right; margin-top:5px;"><i class="fas fa-save"></i> Save</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+<hr />
+<div class="row clearfix">
+    <div class="col-12">
+        <div class="card mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">@Model.fLang.title</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <table class="table table-striped table-bordered" id="gradeTable">
+                    <thead>
+                        <tr>
+                            <th>@Model.fLang.gradeName</th>
+                            <th>@Model.fLang.basic</th>
+                            <th>@Model.fLang.payScale</th>
+                            <th>@Model.fLang.currentBasic</th>
+                            <th>@Model.fLang.action</th>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var data in Model.salaryGrades)
+                        {
+                            <tr>
+                                <td>@data.gradeName</td>
+                                <td>@data.basicAmount?.ToString("0.00")</td>
+                                <td>@data.payScale</td>
+                                <td>@data.currentBasic?.ToString("0.00")</td>
+                                <td>
+                                    <a class="btn btn-success" onclick="Edit(@data.Id, '@data.gradeName', '@data.basicAmount?.ToString("0.00")', '@data.payScale', '@data.currentBasic?.ToString("0.00")')" href="#"><i class="fa fa-edit"></i></a>
+                                    <a class="btn btn-danger" href="javascript:void(0)" onclick="DeleteMaster(@data.Id)"><i class="fa fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section ScriptsMD{
+    <script>
+        $(document).ready(function () {
+            $("#salaryGrade").addClass("active");
+           
+
+            $('#gradeTable').DataTable({
+                stateSave: false,
+                dom: "<'row'<'col-sm-12 col-md-2'l><'col-sm-12 col-md-3'B><'col-sm-12 col-md-7'f>>" +
+                    "<'row'<'col-sm-12't>>" +
+                    "<'row'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'pr>>",
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        titleAttr: 'Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2]
+                        },
+                        title: "Salary Grade Information",
+                        messageTop: 'List Of Salary Grade Information',
+                        class: 'btn btn-info'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa fa-file-excel"></i> CSV',
+                        titleAttr: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2]
+                        },
+                        title: "Salary Grade Information",
+                        messageTop: 'List Of Salary Grade Information'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa fa-print"></i> Print',
+                        titleAttr: 'Print',
+                        title: "Salary Grade Information",
+                        exportOptions: {
+                            columns: [0, 1, 2]
+                        },
+                        customize: function (doc) {
+                            $(doc.document.body).find('h1').css('font-size', '20pt');
+                            $(doc.document.body).find('h1').css('font-family', "'Times New Roman', Times, serif");
+                            $(doc.document.body).find('h1').css('text-align', 'center');
+                        }
+                    }
+                ]
+            });
+            $("#submit").click(function () {
+                swal({
+                    title: 'Are you sure?', text: 'Do you want to submit this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, submit it!'
+                }).then(function () {
+                    $("#submitbtn").click();
+                });
+            });
+        });
+
+        function Edit(Id, gradeName, basicAmount, payScale, currentBasic) {
+            $("#salaryGradeId").val(Id);
+            $("#gradeName").val(gradeName);
+            $("#basicAmount").val(basicAmount);
+            $("#payScale").val(payScale);
+            $("#currentBasic").val(currentBasic);
+        }
+        function DeleteMaster(Id) {
+            swal({
+                title: 'Are you sure?', text: 'Do you want to delete this record!', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!'
+            }).then(function () {
+
+                $.ajax({
+                    url: '@Url.Action("DeleteSalaryGradeById", "SalaryGrade")',
+                    data: { Id: Id },
+                    type: 'POST',
+                })
+                    .done(function () {
+                        swal('', 'Deleted Successfully!', 'success');
+                        window.location.href = "/HRPMSMasterData/SalaryGrade";
+                    })
+                    .fail(function () {
+                        swal('Cancelled', 'It is related with another info, can not deleted', 'error');
+                    });
+            });
+        }
+    </script>
+}

@@ -1,0 +1,231 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Style{
+    <style>
+
+        div.nav-tab {
+            border: 0;
+            margin-bottom: 15px;
+            margin-top: 30px;
+            border-radius: 6px;
+            color: rgba(0,0,0,.87);
+            background: #fff;
+            width: 100%;
+            /*box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);*/
+        }
+
+            div.nav-tab.card-plain {
+                background: transparent;
+                /*box-shadow: none;*/
+            }
+
+            div.nav-tab .card-header {
+                border-radius: 3px;
+                padding: 5px 5px;
+                margin-left: 15px;
+                margin-right: 15px;
+                margin-top: -30px;
+                border: 0;
+                /*background: linear-gradient(60deg,#eee,#bdbdbd);*/
+            }
+
+        .card-plain .card-header:not(.card-avatar) {
+            margin-left: 4px;
+            margin-right: 4px;
+        }
+
+        div.nav-tab .card-header-info {
+            border: 1px solid black;
+            /*background: #4e73df;*/
+            /*box-shadow: 0 5px 20px 0 rgba(0,0,0,.2), 0 13px 24px -11px rgba(244,67,54,.6);*/
+        }
+
+        .card-nav-tabs .card-header {
+            margin-top: -30px !important;
+        }
+
+        .nav-tab .card-header .nav-tabs {
+            padding: 0;
+        }
+
+        .nav-tabs {
+            border: 0;
+            border-radius: 3px;
+            padding: 0 15px;
+        }
+
+        .nav {
+            display: flex;
+            flex-wrap: wrap;
+            padding-left: 0;
+            margin-bottom: 0;
+            list-style: none;
+        }
+
+        .nav-tabs .nav-item {
+            margin-bottom: -1px;
+        }
+
+            .nav-tabs .nav-item .nav-link.active {
+                /*background-color: hsla(0,0%,100%,.2);*/
+                background: #808080;
+                transition: background-color .1s .1s;
+            }
+
+            .nav-tabs .nav-item .nav-link {
+                border: 0 !important;
+                color: #fff !important;
+                font-weight: 500;
+            }
+
+            .nav-tabs .nav-item .nav-link {
+                color: #fff;
+                border: 0;
+                margin: 0;
+                border-radius: 3px;
+                /*line-height: 24px;
+                text-transform: uppercase;*/
+                font-weight: bold;
+                padding: 14px 32.5px !important;
+                background-color: transparent;
+                transition: background-color .1s 0s;
+                font-size: 18.5px;
+            }
+
+        .nav-link {
+            display: block;
+        }
+
+        .nav-tabs .nav-item .material-icons {
+            margin: -1px 5px 0 0;
+            vertical-align: middle;
+        }
+
+        .nav .nav-item {
+            position: relative;
+            background: #70bf42;
+            /*background-image: radial-gradient( circle 916px at -1.1% 50.2%, rgba(16,233,139,1) 13%, rgba(0,176,228,1) 100.2% );*/
+            margin: 2px 2px 2px 2px;
+            border-radius: 7px;
+        }
+
+        footer {
+            margin-top: 100px;
+            color: #555;
+            background: #fff;
+            padding: 25px;
+            font-weight: 300;
+        }
+
+        .footer p {
+            margin-bottom: 0;
+            font-size: 14px;
+            margin: 0 0 10px;
+            font-weight: 300;
+        }
+
+        footer p a {
+            color: #555;
+            font-weight: 400;
+        }
+
+            footer p a:hover {
+                color: #9f26aa;
+                text-decoration: none;
+            }
+
+        .nav-tabs-wrapper ul li:hover {
+            background: #808080
+        }
+
+
+        .btn {
+            padding: 5px 15px !important;
+        }
+
+        .nav-tabs {
+            border-bottom: 0 !important;
+        }
+    </style>
+
+    @RenderSection("StylePatient", required: false)
+}
+<div id="content-wrapper" class="d-flex flex-column mt-2 mb-2">
+    <div class="nav-tab card-nav-tabs card-plain">
+        <div class="card-header card-header-info border-0">
+
+            <div class="nav-tabs-navigation">
+                <div class="nav-tabs-wrapper">
+                    <ul class="nav nav-tabs" data-tabs="tabs">
+                        <li class="nav-item">
+                            <a class="nav-link" id="patient" href="@Url.Action("Index", "Patient", new { id = @ViewBag.patientId ,area="Patient"})">Recipient's Info</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="history" href="@Url.Action("PatientHistory", "Patient", new { id = @ViewBag.patientId,area="Patient" })">History</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="paddress" href="@Url.Action("PatientAddress", "Patient", new { id = @ViewBag.patientId ,area="Patient"})">Address</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="contacts" href="@Url.Action("PatientContacts", "Patient", new { id = @ViewBag.patientId ,area="Patient"})">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="services" href="@Url.Action("PatientService", "Patient", new { id =@ViewBag.patientId,area="Patient" })">Sevice</a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link" id="representive" href="@Url.Action("PatientPresentative", "Patient", new { id = @ViewBag.patientId,area="Patient"})">Re-Presentative</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="activityMasters" href="@Url.Action("ActivityMaster", "PatientActivity", new { id = @ViewBag.patientId,area="Patient"})">Activities</a>
+                        </li>
+
+                    </ul>
+                    <ul class="nav nav-tabs">
+                        <li class="ml-auto mt-3 mb-3">
+                            <a href="/Patient/Patient/PatientList" class="btn  btn-success btn-sm pull-right">Back to List</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<input type="text" id="abc" name="name" value="" />*@
+
+@RenderBody()
+
+@section Scripts{
+
+    @*<script>
+        $(document).ready(function () {
+            $('#abc').autocomplete({
+                source: function (req, res) {
+                    $.ajax({
+                        url: 'https://mobileapp.premierbankltd.com/api/getATMLocations',
+                        dataType: 'json',
+                        method: 'get',
+                        success: function (resposne) {
+                            console.log(resposne)
+                            var data = resposne.ebl365;
+                            res($.map(data, function (v) {
+                                return {
+                                    label: v.atmId,
+                                    value: v.atmName,
+                                }
+                            }));
+                        }
+                    })
+                }
+            }) 
+        })*@
+
+    </script>
+
+
+    @RenderSection("ScriptsPatient", required: false)
+}
+

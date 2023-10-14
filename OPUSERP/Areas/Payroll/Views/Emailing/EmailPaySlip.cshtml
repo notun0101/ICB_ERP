@@ -1,0 +1,433 @@
+﻿@model EmailingViewModel
+@{
+    ViewData["Title"] = "EmailPaySlip";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section Style{
+    <style>
+        ul.ui-autocomplete {
+            z-index: 99999999;
+        }
+    </style>
+}
+
+<div class="card" style="width: 100%;">
+    <div class="card-header">
+        <h5 class="card-title" style="color: black">Process Pay Slip To Send Employees Email</h5>
+        <a href="javascript:void(0)" class="btn btn-info btn-sm" onclick="CheckMailSent()">Check Mail Sending</a>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            @*<form asp-area="Payroll" asp-controller="Emailing" asp-action="EmailPaySlip" method="post" data-parsley-validate="parsley">*@
+                <form id="frmEmailing" method="post" data-parsley-validate="parsley">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                
+                <div class="row">
+
+                    <div class="col-sm-4">
+                        <div class="form-group row">
+                            <label for="salaryPeriodId" class="col-sm-5 col-form-label">Salary Period <span style="color:red;">*</span></label>
+                            <div class="col-sm-7">
+                                <select name="salaryPeriodId" id="salaryPeriodId" class="form-control" data-parsley-required="true">
+                                    <option value="">Select Salary Period</option>
+                                    @foreach (var data in Model.salaryPeriods)
+                                    {
+                                        <option value="@data.Id">@data.periodName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+
+                        <div class="form-group row">
+                            <div class="col-sm-2">
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="radio" name="All" id="EmployeeWise" value="0"><scan style="color:black;font-size: 16px;margin-left: 8px;">Individual</scan>
+                                <input type="radio" name="All" id="DesignationWise" value="3"><scan style="color:black;font-size: 16px;margin-left: 8px;">Designation</scan>
+                                <input type="radio" name="All" id="BranchWise" value="2" required><scan style="color:black;font-size: 16px; margin-right: 23px;margin-left: 8px;">Branch Wise</scan>
+                                <input type="radio" name="All" id="All" value="1" required><scan style="color:black;font-size: 16px; margin-right: 23px;margin-left: 8px;">All</scan>
+                            </div>
+                        </div>
+                    </div>
+                                        
+                    <input type="hidden" id="employeeInfoId" name="employeeInfoId">
+                    <div class="col-sm-4">
+                        @*<div class="form-group row">
+                            <label for="employeeInfoId" class="col-sm-5 col-form-label">Employee's Name </label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="employeeName" name="employeeName">
+                            </div>
+                        </div>*@
+                        @*<div class="form-group row">
+                            <label for="salaryPeriodId" class="col-sm-5 col-form-label">Salary Period <span style="color:red;">*</span></label>
+                            <div class="col-sm-7">
+                                <select name="salaryPeriodId" id="salaryPeriodId" class="form-control" data-parsley-required="true">
+                                    <option value="">Select Salary Period</option>
+                                    @foreach (var data in Model.salaryPeriods)
+                                    {
+                                        <option value="@data.Id">@data.periodName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>*@
+                        <div class="form-group row">
+                            <label for="payDate" class="col-sm-5 col-form-label">Pay Date </label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="payDate" name="payDate">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-7">
+                                @*<a href="javascript:void(0)" class="btn btn-info" onclick="GeneratePaySlip()">Generate Pay Slip</a>*@
+                            </div>
+                            <div class="col-sm-5 text-center" id="fileCountBox" style="display: none; font-weight: bold;">
+                                <span>Generated: </span><span id="incFiles">0</span>
+                            </div>
+                        </div>
+                    </div>
+					<div class="col-sm-8">
+
+
+                        @*<div class="form-group row">
+                            <label for="employeeInfoId" class="col-sm-5 col-form-label">Employee's Name </label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" id="employeeName" name="employeeName">
+                            </div>
+                        </div>*@
+                        @*new*@
+                        <div class="form-group row All" id="employee-box">
+							<label for="employeeInfoId" class="col-sm-2 col-form-label">Employee's Name</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="employeeName" name="employeeName">
+							</div>
+						</div>
+
+						<div class="form-group row All" id="branch-box">
+							<label for="mailSub" class="col-sm-2 col-form-label">Branch Name</label>
+							<div class="col-sm-10">
+								<select class="form-control" id="hrBranchid" name="hrBranchid">
+									<option value="0">Choose Branch</option>
+									@foreach (var item in Model.hrBranches)
+									{
+										<option value="@item.Id">@item.branchName</option>
+									}
+								</select>
+							</div>
+						</div>
+						<div class="form-group row All" id="desig-box">
+							<label for="mailSub" class="col-sm-2 col-form-label">Designation</label>
+							<div class="col-sm-10">
+								<select class="form-control" id="designationId" name="designationId">
+									<option value="0">Choose Designation</option>
+									@foreach (var item in Model.designations.OrderBy(x => Convert.ToInt32(x.designationCode)))
+									{
+										<option value="@item.Id">@item.designationName</option>
+									}
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="mailSub" class="col-sm-2 col-form-label">Mail Subject <span style="color:red;">*</span></label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="mailSub" name="mailSub" data-parsley-required="true">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="mailText" class="col-sm-2 col-form-label">Mail Body <span style="color:red;">*</span></label>
+							<div class="col-sm-10">
+								<textarea class="form-control" id="mailText" name="mailText" cols="18" rows="12" data-parsley-required="true"></textarea>
+							</div>
+						</div>
+					</div>
+                </div>
+                <hr>
+                <a href="javascript:void(0)" class="btn btn-info" onclick="GeneratePaySlip()">Generate Pay Slip</a>
+                <button type="button" value="Forward" title="Forward" class="btn btn-success btn-lg" style="float:right; margin-top:5px;" onclick="forwardEmail()">Forward</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+
+            //reset();
+
+            $("#payDate").datepicker({ dateFormat: "dd-M-yy", showAnim: "scale", changeMonth: true, changeYear: true, yearRange: "1960:2040" }).datepicker("setDate", new Date());
+			$('.All').hide();
+            
+            Common.Ajax('GET', '/global/api/GetAllEmployess', [], 'json', ajaxGetEmployees);   
+
+            $('#salaryPeriodId').change(function () {
+                Common.Ajax('GET', '/Payroll/Emailing/GetSalaryPeriodById/?periodId=' + parseInt($('#salaryPeriodId').val()), [], 'json', ajaxGetSalaryPeriodById);
+			});
+
+            $('#EmployeeWise').on('click', function () {
+                $('#designationId').val('0');
+                $('#hrBranchid').val('0');
+				$('.All').hide();
+                $('#employee-box').show();
+			});
+            
+			$('#DesignationWise').on('click', function () {
+                
+                $('#employeeinfoid').val('');
+                $('#employeeName').val('');
+                $('#hrBranchid').val('0');
+
+				$('.All').hide();
+				$('#desig-box').show();
+			});
+			$('#BranchWise').on('click', function () {
+                $('#employeeinfoid').val('');
+                $('#employeeName').val('');
+                $('#designationId').val('0');
+				$('.All').hide();
+				$('#branch-box').show();
+			});
+            $('#All').on('click', function () {
+                $('#employeeinfoid').val('');
+                $('#employeeName').val('');
+                $('#designationId').val('0');
+                $('#hrBranchid').val('0');
+				$('.All').hide();
+			});
+
+        });
+
+        function GeneratePaySlip() {
+
+           var periodId = $('#salaryPeriodId').val();
+           var period = $('#salaryPeriodId :selected').text();
+
+           var option =  $("input[name='All']:checked").val();
+           var employeeId = $('#employeeInfoId').val();
+           var designationId = $('#designationId :selected').val();
+           var branchid = $('#hrBranchid :selected').val();
+
+            var meaasge = isValid(periodId, option, employeeId, designationId, branchid);
+
+            if (meaasge != '') {
+                swal('warning', meaasge, 'warning');
+                return false;
+            }
+                        
+            $('#fileCountBox').show();
+
+            swal({
+                title: 'Are you sure?', text: 'Do you want to generate payslip', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, send!'
+            }).then(function () {
+                
+                $.ajax({
+                    url: '@Url.Action("GenerateAllPdf", "Emailing")',
+                    data: { periodId: periodId, option: option, employeeId: employeeId, designationId: designationId, branchid: branchid },
+                    type: 'GET',
+                    success: function (records) {
+                        swal({
+                            title: '', text: 'Payslip generated Successfully!', type: 'success', showCancelButton: false, confirmButtonColor: '#3085d6', confirmButtonText: 'Ok!',
+                        }).then(function () {
+                            //window.location.href = "/Payroll/SalaryProcess/SalaryOngoing";
+                            //location.reload();
+                        });
+                    }
+                });
+
+                const interval = setInterval(function () {
+                Common.Ajax('GET', '/Payroll/Emailing/CountPayslipGenerate?period=' + period, [], 'json', ajaxGetIncompleteFileCount, false);
+            }, 5000);
+
+            });
+
+            //Old
+            //if (periodId != '') {
+            //    Common.Ajax('GET', '/Payroll/Emailing/GenerateAllPdf?periodId=' + periodId + '&option=' + option + '&employeeId=' + employeeId + '&designationId=' + designationId + '&branchid=' + branchid, [], 'json', ajaxGetAffectedRecords, false);                
+            //}
+            //else {
+            //    swal('warning', 'Please Choose a period!', 'warning');
+            //}
+
+            //const interval = setInterval(function () {
+            //    Common.Ajax('GET', '/Payroll/Emailing/CountPayslipGenerate?period=' + period, [], 'json', ajaxGetIncompleteFileCount, false);
+            //}, 5000);
+        }
+
+        
+         function ajaxGetIncompleteFileCount(res) {
+            console.log(res);
+            $('#incFiles').text(res);
+        }
+
+        function CheckMailSent() {
+            var periodId = $('#salaryPeriodId').val();
+
+            if (periodId != '') {
+                location.href = '/Payroll/Emailing/CheckEmailSendingStatusByperiodId?periodId=' + periodId;
+            }
+            else {
+                swal('warning', 'Please Choose a period!', 'warning');
+            }
+        }
+
+        function ajaxGetSalaryPeriodById(response) {
+            console.log(response);
+            //$("#mailSub").val(response.mailSub);
+            //$("#mailText").val(response.mailText);
+        }
+
+        function ajaxGetEmployees(response) {
+            var GeEmployeesList = [];
+            $.each(response, function (id, option) {
+                var obj = new Object();
+                obj.key = option.Id;
+                obj.value = option.nameEnglish + "(" + option.employeeCode + ")";
+                obj.designation = option.designation;
+                obj.employeeCode = option.employeeCode;
+                GeEmployeesList[GeEmployeesList.length] = obj;
+            });
+            $('#employeeName').autocomplete({
+                source: GeEmployeesList,
+                select: function (event, ui) {
+                    $("#employeeName").val(ui.item.value);
+                    $("#Designation").val(ui.item.designation);
+                    $("#employeeInfoId").val(ui.item.key);
+                }
+            });
+        }
+
+        function forwardEmail() {
+
+            var periodId = $('#salaryPeriodId').val();
+            var period = $('#salaryPeriodId :selected').text();
+
+            var option = $("input[name='All']:checked").val();
+            var employeeId = $('#employeeInfoId').val();
+            var designationId = $('#designationId :selected').val();
+            var branchid = $('#hrBranchid :selected').val();
+
+            var meaasge = isValid(periodId, option, employeeId, designationId, branchid);
+
+            if (meaasge != '') {
+                swal('warning', meaasge, 'warning');
+                return false;
+            }
+
+            var mailSub = $('#mailSub').val();
+            var mailText = $('#mailText').val();
+
+            if (mailSub == '') {
+                swal('warning', 'Please Enter Mail Subject!', 'warning');
+                return false;
+            }
+
+            if (mailText == '') {
+                swal('warning', 'Please Enter Mail Text!', 'warning');
+                return false;
+            }
+            
+            swal({
+                title: 'Are you sure?', text: 'Do you want to forward email?', type: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, send!'
+            }).then(function () {
+                
+                var form = $("#frmEmailing");
+                $.ajax({
+                    url: '@Url.Action("EmailPaySlip", "Emailing")',
+                    data: form.serialize(),
+                    type: 'POST',
+                    success: function (records) {
+                        reset();
+                        swal({
+                            title: '', text: 'Forwarded Successfully!', type: 'success', showCancelButton: false, confirmButtonColor: '#3085d6', confirmButtonText: 'Ok!',
+                        }).then(function () {
+                            //window.location.href = "/Payroll/SalaryProcess/SalaryOngoing";
+                            //location.reload();
+                        });
+                    }
+                });
+            });
+        }
+
+        function isValid(periodId, option, employeeId, designationId, branchid) {
+                        
+            var message = '';
+            var optionLength = $('input[name="All"]:checked').length;
+
+            if (periodId == '') {
+                message = 'Please Choose a period';
+                
+            }
+                        
+            else if (optionLength == 0) {
+                message = 'Please Choose any option';
+                
+            }
+
+            else if (option === '0') {
+                if (employeeId === '') {
+                    message = 'Please Enter Employee Id';
+                    
+                }
+            }
+
+            else if (option === '3') {
+                if (designationId === '0') {
+                    message = 'Please Select Designation';
+                    
+                }
+            }
+
+            else if (option === '2') {
+                if (branchid === '0') {
+                    message = 'Please Select Branch';
+                    
+                }
+            }
+            return message;
+        }
+
+        function reset(){
+            
+            //alert($('#employeeInfoId').val());
+           $('#salaryPeriodId').val('');
+
+           $('#employeeName').val('');
+           $('#employeeInfoId').val('');
+           $("input[type=radio][name=All]").prop('checked', false);
+           $('#designationId').val('0');
+           $('#hrBranchid').val('0');
+
+           $('#mailSub').text('');
+           $('#mailText').text('');
+           $('#incFiles').text('');
+           
+        }
+        
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

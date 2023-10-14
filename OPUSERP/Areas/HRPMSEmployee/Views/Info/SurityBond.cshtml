@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewData["Title"] = "SurityBond";
+}
+
+
+<style>
+    .redClolor {
+        color: red;
+    }
+
+    .btnWith {
+        width: 95%;
+    }
+
+    h5 {
+        color: darkblue;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #bbb;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    #user_img1:hover {
+        border-radius: 5px;
+        cursor: zoom-in;
+        transition: 0.3s !important;
+        opacity: 0.5;
+        box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    }
+</style>
+
+<div class="card" style="width: 100%;">
+    <div class="card-header">
+        <h2 style="font-size:18px;color:black;">Surity Bond</h2>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <form asp-area="HRPMSEmployee" asp-controller="Info" asp-action="SurityBond" id="FormId" method="post" data-parsley-validate="parsley" enctype="multipart/form-data">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <a class="btn btn-success" style="float:right; margin-top:5px;" href="/HRPMSEmployee/Info/SurityBondPDF">Download</a>
+
+                <br />
+                <br />
+            </form>
+        </div>
+    </div>
+</div>

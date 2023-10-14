@@ -1,0 +1,179 @@
+﻿@model LeadViewModel
+@{
+    ViewData["Title"] = "ClientList";
+}
+@section Style{
+    <style>
+        .redStar {
+            color: red;
+        }
+    </style>
+}
+<div class="row">
+    <div class="col-12 row">
+        <div class="col-10"></div>
+        <div class="col-2" style="padding-top:5px;padding-bottom:0px;margin-bottom:10px;">
+            <a href="/CRMClient/Client/AllClientList" style="background-color:#024972;" class="btn btn-info btn-sm float-right">Back to List</a>
+        </div>
+    </div>
+    <div class="col-md-12 row">
+        <div class="card-body">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h4 class="m-0 font-weight-bold text-primary">Client Information</h4>
+            </div>
+            <hr>
+            <div class="container">
+                <form asp-area="CRMClient" asp-controller="Client" asp-action="SaveClient" method="post" data-parsley-validate="parsley">
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <label for="leadName" class="col-sm-4 col-form-label">Client Name<span class="redStar">*</span></label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="leadName" value="@Model?.leadsingal?.leadName" name="leadName" data-parsley-required="true">
+                                    @{
+                                        var id = 0;
+                                        if (@ViewBag.leadId == null)
+                                        {
+                                            id = 0;
+                                        }
+                                        else
+                                        {
+                                            id = ViewBag.leadId;
+                                        }
+                                        <input type="hidden" name="leadId" id="leadId" value="@id">
+                                        <input type="hidden" name="leadOwner" id="leadOwner" value="@Model?.leadsingal?.leadOwner">
+                                    }
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="leadShortName" class="col-sm-4 col-form-label">Client Short Name</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="leadShortName" name="leadShortName" value="@Model?.leadsingal?.leadShortName">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="leadNumber" class="col-sm-4 col-form-label">Client Number</label>
+                                <div class="col-sm-8">
+                                    @if (Model?.leadsingal?.leadNumber != null)
+                                    {
+                                        <input type="text" class="form-control" id="leadNumber" name="leadNumber" readonly value="@Model?.leadsingal?.leadNumber">
+                                    }
+                                    else
+                                    {
+                                        <input type="text" class="form-control" id="leadNumber" name="leadNumber" readonly value="@ViewBag.leadNumber">
+                                    }
+                                    
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="sourceId" class="col-sm-4 col-form-label">Client Source</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="sourceId" name="sourceId">
+                                        @if (Model?.leadsingal?.sourceId != null)
+                                        {
+                                            <option value="@Model?.leadsingal?.source?.Id">@Model?.leadsingal?.source?.sourceName</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="">Select Lead Source</option>
+                                        }
+                                        @foreach (var data in Model.sources)
+                                        {
+                                            <option value="@data.Id">@data.sourceName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="sourceDescription" class="col-sm-4 col-form-label">Source Description</label>
+                                <div class="col-sm-8">
+                                    <textarea type="text" class="form-control" id="sourceDescription" name="sourceDescription">@Model?.leadsingal?.sourceDescription</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <label for="ownerShipTypeId" class="col-sm-4 col-form-label">Owner Ship Type</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="ownerShipTypeId" name="ownerShipTypeId">
+                                        @if (Model?.leadsingal?.ownerShipTypeId != null)
+                                        {
+                                            <option value="@Model?.leadsingal?.ownerShipType?.Id">@Model?.leadsingal?.ownerShipType?.ownerShipTypeName</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="">Select Owner Ship Type</option>
+                                        }
+                                        
+                                        @foreach (var data in Model.ownerShipTypes)
+                                        {
+                                            <option value="@data.Id">@data.ownerShipTypeName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="companyGroupId" class="col-sm-4 col-form-label">Group Name</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="companyGroupId" name="companyGroupId">
+                                        @if (Model?.leadsingal?.companyGroupId != null)
+                                        {
+                                            <option value="@Model?.leadsingal?.companyGroup?.Id">@Model?.leadsingal?.companyGroup?.company?.companyName</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="">Select Group Name</option>
+                                        }
+                                        @foreach (var data in Model.companyGroups)
+                                        {
+                                            <option value="@data.Id">@data.groupName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="totalemployee" class="col-sm-4 col-form-label">Total Employees</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="totalemployee" name="totalemployee" value="@Model?.leadsingal?.totalemployee">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="sector" class="col-sm-4 col-form-label">Sector </label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" id="sector" name="sector">
+                                        @if (Model?.leadsingal?.sectorId != null)
+                                        {
+                                            <option value="@Model?.leadsingal?.sector?.Id">@Model?.leadsingal?.sector?.sectorName</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="">Select Sector</option>
+                                        }
+                                        @foreach (var data in Model.sectors)
+                                        {
+                                            <option value="@data.Id">@data.sectorName</option>
+                                        }
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <hr />
+                    <button type="submit" value="Submit" class="btn btn-success btn-lg" style="float:right; margin-top:5px;"><i class="fas fa-save"></i></button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

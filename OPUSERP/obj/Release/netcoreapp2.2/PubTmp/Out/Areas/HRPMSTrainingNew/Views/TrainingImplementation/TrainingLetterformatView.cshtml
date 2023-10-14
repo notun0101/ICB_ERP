@@ -1,0 +1,124 @@
+﻿@model TrainingEnrollViewModel
+@{
+    ViewData["Title"] = "SpecialReport";
+    Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+
+
+<style>
+
+    .print-card-body {
+        width: 100%;
+        padding-bottom: 10px;
+    }
+
+    .vartical-table th {
+        width: 25%;
+    }
+
+    .vartical-table td {
+        width: 25%;
+    }
+
+    .table td, .table th {
+        padding: .3rem;
+        font-size: 14px;
+        border: 1px solid black !important;
+    }
+
+    table {
+        page-break-inside: auto;
+        border-collapse: collapse;
+        border: 1px solid black !important;
+    }
+
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+        border: 1px solid black !important;
+    }
+
+    thead {
+        display: table-header-group;
+        border: 1px solid black !important;
+    }
+
+    tfoot {
+        display: table-footer-group;
+        border: 1px solid black !important;
+    }
+
+    h6 {
+        font-size: 14px;
+        background-color: gray;
+        color: white !important;
+        padding: 3px;
+    }
+</style>
+
+
+<div class="print-card" style="width: 100%; color:#000">
+    <div class="print-card-body">
+
+        <div class="container-fluid">
+
+            <div class="row" style="padding-top:0px;">
+                <div class="col-2">
+                    <img src="/EmpImages/@Model.companies.FirstOrDefault().filePath" alt="BDBL Logo" style="height:80px;" />
+                </div>
+                <div class="col-8">
+                    <div style="color:black;text-align:center;">
+                        <h1>বাংলাদেশ ডেভেলপমেন্ট ব্যাংক লিমিটেড</h1>
+                        <h3 style="font-size:20px;">@Model.companies.FirstOrDefault()?.companyName</h3>
+                        <h3 style="font-size:17px;"> Expenditure of BDBL Securities Ltd </h3>
+                        <br />
+                    </div>
+                </div>
+                <div class="col-2">
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+                    <p>No:-06.5/</p>
+                    <p>As per List</p>
+                </div>
+                <div class="col-6 text-right">
+                    <p>@DateTime.Now.ToString("dd MMMM, yyyy")</p>
+                </div>
+            </div>
+            <br />
+            <br />
+            <div class="row">
+                <p style="font-weight:900;margin:0 auto">
+                    Sub: 
+                    <span style="text-decoration:underline">Participation in the Workshop on "@Model.trainingInfoNew?.course”.</span>
+                </p>
+            </div>
+            <br />
+            <br />
+            <div class="row">
+                <p>Dear Participant,</p>
+            </div>
+            <div class="row">
+                <p style="line-height:30px;text-align:justify">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; As per approval of the Managing Director & CEO of the Bank, you have been
+                    selected as one of the @Model.trainingInfoNew?.noOfParticipants ( @OPUSERP.Helpers.AmountInWord.ConvertWholeNumber(Model.trainingInfoNew?.noOfParticipants.ToString()) ) participants for the above workshop to be held at BDBL Training Institute.
+                    The salient features of the workshop are given below:
+                </p>
+            </div>
+            <div class="row">
+                <ol style="line-height:30px;">
+                    <li>Registration: @Model.trainingInfoNew?.startDate?.ToString("dd MMMM, yyyy; dddd"); @Model.trainingSchedules?.FirstOrDefault()?.trainingScheduleVms?.FirstOrDefault()?.startTime</li>
+                    <li>Inauguration: @Model.trainingInfoNew?.startDate?.ToString("dd MMMM, yyyy; dddd"); @Model.trainingSchedules?.FirstOrDefault()?.trainingScheduleVms?.FirstOrDefault()?.startTime</li>
+                    <li>Session Time: @Model.trainingSchedules?.FirstOrDefault()?.trainingScheduleVms?.FirstOrDefault()?.startTime to @Model.trainingSchedules?.LastOrDefault()?.trainingScheduleVms?.FirstOrDefault()?.endTime</li>
+                    <li>Number of Working Dav:01 (One)</li>
+                </ol>
+            </div>
+        </div>
+        
+       
+    </div>
+</div>
+

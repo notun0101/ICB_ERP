@@ -1,0 +1,1594 @@
+﻿@model InfoViewModel
+@{
+	ViewData["Title"] = "Print Info";
+	Layout = "~/Views/Shared/_PrintView.cshtml";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+	body {
+		background-color: #f3efef;
+		margin: 0;
+		padding: 0;
+	}
+
+	#body {
+		height: 110%;
+		padding: 0;
+		margin: 0;
+	}
+
+	/*Asad Added*/
+	tbody tr {
+		vertical-align: top;
+	}
+
+	#left_bar {
+		width: 67%;
+		background-color: snow;
+		/* position: absolute;*/
+		float: left;
+		min-height: 1300px;
+	}
+
+	#right_bar {
+		width: 33%;
+		background-color: #f3efef !important;
+		/*background-image: linear-gradient(180deg, #014C83, #0d94bd);*/
+		position: absolute;
+		/* float: left;*/
+		right: 0px;
+		height: 1300px;
+	}
+
+	img {
+		border-radius: 50%;
+		height: 100px;
+		width: 100px;
+		border: 2px solid #0d94bd;
+		text-align: center;
+		overflow: hidden;
+	}
+
+	#table_1 {
+		width: 237px;
+		/*width: 243px;*/
+		margin-left: 20px;
+		margin-top: 20px;
+		color: #ffffff;
+		/*border: 2px solid #ffffff;*/
+	}
+
+	.hr1 {
+		/*border: 2px solid #ffffff;*/
+		border: black;
+		/* width: 348px;*/
+	}
+
+	.hr2 {
+		border: 1px solid #0d94bd;
+	}
+
+	.td1 {
+		width: 348px;
+	}
+
+	.td2 {
+		padding-right: 50px;
+	}
+
+	.w {
+		color: black;
+	}
+
+	#table_2 {
+		height: 100%;
+		width: 650px; /*540*/
+		/* border: 1px solid #000000;*/
+		margin-left: 11px;
+		margin-top: 12px;
+		color: #ffffff;
+	}
+
+	.label-width {
+		width: 200px;
+	}
+
+	.colon-width {
+		width: 5px;
+	}
+
+</style>
+<div id="body">
+	<div id="left_bar">
+		<div style="height:20px;"></div>
+		<P style="text-align: center;"> <strong style="color:#014C83;font-size: 30px;">@Model.employeeNameCode</strong> </P>
+		<p style="font-size: 22px; text-align: center; color: black;">@Model.employee?.lastDesignation?.designationName</p>
+		<p style="font-size: 18px; text-align: center; color: black;">@Model.employeeInfoByUsername?.Posting</p>
+
+		<p style="text-align: center; width:200px;"><hr style="border: 2px solid #014C83;" /></p>
+
+		<table id="table_2">
+			<thead></thead>
+			<tbody>
+				<!--Parsonal Info-->
+
+				<tr>
+					@*<td class="td2" colspan="2">*@
+					<td class="td2" colspan="3">
+						<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;padding-right:20px;">Title</h5>
+					</td>
+
+
+				</tr>
+				@if (Model.employee.fatherNameEnglish != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">Father's Name</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px; text-transform: capitalize;">@Model.employee?.fatherNameEnglish?.ToLower()</td>
+					</tr>
+				}
+
+				@if (Model.employee?.motherNameEnglish != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">Mother's Name</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px; text-transform: capitalize;">@Model.employee?.motherNameEnglish?.ToLower()</td>
+					</tr>
+				}
+
+				@if (Model.employee?.nationalID != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">National ID</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee?.nationalID</td>
+					</tr>
+				}
+
+				@if (Model.employee?.religion?.name != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">Religion</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee?.religion?.name</td>
+					</tr>
+				}
+
+				@if (Model.employee.maritalStatus != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">Marital Status</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee?.maritalStatus</td>
+					</tr>
+				}
+
+				@if (Model.employee?.disability != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">Disability</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee?.disability</td>
+					</tr>
+				}
+
+
+				@if (Model.employee.tin != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">TIN</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee?.tin</td>
+					</tr>
+				}
+
+				@if (Model.employee?.freedomFighterNo != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">Freedom ighterNo</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee?.freedomFighterNo</td>
+					</tr>
+				}
+
+				@if (Model.employee?.telephoneOffice != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">Telephone Office</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee?.telephoneOffice</td>
+					</tr>
+				}
+
+
+				@if (Model.employee?.emailAddress != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">Email Address</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee?.emailAddressPersonal</td>
+					</tr>
+				}
+
+				@if (Model.employee?.mobileNumberOffice != null)
+				{
+					<tr style="">
+						<td class="label-width" style="padding: 3px;">Mobile Number</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee?.mobileNumberOffice</td>
+					</tr>
+				}
+
+
+				@if (Model.employee?.employeeStatus?.statusName != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">Employee Status</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee?.employeeStatus?.statusName</td>
+					</tr>
+				}
+
+				@if (Model.employee?.employeeType?.empType != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">Employee Type</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee?.employeeType?.empType</td>
+					</tr>
+				}
+
+				@if (Model.employee?.hrProgram?.programName != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">Program</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee?.hrProgram?.programName</td>
+					</tr>
+				}
+								
+				@if (Model.employee?.natureOfRequitment != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">Nature Of Requitment</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee?.natureOfRequitment</td>
+					</tr>
+				}
+
+				@if (Model.employee?.lastDesignationId != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">Designation</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee?.lastDesignation?.designationName</td>
+					</tr>
+				}
+
+				@if (Model.employee?.joiningDateGovtService?.ToString("dd-MMM-yyyy") != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">Joining Date</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee.joiningDateGovtService?.ToString("dd-MMM-yyyy")</td>
+					</tr>
+				}
+
+				@if (Model.employee.LPRDate?.ToString("dd-MMM-yyyy") != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">Date Of LPR</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee.LPRDate?.ToString("dd-MMM-yyyy")</td>
+					</tr>
+				}
+
+
+				@if (Model.employee.PRLStartDate?.ToString("dd-MMM-yyyy") != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">PRL Start Date</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee.PRLStartDate?.ToString("dd-MMM-yyyy")</td>
+					</tr>
+				}
+
+				@if (Model.employee.PRLEndDate?.ToString("dd-MMM-yyyy") != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">PRL End Date</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee.PRLEndDate?.ToString("dd-MMM-yyyy")</td>
+					</tr>
+				}
+
+
+
+				@if (Model.employee.dateOfPermanent?.ToString("dd-MMM-yyyy") != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">Date Of Permanent</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee.dateOfPermanent?.ToString("dd-MMM-yyyy")</td>
+					</tr>
+				}
+
+				@if (Model.employee?.seniorityNumber != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">Seniority Number</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee?.seniorityNumber</td>
+					</tr>
+				}
+
+				@if (Model.employee?.specialSkill != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">Special Skill</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee?.specialSkill</td>
+					</tr>
+				}
+
+				@if (Model.employee?.hrUnit?.unitName != null)
+				{
+					<tr style="">
+						<td style="padding: 3px;">Unit</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.employee?.hrUnit?.unitName</td>
+					</tr>
+				}
+
+
+				<tr style="height:23px;"></tr>
+				@if (Model.educationalQualifications.Count() > 0)
+				{
+					<!--Education-->
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Educational Qualification</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.educationalQualifications.OrderByDescending(x => x.passingYear))
+					{
+						<tr style="">
+							<td style="padding: 3px; font-weight: bold;">Degree</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px; font-weight: bold;">@data.degree?.degreeName</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Subject</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.reldegreesubject?.subject?.subjectName</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Board/Institution</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.organization?.organizationName</td>
+						</tr>
+						@if (data.institution != null)
+						{
+							<tr style="">
+								<td style="padding: 3px;">Institution</td>
+								<td class="colon-width">:</td>
+								<td style="padding: 3px;">@data.institution</td>
+							</tr>
+						}
+						<tr style="">
+							<td style="padding: 3px;">Result</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.result?.resultName</td>
+						</tr>
+						@if (data.grade != null)
+						{
+							<tr style="">
+								<td style="padding: 3px;">Grade</td>
+								<td class="colon-width">:</td>
+								<td style="padding: 3px;">@data.grade</td>
+							</tr>
+						}
+						<tr style="">
+							<td style="padding: 3px;">Passing Year</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.passingYear</td>
+						</tr>
+						<tr style="height: 20px;"></tr>
+					}
+				}
+
+				<!--Present Address-->
+				@if (Model.addressPresent?.district?.districtName != null)
+				{
+					<tr>
+						<td class="td2" colspan="2">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;padding-right:20px;">Present Address</h5>
+						</td>
+					</tr>
+					<tr style="">
+						<td style="padding: 3px;">House/Village</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.addressPresent?.houseVillage</td>
+					</tr>
+					<tr style="">
+						<td style="padding: 3px;">Block/Sector</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.addressPresent?.blockSector</td>
+					</tr>
+					<tr style="">
+						<td style="padding: 3px;">Post Office</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.addressPresent?.postOffice</td>
+					</tr>
+					<tr style="">
+						<td style="padding: 3px;">Post Code</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.addressPresent?.postCode</td>
+					</tr>
+					<tr style="">
+						<td style="padding: 3px;">Thana</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.addressPresent?.thana?.thanaName</td>
+					</tr>
+					
+					<tr style="">
+						<td style="padding: 3px;">District</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.addressPresent?.district?.districtName</td>
+					</tr>
+					<tr style="">
+						<td style="padding: 3px;">Division</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.addressPresent?.division?.divisionName</td>
+					</tr>
+
+
+					<tr style="height:20px;"></tr>
+				}
+
+				<!--Permanent Address-->
+				@if (Model.addressPermanent.district.districtName != null)
+				{
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Permanent Address</h5>
+						</td>
+					</tr>
+					<tr style="">
+						<td style="padding: 3px;">House/Village</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.addressPermanent?.houseVillage</td>
+					</tr>
+					<tr style="">
+						<td style="padding: 3px;">Block/Sector</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.addressPermanent?.blockSector</td>
+					</tr>
+					<tr style="">
+						<td style="padding: 3px;">Post Office</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.addressPermanent?.postOffice</td>
+					</tr>
+					<tr style="">
+						<td style="padding: 3px;">Post Code</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.addressPermanent?.postCode</td>
+					</tr>
+					<tr style="">
+						<td style="padding: 3px;">Thana</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.addressPermanent?.thana?.thanaName</td>
+					</tr>
+					
+					<tr style="">
+						<td style="padding: 3px;">District</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.addressPermanent?.district?.districtName</td>
+					</tr>
+					<tr style="">
+						<td style="padding: 3px;">Division</td>
+						<td class="colon-width">:</td>
+						<td style="padding: 3px;">@Model.addressPermanent?.district?.districtName</td>
+					</tr>
+
+
+					<tr style="height:20px;"></tr>
+
+				}
+				@if (Model.spouses.Count() > 0)
+				{
+					<!--Spouse-->
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Spouse Information</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.spouses)
+					{
+						<tr style="">
+							<td style="padding: 3px;">Name</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.spouseName</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Date of Birth</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;"><strong>@data.dateOfBirth?.ToString("dd-MMM-yyyy")</strong></td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Gender</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.gender </td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Blood Group</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.bloodGroup</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Occupation</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.occupation?.occupationName</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Contact</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.contact</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Email</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.email</td>
+						</tr>
+						<tr style="height:20px;"></tr>
+					}
+				}
+
+
+				@if (Model.childrens.Count() > 0)
+				{
+					<!--Child-->
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Children Information</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.childrens)
+					{
+						<tr style="">
+							<td style="padding: 3px;">Name</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.childName</td>
+						</tr>
+
+						<tr style="">
+							<td style="padding: 3px;">Date of birth</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.dateOfBirth?.ToString("dd-MMM-yyyy")</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Gender</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.gender </td>
+						</tr>
+
+
+						<tr style="">
+							<td style="padding: 3px;">Occupation</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.occupation?.occupationName</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">BIN</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.bin</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">NID</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.nid</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Blood Group</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.bloodGroup</td>
+						</tr>
+						<tr style="height:20px;"></tr>
+					}
+				}
+
+				@if (Model.employeeLanguages.Count() > 0)
+				{
+					<!--Language-->
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Language</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.employeeLanguages)
+					{
+						<tr style="">
+							<td style="padding: 3px;">@data.language?.languageName</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px; font-size: 1rem; "><i class="fa @(data.reading == "reading"?"fa-check-circle":"fa-times")"></i> <span>Reading</span></td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;"></td>
+							<td class="colon-width"></td>
+							<td style="padding: 3px; font-size: 1rem;"><i class="fa @(data.writing == "writing"?"fa-check-circle":"fa-times")"></i> <span>Writing</span> </td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;"></td>
+							<td class="colon-width"></td>
+							<td style="padding: 3px; font-size: 1rem;"><i class="fa @(data.speaking == "speaking"?"fa-check-circle":"fa-times")"></i> <span>Speaking</span></td>
+						</tr>
+
+						<tr style="height:23px;"></tr>
+					}
+				}
+
+				<!--Award-->
+				@if (Model.employeeAwards.Count() > 0)
+				{
+					
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Award Info</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.employeeAwards)
+					{
+						<tr style="">
+							<td style="padding: 3px; font-weight: bold;" colspan="3">@data.award?.awardName</td>
+							@*<td class="colon-width">:</td>*@
+							@*<td style="padding: 3px; font-size:20px; "><strong style="color: #014C83;">@data.purpose</strong></td>*@
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Award Date</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.awardDate?.ToString("dd-MMM-yyyy")</td>
+						</tr>
+						<tr style="height:23px;"></tr>
+					}
+				}
+
+				<!--Publication-->
+				@if (Model.publications.Count() > 0)
+				{
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Publications</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.publications)
+					{
+						<tr style="">
+							<td style="padding: 3px;">@data?.publicationType</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px; font-size:20px; "><strong style="color: #014C83;">@data?.publicationName</strong></td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Publication Place</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data?.publicationPlace</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Publication Date</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.publicationDate?.ToString("dd-MMM-yyyy")</td>
+						</tr>
+
+						<tr style="height:23px;"></tr>
+					}
+				}
+
+
+				@if (Model.disciplinaries.Count() > 0)
+				{
+					<!--Disciplinary-->
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Disciplinary</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.disciplinaries)
+					{
+						<tr style="">
+							<td style="padding: 3px;">@data.Offense?.name</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px; font-size:20px; "><strong style="color: #014C83;">@data.naturalPunishment?.name</strong></td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Punishment Date</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.punishmentDate.ToString("dd-MMM-yyyy")</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Go No. With Date</td>
+							<td class="colon-width"></td>
+							<td style="padding: 3px;">@data.goNumberWithDate</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Starting Date</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.startingDate.ToString("dd-MMM-yyyy")</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">End Date</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.endDate.ToString("dd-MMM-yyyy")</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Remarks</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.remarks</td>
+						</tr>
+
+						<tr style="height:23px;"></tr>
+					}
+				}
+
+				@if (Model.acrInfos.Count() > 0)
+				{
+					<!--ACR-->
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">ACR Info</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.acrInfos)
+					{
+						<tr style="">
+							<td style="padding: 3px;">@data.year</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px; font-size:20px; "><strong style="color: #014C83;">@data.startDate</strong></td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">End Date</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.endDate</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Advance Comment</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.advanceComment</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Remarks</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.remarks</td>
+						</tr>
+						<tr style="height:20px;"></tr>
+					}
+				}
+
+
+				@if (Model.passportDetails.Count() > 0)
+				{
+					<!--Passport-->
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Passport Information</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.passportDetails)
+					{
+						<tr style="">
+							<td style="padding: 3px;">Passport No.</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.passportNumber</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Place of Issue</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.placeOfIssue</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Date of Issue</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.dateOfIssue?.ToString("dd-MMM-yyyy")</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Date of Expiry</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.dateOfExpair?.ToString("dd-MMM-yyyy")</td>
+						</tr>
+
+						<tr style="height:20px;"></tr>
+					}
+				}
+
+				@if (Model.traveInfos.Count() > 0)
+				{
+					<!--Travel-->
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Travel Information</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.traveInfos)
+					{
+						<tr style="">
+							<td style="padding: 3px;">@data?.travelPurpose?.purposeName</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px; font-size:20px; "><strong style="color: #014C83;">@data.purpose</strong></td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Location</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.location</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Country Name</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data?.country?.countryName</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Sponsor Agency</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.sponsoringAgency</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Start Date</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.startDate?.ToString("dd-MMM-yyyy")</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">End Date</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.endDate?.ToString("dd-MMM-yyyy")</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Number</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.goNumber</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Going Date</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.goDate?.ToString("dd-MMM-yyyy")</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Remarks</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.remarks</td>
+						</tr>
+						<tr style="height:20px;"></tr>
+					}
+				}
+
+				<!--License-->
+				@if (Model.drivingLicenses.Count() > 0)
+				{
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">License Information</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.drivingLicenses)
+					{
+
+						<tr style="">
+							<td style="padding: 3px;">License No.</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.licenseNumber</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">License Type.</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.category</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Place of Issue</td>
+							<td class="colon-width"></td>
+							<td style="padding: 3px;">@data.placeOfIssue</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Date of Issue</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.dateOfIssue?.ToString("dd-MMM-yyyy")</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Date of Expiry</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.dateOfExpair?.ToString("dd-MMM-yyyy")</td>
+						</tr>
+						<tr style="height:20px;"></tr>
+					}
+				}
+
+				<!--Service/Transfar-->
+				@if (Model.postingPlaces.Count() > 0)
+				{
+					<tr style="">
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Transfer History</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.postingPlaces.OrderByDescending(x => x.startDate))
+					{
+
+						<tr style="">
+							<td style="padding: 3px;">Posting</td>
+							<td class="colon-width">:</td>
+							<td>
+								
+								@if (data.department?.deptName != null)
+								{
+									<span>
+										@data.department?.deptName?.Replace("Head Office", "")
+									</span>
+								}
+								@if (data.hrBranch?.branchName != null)
+								{
+									<span>
+										@data.hrBranch?.branchName?.Replace("Head Office", "")
+									</span>
+								}
+
+								@if (data.hrDivision?.divName != null)
+								{
+									<span>
+										@data.hrDivision?.divName?.Replace("Head Office", "")
+									</span>
+								}
+								@if (data.hrUnit?.unitName != null)
+								{
+									<span>
+										@data.hrUnit?.unitName?.Replace("Head Office", "")
+									</span>
+								}
+								@if (data.office?.branchUnitName != null)
+								{
+									<span>
+										@data.office?.branchUnitName?.Replace("Head Office", "")
+									</span>
+								}
+
+
+							</td>
+						</tr>
+						<tr>
+							<td style="padding: 3px;">Start Date</td>
+							<td class="colon-width">:</td>
+							<td>@data.startDate?.ToString("dd/MM/yyyy")</td>
+
+						</tr>
+						<tr>
+							<td style="padding: 3px;">End Date</td>
+							<td class="colon-width">:</td>
+							@if (data.endDate != null)
+							{
+								<td>@data.endDate?.ToString("dd/MM/yyyy")</td>
+							}
+							else
+							{
+								<td>Continue</td>
+							}
+
+						</tr>
+
+						<tr style="height:23px;"></tr>
+					}
+				}
+
+				<!--Promotion-->
+				@if (Model.promotionLogs.Count() > 0)
+				{
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Promotion Log</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.promotionLogs)
+					{
+						<tr style="">
+							<td style="padding: 3px;">Prev. Designation</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.designationOld?.designationName</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Present Designation</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.designationNew?.designationName</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Date</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.date.ToString("dd-MMM-yyyy")</td>
+						</tr>
+						<tr style="height:23px;"></tr>
+					}
+				}
+
+				<!--Training-->
+				@if (Model.traningLogs.Count() > 0)
+				{
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Training Info</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.traningLogs)
+					{
+						<tr style="">
+							<td style="padding: 3px;">@data?.trainingCategory?.trainingCategoryName</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px; font-size:20px; "><strong style="color: #014C83;">@data.trainingTitle</strong></td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Institute</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data?.trainingInstitute?.trainingInstituteName</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">From Date</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.fromDate?.ToString("dd-MMM-yyyy")</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">To Date</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.toDate?.ToString("dd-MMM-yyyy")</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Remarks</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.remarks</td>
+						</tr>
+						<tr style="height:23px;"></tr>
+					}
+				}
+
+				<!--Salary Bank -->
+				@if (Model.bankInfos.Count() > 0)
+				{
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Bank Accounts</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.bankInfos)
+					{
+						<tr style="">
+							<td style="padding: 3px;">@data?.bank?.bankName</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px; font-size:20px; "> <strong style="color: #014C83;">@data.branchName</strong></td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Account Number</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.accountNumber</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">IBUS</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.ibus</td>
+						</tr>
+						<tr style="height:23px;"></tr>
+					}
+				}
+
+				<!--Nominee -->
+				@if (Model.nomineeDetails.Count() > 0)
+				{
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Nominee Information</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.nomineeDetails)
+					{
+
+						<tr style="">
+							<td style="padding: 3px;">@data.nominee?.name</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px; font-size:20px; "><strong style="color: #014C83;">@data.nominee?.relation</strong></td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Contact</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.nominee?.contact</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Address</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.nominee?.address</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Name</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.nomineeFund?.name</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Percentage</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.persentence</td>
+						</tr>
+						<tr style="height:23px;"></tr>
+					}
+				}
+
+				<!--supervisor-->
+				@if (Model.supervisors.Count() > 0)
+				{
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Supervisor</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.supervisors)
+					{
+						<tr style="">
+							<td style="padding: 3px;">@data.employee?.nameEnglish</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px; font-size:20px; "><strong style="color: #014C83;">@data.supervisor?.nameEnglish</strong></td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Final Approver</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.canFinalApprover</td>
+						</tr>
+
+						<tr style="height:23px;"></tr>
+					}
+				}
+
+				<!--Membership-->
+				@if (Model.employeeMemberships.Count() > 0)
+				{
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Membership Info</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.employeeMemberships)
+					{
+						<tr style="">
+							<td style="padding: 3px;">Membership Name</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.membership?.organizationName</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Membership No.</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.membershipNo</td>
+						</tr>
+						<tr style="height:23px;"></tr>
+					}
+				}
+				<!--Other Activity Information-->
+
+				@if (Model.otherActivities.Count() > 0)
+				{
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Other Activities Information</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.otherActivities)
+					{
+						<tr style="">
+							<td style="padding: 3px;">@data.activityName</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px; font-size:20px; "><strong style="color: #014C83;">@data.description</strong></td>
+						</tr>
+						<tr style="height:23px;"></tr>
+					}
+				}
+
+				<!--Belongings-->
+				@if (Model.belongings.Count() > 0)
+				{
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Belongings Information</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.belongings)
+					{
+						<tr style="">
+							<td style="padding: 3px;">@data.issueDate.?ToString("dd-MM-yyyy");</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px; font-size:20px; "><strong style="color: #014C83;">@data.belongingItem?.ItemName</strong></td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Item Code</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.belongingItem?.ItemCode</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Return Date</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.returnDate.?ToString("dd-MM-yyyy");</td>
+						</tr>
+
+						<tr style="height:23px;"></tr>
+					}
+				}
+
+				<!--Previous Employeement-->
+				@if (Model.priviousEmployments.Count() > 0)
+				{
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Previous Employeement Information</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.priviousEmployments)
+					{
+						<tr style="">
+							<td style="padding: 3px;">@data.companyName</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px; font-size:20px; "> <strong style="color: #014C83;">@data.companyBusiness</strong></td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Department</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.department</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Position</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.position</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Start Date</td>
+							<td class="colon-width"></td>
+							<td style="padding: 3px;">@data.startDate.?ToString("dd-MM-yyyy");</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">End Date</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.endDate.?ToString("dd-MM-yyyy");</td>
+						</tr>
+
+						<tr style="height:23px;"></tr>
+					}
+				}
+				<!--Freedom Fighter-->
+
+				@if (Model.freedomFighters.Count() > 0)
+				{
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Freedom Fighter's Information</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.freedomFighters)
+					{
+						<tr style="">
+							<td style="padding: 3px;">@data.number</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px; font-size:20px; "><strong style="color: #014C83;">@data.relationship</strong></td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Sector</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.sectorNo</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Remarks</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.remarks</td>
+						</tr>
+						<tr style="height:23px;"></tr>
+					}
+				}
+
+				<!--Referance Information-->
+
+				@if (Model.references.Count() > 0)
+				{
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Referance Information</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.references)
+					{
+						<tr style="">
+							<td style="padding: 3px;">@data.name</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px; font-size:20px; "><strong style="color: #014C83;">@data.organization</strong></td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Contact</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.contact</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Email</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.email</td>
+						</tr>
+						<tr style="height:23px;"></tr>
+					}
+				}
+
+				<!--Emergency Contact Information-->
+
+				@if (Model.emergencyContacts.Count() > 0)
+				{
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">Emergency Contact Information</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.emergencyContacts)
+					{
+						<tr style="">
+							<td style="padding: 3px;">Name</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;"><strong style="color: #014C83;">@data.name</strong></td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Organization</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;"><strong>@data.organization</strong></td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Contact</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.contact</td>
+						</tr>
+						<tr style="">
+							<td style="padding: 3px;">Email</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px;">@data.email</td>
+						</tr>
+						<tr style="height:23px;"></tr>
+					}
+				}
+
+
+				<!--Project Activity Information-->
+				@if (Model.employeeProjectActivities.Count() > 0)
+				{
+					<tr>
+						<td class="td2" colspan="3">
+							<h5 style="color: #0d94bd; padding-bottom: 10px; border-bottom: 1px solid #0d94bd;">CSR Activity Information</h5>
+						</td>
+					</tr>
+					@foreach (var data in Model.employeeProjectActivities)
+					{
+						<tr style="">
+							<td style="padding: 3px;">@data.hRProject?.name</td>
+							<td class="colon-width">:</td>
+							<td style="padding: 3px; font-size:20px; "><strong style="color: #014C83;">@data.hRDoner?.name</strong></td>
+						</tr>
+						<tr style="">
+							@*<td style="padding: 3px;"></td>*@ @*Asad Commented*@
+							<td style="padding: 3px;">@data.hRActivity?.name</td>
+							<td class="colon-width">:</td>
+							@if (data.isActive == 1)
+							{
+								<td>:&nbsp; Active</td>
+
+							}
+							else
+							{
+
+								<td>:&nbsp; In Active</td>
+							}
+						</tr>
+
+						<tr style="height:23px;"></tr>
+					}
+				}
+
+			</tbody>
+		</table>
+
+
+
+
+	</div>
+
+	<div id="right_bar">
+		<div style="height:20px;"></div>
+		<div style="text-align: center;">
+			<img src="~/@Model.photograph.url" />
+		</div>
+		<table id="table_1">
+			<thead></thead>
+			<tbody>
+
+
+				<!--Employee Info-->
+				<tr>
+					<td class="td1">
+						<h5 style="color: black;margin-left: 19px; margin-bottom: -9px ">CONTACT</h5>
+						<div style="width:230px;"><hr class="hr1" /></div>
+					</td>
+
+				</tr>
+				@if (Model.employee.mobileNumberPersonal != null)
+				{
+					<tr style="height:50px;">
+						<td>
+							<i class="fa fa-phone w"></i>	&nbsp;<span style="font-size:18px;" class="w">Mobile Number</span>
+							<br />
+							<p class="w" style="margin-left: 23px;width:230px;">@Model.employee?.mobileNumberPersonal</p>
+						</td>
+
+					</tr>
+					<tr style="height:13px;"></tr>
+				}
+				@if (Model.employee.emailAddressPersonal != null)
+				{
+					<tr style="height:50px;">
+						<td>
+							<i class="fas fa-envelope-open-text w"></i>	&nbsp;<span style="font-size:18px;" class="w">Email Address</span>
+							<br />
+							<p class="w" style="margin-left: 26px;">@Model.employee?.emailAddress</p>
+						</td>
+
+					</tr>
+					<tr style="height:13px;"></tr>
+				}
+				@if (Model.employee.FacebookId != null)
+				{
+					<tr style="height:50px;">
+						<td>
+							<i class="fab fa-facebook w"></i>	&nbsp;<span style="font-size:18px;" class="w">Facebook Id</span>
+							<br />
+							<p class="w" style="margin-left: 26px;">@Model.employee?.FacebookId</p>
+						</td>
+
+					</tr>
+					<tr style="height:13px;"></tr>
+				}
+				@if (Model.employee.skypeId != null)
+				{
+					<tr style="height:50px;">
+						<td>
+							<i class="fab fa-skype w"></i> 	&nbsp;<span style="font-size:18px;" class="w">Skype Id</span>
+							<br />
+							<p class="w" style="margin-left: 26px;">@Model.employee?.skypeId</p>
+						</td>
+
+					</tr>
+					<tr style="height:13px;"></tr>
+				}
+				@if (Model.employee.TwitterId != null)
+				{
+					<tr style="height:50px;">
+						<td>
+							<i class="fab fa-twitter w"></i>	&nbsp;<span style="font-size:18px;" class="w">Twitter Id</span>
+							<br />
+							<p class="w" style="margin-left: 26px;">@Model.employee?.TwitterId</p>
+						</td>
+
+					</tr>
+					<tr style="height:13px;"></tr>
+				}
+				@if (Model.employee.InstagramId != null)
+				{
+					<tr style="height:50px;">
+						<td>
+							<i class="fab fa-instagram w"></i>	&nbsp;<span style="font-size:18px;" class="w">Instagram Id</span>
+							<br />
+							<p class="w" style="margin-left: 26px;">@Model.employee?.InstagramId</p>
+						</td>
+
+					</tr>
+					<tr style="height:13px;"></tr>
+				}
+
+				@if (Model.employee.LinkedInId != null)
+				{
+					<tr style="height:50px;">
+						<td>
+							<i class="fab fa-linkedin w"></i>	&nbsp;<span style="font-size:18px;" class="w">LinkedIn Id</span>
+							<br />
+							<p class="w" style="margin-left: 26px;">@Model.employee?.LinkedInId</p>
+						</td>
+
+					</tr>
+					<tr style="height:13px;"></tr>
+				}
+
+				<tr style="height:30px;"></tr>
+				<tr>
+					<td class="td1">
+						<h5 class="w" style="margin-left: 19px;margin-bottom: -9px">PROFILE</h5>
+						<div style="width:230px;"><hr class="hr1" /></div>
+					</td>
+
+				</tr>
+				@if (Model.employee.nameEnglish != null)
+				{
+
+					<tr style="height:50px;">
+						<td>
+							<span style="font-size:18px;" class="w"><i class="fa fa-user w"></i> &nbsp;<strong>Employee Name</strong></span>
+							<br />
+							<p class="w" style="margin-left: 23px;">@Model.employee?.nameEnglish</p>
+							<hr class="w" />
+						</td>
+
+					</tr>
+				}
+
+				@if (Model.employee.employeeCode != null)
+				{
+					<tr style="height:50px;">
+						<td>
+							<span style="font-size:18px;" class="w"><i class="fa fa-hashtag w"></i> &nbsp;<strong>Employee ID</strong></span>
+							<br />
+							<p class="w" style="margin-left: 27px;">@Model.employee?.employeeCode</p>
+							<hr class="w" />
+						</td>
+
+					</tr>
+				}
+
+
+				@if (Model.employee.dateOfBirth?.ToString("dd-MMM-yyyy") != null)
+				{
+
+					<tr style="height:50px;">
+						<td>
+							<span style="font-size:18px;" class="w"><i class="fa fa-calendar w"></i> &nbsp;<strong>Date Of Birth</strong></span>
+							<br />
+							<p class="w" style="margin-left: 27px;">@Model.employee.dateOfBirth?.ToString("dd-MMM-yyyy")</p>
+							<hr class="w" />
+						</td>
+
+					</tr>
+				}
+
+				@if (Model.employee.nationality != null)
+				{
+					<tr style="height:50px;">
+						<td>
+							<span style="font-size:18px;" class="w"><i class="fa fa-flag w"></i> &nbsp;<strong>Nationality</strong></span>
+							<br />
+							<p class="w" style="margin-left: 26px;">@Model.employee?.nationality</p>
+							<hr class="w" />
+						</td>
+
+					</tr>
+				}
+
+
+				@if (@Model.employee.gender != null)
+				{
+					<tr style="height:50px;">
+						<td>
+							<span style="font-size:18px;" class="w"><i class="fa fa-user w"></i> &nbsp;<strong>Gender</strong></span>
+							<br />
+							<p class="w" style="margin-left: 26px;">@Model.employee?.gender</p>
+							<hr class="w" />
+						</td>
+
+					</tr>
+				}
+
+				@if (@Model.employee.bloodGroup != null)
+				{
+					<tr style="height:50px;">
+						<td>
+							<span style="font-size:18px;" class="w"><i class="fa fa-medkit w"></i> &nbsp;<strong>Blood Group</strong></span>
+							<br />
+							<p class="w" style="margin-left: 26px;">@Model.employee?.bloodGroup</p>
+							<hr class="w" />
+						</td>
+
+					</tr>
+				}
+
+
+			</tbody>
+
+		</table>
+
+
+
+	</div>
+
+</div>
